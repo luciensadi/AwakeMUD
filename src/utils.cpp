@@ -563,7 +563,7 @@ int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, size_t rbuf_len, in
     WRITEOUT_MSG("Being On Fire", 4);
   }
   for (struct sustain_data *sust = GET_SUSTAINED(ch); sust; sust = sust->next) {
-    if (sust->caster == FALSE && (sust->spell == SPELL_CONFUSION || sust->spell == SPELL_CHAOS)) {
+    if (sust->is_caster_record == FALSE && (sust->spell == SPELL_CONFUSION || sust->spell == SPELL_CHAOS)) {
       int amount = MAX(0, MIN(sust->force, sust->success));
       base_target += amount;
       buf_mod(rbuf, rbuf_len, "Confused", amount);
@@ -2485,7 +2485,7 @@ void magic_loss(struct char_data *ch, int magic, bool msg)
     }
 
     // Stop any spells they'd previously cast.
-    end_all_caster_records(ch, FALSE);
+    end_all_spells_cast_BY_ch(ch, FALSE);
 
     // TODO: Deactivate adept powers.
 

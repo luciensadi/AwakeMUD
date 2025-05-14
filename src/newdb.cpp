@@ -1330,7 +1330,7 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
 
   /* Strip off any spell affects. */
   for (struct sustain_data *sust = GET_SUSTAINED(player); sust; sust = sust->next)
-    if (!sust->caster)
+    if (!sust->is_caster_record)
       spell_modify(player, sust, FALSE);
 
   /**************************************************/
@@ -1466,7 +1466,7 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
 
   /* Re-apply spells. */
   for (struct sustain_data *sust = GET_SUSTAINED(player); sust; sust = sust->next)
-    if (!sust->caster)
+    if (!sust->is_caster_record)
       spell_modify(player, sust, TRUE);
 
   /* Re-equip equipment. */

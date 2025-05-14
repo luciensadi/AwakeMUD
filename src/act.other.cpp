@@ -3565,7 +3565,7 @@ ACMD(do_assense)
       if (is_abbrev(buf1, "spell")) {
         bool found = FALSE;
         for (struct sustain_data *sus = GET_SUSTAINED(vict); sus; sus = sus->next)
-          if (!sus->caster) {
+          if (!sus->is_caster_record) {
             found = TRUE;
             success = success_test(GET_INT(ch), 4) + (int)(success_test(GET_SKILL(ch, SKILL_AURA_READING), 4) / 2);
             if (success > 0)

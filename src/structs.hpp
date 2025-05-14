@@ -1345,14 +1345,15 @@ struct sustain_data {
   int idnum; // This is distinct from caster idnum etc, so does not necessarily need to be idnum_t.
   int time;
   unsigned char time_to_take_effect;
-  bool caster;
+  bool is_caster_record;
+  int ritual_cast_cost;
   struct obj_data *focus;
   struct char_data *spirit;
   struct char_data *other;
   struct sustain_data *next;
   sustain_data() :
-    spell(0), subtype(0), force(0), success(0), idnum(0), time(0), time_to_take_effect(0), caster(0),
-    focus(NULL), spirit(NULL), other(NULL), next(NULL)
+    spell(0), subtype(0), force(0), success(0), idnum(0), time(0), time_to_take_effect(0), is_caster_record(0),
+    ritual_cast_cost(0), focus(NULL), spirit(NULL), other(NULL), next(NULL)
   {}
 };
 
@@ -1366,12 +1367,12 @@ struct attack_hit_type
 struct spirit_sustained
 {
   int type;
-  bool caster;
+  bool is_caster_record;
   struct char_data *target;
   struct spirit_sustained *next;
   int force;
   spirit_sustained() :
-    type(0), caster(FALSE), target(NULL), next(NULL), force(0)
+    type(0), is_caster_record(FALSE), target(NULL), next(NULL), force(0)
   {}
 };
 

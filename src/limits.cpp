@@ -1374,7 +1374,7 @@ void misc_update(void)
               continue;
             }
 
-            if (sus && sus->caster && spells[sus->spell].duration == PERMANENT) {
+            if (sus && sus->is_caster_record && spells[sus->spell].duration == PERMANENT) {
               int time_to_take_effect = sus->time_to_take_effect;
               if (sus->spell == SPELL_IGNITE) {
                 // no-op
@@ -1418,7 +1418,7 @@ void misc_update(void)
 
           // This is an optimized affected_by_spell() call.
           for (struct sustain_data *hjp = GET_SUSTAINED(ch); hjp; hjp = hjp->next) {
-            if (hjp->caster == FALSE && (hjp->spell == SPELL_CONFUSION || hjp->spell == SPELL_CHAOS)) {
+            if (hjp->is_caster_record == FALSE && (hjp->spell == SPELL_CONFUSION || hjp->spell == SPELL_CHAOS)) {
               affected_by_chaos_or_confusion = TRUE;
               break;
 

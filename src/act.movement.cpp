@@ -2556,7 +2556,7 @@ ACMD(do_sleep)
     break;
   }
   if (GET_POS(ch) == POS_SLEEPING) {
-    end_all_caster_records(ch, TRUE);
+    end_all_spells_cast_BY_ch(ch, TRUE);
   }
   DELETE_ARRAY_IF_EXTANT(GET_DEFPOS(ch));
 }

@@ -48,7 +48,7 @@ bool spell_is_valid_ritual_spell(int spell) {
 bool vict_meets_spell_preconditions(struct char_data *vict, int spell, int subtype) {
   // Check for spell duplication.
   for (struct sustain_data *sus = GET_SUSTAINED(vict); sus; sus = sus->next) {
-    if (!sus->caster && sus->spell == spell && sus->subtype == subtype) {
+    if (!sus->is_caster_record && sus->spell == spell && sus->subtype == subtype) {
       // Already affected.
       return FALSE;
     }
@@ -102,6 +102,7 @@ void set_up_ritualcast(struct char_data *ch, struct room_data *in_room, struct s
   GET_RITUAL_COMPONENT_SUBTYPE(components) = spell->subtype;
   GET_RITUAL_COMPONENT_FORCE(components) = force;
   GET_RITUAL_COMPONENT_TARGET(components) = GET_IDNUM(vict);
+  GET_RITUAL_COMPONENT_SPENT_NUYEN(components) = cost;
   GET_RITUAL_TICKS_AT_START(components) = GET_RITUAL_TICKS_LEFT(components) = time_in_ticks;
 
   char restring_buf[500];
@@ -142,7 +143,8 @@ bool handle_ritualcast_tick(struct char_data *ch, struct obj_data *components) {
       int spell = GET_RITUAL_COMPONENT_SPELL(components);
       int force = GET_RITUAL_COMPONENT_FORCE(components);
       int subtype = GET_RITUAL_COMPONENT_SUBTYPE(components);
-      int successes = MAX(1, get_max_usable_spell_successes(GET_RITUAL_COMPONENT_SPELL(components), GET_RITUAL_COMPONENT_FORCE(components)) * RITUAL_SPELL_MAX_SUCCESS_MULTIPLIER);
+      int cost = GET_RITUAL_COMPONENT_SPENT_NUYEN(components);
+      int successes = MAX(1, get_max_usable_spell_successes(spell, force) * RITUAL_SPELL_MAX_SUCCESS_MULTIPLIER);
 
       switch (spells[spell].category) {
         case COMBAT:
@@ -161,6 +163,26 @@ bool handle_ritualcast_tick(struct char_data *ch, struct obj_data *components) {
           raw_cast_manipulation_spell(ch, vict, spell, force, NULL, successes, 0);
           break;
       }
+
+      // Iterate over their spells to find the new one and apply the cost to the record.
+      for (struct sustain_data *sust = GET_SUSTAINED(ch); sust; sust = sust->next) {
+        if (sust->is_caster_record
+            && sust->spell == spell
+            && sust->force == force
+            && sust->subtype == subtype
+            && sust->success == successes
+            && !sust->ritual_cast_cost)
+        {
+          sust->ritual_cast_cost = cost;
+          break;
+        }
+      }
+
+      mudlog_vfprintf(ch, LOG_GRIDLOG, "%s ritualcast %s (force %d) for %d nuyen.",
+                      GET_CHAR_NAME(ch),
+                      spells[spell].name,
+                      force,
+                      cost);
     }
 
     // Destroy the components.

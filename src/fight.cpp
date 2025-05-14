@@ -167,7 +167,7 @@ void repeatedly_strip_invis_spells_until_done(struct char_data *ch) {
   // Remove any spells that are causing this character to be invisible.
   for (struct sustain_data *hjp = GET_SUSTAINED(ch), *next_spell; hjp; hjp = next_spell) {
     next_spell = hjp->next;
-    if ((hjp->spell == SPELL_IMP_INVIS || hjp->spell == SPELL_INVIS) && (hjp->caster == FALSE)) {
+    if ((hjp->spell == SPELL_IMP_INVIS || hjp->spell == SPELL_INVIS) && (hjp->is_caster_record == FALSE)) {
       end_sustained_spell(ch, hjp);
 
       // We must restart at this point, otherwise there's a chance that next_spell points to the paired record for the spell we just dropped.
@@ -331,7 +331,7 @@ bool update_pos(struct char_data * victim, bool protect_spells_from_purge)
   // SR3 p178
   if (GET_POS(victim) <= POS_SLEEPING) {
     if (!protect_spells_from_purge) {
-      end_all_caster_records(victim, TRUE);
+      end_all_spells_cast_BY_ch(victim, TRUE);
     }
 
     stop_watching(victim);
@@ -3391,15 +3391,17 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
     struct sustain_data *next;
     // If you've been knocked out, or the damage is from focus overuse, lose all your spells.
     if (GET_POS(victim) < POS_LYING || attacktype == TYPE_FOCUS_OVERUSE) {
-      end_all_caster_records(ch, FALSE);
+      end_all_spells_cast_BY_ch(ch, true);
     } else if (dam > 0 && attacktype != TYPE_SPELL_DRAIN) {
+      // Otherwise, risk losing non-other-sustained spells when taking damage.
       for (struct sustain_data *sust = GET_SUSTAINED(victim); sust; sust = next) {
         next = sust->next;
-        if (sust->caster && !sust->focus && !sust->spirit)
+        if (sust->is_caster_record && !sust->focus && !sust->spirit) {
           if (success_test(GET_SKILL(victim, SKILL_SORCERY), sust->force + damage_modifier(victim, buf, sizeof(buf))) < 1) {
             end_sustained_spell(victim, sust);
             break;
           }
+        }
       }
     }
   }
@@ -5332,7 +5334,7 @@ void explode_flashbang_grenade(struct char_data *ch, struct obj_data *weapon, st
     for (struct sustain_data *next, *sust = GET_SUSTAINED(victim); sust; sust = next) {
       next = sust->next;
       // Only affect spells that are victim records, since this means that this is the effect portion of the spell record pair.
-      if (!sust->caster) {
+      if (!sust->is_caster_record) {
         // House rule: Make an opposed WIL test. If net successes is negative, lose spell successes.
         int grenade_tn = sust->other ? GET_WIL(sust->other) : 1;
         int grenade_dice = power;
@@ -6110,7 +6112,7 @@ void perform_violence(void)
     // Process spirit attacks.
     for (struct spirit_sustained *ssust = SPIRIT_SUST(ch); ssust; ssust = ssust->next) {
       if (ssust->type == ENGULF) {
-        if (ssust->caster) {
+        if (ssust->is_caster_record) {
           int dam;
           if (IS_SPIRIT(ch) || (IS_ANY_ELEMENTAL(ch) && GET_SPARE1(ch) == ELEM_WATER)) {
             dam = convert_damage(stage(-success_test(GET_BOD(ssust->target), GET_SPARE2(ch) + GET_EXTRA(ssust->target)), MODERATE));
@@ -6386,16 +6388,16 @@ void perform_violence(void)
 
         // Movement modifications via spells - charger
         for (struct spirit_sustained *ssust = SPIRIT_SUST(ch); ssust; ssust = ssust->next)
-          if (ssust->type == MOVEMENTUP && ssust->caster == FALSE && GET_LEVEL(ssust->target))
+          if (ssust->type == MOVEMENTUP && ssust->is_caster_record == FALSE && GET_LEVEL(ssust->target))
             quickness *= GET_LEVEL(ssust->target);
-          else if (ssust->type == MOVEMENTDOWN && ssust->caster == FALSE && GET_LEVEL(ssust->target))
+          else if (ssust->type == MOVEMENTDOWN && ssust->is_caster_record == FALSE && GET_LEVEL(ssust->target))
             quickness /= GET_LEVEL(ssust->target);
 
         // Movement modifications via spells - defender
         for (struct spirit_sustained *ssust = SPIRIT_SUST(FIGHTING(ch)); ssust; ssust = ssust->next)
-          if (ssust->type == MOVEMENTUP && ssust->caster == FALSE && GET_LEVEL(ssust->target))
+          if (ssust->type == MOVEMENTUP && ssust->is_caster_record == FALSE && GET_LEVEL(ssust->target))
             defender_attribute *= GET_LEVEL(ssust->target);
-          else if (ssust->type == MOVEMENTDOWN && ssust->caster == FALSE && GET_LEVEL(ssust->target))
+          else if (ssust->type == MOVEMENTDOWN && ssust->is_caster_record == FALSE && GET_LEVEL(ssust->target))
             defender_attribute /= GET_LEVEL(ssust->target);
 
         // Movement reset: Can't move if binding.

@@ -1115,7 +1115,7 @@ ACMD(do_prone)
     struct sustain_data *next;
     for (struct sustain_data *sust = GET_SUSTAINED(victim); sust; sust = next) {
       next = sust->next;
-      if (sust->caster && !sust->focus && !sust->spirit) {
+      if (sust->is_caster_record && !sust->focus && !sust->spirit) {
         strlcat(buf, "Maintain-sustain-while-prone test: ", sizeof(buf));
 
         int dice = GET_WILL(ch);

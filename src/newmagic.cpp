@@ -110,7 +110,7 @@ void print_sust_list_for_debugging(struct char_data *viewer, struct char_data *v
   for (struct sustain_data *sust = GET_SUSTAINED(vict); sust; sust = sust->next) {
     send_to_char(viewer, " - %s (%s %s): idnum %d\r\n", 
                  spells[sust->spell].name,
-                 sust->caster ? "cast BY" : "cast ON",
+                 sust->is_caster_record ? "cast BY" : "cast ON",
                  sust->other != vict ? GET_CHAR_NAME(sust->other) : "self",
                  sust->idnum);
     printed = TRUE;
@@ -124,7 +124,7 @@ void end_sustained_spell(struct char_data *ch, struct sustain_data *sust)
 {
   // print_sust_list_for_debugging(ch, ch, "at start of end_sustained_spell()");
 
-  if (sust->caster) {
+  if (sust->is_caster_record) {
     switch (sust->spell) {
       case SPELL_SILENCE:
         if (ch->in_room) {
@@ -156,10 +156,10 @@ void end_sustained_spell(struct char_data *ch, struct sustain_data *sust)
   // temp for REMOVE_FROM_LIST macro
   struct sustain_data *temp;
 
-  // Remove the paired caster / cast-on record, if applicable.
+  // Remove the paired is_caster_record / cast-on record, if applicable.
   if (sust->other) {
     for (struct sustain_data *vsust = GET_SUSTAINED(sust->other); vsust; vsust = vsust->next) {
-      if (sust->caster != vsust->caster && vsust->other == ch && vsust->idnum == sust->idnum && vsust->spell == sust->spell)
+      if (sust->is_caster_record != vsust->is_caster_record && vsust->other == ch && vsust->idnum == sust->idnum && vsust->spell == sust->spell)
       {
         if (vsust->spirit) {
           if (GET_TRADITION(vsust->spirit) == TRAD_ADEPT)
@@ -179,18 +179,18 @@ void end_sustained_spell(struct char_data *ch, struct sustain_data *sust)
       }
     }
     if (sust->spell == SPELL_INVIS || sust->spell == SPELL_IMP_INVIS) {
-      act("You blink and suddenly $n appears!", FALSE, sust->caster ? sust->other : ch, 0, 0, TO_ROOM);
-      purge_invis_invis_resistance_records(sust->caster ? sust->other : ch);
+      act("You blink and suddenly $n appears!", FALSE, sust->is_caster_record ? sust->other : ch, 0, 0, TO_ROOM);
+      purge_invis_invis_resistance_records(sust->is_caster_record ? sust->other : ch);
     }
   }
 
-  spell_modify(sust->caster ? sust->other : ch, sust, FALSE);
+  spell_modify(sust->is_caster_record ? sust->other : ch, sust, FALSE);
   REMOVE_FROM_LIST(sust, GET_SUSTAINED(ch), next);
   // print_sust_list_for_debugging(ch, ch, "after removal from own sust list");
   if (sust->focus)
   {
-    GET_SUSTAINED_FOCI(sust->caster ? ch : sust->other)--;
-    GET_FOCI(sust->caster ? ch : sust->other)--;
+    GET_SUSTAINED_FOCI(sust->is_caster_record ? ch : sust->other)--;
+    GET_FOCI(sust->is_caster_record ? ch : sust->other)--;
     GET_OBJ_VAL(sust->focus, 4)--;
   }
   if (sust->spirit)
@@ -199,7 +199,7 @@ void end_sustained_spell(struct char_data *ch, struct sustain_data *sust)
     GET_SUSTAINED_NUM(sust->spirit)--;
     GET_SUSTAINED(sust->spirit) = NULL;
   }
-  GET_SUSTAINED_NUM(sust->caster ? ch : sust->other)--;
+  GET_SUSTAINED_NUM(sust->is_caster_record ? ch : sust->other)--;
 
   strcpy(buf, spells[sust->spell].name);
 
@@ -212,7 +212,7 @@ void end_sustained_spell(struct char_data *ch, struct sustain_data *sust)
       break;
   }
 
-  send_to_char(sust->caster ? ch : sust->other, "You stop sustaining %s.\r\n", buf);
+  send_to_char(sust->is_caster_record ? ch : sust->other, "You stop sustaining %s.\r\n", buf);
   delete sust;
 
   // Handle heal.
@@ -1161,7 +1161,7 @@ bool create_sustained(struct char_data *ch, struct char_data *vict, int spell, i
   sust->force = force;
   sust->success = success;
   sust->other = vict;
-  sust->caster = TRUE;
+  sust->is_caster_record = TRUE;
   sust->time_to_take_effect = time_to_take_effect;
   sust->idnum = number(0, 100000);
   sust->next = GET_SUSTAINED(ch);
@@ -1169,7 +1169,7 @@ bool create_sustained(struct char_data *ch, struct char_data *vict, int spell, i
   GET_SUSTAINED(ch) = sust;
   struct sustain_data *vsust = new sustain_data;
   *vsust = *sust;
-  vsust->caster = FALSE;
+  vsust->is_caster_record = FALSE;
   vsust->other = ch;
   vsust->next = GET_SUSTAINED(vict);
   vsust->focus = focus;
@@ -1274,7 +1274,7 @@ bool find_duplicate_spell(struct char_data *ch, struct char_data *vict, int spel
   else
     sus = GET_SUSTAINED(vict);
   for (; sus; sus = sus->next) {
-    if (!sus->caster && sus->spell == spell && sus->subtype == sub) {
+    if (!sus->is_caster_record && sus->spell == spell && sus->subtype == sub) {
       send_to_char(ch, "%s are already affected by %s.\r\n", 
                    (!vict || vict == ch) ? "You" : "They", 
                    spells[spell].name);
@@ -2114,7 +2114,7 @@ void raw_cast_health_spell(struct char_data *ch, struct char_data *vict, int spe
                 - http://www.shadowruntabletop.com/game-resources/shadowrun-third-edition-faq/
             */
             // Skip over caster records.
-            if (sus->caster)
+            if (sus->is_caster_record)
               continue;
 
             if (sus->subtype == sub) {
@@ -2170,7 +2170,7 @@ void raw_cast_health_spell(struct char_data *ch, struct char_data *vict, int spe
           else if (GET_SUSTAINED(vict)) {
             for (struct sustain_data *sus = GET_SUSTAINED(vict); sus; sus = sus->next) {
               // Prevent you from having the CYBER flag set if your modification is from another spell.
-              if (sus->caster == FALSE && (sus->spell == SPELL_INCATTR || sus->spell == SPELL_DECATTR) && sus->subtype == sub) {
+              if (sus->is_caster_record == FALSE && (sus->spell == SPELL_INCATTR || sus->spell == SPELL_DECATTR) && sus->subtype == sub) {
                 cyber = false;
                 break;
               }
@@ -2326,7 +2326,7 @@ void raw_cast_illusion_spell(struct char_data *ch, struct char_data *vict, int s
 
         // Anti-cheese: No having a baller spell on yourself, then casting and releasing a weak one to reset your invis resistance table.
         for (struct sustain_data *sust = GET_SUSTAINED(vict); sust; sust = sust->next) {
-          if (!sust->caster && (sust->spell == SPELL_IMP_INVIS || sust->spell == SPELL_INVIS)) {
+          if (!sust->is_caster_record && (sust->spell == SPELL_IMP_INVIS || sust->spell == SPELL_INVIS)) {
             send_to_char("They're already invisible.\r\n", ch);
             return;
           }
@@ -3134,7 +3134,7 @@ void raw_cast_manipulation_spell(struct char_data *ch, struct char_data *vict, i
 
         // Specific message checking if they're already affected by the flag.
         for (struct sustain_data *sust = GET_SUSTAINED(vict); sust; sust = sust->next) {
-          if (!sust->caster && (sust->spell == SPELL_FLAME_AURA)) {
+          if (!sust->is_caster_record && (sust->spell == SPELL_FLAME_AURA)) {
             send_to_char("They already have a flame aura.\r\n", ch);
             return;
           }
@@ -4092,18 +4092,7 @@ ACMD(do_release)
       }
     }
   } else if (is_abbrev(buf, "all")) {
-    // End all caster records they have, restarting at beginning each time you touch something.
-    bool should_loop = TRUE;
-    while (should_loop) {
-      should_loop = FALSE;
-      for (struct sustain_data *sust = ch->sustained; sust; sust = sust->next) {
-        if (sust->caster) {
-          end_sustained_spell(ch, sust);
-          should_loop = TRUE;
-          break;
-        }
-      }
-    }    
+    end_all_spells_cast_BY_ch(ch, false);
     send_to_char("OK.\r\n", ch);
     return;
   } else if ((i = atoi(buf)) > 0) {
@@ -4111,7 +4100,7 @@ ACMD(do_release)
       send_to_char("You don't have that many spells sustained.\r\n", ch);
     else {
       for (sust = GET_SUSTAINED(ch); sust; sust = sust->next)
-        if (sust->caster && --i == 0)
+        if (sust->is_caster_record && --i == 0)
           break;
       end_sustained_spell(ch, sust);
     }
@@ -4899,14 +4888,14 @@ void make_spirit_power(struct char_data *spirit, struct char_data *tch, int type
 
   struct spirit_sustained *ssust = new spirit_sustained;
   ssust->type = type;
-  ssust->caster = TRUE;
+  ssust->is_caster_record = TRUE;
   ssust->target = tch;
   ssust->force = force;
   ssust->next = SPIRIT_SUST(spirit);
   SPIRIT_SUST(spirit) = ssust;
   ssust = new spirit_sustained;
   ssust->type = type;
-  ssust->caster = FALSE;
+  ssust->is_caster_record = FALSE;
   ssust->target = spirit;
   ssust->force = force;
   ssust->next = SPIRIT_SUST(tch);
@@ -4917,7 +4906,7 @@ void stop_spirit_power(struct char_data *spirit, int type)
 {
   struct spirit_sustained *temp;
   for (struct spirit_sustained *ssust = SPIRIT_SUST(spirit); ssust; ssust = ssust->next)
-    if (ssust->type == type && ssust->caster == TRUE)
+    if (ssust->type == type && ssust->is_caster_record == TRUE)
     {
       for (struct spirit_sustained *tsust = SPIRIT_SUST(ssust->target); tsust; tsust = tsust->next)
         if (tsust->type == type && tsust->target == spirit) {
@@ -5022,7 +5011,7 @@ POWER(spirit_sustain)
     }
 
     for (sust = GET_SUSTAINED(ch); sust; sust = sust->next)
-      if (sust->caster && --i == 0)
+      if (sust->is_caster_record && --i == 0)
         break;
 
     // Anti-crash.
@@ -6121,7 +6110,7 @@ ACMD(do_track)
         if (*buf2)
           spell = atoi(buf2);
         for (struct sustain_data *sust = GET_SUSTAINED(vict); sust; sust = sust->next)
-          if (!sust->caster && !spell--) {
+          if (!sust->is_caster_record && !spell--) {
             vict = sust->other;
             break;
           }
@@ -6225,7 +6214,7 @@ ACMD(do_dispell)
   }
   struct sustain_data *sust = GET_SUSTAINED(vict);
   for (;sust; sust = sust->next)
-    if (!sust->caster && !--x)
+    if (!sust->is_caster_record && !--x)
       break;
   if (!sust) {
     send_to_char("They don't have that many spells cast on them.\r\n", ch);
@@ -6730,15 +6719,15 @@ ACMD(do_focus)
 
     struct sustain_data *spell = GET_SUSTAINED(ch);
     for (; spell; spell = spell->next) {
-      // This can't be a caster record (must be affecting us)
-      if (spell->caster)
+      // This can't be a is_caster_record record (must be affecting us)
+      if (spell->is_caster_record)
         continue;
 
       // Must meet our constraints.
       if (!_spell_is_sustained_with_no_spirit_or_focus(spell))
         continue;
 
-      // We think we found one: Validate that it's not sustained on the caster's end as well.
+      // We think we found one: Validate that it's not sustained on the is_caster_record's end as well.
       bool spell_is_valid_target = FALSE;
       for (struct sustain_data *ospell = GET_SUSTAINED(spell->other); ospell; ospell = ospell->next) {
         // Look for a matching spell (same idnum, cast on us)
@@ -6922,7 +6911,7 @@ int get_spell_affected_successes(struct char_data * ch, int type)
     return 0;
 
   for (struct sustain_data *hjp = GET_SUSTAINED(ch); hjp; hjp = hjp->next)
-    if ((hjp->spell == type) && (hjp->caster == FALSE))
+    if ((hjp->spell == type) && (hjp->is_caster_record == FALSE))
       return MIN(hjp->success, hjp->force);
 
   return FALSE;
@@ -6930,7 +6919,7 @@ int get_spell_affected_successes(struct char_data * ch, int type)
 
 #define CHECK_FOR_CANDIDATE_SPELL(ch_to_check) \
   if (ch_to_check && (ch == ch_to_check || AFF_FLAGGED(ch_to_check, AFF_GROUP))) { \
-    for (struct sustain_data *hjp = GET_SUSTAINED(ch_to_check); hjp; hjp = hjp->next) { if ((hjp->spell == spell_type) && (hjp->caster == TRUE)) { return TRUE; }} \
+    for (struct sustain_data *hjp = GET_SUSTAINED(ch_to_check); hjp; hjp = hjp->next) { if ((hjp->spell == spell_type) && (hjp->is_caster_record == TRUE)) { return TRUE; }} \
   }
 bool spell_affecting_ch_is_cast_by_ch_or_group_member(struct char_data *ch, int spell_type) {
   CHECK_FOR_CANDIDATE_SPELL(ch);
@@ -7092,10 +7081,10 @@ void _end_all_spells_of_type(int spell, int subtype, struct char_data *ch, bool 
 
     for (struct sustain_data *sust = ch->sustained; sust; sust = sust->next) {
       // Don't touch caster records, we only want things affecting ch
-      if (sust->caster && !affect_caster)
+      if (sust->is_caster_record && !affect_caster)
         continue;
 
-      if (!sust->caster && !affect_cast_on)
+      if (!sust->is_caster_record && !affect_cast_on)
         continue;
 
       if (sust->spell == spell && (!subtype || sust->subtype == subtype)) {
@@ -7117,15 +7106,14 @@ void end_all_spells_of_type_cast_by_ch(int spell, int subtype, struct char_data 
   _end_all_spells_of_type(spell, subtype, ch, TRUE, FALSE);
 }
 
-void end_all_caster_records(struct char_data *ch, bool keep_sustained_by_other) {
+void _end_spells_cast_by_or_on_ch(struct char_data *ch, bool keep_sustained_by_other, bool end_spells_cast_by_ch) {
   bool should_loop = TRUE;
 
   while (should_loop) {
     should_loop = FALSE;
 
     for (struct sustain_data *sust = ch->sustained; sust; sust = sust->next) {
-      // Don't touch caster records, we only want things affecting ch
-      if (!sust->caster)
+      if (sust->is_caster_record != end_spells_cast_by_ch)
         continue;
 
       if (!keep_sustained_by_other || !(sust->focus || sust->spirit)) {
@@ -7137,6 +7125,14 @@ void end_all_caster_records(struct char_data *ch, bool keep_sustained_by_other) 
       }
     }
   }
+}
+
+void end_all_spells_cast_ON_ch(struct char_data *ch, bool keep_sustained_by_other) {
+  _end_spells_cast_by_or_on_ch(ch, keep_sustained_by_other, false);
+}
+
+void end_all_spells_cast_BY_ch(struct char_data *ch, bool keep_sustained_by_other) {
+  _end_spells_cast_by_or_on_ch(ch, keep_sustained_by_other, true);
 }
 
 void end_all_sustained_spells(struct char_data *ch) {

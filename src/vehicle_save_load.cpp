@@ -838,6 +838,7 @@ void load_saved_veh(bool purge_existing)
   }
 
   if (!bf::exists(global_vehicles_dir)) {
+    log(" - Migrating old vehicles directory to new format.");
     // We've never run our migration. Load the old files.
     bf::create_directory(global_vehicles_dir);
 

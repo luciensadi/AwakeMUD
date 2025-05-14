@@ -1348,7 +1348,7 @@ bool handle_flame_aura(struct combat_data *att, struct combat_data *def) {
   } else {
     // Iterate through their spells, find the flame aura that's applied to them, and extract its force.
     for (struct sustain_data *sust = GET_SUSTAINED(def->ch); sust; sust = sust->next) {
-      if (!sust->caster && sust->spell == SPELL_FLAME_AURA) {
+      if (!sust->is_caster_record && sust->spell == SPELL_FLAME_AURA) {
         force = sust->force;
         break;
       }

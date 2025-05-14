@@ -227,7 +227,7 @@ char *make_desc(struct char_data *ch, struct char_data *i, char *buf, int act, b
   {
     bool has_aura = FALSE;
     for (struct sustain_data *sust = GET_SUSTAINED(i); sust; sust = sust->next) {
-      if (!sust->caster) {
+      if (!sust->is_caster_record) {
         strlcat(buf, ", surrounded by a spell aura", buf_size);
         has_aura = TRUE;
         break;
@@ -7543,7 +7543,7 @@ ACMD(do_status)
   }
 
   for (struct sustain_data *sust = GET_SUSTAINED(targ); sust; sust = sust->next) {
-    if (!sust->caster) {
+    if (!sust->is_caster_record) {
       snprintf(buf, sizeof(buf), "  %s", spells[sust->spell].name);
       if (sust->spell == SPELL_INCATTR
           || sust->spell == SPELL_INCCYATTR
@@ -7565,7 +7565,7 @@ ACMD(do_status)
     snprintf(ENDOF(aff_buf), sizeof(aff_buf) - strlen(aff_buf), "\r\n%s %s sustaining:\r\n", ch == targ ? "You" : GET_CHAR_NAME(targ), ch == targ ? "are" : "is");
     int i = 1;
     for (struct sustain_data *sust = GET_SUSTAINED(targ); sust; sust = sust->next) {
-      if (sust->caster || sust->spirit == targ) {
+      if (sust->is_caster_record || sust->spirit == targ) {
         snprintf(ENDOF(aff_buf), sizeof(aff_buf) - strlen(aff_buf), "%d) %s (force %d, %d successes%s)", i, get_spell_name(sust->spell, sust->subtype), sust->force, sust->success, warn_if_spell_under_potential(sust));
         if ((IS_SENATOR(ch) || sust->spell == SPELL_MINDLINK)) {
           snprintf(ENDOF(aff_buf), sizeof(aff_buf) - strlen(aff_buf), " (Cast on ^c%s^n)", GET_CHAR_NAME(sust->other));

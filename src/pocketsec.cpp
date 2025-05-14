@@ -164,7 +164,11 @@ void pocketsec_phonemenu(struct descriptor_data *d)
     int first_part = phonenum / 10000;
     int second_part = phonenum % 10000;
 
-    send_to_char(CH, " %2d > %04d-%04d - %s\r\n", idx++, first_part, second_part, row[1]);
+    if (PRF_FLAGGED(ch, PRF_SCREENREADER)) {
+      send_to_char(CH, "Index %d: %s at %04d-%04d\r\n", idx++, row[1], first_part, second_part);
+    } else {
+      send_to_char(CH, " %2d > %50s - %04d-%04d\r\n", idx++, row[1], first_part, second_part);
+    }
   }
   mysql_free_result(res);
   

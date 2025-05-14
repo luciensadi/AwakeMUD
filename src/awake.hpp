@@ -2870,6 +2870,7 @@ enum {
 #define QST_MAGE_INTRO                     5743
 
 #define MOB_BRAIN_IN_A_JAR                 10050
+#define MOB_PROJECTION                     22
 
 #define VEHICLE_JACKRABBIT_E               1302
 #define VEHICLE_EUROCAR_WESTWIND_2000      1303

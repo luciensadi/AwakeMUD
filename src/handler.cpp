@@ -577,9 +577,13 @@ void affect_total(struct char_data * ch)
 
   // remove the effects of spells
   AFF_FLAGS(ch).RemoveBit(AFF_RUTHENIUM);
-  for (sust = GET_SUSTAINED(ch); sust; sust = sust->next)
-    if (!sust->caster)
+  for (sust = GET_SUSTAINED(ch); sust; sust = sust->next) {
+    if (!sust->is_caster_record)
       spell_modify(ch, sust, FALSE);
+    // Don't iterate back into PC's spell list.
+    if (IS_PC_CONJURED_ELEMENTAL(ch))
+      break;
+  }
 
   // Because equipment-granted vision AFFs are notoriously sticky, clear them deliberately.
   if (!IS_NPC(ch))
@@ -829,9 +833,13 @@ void affect_total(struct char_data * ch)
   GET_INIT_DICE(ch) = 0;
 
   /* effects of magic */
-  for (sust = GET_SUSTAINED(ch); sust; sust = sust->next)
-    if (!sust->caster)
+  for (sust = GET_SUSTAINED(ch); sust; sust = sust->next) {
+    if (!sust->is_caster_record)
       spell_modify(ch, sust, TRUE);
+    // Don't iterate back into PC's spell list.
+    if (IS_PC_CONJURED_ELEMENTAL(ch))
+      break;
+  }
 
   if (GET_TRADITION(ch) == TRAD_ADEPT)
   {
@@ -1223,7 +1231,7 @@ int affected_by_spell(struct char_data * ch, int type)
     return 0;
 
   for (struct sustain_data *hjp = GET_SUSTAINED(ch); hjp; hjp = hjp->next) {
-    if ((hjp->spell == type) && (hjp->caster == FALSE))
+    if ((hjp->spell == type) && (hjp->is_caster_record == FALSE))
       return hjp->force;
   
     // Elementals shouldn't have anything cast on them.
@@ -3037,7 +3045,7 @@ void extract_char(struct char_data * ch, bool do_save)
     if (IS_PC_CONJURED_ELEMENTAL(ch) || IS_SPIRIT(ch)) {
       for (struct spirit_sustained *ssust = SPIRIT_SUST(ch); ssust; ssust = next) {
         next = ssust->next;
-        if (ssust->caster)
+        if (ssust->is_caster_record)
           stop_spirit_power(ch, ssust->type);
         else
           stop_spirit_power(ssust->target, ssust->type);
@@ -3893,6 +3901,9 @@ void _char_with_spell_to_room(struct char_data *ch, int spell_num, room_spell_t 
         int force = MIN(sust->force, sust->success);
         room_spell_tracker[ROOM_HIGHEST_SPELL_FORCE] = MAX(room_spell_tracker[ROOM_HIGHEST_SPELL_FORCE], force);
       }
+      // Don't iterate back into PC's spell list.
+      if (IS_PC_CONJURED_ELEMENTAL(ch))
+        break;
     }
   }
 }
@@ -3910,10 +3921,13 @@ void _char_with_spell_from_room(struct char_data *ch, int spell_num, room_spell_
           continue;
 
         for (struct sustain_data *sust = GET_SUSTAINED(tmp_ch); sust; sust = sust->next) {
-          if (sust->spell == spell_num && sust->caster) {
+          if (sust->spell == spell_num && sust->is_caster_record) {
             int force = MIN(sust->force, sust->success);
             room_spell_tracker[ROOM_HIGHEST_SPELL_FORCE] = MAX(room_spell_tracker[ROOM_HIGHEST_SPELL_FORCE], force);
           }
+          // Don't iterate back into PC's spell list.
+          if (IS_PC_CONJURED_ELEMENTAL(tmp_ch))
+          break;
         }
       }
     }
