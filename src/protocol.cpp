@@ -3063,8 +3063,8 @@ static void SendMSSP( descriptor_t *apDescriptor )
     { "ATCP",          "1" },
     { "ZMP",           "0" },
     */
-    { "SSL",           "4002", NULL },
-    { "TLS",           "4002", NULL },
+    //{ "SSL",           "4002", NULL },
+    //{ "TLS",           "4002", NULL },
 
     { NULL, NULL, NULL } /* This must always be last. */
   };
