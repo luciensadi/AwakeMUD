@@ -521,7 +521,8 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define GET_OBJ_RAW_NAME(obj)          ((obj)->text.name)
 #define GET_OBJ_NAME(obj)              (!(obj) ? "<null>" : (obj)->restring ? (obj)->restring : GET_OBJ_RAW_NAME(obj))
 #define GET_OBJ_DESC(obj)              ((obj)->photo ? (obj)->photo : (obj)->text.look_desc)
-#define GET_KEYWORDS(ch)               ((ch)->player.physical_text.keywords)
+#define GET_KEYWORDS(ch)               (((ch) && (ch)->player.physical_text.keywords) ? (ch)->player.physical_text.keywords : "<null>")
+#define GET_SETTABLE_KEYWORDS(ch)      ((ch)->player.physical_text.keywords)
 #define GET_NAME(ch)                   ((ch)->player.physical_text.name)
 #define GET_CHAR_NAME(ch) \
   (!(ch) ? "<null>" : \

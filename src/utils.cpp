@@ -6215,7 +6215,7 @@ const char * keyword_appears_in_char(const char *keyword, struct char_data *ch, 
   }
 
   if (search_keywords) {
-    CHECK_KEYWORD(ch->player.physical_text.keywords, "keywords");
+    CHECK_KEYWORD(GET_KEYWORDS(ch), "keywords");
   }
 
   if (search_name) {
