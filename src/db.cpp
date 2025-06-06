@@ -212,8 +212,7 @@ void assign_rooms(void);
 void assign_shopkeepers(void);
 void assign_johnsons(void);
 void randomize_shop_prices(void);
-int zone_is_empty(int zone_nr);
-void reset_zone(int zone, int reboot);
+void reset_zone(rnum_t zone, int reboot);
 int file_to_string(const char *name, char *buf, size_t buf_size);
 int file_to_string_alloc(const char *name, char **buf);
 void check_start_rooms(void);
@@ -1827,8 +1826,7 @@ void parse_mobile(File &in, long nr)
   VTable data;
   data.Parse(&in);
 
-  mob->player.physical_text.keywords =
-    str_dup(data.GetString("Keywords", "mob unnamed"));
+  GET_SETTABLE_KEYWORDS(mob) = str_dup(data.GetString("Keywords", "mob unnamed"));
   mob->player.physical_text.name =
     str_dup(data.GetString("Name", "an unnamed mob"));
   mob->player.physical_text.room_desc =
@@ -3165,7 +3163,7 @@ int vnum_mobile_attribute(char *attrname, struct char_data *ch) {
   int attr = search_block(attrname, attributes, FALSE);
 
   if (attr >= NUM_ATTRIBUTES || attr < 0) {
-    send_to_char(ch, "'%s' is not a valid attribute. Choices are:\r\n", attributes);
+    send_to_char(ch, "'%s' is not a valid attribute. Choices are:\r\n", attributes[attr]);
     for (attr = 0; attr < NUM_ATTRIBUTES; attr++) {
       send_to_char(ch, "%s%s%s", attr == 0 ? "" : ", ", attributes[attr], attr == NUM_ATTRIBUTES - 1 ? "\r\n" : "");
     }
@@ -3549,7 +3547,7 @@ int vnum_mobile(char *searchname, struct char_data * ch)
     return vnum_mobile_attribute(searchname,ch);
   for (nr = 0; nr <= top_of_mobt; nr++)
   {
-    bool is_keyword = isname(searchname, get_string_after_color_code_removal(mob_proto[nr].player.physical_text.keywords, NULL));
+    bool is_keyword = isname(searchname, get_string_after_color_code_removal(GET_KEYWORDS(&mob_proto[nr]), NULL));
     bool is_name = isname(searchname, get_string_after_color_code_removal(mob_proto[nr].player.physical_text.name, NULL));
     if (is_keyword || is_name) {
       snprintf(buf, sizeof(buf), "%3d. [%5ld] %s\r\n", ++found,
@@ -4626,14 +4624,15 @@ void zone_update(void)
   if (((++timer * PULSE_ZONE) / PASSES_PER_SEC) >= 60) {
     timer = 0;
     for (i = 0; i <= top_of_zone_table; i++) {
-      if (zone_table[i].age < zone_table[i].lifespan &&
-          zone_table[i].reset_mode != ZONE_RESET_NEVER)
+      if (zone_table[i].age < zone_table[i].lifespan && zone_table[i].reset_mode != ZONE_RESET_NEVER) {
         (zone_table[i].age)++;
+      }
 
-      if (zone_table[i].age >= MAX(zone_table[i].lifespan,5) &&
-          zone_table[i].age < ZO_DEAD && zone_table[i].reset_mode &&
-          (zone_table[i].reset_mode == ZONE_RESET_ALWAYS ||
-           zone_is_empty(i))) {
+      if (zone_table[i].age >= MAX(zone_table[i].lifespan, 5)
+          && zone_table[i].age < ZO_DEAD
+          && zone_table[i].reset_mode
+          && (zone_table[i].reset_mode == ZONE_RESET_ALWAYS || zone_table[i].players_in_zone == 0))
+      {
         reset_zone(i, 0);
       }
     }
@@ -4709,7 +4708,7 @@ void zcmd_repair_door(struct room_data *room, int dir) {
 #define ZONE_ERROR(message) {log_zone_error(zone, cmd_no, message); last_cmd = 0;}
 
 /* execute the reset command table of a given zone */
-void reset_zone(int zone, int reboot)
+void reset_zone(rnum_t zone, int reboot)
 {
   SPECIAL(fixer);
   int cmd_no, last_cmd = 0, found = 0, no_mob = 0, temp_qty = 0;
@@ -5368,19 +5367,6 @@ void reset_zone(int zone, int reboot)
     }
   }
 
-}
-
-/* for use in reset_zone; return TRUE if zone 'nr' is Free of non-idle PC's  */
-int zone_is_empty(int zone_nr)
-{
-  struct descriptor_data *i;
-
-  for (i = descriptor_list; i; i = i->next)
-    if (!i->connected && i->character && i->character->char_specials.timer < IDLE_TIMER_ZONE_RESET_THRESHOLD)
-      if (i->character->in_room && i->character->in_room->zone == zone_nr)
-        return 0;
-
-  return 1;
 }
 
 

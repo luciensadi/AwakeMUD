@@ -11,6 +11,14 @@
 #ifndef _handler_h_
 #define _handler_h_
 
+#ifndef TRUE
+#define TRUE 1
+#endif
+
+#ifndef FALSE
+#define FALSE 0
+#endif
+
 /* handling the affected-structures */
 void  affect_total_veh(struct veh_data *veh);
 void    affect_total(struct char_data *ch);

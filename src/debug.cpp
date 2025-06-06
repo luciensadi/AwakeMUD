@@ -48,6 +48,8 @@ extern void weather_change();
 extern bool ranged_response(struct char_data *combatant, struct char_data *ch);
 extern void docwagon_retrieve(struct char_data *ch);
 extern void convert_and_write_string_to_file(const char *str, const char *path);
+extern int calculate_players_in_vehicle(struct veh_data *veh);
+extern void recalculate_whole_game_players_in_zone();
 
 #ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
 extern void verify_every_pointer_we_can_think_of();
@@ -207,6 +209,13 @@ ACMD(do_debug) {
     return;
   }
 
+  if (!str_cmp(arg1, "cleanup_zone_pcs")) {
+    send_to_char(ch, "OK, validating zone and vehicle character counts...\r\n");
+    recalculate_whole_game_players_in_zone();
+    send_to_char(ch, "Done.\r\n");
+    return;
+  }
+
   if (!str_cmp(arg1, "makesecs")) {
     extern void initialize_pocket_secretary(struct obj_data *sec);
 
@@ -249,6 +258,13 @@ ACMD(do_debug) {
     return;
   }
 
+  if (!str_cmp(arg1, "migration_tests")) {
+    extern void test_phonebook_entry_migration_query_generation();
+    test_phonebook_entry_migration_query_generation();
+    send_to_char(ch, "Passed!\r\n");
+    return;
+  }
+
   if (!str_cmp(arg1, "bitfield")) {
     send_to_char(ch, "OK, checking bitfield consistency.\r\n");
 
@@ -266,14 +282,6 @@ ACMD(do_debug) {
     }
     return;
   }
-
-#ifdef TEMPORARY_COMPILATION_GUARD
-  if (!str_cmp(arg1, "minigame")) {
-    extern void minigame_debug(struct char_data *ch, char *rest_of_argument);
-    minigame_debug(ch, rest_of_argument);
-    return;
-  }
-#endif
 
   if (!str_cmp(arg1, "discord")) {
     rest_of_argument = any_one_arg(rest_of_argument, arg2);

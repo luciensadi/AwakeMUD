@@ -4996,79 +4996,43 @@ POWER(spirit_sustain)
   }
 
   struct sustain_data *sust;
-  if (GET_SUSTAINED_NUM(spirit))
-    send_to_char(ch, "That %s is already sustaining a spell.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
-  else {
-    int i = atoi(arg);
-    if (i <= 0) {
-      send_to_char(ch, "Syntax: 'ORDER <%s> SUSTAIN <spell number from the AFFECT command>'\r\n'", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
-      return;
-    }
+  int i = atoi(arg);
+  
+  FAILURE_CASE_PRINTF(GET_SUSTAINED_NUM(spirit), "That %s is already sustaining a spell.", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
+  FAILURE_CASE_PRINTF(i <= 0, "Syntax: 'ORDER <%s> SUSTAIN <spell number from the AFFECT command>'", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
+  FAILURE_CASE_PRINTF(i > GET_SUSTAINED_NUM(ch), "You're only sustaining %d spell%s.", GET_SUSTAINED_NUM(ch), GET_SUSTAINED_NUM(ch) != 1 ? "s" : "");
 
-    if (i > GET_SUSTAINED_NUM(ch)) {
-      send_to_char(ch, "You're only sustaining %d spell%s.\r\n", GET_SUSTAINED_NUM(ch), GET_SUSTAINED_NUM(ch) != 1 ? "s" : "");
-      return;
-    }
+  for (sust = GET_SUSTAINED(ch); sust; sust = sust->next)
+    if (sust->is_caster_record && --i == 0)
+      break;
 
-    for (sust = GET_SUSTAINED(ch); sust; sust = sust->next)
-      if (sust->is_caster_record && --i == 0)
-        break;
-
-    // Anti-crash.
-    if (!sust) {
-      mudlog("SYSERR: We would have crashed from a bad sustain!", ch, LOG_SYSLOG, TRUE);
-      send_to_char("Your elemental can't sustain that spell.\r\n", ch);
-      return;
-    }
-
-    if (sust->focus || sust->spirit) {
-      send_to_char("You aren't sustaining that spell yourself.\r\n", ch);
-      return;
-    }
-
-    switch (spiritdata->type) {
-      case ELEM_EARTH:
-        if (spells[sust->spell].category != MANIPULATION) {
-          send_to_char("Earth elementals can only sustain Manipulation spells.\r\n", ch);
-          return;
-        }
-        break;
-      case ELEM_FIRE:
-        if (spells[sust->spell].category != COMBAT) {
-          send_to_char("Fire elementals can only sustain Combat spells.\r\n", ch);
-          return;
-        }
-        break;
-      case ELEM_WATER:
-        if (spells[sust->spell].category != ILLUSION) {
-          send_to_char("Water elementals can only sustain Illusion spells.\r\n", ch);
-          return;
-        }
-        break;
-      case ELEM_AIR:
-        if (spells[sust->spell].category != DETECTION) {
-          send_to_char("Air elementals can only sustain Detection spells.\r\n", ch);
-          return;
-        }
-        break;
-      default:
-        snprintf(buf, sizeof(buf), "SYSERR: Unexpected elemental type %d in spirit_sustain.", spiritdata->type);
-        mudlog(buf, ch, LOG_SYSLOG, TRUE);
-        break;
-    }
-
-    if (spiritdata->force < sust->force) {
-      send_to_char(ch, "%s can only sustain spells at force %d or lower.\r\n", CAP(GET_NAME(spirit)), spiritdata->force);
-      return;
-    }
-
-    sust->spirit = spirit;
-    GET_SUSTAINED_FOCI(ch)++;
-    GET_SUSTAINED_NUM(spirit)++;
-    spiritdata->services--;
-    GET_SUSTAINED(spirit) = sust;
-    send_to_char(ch, "%s sustains %s for you.\r\n", CAP(GET_NAME(spirit)), spells[sust->spell].name);
+  // Anti-crash.
+  if (!sust) {
+    mudlog("SYSERR: We would have crashed from a bad sustain!", ch, LOG_SYSLOG, TRUE);
+    send_to_char("Your elemental can't sustain that spell.\r\n", ch);
+    return;
   }
+
+  FAILURE_CASE(sust->focus || sust->spirit, "You aren't sustaining that spell yourself.");
+
+  if (spiritdata->type < ELEM_EARTH || spiritdata->type > ELEM_WATER) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Unexpected elemental type %d in spirit_sustain.", spiritdata->type);
+    send_to_char(ch, "Something went wrong with your elemental. Contact staff.\r\n");
+    return;
+  }
+
+  FAILURE_CASE(spiritdata->type == ELEM_EARTH && spells[sust->spell].category != MANIPULATION, "Earth elementals can only sustain Manipulation spells.");
+  FAILURE_CASE(spiritdata->type == ELEM_AIR && spells[sust->spell].category != DETECTION, "Air elementals can only sustain Detection spells.");
+  FAILURE_CASE(spiritdata->type == ELEM_FIRE && spells[sust->spell].category != COMBAT, "Fire elementals can only sustain Combat spells.");
+  FAILURE_CASE(spiritdata->type == ELEM_WATER && spells[sust->spell].category != ILLUSION, "Water elementals can only sustain Illusion spells.");
+  FAILURE_CASE_PRINTF(spiritdata->force < sust->force, "%s can only sustain spells at force %d or lower.\r\n", CAP(GET_NAME(spirit)), spiritdata->force);
+
+  sust->spirit = spirit;
+  GET_SUSTAINED_FOCI(ch)++;
+  GET_SUSTAINED_NUM(spirit)++;
+  spiritdata->services--;
+  GET_SUSTAINED(spirit) = sust;
+  send_to_char(ch, "%s sustains %s for you.\r\n", CAP(GET_NAME(spirit)), spells[sust->spell].name);
 }
 
 POWER(spirit_accident)

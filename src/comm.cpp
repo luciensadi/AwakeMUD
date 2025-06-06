@@ -95,11 +95,6 @@ extern char help[];
 extern void do_secret_ticks(int pulse);
 #endif
 
-#ifdef TEMPORARY_COMPILATION_GUARD
-#include "minigame_container.hpp"
-#include "minigame_module.hpp"
-#endif
-
 bool _GLOBALLY_BAN_OPENVPN_CONNETIONS_ = FALSE;
 
 /* local globals */
@@ -2469,11 +2464,6 @@ void free_editing_structs(descriptor_data *d, int state)
   DELETE_IF_EXTANT(d->edit_apartment);
   DELETE_IF_EXTANT(d->edit_apartment_room);
   DELETE_IF_EXTANT(d->edit_exdesc);
-
-#ifdef TEMPORARY_COMPILATION_GUARD
-  DELETE_IF_EXTANT(d->edit_minigame_module); 
-  DELETE_IF_EXTANT(d->edit_minigame_container);
-#endif
 }
 
 void close_socket(struct descriptor_data *d)

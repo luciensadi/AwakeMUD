@@ -83,6 +83,8 @@ extern int max_ability(int i);
 extern int count_objects(struct obj_data *obj);
 extern void list_mob_precast_spells_to_ch(struct char_data *mob, struct char_data *ch);
 extern const char *get_faction_name(idnum_t idnum, struct char_data *viewer);
+extern void modify_players_in_zone(rnum_t in_zone, int amount, const char *origin);
+extern void modify_players_in_veh(struct veh_data *veh, int amount, const char *origin);
 
 extern const char *wound_arr[];
 extern const char *material_names[];
@@ -108,7 +110,7 @@ extern const char *render_door_type_string(struct room_direction_data *door);
 extern void save_shop_orders();
 extern void turn_hardcore_on_for_character(struct char_data *ch);
 extern void turn_hardcore_off_for_character(struct char_data *ch);
-extern void stop_rigging(struct char_data *ch);
+extern void stop_rigging(struct char_data *ch, bool send_message);
 extern void stop_driving(struct char_data *ch, bool is_involuntary);
 extern void write_zone_to_disk(int vnum);
 
@@ -2318,7 +2320,7 @@ ACMD(do_wizpossess)
     send_to_char("Hee hee... we are jolly funny today, eh?\r\n", ch);
   else if (victim->desc)
     send_to_char("You can't do that, the body is already in use!\r\n", ch);
-  else if ((!access_level(ch, LVL_DEVELOPER)) && !IS_NPC(victim))
+  else if ((!access_level(ch, LVL_PRESIDENT)) && !IS_NPC(victim))
     send_to_char("You aren't holy enough to use a mortal's body.\r\n", ch);
   else {
     send_to_char(OK, ch);
@@ -2334,6 +2336,15 @@ ACMD(do_wizpossess)
 
     victim->desc = ch->desc;
     ch->desc = NULL;
+
+    // Add the possessing staff record to the vehicle and room they're in.
+    if (victim->in_veh) {
+      modify_players_in_veh(victim->in_veh, +1, "staff possession");
+    }
+    if (get_ch_in_room(victim)) {
+      rnum_t in_zone = get_ch_in_room(victim)->zone;
+      modify_players_in_zone(in_zone, +1, "staff possession");
+    }
   }
 }
 
@@ -2348,7 +2359,7 @@ ACMD(do_return)
   struct char_data *vict;
 
   if (PLR_FLAGGED(ch, PLR_REMOTE)) {
-    stop_rigging(ch);
+    stop_rigging(ch, true);
     return;
   }
 
@@ -2364,8 +2375,20 @@ ACMD(do_return)
         if (IS_NPC(ch))
           MOB_FLAGS(ch).SetBit(MOB_NOKILL);
       }
-      if (PLR_FLAGGED(ch->desc->original, PLR_SWITCHED))
+      
+      if (PLR_FLAGGED(ch->desc->original, PLR_SWITCHED)) {
+        // Staff switch. Pull their zone and vehicle player tracker info.
         PLR_FLAGS(ch->desc->original).RemoveBit(PLR_SWITCHED);
+
+        // Remove the possessing staff record from the vehicle and room they're in.
+        if (ch->in_veh) {
+          modify_players_in_veh(ch->in_veh, -1, "do_return (staff possession)");
+        }
+        if (get_ch_in_room(ch)) {
+          rnum_t in_zone = get_ch_in_room(ch)->zone;
+          modify_players_in_zone(in_zone, -1, "do_return (staff possession)");
+        }
+      }
 
       /* JE 2/22/95 */
       /* if someone switched into your original body, disconnect them */
@@ -4119,7 +4142,7 @@ ACMD(do_wizwho)
 
 ACMD(do_zreset)
 {
-  void reset_zone(int zone, int reboot);
+  void reset_zone(rnum_t zone, int reboot);
 
   int i;
 
@@ -6052,7 +6075,7 @@ ACMD(do_set)
     GET_BANK_RAW(vict) = value;
     break;
   case 19:
-    RANGE(0, 7500);
+    RANGE(0, INT_MAX - 1);
     GET_REP(vict) = value;
     break;
   case 20:
@@ -6341,7 +6364,7 @@ ACMD(do_set)
     SET_OR_REMOVE(PLR_FLAGS(vict), PLR_EDCON);
     break;
   case 61:
-    RANGE(0, 7500);
+    RANGE(0, INT_MAX - 1);
     GET_NOT(vict) = value;
     break;
   case 63:
@@ -6368,7 +6391,7 @@ ACMD(do_set)
     SET_OR_REMOVE(PLR_FLAGS(vict), PLR_NO_IDLE_OUT);
     break;
   case 70:
-    RANGE(0, 10000);
+    RANGE(0, INT_MAX - 1);
     GET_TKE(vict) = value;
     break;
   case 71:
@@ -8464,7 +8487,7 @@ int audit_zone_mobs_(struct char_data *ch, int zone_num, bool verbose) {
       }
     }
 
-    if (!mob->player.physical_text.keywords || !*mob->player.physical_text.keywords || !strcmp(mob->player.physical_text.keywords, STRING_MOB_KEYWORDS_UNFINISHED)) {
+    if (!GET_KEYWORDS(mob) || !strcmp(mob->player.physical_text.keywords, STRING_MOB_KEYWORDS_UNFINISHED)) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^ymissing keywords^n.\r\n");
       issues++;
     }

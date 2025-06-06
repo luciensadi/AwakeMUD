@@ -39,6 +39,7 @@
 
 extern MYSQL *mysql;
 extern std::map<std::string, int> wear_flag_map_for_exdescs;
+extern Bitfield wearloc_shadowing_locations[ITEM_WEAR_MAX];
 
 extern void cedit_disp_menu(struct descriptor_data *d, int mode);
 extern const char *remove_final_punctuation(const char *str);
@@ -198,7 +199,7 @@ void syspoints_purchase_exdescs(struct char_data *ch, char *buf, bool is_confirm
 
   // Have they entered the confirmation command?
   FAILURE_CASE_PRINTF(!is_confirmed && !is_abbrev(buf, "confirm"),
-                      "You can spend %d system points to increase your extra description maximum by %d. To do so, type SYSPOINT PURCHASE CONFIRM.",
+                      "You can spend %d system points to increase your extra description maximum by %d. To do so, type SYSPOINT EXDESC CONFIRM.",
                       SYSP_EXDESC_MAX_PURCHASE_COST, SYSP_EXDESC_MAX_PURCHASE_GETS_YOU_X_SLOTS);
 
   // Do it.
@@ -256,15 +257,9 @@ bool can_see_exdesc(struct char_data *viewer, struct char_data *vict, PCExDesc *
   comparison_field.RemoveAll(GET_CHAR_COVERED_WEARLOCS(vict));
 
   // Additional filter-downs
-  if (comparison_field.IsSet(ITEM_WEAR_UNDERWEAR)) {
-    if (GET_CHAR_COVERED_WEARLOCS(vict).AreAnySet(ITEM_WEAR_UNDER, ITEM_WEAR_LEGS, ITEM_WEAR_BODY, ITEM_WEAR_ABOUT, ENDBIT)) {
-      comparison_field.RemoveBit(ITEM_WEAR_UNDERWEAR);
-    }
-  }
-
-  if (comparison_field.AreAnySet(ITEM_WEAR_CHEST, ITEM_WEAR_BACK, ITEM_WEAR_BELLY, ENDBIT)) {
-    if (GET_CHAR_COVERED_WEARLOCS(vict).AreAnySet(ITEM_WEAR_UNDER, ITEM_WEAR_BODY, ITEM_WEAR_ABOUT, ENDBIT)) {
-      comparison_field.RemoveBits(ITEM_WEAR_CHEST, ITEM_WEAR_BACK, ITEM_WEAR_BELLY, ENDBIT);
+  for (int wear_idx = 0; wear_idx < ITEM_WEAR_MAX; wear_idx++) {
+    if (comparison_field.IsSet(wear_idx) && GET_CHAR_COVERED_WEARLOCS(vict).AreAnyShared(wearloc_shadowing_locations[wear_idx])) {
+      comparison_field.RemoveBit(wear_idx);
     }
   }
 
@@ -282,76 +277,72 @@ std::vector<PCExDesc *> exdescs_with_visibility_changed_by_wearloc(struct char_d
     return result;
   }
 
-  // Check for precondition failures (you're wearing something else that occludes this, so change will not happen)
-  // Precondition: it's underwear and you're wearing something that occludes underwear
-  if (wearloc == ITEM_WEAR_UNDERWEAR) {
-    if (GET_CHAR_COVERED_WEARLOCS(vict).AreAnySet(ITEM_WEAR_UNDER, ITEM_WEAR_LEGS, ITEM_WEAR_BODY, ITEM_WEAR_ABOUT, ENDBIT)) {
-#ifdef IS_BUILDPORT
-      send_to_char(vict, "debug: no alteration to exdesc reveal, concealed by other slots\r\n");
-#endif
-      return result;
-    }
-  }
-
-  // Precondition: it's chest and you're wearing something that occludes chest
-  if (wearloc == ITEM_WEAR_CHEST || wearloc == ITEM_WEAR_BACK || wearloc == ITEM_WEAR_BELLY) {
-    if (GET_CHAR_COVERED_WEARLOCS(vict).AreAnySet(ITEM_WEAR_UNDER, ITEM_WEAR_BODY, ITEM_WEAR_ABOUT, ENDBIT)) {
-#ifdef IS_BUILDPORT
-      send_to_char(vict, "debug: no alteration to exdesc reveal, concealed by other slots\r\n");
-#endif
-      return result;
-    }
+  if (GET_CHAR_COVERED_WEARLOCS(vict).AreAnyShared(wearloc_shadowing_locations[wearloc])) {
+    send_to_char(vict, "debug: no alteration to exdesc %s, concealed by other slots\r\n", check_for_reveal ? "reveal" : "conceal");
+    return result;
   }
   
   for (auto exdesc : GET_CHAR_EXDESCS(vict)) {
     Bitfield comparison_field;
+    // First, we put all of this exdesc's shown-on slots into the comparison field.
     comparison_field.SetAll(*(exdesc->get_wear_slots()));
+    // Then, we remove all the slots that are already covered. comparison_field now exclusively contains bits that are part of the exdesc and not covered.
     comparison_field.RemoveAll(GET_CHAR_COVERED_WEARLOCS(vict));
 
     int num_already_set = comparison_field.GetNumSet();
 
-    /*
-    send_to_char(vict, "DEBUG: Comparing '%s's wearlocs of %s to your already-covered wearlocs of %s yields %s (%d set).\r\n",
+    send_to_char(vict, "^bDEBUG (%s): Comparing '%s's wearlocs of %s to your already-covered wearlocs of %s yields %s (%d set).^n\r\n",
+                 check_for_reveal ? "reveal" : "conceal",
                  exdesc->get_keyword(),
                  exdesc->get_wear_slots()->ToString(),
                  GET_CHAR_COVERED_WEARLOCS(vict).ToString(),
                  comparison_field.ToString(),
                  num_already_set
                 );
-    */
 
     // Check for something that's being revealed.
     if (check_for_reveal) {
       // It's already revealed, so we won't reveal it with this action.
       if (num_already_set > 0) {
-        // send_to_char(vict, "debug: won't show %s, already set is too high at %d\r\n", exdesc->get_keyword(), num_already_set);
+        send_to_char(vict, "^cdebug: reveal won't show %s, already set is too high at %d^n\r\n", exdesc->get_keyword(), num_already_set);
         continue;
       }
+
+      // At this point, we know the exdesc is completely hidden (no revealed slots).
       
-      // Check to see if the wearloc we're revealing is both in the exdesc's set and not already revealed.
-      if (exdesc->get_wear_slots()->IsSet(wearloc) && !comparison_field.IsSet(wearloc)) {
-        // send_to_char(vict, "debug: found %s\r\n", exdesc->get_keyword());
+      // Check to see if the wearloc we're revealing is in the exdesc's set. If it is, that means we're revealing this item.
+      if (exdesc->get_wear_slots()->IsSet(wearloc) /* todo: reverse map so that removing body reveals chest etc */) {
+        send_to_char(vict, "^cdebug: reveal found %s^n\r\n", exdesc->get_keyword());
         result.push_back(exdesc);
+      }
+
+      // No overlap, exdesc won't be revealed by this action.
+      else {
+        send_to_char(vict, "^cdebug: reveal falling through %s^n^n\r\n", exdesc->get_keyword());
       }
     }
     // Checking for something that's being hidden.
     else {
       // It's already hidden.
       if (num_already_set == 0) {
-        // send_to_char(vict, "debug: won't show %s, already set is too low at %d\r\n", exdesc->get_keyword(), num_already_set);
+        send_to_char(vict, "^cdebug: conceal won't show %s, already set is too low at %d^n\r\n", exdesc->get_keyword(), num_already_set);
         continue;
       }
 
       // It's revealed, but changing a single wearloc won't change this.
       if (num_already_set > 1) {
-        // send_to_char(vict, "debug: won't show %s, already set is too high at %d (v2)\r\n", exdesc->get_keyword(), num_already_set);
+        send_to_char(vict, "^cdebug: conceal won't show %s, already set is too high at %d (v2)^n\r\n", exdesc->get_keyword(), num_already_set);
         continue;
       }
 
       // Check to see if the sole set wearloc is the one we're covering.
       if (comparison_field.IsSet(wearloc)) {
-        // send_to_char(vict, "debug: found %s\r\n", exdesc->get_keyword());
+        send_to_char(vict, "^cdebug: conceal found %s\r\n", exdesc->get_keyword());
         result.push_back(exdesc);
+      }
+
+      else {
+        send_to_char(vict, "^cdebug: conceal falling through %s: comparison_field = %s^n\r\n", exdesc->get_keyword(), comparison_field.ToString());
       }
     }
   }

@@ -38,10 +38,6 @@ class ApartmentComplex;
 class Apartment;
 class ApartmentRoom;
 class PCExDesc;
-#ifdef TEMPORARY_COMPILATION_GUARD
-class MinigameContainer;
-class MinigameModule;
-#endif
 
 /***********************************************************************
  * Structures                                                          *
@@ -538,7 +534,7 @@ struct char_point_data
   int karma;            /* The experience of the player */
   unsigned int rep;              /* the reputation of the player  (karma earned via runs) */
   unsigned int noto;              /* the reputation of the player  (karma earned via kills) */
-  sh_int tke;              /* the reputation of the player  (karma earned total) */
+  int tke;              /* the reputation of the player  (karma earned total) */
   ush_int sig;
   sbyte init_dice;     /* Bonuses for initiative dice             */
   sh_int init_roll;     /* Total of init roll                      */
@@ -1154,10 +1150,6 @@ struct descriptor_data
   Faction *edit_faction;
   PCExDesc *edit_exdesc;
   Playergroup *edit_pgroup; /* playergroups */
-  #ifdef TEMPORARY_COMPILATION_GUARD
-  MinigameModule *edit_minigame_module;
-  MinigameContainer *edit_minigame_container;
-  #endif
   // If you add more of these edit_whatevers, touch comm.cpp's free_editing_structs and add them!
 
   int canary;
@@ -1176,9 +1168,6 @@ struct descriptor_data
       edit_helpfile(NULL), edit_complex(NULL), edit_complex_original(NULL),
       edit_apartment(NULL), edit_apartment_original(NULL), edit_apartment_room(NULL),
       edit_apartment_room_original(NULL), edit_faction(NULL), edit_pgroup(NULL),
-#ifdef TEMPORARY_COMPILATION_GUARD
-      edit_minigame_module(NULL), edit_minigame_container(NULL),
-#endif
       canary(CANARY_VALUE), pProtocol(NULL)
   {
     // Zero out the communication history for all channels.

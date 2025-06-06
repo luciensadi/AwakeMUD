@@ -55,7 +55,7 @@ void medit_disp_menu(struct descriptor_data *d)
   send_to_char(CH, "Mob number: %s%ld%s\r\n", CCCYN(CH, C_CMP), d->edit_number,
                CCNRM(CH, C_CMP));
   send_to_char(CH, "1) Keywords: %s%s%s\r\n", CCCYN(CH, C_CMP),
-               MOB->player.physical_text.keywords, CCNRM(CH, C_CMP));
+               GET_KEYWORDS(MOB), CCNRM(CH, C_CMP));
   send_to_char(CH, "2) Name: %s%s%s\r\n", CCCYN(CH, C_CMP),
                MOB->player.physical_text.name, CCNRM(CH, C_CMP));
   send_to_char(CH, "3) Room description:\r\n%s%s%s\r\n", CCCYN(CH, C_CMP),
@@ -452,7 +452,7 @@ void medit_parse(struct descriptor_data *d, const char *arg)
         } // end for loop
 
         // now you can free the old prototype and put in the new one
-        DELETE_ARRAY_IF_EXTANT(mob_proto[mob_number].player.physical_text.keywords);
+        DELETE_ARRAY_IF_EXTANT(GET_SETTABLE_KEYWORDS(&mob_proto[mob_number]));
         DELETE_ARRAY_IF_EXTANT(mob_proto[mob_number].player.title);
         DELETE_ARRAY_IF_EXTANT(mob_proto[mob_number].player.physical_text.name);
         DELETE_ARRAY_IF_EXTANT(mob_proto[mob_number].player.physical_text.room_desc);
@@ -910,8 +910,8 @@ void medit_parse(struct descriptor_data *d, const char *arg)
     break;
 
   case MEDIT_EDIT_NAMELIST:
-    DELETE_ARRAY_IF_EXTANT(MOB->player.physical_text.keywords);
-    MOB->player.physical_text.keywords = str_dup(arg);
+    DELETE_ARRAY_IF_EXTANT(GET_SETTABLE_KEYWORDS(MOB));
+    GET_SETTABLE_KEYWORDS(MOB) = str_dup(arg);
     medit_disp_menu(d);
     break;
 
@@ -1855,7 +1855,7 @@ void write_mobs_to_disk(vnum_t zone_num)
         continue;
       fprintf(fp, "#%ld\n", GET_MOB_VNUM(mob));
 
-      fprintf(fp, "Keywords:\t%s\n", mob->player.physical_text.keywords ? mob->player.physical_text.keywords : "mob unnamed");
+      fprintf(fp, "Keywords:\t%s\n", GET_SETTABLE_KEYWORDS(mob) ? GET_SETTABLE_KEYWORDS(mob) : "mob unnamed");
       fprintf(fp, "Name:\t%s\n", mob->player.physical_text.name ? mob->player.physical_text.name : "An unnamed mob");
       fprintf(fp, "RoomDesc:$\n%s\n~\n",
               prep_string_for_writing_to_savefile(buf2, mob->player.physical_text.room_desc ? mob->player.physical_text.room_desc : "An unnamed mob is here."));

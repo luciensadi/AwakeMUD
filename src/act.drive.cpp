@@ -28,15 +28,18 @@ int move_vehicle(struct char_data *ch, int dir);
 ACMD_CONST(do_return);
 int get_vehicle_modifier(struct veh_data *veh, bool include_weather=TRUE);
 void stop_vehicle(struct veh_data *veh);
-void stop_rigging(struct char_data *ch);
+void stop_rigging(struct char_data *ch, bool send_message);
 void stop_driving(struct char_data *ch, bool is_involuntary);
 int calculate_vehicle_entry_load(struct veh_data *veh);
+void start_rigging(struct char_data *ch, struct veh_data *veh, bool is_remote);
 
 extern int max_npc_vehicle_lootwreck_time;
 
 extern void rectify_desc_host(struct descriptor_data *desc);
 extern int get_obj_vehicle_load_usage(struct obj_data *obj, bool is_installed_mod);
 extern void recalculate_vehicle_usedload(struct veh_data *veh);
+extern void modify_players_in_zone(rnum_t in_zone, int amount, const char *origin);
+extern void modify_players_in_veh(struct veh_data *veh, int amount, const char *origin);
 
 #define VEH ch->in_veh
 
@@ -253,12 +256,6 @@ ACMD(do_rig)
       VEH->locked = TRUE;
     }
 
-    // No perception while rigging. Specifically only checks player perception.
-    if (PLR_FLAGGED(ch, PLR_PERCEIVE)) {
-      ACMD_DECLARE(do_astral);
-      do_astral(ch, buf, 0, SCMD_PERCEIVE);
-    }
-
     AFF_FLAGS(ch).SetBits(AFF_PILOT, AFF_RIG, ENDBIT);
     VEH->cspeed = SPEED_CRUISING;
     VEH->lastin[0] = VEH->in_room;
@@ -272,7 +269,7 @@ ACMD(do_rig)
       send_to_char("But you're not rigging.\r\n", ch);
       return;
     }
-    stop_rigging(ch);
+    stop_rigging(ch, true);
     stop_chase(VEH);
     stop_fighting(ch);
   }
@@ -814,19 +811,13 @@ void disp_mod(struct veh_data *veh, struct char_data *ch, int i)
 
 ACMD(do_control)
 {
-  struct obj_data *cyber, *jack;
+  struct obj_data *jack;
   struct veh_data *veh;
   struct char_data *temp;
-  bool has_rig = FALSE;
-  int i;
-      
-  for (cyber = ch->cyberware; cyber; cyber = cyber->next_content)
-    if (GET_CYBERWARE_TYPE(cyber) == CYB_VCR)
-      has_rig = TRUE;
 
   FAILURE_CASE(AFF_FLAGGED(ch, AFF_PILOT), "While driving? Now that would be a neat trick.");
   FAILURE_CASE(IS_WORKING(ch), "You can't pilot something while working on another project.");
-  FAILURE_CASE(!has_rig, "You need a vehicle control rig to do that.");
+  FAILURE_CASE(!find_cyberware(ch, CYB_VCR), "You need a vehicle control rig to do that.");
   FAILURE_CASE(get_ch_in_room(ch)->peaceful, "You can't do that in peaceful rooms.");
 
   // Error message sent in function.
@@ -835,42 +826,32 @@ ACMD(do_control)
 
   FAILURE_CASE(ch->in_veh, "You can't control a vehicle from inside one.");
 
-  has_rig = FALSE;
-  for (cyber = ch->carrying; cyber; cyber = cyber->next_content)
-    if (GET_OBJ_TYPE(cyber) == ITEM_RCDECK)
+  bool has_rig = FALSE;
+  for (struct obj_data *carrying = ch->carrying; carrying && !has_rig; carrying = carrying->next_content)
+    if (GET_OBJ_TYPE(carrying) == ITEM_RCDECK)
+      has_rig = TRUE;
+
+  for (int x = 0; !has_rig && x < NUM_WEARS; x++)
+    if (GET_EQ(ch, x) && GET_OBJ_TYPE(GET_EQ(ch, x)) == ITEM_RCDECK)
       has_rig = TRUE;
 
   if (!has_rig)
-    for (int x = 0; x < NUM_WEARS; x++)
-      if (GET_EQ(ch, x))
-        if (GET_OBJ_TYPE(GET_EQ(ch, x)) == ITEM_RCDECK)
-          has_rig = TRUE;
-
-  if (!has_rig)
-    for (cyber = ch->cyberware; cyber; cyber = cyber->next_content)
-      if (GET_CYBERWARE_TYPE(cyber) == CYB_CRD)
-        has_rig = TRUE;
+    has_rig = find_cyberware(ch, CYB_CRD);
 
   FAILURE_CASE(!has_rig, "You need a Remote Control Deck to do that.");
 
-  if ((i = atoi(argument)) < 0) {
+  int subscriber_idx = atoi(argument);
+  if (subscriber_idx < 0) {
     send_to_char("Which position on your subscriber list?\r\n", ch);
     return;
   }
 
   for (veh = ch->char_specials.subscribe; veh; veh = veh->next_sub)
-    if (--i < 0)
+    if (--subscriber_idx < 0)
       break;
 
-  if (!veh) {
-    send_to_char("Your subscriber list isn't that big.\r\n", ch);
-    return;
-  }
-
-  if (veh->damage >= VEH_DAM_THRESHOLD_DESTROYED) {
-    send_to_char("It doesn't respond.\r\n", ch);
-    return;
-  }
+  FAILURE_CASE(!veh, "Your subscriber list isn't that big.");
+  FAILURE_CASE_PRINTF(veh->damage >= VEH_DAM_THRESHOLD_DESTROYED, "%s doesn't respond.", CAP(GET_VEH_NAME_NOFORMAT(veh)));
 
   // Prevent controlling a towed or lost vehicle.
   if (!veh->in_room && !veh->in_veh) {
@@ -880,14 +861,16 @@ ACMD(do_control)
   }
 
   // Prevent controlling something inside a towed vehicle.
-  if (!get_veh_in_room(veh)) {
-    send_to_char("The tow hookup on the containing vehicle has overridden your controls.\r\n", ch);
-    return;
-  }
+  FAILURE_CASE(!get_veh_in_room(veh), "The tow hookup on the containing vehicle has overridden your controls.");
 
   // Prevent controlling a carried vehicle.
-  if (veh->in_room && GET_ROOM_VNUM(veh->in_room) == RM_PORTABLE_VEHICLE_STORAGE) {
-    send_to_char("The automated safety systems won't let you control a vehicle that's being carried around.\r\n", ch);
+  FAILURE_CASE(veh->in_room && GET_ROOM_VNUM(veh->in_room) == RM_PORTABLE_VEHICLE_STORAGE, "The automated safety systems won't let you control a vehicle that's being carried around.");
+
+  // Don't overwrite existing rigger. If it's someone else, this is an edge case and probably merits looking into.
+  if (veh->rigger) {
+    FAILURE_CASE_PRINTF(veh->rigger == ch, "You're already controlling %s.", GET_VEH_NAME(veh));
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Got already-rigged vehicle to do_control().");
+    send_to_char(ch, "%s is already being remote-controlled by someone else.", CAP(GET_VEH_NAME_NOFORMAT(veh)));
     return;
   }
 
@@ -900,8 +883,8 @@ ACMD(do_control)
   if (PLR_FLAGGED(ch, PLR_REMOTE))
     do_return(ch, NULL, 0, 0);
 
-  ch->char_specials.rigging = veh;
-  veh->rigger = ch;
+  start_rigging(ch, veh, TRUE);
+  
   for(temp = veh->people; temp; temp = temp->next_in_veh)
     if (AFF_FLAGGED(temp, AFF_RIG)) {
       send_to_char("You are forced out of the system!\r\n", temp);
@@ -927,18 +910,7 @@ ACMD(do_control)
     snprintf(buf, sizeof(buf), "$n plugs $s 'trode net into $s remote control deck.");
   }
   act(buf, TRUE, ch, NULL, NULL, TO_ROOM);
-  PLR_FLAGS(ch).SetBit(PLR_REMOTE);
   send_to_char(ch, "You take control of %s.\r\n", GET_VEH_NAME(veh));
-
-  remove_vehicle_brain(veh);
-  veh->cspeed = SPEED_CRUISING;
-
-  // Reallocate pools.
-  int max_offense = MIN(GET_SKILL(ch, SKILL_GUNNERY), GET_COMBAT_POOL(ch));
-  int remainder = MAX(0, GET_COMBAT_POOL(ch) - max_offense);
-  GET_OFFENSE(ch) = max_offense;
-  GET_BODY_POOL(ch) = 0;
-  GET_DODGE(ch) = remainder;
 }
 
 
@@ -1894,8 +1866,7 @@ ACMD(do_gridguide)
     if (PLR_FLAGGED(ch, PLR_REMOTE)) {
       send_to_veh("The autonav beeps and the vehicle starts to move towards its destination.\r\n", veh, 0, FALSE);
       send_to_char("Gridguide activates and kicks you out of the system.\r\n", ch);
-      PLR_FLAGS(ch).RemoveBit(PLR_REMOTE);
-      ch->char_specials.rigging = FALSE;
+      stop_rigging(ch, true);
       veh->rigger = NULL;
     } else
       send_to_veh("The autonav beeps and the vehicle starts to move towards its destination.\r\n", veh, 0, TRUE);
@@ -2533,7 +2504,40 @@ void stop_vehicle(struct veh_data *veh) {
   stop_chase(veh);
 }
 
-void stop_rigging(struct char_data *ch) {
+void start_rigging(struct char_data *ch, struct veh_data *veh, bool is_remote) {
+  // No perception while rigging. Specifically only checks player perception.
+  if (PLR_FLAGGED(ch, PLR_PERCEIVE)) {
+    ACMD_DECLARE(do_astral);
+    do_astral(ch, buf, 0, SCMD_PERCEIVE);
+  }
+
+  ch->char_specials.rigging = veh;
+  veh->rigger = ch;
+
+  if (is_remote) {
+    PLR_FLAGS(ch).SetBit(PLR_REMOTE);
+    // Add them to the vehicle's player counter AND the zone's player counter.
+    modify_players_in_veh(veh, +1, "start_rigging");
+    if (get_veh_in_room(veh)) {
+      rnum_t in_zone = get_veh_in_room(veh)->zone;
+      modify_players_in_zone(in_zone, +1, "start_rigging");
+    }
+  } else {
+    AFF_FLAGS(ch).SetBits(AFF_PILOT, AFF_RIG);
+  }
+
+  remove_vehicle_brain(veh);
+  veh->cspeed = SPEED_CRUISING;
+
+  // Reallocate pools.
+  int max_offense = MIN(GET_SKILL(ch, SKILL_GUNNERY), GET_COMBAT_POOL(ch));
+  int remainder = MAX(0, GET_COMBAT_POOL(ch) - max_offense);
+  GET_OFFENSE(ch) = max_offense;
+  GET_BODY_POOL(ch) = 0;
+  GET_DODGE(ch) = remainder;
+}
+
+void stop_rigging(struct char_data *ch, bool send_message) {
   if (!ch)
     return;
 
@@ -2545,6 +2549,15 @@ void stop_rigging(struct char_data *ch) {
   // Stop their vehicle.
   stop_vehicle(veh);
 
+  if (PLR_FLAGGED(ch, PLR_REMOTE)) {
+    // Remove them from the zone's player counter AND the vehicle's player counter.
+    modify_players_in_veh(veh, -1, "stop_rigging");
+    if (get_veh_in_room(veh)) {
+      rnum_t in_zone = get_veh_in_room(veh)->zone;
+      modify_players_in_zone(in_zone, -1, "stop_rigging");
+    }
+  }
+
   // Clear their pointers and flags.
   ch->char_specials.rigging = NULL;
   PLR_FLAGS(ch).RemoveBit(PLR_REMOTE);
@@ -2554,7 +2567,8 @@ void stop_rigging(struct char_data *ch) {
   // Take them out of combat (does not depend on above pointers/flags)
   stop_fighting(ch);
 
-  send_to_char("You return to your senses.\r\n", ch);
+  if (send_message)
+    send_to_char("You return to your senses.\r\n", ch);
 
   struct obj_data *jack = get_datajack(ch, TRUE);
   if (GET_OBJ_TYPE(jack) == ITEM_CYBERWARE) {
@@ -2595,7 +2609,7 @@ void stop_driving(struct char_data *ch, bool is_involuntary) {
   }
 
   if (AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE)) {
-    stop_rigging(ch);
+    stop_rigging(ch, true);
   } else if (AFF_FLAGGED(ch, AFF_PILOT)) {
     stop_vehicle(ch->in_veh);
     AFF_FLAGS(ch).RemoveBit(AFF_PILOT);

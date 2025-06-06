@@ -79,6 +79,7 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
 void docwagon_retrieve(struct char_data *ch);
 void zero_out_magazine_counts(struct obj_data *obj, int max_ammo_remaining = 0);
 int get_vehicle_damage_modifier(struct veh_data *veh);
+void stop_rigging(struct char_data *ch, bool send_message);
 
 SPECIAL(weapon_dominator);
 SPECIAL(pocket_sec);
@@ -636,19 +637,19 @@ void make_corpse(struct char_data * ch)
   if (IS_NPC(ch))
   {
     if (MOB_FLAGGED(ch, MOB_INANIMATE)) {
-      snprintf(buf, sizeof(buf), "remains corpse %s", ch->player.physical_text.keywords);
+      snprintf(buf, sizeof(buf), "remains corpse %s", GET_KEYWORDS(ch));
       snprintf(buf1, sizeof(buf1), "^rThe remains of %s are lying here.^n", color_replaced_name);
       snprintf(buf2, sizeof(buf2), "^rthe remains of %s^n", color_replaced_name);
       strlcpy(buf3, "It's been powered down permanently.\r\n", sizeof(buf3));
     } else {
-      snprintf(buf, sizeof(buf), "corpse %s", ch->player.physical_text.keywords);
+      snprintf(buf, sizeof(buf), "corpse %s", GET_KEYWORDS(ch));
       snprintf(buf1, sizeof(buf1), "^rThe corpse of %s is lying here.^n", color_replaced_name);
       snprintf(buf2, sizeof(buf2), "^rthe corpse of %s^n", color_replaced_name);
       strlcpy(buf3, "What once was living is no longer. Poor sap.\r\n", sizeof(buf3));
     }
     GET_OBJ_QUEST_CHAR_ID(corpse) = GET_MOB_QUEST_CHAR_ID(ch);
   } else {
-    snprintf(buf, sizeof(buf), "belongings %s", ch->player.physical_text.keywords);
+    snprintf(buf, sizeof(buf), "belongings %s", GET_KEYWORDS(ch));
     snprintf(buf1, sizeof(buf1), "^rThe belongings of %s are lying here.^n", color_replaced_name);
     snprintf(buf2, sizeof(buf2), "^rthe belongings of %s^n", color_replaced_name);
     strlcpy(buf3, "Looks like the DocWagon trauma team wasn't able to bring this stuff along.\r\n", sizeof(buf3));
@@ -6234,6 +6235,7 @@ void perform_violence(void)
     if (FIGHTING(ch)) {
       if (IS_NPC(ch)
           && !ch->desc
+          && !ch->squeue
           && GET_SKILL(ch, SKILL_SORCERY) > 0
           && GET_MENTAL(ch) > 400
           && ch->in_room == FIGHTING(ch)->in_room
@@ -6697,8 +6699,7 @@ void chkdmg(struct veh_data * veh)
       if (!damage(veh->rigger, veh->rigger, convert_damage(stage(-success_test(GET_WIL(veh->rigger), 6), SERIOUS)), TYPE_CRASH, MENTAL)) {
         // If they got knocked out, they've already broken off from rigging.
         if (veh->rigger) {
-          veh->rigger->char_specials.rigging = NULL;
-          PLR_FLAGS(veh->rigger).RemoveBit(PLR_REMOTE);
+          stop_rigging(veh->rigger, false);
         }
       }
       veh->rigger = NULL;
