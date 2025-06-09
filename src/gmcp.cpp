@@ -429,14 +429,21 @@ void ExecuteGMCPMessage(descriptor_t *apDescriptor, const char *module, const js
   log_vfprintf("GMCP module %s, payload %s", module, payload.dump().c_str());
   if (!strncmp(module, "Core.Supports.Get", strlen(module)))
     SendGMCPCoreSupports(apDescriptor);
-  else if (!strncmp(module, "Room.Info.Get", strlen(module)))
-    if (!apDescriptor->character)
+  else if (!strncmp(module, "Room.Info.Get", strlen(module))) {
+    if (!apDescriptor->character) {
       mudlog_vfprintf(apDescriptor->character, LOG_SYSLOG, "Unable to Handle GMCP Room.Info.Get Call: No Valid Character");
-    else if (!apDescriptor->character->in_room)
+      return;
+    }
+
+    struct room_data *in_room = get_ch_in_room(apDescriptor->character);
+    
+    if (!in_room) {
       mudlog_vfprintf(apDescriptor->character, LOG_SYSLOG, "Unable to Handle GMCP Room.Info.Get Call: Not in Room");
-    else
-      SendGMCPRoomInfo(apDescriptor->character, apDescriptor->character->in_room);
-  else if (!strncmp(module, "Room.Exits.Get", strlen(module)))
+      return;
+    }
+    
+    SendGMCPRoomInfo(apDescriptor->character, in_room);
+  } else if (!strncmp(module, "Room.Exits.Get", strlen(module)))
     if (!apDescriptor->character)
       mudlog_vfprintf(apDescriptor->character, LOG_SYSLOG, "Unable to Handle GMCP Room.Exits.Get Call: No Valid Character");
     else
