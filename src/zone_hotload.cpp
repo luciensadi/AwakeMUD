@@ -183,6 +183,8 @@ void _offload_zone(struct zone_data *zone) {
   // Flag it as offloaded so we can A) see it in stats, and B) know it needs to
   // be hotloaded on entry.
   zone->offloaded_at = time(0);
+
+  mudlog_vfprintf(NULL, LOG_MISCLOG, "Offloaded zone %ld (%s) at epoch %ld.", zone->number, zone->name, zone->offloaded_at);
 }
 
 /* Call this from the main loop on a timer. It iterates over the list of zones
