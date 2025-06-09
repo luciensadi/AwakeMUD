@@ -2660,12 +2660,18 @@ SPECIAL(landlord_spec)
 
     for (auto &apartment : complex->get_apartments()) {
       if (is_abbrev(arg, apartment->get_name()) || is_abbrev(arg, apartment->get_short_name())) {
+        if (access_level(ch, LVL_FIXER)) {
+          if (apartment->create_or_extend_lease(ch)) {
+            mudlog_vfprintf(ch, LOG_WIZLOG, "Paid another month on %s. New expiry: %ld.", apartment->get_full_name(), apartment->get_paid_until());
+            mob_say(recep, "You are paid up for the next period.");
+          }
+        }
         if (!apartment->has_owner_privs(ch) && !apartment->is_guest(GET_IDNUM(ch))) {
           snprintf(say_string, sizeof(say_string), "You aren't an owner or guest of %s.", apartment->get_name());
           mob_say(recep, say_string);
         } else {
           if (apartment->create_or_extend_lease(ch)) {
-            mudlog_vfprintf(NULL, LOG_GRIDLOG, "%s paid another month on %s. New expiry: %ld.", GET_CHAR_NAME(ch), apartment->get_full_name(), apartment->get_paid_until());
+            mudlog_vfprintf(ch, LOG_GRIDLOG, "Paid another month on %s. New expiry: %ld.", apartment->get_full_name(), apartment->get_paid_until());
             mob_say(recep, "You are paid up for the next period.");
           }
         }
