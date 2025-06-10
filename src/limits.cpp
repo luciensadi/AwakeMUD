@@ -943,6 +943,7 @@ void process_regeneration(int half_hour)
           if (!is_npc && IS_WATER(ch->in_room) && half_hour) {
             if (check_swimming(ch)) {
               // They died. Stop evaluating and start again.
+              mudlog_vfprintf(NULL, LOG_MISCLOG, "process_regeneration(): recycling loop due to check_swimming() death");
               should_loop = TRUE;
               break;
             }
@@ -990,6 +991,7 @@ void process_regeneration(int half_hour)
             // Deal a box of physical damage.
             if (damage(ch, ch, 1, TYPE_SUFFERING, PHYSICAL)) {
               // They died. Loop again.
+              mudlog_vfprintf(NULL, LOG_MISCLOG, "process_regeneration(): recycling loop due to bleedout() death");
               should_loop = TRUE;
               break;
             }
@@ -1166,6 +1168,7 @@ void point_update(void)
                 // Damage them. This also strips all sustained spells.
                 if (damage(i, i, convert_damage(DEADLY) - 1, TYPE_FOCUS_OVERUSE, TRUE)) {
                   // They died? Time to restart the loop.
+                  mudlog_vfprintf(NULL, LOG_MISCLOG, "point_update(): recycling loop due to old focus addiction death");
                   should_loop = TRUE;
                   break;
                 }
@@ -1180,6 +1183,7 @@ void point_update(void)
           if (i->bioware)
             if (check_bioware(i)) {
               // They died? Time to restart the loop.
+              mudlog_vfprintf(NULL, LOG_MISCLOG, "point_update(): recycling loop due to check_bioware() death");
               should_loop = TRUE;
               break;
             }
@@ -1234,6 +1238,7 @@ void point_update(void)
               damage(victim, victim, 100, TYPE_SUFFERING, TRUE);
 
               // Restart the loop: We extracted someone.
+              mudlog_vfprintf(NULL, LOG_MISCLOG, "point_update(): recycling loop due to projection snapback");
               should_loop = TRUE;
               break;
             } else if (GET_ESS(i) <= 100) {
@@ -1478,6 +1483,7 @@ void misc_update(void)
           // Burn down adrenaline. This can kill the target, so break out if it returns true.
           if (check_adrenaline(ch, 0)) {
             // They died. Start the loop again.
+            mudlog_vfprintf(NULL, LOG_MISCLOG, "misc_update(): recycling loop due to check_adrenaline() death");
             should_loop = TRUE;
             break;
           }
@@ -1485,6 +1491,7 @@ void misc_update(void)
           // Apply new doses of everything. If they die, bail out.
           if (process_drug_point_update_tick(ch)) {
             // They died. Start the loop again.
+            mudlog_vfprintf(NULL, LOG_MISCLOG, "misc_update(): recycling loop due to process_drug_point_update_tick() death");
             should_loop = TRUE;
             break;
           }
@@ -1506,6 +1513,7 @@ void misc_update(void)
             extract_char(ch);
 
             // They died or were extracted. Start the loop again.
+            mudlog_vfprintf(NULL, LOG_MISCLOG, "misc_update(): recycling loop due to astral projection cleanup");
             should_loop = TRUE;
             break;
           }
@@ -1570,6 +1578,7 @@ void misc_update(void)
           GET_CHAR_FIRE_BONUS_DAMAGE(ch)++;
           if (damage(ch, ch, dam, TYPE_SUFFERING, PHYSICAL)) {
             // They died or were extracted. Start the loop again.
+            mudlog_vfprintf(NULL, LOG_MISCLOG, "misc_update(): recycling loop due to flame-induced death");
             should_loop = TRUE;
             break;
           }
