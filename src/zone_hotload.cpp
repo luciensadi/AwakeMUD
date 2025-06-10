@@ -184,7 +184,7 @@ void _offload_zone(struct zone_data *zone) {
   // be hotloaded on entry.
   zone->offloaded_at = time(0);
 
-  mudlog_vfprintf(NULL, LOG_MISCLOG, "Offloaded zone %ld (%s) at epoch %ld.", zone->number, zone->name, zone->offloaded_at);
+  mudlog_vfprintf(NULL, LOG_ZONELOG, "Offloaded zone %ld (%s) at epoch %ld.", zone->number, zone->name, zone->offloaded_at);
 }
 
 /* Call this from the main loop on a timer. It iterates over the list of zones
@@ -268,9 +268,9 @@ void hotload_zone(rnum_t zone_idx) {
   if (zone->offloaded_at <= 0)
     return;
 
-  mudlog_vfprintf(NULL, LOG_MISCLOG,
+  mudlog_vfprintf(NULL, LOG_ZONELOG,
                   "Hotloading zone %ld, which was offloaded %0.2f minutes ago.",
-                  zone->number, (time(0) - zone->offloaded_at) / 60);
+                  zone->number, ((double) (time(0) - zone->offloaded_at)) / 60);
 
   // Unflag as offloaded and set the last activity to now to show that it was
   // just loaded and needs to not be offloaded for a while.
@@ -329,7 +329,7 @@ void hotload_zone(rnum_t zone_idx) {
     }
   }
 
-  mudlog_vfprintf(NULL, LOG_MISCLOG, "Hotloading of zone %ld is complete.",
+  mudlog_vfprintf(NULL, LOG_ZONELOG, "Hotloading of zone %ld is complete.",
                   zone->number);
 #else
   // Do nothing, we don't hotload zones when this flag is disabled.
@@ -423,7 +423,7 @@ void modify_players_in_zone(rnum_t in_zone, int amount, const char *origin) {
   zone_table[in_zone].players_in_zone += amount;
 
 #ifdef DEBUG_PLAYERS_IN_ZONE
-  mudlog_vfprintf(NULL, LOG_MISCLOG, "PIZ %d for '%s^n' from %s, now %d",
+  mudlog_vfprintf(NULL, LOG_ZONELOG, "PIZ %d for '%s^n' from %s, now %d",
                   amount, zone_table[in_zone].name, origin,
                   zone_table[in_zone].players_in_zone);
 #endif
@@ -448,7 +448,7 @@ void modify_players_in_veh(struct veh_data *veh, int amount,
   veh->players_in_veh += amount;
 
 #ifdef DEBUG_PLAYERS_IN_ZONE
-  mudlog_vfprintf(NULL, LOG_MISCLOG, "PIZ %d for veh %ld from %s, now %d",
+  mudlog_vfprintf(NULL, LOG_ZONELOG, "PIZ %d for veh %ld from %s, now %d",
                   amount, GET_VEH_IDNUM(veh), origin, veh->players_in_veh);
 #endif
 
