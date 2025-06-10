@@ -4743,6 +4743,11 @@ void reset_zone(rnum_t zone, int reboot)
     case 'M':                 /* read a mobile */
       temp_qty = ZCMD.arg4;
       do {
+#ifndef USE_GLOBAL_ZCMD_LIMITS
+      // Coerce global loads to 'max 1 in room' loads.
+      if (ZCMD.arg2 == 0)
+        ZCMD.arg2 = -2;
+#endif
         bool passed_global_limits = (mob_index[ZCMD.arg1].number < ZCMD.arg2) || (ZCMD.arg2 == -1);
         bool passed_load_on_reboot = (ZCMD.arg2 == 0) && reboot;
         bool passed_room_limits = FALSE;
@@ -4786,6 +4791,12 @@ void reset_zone(rnum_t zone, int reboot)
         break;
 
       {
+#ifndef USE_GLOBAL_ZCMD_LIMITS
+        // Coerce global loads to 'max 1 in room' loads.
+        if (ZCMD.arg2 == 0)
+          ZCMD.arg2 = -2;
+#endif
+
         bool passed_global_limits = (mob_index[ZCMD.arg1].number < ZCMD.arg2) || (ZCMD.arg2 == -1);
         bool passed_load_on_reboot = (ZCMD.arg2 == 0) && reboot;
         bool passed_room_limits = FALSE;
@@ -4851,6 +4862,13 @@ void reset_zone(rnum_t zone, int reboot)
     case 'U':                 /* mount/upgrades a vehicle with object */
       if (!veh)
         break;
+
+#ifndef USE_GLOBAL_ZCMD_LIMITS
+      // Coerce global loads to 'max 1 in room' loads.
+      if (ZCMD.arg2 == 0)
+        ZCMD.arg2 = -2;
+#endif
+
       if ((obj_index[ZCMD.arg1].number < ZCMD.arg2) || (ZCMD.arg2 == -1) || (ZCMD.arg2 == 0 && reboot)) {
         obj = read_object(ZCMD.arg1, REAL, OBJ_LOAD_REASON_ZONECMD);
 
@@ -4927,6 +4945,13 @@ void reset_zone(rnum_t zone, int reboot)
     case 'I':                 /* puts an item into vehicle */
       if (!veh)
         break;
+
+#ifndef USE_GLOBAL_ZCMD_LIMITS
+      // Coerce global loads to 'max 1 in room' loads.
+      if (ZCMD.arg2 == 0)
+        ZCMD.arg2 = -2;
+#endif
+
       if ((obj_index[ZCMD.arg1].number < ZCMD.arg2) || (ZCMD.arg2 == -1) ||
           (ZCMD.arg2 == 0 && reboot)) {
         obj = read_object(ZCMD.arg1, REAL, OBJ_LOAD_REASON_ZONECMD);
@@ -4937,6 +4962,13 @@ void reset_zone(rnum_t zone, int reboot)
       break;
     case 'V':                 /* loads a vehicle */
       {
+
+#ifndef USE_GLOBAL_ZCMD_LIMITS
+        // Coerce global loads to 'max 1 in room' loads.
+        if (ZCMD.arg2 == 0)
+          ZCMD.arg2 = -2;
+#endif
+
         bool passed_global_limits = (veh_index[ZCMD.arg1].number < ZCMD.arg2) || (ZCMD.arg2 == -1);
         bool passed_load_on_reboot = (ZCMD.arg2 == 0) && reboot;
         bool passed_room_limits = FALSE;
@@ -4964,6 +4996,13 @@ void reset_zone(rnum_t zone, int reboot)
     case 'H':                 /* loads a Matrix file into a host */
       // Count the existing items in this host
       {
+
+#ifndef USE_GLOBAL_ZCMD_LIMITS
+        // Coerce global loads to 'max 1 in room' loads.
+        if (ZCMD.arg2 == 0)
+          ZCMD.arg2 = -2;
+#endif
+
         // Log annoyingly if this is a bitshifted snowflake key.
         if (GET_OBJ_VNUM(&obj_proto[ZCMD.arg1]) == OBJ_SNOWFLAKE_KEY && matrix[ZCMD.arg3].vnum != HOST_SNOWFLAKE_KEY_LOCATION) {
           mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Bitshift happened! The snowflake key is attempting to load in inappropriate host %ld. Redirecting to proper host.", matrix[ZCMD.arg3].vnum);
@@ -4990,6 +5029,13 @@ void reset_zone(rnum_t zone, int reboot)
       break;
     case 'O':                 /* read an object */
       {
+
+#ifndef USE_GLOBAL_ZCMD_LIMITS
+      // Coerce global loads to 'max 1 in room' loads.
+      if (ZCMD.arg2 == 0)
+        ZCMD.arg2 = -2;
+#endif
+
         bool passed_global_limits = (obj_index[ZCMD.arg1].number < ZCMD.arg2) || (ZCMD.arg2 == -1);
         bool passed_load_on_reboot = (ZCMD.arg2 == 0) && reboot;
         bool passed_room_limits = FALSE;
@@ -5033,6 +5079,13 @@ void reset_zone(rnum_t zone, int reboot)
       break;
     case 'P':                 /* object to object */
       {
+
+#ifndef USE_GLOBAL_ZCMD_LIMITS
+      // Coerce global loads to 'max 1 in room' loads.
+      if (ZCMD.arg2 == 0)
+        ZCMD.arg2 = -2;
+#endif
+
         bool passed_global_limits = (obj_index[ZCMD.arg1].number < ZCMD.arg2) || (ZCMD.arg2 == -1);
         bool passed_load_on_reboot = (ZCMD.arg2 == 0) && reboot;
         bool passed_room_limits = FALSE;
@@ -5117,6 +5170,13 @@ void reset_zone(rnum_t zone, int reboot)
       }
 
       {
+
+#ifndef USE_GLOBAL_ZCMD_LIMITS
+        // Coerce global loads to 'max 1 in room' loads.
+        if (ZCMD.arg2 == 0)
+          ZCMD.arg2 = -2;
+#endif
+
         bool passed_global_limits = (obj_index[ZCMD.arg1].number < ZCMD.arg2) || (ZCMD.arg2 == -1);
         bool passed_load_on_reboot = (ZCMD.arg2 == 0) && reboot;
         bool passed_room_limits = FALSE;
@@ -5148,6 +5208,13 @@ void reset_zone(rnum_t zone, int reboot)
         break;
       }
       {
+
+#ifndef USE_GLOBAL_ZCMD_LIMITS
+        // Coerce global loads to 'max 1 in room' loads.
+        if (ZCMD.arg2 == 0)
+          ZCMD.arg2 = -2;
+#endif
+
         bool passed_global_limits = (obj_index[ZCMD.arg1].number < ZCMD.arg2) || (ZCMD.arg2 == -1);
         bool passed_load_on_reboot = (ZCMD.arg2 == 0) && reboot;
         
@@ -5197,6 +5264,13 @@ void reset_zone(rnum_t zone, int reboot)
           ZONE_ERROR("attempt to give obj to non-existent mob");
         break;
       }
+
+#ifndef USE_GLOBAL_ZCMD_LIMITS
+      // Coerce global loads to 'max 1 in room' loads.
+      if (ZCMD.arg2 == 0)
+        ZCMD.arg2 = -2;
+#endif
+
       last_cmd = 0;
       for (i = 0; (i < ZCMD.arg3) && ((obj_index[ZCMD.arg1].number < ZCMD.arg2) ||
                                       (ZCMD.arg2 == -1) || (ZCMD.arg2 == 0 && reboot)); ++i) {
