@@ -3296,8 +3296,12 @@ bool mob_magic(struct char_data *ch)
   char buf[MAX_STRING_LENGTH], rbuf[5000];
   int spell = 0, sub = 0, force, magic = GET_MAG(ch) / 100;
   int wound_level = number(MIN_MOB_COMBAT_MAGIC_WOUND, MAX_MOB_COMBAT_MAGIC_WOUND);
+
+  // Low willpower causes them to always throw the strongest spell they can. Caps at 12, even if their magic is higher.
   if (GET_WIL(ch) <= 2)
-    force = magic;
+    force = MIN(magic, 12);
+
+  // Higher willpower means they're more moderate about it and risk less mental damage as a result.
   else force = MIN(magic, number(MIN_MOB_COMBAT_MAGIC_FORCE, MAX_MOB_COMBAT_MAGIC_FORCE));
 
   // Use different tactics on astral projections: We can't hurt them with physical spells.
@@ -3329,9 +3333,9 @@ bool mob_magic(struct char_data *ch)
     if (magic >= 12) {
       // High-tier mage NPCs cast "intelligently" by prioritizing getting TN penalties on the enemy.
 
-      // We don't want to cast NBC-blocked things as often against an NBC-immune char, but we still do want to
-      // throw them out every once in a while just so they can be satisfied about their protections.
-      bool nbc_immunity_ok = !is_ch_immune_to_nbc(FIGHTING(ch)) || !number(0, 5);
+      // We only want to cast these NBC-blocked things against chars without NBC protections. There's a chance for them to fire
+      // below anyways, so there's no need to have any random chance of casting them here.
+      bool nbc_immunity_ok = !is_ch_immune_to_nbc(FIGHTING(ch));
 
       if (nbc_immunity_ok) {
         // We want the +4 enemy TN from acid.
