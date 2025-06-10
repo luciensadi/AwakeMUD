@@ -61,20 +61,24 @@ REMOVE from the vehicle's amount when:
 extern void reset_zone(rnum_t zone, int reboot);
 extern void do_single_mobile_activity(struct char_data *ch);
 
-bool zone_has_pc_occupied_vehicles(struct zone_data *zone) {
+bool zone_has_pc_occupied_vehicles(struct zone_data *zone)
+{
   rnum_t room_rnum;
 
   for (vnum_t room_vnum = zone->number * 100; room_vnum <= zone->top;
-       room_vnum++) {
+       room_vnum++)
+  {
     if ((room_rnum = real_room(room_vnum)) < 0)
       continue;
 
     for (struct veh_data *veh = world[room_rnum].vehicles; veh;
-         veh = veh->next_veh) {
+         veh = veh->next_veh)
+    {
       if (veh->rigger)
         return true;
 
-      for (struct char_data *ch = veh->people; ch; ch = ch->next_in_veh) {
+      for (struct char_data *ch = veh->people; ch; ch = ch->next_in_veh)
+      {
         if (ch->desc || !IS_NPC(ch))
           return true;
       }
@@ -84,7 +88,8 @@ bool zone_has_pc_occupied_vehicles(struct zone_data *zone) {
   return false;
 }
 
-void _attempt_extract_zone_obj(struct obj_data *obj) {
+void _attempt_extract_zone_obj(struct obj_data *obj)
+{
   // No extracting quest targets.
   if (GET_OBJ_QUEST_CHAR_ID(obj))
     return;
@@ -100,22 +105,29 @@ void _attempt_extract_zone_obj(struct obj_data *obj) {
   extract_obj(obj);
 }
 
-void _attempt_extract_zone_character(struct char_data *ch) {
+void _attempt_extract_zone_character(struct char_data *ch)
+{
   // No extracting questies.
   if (GET_MOB_QUEST_CHAR_ID(ch))
     return;
 
   // Sanity check: Not a PC or PC-controlled entity.
-  if (ch->desc) {
-    mudlog_vfprintf(
-        ch, LOG_SYSLOG,
-        "SYSERR: Found character with descriptor while unloading zone!");
+  if (ch->desc)
+  {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Found character with descriptor while unloading zone!");
     return;
   }
 
   // Check inventory for quest items.
-  for (struct obj_data *obj = ch->carrying; obj; obj = obj->next_content) {
+  for (struct obj_data *obj = ch->carrying; obj; obj = obj->next_content)
+  {
     if (GET_OBJ_QUEST_CHAR_ID(obj))
+      return;
+  }
+
+  // Check equipment for quest items.
+  for (int idx = 0; idx < NUM_WEARS; idx++) {
+    if (GET_EQ(ch, idx) && GET_OBJ_QUEST_CHAR_ID(GET_EQ(ch, idx)))
       return;
   }
 
@@ -123,17 +135,18 @@ void _attempt_extract_zone_character(struct char_data *ch) {
 }
 
 /* Offload zone, removing all non-quest and non-player-owned things in it. */
-void _offload_zone(struct zone_data *zone) {
-  if (!zone) {
-    mudlog_vfprintf(NULL, LOG_SYSLOG,
-                    "SYSERR: Attempted to offload NULL zone!");
+void _offload_zone(struct zone_data *zone)
+{
+  if (!zone)
+  {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Attempted to offload NULL zone!");
     return;
   }
 
   rnum_t room_rnum;
 
-  for (vnum_t room_vnum = zone->number * 100; room_vnum <= zone->top;
-       room_vnum++) {
+  for (vnum_t room_vnum = zone->number * 100; room_vnum <= zone->top; room_vnum++)
+  {
     if ((room_rnum = real_room(room_vnum)) < 0)
       continue;
 
@@ -144,19 +157,22 @@ void _offload_zone(struct zone_data *zone) {
       continue;
 
     // Extract unowned vehicles. These are fully destroyed and will be rebuilt from zone commands when needed.
-    for (struct veh_data *veh = room->vehicles, *next_veh; veh; veh = next_veh) {
+    for (struct veh_data *veh = room->vehicles, *next_veh; veh; veh = next_veh)
+    {
       next_veh = veh->next_veh;
 
       if (veh->owner > 0)
         continue;
 
-      for (struct char_data *ch = veh->people, *next_ch; ch; ch = next_ch) {
+      for (struct char_data *ch = veh->people, *next_ch; ch; ch = next_ch)
+      {
         next_ch = ch->next_in_veh;
         _attempt_extract_zone_character(ch);
       }
 
       for (struct obj_data *obj = room->contents, *next_obj; obj;
-           obj = next_obj) {
+           obj = next_obj)
+      {
         next_obj = obj->next_content;
         _attempt_extract_zone_obj(obj);
       }
@@ -167,14 +183,16 @@ void _offload_zone(struct zone_data *zone) {
     }
 
     // Extract characters that aren't quest-flagged.
-    for (struct char_data *ch = room->people, *next_ch; ch; ch = next_ch) {
+    for (struct char_data *ch = room->people, *next_ch; ch; ch = next_ch)
+    {
       next_ch = ch->next_in_room;
       _attempt_extract_zone_character(ch);
     }
 
     // Extract items that aren't corpses or quest targets.
     for (struct obj_data *obj = room->contents, *next_obj; obj;
-         obj = next_obj) {
+         obj = next_obj)
+    {
       next_obj = obj->next_content;
       _attempt_extract_zone_obj(obj);
     }
@@ -190,7 +208,8 @@ void _offload_zone(struct zone_data *zone) {
 /* Call this from the main loop on a timer. It iterates over the list of zones
    in the game, calling offload_zone on each. Certain zones can be flagged as
    never-unload (apartment buildings mostly), so we check for that. */
-void attempt_to_offload_unused_zones() {
+void attempt_to_offload_unused_zones()
+{
 #ifdef USE_ZONE_HOTLOADING
   int offloaded_count = 0;
 
@@ -204,7 +223,8 @@ void attempt_to_offload_unused_zones() {
   time_t last_valid_timestamp = std::chrono::system_clock::to_time_t(twenty_minutes_ago);
 
   // mudlog("Looking for zones to offload...", NULL, LOG_SYSLOG, TRUE);
-  for (int zone_idx = 0; zone_idx < top_of_zone_table; zone_idx++) {
+  for (int zone_idx = 0; zone_idx < top_of_zone_table; zone_idx++)
+  {
     struct zone_data *zone = &zone_table[zone_idx];
 
     // Make sure it's not already offloaded and hasn't been flagged as
@@ -230,7 +250,8 @@ void attempt_to_offload_unused_zones() {
     offloaded_count++;
   }
 
-  if (offloaded_count > 0) {
+  if (offloaded_count > 0)
+  {
     mudlog_vfprintf(NULL, LOG_SYSLOG, "Offload complete. %d %s offloaded.", offloaded_count, offloaded_count == 1 ? "zone" : "zones");
   }
 #else
@@ -244,8 +265,10 @@ void attempt_to_offload_unused_zones() {
 #define NUM_RESETS_TO_DO_WHEN_HOTLOADING 5
 #define NUM_MOBACTS_TO_DO_PER_HOTLOAD_LOOP 10
 
-void _process_hotloaded_mob(struct char_data *ch, vnum_t zone_number) {
-  if (ch->desc) {
+void _process_hotloaded_mob(struct char_data *ch, vnum_t zone_number)
+{
+  if (ch->desc)
+  {
     mudlog_vfprintf(
         ch, LOG_SYSLOG,
         "SYSERR: Found character with descriptor while hotloading zone %ld!",
@@ -254,7 +277,8 @@ void _process_hotloaded_mob(struct char_data *ch, vnum_t zone_number) {
   }
 
   for (int mobacts_to_do = NUM_MOBACTS_TO_DO_PER_HOTLOAD_LOOP;
-       mobacts_to_do > 0; mobacts_to_do--) {
+       mobacts_to_do > 0; mobacts_to_do--)
+  {
     do_single_mobile_activity(ch);
     // Restore them in case of drain etc.
     GET_MENTAL(ch) = 1000;
@@ -264,7 +288,8 @@ void _process_hotloaded_mob(struct char_data *ch, vnum_t zone_number) {
 
 /* Checks to make sure the zone is already offloaded, then hotloads it, bringing
  * up contents and running resets etc. */
-void hotload_zone(rnum_t zone_idx) {
+void hotload_zone(rnum_t zone_idx)
+{
 #ifdef USE_ZONE_HOTLOADING
   rnum_t room_rnum;
   struct zone_data *zone = &zone_table[zone_idx];
@@ -274,7 +299,7 @@ void hotload_zone(rnum_t zone_idx) {
 
   mudlog_vfprintf(NULL, LOG_ZONELOG,
                   "Hotloading zone %ld, which was offloaded %0.2f minutes ago.",
-                  zone->number, ((double) (time(0) - zone->offloaded_at)) / 60);
+                  zone->number, ((double)(time(0) - zone->offloaded_at)) / 60);
 
   // Unflag as offloaded and set the last activity to now to show that it was
   // just loaded and needs to not be offloaded for a while.
@@ -284,27 +309,32 @@ void hotload_zone(rnum_t zone_idx) {
   // To hotload a zone, we loop through its resets a set number of times, and on
   // each reset we loop through mobact for that zone a few times.
   for (int resets_to_do = NUM_RESETS_TO_DO_WHEN_HOTLOADING; resets_to_do > 0;
-       resets_to_do--) {
+       resets_to_do--)
+  {
     reset_zone(zone_idx, false);
 
     for (vnum_t room_vnum = zone->number * 100; room_vnum <= zone->top;
-         room_vnum++) {
+         room_vnum++)
+    {
       if ((room_rnum = real_room(room_vnum)) < 0 ||
           (!world[room_rnum].people && !world[room_rnum].vehicles))
         continue;
 
       // On-foot mobact.
       for (struct char_data *ch = world[room_rnum].people, *next_ch; ch;
-           ch = next_ch) {
+           ch = next_ch)
+      {
         next_ch = ch->next_in_room;
         _process_hotloaded_mob(ch, zone->number);
       }
 
       // In-vehicle mobact.
       for (struct veh_data *veh = world[room_rnum].vehicles, *next_veh; veh;
-           veh = next_veh) {
+           veh = next_veh)
+      {
         next_veh = veh->next_veh;
-        for (struct char_data *ch = veh->people, *next_ch; ch; ch = next_ch) {
+        for (struct char_data *ch = veh->people, *next_ch; ch; ch = next_ch)
+        {
           next_ch = ch->next_in_veh;
           _process_hotloaded_mob(ch, zone->number);
         }
@@ -315,12 +345,14 @@ void hotload_zone(rnum_t zone_idx) {
   // Clean up corpses that aren't player corpses. This is to prevent a hotloaded
   // warfare zone from popping a bunch of corpses for you to loot at once.
   for (vnum_t room_vnum = zone->number * 100; room_vnum <= zone->top;
-       room_vnum++) {
+       room_vnum++)
+  {
     if ((room_rnum = real_room(room_vnum)) < 0 || (!world[room_rnum].contents))
       continue;
 
     for (struct obj_data *obj = world[room_rnum].contents, *next_obj; obj;
-         obj = next_obj) {
+         obj = next_obj)
+    {
       next_obj = obj->next_content;
 
       if (!IS_OBJ_STAT(obj, ITEM_EXTRA_CORPSE))
@@ -340,11 +372,13 @@ void hotload_zone(rnum_t zone_idx) {
 #endif
 }
 
-int calculate_players_in_vehicle(struct veh_data *veh) {
+int calculate_players_in_vehicle(struct veh_data *veh)
+{
   int single_veh_players_present =
       (veh->rigger && PLR_FLAGGED(veh->rigger, PLR_REMOTE)) ? 1 : 0;
 
-  for (struct char_data *tmp = veh->people; tmp; tmp = tmp->next_in_veh) {
+  for (struct char_data *tmp = veh->people; tmp; tmp = tmp->next_in_veh)
+  {
     if (tmp->desc || !IS_NPNPC(tmp))
       single_veh_players_present++;
   }
@@ -352,11 +386,13 @@ int calculate_players_in_vehicle(struct veh_data *veh) {
   return single_veh_players_present;
 }
 
-void recalculate_whole_game_players_in_zone() {
+void recalculate_whole_game_players_in_zone()
+{
   rnum_t room_rnum;
 
   // Iterate over all zones
-  for (rnum_t zone_idx = 0; zone_idx <= top_of_zone_table; zone_idx++) {
+  for (rnum_t zone_idx = 0; zone_idx <= top_of_zone_table; zone_idx++)
+  {
     struct zone_data *zone = &zone_table[zone_idx];
     int on_foot_players_present = 0;
     int veh_players_present = 0;
@@ -365,25 +401,30 @@ void recalculate_whole_game_players_in_zone() {
 
     // iterate over all rooms in zone
     for (vnum_t room_vnum = zone->number * 100; room_vnum <= zone->top;
-         room_vnum++) {
+         room_vnum++)
+    {
       if ((room_rnum = real_room(room_vnum)) < 0 ||
           (!world[room_rnum].people && !world[room_rnum].vehicles))
         continue;
 
       // On-foot count.
       for (struct char_data *tmp = world[room_rnum].people; tmp;
-           tmp = tmp->next_in_room) {
-        if (tmp->desc || !IS_NPNPC(tmp)) {
+           tmp = tmp->next_in_room)
+      {
+        if (tmp->desc || !IS_NPNPC(tmp))
+        {
           on_foot_players_present++;
         }
       }
 
       // Vehicle count.
       for (struct veh_data *veh = world[room_rnum].vehicles; veh;
-           veh = veh->next_veh) {
+           veh = veh->next_veh)
+      {
         int single_veh_players_present = calculate_players_in_vehicle(veh);
 
-        if (single_veh_players_present != veh->players_in_veh) {
+        if (single_veh_players_present != veh->players_in_veh)
+        {
           mudlog_vfprintf(
               NULL, LOG_SYSLOG,
               "Vehicle '%s^n' failed PIV validation: has %d, actual %d.\r\n",
@@ -400,14 +441,18 @@ void recalculate_whole_game_players_in_zone() {
 
     // Validate findings.
     if (zone->players_in_zone !=
-        (on_foot_players_present + veh_players_present)) {
+        (on_foot_players_present + veh_players_present))
+    {
       if (zone->players_in_zone ==
-          (on_foot_players_present + veh_players_present + veh_discrepancy)) {
+          (on_foot_players_present + veh_players_present + veh_discrepancy))
+      {
         mudlog_vfprintf(NULL, LOG_SYSLOG,
                         "Zone '%s^n' failed PIZ validation, but this is "
                         "explained by vehicle validation failure.\r\n",
                         zone->name);
-      } else {
+      }
+      else
+      {
         mudlog_vfprintf(NULL, LOG_SYSLOG,
                         "Zone '%s^n' failed PIZ validation: expected total %d, "
                         "actual %d (%d + %d (vd %d)).\r\n",
@@ -423,7 +468,8 @@ void recalculate_whole_game_players_in_zone() {
   }
 }
 
-void modify_players_in_zone(rnum_t in_zone, int amount, const char *origin) {
+void modify_players_in_zone(rnum_t in_zone, int amount, const char *origin)
+{
   zone_table[in_zone].players_in_zone += amount;
 
 #ifdef DEBUG_PLAYERS_IN_ZONE
@@ -436,7 +482,8 @@ void modify_players_in_zone(rnum_t in_zone, int amount, const char *origin) {
 #endif
 
   if (zone_table[in_zone].players_in_zone < 0 ||
-      zone_table[in_zone].players_in_zone > 100) {
+      zone_table[in_zone].players_in_zone > 100)
+  {
     mudlog_vfprintf(NULL, LOG_SYSLOG,
                     "SYSERR: Negative or too-high player-in-zone count %d "
                     "after %d change from %s. Recalculating whole game.",
@@ -451,7 +498,8 @@ void modify_players_in_zone(rnum_t in_zone, int amount, const char *origin) {
 }
 
 void modify_players_in_veh(struct veh_data *veh, int amount,
-                           const char *origin) {
+                           const char *origin)
+{
   veh->players_in_veh += amount;
 
 #ifdef DEBUG_PLAYERS_IN_ZONE
@@ -463,7 +511,8 @@ void modify_players_in_veh(struct veh_data *veh, int amount,
                   veh->players_in_veh);
 #endif
 
-  if (veh->players_in_veh < 0 || veh->players_in_veh > 100) {
+  if (veh->players_in_veh < 0 || veh->players_in_veh > 100)
+  {
     mudlog_vfprintf(NULL, LOG_SYSLOG,
                     "SYSERR: Negative or too-high player-in-veh count %d after "
                     "%d change from %s. Recalculating whole game.",

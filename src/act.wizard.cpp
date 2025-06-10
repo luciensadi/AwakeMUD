@@ -2327,9 +2327,6 @@ ACMD(do_wizpossess)
             GET_CHAR_NAME(ch),GET_NAME(victim));
     mudlog(buf, ch, LOG_WIZLOG, TRUE);
 
-    victim->desc = ch->desc;
-    ch->desc = NULL;
-
     // Add the possessing staff record to the vehicle and room they're in.
     if (victim->in_veh) {
       modify_players_in_veh(victim->in_veh, +1, "staff possession");
@@ -2338,6 +2335,9 @@ ACMD(do_wizpossess)
       rnum_t in_zone = get_ch_in_room(victim)->zone;
       modify_players_in_zone(in_zone, +1, "staff possession");
     }
+
+    victim->desc = ch->desc;
+    ch->desc = NULL;
   }
 }
 

@@ -1713,6 +1713,10 @@ void command_interpreter(struct char_data * ch, char *argument, const char *tcna
   extern int no_specials;
   char *line;
 
+  if (get_ch_in_room(ch)) {
+    zone_table[get_ch_in_room(ch)->zone].last_player_action = time(0);
+  }
+
   if (PRF_FLAGS(ch).IsSet(PRF_AFK)) {
     send_to_char("You return from AFK.\r\n", ch);
     PRF_FLAGS(ch).RemoveBit(PRF_AFK);
