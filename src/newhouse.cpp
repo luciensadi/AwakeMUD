@@ -921,6 +921,9 @@ bool Apartment::owner_is_valid() {
   return TRUE;
 #endif
 
+  if (!owned_by_player)
+    return FALSE;
+
   if (owned_by_pgroup)
     return !owned_by_pgroup->is_disabled();
 
