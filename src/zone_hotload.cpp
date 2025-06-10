@@ -237,8 +237,8 @@ void attempt_to_offload_unused_zones() {
 
 ///////////////////// hotload code
 
-#define NUM_RESETS_TO_DO_WHEN_HOTLOADING 3
-#define NUM_MOBACTS_TO_DO_PER_HOTLOAD_LOOP 5
+#define NUM_RESETS_TO_DO_WHEN_HOTLOADING 5
+#define NUM_MOBACTS_TO_DO_PER_HOTLOAD_LOOP 10
 
 void _process_hotloaded_mob(struct char_data *ch, vnum_t zone_number) {
   if (ch->desc) {
