@@ -8443,7 +8443,12 @@ ACMD(do_count) {
             if (crap_count > 0) {
               counts[apartment->get_owner_id()] += crap_count;
               const char *vict_name = apartment->get_owner_name__returns_new();
-              send_to_char(ch, "%20s: %s: %s\r\n", vict_name, apartment->get_full_name(), get_crap_count_string(crap_count, "^n", PRF_FLAGGED(ch, PRF_SCREENREADER)));
+              if (vict_name && str_cmp(vict_name, CHARACTER_DELETED_NAME_FOR_SQL))
+                send_to_char(ch, "%20s: %s (%ld): %s\r\n",
+                             vict_name,
+                             apartment->get_full_name(),
+                             apartment->get_root_vnum(),
+                             get_crap_count_string(crap_count, "^n", PRF_FLAGGED(ch, PRF_SCREENREADER)));
               delete [] vict_name;
             }
           }
@@ -8458,7 +8463,12 @@ ACMD(do_count) {
           if (crap_count > 0) {
             counts[veh->owner] += crap_count;
             const char *vict_name = get_player_name(veh->owner);
-            send_to_char(ch, "%20s: %s: %s\r\n", vict_name, GET_VEH_NAME(veh), get_crap_count_string(crap_count, "^n", PRF_FLAGGED(ch, PRF_SCREENREADER)));
+            if (vict_name && str_cmp(vict_name, CHARACTER_DELETED_NAME_FOR_SQL))
+              send_to_char(ch, "%20s: %s @ %ld: %s\r\n",
+                           vict_name,
+                           GET_VEH_NAME(veh),
+                           GET_ROOM_VNUM(get_veh_in_room(veh)),
+                           get_crap_count_string(crap_count, "^n", PRF_FLAGGED(ch, PRF_SCREENREADER)));
             delete [] vict_name;
           }
         }
@@ -8468,7 +8478,8 @@ ACMD(do_count) {
       send_to_char("\r\n\r\nTOTALS\r\n", ch);
       for (auto iter : counts) {
         const char *vict_name = get_player_name(iter.first);
-        send_to_char(ch, "%20s: %s\r\n", vict_name, get_crap_count_string(iter.second, "^n", PRF_FLAGGED(ch, PRF_SCREENREADER)));
+        if (vict_name && str_cmp(vict_name, CHARACTER_DELETED_NAME_FOR_SQL))
+          send_to_char(ch, "%20s: %s\r\n", vict_name, get_crap_count_string(iter.second, "^n", PRF_FLAGGED(ch, PRF_SCREENREADER)));
         delete [] vict_name;
       }
 
