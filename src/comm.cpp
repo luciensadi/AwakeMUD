@@ -193,6 +193,7 @@ void set_descriptor_canaries(struct descriptor_data *newd);
 extern void process_flying_vehicles();
 extern void cleanup_policy_tree();
 extern void save_all_pcs();
+extern void attempt_to_offload_unused_zones();
 
 extern void save_all_apartments_and_storage_rooms();
 
@@ -1099,6 +1100,9 @@ void game_loop(int mother_desc)
 
     // Every MUD hour
     if (!(pulse % (SECS_PER_MUD_HOUR * PASSES_PER_SEC))) {
+      // This is the big laggy pulse, so offload whatever we can before digging into the rest of this.
+      attempt_to_offload_unused_zones();
+
       matrix_hour_update();
       point_update();
       weather_change();

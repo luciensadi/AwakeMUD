@@ -798,25 +798,18 @@ ACMD(do_at)
   struct char_data *vict = NULL;
 
   half_chop(argument, buf, command, sizeof(command));
-  if (!*buf) {
-    send_to_char("You must supply a room number or a name.\r\n", ch);
-    return;
-  }
-
-  if (!*command) {
-    send_to_char("What do you want to do there?\r\n", ch);
-    return;
-  }
+  
+  FAILURE_CASE(!*buf, "You must supply a room number or a name.");
+  FAILURE_CASE(!*command, "What do you want to do there?");
 
   if (!(location = find_target_room(ch, buf))) {
     if (!(vict = get_char_vis(ch, buf)))
       return;
     veh = vict->in_veh;
   }
-  if (vict && PLR_FLAGGED(vict, PLR_EDITING)) {
-    send_to_char("They are editing a room at the moment.\r\n", ch);
-    return;
-  }
+
+  FAILURE_CASE_PRINTF(vict && PLR_FLAGGED(vict, PLR_EDITING), "%s is editing at the moment.", GET_CHAR_NAME(vict));
+  
   if (ch->in_veh)
     oveh = ch->in_veh;
   else
@@ -828,7 +821,7 @@ ACMD(do_at)
     char_to_veh(veh, ch);
   else {
     char_from_room(ch);
-    ch->in_room = location;
+    char_to_room(ch, location);
   }
   command_interpreter(ch, command, GET_CHAR_NAME(ch));
   char_from_room(ch);

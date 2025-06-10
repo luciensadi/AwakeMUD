@@ -51,6 +51,8 @@ REMOVE from the vehicle's amount when:
 √ a player virtually leaves
 */
 
+#include <chrono>
+
 #include "awake.hpp"
 #include "db.hpp"
 #include "handler.hpp"
@@ -190,10 +192,14 @@ void _offload_zone(struct zone_data *zone) {
    never-unload (apartment buildings mostly), so we check for that. */
 void attempt_to_offload_unused_zones() {
 #ifdef USE_ZONE_HOTLOADING
-  time_t current_timestamp = time(0);
   int offloaded_count = 0;
 
-  mudlog("Looking for zones to offload...", NULL, LOG_SYSLOG, TRUE);
+  // Set up our last valid timestamp.
+  auto now = std::chrono::system_clock::now();
+  auto twenty_minutes_ago = now - std::chrono::minutes(20);
+  time_t last_valid_timestamp = std::chrono::system_clock::to_time_t(twenty_minutes_ago);
+
+  // mudlog("Looking for zones to offload...", NULL, LOG_SYSLOG, TRUE);
   for (int zone_idx = 0; zone_idx < top_of_zone_table; zone_idx++) {
     struct zone_data *zone = &zone_table[zone_idx];
 
@@ -207,7 +213,7 @@ void attempt_to_offload_unused_zones() {
       continue;
 
     // Nobody there. Check if last-used time is too recent.
-    if (zone->last_player_action >= current_timestamp - (60 * 20))
+    if (zone->last_player_action >= last_valid_timestamp)
       continue;
 
     // It's old enough. Check for rigged vehicles. This is the most expensive
@@ -219,8 +225,10 @@ void attempt_to_offload_unused_zones() {
     _offload_zone(zone);
     offloaded_count++;
   }
-  mudlog_vfprintf(NULL, LOG_SYSLOG, "Offload complete. %d %s offloaded.",
-                  offloaded_count, offloaded_count == 1 ? "zone" : "zones");
+
+  if (offloaded_count > 0) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "Offload complete. %d %s offloaded.", offloaded_count, offloaded_count == 1 ? "zone" : "zones");
+  }
 #else
   log("Skipping zone offload check-- USE_ZONE_HOTLOADING is not "
       "defined.");
