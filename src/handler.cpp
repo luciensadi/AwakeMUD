@@ -1331,7 +1331,7 @@ void char_from_room(struct char_data * ch)
     if (ch->desc || !IS_NPC(ch) || GET_MOB_VNUM(ch) == MOB_PROJECTION) {
       modify_players_in_veh(ch->in_veh, -1, "char_from_room (in_veh stanza)");
       if (get_veh_in_room(ch->in_veh)) {
-        modify_players_in_zone(get_veh_in_room(ch->in_veh)->number, -1, "char_from_room (in_veh stanza)");
+        modify_players_in_zone(get_veh_in_room(ch->in_veh)->zone, -1, "char_from_room (in_veh stanza)");
       }
     }
   #endif
