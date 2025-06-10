@@ -4724,6 +4724,10 @@ void reset_zone(rnum_t zone, int reboot)
   struct obj_data *obj = NULL, *obj_to = NULL, *check = NULL;
   struct veh_data *veh = NULL;
 
+  // Refuse to process zone resets for offloaded zones.
+  if (zone_table[zone].offloaded_at)
+    return;
+
   for (cmd_no = 0; cmd_no < zone_table[zone].num_cmds; cmd_no++) {
     /*
      snprintf(buf, sizeof(buf), "Processing ZCMD %d (zone %d): %c %s %ld %ld %ld",
