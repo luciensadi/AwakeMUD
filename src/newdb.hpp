@@ -140,6 +140,7 @@ extern bool get_prf_flag_is_set_by_idnum(int flag, vnum_t id);
 extern bool get_aff_flag_is_set_by_idnum(int flag, vnum_t id);
 extern bool pc_active_in_last_30_days(idnum_t owner_id);
 extern int get_attr_max(struct char_data *ch, int attr);
+extern bool player_is_dead_hardcore(long id);
 
 // DB tag functions, for when you need to persist data but don't want to write a new table for it.
 bool player_has_db_tag(idnum_t idnum, const char *tag_name);

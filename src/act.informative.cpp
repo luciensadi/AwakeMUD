@@ -8425,6 +8425,56 @@ ACMD(do_count) {
 
   // Staff can run a count on a single person as well.
   if (IS_SENATOR(ch)) {
+    // Count everything loaded in vehicles / apartments for all characters, online or not.
+    if (*argument == '!') {
+      FAILURE_CASE(!access_level(ch, LVL_PRESIDENT), "Sorry, for load reasons this is only available to game owners.");
+
+      // Make an unordered map of idnums -> long total.
+      std::unordered_map<idnum_t, long> counts = {};
+
+      // Iterate over all apartments, writing contents to map.
+      for (auto *complex : global_apartment_complexes) {
+        for (auto *apartment : complex->get_apartments()) {
+          if (apartment->owner_is_valid()) {
+            long crap_count = 0, dummy_val = 0;
+            for (auto *room : apartment->get_rooms()) {
+              crap_count += count_objects_in_room(room->get_world_room(), dummy_val);
+            }
+            if (crap_count > 0) {
+              counts[apartment->get_owner_id()] += crap_count;
+              const char *vict_name = apartment->get_owner_name__returns_new();
+              send_to_char(ch, "%20s: %s: %s\r\n", vict_name, apartment->get_full_name(), get_crap_count_string(crap_count, "^n", PRF_FLAGGED(ch, PRF_SCREENREADER)));
+              delete [] vict_name;
+            }
+          }
+        }
+      }
+        
+      // Iterate over all vehicles, writing contents to map.
+      for (struct veh_data *veh = veh_list; veh; veh = veh->next) {
+        if (veh->owner && does_player_exist(veh->owner) && !player_is_dead_hardcore(veh->owner)) {
+          long dummy_val = 0;
+          long crap_count = count_objects_in_veh(veh, dummy_val);
+          if (crap_count > 0) {
+            counts[veh->owner] += crap_count;
+            const char *vict_name = get_player_name(veh->owner);
+            send_to_char(ch, "%20s: %s: %s\r\n", vict_name, GET_VEH_NAME(veh), get_crap_count_string(crap_count, "^n", PRF_FLAGGED(ch, PRF_SCREENREADER)));
+            delete [] vict_name;
+          }
+        }
+      }
+
+      // Iterate over map, printing name -> count.
+      send_to_char("\r\n\r\nTOTALS\r\n", ch);
+      for (auto iter : counts) {
+        const char *vict_name = get_player_name(iter.first);
+        send_to_char(ch, "%20s: %s\r\n", vict_name, get_crap_count_string(iter.second, "^n", PRF_FLAGGED(ch, PRF_SCREENREADER)));
+        delete [] vict_name;
+      }
+
+      return;
+    }
+    // Count everything loaded for online characters.
     if (*argument == '*') {
       FAILURE_CASE(!access_level(ch, LVL_PRESIDENT), "Sorry, for load reasons this is only available to game owners.");
 
