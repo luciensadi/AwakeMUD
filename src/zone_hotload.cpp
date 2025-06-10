@@ -428,8 +428,8 @@ void modify_players_in_zone(rnum_t in_zone, int amount, const char *origin) {
 
 #ifdef DEBUG_PLAYERS_IN_ZONE
   mudlog_vfprintf(NULL, LOG_ZONELOG, "PIZ %s%d for '%s^n' from %s, now %d",
-                  amount,
                   amount > 0 ? "+" : "",
+                  amount,
                   zone_table[in_zone].name,
                   origin,
                   zone_table[in_zone].players_in_zone);
@@ -456,8 +456,8 @@ void modify_players_in_veh(struct veh_data *veh, int amount,
 
 #ifdef DEBUG_PLAYERS_IN_ZONE
   mudlog_vfprintf(NULL, LOG_ZONELOG, "PIV %s%d for veh %ld from %s, now %d",
-                  amount,
                   amount > 0 ? "+" : "",
+                  amount,
                   GET_VEH_IDNUM(veh),
                   origin,
                   veh->players_in_veh);
