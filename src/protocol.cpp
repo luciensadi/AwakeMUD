@@ -38,8 +38,8 @@
  The following section is for Diku/Merc derivatives.  Replace as needed.
  ******************************************************************************/
 
-#define PROTO_DEBUG_MSG(...) log_vfprintf(__VA_ARGS__);
-// #define PROTO_DEBUG_MSG(...)
+// #define PROTO_DEBUG_MSG(...) log_vfprintf(__VA_ARGS__);
+#define PROTO_DEBUG_MSG(...)
 
 static void Write( descriptor_t *apDescriptor, const char *apData )
 {
