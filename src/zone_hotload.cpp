@@ -118,6 +118,10 @@ void _attempt_extract_zone_character(struct char_data *ch)
     return;
   }
 
+  // Skip anyone with a spec.
+  if (GET_MOB_SPEC(ch) || GET_MOB_SPEC2(ch) || ch->mob_specials.spare1 || ch->mob_specials.spare2)
+    return;
+
   // Check inventory for quest items.
   for (struct obj_data *obj = ch->carrying; obj; obj = obj->next_content)
   {
