@@ -1356,20 +1356,20 @@ void char_to_veh(struct veh_data * veh, struct char_data * ch)
     // Remove vehicle brain if one exists.
     remove_vehicle_brain(veh);
 
+#ifdef USE_ZONE_HOTLOADING
+    if (ch->desc || !IS_NPC(ch) || GET_MOB_VNUM(ch) == MOB_PROJECTION) {
+      modify_players_in_veh(veh, +1, "char_to_veh");
+      if (get_veh_in_room(veh)) {
+        modify_players_in_zone(get_veh_in_room(veh)->zone, +1, "char_to_veh");
+      }
+    }
+#endif
+
     ch->next_in_veh = veh->people;
     veh->people = ch;
     ch->in_veh = veh;
     veh->seating[ch->vfront]--;
     GET_POS(ch) = POS_SITTING;
-
-#ifdef USE_ZONE_HOTLOADING
-    if (ch->desc || !IS_NPC(ch) || GET_MOB_VNUM(ch) == MOB_PROJECTION) {
-      modify_players_in_veh(ch->in_veh, +1, "char_to_veh");
-      if (get_veh_in_room(ch->in_veh)) {
-        modify_players_in_zone(get_veh_in_room(ch->in_veh)->zone, +1, "char_to_veh");
-      }
-    }
-#endif
   }
 }
 
@@ -1383,17 +1383,17 @@ void veh_to_room(struct veh_data * veh, struct room_data *room)
   if (veh->in_veh || veh->in_room)
     veh_from_room(veh);
 
+#ifdef USE_ZONE_HOTLOADING
+  // Add them to the zone's player counter.
+  if (veh->players_in_veh) {
+    modify_players_in_zone(room->zone, +veh->players_in_veh, "veh_to_room");
+  }
+#endif
+
   veh->next_veh = room->vehicles;
   room->vehicles = veh;
   veh->in_room = room;
   recalculate_room_light(room);
-
-#ifdef USE_ZONE_HOTLOADING
-  // Add them to the zone's player counter.
-  if (veh->players_in_veh) {
-    modify_players_in_zone(veh->in_room->zone, +veh->players_in_veh, "veh_to_room");
-  }
-#endif
 }
 
 void veh_to_veh(struct veh_data *veh, struct veh_data *dest)
