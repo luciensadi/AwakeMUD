@@ -76,6 +76,7 @@ extern unsigned int get_johnson_overall_max_rep(struct char_data *johnson);
 extern const char *get_crap_count_string(int crap_count, const char *default_color = "^n", bool screenreader = FALSE);
 extern void display_gamba_ledger_leaderboard(struct char_data *ch);
 const char *convert_and_write_string_to_file(const char *str, const char *path);
+extern void hotload_zone(rnum_t zone_rnum);
 
 extern int get_weapon_damage_type(struct obj_data* weapon);
 
@@ -7108,6 +7109,9 @@ const char *render_room_for_scan(struct char_data *ch, struct room_data *room, s
     DEBUG_TO_STAFF(ch, "bad light\r\n");
     return NULL;
   }
+
+  // Ensure it's hotloaded.
+  hotload_zone(room->zone);
 
   // TODO: Add logic to hide ultrasound-visible-only characters in adjacent silent rooms. Not a big urgency unless/until PvP becomes more of a thing.
 

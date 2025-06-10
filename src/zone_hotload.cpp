@@ -138,13 +138,11 @@ void _offload_zone(struct zone_data *zone) {
     struct room_data *room = &world[room_rnum];
 
     // Skip storage rooms, garages, and apartments.
-    if (ROOM_FLAGGED(room, ROOM_STORAGE) || ROOM_FLAGGED(room, ROOM_GARAGE) ||
-        room->apartment)
+    if (ROOM_FLAGGED(room, ROOM_STORAGE) || ROOM_FLAGGED(room, ROOM_GARAGE) || room->apartment)
       continue;
 
-    // Extract vehicles.
-    for (struct veh_data *veh = room->vehicles, *next_veh; veh;
-         veh = next_veh) {
+    // Extract unowned vehicles. These are fully destroyed and will be rebuilt from zone commands when needed.
+    for (struct veh_data *veh = room->vehicles, *next_veh; veh; veh = next_veh) {
       next_veh = veh->next_veh;
 
       if (veh->owner > 0)
@@ -191,7 +189,7 @@ void _offload_zone(struct zone_data *zone) {
    in the game, calling offload_zone on each. Certain zones can be flagged as
    never-unload (apartment buildings mostly), so we check for that. */
 void attempt_to_offload_unused_zones() {
-#ifdef TEMPORARY_COMPILATION_GUARD
+#ifdef USE_ZONE_HOTLOADING
   time_t current_timestamp = time(0);
   int offloaded_count = 0;
 
@@ -224,7 +222,7 @@ void attempt_to_offload_unused_zones() {
   mudlog_vfprintf(NULL, LOG_SYSLOG, "Offload complete. %d %s offloaded.",
                   offloaded_count, offloaded_count == 1 ? "zone" : "zones");
 #else
-  log("Skipping zone offload check-- TEMPORARY_COMPILATION_GUARD is not "
+  log("Skipping zone offload check-- USE_ZONE_HOTLOADING is not "
       "defined.");
 #endif
 }
@@ -255,7 +253,7 @@ void _process_hotloaded_mob(struct char_data *ch, vnum_t zone_number) {
 /* Checks to make sure the zone is already offloaded, then hotloads it, bringing
  * up contents and running resets etc. */
 void hotload_zone(rnum_t zone_idx) {
-#ifdef TEMPORARY_COMPILATION_GUARD
+#ifdef USE_ZONE_HOTLOADING
   rnum_t room_rnum;
   struct zone_data *zone = &zone_table[zone_idx];
 
@@ -432,6 +430,9 @@ void modify_players_in_zone(rnum_t in_zone, int amount, const char *origin) {
     // Recalculate the whole game's PIZ counts as a stopgap.
     recalculate_whole_game_players_in_zone();
   }
+
+  // Ensure it's loaded.
+  hotload_zone(in_zone);
 }
 
 void modify_players_in_veh(struct veh_data *veh, int amount,

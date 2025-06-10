@@ -50,6 +50,7 @@ extern void docwagon_retrieve(struct char_data *ch);
 extern void convert_and_write_string_to_file(const char *str, const char *path);
 extern int calculate_players_in_vehicle(struct veh_data *veh);
 extern void recalculate_whole_game_players_in_zone();
+extern void attempt_to_offload_unused_zones();
 
 #ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
 extern void verify_every_pointer_we_can_think_of();
@@ -206,6 +207,13 @@ ACMD(do_debug) {
   if (!str_cmp(arg1, "pointers")) {
     send_to_char(ch, "OK, validating every pointer we can think of.\r\n");
     verify_every_pointer_we_can_think_of();
+    return;
+  }
+
+  if (!str_cmp(arg1, "offloadzones")) {
+    send_to_char(ch, "OK, offloading all zones that don't have PCs in them...\r\n");
+    attempt_to_offload_unused_zones();
+    send_to_char(ch, "Done.\r\n");
     return;
   }
 

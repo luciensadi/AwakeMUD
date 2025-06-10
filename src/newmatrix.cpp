@@ -19,11 +19,6 @@
 #include "otaku.hpp"
 #include "gmcp.hpp"
 
-#ifdef TEMPORARY_COMPILATION_GUARD
-extern void create_secret_container(struct char_data *ch);
-extern void create_secret_contents(struct char_data *ch);
-#endif
-
 #define PERSONA ch->persona
 #define PERSONA_CONDITION ch->persona->condition
 #define DECKER PERSONA->decker

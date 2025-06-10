@@ -51,7 +51,7 @@ extern void end_quest(struct char_data *ch, bool succeeded);
 extern void set_casting_pools(struct char_data *ch, int casting, int drain, int spell_defense, int reflection, bool message);
 extern void calc_weight(struct char_data *);
 extern void exdesc_conceal_reveal(struct char_data *vict, int wearloc, bool check_for_reveal);
-#ifdef TEMPORARY_COMPILATION_GUARD
+#ifdef USE_ZONE_HOTLOADING
 extern void stop_rigging(struct char_data *ch, bool send_message);
 extern void modify_players_in_zone(rnum_t in_zone, int amount, const char *origin);
 extern void modify_players_in_veh(struct veh_data *veh, int amount, const char *origin);
@@ -1261,7 +1261,7 @@ void veh_from_room(struct veh_data * veh)
     return;
   }
 
-#ifdef TEMPORARY_COMPILATION_GUARD
+#ifdef USE_ZONE_HOTLOADING
   // Remove them from the zone's player counter.
   if (veh->players_in_veh && get_veh_in_room(veh)) {
     modify_players_in_zone(get_veh_in_room(veh)->zone, -(veh->players_in_veh), "veh_from_room");
@@ -1309,7 +1309,7 @@ void char_from_room(struct char_data * ch)
     if (IS_SENATOR(ch) && PRF_FLAGGED(ch, PRF_PACIFY) && ch->in_room->peaceful > 0)
       ch->in_room->peaceful--;
 
-#ifdef TEMPORARY_COMPILATION_GUARD
+#ifdef USE_ZONE_HOTLOADING
     if (ch->desc || !IS_NPC(ch) || GET_MOB_VNUM(ch) == MOB_PROJECTION) {
       modify_players_in_zone(ch->in_room->zone, -1, "char_from_room (in_room stanza)");
     }
@@ -1326,7 +1326,7 @@ void char_from_room(struct char_data * ch)
   }
 
   if (ch->in_veh) {
-  #ifdef TEMPORARY_COMPILATION_GUARD
+  #ifdef USE_ZONE_HOTLOADING
     // Character is in a vehicle. Remove them from it AND from the zone's counter (they'll be added back in with their next to_room)
     if (ch->desc || !IS_NPC(ch) || GET_MOB_VNUM(ch) == MOB_PROJECTION) {
       modify_players_in_veh(ch->in_veh, -1, "char_from_room (in_veh stanza)");
@@ -1362,7 +1362,7 @@ void char_to_veh(struct veh_data * veh, struct char_data * ch)
     veh->seating[ch->vfront]--;
     GET_POS(ch) = POS_SITTING;
 
-#ifdef TEMPORARY_COMPILATION_GUARD
+#ifdef USE_ZONE_HOTLOADING
     if (ch->desc || !IS_NPC(ch) || GET_MOB_VNUM(ch) == MOB_PROJECTION) {
       modify_players_in_veh(ch->in_veh, +1, "char_to_veh");
       if (get_veh_in_room(ch->in_veh)) {
@@ -1388,7 +1388,7 @@ void veh_to_room(struct veh_data * veh, struct room_data *room)
   veh->in_room = room;
   recalculate_room_light(room);
 
-#ifdef TEMPORARY_COMPILATION_GUARD
+#ifdef USE_ZONE_HOTLOADING
   // Add them to the zone's player counter.
   if (veh->players_in_veh) {
     modify_players_in_zone(veh->in_room->zone, +veh->players_in_veh, "veh_to_room");
@@ -1526,6 +1526,13 @@ void char_to_room(struct char_data * ch, struct room_data *room)
     char_from_room(ch);
   }
 
+  // Hotload it BEFORE they enter it so they're not spammed with messages.
+#ifdef USE_ZONE_HOTLOADING
+  if (ch->desc || !IS_NPC(ch) || GET_MOB_VNUM(ch) == MOB_PROJECTION) {
+    modify_players_in_zone(room->zone, +1, "char_to_room");
+  }
+#endif
+
   ch->next_in_room = room->people;
   room->people = ch;
   ch->in_room = room;
@@ -1552,12 +1559,6 @@ void char_to_room(struct char_data * ch, struct room_data *room)
   _char_with_spell_to_room(ch, SPELL_SHADOW, ch->in_room->shadow);
   _char_with_spell_to_room(ch, SPELL_LIGHT, ch->in_room->light);
   _char_with_spell_to_room(ch, SPELL_POLTERGEIST, ch->in_room->poltergeist);
-
-#ifdef TEMPORARY_COMPILATION_GUARD
-  if (ch->desc || !IS_NPC(ch) || GET_MOB_VNUM(ch) == MOB_PROJECTION) {
-    modify_players_in_zone(ch->in_room->zone, +1, "char_to_room");
-  }
-#endif
 }
 
 // Checks obj_to_x preconditions for common errors. Overwrites buf3. Returns TRUE for kosher, FALSE otherwise.
@@ -3082,7 +3083,7 @@ void extract_char(struct char_data * ch, bool do_save)
 
   /* end rigging */
   if (PLR_FLAGGED(ch, PLR_REMOTE)) {
-#ifdef TEMPORARY_COMPILATION_GUARD
+#ifdef USE_ZONE_HOTLOADING
     stop_rigging(ch, false);
 #else
     ch->char_specials.rigging->rigger = NULL;
