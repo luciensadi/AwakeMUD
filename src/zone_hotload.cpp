@@ -196,7 +196,11 @@ void attempt_to_offload_unused_zones() {
 
   // Set up our last valid timestamp.
   auto now = std::chrono::system_clock::now();
+#ifdef IS_BUILDPORT
+  auto twenty_minutes_ago = now - std::chrono::minutes(2);
+#else
   auto twenty_minutes_ago = now - std::chrono::minutes(20);
+#endif
   time_t last_valid_timestamp = std::chrono::system_clock::to_time_t(twenty_minutes_ago);
 
   // mudlog("Looking for zones to offload...", NULL, LOG_SYSLOG, TRUE);
