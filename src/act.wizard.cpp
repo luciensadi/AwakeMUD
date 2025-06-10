@@ -1148,7 +1148,7 @@ ACMD(do_vnum)
 {
   char *remainder = one_argument(argument, buf);
 
-  if (!*buf || !*buf2) {
+  if (!*buf || !*remainder) {
     send_to_char(VNUM_USAGE_STRING, ch);
     return;
   }
