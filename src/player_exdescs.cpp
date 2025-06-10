@@ -270,6 +270,11 @@ std::vector<PCExDesc *> exdescs_with_visibility_changed_by_wearloc(struct char_d
   static std::vector<PCExDesc *> result = {0};
   result.clear();
 
+#ifndef USE_EXDESC_CONCEAL_REVEAL
+  // short circuit: do nothing
+  return result;
+#else
+
   // send_to_char(vict, "exdescs_with_visibility_changed_by_wearloc(%s, %d, %s)\r\n", GET_CHAR_NAME(vict), wearloc, check_for_reveal ? "T" : "F");
 
   if (!vict->player_specials) {
@@ -348,11 +353,15 @@ std::vector<PCExDesc *> exdescs_with_visibility_changed_by_wearloc(struct char_d
   }
 
   return result;
+#endif
 }
 
 void exdesc_conceal_reveal(struct char_data *vict, int wearloc, bool check_for_reveal) {
   auto vec = exdescs_with_visibility_changed_by_wearloc(vict, wearloc, check_for_reveal);
 
+#ifndef USE_EXDESC_CONCEAL_REVEAL
+  return;
+#else
   if (vec.empty()) {
     return;
   }
@@ -377,6 +386,7 @@ void exdesc_conceal_reveal(struct char_data *vict, int wearloc, bool check_for_r
 
   act(exdesc_buf, TRUE, vict, 0, 0, TO_CHAR);
   act(exdesc_buf, TRUE, vict, 0, 0, TO_ROOM);
+#endif
 }
 
 bool viewer_can_see_at_least_one_exdesc_on_vict(struct char_data *viewer, struct char_data *victim) {
