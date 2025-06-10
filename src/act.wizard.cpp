@@ -4419,7 +4419,7 @@ void print_zone_to_buf(char *bufptr, int buf_size, int zone, int detailed, struc
       else if (zone_table[zone].security >= 7)
         sec_color = "^y";
 
-      snprintf(ENDOF(bufptr), buf_size - strlen(bufptr), "%s%s (%-3.3s) Age: %3d; Res: %3d (%1d); Top: ^c%6d^n; Sec: %s%2d; Offloaded: %s^n\r\n",
+      snprintf(ENDOF(bufptr), buf_size - strlen(bufptr), "%s%s (%-3.3s) Age: %3d; Res: %3d (%1d); Top: ^c%6d^n; Sec: %s%2d^n; Offloaded: %s^n\r\n",
             zone_table[zone].editing_restricted_to_admin ? "L" : " ",
             zone_table[zone].approved ? "A" : " ",
             jurisdictions[zone_table[zone].jurisdiction],
