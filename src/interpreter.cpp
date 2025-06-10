@@ -115,6 +115,7 @@ extern void mag_menu_system(struct descriptor_data * d, char *arg);
 extern void ccr_pronoun_menu(struct descriptor_data *d);
 extern void disable_xterm_256(descriptor_t *apDescriptor);
 extern void enable_xterm_256(descriptor_t *apDescriptor);
+extern void recalculate_whole_game_players_in_zone();
 
 // Some commands are not supported but are common in other games. We handle those with these SCMDs.
 #define SCMD_INTRODUCE 0
@@ -2703,6 +2704,15 @@ int perform_dupe_check(struct descriptor_data *d)
             GET_CHAR_NAME(d->character));
     mudlog(buf, d->character, LOG_CONNLOG, TRUE);
     log_vfprintf("[CONNLOG: %s has reconnected from %s]", GET_CHAR_NAME(d->character), d->host);
+    {
+      struct room_data *in_room = (d->character ? get_ch_in_room(d->character) : NULL);
+      if (in_room) {
+        zone_table[in_room->zone].last_player_action = time(0);
+        // Counts can get fucky when players extract, so we take our best guess at what it should be, then recalc it for the whole game.
+        zone_table[in_room->zone].players_in_zone++;
+        recalculate_whole_game_players_in_zone();
+      }
+    }
     break;
   case USURP:
     SEND_TO_Q("You take over your own body, already in use!\r\n", d);
