@@ -5659,7 +5659,7 @@ char *get_string_after_color_code_removal(const char *str, struct char_data *ch)
   memset(clearstr, 0, sizeof(clearstr));
   int pos = 0;
 
-  while (*ptr && (ptr - str) <= ptr_max)
+  while (*ptr && (ptr - str) < ptr_max)
   {
     // Buffer overflow failsafe.
     if (pos == MAX_STRING_LENGTH - 1)

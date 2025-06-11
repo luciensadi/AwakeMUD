@@ -462,8 +462,8 @@ void recalculate_whole_game_players_in_zone()
       else
       {
         mudlog_vfprintf(NULL, LOG_SYSLOG,
-                        "Zone '%s^n' failed PIZ validation: expected total %d, "
-                        "actual %d (%d + %d (vd %d)).\r\n",
+                        "Zone '%s^n' failed PIZ validation: incorrect total was %d, "
+                        "should have been %d (%d + %d (vd %d)).\r\n",
                         zone->name, zone->players_in_zone,
                         (on_foot_players_present + veh_players_present),
                         on_foot_players_present, veh_players_present,
