@@ -9602,6 +9602,14 @@ const char *cleanup_invalid_color_codes(const char *str) {
   static char cleanup_buf[MAX_STRING_LENGTH * 2];
   memset(cleanup_buf, 0, sizeof(cleanup_buf));
 
+  if (!str) {
+    return NULL;
+  }
+
+  if (!*str) {
+    return cleanup_buf;
+  }
+
   size_t len = strlen(str);
   if (len >= sizeof(cleanup_buf)) {
     mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Got too-long string to cleanup_invalid_color_codes. Blanking it.");
