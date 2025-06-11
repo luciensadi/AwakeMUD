@@ -258,7 +258,6 @@ void objList::UpdateCounters(void)
   MYSQL_ROW row;
   char *trid = NULL;
   static nodeStruct<struct obj_data *> *temp, *next;
-  time_t timestamp_now = time(0);
 
   bool trideo_plays = (trideo_ticks++ % TRIDEO_TICK_DELAY == 0);
   int pet_act_tick = (global_pet_act_tick++) % 10;

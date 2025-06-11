@@ -4149,8 +4149,10 @@ ACMD(do_zreset)
       send_to_char("You can't reset the entire world.\r\n", ch);
       return;
     }
-    for (i = 0; i <= top_of_zone_table; i++)
+    for (i = 0; i <= top_of_zone_table; i++) {
+      zone_table[i].last_player_action = time(0);
       reset_zone(i, 0);
+    }
     snprintf(buf, sizeof(buf), "%s reset world.", GET_CHAR_NAME(ch));
     mudlog(buf, ch, LOG_WIZLOG, TRUE);
     send_to_char("Reset world.\r\n", ch);
