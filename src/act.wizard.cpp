@@ -85,6 +85,7 @@ extern void list_mob_precast_spells_to_ch(struct char_data *mob, struct char_dat
 extern const char *get_faction_name(idnum_t idnum, struct char_data *viewer);
 extern void modify_players_in_zone(rnum_t in_zone, int amount, const char *origin);
 extern void modify_players_in_veh(struct veh_data *veh, int amount, const char *origin);
+extern void hotload_zone(rnum_t zone_idx);
 
 extern const char *wound_arr[];
 extern const char *material_names[];
@@ -4150,7 +4151,10 @@ ACMD(do_zreset)
       return;
     }
     for (i = 0; i <= top_of_zone_table; i++) {
+      // Ensure it's loaded.
       zone_table[i].last_player_action = time(0);
+      hotload_zone(i);
+      // Reset it.
       reset_zone(i, 0);
     }
     snprintf(buf, sizeof(buf), "%s reset world.", GET_CHAR_NAME(ch));
