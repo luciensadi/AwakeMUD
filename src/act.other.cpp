@@ -1107,6 +1107,8 @@ ACMD(do_gen_write)
     } else {
       send_to_char("Thanks! Staff will review this contribution and award system points on the next review cycle.\r\n", ch);
     }
+  } else {
+    send_to_char("Received, thank you!\r\n", ch);
   }
 }
 
