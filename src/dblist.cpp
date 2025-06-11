@@ -49,10 +49,6 @@ int objList::PrintList(struct char_data *ch, const char *arg, bool override_vis_
     if (!override_vis_check && !CAN_SEE_OBJ(ch, temp->data))
       continue;
 
-#ifdef IS_BUILDPORT
-    log_vfprintf("PrintList() checking keywords for %s (%ld) at %ld", GET_OBJ_NAME(temp->data), GET_OBJ_VNUM(temp->data), GET_ROOM_VNUM(get_obj_in_room(temp->data)));
-#endif
-
     if (keyword_appears_in_obj(arg, temp->data)) {
       print_object_location(++num, temp->data, ch, TRUE);
     }
