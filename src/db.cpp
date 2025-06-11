@@ -92,6 +92,7 @@ extern void parse_factions();
 extern void initialize_policy_tree();
 extern void initialize_traffic_msgs();
 extern void migrate_pocket_secretaries_in_database();
+extern void attempt_to_offload_unused_zones();
 
 extern void auto_repair_obj(struct obj_data *obj, idnum_t owner);
 
@@ -779,12 +780,6 @@ void DBInit()
   log("Initializing transportation system");
   TransportInit();
 
-#ifdef USE_ZONE_HOTLOADING
-  log_vfprintf("Skipping zone resets for all %ld zones-- treating them as just-offloaded instead.", top_of_zone_table + 1);
-  for (i = 0; i <= top_of_zone_table; i++) {
-    zone_table[i].offloaded_at = time(0);
-  }
-#else
   log_vfprintf("Resetting %ld zones.", top_of_zone_table + 1);
   for (i = 0; i <= top_of_zone_table; i++) {
     log_vfprintf("Resetting %s (rooms %d-%d).", zone_table[i].name,
@@ -795,7 +790,9 @@ void DBInit()
     write_zone_to_disk(zone_table[i].number);
     // log("Written.");
   }
-#endif
+
+  log("Offloading all zones now that we've loaded J's, specs, etc...");
+  attempt_to_offload_unused_zones();
 
   log("Migrating pocket secretaries in database.");
   migrate_pocket_secretaries_in_database();

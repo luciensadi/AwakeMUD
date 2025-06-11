@@ -98,6 +98,10 @@ void _attempt_extract_zone_obj(struct obj_data *obj)
   if (obj->dropped_by_char)
     return;
 
+  // Don't extract anything loaded by a proc.
+  if (obj->load_origin == OBJ_LOAD_REASON_SPECPROC)
+    return;
+
   // No extracting corpses.
   if (IS_OBJ_STAT(obj, ITEM_EXTRA_CORPSE))
     return;
