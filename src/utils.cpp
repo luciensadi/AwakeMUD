@@ -5682,7 +5682,7 @@ char *get_string_after_color_code_removal(const char *str, struct char_data *ch)
       // There are two types of color: Two-character tags (^g) and xterm tags (^[F123]). We must account for both.
       // 7 for xterm tags 2 for regular tags
       // This can push us past the end of the string if someone wrote a malformed one!
-      else if (*(ptr + 1) == '[')
+      else if (*(ptr + 1) == '[' && *(ptr+2) && *(ptr+3) && *(ptr+4) && *(ptr+5) && *(ptr+6))
       {
         ptr += 7;
       }
