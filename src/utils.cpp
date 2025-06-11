@@ -5659,7 +5659,7 @@ char *get_string_after_color_code_removal(const char *str, struct char_data *ch)
   memset(clearstr, 0, sizeof(clearstr));
   int pos = 0;
 
-  while (*ptr && (ptr - str) < ptr_max)
+  while ((ptr - str) < ptr_max && *ptr)
   {
     // Buffer overflow failsafe.
     if (pos == MAX_STRING_LENGTH - 1)
@@ -5681,6 +5681,7 @@ char *get_string_after_color_code_removal(const char *str, struct char_data *ch)
       // Skip color codes.
       // There are two types of color: Two-character tags (^g) and xterm tags (^[F123]). We must account for both.
       // 7 for xterm tags 2 for regular tags
+      // This can push us past the end of the string if someone wrote a malformed one!
       else if (*(ptr + 1) == '[')
       {
         ptr += 7;
