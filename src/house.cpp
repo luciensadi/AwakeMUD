@@ -81,11 +81,11 @@ bool House_load_storage(struct room_data *world_room, const char *filename)
       GET_OBJ_COST(obj) = 0;
 
       snprintf(buf, sizeof(buf), "%s/Name", sect_name);
-      obj->restring = str_dup(data.GetString(buf, NULL));
+      obj->restring = str_dup(cleanup_invalid_color_codes(data.GetString(buf, NULL)));
       snprintf(buf, sizeof(buf), "%s/Graffiti", sect_name);
-      obj->graffiti = str_dup(data.GetString(buf, NULL));
+      obj->graffiti = str_dup(cleanup_invalid_color_codes(data.GetString(buf, NULL)));
       snprintf(buf, sizeof(buf), "%s/Photo", sect_name);
-      obj->photo = str_dup(data.GetString(buf, NULL));
+      obj->photo = str_dup(cleanup_invalid_color_codes(data.GetString(buf, NULL)));
       for (x = 0; x < NUM_OBJ_VALUES; x++) {
         snprintf(buf, sizeof(buf), "%s/Value %d", sect_name, x);
         GET_OBJ_VAL(obj, x) = data.GetInt(buf, GET_OBJ_VAL(obj, x));

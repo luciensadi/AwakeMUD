@@ -9597,3 +9597,61 @@ bool check_if_sitting_and_force_sit_command_if_not(struct char_data *ch)
 
   return true;
 }
+
+const char *cleanup_invalid_color_codes(const char *str) {
+  static char cleanup_buf[MAX_STRING_LENGTH * 2];
+  memset(cleanup_buf, 0, sizeof(cleanup_buf));
+
+  size_t len = strlen(str);
+  if (len >= sizeof(cleanup_buf)) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Got too-long string to cleanup_invalid_color_codes. Blanking it.");
+    strlcpy(cleanup_buf, "(error: string too long!)", sizeof(cleanup_buf));
+    return cleanup_buf;
+  }
+
+  char *write_ptr = cleanup_buf;
+
+  for (const char *read_ptr = str; *read_ptr; ) {
+    if (*read_ptr != '^') {
+      *(write_ptr++) = *(read_ptr++);
+      continue;
+    }
+
+    // Read pointer is a caret, so look for cases.
+    // For all cases other than '[', just write it.
+    if (*(read_ptr + 1) != '[') {
+      *(write_ptr++) = *(read_ptr++);
+      continue;
+    }
+
+    // At this point, it claims to be a 7-character color string like '^[F000]'. Validate that.
+
+    // First character.
+    if (*(read_ptr + 2) != 'F' && *(read_ptr + 2) != 'B') {
+      // Failed-- skip past the caret.
+      read_ptr++;
+      continue;
+    }
+
+    // Second, third, and fourth characters must be digits. Although only 0-6 are valid, we don't care about 7+ for this function.
+    if (!isdigit(*(read_ptr + 3)) || !isdigit(*(read_ptr + 4)) || !isdigit(*(read_ptr + 5))) {
+      // Failed-- skip past the caret.
+      read_ptr++;
+      continue;
+    }
+
+    // Last character must be a ].
+    if (*(read_ptr + 6) != ']') {
+      // Failed-- skip past the caret.
+      read_ptr++;
+      continue;
+    }
+
+    // It's all valid. Copy it in and move on.
+    for (int write_count = 1; write_count <= 7; write_count++) {
+      *(write_ptr++) = *(read_ptr++);
+    }
+  }
+
+  return cleanup_buf;
+}

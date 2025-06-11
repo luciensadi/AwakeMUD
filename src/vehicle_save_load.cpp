@@ -506,10 +506,10 @@ void load_single_veh(const char *filename) {
 
   if (!veh->spare2)
     veh_to_room(veh, &world[veh_room_rnum]);
-  veh->restring = str_dup(data.GetString("VEHICLE/VRestring", NULL));
-  veh->restring_long = str_dup(data.GetString("VEHICLE/VRestringLong", NULL));
-  veh->decorate_front = str_dup(data.GetString("VEHICLE/VDecorateFront", NULL));
-  veh->decorate_rear = str_dup(data.GetString("VEHICLE/VDecorateRear", NULL));
+  veh->restring = str_dup(cleanup_invalid_color_codes(data.GetString("VEHICLE/VRestring", NULL)));
+  veh->restring_long = str_dup(cleanup_invalid_color_codes(data.GetString("VEHICLE/VRestringLong", NULL)));
+  veh->decorate_front = str_dup(cleanup_invalid_color_codes(data.GetString("VEHICLE/VDecorateFront", NULL)));
+  veh->decorate_rear = str_dup(cleanup_invalid_color_codes(data.GetString("VEHICLE/VDecorateRear", NULL)));
   int inside = 0, last_inside = 0;
   int num_objs = data.NumSubsections("CONTENTS");
 
@@ -543,11 +543,11 @@ void load_single_veh(const char *filename) {
       snprintf(buf, sizeof(buf), "%s/Front", sect_name);
       obj->vfront = data.GetInt(buf, TRUE);
       snprintf(buf, sizeof(buf), "%s/Name", sect_name);
-      obj->restring = str_dup(data.GetString(buf, NULL));
+      obj->restring = str_dup(cleanup_invalid_color_codes(data.GetString(buf, NULL)));
       snprintf(buf, sizeof(buf), "%s/Graffiti", sect_name);
-      obj->graffiti = str_dup(data.GetString(buf, NULL));
+      obj->graffiti = str_dup(cleanup_invalid_color_codes(data.GetString(buf, NULL)));
       snprintf(buf, sizeof(buf), "%s/Photo", sect_name);
-      obj->photo = str_dup(data.GetString(buf, NULL));
+      obj->photo = str_dup(cleanup_invalid_color_codes(data.GetString(buf, NULL)));
       snprintf(buf, sizeof(buf), "%s/%s", sect_name, FILESTRING_OBJ_IDNUM);
       GET_OBJ_IDNUM(obj) = data.GetUnsignedLong(buf, 0);
 
@@ -691,7 +691,7 @@ void load_single_veh(const char *filename) {
     struct grid_data *grid = new grid_data;
     const char *sect_name = data.GetIndexSection("GRIDGUIDE", i);
     snprintf(buf, sizeof(buf), "%s/Name", sect_name);
-    grid->name = str_dup(data.GetString(buf, NULL));
+    grid->name = str_dup(cleanup_invalid_color_codes(data.GetString(buf, NULL)));
     snprintf(buf, sizeof(buf), "%s/Room", sect_name);
     grid->room = data.GetLong(buf, 0);
     grid->next = veh->grid;
@@ -726,7 +726,7 @@ void load_single_veh(const char *filename) {
       snprintf(buf, sizeof(buf), "%s/Condition", sect_name);
       GET_OBJ_CONDITION(weapon) = data.GetInt(buf, GET_OBJ_CONDITION(weapon));
       snprintf(buf, sizeof(buf), "%s/Name", sect_name);
-      weapon->restring = str_dup(data.GetString(buf, NULL));
+      weapon->restring = str_dup(cleanup_invalid_color_codes(data.GetString(buf, NULL)));
       for (int x = 0; x < NUM_OBJ_VALUES; x++) {
         snprintf(buf, sizeof(buf), "%s/Value %d", sect_name, x);
         GET_OBJ_VAL(weapon, x) = data.GetInt(buf, GET_OBJ_VAL(weapon, x));

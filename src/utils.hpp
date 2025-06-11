@@ -195,6 +195,7 @@ bool   restore_to_full_health_if_still_in_chargen(struct char_data *victim);
 char * format_for_logging__returns_new(const char *input);
 int    calculate_ware_essence_or_index_cost(struct char_data *ch, struct obj_data *ware);
 bool   check_if_sitting_and_force_sit_command_if_not(struct char_data *ch);
+const char *cleanup_invalid_color_codes(const char *str);
 
 // GMCP / Discord update method. Does nothing if GMCP isn't turned on.
 void update_gmcp_discord_info(struct descriptor_data *desc);
