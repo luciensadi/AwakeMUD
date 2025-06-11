@@ -288,6 +288,10 @@ void objList::UpdateCounters(void)
       continue;
     }
 
+    // If it's flagged as mob equipment / mob load, skip it.
+    if (OBJ->load_origin == OBJ_LOAD_REASON_MOB_DEFAULT_GEAR)
+      continue;
+
     // This is the only thing a pet object can do, so get it out of the way.
     if (GET_OBJ_TYPE(OBJ) == ITEM_PET) {
       pet_acts(OBJ, pet_act_tick);
@@ -436,6 +440,7 @@ void objList::UpdateCounters(void)
 
     // Time out things that have been abandoned outside of storage etc rooms (qualifier checked when setting timeout)
     // TODO: Maybe put it in a vector of expiring objects rather than making this check be part of every item?
+#ifdef EXPIRE_STRAY_ITEMS
     if (OBJ->in_room
         && !OBJ->in_room->people
         && (GET_OBJ_EXPIRATION_TIMESTAMP(OBJ) > 0 && GET_OBJ_EXPIRATION_TIMESTAMP(OBJ) <= timestamp_now)
@@ -471,20 +476,16 @@ void objList::UpdateCounters(void)
       }
 
       const char *representation = generate_new_loggable_representation(OBJ);
-#ifndef EXPIRE_STRAY_ITEMS
-      mudlog_vfprintf(NULL, LOG_MISCLOG, "Item %s @ %s (%ld) WOULD HAVE been cleaned up by expiration logic.", representation, GET_ROOM_NAME(OBJ->in_room), GET_ROOM_VNUM(OBJ->in_room));
-      GET_OBJ_EXPIRATION_TIMESTAMP(OBJ) = 0;
-#else
       mudlog_vfprintf(NULL, LOG_MISCLOG, "Item %s @ %s (%ld) HAS been cleaned up by expiration logic.", representation, GET_ROOM_NAME(OBJ->in_room), GET_ROOM_VNUM(OBJ->in_room));
       if (OBJ->in_room->people) {
         act("$p is lost on the ground.", TRUE, OBJ->in_room->people, OBJ, 0, TO_CHAR);
       }
       next = temp->next;
       extract_obj(OBJ);
-#endif
       delete [] representation;
       continue;
     }
+#endif
 
     // Corpses either have no vnum or are 43 (belongings).
     if (GET_OBJ_VNUM(OBJ) < 0 || GET_OBJ_VNUM(OBJ) == 43) {
