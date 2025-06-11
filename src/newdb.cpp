@@ -406,34 +406,34 @@ bool load_char(const char *name, char_data *ch, bool logon, int pc_load_origin)
   }
 
   ch->player.physical_text.room_desc = str_dup(get_string_after_color_code_removal(row[9], ch));
-  ch->player.background = str_dup(row[10]);
-  ch->player.physical_text.keywords = str_dup(row[11]);
-  ch->player.physical_text.name = str_dup(row[12]);
-  ch->player.physical_text.look_desc = str_dup(row[13]);
+  ch->player.background = str_dup(cleanup_invalid_color_codes(row[10]));
+  ch->player.physical_text.keywords = str_dup(cleanup_invalid_color_codes(row[11]));
+  ch->player.physical_text.name = str_dup(cleanup_invalid_color_codes(row[12]));
+  ch->player.physical_text.look_desc = str_dup(cleanup_invalid_color_codes(row[13]));
 
-  ch->player.matrix_text.keywords = str_dup(row[14]);
-  ch->player.matrix_text.name = str_dup(row[15]);
-  ch->player.matrix_text.room_desc = str_dup(row[16]);
-  ch->player.matrix_text.look_desc = str_dup(row[17]);
+  ch->player.matrix_text.keywords = str_dup(cleanup_invalid_color_codes(row[14]));
+  ch->player.matrix_text.name = str_dup(cleanup_invalid_color_codes(row[15]));
+  ch->player.matrix_text.room_desc = str_dup(cleanup_invalid_color_codes(row[16]));
+  ch->player.matrix_text.look_desc = str_dup(cleanup_invalid_color_codes(row[17]));
 
-  ch->player.astral_text.keywords = str_dup(row[18]);
+  ch->player.astral_text.keywords = str_dup(cleanup_invalid_color_codes(row[18]));
   if (!str_str(ch->player.astral_text.keywords, GET_CHAR_NAME(ch))) {
     char new_keywords[MAX_INPUT_LENGTH + 100];
     snprintf(new_keywords, sizeof(new_keywords), "%s %s", ch->player.astral_text.keywords, GET_CHAR_NAME(ch));
     delete [] ch->player.astral_text.keywords;
     ch->player.astral_text.keywords = str_dup(new_keywords);
   }
-  ch->player.astral_text.name = str_dup(row[19]);
-  ch->player.astral_text.room_desc = str_dup(row[20]);
-  ch->player.astral_text.look_desc = str_dup(row[21]);
-  ch->char_specials.leave = str_dup(row[22]);
-  ch->char_specials.arrive = str_dup(row[23]);
-  GET_TITLE(ch) = str_dup(row[24]);
-  GET_PRETITLE(ch) = str_dup(row[25]);
-  GET_WHOTITLE(ch) = str_dup(row[26]);
-  ch->player.prompt = str_dup(row[27]);
-  ch->player.matrixprompt = str_dup(row[28]);
-  ch->player.host = str_dup(row[29]);
+  ch->player.astral_text.name = str_dup(cleanup_invalid_color_codes(row[19]));
+  ch->player.astral_text.room_desc = str_dup(cleanup_invalid_color_codes(row[20]));
+  ch->player.astral_text.look_desc = str_dup(cleanup_invalid_color_codes(row[21]));
+  ch->char_specials.leave = str_dup(cleanup_invalid_color_codes(row[22]));
+  ch->char_specials.arrive = str_dup(cleanup_invalid_color_codes(row[23]));
+  GET_TITLE(ch) = str_dup(cleanup_invalid_color_codes(row[24]));
+  GET_PRETITLE(ch) = str_dup(cleanup_invalid_color_codes(row[25]));
+  GET_WHOTITLE(ch) = str_dup(cleanup_invalid_color_codes(row[26]));
+  ch->player.prompt = str_dup(cleanup_invalid_color_codes(row[27]));
+  ch->player.matrixprompt = str_dup(cleanup_invalid_color_codes(row[28]));
+  ch->player.host = str_dup(cleanup_invalid_color_codes(row[29]));
   GET_REAL_BOD(ch) = atoi(row[30]);
   GET_REAL_QUI(ch) = atoi(row[31]);
   GET_REAL_STR(ch) = atoi(row[32]);
@@ -483,10 +483,10 @@ bool load_char(const char *name, char_data *ch, bool logon, int pc_load_origin)
   GET_SYSTEM_POINTS(ch) = atoi(row[76]);
   GET_CONGREGATION_BONUS(ch) = atoi(row[77]);
   // note that pgroup is 78
-  SETTABLE_CHAR_COLOR_HIGHLIGHT(ch) = str_dup(row[79]);
-  SETTABLE_EMAIL(ch) = str_dup(row[80]);
+  SETTABLE_CHAR_COLOR_HIGHLIGHT(ch) = str_dup(cleanup_invalid_color_codes(row[79]));
+  SETTABLE_EMAIL(ch) = str_dup(cleanup_invalid_color_codes(row[80]));
   GET_CHAR_MULTIPLIER(ch) = atoi(row[81]);
-  const char *lifestyle_string = str_dup(row[82]);
+  const char *lifestyle_string = str_dup(cleanup_invalid_color_codes(row[82]));
   set_exdesc_max(ch, atoi(row[83]), FALSE);
   GET_OTAKU_PATH(ch) = atoi(row[84]);
   GET_GRADE(ch) = atoi(row[85]);
@@ -678,8 +678,8 @@ bool load_char(const char *name, char_data *ch, bool logon, int pc_load_origin)
   res = mysql_use_result(mysql);
   while ((row = mysql_fetch_row(res))) {
     alias *a = new alias;
-    a->command = str_dup(row[1]);
-    a->replacement = str_dup(row[2]);
+    a->command = str_dup(cleanup_invalid_color_codes(row[1]));
+    a->replacement = str_dup(cleanup_invalid_color_codes(row[2]));
 
     if (strchr(a->replacement, ALIAS_SEP_CHAR) ||
         strchr(a->replacement, ALIAS_VAR_CHAR))
@@ -698,7 +698,7 @@ bool load_char(const char *name, char_data *ch, bool logon, int pc_load_origin)
   while ((row = mysql_fetch_row(res))) {
     remem *a = new remem;
     a->idnum = atol(row[1]);
-    a->mem = str_dup(row[2]);
+    a->mem = str_dup(cleanup_invalid_color_codes(row[2]));
     a->next = GET_PLAYER_MEMORY(ch);
     GET_PLAYER_MEMORY(ch) = a;
   }
@@ -745,9 +745,9 @@ bool load_char(const char *name, char_data *ch, bool logon, int pc_load_origin)
       if (vnum > 0 && (obj = read_object(vnum, VIRTUAL, OBJ_LOAD_REASON_FROM_DB, pc_load_origin, GET_IDNUM(ch)))) {
         GET_OBJ_COST(obj) = atoi(PFILES_CYBERWARE_COST);
         if (*PFILES_CYBERWARE_RESTRING)
-          obj->restring = str_dup(PFILES_CYBERWARE_RESTRING);
+          obj->restring = str_dup(cleanup_invalid_color_codes(PFILES_CYBERWARE_RESTRING));
         if (*PFILES_CYBERWARE_PHOTO)
-          obj->photo = str_dup(PFILES_CYBERWARE_PHOTO);
+          obj->photo = str_dup(cleanup_invalid_color_codes(PFILES_CYBERWARE_PHOTO));
         for (int x = 0; x < NUM_OBJ_VALUES; x++)
           GET_OBJ_VAL(obj, x) = atoi(row[x + 5]);
         if (GET_CYBERWARE_TYPE(obj) == CYB_PHONE && GET_OBJ_VAL(obj, 7))
@@ -759,7 +759,7 @@ bool load_char(const char *name, char_data *ch, bool logon, int pc_load_origin)
         inside = atoi(PFILES_CYBERWARE_LEVEL);
 
         if (PFILES_CYBERWARE_GRAFFITI && *PFILES_CYBERWARE_GRAFFITI)
-          obj->graffiti = str_dup(PFILES_CYBERWARE_GRAFFITI);
+          obj->graffiti = str_dup(cleanup_invalid_color_codes(PFILES_CYBERWARE_GRAFFITI));
 
         GET_OBJ_IDNUM(obj) = strtoul(PFILES_CYBERWARE_OBJ_IDNUM, NULL, 0);
 
@@ -834,9 +834,9 @@ bool load_char(const char *name, char_data *ch, bool logon, int pc_load_origin)
           GET_OBJ_VAL(obj, x) = atoi(row[y]);
         }
         if (PFILES_BIOWARE_RESTRING && *PFILES_BIOWARE_RESTRING)
-          obj->restring = str_dup(PFILES_BIOWARE_RESTRING);
+          obj->restring = str_dup(cleanup_invalid_color_codes(PFILES_BIOWARE_RESTRING));
         if (PFILES_BIOWARE_GRAFFITI && *PFILES_BIOWARE_GRAFFITI)
-          obj->graffiti = str_dup(PFILES_BIOWARE_GRAFFITI);
+          obj->graffiti = str_dup(cleanup_invalid_color_codes(PFILES_BIOWARE_GRAFFITI));
         
         GET_OBJ_IDNUM(obj) = strtoul(PFILES_BIOWARE_OBJ_IDNUM, NULL, 0);
         auto_repair_obj(obj, GET_IDNUM(ch));
@@ -876,9 +876,9 @@ bool load_char(const char *name, char_data *ch, bool logon, int pc_load_origin)
       if (vnum > 0 && (obj = read_object(vnum, VIRTUAL, OBJ_LOAD_REASON_FROM_DB, pc_load_origin, GET_IDNUM(ch)))) {
         GET_OBJ_COST(obj) = atoi(PFILES_WORN_COST);
         if (*PFILES_WORN_RESTRING)
-          obj->restring = str_dup(PFILES_WORN_RESTRING);
+          obj->restring = str_dup(cleanup_invalid_color_codes(PFILES_WORN_RESTRING));
         if (*PFILES_WORN_PHOTO)
-          obj->photo = str_dup(PFILES_WORN_PHOTO);
+          obj->photo = str_dup(cleanup_invalid_color_codes(PFILES_WORN_PHOTO));
         for (int x = 0, y = 5; x < NUM_OBJ_VALUES; x++, y++)
           GET_OBJ_VAL(obj, x) = atoi(row[y]);
         if (GET_OBJ_TYPE(obj) == ITEM_PHONE && GET_ITEM_PHONE_SWITCHED_ON(obj))
@@ -906,7 +906,7 @@ bool load_char(const char *name, char_data *ch, bool logon, int pc_load_origin)
         GET_OBJ_CONDITION(obj) = atoi(PFILES_WORN_COND);
 
         if (PFILES_WORN_GRAFFITI && *PFILES_WORN_GRAFFITI)
-          obj->graffiti = str_dup(PFILES_WORN_GRAFFITI);
+          obj->graffiti = str_dup(cleanup_invalid_color_codes(PFILES_WORN_GRAFFITI));
 
         GET_OBJ_IDNUM(obj) = strtoul(PFILES_WORN_OBJ_IDNUM, NULL, 0);
 
@@ -990,9 +990,9 @@ bool load_char(const char *name, char_data *ch, bool logon, int pc_load_origin)
       if (vnum > 0 && (obj = read_object(vnum, VIRTUAL, OBJ_LOAD_REASON_FROM_DB, pc_load_origin, GET_IDNUM(ch)))) {
         GET_OBJ_COST(obj) = atoi(PFILES_INV_COST);
         if (*PFILES_INV_RESTRING)
-          obj->restring = str_dup(PFILES_INV_RESTRING);
+          obj->restring = str_dup(cleanup_invalid_color_codes(PFILES_INV_RESTRING));
         if (*PFILES_INV_PHOTO)
-          obj->photo = str_dup(PFILES_INV_PHOTO);
+          obj->photo = str_dup(cleanup_invalid_color_codes(PFILES_INV_PHOTO));
         for (int x = 0, y = 5; x < NUM_OBJ_VALUES; x++, y++)
           GET_OBJ_VAL(obj, x) = atoi(row[y]);
 
@@ -1041,7 +1041,7 @@ bool load_char(const char *name, char_data *ch, bool logon, int pc_load_origin)
         GET_OBJ_CONDITION(obj) = atoi(PFILES_INV_COND);
 
         if (PFILES_INV_GRAFFITI && *PFILES_INV_GRAFFITI)
-          obj->graffiti = str_dup(PFILES_INV_GRAFFITI);
+          obj->graffiti = str_dup(cleanup_invalid_color_codes(PFILES_INV_GRAFFITI));
 
         GET_OBJ_IDNUM(obj) = strtoul(PFILES_INV_OBJ_IDNUM, NULL, 0);
 
@@ -2228,7 +2228,7 @@ char *get_player_name(vnum_t id)
     mysql_free_result(res);
     return NULL;
   }
-  char *x = str_dup(row[0]);
+  char *x = str_dup(cleanup_invalid_color_codes(row[0]));
   mysql_free_result(res);
   return x;
 }
@@ -2804,7 +2804,7 @@ ACMD(do_register) {
   }
 
   DELETE_ARRAY_IF_EXTANT(SETTABLE_EMAIL(ch));
-  SETTABLE_EMAIL(ch) = str_dup(prepare_quotes(buf, argument, sizeof(buf) * sizeof(buf[0])));
+  SETTABLE_EMAIL(ch) = str_dup(cleanup_invalid_color_codes(prepare_quotes(buf, argument, sizeof(buf) * sizeof(buf[0]))));
 
   send_to_char(ch, "OK, your email address has been set to '%s'.\r\n", GET_EMAIL(ch));
 
