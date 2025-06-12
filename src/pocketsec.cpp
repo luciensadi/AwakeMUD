@@ -383,8 +383,8 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
 
         if (!(row = mysql_fetch_row(res))) {
           send_to_char(CH, "That entry does not exist.\r\n");
-          pocketsec_phonemenu(d);
           mysql_free_result(res);
+          pocketsec_phonemenu(d);
           return;
         }
 
@@ -478,8 +478,8 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
 
           if (!(row = mysql_fetch_row(res))) {
             send_to_char(CH, "That entry does not exist.\r\n");
-            pocketsec_phonemenu(d);
             mysql_free_result(res);
+            pocketsec_phonemenu(d);
             return;
           }
 
@@ -693,30 +693,30 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
           snprintf(query_buf, sizeof(query_buf), "SELECT idnum, is_protected FROM pfiles_mail WHERE recipient=%ld ORDER BY idnum DESC LIMIT 1 OFFSET %d;", GET_IDNUM(CH), offset);
           if (mysql_wrapper(mysql, query_buf)) {
             send_to_char(CH, "Sorry, your mail isn't working right now.\r\n");
-            mudlog_vfprintf(CH, LOG_SYSLOG, "SYSERR: failed to query mail for %s", GET_CHAR_NAME(d->character));
+            mudlog_vfprintf(CH, LOG_SYSLOG, "SYSERR: failed to query mail in delete/keep mode for %s", GET_CHAR_NAME(d->character));
             pocketsec_mailmenu(d);
             return;
           }
 
           if (!(res = mysql_use_result(mysql))) {
             send_to_char(CH, "Sorry, your mail isn't working right now.\r\n");
-            mudlog_vfprintf(CH, LOG_SYSLOG, "SYSERR: failed to select mail index entry for %s", GET_CHAR_NAME(d->character));
+            mudlog_vfprintf(CH, LOG_SYSLOG, "SYSERR: failed to select mail index entry in delete/keep mode for %s", GET_CHAR_NAME(d->character));
             pocketsec_mailmenu(d);
             return;
           }
 
           if (!(row = mysql_fetch_row(res))) {
             send_to_char(CH, "That mailpiece does not exist.\r\n");
-            pocketsec_mailmenu(d);
             mysql_free_result(res);
+            pocketsec_mailmenu(d);
             return;
           }
 
           if (d->edit_mode == SEC_DELMAIL) {
             if (*(row[1]) == '1') {
               send_to_char(d->character, "That mailpiece has been marked as 'kept' and can't be deleted.\r\n");
-              pocketsec_mailmenu(d);
               mysql_free_result(res);
+              pocketsec_mailmenu(d);
               return;
             }
   
@@ -776,22 +776,22 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
         snprintf(query_buf, sizeof(query_buf), "SELECT sender_name, timestamp, text, idnum FROM pfiles_mail WHERE recipient=%ld ORDER BY idnum DESC LIMIT 1 OFFSET %d;", GET_IDNUM(CH), offset);
         if (mysql_wrapper(mysql, query_buf)) {
           send_to_char(d->character, "Sorry, your mail isn't working right now.\r\n");
-          mudlog_vfprintf(d->character, LOG_SYSLOG, "SYSERR: failed to query mail for %s", GET_CHAR_NAME(d->character));
+          mudlog_vfprintf(d->character, LOG_SYSLOG, "SYSERR: failed to query mail during read for %s", GET_CHAR_NAME(d->character));
           pocketsec_mailmenu(d);
           return;
         }
 
         if (!(res = mysql_use_result(mysql))) {
           send_to_char(CH, "Sorry, your mail isn't working right now.\r\n");
-          mudlog_vfprintf(d->character, LOG_SYSLOG, "SYSERR: failed to select mail index entry for %s", GET_CHAR_NAME(d->character));
+          mudlog_vfprintf(d->character, LOG_SYSLOG, "SYSERR: failed to select mail index entry during read for %s", GET_CHAR_NAME(d->character));
           pocketsec_mailmenu(d);
           return;
         }
 
         if (!(row = mysql_fetch_row(res))) {
           send_to_char(CH, "That mailpiece does not exist.\r\n");
-          pocketsec_mailmenu(d);
           mysql_free_result(res);
+          pocketsec_mailmenu(d);
           return;
         }
 
