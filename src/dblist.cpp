@@ -257,7 +257,6 @@ void objList::UpdateCounters(void)
   MYSQL_RES *res;
   MYSQL_ROW row;
   char *trid = NULL;
-  static nodeStruct<struct obj_data *> *temp, *next;
 
   bool trideo_plays = (trideo_ticks++ % TRIDEO_TICK_DELAY == 0);
   int pet_act_tick = (global_pet_act_tick++) % 10;
@@ -274,7 +273,7 @@ void objList::UpdateCounters(void)
   time_t current_time = time(0);
 
   // Iterate through the list.
-  for (temp = head; temp; temp = next) {
+  for (nodeStruct<struct obj_data *> *temp = head, *next; temp; temp = next) {
     next = temp->next;
 
     // Precondition: The object being examined must exist.
@@ -287,12 +286,184 @@ void objList::UpdateCounters(void)
     if (OBJ->load_origin == OBJ_LOAD_REASON_MOB_DEFAULT_GEAR)
       continue;
 
-    // This is the only thing a pet object can do, so get it out of the way.
-    if (GET_OBJ_TYPE(OBJ) == ITEM_PET) {
-      pet_acts(OBJ, pet_act_tick);
-      continue;
+    switch (GET_OBJ_TYPE(OBJ)) {
+      case ITEM_PET:
+        // This is the only thing a pet object can do, so get it out of the way.
+        pet_acts(OBJ, pet_act_tick);
+        continue;
+      case ITEM_PROGRAM:
+        // Decay evaluate programs. This only fires when they're completed, as non-finished software is ITEM_DESIGN instead.
+        if (GET_PROGRAM_TYPE(OBJ) == SOFT_EVALUATE && GET_PROGRAM_RATING(OBJ)) {
+          if (!GET_PROGRAM_EVALUATE_LAST_DECAY_TIME(OBJ)) {
+            GET_PROGRAM_EVALUATE_LAST_DECAY_TIME(OBJ) = current_time;
+            GET_PROGRAM_EVALUATE_CREATION_TIME(OBJ) = GET_PROGRAM_EVALUATE_LAST_DECAY_TIME(OBJ);
+          }
+          // Decay Evaluate program ratings by one every two IRL days.
+          else if (GET_PROGRAM_EVALUATE_LAST_DECAY_TIME(OBJ) < current_time - (SECS_PER_REAL_DAY * 2) && !(OBJ->carried_by && IS_NPC(OBJ->carried_by))) {
+            GET_PROGRAM_RATING(OBJ)--;
+            GET_PROGRAM_EVALUATE_LAST_DECAY_TIME(OBJ) = current_time;
+            if (GET_PROGRAM_RATING(OBJ) < 0)
+              GET_PROGRAM_RATING(OBJ) = 0;
+          }
+        }
+        continue;
+      case ITEM_MONEY:
+        // Decrement the attempt counter for credsticks.
+        if (GET_OBJ_ATTEMPT(OBJ) > 0)
+          GET_OBJ_ATTEMPT(OBJ)--;
+        continue;
+      case ITEM_WORKSHOP:
+        // Packing / unpacking of workshops. Must be on the ground or in a vehicle to be processed.
+        if (GET_WORKSHOP_UNPACK_TICKS(OBJ) && (OBJ->in_veh || OBJ->in_room)) {
+          struct char_data *ch = NULL;
+          for (ch = OBJ->in_veh ? OBJ->in_veh->people : OBJ->in_room->people;
+               ch;
+               ch = OBJ->in_veh ? ch->next_in_veh : ch->next_in_room) {
+            if (AFF_FLAGGED(ch, AFF_PACKING)) {
+              if (!--GET_WORKSHOP_UNPACK_TICKS(OBJ)) {
+                if (GET_WORKSHOP_IS_SETUP(OBJ)) {
+                  send_to_char(ch, "You finish packing up %s.\r\n", GET_OBJ_NAME(OBJ));
+                  act("$n finishes packing up $P.", FALSE, ch, 0, OBJ, TO_ROOM);
+                  GET_SETTABLE_WORKSHOP_IS_SETUP(OBJ) = 0;
+
+                  // Handle the room's workshop[] array.
+                  if (OBJ->in_room)
+                    remove_workshop_from_room(OBJ);
+                } else {
+                  send_to_char(ch, "You finish setting up %s.\r\n", GET_OBJ_NAME(OBJ));
+                  act("$n finishes setting up $P.", FALSE, ch, 0, OBJ, TO_ROOM);
+                  GET_SETTABLE_WORKSHOP_IS_SETUP(OBJ) = 1;
+
+                  // Handle the room's workshop[] array.
+                  if (OBJ->in_room)
+                    add_workshop_to_room(OBJ);
+                }
+                AFF_FLAGS(ch).RemoveBit(AFF_PACKING);
+              }
+              break;
+            }
+          }
+
+          // If there were no characters in the room working on it, clear its pack/unpack counter.
+          if (!ch) {
+            // Only send a message if someone is there.
+            if (OBJ->in_room) {
+              snprintf(buf, sizeof(buf), "A passerby rolls %s eyes and quickly re-%spacks the half-packed %s.",
+                       number(0, 1) == 0 ? "his" : "her",
+                       GET_WORKSHOP_IS_SETUP(OBJ) ? "un" : "",
+                       GET_OBJ_NAME(OBJ));
+              send_to_room(buf, OBJ->in_room);
+            } else if (OBJ->in_veh) {
+              snprintf(buf, sizeof(buf), "Huh, %s must have actually been %spacked this whole time.",
+                       GET_OBJ_NAME(OBJ),
+                       GET_WORKSHOP_IS_SETUP(OBJ) ? "un" : "");
+              send_to_veh(buf, OBJ->in_veh, NULL, FALSE);
+            }
+            GET_WORKSHOP_UNPACK_TICKS(OBJ) = 0;
+          }
+        }
+        continue;
+      case ITEM_DECK_ACCESSORY:
+        // Cook chips.
+        if (GET_DECK_ACCESSORY_TYPE(OBJ) == TYPE_COOKER && OBJ->contains && GET_DECK_ACCESSORY_COOKER_TIME_REMAINING(OBJ) > 0) {
+          if (--GET_DECK_ACCESSORY_COOKER_TIME_REMAINING(OBJ) < 1) {
+            struct obj_data *chip = OBJ->contains;
+            act("$p beeps loudly, signaling completion.", FALSE, 0, OBJ, 0, TO_ROOM);
+            if (GET_OBJ_TIMER(chip) == -1) {
+              DELETE_ARRAY_IF_EXTANT(chip->restring);
+              chip->restring = str_dup("a ruined optical chip");
+            } else
+              GET_OBJ_TIMER(chip) = 1;
+          }
+        }
+        continue;
     }
 
+    // Decay corpses, which either have no vnum or are 43 (belongings).
+    if (GET_OBJ_VNUM(OBJ) < 0 || GET_OBJ_VNUM(OBJ) == 43) {
+      // Don't touch PC belongings that have contents.
+      if (GET_CORPSE_IS_PC(OBJ) && OBJ->contains != NULL)
+        continue;
+
+      // Corpse decay.
+      if (GET_OBJ_TIMER(OBJ)-- <= 0) {
+        if (OBJ->carried_by)
+          act("$p decays in your hands.", FALSE, temp->data->carried_by, temp->data, 0, TO_CHAR);
+        else if (temp->data->worn_by)
+          act("$p decays in your hands.", FALSE, temp->data->worn_by, temp->data, 0, TO_CHAR);
+        else if (temp->data->in_room && temp->data->in_room->people) {
+          if (str_str("remains of", temp->data->text.room_desc)) {
+            act("$p are taken away by the coroner.", TRUE, temp->data->in_room->people, temp->data, 0, TO_ROOM);
+            act("$p are taken away by the coroner.", TRUE, temp->data->in_room->people, temp->data, 0, TO_CHAR);
+          } else {
+            act("$p is taken away by the coroner.", TRUE, temp->data->in_room->people, temp->data, 0, TO_ROOM);
+            act("$p is taken away by the coroner.", TRUE, temp->data->in_room->people, temp->data, 0, TO_CHAR);
+          }
+
+          if (ROOM_FLAGGED(temp->data->in_room, ROOM_CORPSE_SAVE_HACK)) {
+            bool should_clear_flag = TRUE;
+
+            // Iterate through items in room, making sure there are no other corpses.
+            for (struct obj_data *tmp_obj = temp->data->in_room->contents; tmp_obj; tmp_obj = tmp_obj->next_content) {
+              if (tmp_obj != temp->data && IS_OBJ_STAT(tmp_obj, ITEM_EXTRA_CORPSE) && GET_OBJ_BARRIER(tmp_obj) == PC_CORPSE_BARRIER) {
+                should_clear_flag = FALSE;
+                break;
+              }
+            }
+
+            if (should_clear_flag) {
+              snprintf(buf, sizeof(buf), "Cleanup: Auto-removing storage flag from %s (%ld) due to no more player corpses being in it.",
+                       GET_ROOM_NAME(temp->data->in_room),
+                       GET_ROOM_VNUM(temp->data->in_room));
+              mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+
+              // No more? Remove storage flag and save.
+              temp->data->in_room->room_flags.RemoveBit(ROOM_CORPSE_SAVE_HACK);
+              temp->data->in_room->room_flags.RemoveBit(ROOM_STORAGE);
+
+              // Save the change.
+              for (int counter = 0; counter <= top_of_zone_table; counter++) {
+                if ((GET_ROOM_VNUM(temp->data->in_room) >= (zone_table[counter].number * 100))
+                    && (GET_ROOM_VNUM(temp->data->in_room) <= (zone_table[counter].top)))
+                {
+                  write_world_to_disk(zone_table[counter].number);
+                  return;
+                }
+              }
+            }
+          }
+        }
+        
+        // here we make sure to remove all items from the object
+        struct room_data *in_room = get_obj_in_room(temp->data);
+#define CONTENTS temp->data->contains
+        while (CONTENTS) {
+          if (GET_OBJ_QUEST_CHAR_ID(CONTENTS) && in_room) {
+            // If it's a quest item, and we have somewhere to drop it, do so.
+            obj_from_obj(CONTENTS);
+            obj_to_room(CONTENTS, in_room);
+          } else {
+            // Otherwise, extract it. We know it's an NPC corpse because PC corpses never decay.
+            if (GET_OBJ_TYPE(CONTENTS) == ITEM_WEAPON && WEAPON_IS_GUN(CONTENTS) && CONTENTS->contains && GET_OBJ_TYPE(CONTENTS->contains) == ITEM_GUN_MAGAZINE) {
+              AMMOTRACK_OK(GET_MAGAZINE_BONDED_ATTACKTYPE(CONTENTS->contains), GET_MAGAZINE_AMMO_TYPE(CONTENTS->contains), AMMOTRACK_NPC_SPAWNED, -GET_MAGAZINE_AMMO_COUNT(CONTENTS->contains));
+            }
+            extract_obj(CONTENTS);
+          }
+        }
+#undef CONTENTS
+        extract_obj(temp->data);
+      }
+    }
+
+    // Decay mail.
+    if (GET_OBJ_VNUM(OBJ) == OBJ_PIECE_OF_MAIL) {
+      if (GET_OBJ_TIMER(OBJ) != -1 && GET_OBJ_TIMER(OBJ) > MAIL_EXPIRATION_TICKS) {
+        mudlog_vfprintf(NULL, LOG_SYSLOG, "Extracting expired mail '%s'.", GET_OBJ_NAME(OBJ));
+        extract_obj(OBJ);
+        continue;
+      }
+    }
+    
     // We use the trideo broadcast tick for a variety of timed things.
     if (trideo_plays) {
       // Pocket secretary beep tick.
@@ -302,7 +473,7 @@ void objList::UpdateCounters(void)
           continue;
 
         struct char_data *carried_by = get_obj_carried_by_recursive(OBJ);
-        struct char_data *worn_by = get_obj_worn_by_recursive(OBJ);
+        struct char_data *worn_by = carried_by ? NULL : get_obj_worn_by_recursive(OBJ);
         struct char_data *recipient = carried_by ? carried_by : worn_by;
 
         if (recipient && amount_of_mail_waiting(recipient) > 0) {
@@ -317,121 +488,6 @@ void objList::UpdateCounters(void)
         continue;
       }
     }
-    
-    // Decay evaluate programs. This only fires when they're completed, as non-finished software is ITEM_DESIGN instead.
-    if (GET_OBJ_TYPE(OBJ) == ITEM_PROGRAM && GET_PROGRAM_TYPE(OBJ) == SOFT_EVALUATE) {
-      if (!GET_PROGRAM_EVALUATE_LAST_DECAY_TIME(OBJ)) {
-        GET_PROGRAM_EVALUATE_LAST_DECAY_TIME(OBJ) = current_time;
-        GET_PROGRAM_EVALUATE_CREATION_TIME(OBJ) = GET_PROGRAM_EVALUATE_LAST_DECAY_TIME(OBJ);
-      }
-      // Decay Evaluate program ratings by one every two IRL days.
-      else if (GET_PROGRAM_EVALUATE_LAST_DECAY_TIME(OBJ) < current_time - (SECS_PER_REAL_DAY * 2) && !(OBJ->carried_by && IS_NPC(OBJ->carried_by))) {
-        GET_PROGRAM_RATING(OBJ)--;
-        GET_PROGRAM_EVALUATE_LAST_DECAY_TIME(OBJ) = current_time;
-        if (GET_PROGRAM_RATING(OBJ) < 0)
-          GET_PROGRAM_RATING(OBJ) = 0;
-      }
-      continue;
-    }
-
-    // Decrement the attempt counter for credsticks.
-    if (GET_OBJ_TYPE(OBJ) == ITEM_MONEY && GET_OBJ_ATTEMPT(OBJ) > 0)
-      GET_OBJ_ATTEMPT(OBJ)--;
-
-    // Packing / unpacking of workshops.
-    if (GET_OBJ_TYPE(OBJ) == ITEM_WORKSHOP && GET_WORKSHOP_UNPACK_TICKS(OBJ)) {
-      struct char_data *ch;
-      if (!OBJ->in_veh && !OBJ->in_room) {
-        // It's being carried by a character (or is in a container, etc).
-        continue;
-      }
-
-      for (ch = OBJ->in_veh ? OBJ->in_veh->people : OBJ->in_room->people;
-           ch;
-           ch = OBJ->in_veh ? ch->next_in_veh : ch->next_in_room) {
-        if (AFF_FLAGGED(ch, AFF_PACKING))
-      {
-          if (!--GET_WORKSHOP_UNPACK_TICKS(OBJ)) {
-            if (GET_WORKSHOP_IS_SETUP(OBJ)) {
-              send_to_char(ch, "You finish packing up %s.\r\n", GET_OBJ_NAME(OBJ));
-              act("$n finishes packing up $P.", FALSE, ch, 0, OBJ, TO_ROOM);
-              GET_SETTABLE_WORKSHOP_IS_SETUP(OBJ) = 0;
-
-              // Handle the room's workshop[] array.
-              if (OBJ->in_room)
-                remove_workshop_from_room(OBJ);
-            } else {
-              send_to_char(ch, "You finish setting up %s.\r\n", GET_OBJ_NAME(OBJ));
-              act("$n finishes setting up $P.", FALSE, ch, 0, OBJ, TO_ROOM);
-              GET_SETTABLE_WORKSHOP_IS_SETUP(OBJ) = 1;
-
-              // Handle the room's workshop[] array.
-              if (OBJ->in_room)
-                add_workshop_to_room(OBJ);
-            }
-            AFF_FLAGS(ch).RemoveBit(AFF_PACKING);
-          }
-          break;
-        }
-      }
-
-      // If there were no characters in the room working on it, clear its pack/unpack counter.
-      if (!ch) {
-        // Only send a message if someone is there.
-        if (OBJ->in_room) {
-          snprintf(buf, sizeof(buf), "A passerby rolls %s eyes and quickly re-%spacks the half-packed %s.",
-                  number(0, 1) == 0 ? "his" : "her",
-                  GET_WORKSHOP_IS_SETUP(OBJ) ? "un" : "",
-                  GET_OBJ_NAME(OBJ)
-                );
-          send_to_room(buf, OBJ->in_room);
-        } else if (OBJ->in_veh) {
-          snprintf(buf, sizeof(buf), "Huh, %s must have actually been %spacked this whole time.",
-                  GET_OBJ_NAME(OBJ),
-                  GET_WORKSHOP_IS_SETUP(OBJ) ? "un" : ""
-                );
-          send_to_veh(buf, OBJ->in_veh, NULL, FALSE);
-        }
-        GET_WORKSHOP_UNPACK_TICKS(OBJ) = 0;
-      }
-    }
-
-    // Cook chips.
-    if (GET_OBJ_TYPE(OBJ) == ITEM_DECK_ACCESSORY
-        && GET_DECK_ACCESSORY_TYPE(OBJ) == TYPE_COOKER
-        && OBJ->contains
-        && GET_DECK_ACCESSORY_COOKER_TIME_REMAINING(OBJ) > 0)
-    {
-      if (--GET_DECK_ACCESSORY_COOKER_TIME_REMAINING(OBJ) < 1) {
-        struct obj_data *chip = OBJ->contains;
-        act("$p beeps loudly, signaling completion.", FALSE, 0, OBJ, 0, TO_ROOM);
-        if (GET_OBJ_TIMER(chip) == -1) {
-          DELETE_ARRAY_IF_EXTANT(chip->restring);
-          chip->restring = str_dup("a ruined optical chip");
-        } else
-          GET_OBJ_TIMER(chip) = 1;
-      }
-      continue;
-    }
-
-    // Decay mail.
-    if (GET_OBJ_VNUM(OBJ) == OBJ_PIECE_OF_MAIL) {
-      if (GET_OBJ_TIMER(OBJ) != -1 && GET_OBJ_TIMER(OBJ) > MAIL_EXPIRATION_TICKS) {
-        snprintf(buf, sizeof(buf), "Extracting expired mail '%s'.", GET_OBJ_NAME(OBJ));
-        mudlog(buf, NULL, LOG_SYSLOG, TRUE);
-        extract_obj(OBJ);
-        continue;
-      }
-    }
-
-    // In-game this is a UCAS dress shirt. I suspect the files haven't been updated.
-    /*
-    if (GET_OBJ_VNUM(OBJ) == 120 && ++GET_OBJ_TIMER(OBJ) >= 72) {
-      next = temp->next;
-      extract_obj(OBJ);
-      continue;
-    }
-    */
 
     // Time out things that have been abandoned outside of storage etc rooms (qualifier checked when setting timeout)
     // TODO: Maybe put it in a vector of expiring objects rather than making this check be part of every item?
@@ -481,84 +537,6 @@ void objList::UpdateCounters(void)
       continue;
     }
 #endif
-
-    // Corpses either have no vnum or are 43 (belongings).
-    if (GET_OBJ_VNUM(OBJ) < 0 || GET_OBJ_VNUM(OBJ) == 43) {
-      // Don't touch PC belongings that have contents.
-      if (GET_CORPSE_IS_PC(OBJ) && OBJ->contains != NULL)
-        continue;
-
-      // Corpse decay.
-      if (GET_OBJ_TIMER(OBJ) > 1) {
-        GET_OBJ_TIMER(OBJ)--;
-      } else {
-        if (OBJ->carried_by)
-          act("$p decays in your hands.", FALSE, temp->data->carried_by, temp->data, 0, TO_CHAR);
-        else if (temp->data->worn_by)
-          act("$p decays in your hands.", FALSE, temp->data->worn_by, temp->data, 0, TO_CHAR);
-        else if (temp->data->in_room && temp->data->in_room->people) {
-          if (str_str("remains of", temp->data->text.room_desc)) {
-            act("$p are taken away by the coroner.", TRUE, temp->data->in_room->people, temp->data, 0, TO_ROOM);
-            act("$p are taken away by the coroner.", TRUE, temp->data->in_room->people, temp->data, 0, TO_CHAR);
-          } else {
-            act("$p is taken away by the coroner.", TRUE, temp->data->in_room->people, temp->data, 0, TO_ROOM);
-            act("$p is taken away by the coroner.", TRUE, temp->data->in_room->people, temp->data, 0, TO_CHAR);
-          }
-
-          if (ROOM_FLAGGED(temp->data->in_room, ROOM_CORPSE_SAVE_HACK)) {
-            bool should_clear_flag = TRUE;
-
-            // Iterate through items in room, making sure there are no other corpses.
-            for (struct obj_data *tmp_obj = temp->data->in_room->contents; tmp_obj; tmp_obj = tmp_obj->next_content) {
-              if (tmp_obj != temp->data && IS_OBJ_STAT(tmp_obj, ITEM_EXTRA_CORPSE) && GET_OBJ_BARRIER(tmp_obj) == PC_CORPSE_BARRIER) {
-                should_clear_flag = FALSE;
-                break;
-              }
-            }
-
-            if (should_clear_flag) {
-              snprintf(buf, sizeof(buf), "Cleanup: Auto-removing storage flag from %s (%ld) due to no more player corpses being in it.",
-                       GET_ROOM_NAME(temp->data->in_room),
-                       GET_ROOM_VNUM(temp->data->in_room));
-              mudlog(buf, NULL, LOG_SYSLOG, TRUE);
-
-              // No more? Remove storage flag and save.
-              temp->data->in_room->room_flags.RemoveBit(ROOM_CORPSE_SAVE_HACK);
-              temp->data->in_room->room_flags.RemoveBit(ROOM_STORAGE);
-
-              // Save the change.
-              for (int counter = 0; counter <= top_of_zone_table; counter++) {
-                if ((GET_ROOM_VNUM(temp->data->in_room) >= (zone_table[counter].number * 100))
-                    && (GET_ROOM_VNUM(temp->data->in_room) <= (zone_table[counter].top)))
-                {
-                  write_world_to_disk(zone_table[counter].number);
-                  return;
-                }
-              }
-            }
-          }
-        }
-        // here we make sure to remove all items from the object
-        struct room_data *in_room = get_obj_in_room(temp->data);
-        for (struct obj_data *contents = temp->data->contains, *next_thing; contents; contents = next_thing) {
-          next_thing = contents->next_content;     /*Next in inventory */
-
-          if (GET_OBJ_QUEST_CHAR_ID(contents) && in_room) {
-            // If it's a quest item, and we have somewhere to drop it, do so.
-            obj_from_obj(contents);
-            obj_to_room(contents, in_room);
-          } else {
-            // Otherwise, extract it. We know it's an NPC corpse because PC corpses never decay.
-            if (GET_OBJ_TYPE(contents) == ITEM_WEAPON && WEAPON_IS_GUN(contents) && contents->contains && GET_OBJ_TYPE(contents->contains) == ITEM_GUN_MAGAZINE) {
-              AMMOTRACK_OK(GET_MAGAZINE_BONDED_ATTACKTYPE(contents->contains), GET_MAGAZINE_AMMO_TYPE(contents->contains), AMMOTRACK_NPC_SPAWNED, -GET_MAGAZINE_AMMO_COUNT(contents->contains));
-            }
-            extract_obj(contents);
-          }
-        }
-        next = temp->next;
-        extract_obj(temp->data);
-      }
-    }
   }
   DELETE_ARRAY_IF_EXTANT(trid);
 }
