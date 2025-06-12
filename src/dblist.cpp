@@ -282,9 +282,11 @@ void objList::UpdateCounters(void)
       continue;
     }
 
+    /*
     // If it's flagged as mob equipment / mob load, skip it.
     if (OBJ->load_origin == OBJ_LOAD_REASON_MOB_DEFAULT_GEAR)
       continue;
+    */
 
     switch (GET_OBJ_TYPE(OBJ)) {
       case ITEM_PET:
