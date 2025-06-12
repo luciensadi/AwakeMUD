@@ -260,7 +260,7 @@ void attempt_to_offload_unused_zones()
 
   if (offloaded_count > 0)
   {
-    mudlog_vfprintf(NULL, LOG_SYSLOG, "Offload complete. %d %s offloaded.", offloaded_count, offloaded_count == 1 ? "zone" : "zones");
+    mudlog_vfprintf(NULL, LOG_ZONELOG, "Offload complete. %d zone%s offloaded.", offloaded_count, offloaded_count == 1 ? "" : "s");
   }
 #else
   log("Skipping zone offload check-- USE_ZONE_HOTLOADING is not "
