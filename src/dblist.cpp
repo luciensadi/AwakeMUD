@@ -377,85 +377,87 @@ void objList::UpdateCounters(void)
           }
         }
         continue;
-    }
+      case ITEM_CONTAINER:
+        // Decay corpses, which either have no vnum or are 43 (belongings). (All corpses are containers.)
+        if (GET_OBJ_VNUM(OBJ) < 0 || GET_OBJ_VNUM(OBJ) == 43) {
+          // Don't touch PC belongings that have contents.
+          if (GET_CORPSE_IS_PC(OBJ) && OBJ->contains != NULL)
+            continue;
 
-    // Decay corpses, which either have no vnum or are 43 (belongings).
-    if (GET_OBJ_VNUM(OBJ) < 0 || GET_OBJ_VNUM(OBJ) == 43) {
-      // Don't touch PC belongings that have contents.
-      if (GET_CORPSE_IS_PC(OBJ) && OBJ->contains != NULL)
-        continue;
-
-      // Corpse decay.
-      if (GET_OBJ_TIMER(OBJ)-- <= 0) {
-        if (OBJ->carried_by)
-          act("$p decays in your hands.", FALSE, temp->data->carried_by, temp->data, 0, TO_CHAR);
-        else if (temp->data->worn_by)
-          act("$p decays in your hands.", FALSE, temp->data->worn_by, temp->data, 0, TO_CHAR);
-        else if (temp->data->in_room && temp->data->in_room->people) {
-          if (str_str("remains of", temp->data->text.room_desc)) {
-            act("$p are taken away by the coroner.", TRUE, temp->data->in_room->people, temp->data, 0, TO_ROOM);
-            act("$p are taken away by the coroner.", TRUE, temp->data->in_room->people, temp->data, 0, TO_CHAR);
-          } else {
-            act("$p is taken away by the coroner.", TRUE, temp->data->in_room->people, temp->data, 0, TO_ROOM);
-            act("$p is taken away by the coroner.", TRUE, temp->data->in_room->people, temp->data, 0, TO_CHAR);
-          }
-
-          if (ROOM_FLAGGED(temp->data->in_room, ROOM_CORPSE_SAVE_HACK)) {
-            bool should_clear_flag = TRUE;
-
-            // Iterate through items in room, making sure there are no other corpses.
-            for (struct obj_data *tmp_obj = temp->data->in_room->contents; tmp_obj; tmp_obj = tmp_obj->next_content) {
-              if (tmp_obj != temp->data && IS_OBJ_STAT(tmp_obj, ITEM_EXTRA_CORPSE) && GET_OBJ_BARRIER(tmp_obj) == PC_CORPSE_BARRIER) {
-                should_clear_flag = FALSE;
-                break;
+          // Corpse decay.
+          if (GET_OBJ_TIMER(OBJ)-- <= 0) {
+            if (OBJ->carried_by)
+              act("$p decays in your hands.", FALSE, temp->data->carried_by, temp->data, 0, TO_CHAR);
+            else if (temp->data->worn_by)
+              act("$p decays in your hands.", FALSE, temp->data->worn_by, temp->data, 0, TO_CHAR);
+            else if (temp->data->in_room && temp->data->in_room->people) {
+              if (str_str("remains of", temp->data->text.room_desc)) {
+                act("$p are taken away by the coroner.", TRUE, temp->data->in_room->people, temp->data, 0, TO_ROOM);
+                act("$p are taken away by the coroner.", TRUE, temp->data->in_room->people, temp->data, 0, TO_CHAR);
+              } else {
+                act("$p is taken away by the coroner.", TRUE, temp->data->in_room->people, temp->data, 0, TO_ROOM);
+                act("$p is taken away by the coroner.", TRUE, temp->data->in_room->people, temp->data, 0, TO_CHAR);
               }
-            }
 
-            if (should_clear_flag) {
-              snprintf(buf, sizeof(buf), "Cleanup: Auto-removing storage flag from %s (%ld) due to no more player corpses being in it.",
-                       GET_ROOM_NAME(temp->data->in_room),
-                       GET_ROOM_VNUM(temp->data->in_room));
-              mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+              if (ROOM_FLAGGED(temp->data->in_room, ROOM_CORPSE_SAVE_HACK)) {
+                bool should_clear_flag = TRUE;
 
-              // No more? Remove storage flag and save.
-              temp->data->in_room->room_flags.RemoveBit(ROOM_CORPSE_SAVE_HACK);
-              temp->data->in_room->room_flags.RemoveBit(ROOM_STORAGE);
+                // Iterate through items in room, making sure there are no other corpses.
+                for (struct obj_data *tmp_obj = temp->data->in_room->contents; tmp_obj; tmp_obj = tmp_obj->next_content) {
+                  if (tmp_obj != temp->data && IS_OBJ_STAT(tmp_obj, ITEM_EXTRA_CORPSE) && GET_OBJ_BARRIER(tmp_obj) == PC_CORPSE_BARRIER) {
+                    should_clear_flag = FALSE;
+                    break;
+                  }
+                }
 
-              // Save the change.
-              for (int counter = 0; counter <= top_of_zone_table; counter++) {
-                if ((GET_ROOM_VNUM(temp->data->in_room) >= (zone_table[counter].number * 100))
-                    && (GET_ROOM_VNUM(temp->data->in_room) <= (zone_table[counter].top)))
-                {
-                  write_world_to_disk(zone_table[counter].number);
-                  return;
+                if (should_clear_flag) {
+                  snprintf(buf, sizeof(buf), "Cleanup: Auto-removing storage flag from %s (%ld) due to no more player corpses being in it.",
+                          GET_ROOM_NAME(temp->data->in_room),
+                          GET_ROOM_VNUM(temp->data->in_room));
+                  mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+
+                  // No more? Remove storage flag and save.
+                  temp->data->in_room->room_flags.RemoveBit(ROOM_CORPSE_SAVE_HACK);
+                  temp->data->in_room->room_flags.RemoveBit(ROOM_STORAGE);
+
+                  // Save the change.
+                  for (int counter = 0; counter <= top_of_zone_table; counter++) {
+                    if ((GET_ROOM_VNUM(temp->data->in_room) >= (zone_table[counter].number * 100))
+                        && (GET_ROOM_VNUM(temp->data->in_room) <= (zone_table[counter].top)))
+                    {
+                      write_world_to_disk(zone_table[counter].number);
+                      return;
+                    }
+                  }
                 }
               }
             }
-          }
-        }
-        
-        // here we make sure to remove all items from the object
-        struct room_data *in_room = get_obj_in_room(temp->data);
+            
+            // here we make sure to remove all items from the object
+            struct room_data *in_room = get_obj_in_room(temp->data);
 #define CONTENTS temp->data->contains
-        while (CONTENTS) {
-          if (GET_OBJ_QUEST_CHAR_ID(CONTENTS) && in_room) {
-            // If it's a quest item, and we have somewhere to drop it, do so.
-            obj_from_obj(CONTENTS);
-            obj_to_room(CONTENTS, in_room);
-          } else {
-            // Otherwise, extract it. We know it's an NPC corpse because PC corpses never decay.
-            if (GET_OBJ_TYPE(CONTENTS) == ITEM_WEAPON && WEAPON_IS_GUN(CONTENTS) && CONTENTS->contains && GET_OBJ_TYPE(CONTENTS->contains) == ITEM_GUN_MAGAZINE) {
-              AMMOTRACK_OK(GET_MAGAZINE_BONDED_ATTACKTYPE(CONTENTS->contains), GET_MAGAZINE_AMMO_TYPE(CONTENTS->contains), AMMOTRACK_NPC_SPAWNED, -GET_MAGAZINE_AMMO_COUNT(CONTENTS->contains));
+            while (CONTENTS) {
+              if (GET_OBJ_QUEST_CHAR_ID(CONTENTS) && in_room) {
+                // If it's a quest item, and we have somewhere to drop it, do so.
+                obj_from_obj(CONTENTS);
+                obj_to_room(CONTENTS, in_room);
+              } else {
+                // Otherwise, extract it. We know it's an NPC corpse because PC corpses never decay.
+                if (GET_OBJ_TYPE(CONTENTS) == ITEM_WEAPON && WEAPON_IS_GUN(CONTENTS) && CONTENTS->contains && GET_OBJ_TYPE(CONTENTS->contains) == ITEM_GUN_MAGAZINE) {
+                  AMMOTRACK_OK(GET_MAGAZINE_BONDED_ATTACKTYPE(CONTENTS->contains), GET_MAGAZINE_AMMO_TYPE(CONTENTS->contains), AMMOTRACK_NPC_SPAWNED, -GET_MAGAZINE_AMMO_COUNT(CONTENTS->contains));
+                }
+                extract_obj(CONTENTS);
+              }
             }
-            extract_obj(CONTENTS);
+#undef CONTENTS
+            extract_obj(temp->data);
           }
         }
-#undef CONTENTS
-        extract_obj(temp->data);
-      }
+        continue;
     }
 
-    // Decay mail.
+    /*
+    // Decay mail. Commented out because mail can no longer be retrieved like this.
     if (GET_OBJ_VNUM(OBJ) == OBJ_PIECE_OF_MAIL) {
       if (GET_OBJ_TIMER(OBJ) != -1 && GET_OBJ_TIMER(OBJ) > MAIL_EXPIRATION_TICKS) {
         mudlog_vfprintf(NULL, LOG_SYSLOG, "Extracting expired mail '%s'.", GET_OBJ_NAME(OBJ));
@@ -463,7 +465,8 @@ void objList::UpdateCounters(void)
         continue;
       }
     }
-    
+    */
+
     // We use the trideo broadcast tick for a variety of timed things.
     if (trideo_plays) {
       // Pocket secretary beep tick.
