@@ -1422,7 +1422,7 @@ void shop_sell(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
   struct shop_sell_data *sell = shop_table[shop_nr].selling;
 
   if (!*arg) {
-    send_to_char("What item do you want to sell?\r\n", ch);
+    send_to_char("Syntax: SELL <item>, or SELL STOWED to sell your stowed loot.\r\n", ch);
     return;
   }
 

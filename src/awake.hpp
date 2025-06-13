@@ -2030,6 +2030,11 @@ enum {
 
 /* Subcommands section: Originally from interpreter.h */
 
+/* do_stow */
+#define SCMD_LIST_STOWED 0
+#define SCMD_STOW        1
+#define SCMD_UNSTOW      2
+
 /* do_dice */
 #define SCMD_STANDARD_ROLL  0
 #define SCMD_PRIVATE_ROLL   1
@@ -3284,6 +3289,7 @@ enum {
 #define OBJ_LOAD_REASON_CREATE_PET               59
 #define OBJ_LOAD_REASON_OTAKU_RESONANCE          60
 #define OBJ_LOAD_REASON_CREATE_COMPLEX_FORM      61
+#define OBJ_LOAD_REASON_UNSTOW_CMD               62
 
 #define IDNUM_FOR_MOB_ALERT_STATE  -1
 

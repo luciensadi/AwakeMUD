@@ -50,6 +50,8 @@ extern void dominator_mode_switch(struct char_data *ch, struct obj_data *obj, in
 extern float get_bulletpants_weight(struct char_data *ch);
 extern int calculate_vehicle_weight(struct veh_data *veh);
 extern void die(struct char_data *ch, idnum_t cause_of_death_idnum);
+extern bool obj_can_be_stowed(struct char_data *ch, struct obj_data *obj, bool send_messages);
+extern bool raw_stow_obj(struct char_data *ch, struct obj_data *obj, bool send_messages);
 
 extern SPECIAL(fence);
 extern SPECIAL(hacker);
@@ -1010,7 +1012,7 @@ void calc_weight(struct char_data *ch)
 	IS_CARRYING_W(ch) += get_bulletpants_weight(ch);
 }
 
-// Returns TRUE if container is emptied.
+// Returns TRUE if container is extracted.
 bool perform_get_from_container(struct char_data *ch, struct obj_data *obj,
 																struct obj_data *cont, int mode)
 {
@@ -1027,231 +1029,237 @@ bool perform_get_from_container(struct char_data *ch, struct obj_data *obj,
 
 	if (mode == FIND_OBJ_INV || ch == get_obj_possessor(obj) || can_take_obj_from_anywhere(ch, obj))
 	{
-		if (IS_CARRYING_N(ch) >= CAN_CARRY_N(ch))
+		if (IS_CARRYING_N(ch) >= CAN_CARRY_N(ch)) {
 			act("$p: you can't hold any more items.", FALSE, ch, obj, 0, TO_CHAR);
-		else
-		{
-			bool should_wizlog = IS_OBJ_STAT(obj, ITEM_EXTRA_WIZLOAD);
-			bool should_cheatlog = (!IS_NPC(ch) && access_level(ch, LVL_BUILDER)) || (IS_OBJ_STAT(obj, ITEM_EXTRA_CHEATLOG_MARK) || IS_OBJ_STAT(cont, ITEM_EXTRA_CHEATLOG_MARK));
-			bool should_gridlog = FALSE;
-			bool same_host_warning = FALSE;
+      return FALSE;
+    }
 
-			if (cont->obj_flags.extra_flags.IsSet(ITEM_EXTRA_CORPSE) && GET_CORPSE_IS_PC(cont))
-			{
-				if (GET_CORPSE_IDNUM(cont) == GET_IDNUM(ch))
-				{
-					should_gridlog = TRUE;
-				}
-				else
-				{
-					should_cheatlog = TRUE;
-				}
-			}
+    bool should_wizlog = IS_OBJ_STAT(obj, ITEM_EXTRA_WIZLOAD);
+    bool should_cheatlog = (!IS_NPC(ch) && access_level(ch, LVL_BUILDER)) || (IS_OBJ_STAT(obj, ITEM_EXTRA_CHEATLOG_MARK) || IS_OBJ_STAT(cont, ITEM_EXTRA_CHEATLOG_MARK));
+    bool should_gridlog = FALSE;
+    bool same_host_warning = FALSE;
 
-			if (!should_cheatlog && obj->dropped_by_char > 0 && obj->dropped_by_char != GET_IDNUM(ch) && ch->desc)
-			{
-				// Ensure that the object and character both have valid hosts, and convert them from IP to lookup if possible.
-				rectify_obj_host(obj);
-				rectify_desc_host(ch->desc);
+    if (cont->obj_flags.extra_flags.IsSet(ITEM_EXTRA_CORPSE) && GET_CORPSE_IS_PC(cont)) {
+      if (GET_CORPSE_IDNUM(cont) == GET_IDNUM(ch)) {
+        should_gridlog = TRUE;
+      }
+      else {
+        should_cheatlog = TRUE;
+      }
+    }
 
-				if (obj->dropped_by_host && !str_cmp(obj->dropped_by_host, ch->desc->host))
-				{
-					// Log anyone doing this from a multibox host.
-					should_cheatlog = TRUE;
-					same_host_warning = TRUE;
-				}
-			}
+    if (!should_cheatlog && obj->dropped_by_char > 0 && obj->dropped_by_char != GET_IDNUM(ch) && ch->desc) {
+      // Ensure that the object and character both have valid hosts, and convert them from IP to lookup if possible.
+      rectify_obj_host(obj);
+      rectify_desc_host(ch->desc);
 
-			if ((should_wizlog || should_cheatlog || should_gridlog) && !(cont->carried_by == ch || cont->worn_by == ch))
-			{
-				char *representation = generate_new_loggable_representation(obj);
+      if (obj->dropped_by_host && !str_cmp(obj->dropped_by_host, ch->desc->host)) {
+        // Log anyone doing this from a multibox host.
+        should_cheatlog = TRUE;
+        same_host_warning = TRUE;
+      }
+    }
 
-				// Compose our log line.
-				snprintf(buf, sizeof(buf), "%s gets from (%ld) %s [restring: %s]: %s (cost %d)",
-								 GET_CHAR_NAME(ch),
-								 GET_OBJ_VNUM(cont), cont->text.name, cont->restring ? cont->restring : "none",
-								 representation,
-								 GET_OBJ_COST(obj));
+    if ((should_wizlog || should_cheatlog || should_gridlog) && !(cont->carried_by == ch || cont->worn_by == ch)) {
+      char *representation = generate_new_loggable_representation(obj);
 
-				if (same_host_warning)
-				{
-					const char *pname = get_player_name(obj->dropped_by_char);
-					snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", which was dropped/donated by %s (%ld) at their same host (%s)!",
-									 pname,
-									 obj->dropped_by_char,
-									 GET_LEVEL(ch) < LVL_PRESIDENT ? (obj->dropped_by_host ? obj->dropped_by_host : "<host missing>") : "<obscured>");
-					delete[] pname;
-				}
+      // Compose our log line.
+      snprintf(buf, sizeof(buf), "%s gets from (%ld) %s [restring: %s]: %s (cost %d)",
+                GET_CHAR_NAME(ch),
+                GET_OBJ_VNUM(cont), cont->text.name, cont->restring ? cont->restring : "none",
+                representation,
+                GET_OBJ_COST(obj));
 
-				// Write it.
-				if (should_wizlog)
-				{
-					mudlog(buf, ch, LOG_WIZITEMLOG, TRUE);
-				}
-				else if (should_cheatlog)
-				{
-					mudlog(buf, ch, LOG_CHEATLOG, TRUE);
-				}
-				else
-				{
-					mudlog(buf, ch, LOG_GRIDLOG, TRUE);
-				}
-				delete[] representation;
-			}
+      if (same_host_warning)
+      {
+        const char *pname = get_player_name(obj->dropped_by_char);
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", which was dropped/donated by %s (%ld) at their same host (%s)!",
+                  pname,
+                  obj->dropped_by_char,
+                  GET_LEVEL(ch) < LVL_PRESIDENT ? (obj->dropped_by_host ? obj->dropped_by_host : "<host missing>") : "<obscured>");
+        delete[] pname;
+      }
 
-			set_dropped_by_info(obj, NULL);
+      // Write it.
+      if (should_wizlog) {
+        mudlog(buf, ch, LOG_WIZITEMLOG, TRUE);
+      }
+      else if (should_cheatlog) {
+        mudlog(buf, ch, LOG_CHEATLOG, TRUE);
+      }
+      else {
+        mudlog(buf, ch, LOG_GRIDLOG, TRUE);
+      }
+      delete[] representation;
+    }
 
-			if (GET_OBJ_TYPE(cont) == ITEM_QUIVER)
-				GET_OBJ_VAL(cont, 2) = MAX(0, GET_OBJ_VAL(cont, 2) - 1);
-			snprintf(buf, sizeof(buf), "You %s $p from $P.", (cyberdeck || computer ? "uninstall" : "get"));
+    set_dropped_by_info(obj, NULL);
 
-			if (computer)
-			{
-				if (ch->in_room)
-				{
-					for (struct char_data *vict = ch->in_room->people; vict; vict = vict->next_in_room)
-					{
-						if ((AFF_FLAGGED(vict, AFF_PROGRAM) || AFF_FLAGGED(vict, AFF_DESIGN)) && vict != ch)
-						{
-							send_to_char(ch, "You can't uninstall %s while someone is working on it.\r\n", GET_OBJ_NAME(obj));
-							return FALSE;
-						}
-						else if (vict == ch && vict->char_specials.programming == obj)
-						{
-							send_to_char(ch, "You stop %sing %s.\r\n", AFF_FLAGGED(ch, AFF_PROGRAM) ? "programm" : "design", GET_OBJ_NAME(obj));
-							STOP_WORKING(ch);
-							break;
-						}
-					}
-				}
-				else
-				{
-					for (struct char_data *vict = ch->in_veh->people; vict; vict = vict->next_in_veh)
-					{
-						if ((AFF_FLAGGED(vict, AFF_PROGRAM) || AFF_FLAGGED(vict, AFF_DESIGN)) && vict != ch)
-						{
-							send_to_char(ch, "You can't uninstall %s while someone is working on it.\r\n", GET_OBJ_NAME(obj));
-							return FALSE;
-						}
-						else if (vict == ch && vict->char_specials.programming == obj)
-						{
-							send_to_char(ch, "You stop %sing %s.\r\n", AFF_FLAGGED(ch, AFF_PROGRAM) ? "programm" : "design", GET_OBJ_NAME(obj));
-							STOP_WORKING(ch);
-							break;
-						}
-					}
-				}
-				if (GET_OBJ_TYPE(obj) == ITEM_PROGRAM)
-					GET_CYBERDECK_TOTAL_STORAGE(cont) -= GET_OBJ_VAL(obj, 2);
-				else
-					GET_CYBERDECK_TOTAL_STORAGE(cont) -= GET_OBJ_VAL(obj, 6) + (GET_OBJ_VAL(obj, 6) / 10);
-			}
-			else if (cyberdeck)
-			{
-				if (GET_OBJ_TYPE(obj) == ITEM_PROGRAM && (GET_CYBERDECK_MPCP(cont) == 0 || GET_CYBERDECK_IS_INCOMPLETE(cont)))
-				{
-					display_cyberdeck_issues(ch, cont);
-					return FALSE;
-				}
+    if (GET_OBJ_TYPE(cont) == ITEM_QUIVER) {
+      GET_OBJ_VAL(cont, 2) = MAX(0, GET_OBJ_VAL(cont, 2) - 1);
+    }
+    snprintf(buf, sizeof(buf), "You %s $p from $P.", (cyberdeck || computer ? "uninstall" : "get"));
 
-				// Subtract program size from storage, but a persona program on a store-bought deck doesn't use storage
-				if (((GET_OBJ_TYPE(obj) == ITEM_PROGRAM) && !((GET_OBJ_TYPE(cont) == ITEM_CYBERDECK) && (GET_PROGRAM_TYPE(obj) <= SOFT_SENSOR))) || (GET_OBJ_TYPE(obj) == ITEM_DECK_ACCESSORY && GET_DECK_ACCESSORY_TYPE(obj) == TYPE_FILE))
-				{
-					GET_CYBERDECK_USED_STORAGE(cont) -= GET_DECK_ACCESSORY_FILE_SIZE(obj);
-				}
+    if (computer) {
+      if (ch->in_room) {
+        for (struct char_data *vict = ch->in_room->people; vict; vict = vict->next_in_room)
+        {
+          if ((AFF_FLAGGED(vict, AFF_PROGRAM) || AFF_FLAGGED(vict, AFF_DESIGN)) && vict != ch)
+          {
+            send_to_char(ch, "You can't uninstall %s while someone is working on it.\r\n", GET_OBJ_NAME(obj));
+            return FALSE;
+          }
+          else if (vict == ch && vict->char_specials.programming == obj)
+          {
+            send_to_char(ch, "You stop %sing %s.\r\n", AFF_FLAGGED(ch, AFF_PROGRAM) ? "programm" : "design", GET_OBJ_NAME(obj));
+            STOP_WORKING(ch);
+            break;
+          }
+        }
+      }
+      else
+      {
+        for (struct char_data *vict = ch->in_veh->people; vict; vict = vict->next_in_veh)
+        {
+          if ((AFF_FLAGGED(vict, AFF_PROGRAM) || AFF_FLAGGED(vict, AFF_DESIGN)) && vict != ch)
+          {
+            send_to_char(ch, "You can't uninstall %s while someone is working on it.\r\n", GET_OBJ_NAME(obj));
+            return FALSE;
+          }
+          else if (vict == ch && vict->char_specials.programming == obj)
+          {
+            send_to_char(ch, "You stop %sing %s.\r\n", AFF_FLAGGED(ch, AFF_PROGRAM) ? "programm" : "design", GET_OBJ_NAME(obj));
+            STOP_WORKING(ch);
+            break;
+          }
+        }
+      }
+      if (GET_OBJ_TYPE(obj) == ITEM_PROGRAM)
+        GET_CYBERDECK_TOTAL_STORAGE(cont) -= GET_OBJ_VAL(obj, 2);
+      else
+        GET_CYBERDECK_TOTAL_STORAGE(cont) -= GET_OBJ_VAL(obj, 6) + (GET_OBJ_VAL(obj, 6) / 10);
+    }
+    else if (cyberdeck)
+    {
+      if (GET_OBJ_TYPE(obj) == ITEM_PROGRAM && (GET_CYBERDECK_MPCP(cont) == 0 || GET_CYBERDECK_IS_INCOMPLETE(cont)))
+      {
+        display_cyberdeck_issues(ch, cont);
+        return FALSE;
+      }
 
-				if (GET_OBJ_TYPE(obj) == ITEM_PART)
-				{
-					if (GET_OBJ_VAL(obj, 0) == PART_STORAGE)
-					{
-						for (struct obj_data *k = cont->contains; k; k = k->next_content)
-							if ((GET_OBJ_TYPE(k) == ITEM_DECK_ACCESSORY && GET_DECK_ACCESSORY_TYPE(k) == TYPE_FILE) ||
-									GET_OBJ_TYPE(k) == ITEM_PROGRAM)
-							{
-								send_to_char(ch, "You cannot uninstall %s while you have files installed.\r\n", GET_OBJ_NAME(obj));
-								return FALSE;
-							}
-						GET_CYBERDECK_USED_STORAGE(cont) = GET_CYBERDECK_TOTAL_STORAGE(cont) = 0;
-					}
-					switch (GET_OBJ_VAL(obj, 0))
-					{
-					case PART_MPCP:
-						GET_PART_RATING(obj) = GET_CYBERDECK_MPCP(cont);
-						GET_PART_TARGET_MPCP(obj) = GET_CYBERDECK_MPCP(cont);
-						// fall through
-					case PART_ACTIVE:
-					case PART_BOD:
-					case PART_SENSOR:
-					case PART_IO:
-					case PART_MATRIX_INTERFACE:
-						GET_CYBERDECK_IS_INCOMPLETE(cont) = 1;
-					}
-				}
-			}
+      // Subtract program size from storage, but a persona program on a store-bought deck doesn't use storage
+      if (((GET_OBJ_TYPE(obj) == ITEM_PROGRAM) && !((GET_OBJ_TYPE(cont) == ITEM_CYBERDECK) && (GET_PROGRAM_TYPE(obj) <= SOFT_SENSOR))) || (GET_OBJ_TYPE(obj) == ITEM_DECK_ACCESSORY && GET_DECK_ACCESSORY_TYPE(obj) == TYPE_FILE))
+      {
+        GET_CYBERDECK_USED_STORAGE(cont) -= GET_DECK_ACCESSORY_FILE_SIZE(obj);
+      }
 
-			act(buf, FALSE, ch, obj, cont, TO_CHAR);
-			if (GET_OBJ_TYPE(cont) == ITEM_WORN)
-				GET_OBJ_VAL(cont, GET_OBJ_TIMER(obj))
-				++;
-			if (!cyberdeck && !computer)
-				act("$n gets $p from $P.", TRUE, ch, obj, cont, TO_ROOM);
-			else
-				act("$n uninstalls $p from $P.", TRUE, ch, obj, cont, TO_ROOM);
+      if (GET_OBJ_TYPE(obj) == ITEM_PART)
+      {
+        if (GET_OBJ_VAL(obj, 0) == PART_STORAGE)
+        {
+          for (struct obj_data *k = cont->contains; k; k = k->next_content)
+            if ((GET_OBJ_TYPE(k) == ITEM_DECK_ACCESSORY && GET_DECK_ACCESSORY_TYPE(k) == TYPE_FILE) ||
+                GET_OBJ_TYPE(k) == ITEM_PROGRAM)
+            {
+              send_to_char(ch, "You cannot uninstall %s while you have files installed.\r\n", GET_OBJ_NAME(obj));
+              return FALSE;
+            }
+          GET_CYBERDECK_USED_STORAGE(cont) = GET_CYBERDECK_TOTAL_STORAGE(cont) = 0;
+        }
+        switch (GET_OBJ_VAL(obj, 0))
+        {
+        case PART_MPCP:
+          GET_PART_RATING(obj) = GET_CYBERDECK_MPCP(cont);
+          GET_PART_TARGET_MPCP(obj) = GET_CYBERDECK_MPCP(cont);
+          // fall through
+        case PART_ACTIVE:
+        case PART_BOD:
+        case PART_SENSOR:
+        case PART_IO:
+        case PART_MATRIX_INTERFACE:
+          GET_CYBERDECK_IS_INCOMPLETE(cont) = 1;
+        }
+      }
+    }
 
-			{
-				struct obj_data *was_in_obj = obj->in_obj;
-				obj_from_obj(obj);
-				obj_to_char(obj, ch);
-				get_check_money(ch, obj, was_in_obj);
-				obj = NULL;
-			}
+    // Only send this message for things that aren't corpses. Corpses get their own messaging later on due to potential autostow.
+    if (!cont->obj_flags.extra_flags.IsSet(ITEM_EXTRA_CORPSE)) {
+      act(buf, FALSE, ch, obj, cont, TO_CHAR);
+    }
+    if (GET_OBJ_TYPE(cont) == ITEM_WORN) {
+      GET_OBJ_VAL(cont, GET_OBJ_TIMER(obj))++;
+    }
+    if (!cyberdeck && !computer) {
+      act("$n gets $p from $P.", TRUE, ch, obj, cont, TO_ROOM);
+    } else {
+      act("$n uninstalls $p from $P.", TRUE, ch, obj, cont, TO_ROOM);
+    }
 
-			if (cont->obj_flags.extra_flags.IsSet(ITEM_EXTRA_CORPSE) && GET_OBJ_VAL(cont, 4) && !cont->contains)
-			{
-				if (cont->in_room && ROOM_FLAGGED(cont->in_room, ROOM_CORPSE_SAVE_HACK))
-				{
-					bool should_clear_flag = TRUE;
+    {
+      struct obj_data *was_in_obj = obj->in_obj;
+      obj_from_obj(obj);
+      obj_to_char(obj, ch);
+      get_check_money(ch, obj, was_in_obj);
+      obj = NULL;
+    }
 
-					// Iterate through items in room, making sure there are no other corpses.
-					for (struct obj_data *tmp_obj = cont->in_room->contents; tmp_obj; tmp_obj = tmp_obj->next_content)
-					{
-						if (tmp_obj != cont && IS_OBJ_STAT(tmp_obj, ITEM_EXTRA_CORPSE) && GET_OBJ_BARRIER(tmp_obj) == PC_CORPSE_BARRIER)
-						{
-							should_clear_flag = FALSE;
-							break;
-						}
-					}
+    if (cont->obj_flags.extra_flags.IsSet(ITEM_EXTRA_CORPSE)) {
+      // Extract PC corpses if they're empty.
+      if (GET_CORPSE_IS_PC(cont)) {
+        act("You get $p from $P.", FALSE, ch, obj, cont, TO_CHAR);
+        if (!cont->contains) {
+          if (cont->in_room && ROOM_FLAGGED(cont->in_room, ROOM_CORPSE_SAVE_HACK)) {
+            bool should_clear_flag = TRUE;
 
-					if (should_clear_flag)
-					{
-						snprintf(buf, sizeof(buf), "Removing storage flag from %s (%ld) due to no more player corpses being in it.",
-										 GET_ROOM_NAME(cont->in_room),
-										 GET_ROOM_VNUM(cont->in_room));
-						mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+            // Iterate through items in room, making sure there are no other corpses.
+            for (struct obj_data *tmp_obj = cont->in_room->contents; tmp_obj; tmp_obj = tmp_obj->next_content) {
+              if (tmp_obj != cont && IS_OBJ_STAT(tmp_obj, ITEM_EXTRA_CORPSE) && GET_OBJ_BARRIER(tmp_obj) == PC_CORPSE_BARRIER) {
+                should_clear_flag = FALSE;
+                break;
+              }
+            }
 
-						// No more? Remove storage flag and save.
-						cont->in_room->room_flags.RemoveBit(ROOM_CORPSE_SAVE_HACK);
-						cont->in_room->room_flags.RemoveBit(ROOM_STORAGE);
+            if (should_clear_flag) {
+              snprintf(buf, sizeof(buf), "Removing storage flag from %s (%ld) due to no more player corpses being in it.",
+                        GET_ROOM_NAME(cont->in_room),
+                        GET_ROOM_VNUM(cont->in_room));
+              mudlog(buf, NULL, LOG_SYSLOG, TRUE);
 
-						// Save the change.
-						for (int counter = 0; counter <= top_of_zone_table; counter++)
-						{
-							if ((GET_ROOM_VNUM(cont->in_room) >= (zone_table[counter].number * 100)) && (GET_ROOM_VNUM(cont->in_room) <= (zone_table[counter].top)))
-							{
-								write_world_to_disk(zone_table[counter].number);
-								break;
-							}
-						}
-					}
-				}
+              // No more? Remove storage flag and save.
+              cont->in_room->room_flags.RemoveBit(ROOM_CORPSE_SAVE_HACK);
+              cont->in_room->room_flags.RemoveBit(ROOM_STORAGE);
 
-				act("$n takes the last of the items from $p.", TRUE, ch, cont, NULL, TO_ROOM);
-				act("You take the last of the items from $p.", TRUE, ch, cont, NULL, TO_CHAR);
-				extract_obj(cont);
-				return TRUE;
-			}
-		}
-	}
+              // Save the change.
+              for (int counter = 0; counter <= top_of_zone_table; counter++) {
+                if ((GET_ROOM_VNUM(cont->in_room) >= (zone_table[counter].number * 100)) && (GET_ROOM_VNUM(cont->in_room) <= (zone_table[counter].top))) {
+                  write_world_to_disk(zone_table[counter].number);
+                  break;
+                }
+              }
+            }
+          }
+
+          act("$n takes the last of the items from $p.", TRUE, ch, cont, NULL, TO_ROOM);
+          act("You take the last of the items from $p.", TRUE, ch, cont, NULL, TO_CHAR);
+          extract_obj(cont);
+          return TRUE;
+        }
+      }
+      // Anything in an NPC corpse that can be stowed: stow it.
+      else {
+        if (obj_can_be_stowed(ch, obj, FALSE)) {
+          snprintf(buf, sizeof(buf), "You get %s from $P, then stow it away for fencing.", decapitalize_a_an(GET_OBJ_NAME(obj)));
+          if (raw_stow_obj(ch, obj, FALSE)) {
+            act(buf, FALSE, ch, NULL, cont, TO_CHAR);
+          } else {
+            act("You get $p from $P.", FALSE, ch, obj, cont, TO_CHAR);
+          }
+          return TRUE;
+        }
+        act("You get $p from $P.", FALSE, ch, obj, cont, TO_CHAR);
+      }
+    }
+  }
 
 	return FALSE;
 }

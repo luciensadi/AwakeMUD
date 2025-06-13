@@ -1612,6 +1612,26 @@ char    *crypt(const char *key, const char *salt);
   }                                               \
 }                                                 \
 
+// 'message optional' version
+#define FAILURE_CASE_MO(condition, message) { \
+  if ((condition)) {                          \
+    if (send_messages) {                      \
+      send_to_char(ch, "%s\r\n", (message));  \
+    }                                         \
+    return;                                   \
+  }                                           \
+}                                             \
+
+#define FAILURE_CASE_PRINTF_MO(condition, ...) {    \
+  if ((condition)) {                                \
+    if (send_messages) {                            \
+      send_to_char(ch, __VA_ARGS__);                \
+      send_to_char(ch, "\r\n"); /*force a newline*/ \
+    }                                               \
+    return;                                         \
+  }                                                 \
+}                                                   \
+
 #define FALSE_CASE(condition, message) {   \
   if ((condition)) {                       \
     send_to_char(ch, "%s\r\n", (message)); \
@@ -1626,6 +1646,25 @@ char    *crypt(const char *key, const char *salt);
     return FALSE;                                 \
   }                                               \
 }                                                 \
+
+#define FALSE_CASE_MO(condition, message) {  \
+  if ((condition)) {                         \
+    if (send_messages) {                     \
+      send_to_char(ch, "%s\r\n", (message)); \
+    }                                        \
+    return FALSE;                            \
+  }                                          \
+}                                            \
+
+#define FALSE_CASE_PRINTF_MO(condition, ...) {      \
+  if ((condition)) {                                \
+    if (send_messages) {                            \
+      send_to_char(ch, __VA_ARGS__);                \
+      send_to_char(ch, "\r\n"); /*force a newline*/ \
+    }                                               \
+    return FALSE;                                   \
+  }                                                 \
+}                                                   \
 
 #define TRUE_CASE(condition, message) {    \
   if ((condition)) {                       \

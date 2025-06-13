@@ -3568,7 +3568,10 @@ const char *obj_load_reasons[] {
   "BULLETPANTS_MAKE_BOX",
   "FIND_OBJ_SHOP",
   "SHOP_RECEIVE",
-  "CREATE_PET"
+  "CREATE_PET",
+  "OTAKU_RESONANCE",
+  "CREATE_COMPLEX_FORM",
+  "UNSTOW_CMD"
 };
 
 int bone_lacing_power_lookup[] = {

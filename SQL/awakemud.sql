@@ -89,6 +89,13 @@ CREATE TABLE `pfiles` (
   KEY (`name`)
 );
 
+CREATE TABLE `pfiles_hammerspace` (
+  `idnum` mediumint(5) unsigned NOT NULL,
+  `vnum` mediumint(5) unsigned NOT NULL,
+  `qty` smallint(3) unsigned NOT NULL,
+  PRIMARY KEY(`idnum`, `vnum`)
+);
+
 CREATE TABLE `pocsec_phonebook` (
   `record_id` int NOT NULL AUTO_INCREMENT,
   `idnum` mediumint(5) unsigned NOT NULL,

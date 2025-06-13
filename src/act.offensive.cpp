@@ -42,7 +42,6 @@ extern int find_weapon_range(struct char_data *ch, struct obj_data *weapon);
 extern void roll_individual_initiative(struct char_data *ch);
 extern bool has_ammo(struct char_data *ch, struct obj_data *wielded);
 extern void damage_door(struct char_data *ch, struct room_data *room, int dir, int power, int type);
-extern void perform_get_from_container(struct char_data *, struct obj_data *, struct obj_data *, int);
 extern int can_wield_both(struct char_data *, struct obj_data *, struct obj_data *);
 extern void find_and_draw_weapon(struct char_data *);
 extern bool can_hurt(struct char_data *ch, struct char_data *victim, int attacktype, bool include_func_protections);
