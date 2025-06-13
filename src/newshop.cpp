@@ -42,6 +42,7 @@ void shop_install(char *argument, struct char_data *ch, struct char_data *keeper
 void shop_uninstall(char *argument, struct char_data *ch, struct char_data *keeper, vnum_t shop_nr);
 struct obj_data *shop_package_up_ware(struct obj_data *obj);
 int get_cyberware_install_cost(struct obj_data *ware);
+void sell_all_stowed_items(struct char_data *ch, rnum_t shop_nr, struct char_data *keeper);
 
 int cmd_say;
 int cmd_echo;
@@ -1409,6 +1410,21 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
   }
 }
 
+int negotiate_and_payout_sellprice(struct char_data *ch, struct char_data *keeper, vnum_t shop_nr, int sellprice) {
+  // Negotiate the total cost.
+  if (!shop_table[shop_nr].flags.IsSet(SHOP_WONT_NEGO) && !MOB_FLAGGED(keeper, MOB_INANIMATE))
+    sellprice = negotiate(ch, keeper, 0, sellprice, 0, FALSE, TRUE);
+
+  // Pay it out as nuyen.
+  if (shop_table[shop_nr].type == SHOP_BLACK)
+    gain_nuyen(ch, sellprice, NUYEN_INCOME_SHOP_SALES);
+  else
+    gain_bank(ch, sellprice, NUYEN_INCOME_SHOP_SALES);
+
+  // Just in case they care about the difference in the price.
+  return sellprice;
+}
+
 void shop_sell(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t shop_nr)
 {
   char buf[MAX_STRING_LENGTH], buf3[MAX_STRING_LENGTH];
@@ -1430,6 +1446,11 @@ void shop_sell(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
   if (IS_GHOUL(ch) && !shop_table[shop_nr].flags.AreAnySet(SHOP_YES_GHOUL, SHOP_CHARGEN, ENDBIT) && !MOB_FLAGGED(keeper, MOB_INANIMATE)) {
     snprintf(buf, sizeof(buf), "%s GET THE FRAG OUTTA HERE GHOUL!", GET_CHAR_NAME(ch));
     do_say(keeper, buf, cmd_say, SCMD_SAYTO);
+    return;
+  }
+
+  if (!str_cmp(arg, "stowed")) {
+    sell_all_stowed_items(ch, shop_nr, keeper);
     return;
   }
 
@@ -1508,8 +1529,6 @@ void shop_sell(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
   }
 
   int sellprice = sell_price(obj, shop_nr, GET_MOB_FACTION_IDNUM(keeper), ch);
-  if (!shop_table[shop_nr].flags.IsSet(SHOP_WONT_NEGO) && !MOB_FLAGGED(keeper, MOB_INANIMATE))
-    sellprice = negotiate(ch, keeper, 0, sellprice, 0, FALSE, TRUE);
 
   if (shop_table[shop_nr].flags.IsSet(SHOP_DOCTOR) && !obj->in_obj) {
     for (struct obj_data *ware_verifier = ch->carrying; ware_verifier; ware_verifier = ware_verifier->next_content) {
@@ -1551,10 +1570,7 @@ void shop_sell(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
     }
   }
 
-  if (!cred || shop_table[shop_nr].type == SHOP_BLACK)
-    gain_nuyen(ch, sellprice, NUYEN_INCOME_SHOP_SALES);
-  else
-    gain_bank(ch, sellprice, NUYEN_INCOME_SHOP_SALES);
+  negotiate_and_payout_sellprice(ch, keeper, shop_nr, sellprice);
 
   const char *representation = generate_new_loggable_representation(obj);
   snprintf(buf3, sizeof(buf3), "%s sold %s^g at %s^g (%ld) for %d.", GET_CHAR_NAME(ch), representation, GET_CHAR_NAME(keeper), shop_table[shop_nr].vnum, sellprice);

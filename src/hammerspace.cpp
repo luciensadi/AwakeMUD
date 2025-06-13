@@ -15,18 +15,62 @@
 
 
 
-  todo: add table, test
+  todo: test
 
   stretch: convert immediate DB calls to calls to memory
 */
 
 #include <mysql/mysql.h>
+#include <unordered_map>
+#include <vector>
 
 #include "interpreter.hpp"
 #include "utils.hpp"
 #include "handler.hpp"
 #include "db.hpp"
 #include "newdb.hpp"
+
+#define STOWED_MAP_T std::unordered_map<vnum_t, long>
+
+extern int negotiate_and_payout_sellprice(struct char_data *ch, struct char_data *keeper, vnum_t shop_nr, int sellprice);
+extern int sell_price(struct obj_data *obj, vnum_t shop_nr, idnum_t faction_idnum, struct char_data *ch);
+extern bool shop_will_buy_item_from_ch(rnum_t shop_nr, struct obj_data *obj, struct char_data *ch);
+extern struct shop_data *shop_table;
+
+STOWED_MAP_T *get_stowed_item_list(idnum_t idnum, STOWED_MAP_T *map_to_populate) {
+  map_to_populate->clear();
+
+  char query_buf[1000];
+  snprintf(query_buf, sizeof(query_buf), "SELECT vnum, qty FROM pfiles_stowed WHERE idnum = %ld AND qty >= 1 ORDER BY qty DESC;", idnum);
+    
+  if (mysql_wrapper(mysql, query_buf)) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: failed to query storage for %ld in list mode", idnum);
+    return NULL;
+  }
+
+  MYSQL_RES *res;
+  MYSQL_ROW row;
+  
+  if (!(res = mysql_use_result(mysql))) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: failed to use_result when querying storage for %s in list mode", idnum);
+    return NULL;
+  }
+
+  while ((row = mysql_fetch_row(res))) {
+    vnum_t vnum = atol(row[0]);
+
+    // Validate it's a real object.
+    if (real_object(vnum) <= 0) {
+      mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Object with unrecognized vnum %ld found in storage space for %ld.", vnum, idnum);
+      continue;
+    }
+
+    map_to_populate->emplace(vnum, atol(row[1]));
+  }
+
+  mysql_free_result(res);
+  return map_to_populate;
+}
 
 // Determines if object is stowable, TRUE or FALSE. Sends an error to user on FALSE.
 bool obj_can_be_stowed(struct char_data *ch, struct obj_data *obj, bool send_messages) {
@@ -36,6 +80,8 @@ bool obj_can_be_stowed(struct char_data *ch, struct obj_data *obj, bool send_mes
   FALSE_CASE_PRINTF_MO(GET_OBJ_RNUM(obj) <= 0 || GET_OBJ_RNUM(obj) > top_of_objt, "%s is a temporary object that can't be stowed.", GET_OBJ_NAME(obj));
   FALSE_CASE_PRINTF_MO(obj->restring || obj->photo || obj->graffiti, "Customized objects like %s can't be stowed.", GET_OBJ_NAME(obj));
   FALSE_CASE_PRINTF_MO(get_soulbound_idnum(obj) > 0, "You can't stow soulbound items like %s.", GET_OBJ_NAME(obj));
+  FALSE_CASE_PRINTF_MO(GET_OBJ_TYPE(obj) == ITEM_SHOPCONTAINER, "You can't stow shop containers.");
+  FALSE_CASE_PRINTF_MO(GET_OBJ_TYPE(obj) == ITEM_VEHCONTAINER, "You can't stow vehicles.");
 
   struct obj_data *proto = &obj_proto[GET_OBJ_RNUM(obj)];
 
@@ -69,7 +115,7 @@ bool raw_stow_obj(struct char_data *ch, struct obj_data *obj, bool send_messages
 
   // Put it in their hammer space.
   char query_buf[1000] = {0};
-  snprintf(query_buf, sizeof(query_buf), "INSERT INTO pfiles_stowed (idnum, vnum, qty) VALUES (%ld, %ld, 1) ON DUPLICATE KEY UPDATE qty=qty+1;", GET_IDNUM(ch), GET_OBJ_VNUM(obj));
+  snprintf(query_buf, sizeof(query_buf), "INSERT INTO pfiles_stowed (idnum, vnum, qty) VALUES (%ld, %ld, 1) ON DUPLICATE KEY UPDATE qty=qty+1;", GET_IDNUM_EVEN_IF_PROJECTING(ch), GET_OBJ_VNUM(obj));
   if (mysql_wrapper(mysql, query_buf)) {
     mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Unable to stow item due to mysql_wrapper failure.");
     if (send_messages) {
@@ -86,7 +132,7 @@ void unstow_obj(struct char_data *ch, rnum_t rnum) {
   char query_buf[1000];
 
   // Prepare to decrease stored qty by 1.
-  snprintf(query_buf, sizeof(query_buf), "UPDATE pfiles_stowed SET qty=qty-1 WHERE idnum = %ld AND vnum = %ld;", GET_IDNUM(ch), GET_OBJ_VNUM(&obj_proto[rnum]));
+  snprintf(query_buf, sizeof(query_buf), "UPDATE pfiles_stowed SET qty=qty-1 WHERE idnum = %ld AND vnum = %ld;", GET_IDNUM_EVEN_IF_PROJECTING(ch), GET_OBJ_VNUM(&obj_proto[rnum]));
 
   // Execute query and confirm it worked.
   if (mysql_wrapper(mysql, query_buf)) {
@@ -96,7 +142,7 @@ void unstow_obj(struct char_data *ch, rnum_t rnum) {
   }
 
   // Read it out and give it to them
-  struct obj_data *obj = read_object(rnum, REAL, OBJ_LOAD_REASON_UNSTOW_CMD, 0, GET_IDNUM(ch));
+  struct obj_data *obj = read_object(rnum, REAL, OBJ_LOAD_REASON_UNSTOW_CMD, 0, GET_IDNUM_EVEN_IF_PROJECTING(ch));
   obj_to_char(obj, ch);
   send_to_char(ch, "You pull %s out of stowage.\r\n", GET_OBJ_NAME(obj));
   return;
@@ -104,51 +150,30 @@ void unstow_obj(struct char_data *ch, rnum_t rnum) {
 
 #define STOW_SYNTAX "Syntax: STOW <item>; UNSTOW <item>; STOWED. You can sell your stowage with SELL STOWED at a vendor."
 ACMD(do_stow) {
-  MYSQL_RES *res;
-  MYSQL_ROW row;
-  char query_buf[MAX_INPUT_LENGTH + 100] = {0};
-
   FAILURE_CASE(IS_NPC(ch), "Sorry, you can't use the STOW command in your current state.");
 
   // 'stowed' lists contents of storage
   if (subcmd == SCMD_LIST_STOWED) {
     // todo: list storage
-    snprintf(query_buf, sizeof(query_buf), "SELECT vnum, qty FROM pfiles_stowed WHERE idnum = %ld AND qty >= 1 ORDER BY qty DESC;", GET_IDNUM(ch));
-    
-    if (mysql_wrapper(mysql, query_buf)) {
-      send_to_char(ch, "Sorry, your storage space isn't working right now.\r\n");
-      mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: failed to query storage for %s in list mode", GET_CHAR_NAME(ch));
-      return;
-    }
-    
-    if (!(res = mysql_use_result(mysql))) {
-      send_to_char(ch, "Sorry, your storage space isn't working right now.\r\n");
-      mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: failed to use_result when querying storage for %s in list mode", GET_CHAR_NAME(ch));
-      return;
-    }
-  
+    STOWED_MAP_T stowed_map = {};
     int total_value = 0;
-    send_to_char(ch, "Your storage space contains:\r\n");
-    while ((row = mysql_fetch_row(res))) {
-      vnum_t vnum = atol(row[0]);
-      rnum_t rnum = real_object(vnum);
-      long qty = atol(row[1]);
-      if (rnum <= 0) {
-        mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Object with unrecognized vnum %ld found in storage space.", vnum);
-        continue;
-      }
-      struct obj_data *proto = &obj_proto[rnum];
-      send_to_char(ch, "- %50s (x%ld)", GET_OBJ_NAME(proto), qty);
+
+    FAILURE_CASE(!get_stowed_item_list(GET_IDNUM_EVEN_IF_PROJECTING(ch), &stowed_map), "Sorry, your stowage space isn't working right now.");
+    FAILURE_CASE(stowed_map.empty(), "Your stowage space is empty.");
+
+    send_to_char(ch, "Your stowage space contains:\r\n");
+    for (auto iter : stowed_map) {
+      struct obj_data *proto = &obj_proto[real_object(iter.first)];
+      send_to_char(ch, "- %50s (x%ld)", GET_OBJ_NAME(proto), iter.second);
       total_value += IS_OBJ_STAT(proto, ITEM_EXTRA_NOSELL) ? 0 : GET_OBJ_COST(proto);
     }
     send_to_char(ch, "Total value is somewhere between %.2f and %.2f nuyen.", total_value * 0.05, total_value * 0.25);
-    mysql_free_result(res);
     return;
   }
 
   skip_spaces(&argument);
 
-  // 'stow' and 'unstown' on their own gives syntax
+  // 'stow' and 'unstow' on their own gives syntax
   FAILURE_CASE(!*argument, STOW_SYNTAX);
 
   // 'stow X' puts the thing away
@@ -164,40 +189,75 @@ ACMD(do_stow) {
 
   // 'unstow X' gets a new copy of the thing out
   if (subcmd == SCMD_UNSTOW) {
+    STOWED_MAP_T stowed_map = {};
+
     // Make sure they have enough inventory space.
     FAILURE_CASE(IS_CARRYING_N(ch) + 1 > CAN_CARRY_N(ch), "You can't carry any more items.");
-
-    // Search through stowed things for something matching the keyword.    
-    snprintf(query_buf, sizeof(query_buf), "SELECT vnum FROM pfiles_stowed WHERE idnum = %ld AND qty >= 1;", GET_IDNUM(ch));
-    
-    if (mysql_wrapper(mysql, query_buf)) {
-      send_to_char(ch, "Sorry, your storage space isn't working right now.\r\n");
-      mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: failed to query storage for %s", GET_CHAR_NAME(ch));
-      return;
-    }
-    
-    if (!(res = mysql_use_result(mysql))) {
-      send_to_char(ch, "Sorry, your storage space isn't working right now.\r\n");
-      mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: failed to use_result when querying storage for %s", GET_CHAR_NAME(ch));
-      return;
-    }
+    FAILURE_CASE(!get_stowed_item_list(GET_IDNUM_EVEN_IF_PROJECTING(ch), &stowed_map), "Sorry, your stowage space isn't working right now.");
+    FAILURE_CASE(stowed_map.empty(), "Your stowage space is empty.");
   
-    while ((row = mysql_fetch_row(res))) {
-      vnum_t vnum = atol(row[0]);
-      rnum_t rnum = real_object(vnum);
-      if (rnum <= 0) {
-        mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Object with unrecognized vnum %ld found in storage space.", vnum);
-        continue;
-      }
+    for (auto iter : stowed_map) {
+      rnum_t rnum = real_object(iter.first);
       if (keyword_appears_in_obj(argument, &obj_proto[rnum])) {
-        mysql_free_result(res);
         unstow_obj(ch, rnum);
         return;
       }
     }
 
     send_to_char(ch, "You don't have anything matching '%s' in your stowage space.\r\n", argument);
-    mysql_free_result(res);
     return;
   }
+}
+
+void sell_all_stowed_items(struct char_data *ch, rnum_t shop_nr, struct char_data *keeper) {
+  // check for invalid ch/keeper
+  if (!ch || !keeper || shop_nr < 0 || shop_nr > top_of_shopt) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Invalid invocation of sell_all_stowed_items(%s, %ld, %s)", GET_CHAR_NAME(ch), shop_nr, GET_CHAR_NAME(keeper));
+    return;
+  }
+
+  STOWED_MAP_T stowed_map = {};
+  std::vector<vnum_t> to_drop_from_table = {};
+
+  FAILURE_CASE(!get_stowed_item_list(GET_IDNUM_EVEN_IF_PROJECTING(ch), &stowed_map), "Sorry, your stowage space isn't working right now.");
+  FAILURE_CASE(stowed_map.empty(), "Your stowage space is empty.");
+
+  int total_sell_price = 0;
+  int total_sold_items = 0;
+  char query_buf[1000];
+
+  // for each item in list, if it's sellable here, add its value to the total (multiply by qty) and queue it for dropping from table
+  for (auto iter : stowed_map) {
+    struct obj_data *proto = &obj_proto[real_object(iter.first)];
+
+    if (!shop_will_buy_item_from_ch(shop_nr, proto, ch))
+      continue;
+
+    total_sell_price += sell_price(proto, shop_nr, GET_MOB_FACTION_IDNUM(keeper), ch);
+    to_drop_from_table.push_back(GET_OBJ_VNUM(proto));
+    total_sold_items += iter.second;
+  }
+
+  if (total_sold_items <= 0) {
+    act("$N isn't interested in buying any of your stowed items.", FALSE, ch, 0, keeper, TO_CHAR);
+    return;
+  }
+
+  // TODO: Drop items from table. On error, bail.
+  snprintf(query_buf, sizeof(query_buf), "DELETE FROM pfiles_stowed WHERE idnum=%ld AND vnum IN (", GET_IDNUM_EVEN_IF_PROJECTING(ch));
+  bool first_run = TRUE;
+  for (auto vnum : to_drop_from_table) {
+    snprintf(ENDOF(query_buf), sizeof(query_buf) - strlen(query_buf), "%s%ld", first_run ? "" : ", ", vnum);
+    first_run = FALSE;
+  }
+
+  if (mysql_wrapper(mysql, query_buf)) {
+    send_to_char(ch, "Something went wrong. Your items have been returned to you.\r\n");
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Failed to execute query to delete stowed items during sell.");
+    return;
+  }
+
+  negotiate_and_payout_sellprice(ch, keeper, shop_nr, total_sell_price);
+  
+  send_to_char(ch, "You sell %d item%s for %d nuyen.\r\n", total_sold_items, total_sold_items == 1 ? "" : "s", total_sell_price);
 }
