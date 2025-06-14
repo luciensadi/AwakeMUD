@@ -83,6 +83,7 @@ bool obj_can_be_stowed(struct char_data *ch, struct obj_data *obj, bool send_mes
   FALSE_CASE_PRINTF_MO(GET_OBJ_TYPE(obj) == ITEM_SHOPCONTAINER, "You can't stow shop containers.");
   FALSE_CASE_PRINTF_MO(GET_OBJ_TYPE(obj) == ITEM_VEHCONTAINER, "You can't stow vehicles.");
   FALSE_CASE_PRINTF_MO(GET_OBJ_TYPE(obj) == ITEM_MONEY, "You can't stow credsticks or nuyen.");
+  FALSE_CASE_PRINTF_MO(IS_OBJ_STAT(obj, ITEM_EXTRA_NOSELL), "You can't stow unsellable things.");
 
   struct obj_data *proto = &obj_proto[GET_OBJ_RNUM(obj)];
 
