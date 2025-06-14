@@ -911,6 +911,7 @@ void move_vehicle(struct char_data *ch, int dir)
   veh_from_room(veh);
   veh_to_room(veh, was_in);
   veh->lastin[0] = veh->in_room;
+  SendGMCPRoomInfo(ch, veh->in_room);
 
   // People in the room.
   for (struct char_data *tch = veh->in_room->people; tch; tch = tch->next_in_room) {
