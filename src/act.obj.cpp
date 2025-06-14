@@ -32,6 +32,7 @@
 #include "redit.hpp"
 #include "vehicles.hpp"
 #include "pets.hpp"
+#include "bullet_pants.hpp"
 
 /* extern variables */
 extern int drink_aff[][3];
@@ -894,13 +895,14 @@ bool can_take_obj_from_anywhere(struct char_data *ch, struct obj_data *obj)
 	return 1;
 }
 
-void get_check_money(struct char_data *ch, struct obj_data *obj, struct obj_data *from_obj)
+// Returns TRUE if extracted.
+bool get_check_money(struct char_data *ch, struct obj_data *obj, struct obj_data *from_obj)
 {
 	int zone;
 
 	// Do nothing if it's not money.
 	if (GET_OBJ_TYPE(obj) != ITEM_MONEY)
-		return;
+		return FALSE;
 
 	// Find the zone it belongs to.
 	for (zone = 0; zone <= top_of_zone_table; zone++)
@@ -916,7 +918,7 @@ void get_check_money(struct char_data *ch, struct obj_data *obj, struct obj_data
 		mudlog(buf3, ch, LOG_SYSLOG, TRUE);
 
 		extract_obj(obj);
-		return;
+		return TRUE;
 	}
 
 	// Confirm that it has money on it.
@@ -927,7 +929,7 @@ void get_check_money(struct char_data *ch, struct obj_data *obj, struct obj_data
 		mudlog(buf3, ch, LOG_SYSLOG, TRUE);
 
 		extract_obj(obj);
-		return;
+		return TRUE;
 	}
 
 	// If it's paper money, handle it here.
@@ -950,7 +952,7 @@ void get_check_money(struct char_data *ch, struct obj_data *obj, struct obj_data
 		}
 
 		extract_obj(obj);
-		return;
+		return TRUE;
 	}
 
 	// Credstick? Handle it here.
@@ -970,8 +972,10 @@ void get_check_money(struct char_data *ch, struct obj_data *obj, struct obj_data
 		}
 
 		// We don't extract the credstick.
-		return;
+		return FALSE;
 	}
+
+  return FALSE;
 }
 
 void calc_weight(struct char_data *ch)
@@ -1195,14 +1199,6 @@ bool perform_get_from_container(struct char_data *ch, struct obj_data *obj,
       act("$n uninstalls $p from $P.", TRUE, ch, obj, cont, TO_ROOM);
     }
 
-    {
-      struct obj_data *was_in_obj = obj->in_obj;
-      obj_from_obj(obj);
-      obj_to_char(obj, ch);
-      get_check_money(ch, obj, was_in_obj);
-      obj = NULL;
-    }
-
     if (cont->obj_flags.extra_flags.IsSet(ITEM_EXTRA_CORPSE)) {
       // Extract PC corpses if they're empty.
       if (GET_CORPSE_IS_PC(cont)) {
@@ -1247,17 +1243,58 @@ bool perform_get_from_container(struct char_data *ch, struct obj_data *obj,
       }
       // Anything in an NPC corpse that can be stowed: stow it.
       else {
+        int ammo_weapontype = -1;
+        int ammo_type = -1;
+        // If it's a mob gun with 1 round, strip out the ammo before attempting to stow.
+        if (GET_OBJ_TYPE(obj) == ITEM_WEAPON
+            && WEAPON_IS_GUN(obj)
+            && obj->contains
+            && GET_OBJ_TYPE(obj->contains) == ITEM_GUN_MAGAZINE
+            && GET_MAGAZINE_AMMO_COUNT(obj->contains) == 1)
+        {
+          struct obj_data *magazine = obj->contains;
+          obj_from_obj(magazine);
+          if (obj_can_be_stowed(ch, obj, FALSE)) {
+            ammo_weapontype = GET_MAGAZINE_BONDED_ATTACKTYPE(magazine);
+            ammo_type = GET_MAGAZINE_AMMO_TYPE(magazine);
+            update_bulletpants_ammo_quantity(ch, GET_MAGAZINE_BONDED_ATTACKTYPE(magazine), GET_MAGAZINE_AMMO_TYPE(magazine), 1);
+            extract_obj(magazine);
+          } else {
+            // Put it back.
+            obj_to_obj(magazine, obj);
+          }
+        }
+
         if (obj_can_be_stowed(ch, obj, FALSE)) {
-          snprintf(buf, sizeof(buf), "You get %s from $P, then stow it away for fencing.", decapitalize_a_an(GET_OBJ_NAME(obj)));
+          if (ammo_weapontype > -1) {
+            // Swap AV for APDS to prevent players getting it.
+            ammo_type = (ammo_type == AMMO_AV ? AMMO_APDS : ammo_type);
+            snprintf(buf, sizeof(buf), "You get %s from $P, strip out and pocket %s, then stow the weapon away for fencing.",
+                     decapitalize_a_an(GET_OBJ_NAME(obj)),
+                     get_ammo_representation(ammo_weapontype, ammo_type, 1, ch));
+          } else {
+            snprintf(buf, sizeof(buf), "You get %s from $P, then stow it away for fencing.", decapitalize_a_an(GET_OBJ_NAME(obj)));
+          }
+          
           if (raw_stow_obj(ch, obj, FALSE)) {
             act(buf, FALSE, ch, NULL, cont, TO_CHAR);
+            // We return at this point because the object was stowed.
+            return TRUE;
           } else {
             act("You get $p from $P.", FALSE, ch, obj, cont, TO_CHAR);
           }
-          return TRUE;
+        } else {
+          act("You get $p from $P.", FALSE, ch, obj, cont, TO_CHAR);
         }
-        act("You get $p from $P.", FALSE, ch, obj, cont, TO_CHAR);
       }
+    }
+
+    {
+      struct obj_data *was_in_obj = obj->in_obj;
+      obj_from_obj(obj);
+      obj_to_char(obj, ch);
+      get_check_money(ch, obj, was_in_obj);
+      obj = NULL;
     }
   }
 
@@ -2334,6 +2371,9 @@ int perform_drop(struct char_data *ch, struct obj_data *obj, byte mode,
 	{
 		FALSE_CASE_PRINTF(mode != SCMD_DROP, "You can't %s vehicles.", sname);
 		FALSE_CASE(ch->in_veh, "You'll have to step out of your current vehicle to do that.");
+
+    // Load vehicles owned by the identified owner to reduce cases of stuck containers.
+    load_vehicles_for_idnum(GET_VEHCONTAINER_VEH_OWNER(obj));
 
 		// Find the veh storage room.
 		rnum_t vehicle_storage_rnum = real_room(RM_PORTABLE_VEHICLE_STORAGE);

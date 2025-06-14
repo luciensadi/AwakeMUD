@@ -382,6 +382,7 @@ ACMD_DECLARE(do_stat);
 ACMD_DECLARE(do_status);
 ACMD_DECLARE(do_steal);
 ACMD_DECLARE(do_stop);
+ACMD_DECLARE(do_stow);
 ACMD_DECLARE(do_stuck);
 ACMD_DECLARE(do_survey);
 ACMD_DECLARE(do_switch);
@@ -946,8 +947,8 @@ struct command_info cmd_info[] =
     { "status"     , POS_MORTALLYW, do_status   , 0, 0, ALLOWS_IDLE_REWARD },
     { "steal"      , POS_LYING   , do_steal    , 0, 0, BLOCKS_IDLE_REWARD },
     { "stop"       , POS_LYING   , do_stop     , 0, 0, BLOCKS_IDLE_REWARD },
-    { "stow"       , POS_LYING   , do_stop     , LVL_BUILDER, SCMD_STOW, BLOCKS_IDLE_REWARD },
-    { "stowed"     , POS_LYING   , do_stop     , LVL_BUILDER, SCMD_LIST_STOWED, BLOCKS_IDLE_REWARD },
+    { "stow"       , POS_LYING   , do_stow     , LVL_BUILDER, SCMD_STOW, BLOCKS_IDLE_REWARD },
+    { "stowed"     , POS_LYING   , do_stow     , LVL_BUILDER, SCMD_LIST_STOWED, BLOCKS_IDLE_REWARD },
     { "stuck"      , POS_LYING   , do_stuck    , 0, 0, BLOCKS_IDLE_REWARD },
     { "subscribe"  , POS_SITTING , do_subscribe, 0, 0, BLOCKS_IDLE_REWARD },
     { "submerse"   , POS_DEAD    , do_submerse , 0, SCMD_INITIATE, BLOCKS_IDLE_REWARD },
@@ -997,7 +998,7 @@ struct command_info cmd_info[] =
     { "unattach"   , POS_RESTING , do_unattach , 0, 0, BLOCKS_IDLE_REWARD },
     { "unpack"     , POS_SITTING , do_unpack   , 0, 0, BLOCKS_IDLE_REWARD },
     { "unpractice" , POS_RESTING , do_practice, 1, SCMD_UNPRACTICE, BLOCKS_IDLE_REWARD },
-    { "unstow"     , POS_LYING   , do_stop     , LVL_BUILDER, SCMD_UNSTOW, BLOCKS_IDLE_REWARD },
+    { "unstow"     , POS_LYING   , do_stow     , LVL_BUILDER, SCMD_UNSTOW, BLOCKS_IDLE_REWARD },
     { "unsubscribe",POS_RESTING, do_subscribe, 0, SCMD_UNSUB, BLOCKS_IDLE_REWARD },
     { "untrain"    , POS_RESTING , do_train    , 1, SCMD_UNTRAIN, BLOCKS_IDLE_REWARD },
     { "unlearn"    , POS_DEAD    , do_forget   , 0, 0, BLOCKS_IDLE_REWARD },
@@ -4005,7 +4006,6 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("whereismycar", "wheresmycar");
   COMMAND_ALIAS("store", "put");
   COMMAND_ALIAS("swap", "switch");
-  COMMAND_ALIAS("stow", "holster");
   COMMAND_ALIAS("unconceal", "reveal");
   COMMAND_ALIAS("snipe", "shoot");
   COMMAND_ALIAS("penalty", "penalties");

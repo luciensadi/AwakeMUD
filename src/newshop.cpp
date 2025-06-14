@@ -1411,6 +1411,13 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
 }
 
 int negotiate_and_payout_sellprice(struct char_data *ch, struct char_data *keeper, vnum_t shop_nr, int sellprice) {
+  // Since we added hammerspace/stowage, more loot is being collected faster, and the friction point of having to do loot
+  // runs to drones/cars/etc has gone away. Since the speed at which farming can be done has increased, we must decrease
+  // the nuyen gained from farming. In lieu of builders going through and lowering the value of all items in the game,
+  // we apply a modifier here to reduce the sell price of an item accordingly. This doesn't apply in chargen, of course.
+  if (!shop_table[shop_nr].flags.IsSet(SHOP_CHARGEN))
+    sellprice *= 0.70;
+
   // Negotiate the total cost.
   if (!shop_table[shop_nr].flags.IsSet(SHOP_WONT_NEGO) && !MOB_FLAGGED(keeper, MOB_INANIMATE))
     sellprice = negotiate(ch, keeper, 0, sellprice, 0, FALSE, TRUE);
@@ -1421,7 +1428,7 @@ int negotiate_and_payout_sellprice(struct char_data *ch, struct char_data *keepe
   else
     gain_bank(ch, sellprice, NUYEN_INCOME_SHOP_SALES);
 
-  // Just in case they care about the difference in the price.
+  // Just in case the caller cares about the negotiated price.
   return sellprice;
 }
 

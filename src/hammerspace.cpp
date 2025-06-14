@@ -44,7 +44,7 @@ STOWED_MAP_T *get_stowed_item_list(idnum_t idnum, STOWED_MAP_T *map_to_populate)
   snprintf(query_buf, sizeof(query_buf), "SELECT vnum, qty FROM pfiles_stowed WHERE idnum = %ld AND qty >= 1 ORDER BY qty DESC;", idnum);
     
   if (mysql_wrapper(mysql, query_buf)) {
-    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: failed to query storage for %ld in list mode", idnum);
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: failed to query stowage for %ld in list mode", idnum);
     return NULL;
   }
 
@@ -52,7 +52,7 @@ STOWED_MAP_T *get_stowed_item_list(idnum_t idnum, STOWED_MAP_T *map_to_populate)
   MYSQL_ROW row;
   
   if (!(res = mysql_use_result(mysql))) {
-    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: failed to use_result when querying storage for %s in list mode", idnum);
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: failed to use_result when querying stowage for %s in list mode", idnum);
     return NULL;
   }
 
@@ -61,7 +61,7 @@ STOWED_MAP_T *get_stowed_item_list(idnum_t idnum, STOWED_MAP_T *map_to_populate)
 
     // Validate it's a real object.
     if (real_object(vnum) <= 0) {
-      mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Object with unrecognized vnum %ld found in storage space for %ld.", vnum, idnum);
+      mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Object with unrecognized vnum %ld found in stowage space for %ld.", vnum, idnum);
       continue;
     }
 
@@ -82,12 +82,13 @@ bool obj_can_be_stowed(struct char_data *ch, struct obj_data *obj, bool send_mes
   FALSE_CASE_PRINTF_MO(get_soulbound_idnum(obj) > 0, "You can't stow soulbound items like %s.", GET_OBJ_NAME(obj));
   FALSE_CASE_PRINTF_MO(GET_OBJ_TYPE(obj) == ITEM_SHOPCONTAINER, "You can't stow shop containers.");
   FALSE_CASE_PRINTF_MO(GET_OBJ_TYPE(obj) == ITEM_VEHCONTAINER, "You can't stow vehicles.");
+  FALSE_CASE_PRINTF_MO(GET_OBJ_TYPE(obj) == ITEM_MONEY, "You can't stow credsticks or nuyen.");
 
   struct obj_data *proto = &obj_proto[GET_OBJ_RNUM(obj)];
 
   FALSE_CASE_PRINTF_MO(GET_OBJ_COST(obj) != GET_OBJ_COST(proto), "%s's cost has changed from the prototype value, so it can't be stowed.", GET_OBJ_NAME(obj));
 
-  FALSE_CASE_PRINTF_MO(obj->obj_flags.extra_flags == proto->obj_flags.extra_flags,
+  FALSE_CASE_PRINTF_MO(strcmp(obj->obj_flags.extra_flags.ToString(), proto->obj_flags.extra_flags.ToString()),
                          "%s's flags don't match the prototype, so it can't be stowed.", GET_OBJ_NAME(obj));
 
   for (int val_idx = 0; val_idx < NUM_OBJ_VALUES; val_idx++) {
@@ -148,47 +149,67 @@ void unstow_obj(struct char_data *ch, rnum_t rnum) {
   return;
 }
 
+void list_stowage_to_character(struct char_data *ch, idnum_t victim) {
+  STOWED_MAP_T stowed_map = {};
+  int total_value = 0;
+  bool viewer_is_victim = (GET_IDNUM_EVEN_IF_PROJECTING(ch) == victim);
+
+  FAILURE_CASE_PRINTF(!get_stowed_item_list(GET_IDNUM_EVEN_IF_PROJECTING(ch), &stowed_map), "Sorry, %s stowage space isn't working right now.", viewer_is_victim ? "your" : "their'");
+  FAILURE_CASE_PRINTF(stowed_map.empty(), "%s stowage space is empty.", viewer_is_victim ? "Your" : "Their'");
+
+  send_to_char(ch, "%s stowage space contains:\r\n", viewer_is_victim ? "your" : "their'");
+  for (auto iter : stowed_map) {
+    struct obj_data *proto = &obj_proto[real_object(iter.first)];
+    if (iter.second > 1) {
+      send_to_char(ch, "  %s^n  (^c%ld^n)\r\n", GET_OBJ_NAME(proto), iter.second);
+    } else {
+      send_to_char(ch, "  %s^n\r\n", GET_OBJ_NAME(proto));
+    }
+    total_value += (IS_OBJ_STAT(proto, ITEM_EXTRA_NOSELL) ? 0 : GET_OBJ_COST(proto)) * iter.second;
+  }
+  if (IS_SENATOR(ch)) {
+    send_to_char(ch, "Total value is %d, which upon selling works out to somewhere between %d and %d nuyen.\r\n", total_value, (int) (total_value * 0.05), (int) (total_value * 0.25));
+  } else {
+    send_to_char(ch, "Total value is somewhere between %d and %d nuyen.\r\n", (int) (total_value * 0.05), (int) (total_value * 0.25));
+  }
+}
+
 #define STOW_SYNTAX "Syntax: STOW <item>; UNSTOW <item>; STOWED. You can sell your stowage with SELL STOWED at a vendor."
 ACMD(do_stow) {
   FAILURE_CASE(IS_NPC(ch), "Sorry, you can't use the STOW command in your current state.");
 
-  // 'stowed' lists contents of storage
+  // 'stowed' lists contents of stowage
   if (subcmd == SCMD_LIST_STOWED) {
-    // todo: list storage
-    STOWED_MAP_T stowed_map = {};
-    int total_value = 0;
-
-    FAILURE_CASE(!get_stowed_item_list(GET_IDNUM_EVEN_IF_PROJECTING(ch), &stowed_map), "Sorry, your stowage space isn't working right now.");
-    FAILURE_CASE(stowed_map.empty(), "Your stowage space is empty.");
-
-    send_to_char(ch, "Your stowage space contains:\r\n");
-    for (auto iter : stowed_map) {
-      struct obj_data *proto = &obj_proto[real_object(iter.first)];
-      send_to_char(ch, "- %50s (x%ld)", GET_OBJ_NAME(proto), iter.second);
-      total_value += IS_OBJ_STAT(proto, ITEM_EXTRA_NOSELL) ? 0 : GET_OBJ_COST(proto);
-    }
-    send_to_char(ch, "Total value is somewhere between %.2f and %.2f nuyen.", total_value * 0.05, total_value * 0.25);
+    list_stowage_to_character(ch, GET_IDNUM_EVEN_IF_PROJECTING(ch));
     return;
   }
 
   skip_spaces(&argument);
 
-  // 'stow' and 'unstow' on their own gives syntax
-  FAILURE_CASE(!*argument, STOW_SYNTAX);
-
   // 'stow X' puts the thing away
   if (subcmd == SCMD_STOW) {
+    // 'stow' on its own gives syntax
+    FAILURE_CASE(!*argument, STOW_SYNTAX);
+
     struct obj_data *obj = get_obj_in_list_vis(ch, argument, ch->carrying);
     FAILURE_CASE_PRINTF(!obj, "You're not carrying anything named '%s'.", argument);
     if (!obj_can_be_stowed(ch, obj, TRUE))
       return;
     // Stow it. Obj should be assumed extracted after this call, so don't reference it.
+    send_to_char(ch, "You stow %s away for fencing.\r\n", decapitalize_a_an(obj));
     raw_stow_obj(ch, obj, TRUE);
     return;
   }
 
   // 'unstow X' gets a new copy of the thing out
   if (subcmd == SCMD_UNSTOW) {
+    // 'unstow' on its own gives list of items
+    if (!*argument) {
+      list_stowage_to_character(ch, GET_IDNUM_EVEN_IF_PROJECTING(ch));
+      send_to_char(ch, "\r\nSyntax to get an item back out: UNSTOW <keyword>\r\n");
+      return;
+    }
+
     STOWED_MAP_T stowed_map = {};
 
     // Make sure they have enough inventory space.
@@ -243,7 +264,7 @@ void sell_all_stowed_items(struct char_data *ch, rnum_t shop_nr, struct char_dat
     return;
   }
 
-  // TODO: Drop items from table. On error, bail.
+  // Drop items from table. On error, bail.
   snprintf(query_buf, sizeof(query_buf), "DELETE FROM pfiles_stowed WHERE idnum=%ld AND vnum IN (", GET_IDNUM_EVEN_IF_PROJECTING(ch));
   bool first_run = TRUE;
   for (auto vnum : to_drop_from_table) {
