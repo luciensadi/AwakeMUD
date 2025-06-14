@@ -434,6 +434,7 @@ void _raw_gain_nuyen(struct char_data *ch, long amount, int category, bool bank,
       GET_NUYEN_RAW(ch) = 0;
     }
   }
+  SendGMCPCharVitals(ch);
 }
 
 void gain_nuyen(struct char_data *ch, long amount, int category) {
