@@ -141,6 +141,8 @@ void perform_put(struct char_data *ch, struct obj_data *obj, struct obj_data *co
 	FAILURE_CASE_PRINTF(cont->in_veh && cont->in_veh->usedload + GET_OBJ_WEIGHT(obj) > cont->in_veh->load,
 											"%s would overload %s's carrying capacity.", CAP(GET_OBJ_NAME(obj)), decapitalize_a_an(cont->in_veh));
 
+  FAILURE_CASE(IS_OBJ_STAT(cont, ITEM_EXTRA_CORPSE), "You can't put anything on corpses or in belongings.");
+
 	if (GET_OBJ_TYPE(cont) == ITEM_WORN)
 	{
 		if (GET_OBJ_TYPE(obj) == ITEM_SPELL_FORMULA || GET_OBJ_TYPE(obj) == ITEM_DESIGN || GET_OBJ_TYPE(obj) == ITEM_PART)
