@@ -1106,16 +1106,26 @@ void reward(struct char_data *ch, struct char_data *johnson)
     rnum_t rnum = real_object(quest_table[GET_QUEST(ch)].reward);
     if (rnum > 0) {
       obj = read_object(rnum, REAL, OBJ_LOAD_REASON_QUEST_REWARD);
-      obj_to_char(obj, ch);
-      soulbind_obj_to_char(obj, ch, FALSE);
-      if (MOB_FLAGGED(johnson, MOB_INANIMATE)) {
-        act("You dispense $p for $N.", FALSE, johnson, obj, ch, TO_CHAR);
-        act("$n dispenses $p, and you pick it up.", FALSE, johnson, obj, ch, TO_VICT);
-        act("$n dispenses $p for $N.", TRUE, johnson, obj, ch, TO_NOTVICT);
-      } else {
-        act("You give $p to $N.", FALSE, johnson, obj, ch, TO_CHAR);
-        act("$n gives you $p.", FALSE, johnson, obj, ch, TO_VICT);
-        act("$n gives $p to $N.", TRUE, johnson, obj, ch, TO_NOTVICT);
+
+      // Check to see if they have it on them already.
+      if (get_carried_vnum(ch, GET_OBJ_VNUM(obj), FALSE)) {
+        act("You already have a copy of $p, so $N doesn't give you another.", FALSE, johnson, obj, ch, TO_VICT);
+        extract_obj(obj);
+        obj = NULL;
+      }
+      // You don't have one, so you get one.
+      else {
+        obj_to_char(obj, ch);
+        soulbind_obj_to_char(obj, ch, FALSE);
+        if (MOB_FLAGGED(johnson, MOB_INANIMATE)) {
+          act("You dispense $p for $N.", FALSE, johnson, obj, ch, TO_CHAR);
+          act("$n dispenses $p, and you pick it up.", FALSE, johnson, obj, ch, TO_VICT);
+          act("$n dispenses $p for $N.", TRUE, johnson, obj, ch, TO_NOTVICT);
+        } else {
+          act("You give $p to $N.", FALSE, johnson, obj, ch, TO_CHAR);
+          act("$n gives you $p.", FALSE, johnson, obj, ch, TO_VICT);
+          act("$n gives $p to $N.", TRUE, johnson, obj, ch, TO_NOTVICT);
+        }
       }
     }
   } else {
