@@ -410,6 +410,57 @@ void save_vehicles(bool fromCopyover)
   fclose(fl);
 }
 
+void offload_vehicles_for_owner(idnum_t owner_idnum)
+{
+  save_vehicles(FALSE);
+  for (struct veh_data *veh = veh_list, *next_veh; veh; veh = next_veh) {
+    next_veh = veh->next;
+    if (veh->owner == owner_idnum) {
+      bool disqualified = FALSE;
+
+      // Check for rigger, skip if you find one
+      if (veh->rigger)
+        continue;
+      
+      // Check for players or NPCs in it
+      for (struct char_data *people = veh->people; people; people = people->next_in_veh) {
+        if (people->desc || !IS_NPC(people)) {
+          disqualified = TRUE;
+          break;
+        }
+      }
+
+      // Check for carried vehicles belonging to someone else
+      for (struct veh_data *carried = veh->carriedvehs; carried; carried = carried->next_veh) {
+        if (carried->owner && carried->owner != owner_idnum) {
+          disqualified = TRUE;
+          break;
+        }
+      }
+
+      // Check for towed vehicle belonging to someone else, skip if you find one
+      if (veh->towing && veh->towing->owner && veh->towing->owner != owner_idnum)
+        continue;
+      
+      if (disqualified)
+        continue;
+      
+      // Blow it away completely.
+      while (veh->carriedvehs)
+        extract_veh(veh->carriedvehs);
+      while (veh->people)
+        extract_char(veh->people);
+      while (veh->contents)
+        extract_obj(veh->contents);
+      if (veh->towing) {
+        extract_veh(veh->towing);
+        veh->towing = NULL;
+      }
+      extract_veh(veh);
+    }
+  }
+}
+
 void load_single_veh(const char *filename) {
   File file;
   int veh_version = 0;
