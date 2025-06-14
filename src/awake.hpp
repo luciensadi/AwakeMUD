@@ -861,6 +861,7 @@ enum {
 #define HEALTH      3
 #define ILLUSION    4
 #define MANIPULATION    5
+#define NUM_SPELL_CATEGORY_TYPES 5
 
 #define INSTANT      0
 #define SUSTAINED    1

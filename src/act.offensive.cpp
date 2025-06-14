@@ -708,10 +708,15 @@ ACMD(do_flee)
     }
   }
 
+  WAIT_STATE(ch, PULSE_VIOLENCE);
+
   if (valid_directions.empty()) {
     send_to_char("PANIC! There's nowhere you can flee to!\r\n", ch);
-    WAIT_STATE(ch, PULSE_VIOLENCE);
   } else {
+    // Some totems can't withdraw from combat.
+    FAILURE_CASE(IS_COMBAT_ENTHRALLED_SHAMAN(ch) && success_test(GET_WIL(ch), 6, ch, "shaman conflict withdraw test", NULL) <= 0,
+                 "You fail to fight off your baser instincts, instead committing to the fight once more.");
+
     // Sort our list of valid directions by weight.
     std::sort(valid_directions.begin(), valid_directions.end(), _sort_pairs_by_weight);
 
@@ -720,7 +725,6 @@ ACMD(do_flee)
 
     // Supply messaging and put the character into a wait state half that of perform_move.
     act("$n panics, and attempts to flee!", TRUE, ch, 0, 0, TO_ROOM);
-    WAIT_STATE(ch, PULSE_VIOLENCE);
 
     // If the character is fighting in melee combat with someone they can hurt, they must pass a test to escape.
     struct char_data *blocker = find_a_character_that_blocks_fleeing_for_ch(ch);

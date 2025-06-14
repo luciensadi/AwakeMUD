@@ -2547,7 +2547,7 @@ const char *totem_types[] =
     "Creator",
     "Dark King",
     "Dragonslayer",
-    "Fire Bringer",
+    "Fire-Bringer",
     "Horned Man",
     "Sea King",
     "Sky Father",

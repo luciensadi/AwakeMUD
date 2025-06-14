@@ -68,4 +68,7 @@ extern void end_all_spells_cast_BY_ch(struct char_data *ch, bool keep_sustained_
 #define PACK_VARIABLE_DRAIN_DAMAGE(modifier)       (VARIABLE_DRAIN_DAMAGE_CODE + modifier)
 #define UNPACK_VARIABLE_DRAIN_DAMAGE(damage_code)  (-VARIABLE_DRAIN_DAMAGE_CODE + damage_code)
 
+#define IS_COMBAT_ENTHRALLED_SHAMAN(ch) (GET_TRADITION(ch) == TRAD_SHAMANIC && (GET_TOTEM(ch) == TOTEM_BOAR || GET_TOTEM(ch) == TOTEM_POLECAT || GET_TOTEM(ch) == TOTEM_GATOR      \
+                                                                                || GET_TOTEM(ch) == TOTEM_MOUNTAIN || GET_TOTEM(ch) == TOTEM_DOG))
+
 #endif

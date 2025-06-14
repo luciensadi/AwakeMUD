@@ -1048,6 +1048,11 @@ int perform_move(struct char_data *ch, int dir, int extra, struct char_data *vic
 
   if (GET_POS(ch) >= POS_FIGHTING && FIGHTING(ch)) {
     WAIT_STATE(ch, PULSE_VIOLENCE * 2);
+
+    // Some totems can't withdraw from combat.
+    FALSE_CASE(IS_COMBAT_ENTHRALLED_SHAMAN(ch) && success_test(GET_WIL(ch), 6, ch, "shaman conflict withdraw test", NULL) <= 0,
+               "You fail to fight off your baser instincts, instead committing to the fight once more.");
+
     struct char_data *blocker = find_a_character_that_blocks_fleeing_for_ch(ch);
     if (!blocker
         && (CAN_GO(ch, dir)

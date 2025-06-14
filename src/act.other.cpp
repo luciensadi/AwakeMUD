@@ -4591,6 +4591,12 @@ ACMD(do_cpool)
   }
 
   send_to_char(ch, "Pools set as: Ranged Dodge: %d, Damage Soak: %d, Offense: %d\r\n", GET_DODGE(ch), GET_BODY_POOL(ch), GET_OFFENSE(ch));
+
+  // If they're in combat, add a delay to lessen the pool-shoot-pool cheese strat.
+  if (FIGHTING(ch) || FIGHTING_VEH(ch)) {
+    send_to_char(ch, "You shift your stance, timing it out to avoid creating an opening.\r\n");
+    WAIT_STATE(ch, 3);
+  }
 }
 
 ACMD(do_spool)

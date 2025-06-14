@@ -23,6 +23,9 @@
 
 #define POWER(name) void (name)(struct char_data *ch, struct char_data *spirit, struct spirit_data *spiritdata, char *arg)
 #define FAILED_CAST "You fail to bind the mana to your will.\r\n"
+#define CH_IN_SUNLIGHT(ch) (get_ch_in_room(ch) && !ch->in_veh && (time_info.hours >= 7 && time_info.hours <= 19) && !ROOM_FLAGGED(get_ch_in_room(ch), ROOM_INDOORS) && weather_info.sky == SKY_CLOUDLESS)
+#define SPELL_IS_TRANSFORMATION_MANIPULATION(spell) (spell == SPELL_ARMOR || spell == SPELL_PHYSICALBARRIER || spell == SPELL_ASTRALBARRIER || spell == SPELL_ICESHEET || spell == SPELL_IGNITE || spell == SPELL_LIGHT || spell == SPELL_SHADOW)
+#define SPELL_IS_CONTROL_MANIPULATION(spell) (FALSE /* Control Actions, Emotion, Thoughts; Influence -- none implemented */)
 
 //  set_fighting(ch, vict); set_fighting(vict, ch);
 #define SET_WAIT_STATE_AND_COMBAT_STATUS_AFTER_OFFENSIVE_SPELLCAST {WAIT_STATE(ch, (int) (OFFENSIVE_SPELL_WAIT_STATE_TIME));}
@@ -225,6 +228,98 @@ void end_sustained_spell(struct char_data *ch, struct sustain_data *sust)
   }
 }
 
+struct totem_bonus_t {
+  int casting_skill_mods[NUM_SPELL_CATEGORY_TYPES + 1]; // this is 1-indexed, so we max out at 1 + number
+  int conjuring_skill_mods[NUM_SPIRITS];
+};
+
+const struct totem_bonus_t totem_bonuses[NUM_TOTEMS] = {
+//          na CO DE HE IL MA    HE CI FI FO DE MO RI SE PR MI ST WI LA SW
+/*  0 */ { { 0, 0, 0, 0, 0, 0}, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },  /* UNDEFINED */
+/*  1 */ { { 0, 0, 0, 2, 0, 0}, { 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },  /* Bear */
+/*  2 */ { { 0, 0, 0, 2,-1, 0}, { 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0} },  /* Buffalo */
+/*  3 */ { { 0, 0, 0, 0, 2, 0}, { 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },  /* Cat */
+/*  4 */ { { 0, 0, 0, 0, 0, 0}, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },  /* Coyote */
+/*  5 */ { { 0, 0, 2, 0, 0, 0}, { 2, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },  /* Dog */
+/*  6 */ { { 0,-1, 2, 0, 0, 0}, { 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0} },  /* Dolphin */
+/*  7 */ { { 0, 0, 2, 0, 0, 0}, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 0, 0} },  /* Eagle */
+/*  8 */ { { 0, 2, 0, 0,-1, 0}, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },  /* Gator */
+/*  9 */ { { 0, 2, 0,-1, 0, 0}, { 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0} },  /* Lion */
+/* 10 */ { { 0,-2, 2, 2, 0, 0}, { 2, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },  /* Mouse */
+//          na CO DE HE IL MA    HE CI FI FO DE MO RI SE PR MI ST WI LA SW
+/* 11 */ { { 0, 0, 0, 0, 0, 0}, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },  /* Owl */
+/* 12 */ { { 0,-1, 0, 0, 0, 2}, { 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },  /* Raccoon */
+/* 13 */ { {-1, 0, 2, 0, 2, 0}, { 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },  /* Rat */
+/* 14 */ { { 0, 0, 0, 0, 0, 2}, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 0, 0} },  /* Raven */
+/* 15 */ { { 0, 2, 2, 0, 0, 0}, { 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0} },  /* Shark */
+/* 16 */ { { 0, 0, 2, 2, 2, 0}, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },  /* Snake */
+/* 17 */ { { 0, 2, 2, 0, 0, 0}, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },  /* Wolf */
+/* 18 */ { { 0, 2, 0, 0, 0, 0}, { 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },  /* Badger */
+/* 19 */ { { 0, 0, 2, 0, 0, 2}, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0} },  /* Bat */
+/* 20 */ { { 0, 2, 0, 0,-1, 0}, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },  /* Boar */
+//          na CO DE HE IL MA    HE CI FI FO DE MO RI SE PR MI ST WI LA SW
+/* 21 */ { { 0, 1, 1, 2, 0, 0}, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },  /* Bull */
+/* 22 */ { { 0, 2, 0,-1, 0, 0}, { 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0} },  /* Cheetah */
+/* 23 */ { { 0, 2, 0, 0, 2, 0}, { 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },  /* Cobra */
+/* 24 */ { { 0, 0, 0, 0,-1, 0}, { 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0} },  /* Crab */
+/* 25 */ { { 0, 2, 0, 0, 1, 0}, { 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0} },  /* Crocodile */
+/* 26 */ { {0,-99, 1, 2, 0, 0}, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0} },  /* Dove */
+/* 27 */ { { 0,-2, 0, 1, 0, 0}, { 0, 0, 0, 2, 2, 2, 0, 0, 2, 0, 0, 0, 0, 0} },  /* Elk */
+/* 28 */ { { 0,-1, 2, 0, 0, 0}, { 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0, 0, 2, 2} },  /* Fish */
+/* 29 */ { { 0,-1, 0, 0, 2, 0}, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },  /* Fox */
+/* 30 */ { { 0,-1, 0, 0, 0, 0}, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },  /* Gecko - special spells, see switch */
+//          na CO DE HE IL MA    HE CI FI FO DE MO RI SE PR MI ST WI LA SW
+/* 31 */ { { 0, 1, 2, 0, 0, 0}, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },  /* Goose */
+/* 32 */ { { 0, 0, 0, 2, 0, 0}, { 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0} },  /* Horse */
+/* 33 */ { { 0, 2, 0,-1, 0, 0}, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },  /* Hyena */
+/* 34 */ { {-1, 0, 2, 0, 2, 0}, { 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0} },  /* Jackal */
+/* 35 */ { { 0, 0, 2,-1, 0, 0}, { 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },  /* Jaguar */
+/* 36 */ { { 0, 2, 0, 2, 0, 0}, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },  /* Leopard */
+/* 37 */ { { 0, 0, 0, 2, 0, 0}, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },  /* Lizard */
+/* 38 */ { { 0,-1, 0, 0, 0, 2}, { 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },  /* Monkey */
+/* 39 */ { { 0,-1, 0, 0, 2, 0}, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },  /* Otter */
+/* 40 */ { { 0, 0, 0, 0, 2, 0}, { 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },  /* Parrot */
+//          na CO DE HE IL MA    HE CI FI FO DE MO RI SE PR MI ST WI LA SW
+/* 41 */ { { 0, 1, 0,-1, 0, 0}, { 0, 0, 0, 2, 2, 2, 0, 0, 2, 0, 0, 0, 0, 0} },  /* Polecat - special spells, see switch */
+/* 42 */ { { 0,-2, 2, 0, 1, 0}, { 0, 0, 0, 2, 2, 2, 0, 0, 2, 0, 0, 0, 0, 0} },  /* Prairie dog */
+/* 43 */ { { 0, 0, 0, 0, 2, 0}, { 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0} },  /* Puma */
+/* 44 */ { { 0, 0, 0, 2, 0, 0}, { 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },  /* Python */
+/* 45 */ { { 0, 2, 0, 0, 2, 0}, {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1} },  /* Scorpion */
+/* 46 */ { { 0, 0, 0, 0, 2, 0}, { 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1} },  /* Spider */
+/* 47 */ { { 0, 0, 0, 2, 2,-1}, { 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },  /* Stag */
+/* 48 */ { { 0,-2, 0, 0, 2, 0}, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },  /* Turtle */
+/* 49 */ { { 0, 2, 0, 0,-1, 0}, { 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0} },  /* Whale */
+/* 50 */ { { 0, 2, 2, 2, 0, 0}, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },  /* Sun */
+//          na CO DE HE IL MA    HE CI FI FO DE MO RI SE PR MI ST WI LA SW
+/* 51 */ { { 0, 0, 0, 0, 2, 0}, { 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0, 0, 2, 2} },  /* Lover */
+/* 52 */ { { 0, 0, 0, 0, 2, 0}, { 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },  /* Seductress */
+/* 53 */ { { 0, 0, 0, 0, 2, 0}, { 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0, 0, 2, 2} },  /* Siren */
+/* 54 */ { { 0, 0, 0, 2, 0, 0}, { 2, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },  /* Oak */
+/* 55 */ { { 0,-1, 2, 0, 2, 0}, { 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0} },  /* Moon */
+/* 56 */ { { 0, 0, 0, 0,-1, 2}, { 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0} },  /* Mountain */
+/* 57 */ { { 0, 0, 0, 2, 0, 0}, { 2, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0} },  /* Sea */
+/* 58 */ { { 0,-1, 0, 2, 0, 0}, { 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0} },  /* Stream */
+/* 59 */ { { 0, 0, 2, 0, 0, 0}, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 0, 0} },  /* Wind */
+/* 60 */ { { 0, 2, 0, 0, 0, 2}, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },  /* Adversary */
+//          na CO DE HE IL MA    HE CI FI FO DE MO RI SE PR MI ST WI LA SW
+/* 61 */ { { 0, 0, 0, 0, 2, 0}, { 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },  /* Bacchus */
+/* 62 */ { { 0,-1, 0, 0, 0, 0}, { 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },  /* Creator */
+/* 63 */ { { 0, 0, 0, 2, 0, 0}, { 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },  /* Dark King */
+/* 64 */ { { 0, 3,-1, 0,-1, 0}, { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },  /* Dragonslayer */
+/* 65 */ { { 0, 0, 2, 0,-1, 2}, { 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },  /* Fire-Bringer */
+/* 66 */ { { 0, 2, 0, 0, 0, 0}, { 0, 0, 0, 2, 2, 2, 0, 0, 2, 0, 0, 0, 0, 0} },  /* Horned Man */
+/* 67 */ { { 0,-1, 0, 0, 0, 2}, { 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0, 0, 2, 2} },  /* Sea King */
+/* 68 */ { { 0, 0, 2, 0, 0, 2}, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0} },  /* Sky Father */
+/* 69 */ { { 0, 0, 2, 0, 2, 0}, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0} },  /* Wild Huntsman */
+/* 70 */ { { 0, 2, 2, 0,-1, 0}, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },  /* Wise Warrior */
+//          na CO DE HE IL MA    HE CI FI FO DE MO RI SE PR MI ST WI LA SW
+/* 71 */ { { 0, 0, 0, 2, 0, 0}, { 0, 0, 2, 2, 0, 0, 2, 2, 0, 0, 0, 0, 2, 2} },  /* Great Mother */
+/* 72 */ { { 0, 0, 0, 0, 0, 0}, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },  /* Moon Maiden */
+/* 73 */ { { 0, 0, 0, 0, 0, 0}, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },  /* Trickster */
+/* 74 */ { { 0, 0, 0, 2, 0, 0}, { 0, 0, 2, 2, 0, 0, 2, 2, 0, 0, 0, 0, 2, 2} },  /* Father Tree */
+/* 75 */ { { 0, 0, 2, 0, 0, 2}, { 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0} },  /* Dragon */
+};
+
 void totem_bonus(struct char_data *ch, int action, int type, int &target, int &skill)
 {
   extern struct time_info_data time_info;
@@ -239,13 +334,11 @@ void totem_bonus(struct char_data *ch, int action, int type, int &target, int &s
   } else if (GET_TOTEM(ch) == TOTEM_SNAKE && CH_IN_COMBAT(ch)) {
     skill--;
   } else if (GET_TOTEM(ch) == TOTEM_BAT || GET_TOTEM(ch) == TOTEM_PUMA) {
-    if (time_info.hours > 6 && time_info.hours < 19 && OUTSIDE(ch))
+    if (CH_IN_SUNLIGHT(ch) || (GET_TOTEM(ch) == TOTEM_PUMA && get_ch_in_room(ch)->crowd > 4))
       target += 2;
   } else if (GET_TOTEM(ch) == TOTEM_WIND) {
-    if (ROOM_FLAGGED(get_ch_in_room(ch), ROOM_INDOORS) || SECT(get_ch_in_room(ch)) == SPIRIT_HEARTH)
+    if (ch->in_veh || ROOM_FLAGGED(get_ch_in_room(ch), ROOM_INDOORS) || SECT(get_ch_in_room(ch)) == SPIRIT_HEARTH)
       target += 2;
-  } else if (GET_TOTEM(ch) == TOTEM_PUMA && get_ch_in_room(ch)->crowd > 4) {
-    target += 2;
   } else if (GET_TOTEM(ch) == TOTEM_SCORPION && (time_info.hours > 6 && time_info.hours < 19)) {
     target += 2;
   } else if (GET_TOTEM(ch) == TOTEM_SPIDER && OUTSIDE(ch)) {
@@ -254,376 +347,45 @@ void totem_bonus(struct char_data *ch, int action, int type, int &target, int &s
 
   if (action == SPELLCASTING)
   {
-    type = spells[type].category;
+    int spell = type;
+    int category = spells[spell].category;
+    skill += totem_bonuses[GET_TOTEM(ch)].casting_skill_mods[spell];
+
     switch (GET_TOTEM(ch)) {
-      case TOTEM_PRAIRIEDOG:
-        if (type == DETECTION)
-          skill += 2;
-        else if (type == ILLUSION)
-          skill++;
-        else if (type == COMBAT)
-          skill -= 2;
-        break;
-      case TOTEM_SPIDER:
-        if (type == ILLUSION)
-          skill += 2;
-        break;
-      case TOTEM_LEOPARD:
-        if (type == COMBAT || type == HEALTH)
-          skill += 2;
-        break;
-      case TOTEM_BEAR:
-      case TOTEM_HORSE:
-      case TOTEM_LIZARD:
-      case TOTEM_PYTHON:
-       if (type == HEALTH)
-          skill += 2;
-        break;
-      case TOTEM_ELK:
-        if (type == HEALTH)
-          skill++;
-        else if (type == COMBAT)
-          skill -= 2;
-        break;
-      case TOTEM_TURTLE:
-        if (type == ILLUSION)
-          skill += 2;
-        else if (type == COMBAT)
-          skill -= 2;
-        break;
-      case TOTEM_BUFFALO:
-        if (type == HEALTH)
-          skill += 2;
-        else if (type == ILLUSION)
-          skill--;
-        break;
-      case TOTEM_PUMA:
-      case TOTEM_CAT:
-      case TOTEM_PARROT:
-        if (type == ILLUSION)
-          skill += 2;
-        break;
-      case TOTEM_DOG:
-      case TOTEM_EAGLE:
-        if (type == DETECTION)
-          skill += 2;
-        break;
-      case TOTEM_DOLPHIN:
-      case TOTEM_FISH:
-        if (type == DETECTION)
-          skill += 2;
-        else if (type == COMBAT)
-          skill--;
-        break;
-      case TOTEM_GATOR:
-        if (type == COMBAT || type == DETECTION)
-          skill += 2;
-        else if (type == ILLUSION)
-          skill--;
-        break;
-      case TOTEM_LION:
-      case TOTEM_HYENA:
-        if (type == COMBAT)
-          skill += 2;
-        else if (type == HEALTH)
-          skill--;
-        break;
-      case TOTEM_MOUSE:
-        if (type == DETECTION || type == HEALTH)
-          skill += 2;
-        else if (type == COMBAT)
-          skill -= 2;
-        break;
-      case TOTEM_RACCOON:
-      case TOTEM_MONKEY:
-        if (type == MANIPULATION)
-          skill += 2;
-        else if (type == COMBAT)
-          skill--;
-        break;
-      case TOTEM_RAT:
-      case TOTEM_JACKAL:
-        if (type == DETECTION || type == ILLUSION)
-          skill += 2;
-        else if (type == COMBAT)
-          skill--;
-        break;
-      case TOTEM_JAGUAR:
-        if (type == DETECTION)
-          skill += 2;
-        else if (type == HEALTH)
-          skill--;
-        break;
-      case TOTEM_RAVEN:
-        if (type == MANIPULATION)
-          skill += 2;
-        break;
-      case TOTEM_SHARK:
-      case TOTEM_WOLF:
-        if (type == COMBAT || type == DETECTION)
-          skill += 2;
-        break;
-      case TOTEM_SNAKE:
-        if (type == DETECTION || type == HEALTH || type == ILLUSION)
-          skill += 2;
-        break;
-      case TOTEM_CRAB:
-        if (type == ILLUSION)
-          skill--;
-        break;
-      case TOTEM_CROCODILE:
-        if (type == COMBAT)
-          skill += 2;
-        else if (type == ILLUSION)
-          skill++;
-        break;
-      case TOTEM_BOAR:
-      case TOTEM_WHALE:
-        if (type == ILLUSION)
-          skill--;
-        break;
-      case TOTEM_BADGER:
-        if (type == COMBAT)
-          skill += 2;
-        break;
-      case TOTEM_CHEETAH:
-        if (type == COMBAT)
-          skill += 2;
-        else if (type == HEALTH)
-          skill--;
-        break;
-      case TOTEM_BAT:
-        if (type == DETECTION || type == MANIPULATION)
-          skill += 2;
-        break;
-      case TOTEM_BULL:
-        if (type == HEALTH)
-          skill +=2;
-        else if (type == COMBAT || type == DETECTION)
-          skill++;
-        break;
-      case TOTEM_SCORPION:
-      case TOTEM_COBRA:
-        if (type == COMBAT || type == ILLUSION)
-          skill += 2;
-        break;
-      case TOTEM_DOVE:
-        if (type == HEALTH)
-          skill += 2;
-        else if (type == DETECTION)
-          skill++;
-        break;
-      case TOTEM_GOOSE:
-        if (type == DETECTION)
-          skill += 2;
-        else if (type == COMBAT)
-          skill++;
-        break;
-      case TOTEM_FOX:
-      case TOTEM_OTTER:
-        if (type == ILLUSION)
-          skill += 2;
-        else if (type == COMBAT)
-          skill--;
-        break;
       case TOTEM_GECKO:
-        if (type == GET_TOTEMSPIRIT(ch))
+        if (category == GET_TOTEMSPIRIT(ch))
           skill += 2;
-        else if (type == COMBAT)
-          skill--;
         break;
       case TOTEM_POLECAT:
-        if (type == COMBAT) {
+        if (category == COMBAT && (time_info.hours < 6 || time_info.hours > 19))
           skill++;
-          if (time_info.hours < 6 || time_info.hours > 19)
-            skill++;
-        } else if (type == HEALTH)
-          skill--;
-        break;
-      case TOTEM_STAG:
-        if (type == HEALTH || type == ILLUSION)
-          skill += 2;
-        else if (type == MANIPULATION)
-          skill--;
         break;
       case TOTEM_MOON:
-        if (type == ILLUSION || type == MANIPULATION || type == DETECTION)
-          skill += 2;
-        else if (type == COMBAT)
-          skill -= 1;
-        break;
-      case TOTEM_MOUNTAIN:
-        if (type == MANIPULATION)
-          skill += 2;
-        else if (type == ILLUSION)
-          skill -= 1;
-        break;
-      case TOTEM_OAK:
-        if (type == HEALTH)
-          skill += 2;
-        break;
       case TOTEM_SEA:
-        if (type == HEALTH || type == MANIPULATION)
+      case TOTEM_SIREN:
+        // Bonus to manipulation applies only to transformation manips.
+        if (category == MANIPULATION && SPELL_IS_TRANSFORMATION_MANIPULATION(spell))
           skill += 2;
-        break;
-      case TOTEM_STREAM:
-        if (type == HEALTH)
-          skill += 2;
-        else if (type == COMBAT)
-          skill -= 1;
-        break;
-      case TOTEM_SUN:
-        if (type == COMBAT || type == DETECTION || type == HEALTH)
-          skill += 2;
-        break;
-      case TOTEM_WIND:
-        if (type == DETECTION)
-          skill += 2;
-        break;
-      case TOTEM_ADVERSARY:
-        if (type == COMBAT || type == MANIPULATION)
-          skill += 2;
-        break;
-      case TOTEM_BACCHUS:
-        if (type == ILLUSION)
-          skill += 2;
-        break;
-      case TOTEM_CREATOR:
-        if (type == COMBAT)
-          skill -= 1;
-        break;
-      case TOTEM_DARKKING:
-        if (type == HEALTH)
-          skill += 2;
-        break;
-      case TOTEM_DRAGONSLAYER:
-        if (type == COMBAT)
-          skill += 3;
-        else if (type == ILLUSION || type == DETECTION)
-          skill -= 1;
-        break;
-      case TOTEM_FIREBRINGER:
-        if (type == MANIPULATION || type == DETECTION)
-          skill += 2;
-        else if (type == ILLUSION)
-          skill -= 1;
-        break;
-      case TOTEM_GREATMOTHER:
-      case TOTEM_FATHERTREE:
-        if (type == HEALTH)
-          skill += 2;
-        break;
-      case TOTEM_HORNEDMAN:
-        if (type == COMBAT)
-          skill += 2;
+        // TN penalty when in combat with more than one foe. Should technically include people shooting from around you too.
+        if (ch->in_room) {
+          int fighting_count = 0;
+          for (struct char_data *tmp = ch->in_room->people; tmp; tmp = tmp->next_in_room) {
+            if (FIGHTING(tmp) == ch && ++fighting_count >= 2) {
+              target++;
+              break;
+            }
+          }
+        }
         break;
       case TOTEM_LOVER:
-        if (type == ILLUSION || type == MANIPULATION)
-          skill += 2;
-        break;
-      case TOTEM_SEAKING:
-        if (type == MANIPULATION)
-          skill += 2;
-        else if (type == COMBAT)
-          skill -= 1;
-        break;
       case TOTEM_SEDUCTRESS:
-        if (type == ILLUSION || type == MANIPULATION)
-          skill += 2;
-        break;
-      case TOTEM_SIREN:
-        if (type == ILLUSION || type == MANIPULATION)
-          skill += 2;
-        break;
-      case TOTEM_SKYFATHER:
-        if (type == DETECTION || type == MANIPULATION)
-          skill += 2;
-        break;
-      case TOTEM_WILDHUNTSMAN:
-        if (type == ILLUSION || type == DETECTION)
-          skill += 2;
-        break;
-      case TOTEM_WISEWARRIOR:
-        if (type == COMBAT || type == DETECTION)
-          skill += 2;
-        else if (type == ILLUSION)
-          skill -= 1;
-        break;
-      case TOTEM_DRAGON:
-        if (type == DETECTION || type == MANIPULATION)
+        if (category == MANIPULATION && SPELL_IS_CONTROL_MANIPULATION(spell))
           skill += 2;
         break;
     }
   } else if (action == CONJURING)
   {
     switch (GET_TOTEM(ch)) {
-    case TOTEM_SCORPION:
-      skill--;
-      break;
-    case TOTEM_SPIDER:
-      skill++;
-      break;
-    case TOTEM_PRAIRIEDOG:
-    case TOTEM_ELK:
-    case TOTEM_POLECAT:
-      if (type == SPIRIT_FOREST || type == SPIRIT_DESERT || type == SPIRIT_MOUNTAIN || type == SPIRIT_PRAIRIE)
-        skill += 2;
-      break;
-    case TOTEM_STAG:
-    case TOTEM_PYTHON:
-    case TOTEM_BEAR:
-    case TOTEM_BADGER:
-    case TOTEM_JAGUAR:
-    case TOTEM_PARROT:
-      if (type == SPIRIT_FOREST)
-        skill += 2;
-      break;
-    case TOTEM_COBRA:
-      if (type == SPIRIT_FOREST)
-        skill++;
-      break;
-    case TOTEM_JACKAL:
-    case TOTEM_HORSE:
-    case TOTEM_BUFFALO:
-    case TOTEM_LION:
-    case TOTEM_CHEETAH:
-      if (type == SPIRIT_PRAIRIE)
-        skill += 2;
-      break;
-    case TOTEM_CAT:
-    case TOTEM_RAT:
-    case TOTEM_RACCOON:
-      if (type == SPIRIT_CITY)
-        skill += 2;
-      break;
-    case TOTEM_DOG:
-    case TOTEM_MOUSE:
-      if (type == SPIRIT_FIELD || type == SPIRIT_HEARTH)
-        skill += 2;
-      break;
-    case TOTEM_MONKEY:
-      if (type == SPIRIT_FIELD || type == SPIRIT_HEARTH || type == SPIRIT_CITY)
-        skill += 2;
-      break;
-    case TOTEM_WHALE:
-    case TOTEM_DOLPHIN:
-    case TOTEM_SHARK:
-    case TOTEM_CRAB:
-    case TOTEM_CROCODILE:
-      if (type == SPIRIT_SEA)
-        skill += 2;
-      break;
-    case TOTEM_EAGLE:
-    case TOTEM_RAVEN:
-    case TOTEM_BAT:
-    case TOTEM_DOVE:
-      if (type == SPIRIT_MIST || type == SPIRIT_STORM || type == SPIRIT_WIND)
-        skill += 2;
-      break;
-    case TOTEM_PUMA:
-      if (type == SPIRIT_MOUNTAIN)
-        skill += 2;
-      break;
     case TOTEM_LEOPARD:
       if (time_info.hours < 6 || time_info.hours > 19)
         skill += 2;
@@ -639,96 +401,16 @@ void totem_bonus(struct char_data *ch, int action, int type, int &target, int &s
       if (GET_TOTEMSPIRIT(ch) == type)
         skill += 2;
       break;
-    case TOTEM_MOON:
-      if (type == SPIRIT_RIVER || type == SPIRIT_SEA || type == SPIRIT_LAKE)
-        skill += 1;
-      break;
-    case TOTEM_MOUNTAIN:
-      if (type == SPIRIT_MOUNTAIN)
-        skill += 2;
-      break;
-    case TOTEM_OAK:
-      if (type == SPIRIT_FOREST || type == SPIRIT_HEARTH)
-        skill += 2;
-      break;
-    case TOTEM_SEA:
-      if (type == SPIRIT_SEA || type == SPIRIT_HEARTH)
-        skill += 2;
-      break;
-    case TOTEM_STREAM:
-      if (type == SPIRIT_RIVER)
-        skill += 2;
-      break;
     case TOTEM_SUN:
-      if (type == SPIRIT_FOREST || type == SPIRIT_DESERT || type == SPIRIT_MOUNTAIN || type == SPIRIT_PRAIRIE ||
-	      type == SPIRIT_MIST || type == SPIRIT_STORM || type == SPIRIT_RIVER || type == SPIRIT_SEA ||
-          type == SPIRIT_WIND || type == SPIRIT_LAKE || type == SPIRIT_SWAMP || type == SPIRIT_CITY ||
-          type == SPIRIT_FIELD)
-        skill += 2;
-      if (time_info.hours < 6 || time_info.hours > 19)
-        skill -= 2;
-      break;
-    case TOTEM_WIND:
-      if (type == SPIRIT_MIST || type == SPIRIT_STORM || type == SPIRIT_WIND)
-        skill += 2;
-      break;
-    case TOTEM_BACCHUS:
-      if (type == SPIRIT_CITY || type == SPIRIT_FIELD || type == SPIRIT_HEARTH)
-        skill += 2;
-      break;
-    case TOTEM_CREATOR:
-      if (type == SPIRIT_CITY)
-        skill += 2;
-      break;
-    case TOTEM_DARKKING:
-      if (type == SPIRIT_CITY || type == SPIRIT_FIELD || type == SPIRIT_HEARTH)
-        skill += 2;
-      break;
-    case TOTEM_DRAGONSLAYER:
-      if (type == SPIRIT_HEARTH)
-        skill += 1;
-      break;
-    case TOTEM_FIREBRINGER:
-      if (type == SPIRIT_CITY || type == SPIRIT_FIELD || type == SPIRIT_HEARTH)
-        skill += 2;
-      break;
-    case TOTEM_GREATMOTHER:
-    case TOTEM_FATHERTREE:
-      if (type == SPIRIT_FIELD || type == SPIRIT_FOREST || type == SPIRIT_SEA || type == SPIRIT_LAKE ||
-          type == SPIRIT_RIVER || type == SPIRIT_SWAMP)
-        skill += 2;
-      break;
-    case TOTEM_HORNEDMAN:
-      if (type == SPIRIT_DESERT || type == SPIRIT_FOREST || type == SPIRIT_MOUNTAIN || type == SPIRIT_PRAIRIE)
-        skill += 2;
-      break;
-    case TOTEM_LOVER:
-      if (type == SPIRIT_SEA || type == SPIRIT_LAKE || type == SPIRIT_RIVER || type == SPIRIT_SWAMP)
-        skill += 2;
-      break;
-    case TOTEM_SEAKING:
-      if (type == SPIRIT_SEA || type == SPIRIT_LAKE || type == SPIRIT_RIVER || type == SPIRIT_SWAMP)
-        skill += 2;
-      break;
-    case TOTEM_SEDUCTRESS:
-      if (type == SPIRIT_CITY || type == SPIRIT_FIELD || type == SPIRIT_HEARTH)
-        skill += 2;
-      break;
-    case TOTEM_SIREN:
-      if (type == SPIRIT_SEA || type == SPIRIT_LAKE || type == SPIRIT_RIVER || type == SPIRIT_SWAMP)
-        skill += 2;
-      break;
-    case TOTEM_SKYFATHER:
-      if (type == SPIRIT_STORM)
-        skill += 2;
-      break;
-    case TOTEM_WILDHUNTSMAN:
-      if (type == SPIRIT_STORM)
-        skill += 2;
-      break;
-    case TOTEM_DRAGON:
-      if (type == SPIRIT_MOUNTAIN)
-        skill += 1;
+      {
+        if (CH_IN_SUNLIGHT(ch)) {
+          skill += 2;
+        }
+        // +2 TN for conjuring at night.
+        else if (time_info.hours < 6 || time_info.hours > 19) {
+          target += 2;
+        }
+      }
       break;
     }
   }
@@ -1476,7 +1158,7 @@ void cast_combat_spell(struct char_data *ch, int spell, int force, char *arg)
   for (basedamage = 0; *wound_name[basedamage] != '\n'; basedamage++)
     if (is_abbrev(buf, wound_name[basedamage]))
       break;
-  if (basedamage > 4 || basedamage == 0) {
+  if (basedamage > DEADLY || basedamage == 0) {
     send_to_char(ch, "'%s' is not a valid damage level, please choose between Light, Moderate, Serious and Deadly.\r\n", capitalize(buf));
     return;
   }
@@ -3221,7 +2903,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
         for (basedamage = 0; *wound_name[basedamage] != '\n'; basedamage++)
           if (is_abbrev(buf, wound_name[basedamage]))
             break;
-        if (basedamage > 4 || basedamage == 0) {
+        if (basedamage > DEADLY || basedamage == 0) {
           send_to_char(ch, "'%s' is not a valid damage level, please choose between Light, Moderate, Serious and Deadly.\r\n", capitalize(buf));
           return;
         }
@@ -3837,7 +3519,7 @@ ACMD(do_bond)
       send_to_char("Mundanes can't bond weapon foci.\r\n", ch);
       return;
     }
-    if (GET_WEAPON_FOCUS_BONDED_BY(obj) > 0 && GET_WEAPON_FOCUS_BOND_STATUS(obj) == 0) {
+    if (GET_WEAPON_FOCUS_BONDED_BY(obj) > 0 && !GET_WEAPON_FOCUS_BOND_STATUS(obj)) {
       send_to_char(ch, "%s is already bonded to %s.",
                    capitalize(GET_OBJ_NAME(obj)),
                    GET_WEAPON_FOCUS_BONDED_BY(obj) == GET_IDNUM(ch) ? "you" : "someone else");
@@ -4569,7 +4251,7 @@ ACMD(do_learn)
     send_to_char(ch, "You don't understand the formula written on %s-- seems like it's for another tradition of magic.\r\n", GET_OBJ_NAME(obj));
     return;
   }
-  if (!*buf2 || atoi(buf1) == 0)
+  if (!*buf2 || !atoi(buf1))
     force = GET_SPELLFORMULA_FORCE(obj);
   else
     force = MIN(GET_SPELLFORMULA_FORCE(obj), atoi(buf1));
@@ -6252,7 +5934,7 @@ ACMD(do_heal)
     for (; *wound_name[basedamage] != '\n'; basedamage++)
       if (is_abbrev(buf, wound_name[basedamage]))
         break;
-    if (basedamage > 4 || basedamage == 0) {
+    if (basedamage > DEADLY || basedamage == 0) {
       send_to_char(ch, "'%s' is not a valid damage level, please choose between Light, Moderate, Serious and Deadly.\r\n", capitalize(buf));
       return;
     }
@@ -7015,7 +6697,7 @@ void set_casting_pools(struct char_data *ch, int casting, int drain, int spell_d
   total -= SET_POOL_INFO(casting_pool, GET_CASTING(ch), casting);
   total -= SET_POOL_INFO(drain_pool, GET_DRAIN(ch), drain);
   total -= SET_POOL_INFO(spell_defense_pool, GET_SDEFENSE(ch), spell_defense);
-  if (GET_METAMAGIC(ch, META_REFLECTING) == 2) {
+  if (GET_METAMAGIC(ch, META_REFLECTING) == METAMAGIC_STAGE_LEARNED) {
     total -= SET_POOL_INFO(reflection_pool, GET_REFLECT(ch), reflection);
   } else {
     ch->aff_abils.reflection_pool = GET_REFLECT(ch) = 0;
@@ -7038,6 +6720,12 @@ void set_casting_pools(struct char_data *ch, int casting, int drain, int spell_d
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " Reflect-%d", GET_REFLECT(ch));
     strlcat(buf, "\r\n", sizeof(buf));
     send_to_char(buf, ch); 
+  }
+
+  // If they're in combat, add a delay to lessen the pool-cast-pool cheese strat.
+  if (FIGHTING(ch) || FIGHTING_VEH(ch)) {
+    send_to_char(ch, "You shift your concentration, timing it out to avoid creating an opening.\r\n");
+    WAIT_STATE(ch, 3);
   }
 }
 
