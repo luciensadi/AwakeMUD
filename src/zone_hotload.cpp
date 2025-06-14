@@ -210,7 +210,7 @@ void _offload_zone(struct zone_data *zone)
   // be hotloaded on entry.
   zone->offloaded_at = time(0);
 
-  mudlog_vfprintf(NULL, LOG_ZONELOG, "Offloaded zone %ld (%s) at epoch %ld.", zone->number, zone->name, zone->offloaded_at);
+  mudlog_vfprintf(NULL, LOG_ZONELOG, "Offloaded zone %d (%s) at epoch %ld.", zone->number, zone->name, zone->offloaded_at);
 }
 
 /* Call this from the main loop on a timer. It iterates over the list of zones

@@ -52,7 +52,7 @@ STOWED_MAP_T *get_stowed_item_list(idnum_t idnum, STOWED_MAP_T *map_to_populate)
   MYSQL_ROW row;
   
   if (!(res = mysql_use_result(mysql))) {
-    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: failed to use_result when querying stowage for %s in list mode", idnum);
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: failed to use_result when querying stowage for %ld in list mode", idnum);
     return NULL;
   }
 
