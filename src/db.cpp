@@ -4530,44 +4530,20 @@ struct obj_data *read_object(int nr, int type, int load_origin, int pc_load_orig
   obj->load_time = time(0);
   obj->pc_load_origin = pc_load_origin;
   obj->pc_load_idnum = pc_load_idnum;
-  if (GET_OBJ_TYPE(obj) == ITEM_PHONE)
-  {
-    switch (GET_OBJ_VAL(obj, 0)) {
-    case 0:
+  if (GET_OBJ_TYPE(obj) == ITEM_PHONE || (GET_OBJ_TYPE(obj) == ITEM_CYBERWARE && GET_OBJ_VAL(obj, 0) == CYB_PHONE)) {
+    // We used to have phone numbers based on jurisdiction / issuing locale, but most people don't notice that and it caused birthday collisions.
+    // We now do a fully random phone number.
+    if (GET_OBJ_TYPE(obj) == ITEM_CYBERWARE) {
+      GET_OBJ_VAL(obj, 8) = 1102; // Don't know what this is, so we persist it.
+      GET_CYBERWARE_PHONE_NUMBER_PART_ONE(obj) = number(0, 9999);
+      GET_CYBERWARE_PHONE_NUMBER_PART_TWO(obj) = number(0, 9999);
+    } else {
       GET_OBJ_VAL(obj, 8) = 1102;
-      snprintf(buf, sizeof(buf), "%d206", number(0, 9));
-      break;
-    case 1:
-      GET_OBJ_VAL(obj, 8) = 1102;
-      snprintf(buf, sizeof(buf), "%d321", number(0, 9));
-      break;
-    case 2:
-      GET_OBJ_VAL(obj, 8) = 1103;
-      snprintf(buf, sizeof(buf), "%d503", number(0, 9));
-      break;
+      GET_ITEM_PHONE_NUMBER_PART_ONE(obj) = number(0, 9999);
+      GET_ITEM_PHONE_NUMBER_PART_TWO(obj) = number(0, 9999);
     }
-    GET_OBJ_VAL(obj, 0) = atoi(buf);
-    GET_OBJ_VAL(obj, 1) = number(0, 9999);
-  } else if (GET_OBJ_TYPE(obj) == ITEM_CYBERWARE && GET_OBJ_VAL(obj, 0) == CYB_PHONE)
-  {
-    switch (GET_OBJ_VAL(obj, 3)) {
-    case 0:
-      GET_OBJ_VAL(obj, 8) = 1102;
-      snprintf(buf, sizeof(buf), "%d206", number(0, 9));
-      break;
-    case 1:
-      GET_OBJ_VAL(obj, 8) = 1102;
-      snprintf(buf, sizeof(buf), "%d321", number(0, 9));
-      break;
-    case 2:
-      GET_OBJ_VAL(obj, 8) = 1103;
-      snprintf(buf, sizeof(buf), "%d503", number(0, 9));
-      break;
-    }
-    GET_OBJ_VAL(obj, 3) = atoi(buf);
-    GET_OBJ_VAL(obj, 6) = number(0, 9999);
   } else if (GET_OBJ_TYPE(obj) == ITEM_GUN_MAGAZINE) {
-    GET_OBJ_VAL(obj, 9) = GET_OBJ_VAL(obj, 0);
+    GET_MAGAZINE_AMMO_COUNT(obj) = GET_MAGAZINE_BONDED_MAXAMMO(obj);
   } else if (GET_OBJ_TYPE(obj) == ITEM_WEAPON)
     handle_weapon_attachments(obj);
 

@@ -1245,6 +1245,7 @@ bool perform_get_from_container(struct char_data *ch, struct obj_data *obj,
       }
       // Anything in an NPC corpse that can be stowed: stow it.
       else {
+#ifdef USE_HAMMERSPACE
         int ammo_weapontype = -1;
         int ammo_type = -1;
         // If it's a mob gun with 1 round, strip out the ammo before attempting to stow.
@@ -1282,12 +1283,10 @@ bool perform_get_from_container(struct char_data *ch, struct obj_data *obj,
             act(buf, FALSE, ch, NULL, cont, TO_CHAR);
             // We return at this point because the object was stowed.
             return TRUE;
-          } else {
-            act("You get $p from $P.", FALSE, ch, obj, cont, TO_CHAR);
           }
-        } else {
-          act("You get $p from $P.", FALSE, ch, obj, cont, TO_CHAR);
         }
+#endif
+        act("You get $p from $P.", FALSE, ch, obj, cont, TO_CHAR);
       }
     }
 

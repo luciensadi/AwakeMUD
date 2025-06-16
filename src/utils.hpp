@@ -1272,6 +1272,11 @@ bool is_weapon_focus_usable_by(struct obj_data *focus, struct char_data *ch);
 #define GET_CYBERWARE_RADIO_CRYPT(cyberware)      (GET_OBJ_VAL((cyberware), 7)) // Settable by player
 #define GET_CYBERWARE_SOULBOND(cyberware)         (GET_OBJ_VAL((cyberware), 11))
 // Cyberware phones use 6, 7, and 8 for... stuff?
+#define GET_CYBERWARE_PHONE_NUMBER_PART_ONE(cyberware) (GET_OBJ_VAL((cyberware), 3))
+#define GET_CYBERWARE_PHONE_NUMBER_PART_TWO(cyberware) (GET_OBJ_VAL((cyberware), 6))
+#define GET_CYBERWARE_PHONE_NUMBER_IS_ON(cyberware) (GET_OBJ_VAL((cyberware), 7))
+#define GET_CYBERWARE_PHONE_NUMBER_RINGER_IS_ON(cyberware) (GET_OBJ_VAL((cyberware), 8))
+
 #define GET_CYBERWARE_IS_DISABLED(cyberware)      (GET_OBJ_VAL((cyberware), 9))
 #define GET_CYBERWARE_MEMORY_FREE(cyberware)      (GET_CYBERWARE_MEMORY_MAX((cyberware)) - GET_CYBERWARE_MEMORY_USED((cyberware)))
 

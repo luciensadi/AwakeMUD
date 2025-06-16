@@ -2005,10 +2005,10 @@ ACMD(do_phone)
             "Switched: %s\r\n"
             "Ringing: %s\r\n",
             GET_OBJ_NAME(obj),
-            GET_OBJ_VAL(obj, (cyber ? 3 : 0)),
-            GET_OBJ_VAL(obj, (cyber ? 6 : 1)),
-            GET_OBJ_VAL(obj, (cyber ? 7 : 2)) ? "On" : "Off",
-            GET_OBJ_VAL(obj, (cyber ? 8 : 3)) ? "Off": "On"
+            cyber ? GET_CYBERWARE_PHONE_NUMBER_PART_ONE(obj) : GET_ITEM_PHONE_NUMBER_PART_ONE(obj),
+            cyber ? GET_CYBERWARE_PHONE_NUMBER_PART_TWO(obj) : GET_ITEM_PHONE_NUMBER_PART_TWO(obj),
+            (cyber ? GET_CYBERWARE_PHONE_NUMBER_IS_ON(obj) : GET_ITEM_PHONE_SWITCHED_ON(obj)) ? "On" : "Off",
+            (cyber ? GET_CYBERWARE_PHONE_NUMBER_RINGER_IS_ON(obj) : GET_ITEM_PHONE_RINGER_ON(obj)) ? "Off": "On"
     );
 
     if (phone && phone->dest) {

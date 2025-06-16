@@ -14,10 +14,8 @@
   pk: idnum + vnum together
 
 
-
-  todo: test
-
-  stretch: convert immediate DB calls to calls to memory
+  todo: add a qualifier / type column so that this table and logic can be used for more things, e.g. keyrings
+  alternatively, make identical tables with different names for these uses. Would probably be faster.
 */
 
 #include <mysql/mysql.h>
