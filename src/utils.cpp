@@ -8293,7 +8293,7 @@ const char *resolve_hostname_from_ip_str(const char *ip_str)
   time_t time_delta = time(0) - gethostbyaddr_timer;
   if (time_delta > THRESHOLD_IN_SECONDS_FOR_SLOWNS_AUTOMATIC_ACTIVATION)
   {
-    mudlog_vfprintf(NULL, LOG_SYSLOG, "^YThe resolution of host '%s' [%s] took too long at %ld second(s). Automatically engaging slow NS defense.^g", hbuf, buf2, time_delta);
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "^YThe resolution of host '%s' [%s] took too long at %ld second(s). Automatically engaging slow NS defense.^g", hbuf, ip_str, time_delta);
     nameserver_is_slow = TRUE;
   }
 
