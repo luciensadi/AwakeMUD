@@ -354,8 +354,10 @@ void SendGMCPCharVitals( struct char_data * ch )
   if (!ch || !ch->desc || !ch->desc->pProtocol->bGMCP) return;
   json j;
 
-  j["physical"] = GET_PHYSICAL(ch);
-  j["mental"] = GET_MENTAL(ch);
+  struct obj_data *editor = find_bioware(ch, BIO_PAINEDITOR);
+
+  j["physical"] = editor && GET_BIOWARE_IS_ACTIVATED(editor) ? GET_MAX_PHYSICAL(ch) : GET_PHYSICAL(ch);
+  j["mental"] = editor && GET_BIOWARE_IS_ACTIVATED(editor) ? GET_MAX_MENTAL(ch) : GET_MENTAL(ch);
   j["physical_max"] = GET_MAX_PHYSICAL(ch);
   j["mental_max"] = GET_MAX_MENTAL(ch);
   j["karma"] = GET_KARMA(ch);
@@ -365,17 +367,20 @@ void SendGMCPCharVitals( struct char_data * ch )
   j["armor"] = json::object();
   j["armor"]["ballistic"] = GET_BALLISTIC(ch);
   j["armor"]["impact"] = GET_IMPACT(ch);
-  if (get_ch_domain_str(ch, TRUE)) 
-    j["domain"] = get_ch_domain_str(ch, TRUE);
+
+  const char *domain_str = get_ch_domain_str(ch, TRUE);
+  if (domain_str && *domain_str) 
+    j["domain"] = domain_str;
 
   // Current Ammo Handler
-  if (GET_EQ(ch, WEAR_WIELD) && WEAPON_IS_GUN(GET_EQ(ch, WEAR_WIELD))) {
-    if (GET_EQ(ch, WEAR_WIELD)->contains) {
-      j["ammo"] = MIN(GET_OBJ_VAL(GET_EQ(ch, WEAR_WIELD), 5), GET_OBJ_VAL(GET_EQ(ch, WEAR_WIELD)->contains, 9));
+  struct obj_data *weapon = GET_EQ(ch, WEAR_WIELD);
+  if (weapon && GET_OBJ_TYPE(weapon) == ITEM_WEAPON && WEAPON_IS_GUN(weapon)) {
+    if (weapon->contains) {
+      j["ammo"] = MIN(GET_WEAPON_MAX_AMMO(weapon), GET_MAGAZINE_AMMO_COUNT(weapon->contains));
     } else {
       j["ammo"] = 0;
     }
-    j["max_ammo"] =  GET_OBJ_VAL(GET_EQ(ch, WEAR_WIELD), 5);
+    j["max_ammo"] =  GET_WEAPON_MAX_AMMO(weapon);
   } else {
     j["max_ammo"] = 0;
   }
