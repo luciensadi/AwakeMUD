@@ -703,6 +703,8 @@ int get_armor_penalty_grade(struct char_data *ch);
 #define GET_FOCI(ch)            ((ch)->char_specials.foci)
 #define GET_QUEST(ch)           ((ch)->desc && (ch)->desc->original ? (ch)->desc->original->player_specials->questnum : \
                                                                       (ch)->player_specials->questnum)
+#define GET_QUEST_STARTED(ch)   ((ch)->desc && (ch)->desc->original ? (ch)->desc->original->player_specials->quest_started : \
+                                                                      (ch)->player_specials->quest_started)
 #define GET_LQUEST(ch, i)       ((ch)->player_specials->last_quest[i])
 #define GET_CQUEST(ch, i)       ((ch)->player_specials->completed_quest[i])
 #define GET_PLAYER_WHERE_COMMANDS(ch) ((ch)->player_specials->wherelist_checks)

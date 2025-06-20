@@ -126,6 +126,10 @@ void _attempt_extract_zone_character(struct char_data *ch)
   if (GET_MOB_SPEC(ch) || GET_MOB_SPEC2(ch) || ch->mob_specials.spare1 || ch->mob_specials.spare2)
     return;
 
+  // Don't extract anyone from another zone.
+  if (ch->in_room && get_zone_from_vnum(GET_MOB_VNUM(ch)) != get_zone_from_vnum(GET_ROOM_VNUM(ch->in_room)))
+    return;
+
   // Check inventory for quest items.
   for (struct obj_data *obj = ch->carrying; obj; obj = obj->next_content)
   {
