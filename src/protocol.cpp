@@ -2418,6 +2418,12 @@ static void PerformSubnegotiation( descriptor_t *apDescriptor, char aCmd, char *
             pProtocol->pVariables[eMSDP_CLIENT_VERSION]->pValueString = AllocString(pClientName+7);
           }
         }
+        else if ( MatchString(pClientName, "lociterm") )
+        {
+          /* Lociterm supports 256 colors. */
+          pProtocol->pVariables[eMSDP_XTERM_256_COLORS]->ValueInt = 1;
+          pProtocol->b256Support = eYES;
+        }
         else if ( MatchString(pClientName, "EMACS-RINZAI") )
         {
           /* We know for certain that this client has support */
