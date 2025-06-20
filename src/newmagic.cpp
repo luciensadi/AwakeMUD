@@ -5717,7 +5717,8 @@ ACMD(do_track)
 {
   if (!IS_PROJECT(ch)) {
     if (!handle_player_docwagon_track(ch, argument)) {
-      send_to_char("You have to be projecting to astrally track.\r\n", ch);
+      send_to_char(ch, "You have to be projecting to astrally track.%s\r\n",
+                   AFF_FLAGGED(ch, AFF_WEARING_ACTIVE_DOCWAGON_RECEIVER) ? "  (If you're looking for a patient, use ^WDOCWAGON TRACK <name>^n to find them.)" : "");
     }
     return;
   }
