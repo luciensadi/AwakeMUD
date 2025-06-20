@@ -157,6 +157,7 @@ void end_quest(struct char_data *ch, bool succeeded);
 void initialize_quest_for_ch(struct char_data *ch, int quest_rnum, struct char_data *johnson) {
   // Assign them the quest.
   GET_QUEST(ch) = quest_rnum;
+  GET_QUEST_STARTED(ch) = time(0);
 
   // Create their memory structures.
   ch->player_specials->obj_complete = new sh_int[quest_table[GET_QUEST(ch)].num_objs];
@@ -924,6 +925,7 @@ void end_quest(struct char_data *ch, bool succeeded)
     GET_CQUEST(ch, 0) = quest_table[GET_QUEST(ch)].vnum;
 
   GET_QUEST(ch) = 0;
+  GET_QUEST_STARTED(ch) = 0;
 
   delete [] ch->player_specials->mob_complete;
   delete [] ch->player_specials->obj_complete;
@@ -1027,6 +1029,19 @@ bool follower_can_receive_reward(struct char_data *follower, struct char_data *l
   }
 
   return TRUE;
+}
+
+void award_follower_payout(struct char_data *follower, int karma, int nuyen, struct char_data *questor) {
+  gain_nuyen(follower, nuyen, NUYEN_INCOME_AUTORUNS);
+  int gained = gain_karma(follower, karma, TRUE, FALSE, TRUE);
+  send_to_char(follower, "You gain %0.2f karma and %d nuyen for being in %s's group.\r\n", (float) gained * 0.01, nuyen, GET_CHAR_NAME(questor));
+  mudlog_vfprintf(follower, LOG_GRIDLOG, "%s gains %0.2fk and %dn from job %ld (grouped with %s (%ld))",
+                  GET_CHAR_NAME(follower),
+                  (float) gained * 0.01,
+                  nuyen,
+                  GET_QUEST(questor),
+                  GET_CHAR_NAME(questor),
+                  GET_IDNUM(questor));
 }
 
 void reward(struct char_data *ch, struct char_data *johnson)
@@ -1167,16 +1182,12 @@ void reward(struct char_data *ch, struct char_data *johnson)
         if (!follower_can_receive_reward(f->follower, ch, FALSE))
           continue;
 
-        gain_nuyen(f->follower, nuyen, NUYEN_INCOME_AUTORUNS);
-        int gained = gain_karma(f->follower, karma, TRUE, FALSE, TRUE);
-        send_to_char(f->follower, "You gain %0.2f karma and %d nuyen for being in %s's group.\r\n", (float) gained * 0.01, nuyen, GET_CHAR_NAME(ch));
+        award_follower_payout(f->follower, karma, nuyen, ch);
       }
 
       // Skip invalid leaders WITHOUT sending a message.
       if (ch->master && follower_can_receive_reward(ch->master, ch, FALSE)) {
-        gain_nuyen(ch->master, nuyen, NUYEN_INCOME_AUTORUNS);
-        int gained = gain_karma(ch->master, karma, TRUE, FALSE, TRUE);
-        send_to_char(ch->master, "You gain %0.2f karma and %d nuyen for being in %s's group.\r\n", (float) gained * 0.01, nuyen, GET_CHAR_NAME(ch));
+        award_follower_payout(ch->master, karma, nuyen, ch);
       }
     }
   }
@@ -1188,6 +1199,13 @@ void reward(struct char_data *ch, struct char_data *johnson)
   snprintf(buf, sizeof(buf), "$n gives you %d nuyen.", nuyen);
   act(buf, FALSE, johnson, 0, ch, TO_VICT);
   send_to_char(ch, "You gain %.2f karma.\r\n", ((float) gained / 100));
+
+  mudlog_vfprintf(ch, LOG_GRIDLOG, "%s gains %0.2fk and %dn from job %ld. Elapsed time %ld seconds.",
+                  GET_CHAR_NAME(ch),
+                  (float) gained * 0.01,
+                  nuyen,
+                  GET_QUEST(ch),
+                  (time(0) - GET_QUEST_STARTED(ch)) / 1000);
   end_quest(ch, TRUE);
 }
 
@@ -1902,6 +1920,7 @@ SPECIAL(johnson)
       // Decline the quest.
       GET_SPARE1(johnson) = -1;
       GET_QUEST(ch) = 0;
+      GET_QUEST_STARTED(ch) = 0;
       forget(johnson, ch);
       if (quest_table[new_q].decline_emote && *quest_table[new_q].decline_emote) {
         // Don't @ me about this, it's the only way to reliably display a newline in this context.

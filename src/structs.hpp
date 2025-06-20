@@ -730,6 +730,7 @@ struct player_special_data
   struct remem *remem;         /* Character's Remembers          */
   idnum_t last_tell;              /* idnum of last tell from              */
   sh_int  questnum;
+  time_t quest_started;
   sh_int *obj_complete;
   sh_int *mob_complete;
   long last_quest[QUEST_TIMER];
@@ -746,8 +747,8 @@ struct player_special_data
   Bitfield covered_wearlocs;
 
   player_special_data() :
-      aliases(NULL), remem(NULL), last_tell(0), questnum(0), obj_complete(NULL),
-      mob_complete(NULL), mental_loss(0), physical_loss(0),
+      aliases(NULL), remem(NULL), last_tell(0), questnum(0), quest_started(0),
+      obj_complete(NULL), mob_complete(NULL), mental_loss(0), physical_loss(0),
       perm_bod(0), watching(NULL), wherelist_checks(0), max_exdescs(0)
   {
     ZERO_OUT_ARRAY(last_quest, QUEST_TIMER);
