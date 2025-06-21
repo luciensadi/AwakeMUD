@@ -431,7 +431,7 @@ void SendGMCPCharPools( struct char_data * ch )
 
 
 void ExecuteGMCPMessage(descriptor_t *apDescriptor, const char *module, const json &payload) {
-  log_vfprintf("GMCP module %s, payload %s", module, payload.dump().c_str());
+  // log_vfprintf("GMCP module %s, payload %s", module, payload.dump().c_str());
   if (!strncmp(module, "Core.Supports.Get", strlen(module)))
     SendGMCPCoreSupports(apDescriptor);
   else if (!strncmp(module, "Room.Info.Get", strlen(module))) {
