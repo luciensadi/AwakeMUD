@@ -257,7 +257,6 @@ void alert_player_doctors_of_contract_withdrawal(struct char_data *ch, bool with
 
 bool handle_player_docwagon_track(struct char_data *ch, char *argument) {
   skip_spaces(&argument);
-  struct remem *mem_record = NULL;
 
   // This only works for people with receivers.
   if (!AFF_FLAGGED(ch, AFF_WEARING_ACTIVE_DOCWAGON_RECEIVER) || !AWAKE(ch))

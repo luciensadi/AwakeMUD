@@ -1275,6 +1275,10 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
   if (IS_NPC(player))
     return false;
 
+#ifdef DEBUG_SAVING_PCS_TO_DB
+  log_vfprintf("Saving %s to DB.", GET_CHAR_NAME(player));
+#endif
+
   // Check all their stuff over. If it's ALL empty, this is a bugged character and should not be saved.
   {
     bool has_any_item = player->cyberware || player->bioware || player->carrying;
@@ -1533,7 +1537,9 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
   SAVE_IF_DIRTY_BIT_SET(GET_ALIAS_DIRTY_BIT, save_aliases_to_db);
 
   // Save bioware and cyberware.
+  log_vfprintf("player is %p (%s)", player, GET_CHAR_NAME(player));
   save_bioware_to_db(player);
+  log_vfprintf("player is %p (%s)", player, GET_CHAR_NAME(player));
   save_cyberware_to_db(player);
 
   // Save gear.
@@ -2928,26 +2934,26 @@ void save_inventory_to_db(struct char_data *player) {
   int level = 0, posi = 0;
 
   // Deliberately shadow external scope's 'buf' with a larger character buffer.
-  char buf[10000000]; // this is almost 10 megabytes of text. If they exceed it, wiping their inventory is fine by me.
+  char *query_buf = new char[CODEBASE_REQUIRED_MYSQL_MAX_PACKET_MINIMUM_SIZE]; // this is almost 10 megabytes of text. If they exceed it, wiping their inventory is fine by me.
 
   // Blow away their existing inventory. Too much can change between savings for us to try to modify in place.
-  snprintf(buf, sizeof(buf), "DELETE FROM pfiles_inv WHERE idnum=%ld", GET_IDNUM(player));
-  mysql_wrapper(mysql, buf);
+  snprintf(query_buf, CODEBASE_REQUIRED_MYSQL_MAX_PACKET_MINIMUM_SIZE, "DELETE FROM pfiles_inv WHERE idnum=%ld", GET_IDNUM(player));
+  mysql_wrapper(mysql, query_buf);
 
   // Compose the first part of our bulk save string.
   assert(NUM_OBJ_VALUES == 18); // If this assertion tripped, you need to rewrite object saving here, then UPDATE the assertion.
-  strlcpy(buf, "INSERT INTO pfiles_inv ("
+  strlcpy(query_buf, "INSERT INTO pfiles_inv ("
                "idnum, Vnum, Cost, Restring, Photo, graffiti, Inside, Timer, ExtraFlags, Attempt, Cond, posi, obj_idnum,"
                "Value0, Value1, Value2, Value3, Value4, Value5, Value6, Value7, Value8, Value9, Value10, Value11, Value12, Value13, Value14, Value15, Value16, Value17"
                ") VALUES ",
-          sizeof(buf));
+          CODEBASE_REQUIRED_MYSQL_MAX_PACKET_MINIMUM_SIZE);
 
   bool wrote_anything = FALSE;
   for (struct obj_data *obj = player->carrying; obj;) {
     if (!IS_OBJ_STAT(obj, ITEM_EXTRA_NORENT)) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf),
+      snprintf(ENDOF(query_buf), CODEBASE_REQUIRED_MYSQL_MAX_PACKET_MINIMUM_SIZE - strlen(query_buf),
                //, id   vn   co   re    ph    gr   in  ti   ex   at  cd  po  oid
-               "%s(%ld, %ld, %d, '%s', '%s', '%s', %d, %d, '%s', %d, %d, %d, %lu"
+               "%s(%ld, %ld, %d, '%s', '%s', '%s', %d, %d, '%s', %d, %d, %d, %lu,"
                // object values 0-17
                "%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d)",
                wrote_anything ? "," : "",
@@ -3006,8 +3012,8 @@ void save_inventory_to_db(struct char_data *player) {
   }
 
   // Finally, execute our query.
-  if (mysql_wrapper(mysql, buf)) {
-    if (strlen(buf) >= sizeof(buf) - 2) {
+  if (mysql_wrapper(mysql, query_buf)) {
+    if (strlen(query_buf) >= CODEBASE_REQUIRED_MYSQL_MAX_PACKET_MINIMUM_SIZE - 2) {
       mudlog_vfprintf(player, LOG_SYSLOG, "SYSERR: Failed to save inventory for %s due to having too much crap.", GET_CHAR_NAME(player));
       send_to_char(player, "^RWARNING: You have so much inventory that the game is unable to save your profile. Sell or junk nested items immediately to avoid loss of data.^n\r\n");
     } else {
@@ -3021,20 +3027,19 @@ void save_worn_equipment_to_db(struct char_data *player) {
   struct obj_data *obj = NULL;
   int level = 0, posi = 0, i = 0;
 
-  // Deliberately shadow external scope's 'buf' with a larger character buffer.
-  char buf[10000000]; // this is almost 10 megabytes of text. If they exceed it, wiping their inventory is fine by me.
+  char *query_buf = new char[CODEBASE_REQUIRED_MYSQL_MAX_PACKET_MINIMUM_SIZE]; // this is almost 10 megabytes of text. If they exceed it, wiping their inventory is fine by me.
 
   // Blow away their existing gear. Too much can change between savings for us to try to modify in place.
-  snprintf(buf, sizeof(buf), "DELETE FROM pfiles_worn WHERE idnum=%ld", GET_IDNUM(player));
-  mysql_wrapper(mysql, buf);
+  snprintf(query_buf, CODEBASE_REQUIRED_MYSQL_MAX_PACKET_MINIMUM_SIZE, "DELETE FROM pfiles_worn WHERE idnum=%ld", GET_IDNUM(player));
+  mysql_wrapper(mysql, query_buf);
 
   // Compose the first part of our bulk save string.
   assert(NUM_OBJ_VALUES == 18); // If this assertion tripped, you need to rewrite object saving here, then UPDATE the assertion.
-  strlcpy(buf, "INSERT INTO pfiles_worn ("
+  strlcpy(query_buf, "INSERT INTO pfiles_worn ("
                "idnum, Vnum, Cost, Restring, Photo, graffiti, Inside, Position, Timer, ExtraFlags, Attempt, Cond, posi, obj_idnum,"
                "Value0, Value1, Value2, Value3, Value4, Value5, Value6, Value7, Value8, Value9, Value10, Value11, Value12, Value13, Value14, Value15, Value16, Value17"
                ") VALUES ",
-          sizeof(buf));
+          CODEBASE_REQUIRED_MYSQL_MAX_PACKET_MINIMUM_SIZE);
 
   // Iterate to the first saveable worn item they have.
   for (i = 0; i < NUM_WEARS; i++) {
@@ -3046,9 +3051,9 @@ void save_worn_equipment_to_db(struct char_data *player) {
   while (obj && i < NUM_WEARS) {
     // Only save things that are not NORENT. Despite being written into the forloop, this is necessary to cover NORENT items _in_ worn things.
     if (!IS_OBJ_STAT(obj, ITEM_EXTRA_NORENT)) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), 
+      snprintf(ENDOF(query_buf), CODEBASE_REQUIRED_MYSQL_MAX_PACKET_MINIMUM_SIZE - strlen(query_buf), 
               //   id vn  co  re   ph   gr  in po ti exf  at co ps oid
-              "%s(%ld,%ld,%d,'%s','%s','%s',%d,%d,%d,'%s',%d,%d,%d,%lu"
+              "%s(%ld,%ld,%d,'%s','%s','%s',%d,%d,%d,'%s',%d,%d,%d,%lu,"
               // object values 0-17
               "%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d)",
               wrote_anything ? "," : "", // comma separator for subsequent items
@@ -3118,8 +3123,8 @@ void save_worn_equipment_to_db(struct char_data *player) {
   }
 
   // Finally, execute our query.
-  if (mysql_wrapper(mysql, buf)) {
-    if (strlen(buf) >= sizeof(buf) - 2) {
+  if (mysql_wrapper(mysql, query_buf)) {
+    if (strlen(query_buf) >= CODEBASE_REQUIRED_MYSQL_MAX_PACKET_MINIMUM_SIZE - 2) {
       mudlog_vfprintf(player, LOG_SYSLOG, "SYSERR: Failed to save equipment for %s due to having too much crap.", GET_CHAR_NAME(player));
       send_to_char(player, "^RWARNING: You have so much equipment that the game is unable to save your profile. Sell or junk nested items immediately to avoid loss of data.^n\r\n");
     } else {
@@ -3130,31 +3135,31 @@ void save_worn_equipment_to_db(struct char_data *player) {
 
 void save_bioware_to_db(struct char_data *player) {
   PERF_PROF_SCOPE(pr_, __func__);
-  // Deliberately shadow external scope's 'buf' with a larger character buffer.
-  char buf[1000000]; // this is almost 1 megabyte of text. If they exceed it, wiping their inventory is fine by me.
+  
+  char *query_buf = new char[CODEBASE_REQUIRED_MYSQL_MAX_PACKET_MINIMUM_SIZE]; // this is almost 10 megabytes of text. If they exceed it, wiping their inventory is fine by me.
 
   // Blow away their existing bioware.
-  snprintf(buf, sizeof(buf), "DELETE FROM pfiles_bioware WHERE idnum=%ld", GET_IDNUM(player));
-  mysql_wrapper(mysql, buf);
+  snprintf(query_buf, CODEBASE_REQUIRED_MYSQL_MAX_PACKET_MINIMUM_SIZE, "DELETE FROM pfiles_bioware WHERE idnum=%ld", GET_IDNUM(player));
+  mysql_wrapper(mysql, query_buf);
 
   if (!player->bioware)
     return;
 
   // Compose the first part of our bulk save string.
   assert(NUM_OBJ_VALUES == 18); // If this assertion tripped, you need to rewrite object saving here, then UPDATE the assertion.
-  strlcpy(buf,
+  strlcpy(query_buf,
           "INSERT INTO pfiles_bioware ("
           "idnum, Vnum, Cost, Restring, graffiti, obj_idnum"
           "Value0, Value1, Value2, Value3, Value4, Value5, Value6, Value7, Value8, Value9, Value10, Value11, Value12, Value13, Value14, Value15, Value16, Value17"
           ") VALUES ",
-          sizeof(buf));
+          CODEBASE_REQUIRED_MYSQL_MAX_PACKET_MINIMUM_SIZE);
 
   bool wrote_anything = FALSE;
   for (struct obj_data *obj = player->bioware; obj; obj = obj->next_content) {
     if (!IS_OBJ_STAT(obj, ITEM_EXTRA_NORENT)) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf),
-               //  id   vn   co   re    gr   oid
-               "%s(%ld, %ld, %d, '%s', '%s', %lu)"
+      snprintf(ENDOF(query_buf), CODEBASE_REQUIRED_MYSQL_MAX_PACKET_MINIMUM_SIZE - strlen(query_buf),
+               //  id  vn  co  re   gr  oid
+               "%s(%ld,%ld,%d,'%s','%s',%lu,"
                // object values 0-17
               "%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d)",
                wrote_anything ? "," : "",
@@ -3187,40 +3192,41 @@ void save_bioware_to_db(struct char_data *player) {
     }
   }
   // Finally, execute our query.
-  if (mysql_wrapper(mysql, buf)) {
+  if (mysql_wrapper(mysql, query_buf)) {
     mudlog_vfprintf(player, LOG_SYSLOG, "SYSERR: Failed to save bioware for %s due to database error. (Do they have too much crap?)", GET_CHAR_NAME(player));
   }
+
+  delete [] query_buf;
 }
 
 void save_cyberware_to_db(struct char_data *player) {
   PERF_PROF_SCOPE(pr_, __func__);
   int level = 0, posi = 0;
 
-  // Deliberately shadow external scope's 'buf' with a larger character buffer.
-  char buf[10000000]; // this is almost 10 megabytes of text. If they exceed it, wiping their inventory is fine by me.
+  char *query_buf = new char[CODEBASE_REQUIRED_MYSQL_MAX_PACKET_MINIMUM_SIZE]; // this is almost 10 megabytes of text. If they exceed it, wiping their inventory is fine by me.
 
   // Blow away their existing gear. Too much can change between savings for us to try to modify in place.
-  snprintf(buf, sizeof(buf), "DELETE FROM pfiles_cyberware WHERE idnum=%ld", GET_IDNUM(player));
-  mysql_wrapper(mysql, buf);
+  snprintf(query_buf, CODEBASE_REQUIRED_MYSQL_MAX_PACKET_MINIMUM_SIZE, "DELETE FROM pfiles_cyberware WHERE idnum=%ld", GET_IDNUM(player));
+  mysql_wrapper(mysql, query_buf);
 
   if (!player->cyberware)
     return;
 
   // Compose the first part of our bulk save string.
   assert(NUM_OBJ_VALUES == 18); // If this assertion tripped, you need to rewrite object saving here, then UPDATE the assertion.
-  strlcpy(buf, "INSERT INTO pfiles_cyberware ("
+  strlcpy(query_buf, "INSERT INTO pfiles_cyberware ("
                "idnum, Vnum, Cost, Restring, Photo, graffiti, Level, posi, obj_idnum,"
                "Value0, Value1, Value2, Value3, Value4, Value5, Value6, Value7, Value8, Value9, Value10, Value11, Value12, Value13, Value14, Value15, Value16, Value17"
                ") VALUES ",
-          sizeof(buf));
+          CODEBASE_REQUIRED_MYSQL_MAX_PACKET_MINIMUM_SIZE);
 
   bool wrote_anything = FALSE;
   for (struct obj_data *obj = player->cyberware; obj;) {
     // Only save things that are not NORENT. Despite being written into the forloop, this is necessary to cover NORENT items _in_ worn things.
     if (!IS_OBJ_STAT(obj, ITEM_EXTRA_NORENT)) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), 
+      snprintf(ENDOF(query_buf), CODEBASE_REQUIRED_MYSQL_MAX_PACKET_MINIMUM_SIZE - strlen(query_buf), 
               //   id vn  co  re   ph   gr  lv po oid
-              "%s(%ld,%ld,%d,'%s','%s','%s',%d,%d,%lu"
+              "%s(%ld,%ld,%d,'%s','%s','%s',%d,%d,%lu,"
               // object values 0-17
               "%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d)",
               wrote_anything ? "," : "", // comma separator for subsequent items
@@ -3276,8 +3282,8 @@ void save_cyberware_to_db(struct char_data *player) {
   }
 
   // Finally, execute our query.
-  if (mysql_wrapper(mysql, buf)) {
-    if (strlen(buf) >= sizeof(buf) - 2) {
+  if (mysql_wrapper(mysql, query_buf)) {
+    if (strlen(query_buf) >= CODEBASE_REQUIRED_MYSQL_MAX_PACKET_MINIMUM_SIZE) {
       mudlog_vfprintf(player, LOG_SYSLOG, "SYSERR: Failed to save cyberware for %s due to having too much crap.", GET_CHAR_NAME(player));
       send_to_char(player, "^RWARNING: You have so much cyberware that the game is unable to save your profile. Clear out your headware memory immediately to avoid loss of data.^n\r\n");
     } else {
@@ -3627,6 +3633,36 @@ void save_all_pcs() {
     }
   }
   log("Finished saving all PCs.");
+}
+
+void verify_db_max_packet_constraints() {
+  unsigned long max_allowed_packet_dest = 0;
+
+  // Check at the session level.
+  if (mysql_get_option(mysql, MYSQL_OPT_MAX_ALLOWED_PACKET, &max_allowed_packet_dest)) {
+    log("Failed to get max allowed packet from session-- bailing out.");
+    exit(ERROR_MYSQL_MAX_ALLOWED_PACKET_CHECK_FAILURE);
+  }
+
+  if (max_allowed_packet_dest == 0) {
+    // Check at the global level.
+    if (mysql_get_option(NULL, MYSQL_OPT_MAX_ALLOWED_PACKET, &max_allowed_packet_dest)) {
+      log("Failed to get max allowed packet from global values-- bailing out.");
+      exit(ERROR_MYSQL_MAX_ALLOWED_PACKET_CHECK_FAILURE);
+    }
+
+    if (max_allowed_packet_dest < CODEBASE_REQUIRED_MYSQL_MAX_PACKET_MINIMUM_SIZE) {
+      log_vfprintf("MySQL max allowed packet size is too low at the global level at %lu. Please ensure it's at least %lu.", max_allowed_packet_dest, CODEBASE_REQUIRED_MYSQL_MAX_PACKET_MINIMUM_SIZE);
+      exit(ERROR_MYSQL_MAX_ALLOWED_PACKET_CHECK_FAILURE);
+    }
+  } else {
+    if (max_allowed_packet_dest < CODEBASE_REQUIRED_MYSQL_MAX_PACKET_MINIMUM_SIZE) {
+      log_vfprintf("MySQL max allowed packet size is too low at the session level at %lu. Please ensure it's at least %lu.", max_allowed_packet_dest, CODEBASE_REQUIRED_MYSQL_MAX_PACKET_MINIMUM_SIZE);
+      exit(ERROR_MYSQL_MAX_ALLOWED_PACKET_CHECK_FAILURE);
+    }
+  }
+  
+  
 }
 
 void recalculate_character_magic_rating(struct char_data *ch) {

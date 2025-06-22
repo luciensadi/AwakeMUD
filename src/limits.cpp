@@ -349,7 +349,7 @@ int gain_karma(struct char_data * ch, int gain, bool rep, bool limits, bool mult
       } else if (GET_TKE(ch) >= 100 && GET_TKE(ch) < 500) {
         gain = MIN(MAX_MIDCHAR_GAIN, gain);
       } else {
-        gain = MIN(MAX_OLDCHAR_GAIN, gain);
+        gain = MIN((int) (MAX_OLDCHAR_GAIN), gain);
       }
     }
 

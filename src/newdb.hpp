@@ -13,6 +13,8 @@
 #include "structs.hpp"
 #include "utils.hpp"
 
+#define CODEBASE_REQUIRED_MYSQL_MAX_PACKET_MINIMUM_SIZE 10000000
+
 class File;
 
 class DBIndex

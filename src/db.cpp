@@ -240,6 +240,7 @@ void boot_shop_orders(void);
 void price_cyber(struct obj_data *obj);
 void price_bio(struct obj_data *obj);
 extern void verify_db_password_column_size();
+extern void verify_db_max_packet_constraints();
 void set_elemental_races();
 void initialize_and_alphabetize_flag_maps();
 void set_up_pet_dummy_mob();
@@ -584,14 +585,7 @@ void boot_world(void)
   verify_db_password_column_size();
 
   log("Verifying DB max-packet constraints allow for expanded saving.");
-  int max_allowed_packet_dest = 0;
-  if (mysql_get_option(mysql, MYSQL_OPT_MAX_ALLOWED_PACKET, &max_allowed_packet_dest)) {
-    log("Failed to get max allowed packet-- bailing out.");
-    exit(ERROR_MYSQL_MAX_ALLOWED_PACKET_CHECK_FAILURE);
-  } else if (max_allowed_packet_dest < 10000000) {
-    log("MySQL max allowed packet size is too low. Please ensure it's at least 10 megabytes.");
-    exit(ERROR_MYSQL_MAX_ALLOWED_PACKET_CHECK_FAILURE);
-  }
+  verify_db_max_packet_constraints();
 
   // Search terms below because it always takes me forever to ctrl-f this block -LS
   // ensure table, ensure row, ensure field, database, limits, restrictions
