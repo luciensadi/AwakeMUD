@@ -431,6 +431,7 @@ void load_bullet_pants(struct char_data *ch) {
     // All taser ammo must be normal.
     if (weapon == WEAP_TASER) {
       for (int atype = AMMO_APDS; atype < NUM_AMMOTYPES; atype++) {
+        // This specifically does not set dirty_bit to true since it's a load from DB.
         GET_BULLETPANTS_AMMO_AMOUNT(ch, weapon, AMMO_NORMAL) += GET_BULLETPANTS_AMMO_AMOUNT(ch, weapon, atype);
         GET_BULLETPANTS_AMMO_AMOUNT(ch, weapon, atype) = 0;
       }
@@ -476,6 +477,7 @@ bool update_bulletpants_ammo_quantity(struct char_data *ch, int weapon, int ammo
     return FALSE;
   }
 
+  GET_BULLETPANTS_DIRTY_BIT(ch) = TRUE;
   GET_BULLETPANTS_AMMO_AMOUNT(ch, weapon, ammotype) += quantity;
   calc_weight(ch);
   return TRUE;

@@ -931,6 +931,8 @@ void end_quest(struct char_data *ch, bool succeeded)
   delete [] ch->player_specials->obj_complete;
   ch->player_specials->mob_complete = NULL;
   ch->player_specials->obj_complete = NULL;
+
+  GET_QUEST_DIRTY_BIT(ch) = TRUE;
 }
 
 bool rep_too_high(struct char_data *ch, int num)
@@ -1533,6 +1535,7 @@ SPECIAL(johnson)
         GET_CQUEST(ch, i) = 0;
       }
       send_to_char("OK, your quest history has been cleared.\r\n", ch);
+      GET_QUEST_DIRTY_BIT(ch) = TRUE;
       return FALSE;
     } else {
       //snprintf(buf, sizeof(buf), "INFO: No Johnson keywords found in %s's speech: '%s'.", GET_CHAR_NAME(ch), argument);
