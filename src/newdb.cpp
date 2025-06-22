@@ -72,6 +72,7 @@ void save_skills_to_db(struct char_data *player);
 void save_aliases_to_db(struct char_data *player);
 void save_bioware_to_db(struct char_data *player);
 void save_cyberware_to_db(struct char_data *player);
+void fix_ghoul_index(struct char_data *ch);
 void fix_character_essence_after_cybereye_migration(struct char_data *ch);
 void fix_character_essence_after_expert_driver_change(struct char_data *ch);
 void recalculate_character_magic_rating(struct char_data *ch);
@@ -1758,6 +1759,7 @@ char_data *CreateChar(char_data *ch)
   // Ensure we don't run this character through any rectifying functions.
   PLR_FLAGS(ch).SetBits(PLR_COMPLETED_EXPERT_DRIVER_OVERHAUL,
                         PLR_RECEIVED_CYBEREYE_ESSENCE_DELTA,
+                        PLR_RECEIVED_GHOUL_INDEX_DELTA,
                         ENDBIT);
   
   // They're no longer in the creation menus.
@@ -1848,6 +1850,8 @@ char_data *PCIndex::LoadChar(const char *name, bool logon, int load_origin)
   fix_character_essence_after_expert_driver_change(ch);
 
   recalculate_character_magic_rating(ch);
+
+  fix_ghoul_index(ch);
 
   // At this point, cybereye migration has been done for over a year. Disabled.
   // fix_character_essence_after_cybereye_migration(ch);
@@ -3291,6 +3295,36 @@ void save_cyberware_to_db(struct char_data *player) {
       mudlog_vfprintf(player, LOG_SYSLOG, "SYSERR: Failed to save cyberware for %s due to database error. Page Lucien to diagnose.", GET_CHAR_NAME(player));
     }
   }
+}
+
+void fix_ghoul_index(struct char_data *ch) {
+  // Only apply to ghouls who haven't had this done yet.
+  if (!IS_GHOUL(ch) || PLR_FLAGGED(ch, PLR_RECEIVED_GHOUL_INDEX_DELTA))
+    return;
+
+  if (GET_TRADITION(ch) != TRAD_MUNDANE) {
+    // Calculate magic refund amount. Bioware is half magic.
+    int delta = GET_HIGHEST_INDEX(ch) / 2;
+    int magic_refund_amount = delta / 2;
+    
+    // Apply it. Refund PP as well if they're adepts.
+    GET_SETTABLE_REAL_MAG(ch) += magic_refund_amount;
+    if (GET_TRADITION(ch) == TRAD_ADEPT) {
+      GET_PP(ch) += magic_refund_amount;
+    }
+  }
+
+  mudlog_vfprintf(ch, LOG_SYSLOG, "Ghoul bioware index refund: Index %d -> %d, highest %d -> %d.", GET_INDEX(ch), GET_INDEX(ch) / 2, GET_HIGHEST_INDEX(ch), GET_HIGHEST_INDEX(ch) / 2);
+
+  GET_INDEX(ch) /= 2;
+  GET_HIGHEST_INDEX(ch) /= 2;
+
+  PLR_FLAGS(ch).SetBit(PLR_RECEIVED_GHOUL_INDEX_DELTA);
+
+  raw_store_mail(GET_IDNUM(ch), 0, "System Message (OOC)", 
+                 "Good news: You have been refunded half of your bioware index and highest bioware index rating."
+                 " If you're a mage/adept, you've regained the relevant amount of magic and powerpoints."
+                 " Going forward, ghouls will no longer pay double for bioware index costs.");
 }
 
 /* Because we've changed the essence cost of cybereyes, we need to refund the difference to people. */

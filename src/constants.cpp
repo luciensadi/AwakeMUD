@@ -618,6 +618,7 @@ const char *player_bits[] =
     "CLOUD_HATER",
     "SUBMERSION",
     "STAFF_SCRUTINY",
+    "GHOUL_IDX_DONE",
     "\n"
   };
 

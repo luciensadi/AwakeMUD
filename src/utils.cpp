@@ -9528,8 +9528,8 @@ int calculate_ware_essence_or_index_cost(struct char_data *ch, struct obj_data *
   {
     int indexcost = GET_BIOWARE_ESSENCE_COST(ware);
 
-    // Ghouls and drakes have doubled bioware index costs.
-    if (IS_GHOUL(ch) || IS_DRAKE(ch))
+    // Drakes have doubled bioware index costs.
+    if (IS_DRAKE(ch))
       indexcost *= 2;
 
     return indexcost;
