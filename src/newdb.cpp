@@ -3009,12 +3009,14 @@ void save_inventory_to_db(struct char_data *player) {
   }
 
   // Finally, execute our query.
-  if (mysql_wrapper(mysql, query_buf)) {
-    if (strlen(query_buf) >= CODEBASE_REQUIRED_MYSQL_MAX_PACKET_MINIMUM_SIZE - 2) {
-      mudlog_vfprintf(player, LOG_SYSLOG, "SYSERR: Failed to save inventory for %s due to having too much crap.", GET_CHAR_NAME(player));
-      send_to_char(player, "^RWARNING: You have so much inventory that the game is unable to save your profile. Sell or junk nested items immediately to avoid loss of data.^n\r\n");
-    } else {
-      mudlog_vfprintf(player, LOG_SYSLOG, "SYSERR: Failed to save inventory for %s due to database error. Page Lucien to diagnose.", GET_CHAR_NAME(player));
+  if (wrote_anything) {
+    if (mysql_wrapper(mysql, query_buf)) {
+      if (strlen(query_buf) >= CODEBASE_REQUIRED_MYSQL_MAX_PACKET_MINIMUM_SIZE - 2) {
+        mudlog_vfprintf(player, LOG_SYSLOG, "SYSERR: Failed to save inventory for %s due to having too much crap.", GET_CHAR_NAME(player));
+        send_to_char(player, "^RWARNING: You have so much inventory that the game is unable to save your profile. Sell or junk nested items immediately to avoid loss of data.^n\r\n");
+      } else {
+        mudlog_vfprintf(player, LOG_SYSLOG, "SYSERR: Failed to save inventory for %s due to database error. Page Lucien to diagnose.", GET_CHAR_NAME(player));
+      }
     }
   }
 }
@@ -3120,12 +3122,14 @@ void save_worn_equipment_to_db(struct char_data *player) {
   }
 
   // Finally, execute our query.
-  if (mysql_wrapper(mysql, query_buf)) {
-    if (strlen(query_buf) >= CODEBASE_REQUIRED_MYSQL_MAX_PACKET_MINIMUM_SIZE - 2) {
-      mudlog_vfprintf(player, LOG_SYSLOG, "SYSERR: Failed to save equipment for %s due to having too much crap.", GET_CHAR_NAME(player));
-      send_to_char(player, "^RWARNING: You have so much equipment that the game is unable to save your profile. Sell or junk nested items immediately to avoid loss of data.^n\r\n");
-    } else {
-      mudlog_vfprintf(player, LOG_SYSLOG, "SYSERR: Failed to save equipment for %s due to database error. Page Lucien to diagnose.", GET_CHAR_NAME(player));
+  if (wrote_anything) {
+    if (mysql_wrapper(mysql, query_buf)) {
+      if (strlen(query_buf) >= CODEBASE_REQUIRED_MYSQL_MAX_PACKET_MINIMUM_SIZE - 2) {
+        mudlog_vfprintf(player, LOG_SYSLOG, "SYSERR: Failed to save equipment for %s due to having too much crap.", GET_CHAR_NAME(player));
+        send_to_char(player, "^RWARNING: You have so much equipment that the game is unable to save your profile. Sell or junk nested items immediately to avoid loss of data.^n\r\n");
+      } else {
+        mudlog_vfprintf(player, LOG_SYSLOG, "SYSERR: Failed to save equipment for %s due to database error. Page Lucien to diagnose.", GET_CHAR_NAME(player));
+      }
     }
   }
 }
@@ -3146,7 +3150,7 @@ void save_bioware_to_db(struct char_data *player) {
   assert(NUM_OBJ_VALUES == 18); // If this assertion tripped, you need to rewrite object saving here, then UPDATE the assertion.
   strlcpy(query_buf,
           "INSERT INTO pfiles_bioware ("
-          "idnum, Vnum, Cost, Restring, graffiti, obj_idnum"
+          "idnum, Vnum, Cost, Restring, graffiti, obj_idnum,"
           "Value0, Value1, Value2, Value3, Value4, Value5, Value6, Value7, Value8, Value9, Value10, Value11, Value12, Value13, Value14, Value15, Value16, Value17"
           ") VALUES ",
           CODEBASE_REQUIRED_MYSQL_MAX_PACKET_MINIMUM_SIZE);
