@@ -1275,9 +1275,8 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
   if (IS_NPC(player))
     return false;
 
-#ifdef DEBUG_SAVING_PCS_TO_DB
+  // Write a single log message each time we save. This will help trace how often we're doing this and if there are excessive calls.
   log_vfprintf("Saving %s to DB.", GET_CHAR_NAME(player));
-#endif
 
   // Check all their stuff over. If it's ALL empty, this is a bugged character and should not be saved.
   {
@@ -1537,9 +1536,7 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
   SAVE_IF_DIRTY_BIT_SET(GET_ALIAS_DIRTY_BIT, save_aliases_to_db);
 
   // Save bioware and cyberware.
-  log_vfprintf("player is %p (%s)", player, GET_CHAR_NAME(player));
   save_bioware_to_db(player);
-  log_vfprintf("player is %p (%s)", player, GET_CHAR_NAME(player));
   save_cyberware_to_db(player);
 
   // Save gear.
