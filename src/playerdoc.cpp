@@ -257,6 +257,7 @@ void alert_player_doctors_of_contract_withdrawal(struct char_data *ch, bool with
 
 bool handle_player_docwagon_track(struct char_data *ch, char *argument) {
   skip_spaces(&argument);
+  struct remem *mem_record = NULL;
 
   // This only works for people with receivers.
   if (!AFF_FLAGGED(ch, AFF_WEARING_ACTIVE_DOCWAGON_RECEIVER) || !AWAKE(ch))
@@ -276,7 +277,7 @@ bool handle_player_docwagon_track(struct char_data *ch, char *argument) {
     }
 
     // Wrong target?
-    if (!keyword_appears_in_char(argument, ch)) {
+    if (!isname(argument, get_string_after_color_code_removal(get_char_representation_for_docwagon(d->character, ch), NULL))) {
       if (access_level(ch, LVL_PRESIDENT)) {
         send_to_char(ch, "DEBUG: Skipping %s (%s): '%s' does not match their representation.\r\n", get_char_representation_for_docwagon(d->character, ch), GET_CHAR_NAME(d->character), argument);
       }

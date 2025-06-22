@@ -3279,7 +3279,7 @@ struct char_data *get_char_vis(struct char_data * ch, const char *name)
 {
   struct char_data *i;
   int j = 0, number;
-  char tmpname[MAX_INPUT_LENGTH];
+  char tmpname[MAX_INPUT_LENGTH] = {0};
   char *tmp = tmpname;
 
   // Short circuit: If you're looking for yourself, we don't have to search very hard.

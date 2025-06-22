@@ -5659,7 +5659,7 @@ char *get_string_after_color_code_removal(const char *str, struct char_data *ch)
   memset(clearstr, 0, sizeof(clearstr));
   int pos = 0;
 
-  while ((ptr - str) < ptr_max && *ptr)
+  while ((ptr - str) <= ptr_max && *ptr)
   {
     // Buffer overflow failsafe.
     if (pos == MAX_STRING_LENGTH - 1)
@@ -7106,7 +7106,7 @@ const char *keyword_appears_in_char(const char *keyword, struct char_data *ch, b
       return "pronoun";
   }
 
-  return FALSE;
+  return NULL;
 }
 
 const char *keyword_appears_in_veh(const char *keyword, struct veh_data *veh, bool search_name, bool search_desc, bool search_messages)
