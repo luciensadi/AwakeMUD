@@ -6203,7 +6203,7 @@ ACMD(do_set)
       SET_CLEANUP(false);
       return;
     }
-    mudlog_vfprintf(ch, LOG_WIZLOG, "Changing %s's idnum from %ld to %ld. THIS WILL BREAK DATABASE ENTRIES.", GET_CHAR_NAME(vict), GET_IDNUM(vict), value);
+    mudlog_vfprintf(ch, LOG_WIZLOG, "Changing %s's idnum from %ld to %d. THIS WILL BREAK DATABASE ENTRIES.", GET_CHAR_NAME(vict), GET_IDNUM(vict), value);
     GET_IDNUM(vict) = value;
     break;
   case 39: // password
