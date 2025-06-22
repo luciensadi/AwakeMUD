@@ -452,12 +452,12 @@ bool load_char(const char *name, char_data *ch, bool logon, int pc_load_origin)
   GET_HEIGHT(ch) = atoi(row[43]);
   GET_WEIGHT(ch) = atoi(row[44]);
   GET_TRADITION(ch) = atoi(row[45]);
-  GET_NUYEN_RAW(ch) = atoi(row[46]);
-  GET_BANK_RAW(ch) = atoi(row[47]);
+  GET_NUYEN_RAW(ch) = atol(row[46]);
+  GET_BANK_RAW(ch) = atol(row[47]);
   GET_KARMA(ch) = atoi(row[48]);
-  GET_REP(ch) = atoi(row[49]);
-  GET_NOT(ch) = atoi(row[50]);
-  GET_TKE(ch) = atoi(row[51]);
+  GET_REP(ch) = strtoul(row[49], NULL, 10);
+  GET_NOT(ch) = strtoul(row[50], NULL, 10);
+  GET_TKE(ch) = strtoul(row[51], NULL, 10);
 
   GET_PHYSICAL(ch) = atoi(row[54]);
   GET_PHYSICAL_LOSS(ch) = atoi(row[55]);
