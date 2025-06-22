@@ -6723,11 +6723,13 @@ void set_casting_pools(struct char_data *ch, int casting, int drain, int spell_d
     send_to_char(buf, ch); 
   }
 
+#ifdef APPLY_DELAY_ON_POOL_CHANGE_IN_COMBAT
   // If they're in combat, add a delay to lessen the pool-cast-pool cheese strat.
-  if (FIGHTING(ch) || FIGHTING_VEH(ch)) {
+  if (message && FIGHTING(ch) || FIGHTING_VEH(ch)) {
     send_to_char(ch, "You shift your concentration, timing it out to avoid creating an opening.\r\n");
     WAIT_STATE(ch, 3);
   }
+#endif
 }
 
 void _end_all_spells_of_type(int spell, int subtype, struct char_data *ch, bool affect_caster, bool affect_cast_on) {
