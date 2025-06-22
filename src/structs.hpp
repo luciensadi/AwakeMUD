@@ -531,10 +531,10 @@ struct char_point_data
   sh_int impact[3];       /* Impact armor class for clubs and such   */
   long nuyen;           /* Money carried */
   long bank;           /* Nuyen the char has in a bank account */
-  int karma;            /* The experience of the player */
-  unsigned int rep;              /* the reputation of the player  (karma earned via runs) */
-  unsigned int noto;              /* the reputation of the player  (karma earned via kills) */
-  unsigned int tke;              /* the reputation of the player  (karma earned total) */
+  long karma;            /* The experience of the player */
+  long rep;              /* the reputation of the player  (karma earned via runs) */
+  long noto;              /* the reputation of the player  (karma earned via kills) */
+  long tke;              /* the reputation of the player  (karma earned total) */
   ush_int sig;
   sbyte init_dice;     /* Bonuses for initiative dice             */
   sh_int init_roll;     /* Total of init roll                      */

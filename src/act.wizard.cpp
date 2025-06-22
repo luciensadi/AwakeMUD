@@ -1770,7 +1770,7 @@ void do_stat_character(struct char_data * ch, struct char_data * k)
              status_ratings[(int)GET_LEVEL(k)],
              GET_SYSTEM_POINTS(k));
   else
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", Status: Mortal \r\nRep: [^y%3d^n] Not: [^y%3d^n] TKE: [^y%3d^n] ^WSysP^n: [^y%3d^n]\r\n",
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", Status: Mortal \r\nRep: [^y%3ld^n] Not: [^y%3ld^n] TKE: [^y%3ld^n] ^WSysP^n: [^y%3d^n]\r\n",
              GET_REP(k),
              GET_NOT(k),
              GET_TKE(k),
@@ -1970,7 +1970,7 @@ void do_stat_mobile(struct char_data * ch, struct char_data * k)
 
   base = calc_karma(NULL, k);
 
-  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Nuyen: [%ld], Credstick: [%ld], Bonus karma: [%4d], Total karma: [%4d]\r\n",
+  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Nuyen: [%ld], Credstick: [%ld], Bonus karma: [%4ld], Total karma: [%4d]\r\n",
           GET_NUYEN(k), GET_BANK(k), GET_KARMA(k), base);
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "B: %d, I: %d, I-Dice: %d, I-Roll: %d, Sus: %d, TargMod: %d, Reach: %d\r\n",
           GET_BALLISTIC(k), GET_IMPACT(k), GET_INIT_DICE(k), GET_INIT_ROLL(k),
@@ -3278,9 +3278,9 @@ ACMD(do_charge) {
   mudlog(buf2, ch, LOG_WIZLOG, TRUE);
 }
 
-void staff_induced_karma_alteration_for_online_char(struct char_data *ch, struct char_data *vict, int karma_times_100, const char *reason, bool add_karma) {
+void staff_induced_karma_alteration_for_online_char(struct char_data *ch, struct char_data *vict, long karma_times_100, const char *reason, bool add_karma) {
   float karma = ((float) karma_times_100) / 100;
-  int old_karma = GET_KARMA(vict);
+  long old_karma = GET_KARMA(vict);
 
   if (add_karma) {
     if (GET_KARMA(vict) + karma_times_100 > MYSQL_UNSIGNED_MEDIUMINT_MAX) {
@@ -3331,7 +3331,7 @@ void staff_induced_karma_alteration_for_online_char(struct char_data *ch, struct
                ispunct(get_final_character_from_string(reason)) ? "" : ".");
 
   // Log it.
-  snprintf(buf2, sizeof(buf2), "%s %s %0.2f karma to %s for %s^g (%d to %d).",
+  snprintf(buf2, sizeof(buf2), "%s %s %0.2f karma to %s for %s^g (%ld to %ld).",
            GET_CHAR_NAME(ch),
            add_karma ? "awarded" : "deducted",
            karma,
@@ -4662,7 +4662,7 @@ ACMD(do_show)
       mudlog_vfprintf(ch, LOG_WIZLOG, "Viewed %s (%ld)'s info.", GET_CHAR_NAME(vict), GET_IDNUM(vict));
       snprintf(buf, sizeof(buf), "Player: %-12s (%s) [%2d]\r\n", GET_NAME(vict),
               genders[(int) GET_PRONOUNS(vict)], GET_LEVEL(vict));
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Y: %-8ld  Bal: %-8ld  Karma: %-8d\r\n",
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Y: %-8ld  Bal: %-8ld  Karma: %-8ld\r\n",
               GET_NUYEN(vict), GET_BANK(vict), GET_KARMA(vict));
       strlcpy(birth, ctime(&vict->player.time.birth), sizeof(birth));
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Started: %-20.16s  Last: %-20.16s  Played: %3dh %2dm\r\n",

@@ -1923,7 +1923,7 @@ void write_mobs_to_disk(vnum_t zone_num)
       if (GET_BANK(mob) > 0)
         fprintf(fp, "\tBank:\t%ld\n", GET_BANK(mob));
       if (GET_KARMA(mob) > 0)
-        fprintf(fp, "\tKarma:\t%d\n", GET_KARMA(mob));
+        fprintf(fp, "\tKarma:\t%ld\n", GET_KARMA(mob));
       if (GET_MOB_FACTION_IDNUM(mob) > 0)
         fprintf(fp, "\tFaction:\t%ld\n", GET_MOB_FACTION_IDNUM(mob));
 

@@ -4759,8 +4759,8 @@ const char *get_plaintext_score_equipment(struct char_data *ch) {
 const char *get_plaintext_score_karma(struct char_data *ch) {
   snprintf(buf2, sizeof(buf2), "Current karma: %.2f\r\n", ((float)GET_KARMA(ch) / 100));
   snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Total karma earned: %.2f\r\n", ((float)GET_TKE(ch)));
-  snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Reputation: %d\r\n", GET_REP(ch));
-  snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Notoriety: %d\r\n", GET_NOT(ch));
+  snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Reputation: %ld\r\n", GET_REP(ch));
+  snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Notoriety: %ld\r\n", GET_NOT(ch));
   return buf2;
 }
 
@@ -5172,7 +5172,7 @@ ACMD(do_score)
                           GET_REAL_QUI(ch), GET_QUI(ch), IS_CARRYING_W(ch) ,CAN_CARRY_W(ch));
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^L/^b/ ^nStrength      ^w%2d (^W%2d^w)    Current session length ^W%2d^w days, ^W%2d^w hours.^b/^L/\r\n",
                           GET_REAL_STR(ch), GET_STR(ch), playing_time.day, playing_time.hours);
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^b/^L/ ^nCharisma      ^w%2d (^W%2d^w)    ^wKarma ^B[^W%7.2f^B] ^wRep ^B[^W%4d^B] ^rNotor ^r[^R%4d^r]  ^L/^b/\r\n",
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^b/^L/ ^nCharisma      ^w%2d (^W%2d^w)    ^wKarma ^B[^W%7.2f^B] ^wRep ^B[^W%4ld^B] ^rNotor ^r[^R%4ld^r]  ^L/^b/\r\n",
                           GET_REAL_CHA(ch), GET_CHA(ch), ((float)GET_KARMA(ch) / 100), GET_REP(ch), GET_NOT(ch));
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^L/^b/ ^nIntelligence  ^w%2d (^W%2d^w)    ^r%-41s^b/^L/\r\n",
                           GET_REAL_INT(ch), GET_INT(ch), get_vision_string(ch, TRUE));

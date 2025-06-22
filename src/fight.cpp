@@ -1024,14 +1024,14 @@ void raw_kill(struct char_data * ch, idnum_t cause_of_death_idnum)
 }
 
 int raw_stat_loss(struct char_data *ch) {
-  int old_tke = GET_TKE( ch );
+  long old_tke = GET_TKE( ch );
 
   for (int limiter = 100; limiter > 0; limiter--) {
     int attribute = number(BOD, WIL);
 
     if (GET_REAL_ATT(ch, attribute) > MAX(1, 1 + racial_attribute_modifiers[(int)GET_RACE(ch)][attribute])) {
       // We can safely knock down the attribute since we've guaranteed it's above their racial minimum.
-      int karma_to_lose = MIN((int) GET_TKE(ch), 2 * GET_REAL_ATT(ch, attribute));
+      long karma_to_lose = MIN(GET_TKE(ch), 2 * GET_REAL_ATT(ch, attribute));
 
       // Take the full amount from TKE.
       GET_TKE(ch) -= karma_to_lose;
@@ -1042,7 +1042,7 @@ int raw_stat_loss(struct char_data *ch) {
 
       // Knock down the attribute.
       GET_REAL_ATT(ch, attribute)--;
-      snprintf(buf, sizeof(buf),"%s lost a point of %s.  Total Karma Earned from %d to %d.",
+      snprintf(buf, sizeof(buf),"%s lost a point of %s.  Total Karma Earned from %ld to %ld.",
               GET_CHAR_NAME(ch), short_attributes[attribute], old_tke, GET_TKE( ch ) );
       mudlog(buf, ch, LOG_DEATHLOG, TRUE);
       return attribute;
