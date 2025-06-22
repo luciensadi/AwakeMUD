@@ -2987,6 +2987,7 @@ enum {
 #define EXIT_CODE_REBOOTING                           52   /* what's so great about HHGTTG, anyhow? */
 #define ERROR_WORLD_BOOT_FORMAT_ERROR                 53
 #define ERROR_FLAG_CONSTANT_MISSING                   54
+#define ERROR_MYSQL_MAX_ALLOWED_PACKET_CHECK_FAILURE  55
 
 // Materials.
 #define MATERIAL_PAPER        0

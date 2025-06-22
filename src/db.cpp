@@ -583,6 +583,16 @@ void boot_world(void)
   log("Verifying DB compatibility with extended-length passwords.");
   verify_db_password_column_size();
 
+  log("Verifying DB max-packet constraints allow for expanded saving.");
+  int max_allowed_packet_dest = 0;
+  if (mysql_get_option(mysql, MYSQL_OPT_MAX_ALLOWED_PACKET, &max_allowed_packet_dest)) {
+    log("Failed to get max allowed packet-- bailing out.");
+    exit(ERROR_MYSQL_MAX_ALLOWED_PACKET_CHECK_FAILURE);
+  } else if (max_allowed_packet_dest < 10000000) {
+    log("MySQL max allowed packet size is too low. Please ensure it's at least 10 megabytes.");
+    exit(ERROR_MYSQL_MAX_ALLOWED_PACKET_CHECK_FAILURE);
+  }
+
   // Search terms below because it always takes me forever to ctrl-f this block -LS
   // ensure table, ensure row, ensure field, database, limits, restrictions
   log("Verifying that DB has expected migrations. Note that not all migrations are checked here.");

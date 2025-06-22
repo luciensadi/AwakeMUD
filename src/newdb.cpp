@@ -3194,53 +3194,94 @@ void save_bioware_to_db(struct char_data *player) {
 
 void save_cyberware_to_db(struct char_data *player) {
   PERF_PROF_SCOPE(pr_, __func__);
-  char cyberware_query_str[MAX_STRING_LENGTH];
-  snprintf(cyberware_query_str, sizeof(cyberware_query_str), "DELETE FROM pfiles_cyberware WHERE idnum=%ld", GET_IDNUM(player));
-  mysql_wrapper(mysql, cyberware_query_str);
   int level = 0, posi = 0;
-  if (player->cyberware) {
-    /* Ran into a weird edge case where people would fill their headware memory with photos of people, and their memory would no longer save in the DB.
-        This was caused by the total length of the concatenated query string exceeding buf's length.
-        As such, we write each cyberware entry on its own now instead of batching them together. */
 
-    for (struct obj_data *obj = player->cyberware; obj;) {
-      strlcpy(cyberware_query_str, "INSERT INTO pfiles_cyberware (idnum, Vnum, Cost, Restring, Photo, graffiti, ", sizeof(cyberware_query_str));
-      for (int x = 0; x < NUM_OBJ_VALUES; x++)
-        snprintf(ENDOF(cyberware_query_str), sizeof(cyberware_query_str) - strlen(cyberware_query_str), "Value%d, ", x);
+  // Deliberately shadow external scope's 'buf' with a larger character buffer.
+  char buf[10000000]; // this is almost 10 megabytes of text. If they exceed it, wiping their inventory is fine by me.
 
-      snprintf(ENDOF(cyberware_query_str), sizeof(cyberware_query_str) - strlen(cyberware_query_str), "Level, posi, obj_idnum) VALUES "
-               "(%ld, %ld, %d, '%s', '%s', '%s'", GET_IDNUM(player), GET_OBJ_VNUM(obj), GET_OBJ_COST(obj),
-               obj->restring ? prepare_quotes(buf3, obj->restring, sizeof(buf3) / sizeof(buf3[0])) : "",
-               obj->photo ? prepare_quotes(buf2, obj->photo, sizeof(buf2) / sizeof(buf2[0])) : "",
-               obj->graffiti ? prepare_quotes(buf4, obj->graffiti, sizeof(buf4) / sizeof(buf4[0])) : "");
+  // Blow away their existing gear. Too much can change between savings for us to try to modify in place.
+  snprintf(buf, sizeof(buf), "DELETE FROM pfiles_cyberware WHERE idnum=%ld", GET_IDNUM(player));
+  mysql_wrapper(mysql, buf);
 
-      // Obj val 2 for cyberware is grade, so I'm not sure what this code used to do, but now it probably chokes on things.
-      // Maybe it was related to skillsoft chips or photos or something?
-      /* if (GET_OBJ_VAL(obj, 2) == 4) {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "0, 0, 0, %d, 0, 0, %d, %d, %d, 0, 0, 0", GET_OBJ_VAL(obj, 3), GET_OBJ_VAL(obj, 6),
-                           GET_OBJ_VAL(obj, 7), GET_OBJ_VAL(obj, 8));
-      } else
-        <for loop to iterate over values>
-      */
-      for (int x = 0; x < NUM_OBJ_VALUES; x++)
-        snprintf(ENDOF(cyberware_query_str), sizeof(cyberware_query_str) - strlen(buf), ", %d", GET_OBJ_VAL(obj, x));
+  if (!player->cyberware)
+    return;
 
-      // Add our level and position information here, then execute.
-      snprintf(ENDOF(cyberware_query_str), sizeof(cyberware_query_str) - strlen(cyberware_query_str), ", %d, %d, %lu);",
-               level, posi++, GET_OBJ_IDNUM(obj));
-      mysql_wrapper(mysql, cyberware_query_str);
+  // Compose the first part of our bulk save string.
+  assert(NUM_OBJ_VALUES == 18); // If this assertion tripped, you need to rewrite object saving here, then UPDATE the assertion.
+  strlcpy(buf, "INSERT INTO pfiles_cyberware ("
+               "idnum, Vnum, Cost, Restring, Photo, graffiti, Level, posi, obj_idnum,"
+               "Value0, Value1, Value2, Value3, Value4, Value5, Value6, Value7, Value8, Value9, Value10, Value11, Value12, Value13, Value14, Value15, Value16, Value17"
+               ") VALUES ",
+          sizeof(buf));
 
-      if (obj->contains) {
+  bool wrote_anything = FALSE;
+  for (struct obj_data *obj = player->cyberware; obj;) {
+    // Only save things that are not NORENT. Despite being written into the forloop, this is necessary to cover NORENT items _in_ worn things.
+    if (!IS_OBJ_STAT(obj, ITEM_EXTRA_NORENT)) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), 
+              //   id vn  co  re   ph   gr  lv po oid
+              "%s(%ld,%ld,%d,'%s','%s','%s',%d,%d,%lu"
+              // object values 0-17
+              "%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d)",
+              wrote_anything ? "," : "", // comma separator for subsequent items
+              GET_IDNUM(player),
+              GET_OBJ_VNUM(obj),
+              GET_OBJ_COST(obj),
+              obj->restring ? prepare_quotes(buf3, obj->restring, sizeof(buf3) / sizeof(buf3[0])) : "",
+              obj->photo ? prepare_quotes(buf2, obj->photo, sizeof(buf2) / sizeof(buf2[0])) : "",
+              obj->graffiti ? prepare_quotes(buf4, obj->graffiti, sizeof(buf4) / sizeof(buf4[0])) : "",
+              level,
+              posi++,
+              GET_OBJ_IDNUM(obj),
+              // I hate this, but having it prewritten saves 18 string concatenations _per object_ compared to doing it in a forloop.
+              GET_OBJ_VAL(obj, 0),
+              GET_OBJ_VAL(obj, 1),
+              GET_OBJ_VAL(obj, 2),
+              GET_OBJ_VAL(obj, 3),
+              GET_OBJ_VAL(obj, 4),
+              GET_OBJ_VAL(obj, 5),
+              GET_OBJ_VAL(obj, 6),
+              GET_OBJ_VAL(obj, 7),
+              GET_OBJ_VAL(obj, 8),
+              GET_OBJ_VAL(obj, 9),
+              GET_OBJ_VAL(obj, 10),
+              GET_OBJ_VAL(obj, 11),
+              GET_OBJ_VAL(obj, 12),
+              GET_OBJ_VAL(obj, 13),
+              GET_OBJ_VAL(obj, 14),
+              GET_OBJ_VAL(obj, 15),
+              GET_OBJ_VAL(obj, 16),
+              GET_OBJ_VAL(obj, 17));
+      wrote_anything = TRUE;
+
+      // Since this is a rentable object, we want to dive into the contents if they exist.
+      // Never dive into ITEM_PART, since it can point to a cyberdeck that's not part of this list.
+      if (obj->contains && GET_OBJ_TYPE(obj) != ITEM_PART) {
         obj = obj->contains;
         level++;
         continue;
-      } else if (!obj->next_content && obj->in_obj)
-        while (obj && !obj->next_content && level >= 0) {
-          obj = obj->in_obj;
-          level--;
-        }
-      if (obj)
-        obj = obj->next_content;
+      }
+    }
+
+    // If we've hit the end of this object's linked list, and it's in an object, back out until we hit the top.
+    if (!obj->next_content && obj->in_obj) {
+      while (obj && !obj->next_content && level >= 0) {
+        obj = obj->in_obj;
+        level--;
+      }
+    }
+
+    if (obj)
+      obj = obj->next_content;
+  }
+
+  // Finally, execute our query.
+  if (mysql_wrapper(mysql, buf)) {
+    if (strlen(buf) >= sizeof(buf) - 2) {
+      mudlog_vfprintf(player, LOG_SYSLOG, "SYSERR: Failed to save cyberware for %s due to having too much crap.", GET_CHAR_NAME(player));
+      send_to_char(player, "^RWARNING: You have so much cyberware that the game is unable to save your profile. Clear out your headware memory immediately to avoid loss of data.^n\r\n");
+    } else {
+      mudlog_vfprintf(player, LOG_SYSLOG, "SYSERR: Failed to save cyberware for %s due to database error. Page Lucien to diagnose.", GET_CHAR_NAME(player));
     }
   }
 }
