@@ -1031,7 +1031,7 @@ int raw_stat_loss(struct char_data *ch) {
 
     if (GET_REAL_ATT(ch, attribute) > MAX(1, 1 + racial_attribute_modifiers[(int)GET_RACE(ch)][attribute])) {
       // We can safely knock down the attribute since we've guaranteed it's above their racial minimum.
-      int karma_to_lose = MIN(GET_TKE(ch), 2 * GET_REAL_ATT(ch, attribute));
+      int karma_to_lose = MIN((int) GET_TKE(ch), 2 * GET_REAL_ATT(ch, attribute));
 
       // Take the full amount from TKE.
       GET_TKE(ch) -= karma_to_lose;
