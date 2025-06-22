@@ -5603,7 +5603,7 @@ int get_string_length_after_color_code_removal(const char *str, struct char_data
         if (*(ptr + 1) == '[')
         {
           // We know that ptr+1 was a valid character (see first check in this while), so at worst, +2 can be \0.
-          if (!*(ptr + 2) || !(*(ptr + 2) == 'F' && *(ptr + 2) == 'f'))
+          if (!*(ptr + 2) || !(*(ptr + 2) == 'F' || *(ptr + 2) == 'f'))
           {
             if (ch_to_notify_of_failure_reason)
               send_to_char("Sorry, xterm256 colors can only be specified in foreground mode (^^[F...]).\r\n", ch_to_notify_of_failure_reason);
