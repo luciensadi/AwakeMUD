@@ -5740,9 +5740,9 @@ ACMD(do_set)
                { "maxmental",       LVL_VICEPRES,      BOTH,   NUMBER },       // 5
                { "physical",        LVL_ADMIN, BOTH,   NUMBER },
                { "mental",   LVL_ADMIN, BOTH,   NUMBER },
-               { "align",           LVL_VICEPRES,      BOTH,   NUMBER },
-               { "str",             LVL_ADMIN, BOTH,   NUMBER },
-               { "ess",             LVL_ADMIN, BOTH,   NUMBER },       // 10
+               { "donotusealign",           LVL_VICEPRES,      BOTH,   NUMBER },
+               { "ess",             LVL_ADMIN, BOTH,   NUMBER },
+               { "str",             LVL_ADMIN, BOTH,   NUMBER },       // 10
                { "int",             LVL_ADMIN, BOTH,   NUMBER },
                { "wil",             LVL_ADMIN, BOTH,   NUMBER },
                { "qui",             LVL_ADMIN, BOTH,   NUMBER },
@@ -5770,7 +5770,7 @@ ACMD(do_set)
                { "nowizlist",       LVL_VICEPRES,      PC,     BINARY },//35
                { "loadroom",        LVL_ADMIN, PC,     MISC },
                { "color",           LVL_ADMIN, PC,     BINARY },
-               { "idnum",           LVL_VICEPRES,      PC,     NUMBER },
+               { "idnum",           LVL_PRESIDENT,      PC,     NUMBER },
                { "password",  LVL_VICEPRES,      PC,     MISC },
                { "nodelete",        LVL_VICEPRES,      PC,     BINARY }, // 40
                { "cha",             LVL_ADMIN, BOTH,   NUMBER },
@@ -5966,29 +5966,30 @@ ACMD(do_set)
     SET_OR_REMOVE(PRF_FLAGS(vict), PRF_AFK);
     on = !on;                   /* so output will be correct */
     break;
-  case 4:
+  case 4: // max physical
     RANGE(0, 100);
     vict->points.max_physical = value * 100;
     affect_total(vict);
     break;
-  case 5:
+  case 5: // max mental
     RANGE(0, 100);
     vict->points.max_mental = value * 100;
     affect_total(vict);
     break;
-  case 6:
+  case 6: // physical
     RANGE(-(GET_BOD(vict) - 1), (int)(vict->points.max_physical / 100));
     vict->points.physical = value * 100;
     affect_total(vict);
     update_pos(vict);
     break;
-  case 7:
+  case 7: // mental
     RANGE(-9, (int)(vict->points.max_mental / 100));
     vict->points.mental = value * 100;
     affect_total(vict);
     update_pos(vict);
     break;
-  case 9:
+  // case 8 would be align, but that's not used
+  case 9: // str
     if (IS_NPC(vict) || access_level(vict, LVL_ADMIN))
       RANGE(1, 50);
     else
@@ -5998,7 +5999,7 @@ ACMD(do_set)
     GET_REAL_STR(vict) = value;
     affect_total(vict);
     break;
-  case 10:
+  case 10: // ess
     if (IS_NPC(vict) || (IS_SENATOR(vict) && access_level(vict, LVL_ADMIN)))
       RANGE(1, 1000);
     else
@@ -6006,7 +6007,7 @@ ACMD(do_set)
     GET_REAL_ESS(vict) = value;
     affect_total(vict);
     break;
-  case 11:
+  case 11: // int
     if (IS_NPC(vict) || (IS_SENATOR(vict) && access_level(vict, LVL_ADMIN)))
       RANGE(1, 50);
     else
@@ -6016,7 +6017,7 @@ ACMD(do_set)
     GET_REAL_INT(vict) = value;
     affect_total(vict);
     break;
-  case 12:
+  case 12: // wil
     if (IS_NPC(vict) || (IS_SENATOR(vict) && access_level(vict, LVL_ADMIN)))
       RANGE(1, 50);
     else
@@ -6026,7 +6027,7 @@ ACMD(do_set)
     GET_REAL_WIL(vict) = value;
     affect_total(vict);
     break;
-  case 13:
+  case 13: // qui
     if (IS_NPC(vict) || (IS_SENATOR(vict) && access_level(vict, LVL_ADMIN)))
       RANGE(1, 50);
     else
@@ -6036,7 +6037,7 @@ ACMD(do_set)
     GET_REAL_QUI(vict) = value;
     affect_total(vict);
     break;
-  case 14:
+  case 14: // bod
     if (IS_NPC(vict) || (IS_SENATOR(vict) && access_level(vict, LVL_ADMIN)))
       RANGE(1, 50);
     else
@@ -6046,7 +6047,7 @@ ACMD(do_set)
     GET_REAL_BOD(vict) = value;
     affect_total(vict);
     break;
-  case 15:
+  case 15: // pronouns / sex
     if (!str_cmp(val_arg, "male"))
       vict->player.pronouns = PRONOUNS_MASCULINE;
     else if (!str_cmp(val_arg, "female"))
@@ -6061,61 +6062,55 @@ ACMD(do_set)
       return;
     }
     break;
-  case 16:
+  case 16: // innate ballistic
     RANGE(0, 100);
     GET_INNATE_BALLISTIC(vict) = value;
     affect_total(vict);
     break;
-  case 17:
+  case 17: // nuyen
     RANGE(0, 100000000);
     GET_NUYEN_RAW(vict) = value;
     break;
-  case 18:
+  case 18: // bank
     RANGE(0, 100000000);
     GET_BANK_RAW(vict) = value;
     break;
-  case 19:
+  case 19: // rep
     RANGE(0, INT_MAX - 1);
     GET_REP(vict) = value;
     break;
-  case 20:
+  case 20: // init dice
     RANGE(0, 10);
     vict->points.init_dice = value;
     affect_total(vict);
     break;
-  case 21:
+  case 21: // init roll
     RANGE(0, 50);
     vict->points.init_roll = value;
     affect_total(vict);
     break;
-  case 22:
+  case 22: // invis
     if (!access_level(ch, LVL_ADMIN) && ch != vict) {
-      send_to_char("You aren't erudite enough for that!\r\n", ch);
-
+      send_to_char("You aren't erudite enough to do that on others!\r\n", ch);
       SET_CLEANUP(false);
-
       return;
     }
     if(!access_level(vict, value))
       RANGE(0, GET_LEVEL(vict));
     GET_INVIS_LEV(vict) = value;
     break;
-  case 23:
+  case 23: // nohassle
     if (!access_level(ch, LVL_ADMIN) && ch != vict) {
-      send_to_char("You aren't erudite enough for that!\r\n", ch);
-
+      send_to_char("You aren't erudite enough to do that on others!\r\n", ch);
       SET_CLEANUP(false);
-
       return;
     }
     SET_OR_REMOVE(PRF_FLAGS(vict), PRF_NOHASSLE);
     break;
-  case 24:
+  case 24: // frozen
     if (ch == vict) {
       send_to_char("Better not -- could be a long winter!\r\n", ch);
-
       SET_CLEANUP(false);
-
       return;
     }
     SET_OR_REMOVE(PLR_FLAGS(vict), PLR_FROZEN);
@@ -6125,14 +6120,14 @@ ACMD(do_set)
       GET_FREEZE_LEV(vict) = GET_LEVEL(ch);
 
     break;
-  case 25:
+  case 25: // karma
     RANGE(0, MYSQL_UNSIGNED_MEDIUMINT_MAX);
     //GET_KARMA(vict) = value;
     vict->points.karma = value;
     break;
-  case 26:
-  case 27:
-  case 28:
+  case 26: // drunk
+  case 27: // hunger
+  case 28: // thirst
     if (!str_cmp(val_arg, "off")) {
       GET_COND(vict, (l - 26)) = (char) -1;
       snprintf(buf, sizeof(buf), "%s's %s now off.", GET_NAME(vict), fields[l].cmd);
@@ -6149,31 +6144,27 @@ ACMD(do_set)
       return;
     }
     break;
-  case 29:
+  case 29: // killer
     SET_OR_REMOVE(PLR_FLAGS(vict), PLR_KILLER);
     break;
-  case 30:
-    if (!access_level(ch, value) || value > LVL_MAX) {
+  case 30: // level (shittier form of advance)
+    if (!access_level(ch, value) || !access_level(ch, GET_LEVEL(vict))) {
       send_to_char("You can't do that.\r\n", ch);
-
       SET_CLEANUP(false);
-
       return;
     }
 
     /* Can't demote other owners this way, unless it's yourself */
     if ( access_level(vict, LVL_PRESIDENT) && vict != ch ) {
       send_to_char("You can't demote other presidents.\r\n",ch);
-
       SET_CLEANUP(false);
-
       return;
     }
 
     RANGE(1, LVL_MAX);
     GET_LEVEL(vict) = (byte) value;
     break;
-  case 31:
+  case 31: // room (like a transfer I guess?)
     if ((i = real_room(value)) < 0) {
       send_to_char("No room exists with that number.\r\n", ch);
 
@@ -6183,19 +6174,17 @@ ACMD(do_set)
     char_from_room(vict);
     char_to_room(vict, &world[i]);
     break;
-  case 32:
+  case 32: // roomflags visible to vict
     SET_OR_REMOVE(PRF_FLAGS(vict), PRF_ROOMFLAGS);
     break;
-  case 33:
+  case 33: // can log in on this character from a half-banned site
     SET_OR_REMOVE(PLR_FLAGS(vict), PLR_SITEOK);
     break;
-  case 34:
+  case 34: // deleted flag
     SET_OR_REMOVE(PLR_FLAGS(vict), PLR_DELETED);
     break;
-  case 35:
-    //    SET_OR_REMOVE(PLR_FLAGS(vict), PLR_NOWIZLIST);
-    break;
-  case 36:
+  // 35 is nowizlist, invalid
+  case 36: // loadroom
     if (!str_cmp(val_arg, "off"))
       GET_LOADROOM(vict) = 0;
     else if (is_number(val_arg)) {
@@ -6208,14 +6197,16 @@ ACMD(do_set)
     } else
       strlcpy(buf, "Must be 'off' or a room's virtual number.\r\n", sizeof(buf));
     break;
-  case 38:
+  // 37: color
+  case 38: // idnum (bad idea)
     if (GET_IDNUM(ch) != 1 || !IS_NPC(vict)) {
       SET_CLEANUP(false);
       return;
     }
+    mudlog_vfprintf(ch, LOG_WIZLOG, "Changing %s's idnum from %ld to %ld. THIS WILL BREAK DATABASE ENTRIES.", GET_CHAR_NAME(vict), GET_IDNUM(vict), value);
     GET_IDNUM(vict) = value;
     break;
-  case 39:
+  case 39: // password
     if (!is_file) {
       send_to_char("You can only do that to offline characters.\r\n", ch);
       SET_CLEANUP(false);

@@ -534,7 +534,7 @@ struct char_point_data
   int karma;            /* The experience of the player */
   unsigned int rep;              /* the reputation of the player  (karma earned via runs) */
   unsigned int noto;              /* the reputation of the player  (karma earned via kills) */
-  int tke;              /* the reputation of the player  (karma earned total) */
+  unsigned int tke;              /* the reputation of the player  (karma earned total) */
   ush_int sig;
   sbyte init_dice;     /* Bonuses for initiative dice             */
   sh_int init_roll;     /* Total of init roll                      */
