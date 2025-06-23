@@ -1275,8 +1275,17 @@ void point_update(void)
   /* save shop order updates */
   save_shop_orders();
 
+  if (world[0].contents) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Room 0 already contains objects before UpdateCounters(), they will be destroyed now. First content is %s.", GET_OBJ_NAME(world[0].contents));
+  }
+
   /* update object counters */
   ObjList.UpdateCounters();
+
+  // Purge out room 0.
+  while (world[0].contents) {
+    extract_obj(world[0].contents);
+  }
 }
 
 void update_paydata_market() {

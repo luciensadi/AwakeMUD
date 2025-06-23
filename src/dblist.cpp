@@ -437,22 +437,23 @@ void objList::UpdateCounters(void)
             
             // here we make sure to remove all items from the object
             struct room_data *in_room = get_obj_in_room(temp->data);
-#define CONTENTS temp->data->contains
-            while (CONTENTS) {
-              if (GET_OBJ_QUEST_CHAR_ID(CONTENTS) && in_room) {
+            struct obj_data *contents;
+            while ((contents = temp->data->contains)) {
+              obj_from_obj(contents);
+              if (GET_OBJ_QUEST_CHAR_ID(contents) && in_room) {
                 // If it's a quest item, and we have somewhere to drop it, do so.
-                obj_from_obj(CONTENTS);
-                obj_to_room(CONTENTS, in_room);
+                obj_to_room(contents, in_room);
               } else {
                 // Otherwise, extract it. We know it's an NPC corpse because PC corpses never decay.
-                if (GET_OBJ_TYPE(CONTENTS) == ITEM_WEAPON && WEAPON_IS_GUN(CONTENTS) && CONTENTS->contains && GET_OBJ_TYPE(CONTENTS->contains) == ITEM_GUN_MAGAZINE) {
-                  AMMOTRACK_OK(GET_MAGAZINE_BONDED_ATTACKTYPE(CONTENTS->contains), GET_MAGAZINE_AMMO_TYPE(CONTENTS->contains), AMMOTRACK_NPC_SPAWNED, -GET_MAGAZINE_AMMO_COUNT(CONTENTS->contains));
+                if (GET_OBJ_TYPE(contents) == ITEM_WEAPON && WEAPON_IS_GUN(contents) && contents->contains && GET_OBJ_TYPE(contents->contains) == ITEM_GUN_MAGAZINE) {
+                  AMMOTRACK_OK(GET_MAGAZINE_BONDED_ATTACKTYPE(contents->contains), GET_MAGAZINE_AMMO_TYPE(contents->contains), AMMOTRACK_NPC_SPAWNED, -GET_MAGAZINE_AMMO_COUNT(contents->contains));
                 }
-                extract_obj(CONTENTS);
+                // And by 'extract it', I mean 'transfer it to room 0 and deal with it later'.
+                obj_to_room(contents, &world[0]);
               }
             }
-#undef CONTENTS
             extract_obj(temp->data);
+            // We've possibly invalidated the list here, so we have to go back to the top and start over.
           }
         }
         continue;
