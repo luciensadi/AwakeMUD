@@ -1126,7 +1126,7 @@ void reward(struct char_data *ch, struct char_data *johnson)
 
       // Check to see if they have it on them already.
       if (get_carried_vnum(ch, GET_OBJ_VNUM(obj), FALSE)) {
-        act("You already have a copy of $p, so $N doesn't give you another.", FALSE, johnson, obj, ch, TO_VICT);
+        act("You already have a copy of $p, so $n doesn't give you another.", FALSE, johnson, obj, ch, TO_VICT);
         extract_obj(obj);
         obj = NULL;
       }
