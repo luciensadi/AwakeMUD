@@ -1714,12 +1714,12 @@ void do_stat_character(struct char_data * ch, struct char_data * k)
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Multiplier: ^c%.2f^n\r\n", (float) GET_CHAR_MULTIPLIER(k) / 100);
     }
     if (access_level(ch, LVL_VICEPRES)) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Email: ^y%s^n", GET_EMAIL(k));
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Email: ^y%s^n; ", GET_EMAIL(k));
       if (k->desc && k->desc->pProtocol) {
         if (k->desc->pProtocol->pVariables[eMSDP_CLIENT_ID] && k->desc->pProtocol->pVariables[eMSDP_CLIENT_ID]->pValueString) {
           extern const char *get_descriptor_fingerprint(struct descriptor_data *d);
 
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "; Current Client: ^c%s v%s^n",
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Current Client: ^c%s v%s^n; ",
                    k->desc->pProtocol->pVariables[eMSDP_CLIENT_ID]->pValueString,
                    k->desc->pProtocol->pVariables[eMSDP_CLIENT_VERSION]->pValueString ? k->desc->pProtocol->pVariables[eMSDP_CLIENT_VERSION]->pValueString : "NULL");
           
