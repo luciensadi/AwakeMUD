@@ -339,7 +339,7 @@ bool should_tch_see_chs_movement_message(struct char_data *viewer, struct char_d
             act("You notice $N sneaking around.", FALSE, viewer, 0, actor, TO_CHAR);
             if (can_hurt(actor, viewer, 0, TRUE)) {
               act("^T$n^T scowls at you-- your sneaking around has not gone unnoticed.^n", TRUE, viewer, 0, actor, TO_VICT);
-              act("$n scowls at $N-- $s sneaking around has not gone unnoticed.", TRUE, viewer, 0, actor, TO_NOTVICT);
+              act("$n scowls at $N-- $S sneaking around has not gone unnoticed.", TRUE, viewer, 0, actor, TO_NOTVICT);
             }
           } else {
             act("You startle and look around-- you could have sworn you heard something.", FALSE, viewer, 0, 0, TO_CHAR);
