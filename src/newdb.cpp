@@ -1281,7 +1281,7 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
     return false;
 
   // Write a single log message each time we save. This will help trace how often we're doing this and if there are excessive calls.
-  log_vfprintf("Saving %s to DB.", GET_CHAR_NAME(player));
+  // log_vfprintf("Saving %s to DB.", GET_CHAR_NAME(player));
 
   // Check all their stuff over. If it's ALL empty, this is a bugged character and should not be saved.
   {
@@ -3307,7 +3307,7 @@ void fix_ghoul_index(struct char_data *ch) {
     }
   }
 
-  mudlog_vfprintf(ch, LOG_SYSLOG, "Ghoul bioware index refund: Index %d -> %d, highest %d -> %d.", GET_INDEX(ch), GET_INDEX(ch) / 2, GET_HIGHEST_INDEX(ch), GET_HIGHEST_INDEX(ch) / 2);
+  mudlog_vfprintf(ch, LOG_SYSLOG, "%s: Ghoul bioware index refund: Index %d -> %d, highest %d -> %d.", GET_CHAR_NAME(ch), GET_INDEX(ch), GET_INDEX(ch) / 2, GET_HIGHEST_INDEX(ch), GET_HIGHEST_INDEX(ch) / 2);
 
   GET_INDEX(ch) /= 2;
   GET_HIGHEST_INDEX(ch) /= 2;
