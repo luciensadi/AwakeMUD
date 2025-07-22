@@ -365,7 +365,8 @@ enum {
 #define PLR_SUBMERSION                       55
 #define PLR_ADDITIONAL_SCRUTINY              56
 #define PLR_RECEIVED_GHOUL_INDEX_DELTA       57  /* Player has had their ghoul index cost reset */
-#define PLR_MAX                              58
+#define PLR_PAID_FOR_WHOTITLE                58
+#define PLR_MAX                              59
 // Adding something here? Add it to constants.cpp's player_bits too.
 
 

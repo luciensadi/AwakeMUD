@@ -619,6 +619,7 @@ const char *player_bits[] =
     "SUBMERSION",
     "STAFF_SCRUTINY",
     "GHOUL_IDX_DONE",
+    "PAID_FOR_WHOTITLE",
     "\n"
   };
 

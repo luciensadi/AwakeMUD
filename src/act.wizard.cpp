@@ -4184,41 +4184,40 @@ ACMD(do_wiztitle)
   send_to_char("Titles are disabled on the buildport.\r\n", ch);
   return;
 #else
-  if (IS_NPC(ch))
-    send_to_char("Your title is fine... go away.\r\n", ch);
-  else if (PLR_FLAGGED(ch, PLR_NOTITLE))
-    send_to_char("You can't title yourself.\r\n", ch);
-  else if (subcmd == SCMD_WHOTITLE) {
-    skip_spaces(&argument);
-    if (strstr((const char *)argument, "^"))
-      send_to_char("Whotitles can't contain the ^^ character.\r\n", ch);
-    else if (strlen(argument) > MAX_WHOTITLE_LENGTH) {
-      send_to_char(ch, "Sorry, whotitles can't be longer than %d characters.\r\n", MAX_WHOTITLE_LENGTH);
-    } else {
-      set_whotitle(ch, argument);
-      send_to_char(ch, "Okay, your whotitle is now %s.\r\n", GET_WHOTITLE(ch));
-      snprintf(buf, sizeof(buf), "UPDATE pfiles SET Whotitle='%s' WHERE idnum=%ld;", prepare_quotes(buf2, GET_WHOTITLE(ch), sizeof(buf2) / sizeof(buf2[0])), GET_IDNUM(ch));
-      mysql_wrapper(mysql, buf);
-    }
-  } else if (subcmd == SCMD_PRETITLE) {
-    if (GET_TKE(ch) < 100 && GET_LEVEL(ch) < LVL_BUILDER) {
-      send_to_char(ch, "You aren't erudite enough to do that.\r\n");
-      return;
-    }
-    skip_spaces(&argument);
+  
+  FAILURE_CASE(IS_NPC(ch), "Your title is fine... go away.");
+  FAILURE_CASE(PLR_FLAGGED(ch, PLR_NOTITLE), "Your ability to set your title has been restricted.");
+  FAILURE_CASE(!access_level(ch, LVL_BUILDER) && !PLR_FLAGGED(ch, PLR_PAID_FOR_WHOTITLE),
+               "Setting your whotitle replaces your race in the wholist. You'll need to purchase this vanity ability with the ^WSYSPOINTS WHOTITLE^n command.");
+
+  skip_spaces(&argument);
+
+  FAILURE_CASE(!*argument, "You must specify the title you want to change to.");
+
+  if (subcmd == SCMD_WHOTITLE) {
+    FAILURE_CASE(str_cmp(argument, get_string_after_color_code_removal(argument, NULL)), "Whotitles can't contain colors.");
+    FAILURE_CASE_PRINTF(strlen(argument) > MAX_WHOTITLE_LENGTH, "Sorry, whotitles can't be longer than %d characters.", MAX_WHOTITLE_LENGTH);
+    
+    set_whotitle(ch, argument);
+    send_to_char(ch, "Okay, your whotitle is now %s.\r\n", GET_WHOTITLE(ch));
+    snprintf(buf, sizeof(buf), "UPDATE pfiles SET Whotitle='%s' WHERE idnum=%ld;", prepare_quotes(buf2, GET_WHOTITLE(ch), sizeof(buf2) / sizeof(buf2[0])), GET_IDNUM(ch));
+    mysql_wrapper(mysql, buf);
+    return;
+  }
+  
+  if (subcmd == SCMD_PRETITLE) {
+    FAILURE_CASE(GET_TKE(ch) < 100 && GET_LEVEL(ch) < LVL_BUILDER, "You don't have enough TKE for that. You need at least 100.");
+
     if (GET_LEVEL(ch) < LVL_BUILDER && *argument)
       strlcat(buf, "^n", sizeof(buf));
-    if (strstr((const char *)argument, "^l")) {
-      send_to_char("Whotitles can't contain pure black.\r\n", ch);
-    } else if (strlen(argument) > (MAX_TITLE_LENGTH -2)) {
-      send_to_char(ch, "Sorry, pretitles can't be longer than %d characters.\r\n", MAX_TITLE_LENGTH - 2);
-    } else {
-      set_pretitle(ch, argument);
-      snprintf(buf, sizeof(buf), "Okay, you're now %s %s %s.\r\n", GET_PRETITLE(ch), GET_CHAR_NAME(ch), GET_TITLE(ch));
-      send_to_char(buf, ch);
-      snprintf(buf, sizeof(buf), "UPDATE pfiles SET Pretitle='%s' WHERE idnum=%ld;", prepare_quotes(buf2, GET_PRETITLE(ch), sizeof(buf2) / sizeof(buf2[0])), GET_IDNUM(ch));
-      mysql_wrapper(mysql, buf);
-    }
+    
+    FAILURE_CASE(strstr(argument, "^l"), "Whotitles can't contain pure black.");
+    FAILURE_CASE_PRINTF(strlen(argument) > (MAX_TITLE_LENGTH -2), "Sorry, pretitles can't be longer than %d characters.", MAX_TITLE_LENGTH - 2);
+    
+    set_pretitle(ch, argument);
+    send_to_char(ch, "Okay, you're now %s %s %s.\r\n", GET_PRETITLE(ch), GET_CHAR_NAME(ch), GET_TITLE(ch));
+    snprintf(buf, sizeof(buf), "UPDATE pfiles SET Pretitle='%s' WHERE idnum=%ld;", prepare_quotes(buf2, GET_PRETITLE(ch), sizeof(buf2) / sizeof(buf2[0])), GET_IDNUM(ch));
+    mysql_wrapper(mysql, buf);
   }
 #endif
 }

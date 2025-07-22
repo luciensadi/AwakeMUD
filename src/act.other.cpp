@@ -4839,6 +4839,7 @@ ACMD(do_syspoints) {
       send_to_char(ch, " - You %s^n purchased ^WNODELETE^n.\r\n", PLR_FLAGGED(ch, PLR_NODELETE) ? "^ghave" : "^yhave not yet");
       send_to_char(ch, " - You %s^n purchased the ability to see ^WROLLS^n output.\r\n", PLR_FLAGGED(ch, PLR_PAID_FOR_ROLLS) ? "^ghave" : "^yhave not yet");
       send_to_char(ch, " - You %s^n purchased the ability to see ^WVNUMS^n in your prompt.\r\n", PLR_FLAGGED(ch, PLR_PAID_FOR_VNUMS) ? "^ghave" : "^yhave not yet");
+      send_to_char(ch, " - You %s^n purchased the ability to set your ^WWHOTITLE^n.\r\n", PLR_FLAGGED(ch, PLR_PAID_FOR_WHOTITLE) ? "^ghave" : "^yhave not yet");
 
       if (GET_CHAR_MAX_EXDESCS(ch) <= 2) {
         send_to_char(" - You ^yhave not yet^n purchased any ^WEXDESC^n slots beyond the default 2.\r\n", ch);
@@ -5117,6 +5118,35 @@ ACMD(do_syspoints) {
 
     if (is_abbrev(arg, "exdescs") || is_abbrev(arg, "extra descriptions")) {
       syspoints_purchase_exdescs(ch, buf, FALSE);
+      return;
+    }
+
+    if (is_abbrev(arg, "whotitle")) {
+      // Already set.
+      if (PLR_FLAGGED(ch, PLR_PAID_FOR_WHOTITLE)) {
+        send_to_char("You've already purchased the ability to set your whotitle! You can set it with ^WWHOTITLE <new title>^n.\r\n", ch);
+        return;
+      }
+
+      // Can they afford it?
+      if (GET_SYSTEM_POINTS(ch) >= SYSP_WHOTITLE_COST) {
+        // Have they entered the confirmation command?
+        if (is_abbrev(buf, "confirm")) {
+          GET_SYSTEM_POINTS(ch) -= SYSP_WHOTITLE_COST;
+          send_to_char(ch, "Congratulations, you can now set your whotitle with the ^WWHOTITLE <new title>^n command! %d syspoints have been deducted from your total.\r\n", SYSP_WHOTITLE_COST);
+          PLR_FLAGS(ch).SetBit(PLR_PAID_FOR_WHOTITLE);
+          mudlog("Purchased whotitle with syspoints.", ch, LOG_SYSLOG, TRUE);
+          playerDB.SaveChar(ch);
+          return;
+        }
+
+        // They can afford it, but didn't use the confirm form.
+        send_to_char(ch, "You can spend %d syspoints to purchase the ability to change the part of the wholist where your race shows up. Type ^WSYSPOINTS WHOTITLE CONFIRM^n to do so.\r\n", SYSP_WHOTITLE_COST);
+        return;
+      }
+
+      // Too broke.
+      send_to_char(ch, "That costs %d syspoints, and you only have %d.\r\n", SYSP_WHOTITLE_COST, GET_SYSTEM_POINTS(ch));
       return;
     }
 

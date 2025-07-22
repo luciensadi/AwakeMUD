@@ -1034,7 +1034,7 @@ struct command_info cmd_info[] =
     { "weather"    , POS_LYING   , do_weather  , 0, 0, ALLOWS_IDLE_REWARD },
     { "who"        , POS_DEAD    , do_who      , 0, 0, ALLOWS_IDLE_REWARD },
     { "whoami"     , POS_DEAD    , do_gen_ps   , 0, SCMD_WHOAMI, ALLOWS_IDLE_REWARD },
-    { "whotitle"   , POS_DEAD    , do_wiztitle , LVL_BUILDER, SCMD_WHOTITLE, ALLOWS_IDLE_REWARD },
+    { "whotitle"   , POS_DEAD    , do_wiztitle , 0, SCMD_WHOTITLE, ALLOWS_IDLE_REWARD },
     { "where"      , POS_MORTALLYW, do_where    , 1, 0, ALLOWS_IDLE_REWARD },
     { "wheresmycar", POS_RESTING , do_wheresmycar, 1, 0, BLOCKS_IDLE_REWARD },
     { "whisper"    , POS_LYING   , do_spec_comm, 0, SCMD_WHISPER, BLOCKS_IDLE_REWARD },

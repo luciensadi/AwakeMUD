@@ -73,6 +73,7 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 #define SYSP_NODELETE_COST                                     100
 #define SYSP_ROLLS_COST                                        25
 #define SYSP_VNUMS_COST                                        5
+#define SYSP_WHOTITLE_COST                                     50
 
 #define SYSP_NUYEN_PURCHASE_COST                               100000
 
