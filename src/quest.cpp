@@ -832,14 +832,14 @@ bool _raw_check_quest_kill(struct char_data *ch, struct char_data *victim) {
 }
 
 bool _subsection_check_quest_kill(struct char_data *ch, struct char_data *victim) {
-  // You can only share quest ticks if you're grouped.
-  if (!AFF_FLAGGED(ch, AFF_GROUP)) {
+  // You can only share quest ticks if you're grouped. Summoned NPCs are immune to this requirement.
+  if (!AFF_FLAGGED(ch, AFF_GROUP) && !IS_NPNPC(ch)) {
     return FALSE;
   }
 
   // Followers (both projected and not)
   for (struct follow_type *f = ch->followers; f; f = f->next) {
-    if (!AFF_FLAGGED(f->follower, AFF_GROUP)) {
+    if (!AFF_FLAGGED(f->follower, AFF_GROUP) && !IS_NPNPC(ch)) {
       continue;
     }
 
@@ -856,7 +856,7 @@ bool _subsection_check_quest_kill(struct char_data *ch, struct char_data *victim
 
   // Master (both projected and not)
   if (ch->master) {
-    if (!AFF_FLAGGED(ch->master, AFF_GROUP)) {
+    if (!AFF_FLAGGED(ch->master, AFF_GROUP)) {  // No NPNPC check here since the master should never be an elemental etc.
       return FALSE;
     }
 
@@ -1202,12 +1202,12 @@ void reward(struct char_data *ch, struct char_data *johnson)
   act(buf, FALSE, johnson, 0, ch, TO_VICT);
   send_to_char(ch, "You gain %.2f karma.\r\n", ((float) gained / 100));
 
-  mudlog_vfprintf(ch, LOG_GRIDLOG, "%s gains %0.2fk and %dn from job %ld. Elapsed time %ld seconds.",
+  mudlog_vfprintf(ch, LOG_GRIDLOG, "%s gains %0.2fk and %dn from job %ld. Elapsed time v2 %0.2f seconds.",
                   GET_CHAR_NAME(ch),
                   (float) gained * 0.01,
                   nuyen,
                   GET_QUEST(ch),
-                  (time(0) - GET_QUEST_STARTED(ch)) / 1000);
+                  difftime(time(0), GET_QUEST_STARTED(ch)));
   end_quest(ch, TRUE);
 }
 
