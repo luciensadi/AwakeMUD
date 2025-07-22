@@ -3711,7 +3711,7 @@ ACMD(do_pour)
 void wear_message(struct char_data *ch, struct obj_data *obj, int where)
 {
 	const char *wear_messages[][2] = {
-			{"$n equip and activates $p.",
+			{"$n equips and activates $p.",
 			 "You equip and activate $p."},
 
 			{"$n wears $p on $s head.",
