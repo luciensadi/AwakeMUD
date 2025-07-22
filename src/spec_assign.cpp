@@ -1005,6 +1005,7 @@ void assign_objects(void)
   ASSIGNOBJ(OBJ_INITIATIVE_TRACKER, initiative_tracker);
   ASSIGNOBJ(10093, slot_machine);
 #ifdef USE_PRIVATE_CE_WORLD
+  ASSIGNOBJ(102208, trideo);
   ASSIGNOBJ(94331, trideo);
   ASSIGNOBJ(70605, desktop);
   ASSIGNOBJ(39799, bank);
