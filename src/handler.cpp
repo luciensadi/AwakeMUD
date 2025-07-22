@@ -2918,6 +2918,20 @@ void extract_char(struct char_data * ch, bool do_save)
     }
   }
 
+    /* end rigging, must come before cyberware extraction */
+  if (PLR_FLAGGED(ch, PLR_REMOTE)) {
+#ifdef USE_ZONE_HOTLOADING
+    stop_rigging(ch, false);
+#else
+    ch->char_specials.rigging->rigger = NULL;
+    ch->char_specials.rigging->cspeed = SPEED_OFF;
+    stop_chase(ch->char_specials.rigging);
+    send_to_veh("You slow to a halt.\r\n", ch->char_specials.rigging, NULL, 0);
+    ch->char_specials.rigging = NULL;
+    PLR_FLAGS(ch).RemoveBit(PLR_REMOTE);
+#endif
+  }
+
   if (ch->followers)
   {
     struct follow_type *nextfollow;
@@ -3072,27 +3086,15 @@ void extract_char(struct char_data * ch, bool do_save)
   }
 
   /* end astral tracking */
-  if (AFF_FLAGGED(ch, AFF_TRACKED))
-    for (struct descriptor_data *d = descriptor_list; d; d = d->next)
+  if (AFF_FLAGGED(ch, AFF_TRACKED)) {
+    for (struct descriptor_data *d = descriptor_list; d; d = d->next) {
       if (d->original && HUNTING(d->original) == ch)
       {
         HUNTING(d->original) = NULL;
         AFF_FLAGS(d->original).RemoveBit(AFF_TRACKING);
         send_to_char("You suddenly lose the trail.\r\n", d->character);
       }
-
-  /* end rigging */
-  if (PLR_FLAGGED(ch, PLR_REMOTE)) {
-#ifdef USE_ZONE_HOTLOADING
-    stop_rigging(ch, false);
-#else
-    ch->char_specials.rigging->rigger = NULL;
-    ch->char_specials.rigging->cspeed = SPEED_OFF;
-    stop_chase(ch->char_specials.rigging);
-    send_to_veh("You slow to a halt.\r\n", ch->char_specials.rigging, NULL, 0);
-    ch->char_specials.rigging = NULL;
-    PLR_FLAGS(ch).RemoveBit(PLR_REMOTE);
-#endif
+    }
   }
 
   // Clean up playergroup info.
