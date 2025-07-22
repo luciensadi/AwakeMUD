@@ -204,6 +204,22 @@ ACMD(do_debug) {
   rest_of_argument = any_one_arg(argument, arg1);
   skip_spaces(&rest_of_argument);
 
+  if (!str_cmp(arg1, "formatting")) {
+    send_to_char(ch, "\e[3mitalics test\e[0m\r\n");
+    send_to_char(ch, "\e[4munderline test\e[0m\r\n");
+    send_to_char(ch, "\e[5mslow blink test\e[0m\r\n");
+    send_to_char(ch, "\e[6mrapid blink test\e[0m\r\n");
+    send_to_char(ch, "\e[7minvert test\e[0m\r\n");
+    send_to_char(ch, "\e[8mconceal test\e[0m\r\n");
+    send_to_char(ch, "\e[9mstrikethrough test\e[0m\r\n");
+    send_to_char(ch, "\e[20mgothic font test\e[0m\r\n");
+    send_to_char(ch, "\e[21mdouble underline test\e[0m\r\n");
+    send_to_char(ch, "\e[51mframed test\e[0m\r\n");
+    send_to_char(ch, "\e[52mencircled test\e[0m\r\n");
+    send_to_char(ch, "\e[53moverlined test\e[0m\r\n");
+    return;
+  }
+
   if (!str_cmp(arg1, "pointers")) {
     send_to_char(ch, "OK, validating every pointer we can think of.\r\n");
     verify_every_pointer_we_can_think_of();
