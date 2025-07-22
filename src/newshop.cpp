@@ -3746,11 +3746,11 @@ bool shop_will_buy_item_from_ch(rnum_t shop_nr, struct obj_data *obj, struct cha
 }
 
 int get_eti_test_results(struct char_data *ch, int eti_skill, int availtn, int availoff, int kinesics, int meta_penalty, int lifestyle, int pheromone_dice, int skill_dice) {
-  char rollbuf[10000];
+  char rollbuf[10000] = {0};
   
   // Calculate eti TNs, factoring in settings, powers, and racism.
   int target = availtn;
-  snprintf(rollbuf, sizeof(rollbuf), "Initial TN %d", target);
+  snprintf(rollbuf, sizeof(rollbuf), "Etiquette test. Initial TN %d", target);
 
   if (availoff) {
     snprintf(ENDOF(rollbuf), sizeof(rollbuf) - strlen(rollbuf), ", -%d (availoffset)", availoff);
@@ -3780,7 +3780,7 @@ int get_eti_test_results(struct char_data *ch, int eti_skill, int availtn, int a
   }
 
   // Calculate their skill dice, including from bioware.
-  int skill = skill_dice ? skill_dice : get_skill(ch, eti_skill, target);
+  int skill = (skill_dice || !ch) ? skill_dice : get_skill(ch, eti_skill, target);
   snprintf(ENDOF(rollbuf), sizeof(rollbuf) - strlen(rollbuf), ", final %d after get_skill(). Base skill %d", target, skill);
 
   if (pheromone_dice) {
