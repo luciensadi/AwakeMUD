@@ -2551,12 +2551,19 @@ bool docwagon(struct char_data *ch)
     if (successes > 0)
     {
       send_to_char(ch, "%s^n chirps cheerily: a trauma team is on its way!\r\n", CAP(GET_OBJ_NAME(docwagon)));
-      if (GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD) {
-        send_to_char(ch, "^L[OOC: Your automated rescue is ready! You can type ^w##COMEGETME^L at any time for pickup.]\r\n");
-      } else {
-        send_to_char(ch, "^L[OOC: Your automated rescue is ready! You can type ^w##COMEGETME^L to be picked up immediately, or you can choose to wait for player assistance to arrive. See ^wHELP DOCWAGON^L for more details.]\r\n");
-      }
       PLR_FLAGS(ch).SetBit(PLR_DOCWAGON_READY);
+
+      if (PLR_FLAGGED(ch, PLR_NEWBIE)) {
+        // Since playerdoc is disabled for newbies, pick them up immediately.
+        docwagon_retrieve(ch);
+        return FALSE;
+      } else {
+        if (GET_TKE(ch) < NEWBIE_KARMA_THRESHOLD) {
+          send_to_char(ch, "^L[OOC: Your automated rescue is ready! You can type ^w##COMEGETME^L at any time for pickup.]\r\n");
+        } else {
+          send_to_char(ch, "^L[OOC: Your automated rescue is ready! You can type ^w##COMEGETME^L to be picked up immediately, or you can choose to wait for player assistance to arrive. See ^wHELP DOCWAGON^L for more details.]\r\n");
+        }
+      }
     } else {
       if (docwagon_tn >= 12) {
         send_to_char(ch, "%s^n pulses weakly, struggling to send out a trauma call through heavy interference.\r\n", CAP(GET_OBJ_NAME(docwagon)));
@@ -2570,7 +2577,7 @@ bool docwagon(struct char_data *ch)
     }
   }
 
-  if ((ch->in_room || ch->in_veh) && !PRF_FLAGGED(ch, PRF_DONT_ALERT_PLAYER_DOCTORS_ON_MORT)) {
+  if ((ch->in_room || ch->in_veh) && !PRF_FLAGGED(ch, PRF_DONT_ALERT_PLAYER_DOCTORS_ON_MORT) && !PLR_FLAGGED(ch, PLR_NEWBIE)) {
     int num_responders = alert_player_doctors_of_mort(ch, docwagon);
     if (num_responders > 0) {
       send_to_char(ch, "^L[OOC: There %s ^w%d^L player%s online who may be able to respond to your DocWagon call.]^n\r\n",

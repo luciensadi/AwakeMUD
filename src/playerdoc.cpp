@@ -58,6 +58,10 @@ int alert_player_doctors_of_mort(struct char_data *ch, struct obj_data *docwagon
   if (!docwagon && !(docwagon = find_best_active_docwagon_modulator(ch)))
     return 0;
 
+  // Skip newbies. They have no death penalty.
+  if (PLR_FLAGGED(ch, PLR_NEWBIE))
+    return 0;
+
   // They don't want to participate-- not an error, just bail.
   if (PRF_FLAGGED(ch, PRF_DONT_ALERT_PLAYER_DOCTORS_ON_MORT))
     return 0;
