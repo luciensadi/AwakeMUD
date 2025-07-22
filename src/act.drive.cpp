@@ -2571,7 +2571,7 @@ void stop_rigging(struct char_data *ch, bool send_message) {
     send_to_char("You return to your senses.\r\n", ch);
 
   struct obj_data *jack = get_datajack(ch, TRUE);
-  if (GET_OBJ_TYPE(jack) == ITEM_CYBERWARE) {
+  if (jack && GET_OBJ_TYPE(jack) == ITEM_CYBERWARE) {
     if (GET_CYBERWARE_TYPE(jack) == CYB_DATAJACK) {
       if (GET_CYBERWARE_FLAGS(jack) == DATA_INDUCTION) {
         snprintf(buf, sizeof(buf), "$n slowly removes $s hand from the induction pad%s.", veh == ch->in_veh ? ", relinquishing control" : "");
@@ -2583,6 +2583,7 @@ void stop_rigging(struct char_data *ch, bool send_message) {
     }
   } else {
     // We should never see this.
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Unable to find datajack during stop_rigging for %s.", GET_CHAR_NAME(ch));
     snprintf(buf, sizeof(buf), "$n undoes the leads of $s 'trode net%s.", veh == ch->in_veh ? ", relinquishing control" : "");
   }
   act(buf, TRUE, ch, 0, 0, TO_ROOM);
