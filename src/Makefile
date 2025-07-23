@@ -27,7 +27,7 @@ CVS = cvs
 # smooth, the define can be removed.
 
 COMMON_FLAGS = -lmysqlclient -lz -lm -lstdc++ -std=c++11
-BOOST_FLAGS = -lboost_filesystem
+BOOST_FLAGS = -lboost_filesystem -lboost_system
 
 # You probably want to comment this out: This is the makefile specification for the GitHub runner.
 LIBS = -lcrypt -L/usr/local/lib $(COMMON_FLAGS) $(BOOST_FLAGS) -lnsl -lcurl
@@ -38,7 +38,7 @@ MYFLAGS = -DNOCRYPT -Dlinux -I /usr/local/include/ -Wall -Wextra -Wno-unused-par
 #MYFLAGS = -DUSE_MEMORY_CANARIES -DDEBUG -DSELFADVANCE -Dosx -I /usr/local/include/ -Wall -Wextra -Wno-unused-parameter -std=c++11 -DSUPPRESS_MOB_SKILL_ERRORS -DACCELERATE_FOR_TESTING -D_GLIBCXX_DEBUG
 
 # Linux / others? Uncomment these:
-#LIBS = -lcrypt -L/usr/local/lib $(COMMON_FLAGS) -lnsl -lsodium -lcurl
+#LIBS = -lcrypt -L/usr/local/lib $(COMMON_FLAGS) $(BOOST_FLAGS) -lnsl -lsodium -lcurl
 #MYFLAGS = -DDEBUG_CRYPTO -DDEBUG -DSELFADVANCE -DIDLEDELETE_DRYRUN -Dlinux -I /usr/local/include/ -Wall -Wextra -Wno-unused-parameter -DSUPPRESS_MOB_SKILL_ERRORS -std=c++11
 # If you want GitHub integration, add -DGITHUB_INTEGRATION to the above and fill out your basic auth credentials in github_config.cpp.
 
