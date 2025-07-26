@@ -1156,6 +1156,8 @@ ACMD(do_iclone)
     obj->text.room_desc = str_dup(obj_proto[obj_num1].text.room_desc);
   if (obj_proto[obj_num1].text.look_desc)
     obj->text.look_desc = str_dup(obj_proto[obj_num1].text.look_desc);
+  if (obj_proto[obj_num1].source_info)
+    obj->source_info = str_dup(obj_proto[obj_num1].source_info);
 
   // extra descriptions done next
   if (obj_proto[obj_num1].ex_description) {
