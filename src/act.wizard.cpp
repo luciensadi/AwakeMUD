@@ -4187,14 +4187,14 @@ ACMD(do_wiztitle)
   
   FAILURE_CASE(IS_NPC(ch), "Your title is fine... go away.");
   FAILURE_CASE(PLR_FLAGGED(ch, PLR_NOTITLE), "Your ability to set your title has been restricted.");
-  FAILURE_CASE(!access_level(ch, LVL_BUILDER) && !PLR_FLAGGED(ch, PLR_PAID_FOR_WHOTITLE),
-               "Setting your whotitle replaces your race in the wholist. You'll need to purchase this vanity ability with the ^WSYSPOINTS WHOTITLE^n command.");
 
   skip_spaces(&argument);
 
   FAILURE_CASE(!*argument, "You must specify the title you want to change to.");
 
   if (subcmd == SCMD_WHOTITLE) {
+    FAILURE_CASE(!access_level(ch, LVL_BUILDER) && !PLR_FLAGGED(ch, PLR_PAID_FOR_WHOTITLE),
+               "Setting your whotitle replaces your race in the wholist. You'll need to purchase this vanity ability with the ^WSYSPOINTS WHOTITLE^n command.");
     FAILURE_CASE(str_cmp(argument, get_string_after_color_code_removal(argument, NULL)), "Whotitles can't contain colors.");
     FAILURE_CASE_PRINTF(strlen(argument) > MAX_WHOTITLE_LENGTH, "Sorry, whotitles can't be longer than %d characters.", MAX_WHOTITLE_LENGTH);
     
