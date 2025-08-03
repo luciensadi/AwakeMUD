@@ -2075,6 +2075,14 @@ ACMD(do_logon)
     send_to_char(ch, "You can't do that while hitching.\r\n");
     return;
   }
+
+  for (struct matrix_icon *icon = matrix[PERSONA->in_host].icons; icon; icon = icon->next_in_host) {
+    if (icon->fighting == PERSONA && icon->ic.type >= IC_LETHAL_BLACK) {
+      send_to_icon(PERSONA, "You can't leave the node with a black IC fighting you!\r\n");
+      return;
+    }
+  }
+    
   skip_spaces(&argument);
   rnum_t target_host = -1, trapdoor_host = -1;
   int subsystem = ACIFS_ACCESS;  // Most logons target ACCESS 
