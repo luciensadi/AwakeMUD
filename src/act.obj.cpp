@@ -2718,7 +2718,7 @@ ACMD(do_drop)
 	}
 
 	FAILURE_CASE(IS_ASTRAL(ch), "Astral projections can't touch things!");
-	FAILURE_CASE(AFF_FLAGGED(ch, AFF_PILOT), "While driving? Now that would be a good trick!");
+	// FAILURE_CASE(AFF_FLAGGED(ch, AFF_PILOT), "While driving? Now that would be a good trick!");
 	FAILURE_CASE(PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED) && (subcmd == SCMD_DROP || subcmd == SCMD_DONATE),
 							 "You cannot drop or donate items until you complete character generation.");
 	FAILURE_CASE(IS_WORKING(ch), "You're too busy to do that.");
