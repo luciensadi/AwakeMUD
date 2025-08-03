@@ -3142,7 +3142,7 @@ ACMD(do_give)
 
 			if (ch->in_veh)
 			{
-				if (!(vict = get_char_veh(ch, arg, ch->in_veh)) || IS_IGNORING(vict, is_blocking_ic_interaction_from, ch))
+				if (!(vict = get_char_veh(ch, arg, ch->in_veh)) || IS_IGNORING(vict, is_blocking_ic_interaction_from, ch) || vict == ch)
 				{
 					send_to_char(ch, "You don't see anyone named '%s' here.\r\n", arg);
 				}
@@ -3153,7 +3153,7 @@ ACMD(do_give)
 				return;
 			}
 
-			if (!(vict = give_find_vict(ch, arg)) || IS_IGNORING(vict, is_blocking_ic_interaction_from, ch))
+			if (!(vict = give_find_vict(ch, arg)) || IS_IGNORING(vict, is_blocking_ic_interaction_from, ch) || vict == ch)
 			{
 				send_to_char(ch, "You don't see anyone named '%s' here.\r\n", arg);
 			}
@@ -3175,13 +3175,13 @@ ACMD(do_give)
 		one_argument(argument, buf1);
 		if (ch->in_veh)
 		{
-			if (!(vict = get_char_veh(ch, buf1, ch->in_veh)))
+			if (!(vict = get_char_veh(ch, buf1, ch->in_veh)) || vict == ch)
 			{
 				send_to_char(ch, "You don't see anyone named '%s' here.\r\n", buf1);
 				return;
 			}
 		}
-		else if (!(vict = give_find_vict(ch, buf1)))
+		else if (!(vict = give_find_vict(ch, buf1)) || vict == ch)
 			return;
 
 		if (IS_IGNORING(vict, is_blocking_ic_interaction_from, ch))
