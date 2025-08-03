@@ -1778,7 +1778,7 @@ int _get_negotiation_test_result(
 int _apply_negotiation_results_to_basevalue(int ch_successes, int t_successes, int basevalue, bool buy, char *rbuf, size_t rbuf_len)
 {
   int num = ch_successes - t_successes;
-  if (num > 0)
+  if (num >= 0)
   {
     snprintf(rbuf, rbuf_len, "\r\nPC got %d net successes, so basevalue goes from %d", num, basevalue);
     if (buy)

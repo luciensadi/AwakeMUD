@@ -1588,7 +1588,7 @@ void shop_sell(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
     }
   }
 
-  negotiate_and_payout_sellprice(ch, keeper, shop_nr, sellprice);
+  sellprice = negotiate_and_payout_sellprice(ch, keeper, shop_nr, sellprice);
 
   const char *representation = generate_new_loggable_representation(obj);
   snprintf(buf3, sizeof(buf3), "%s sold %s^g at %s^g (%ld) for %d.", GET_CHAR_NAME(ch), representation, GET_CHAR_NAME(keeper), shop_table[shop_nr].vnum, sellprice);
