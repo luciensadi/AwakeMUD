@@ -844,9 +844,18 @@ ACMD(do_radio)
       send_to_char(ch, "  Crypt (max %d): on (level %d)\r\n", max_crypt, *crypt_rating);
     else
       send_to_char(ch, "  Crypt (max %d): off\r\n", max_crypt);
-    return;
 #endif
-  } else if (!str_cmp(one, "off")) {
+
+    return;
+  }
+
+  // RADIO ON now centers to 8 automatically.
+  if (!str_cmp(one, "on")) {
+    strlcpy(one, "center", sizeof(one));
+    strlcpy(two, "8", sizeof(two));
+  }
+  
+  if (!str_cmp(one, "off")) {
     act("You turn $p off.", FALSE, ch, radio, ch, ch->persona ? TO_DECK : TO_CHAR);
     *freq = 0;
   } else if (!str_cmp(one, "scan")) {
