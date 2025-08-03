@@ -3135,8 +3135,9 @@ enum {
 #define NUYEN_OUTFLOW_GAMBLING              34
 #define NUYEN_INCOME_GAMBLING               35
 #define NUYEN_INCOME_CREDSTICK_ACTIVATION   36
+#define NUYEN_INCOME_AUTOMATED_REFUNDS      37
 
-#define NUM_OF_TRACKED_NUYEN_INCOME_SOURCES 37
+#define NUM_OF_TRACKED_NUYEN_INCOME_SOURCES 38
 // Make sure you update constants.cpp's nuyen_faucets_and_sinks[] too!
 
 #define NI_IS_SINK   0

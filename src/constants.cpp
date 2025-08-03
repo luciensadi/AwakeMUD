@@ -3426,7 +3426,8 @@ struct nuyen_faucet_or_sink nuyen_faucets_and_sinks[NUM_OF_TRACKED_NUYEN_INCOME_
     {"Decorating", NI_IS_SINK},
     {"Gambling Costs", NI_IS_SINK},
     {"Gambling Payouts", NI_IS_FAUCET},
-    {"Credstick Activation", NI_IS_FAUCET}
+    {"Credstick Activation", NI_IS_FAUCET},
+    {"Automated Refunds", NI_IS_FAUCET}
   };
 
 const char *ignored_bits_in_english[] =

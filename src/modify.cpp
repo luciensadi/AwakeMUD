@@ -190,6 +190,19 @@ void string_add(struct descriptor_data *d, char *str)
         SEND_TO_Q("Sorry, board posts can't be aborted.\r\n", d);
         return;
       }
+
+      struct char_data *refund_recipient = d->original ? d->original : d->character;
+
+      if (STATE(d) == CON_DECORATE_VEH) {
+        mudlog_vfprintf(refund_recipient, LOG_GRIDLOG, "Refunding %d nuyen to %s for veh decoration abort.", COST_TO_DECORATE_VEH, refund_recipient);
+        send_to_char(refund_recipient, "You receive a refund of %d nuyen.\r\n", COST_TO_DECORATE_VEH);
+        gain_nuyen(refund_recipient, COST_TO_DECORATE_VEH, NUYEN_INCOME_AUTOMATED_REFUNDS);
+      } else if (STATE(d) == CON_DECORATE) {
+        mudlog_vfprintf(refund_recipient, LOG_GRIDLOG, "Refunding %d nuyen to %s for decoration abort.", COST_TO_DECORATE_APT, refund_recipient);
+        send_to_char(refund_recipient, "You receive a refund of %d nuyen.\r\n", COST_TO_DECORATE_APT);
+        gain_nuyen(refund_recipient, COST_TO_DECORATE_APT, NUYEN_INCOME_AUTOMATED_REFUNDS);
+      }
+
       SEND_TO_Q("Aborted.\r\n", d);
       d->mail_to = 0;
       DELETE_D_STR_IF_EXTANT(d);
