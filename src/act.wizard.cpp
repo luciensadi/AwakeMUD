@@ -522,9 +522,11 @@ ACMD(do_playerrolls)
   if (_OVERRIDE_ALLOW_PLAYERS_TO_USE_ROLLS_) {
     _OVERRIDE_ALLOW_PLAYERS_TO_USE_ROLLS_ = FALSE;
     send_gamewide_annoucement("We hope you enjoyed being able to see the debug information! This ability has now been disabled.", TRUE);
+    mudlog_vfprintf(ch, LOG_WIZLOG, "%s disabled global rolls output.", GET_CHAR_NAME(ch));
   } else {
     _OVERRIDE_ALLOW_PLAYERS_TO_USE_ROLLS_ = TRUE;
     send_gamewide_annoucement("Players can now see the details on rolls by using the ^WTOGGLE ROLLS^n command.", TRUE);
+    mudlog_vfprintf(ch, LOG_WIZLOG, "%s enabled global rolls output.", GET_CHAR_NAME(ch));
   }
 }
 
