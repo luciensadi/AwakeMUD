@@ -128,6 +128,7 @@ int can_move(struct char_data *ch, int dir, int extra)
     return 0;
   }
   
+#ifdef USE_TUNNEL_LIMITS
   if (ROOM_FLAGGED(EXIT(ch, dir)->to_room, ROOM_TUNNEL) && !IS_ASTRAL(ch)) {
     int num_occupants = 0;
     for (struct char_data *in_room_ptr = EXIT(ch, dir)->to_room->people; in_room_ptr && num_occupants < 2; in_room_ptr = in_room_ptr->next_in_room) {
@@ -143,6 +144,7 @@ int can_move(struct char_data *ch, int dir, int extra)
       }
     }
   }
+#endif
 
   if (ROOM_FLAGGED(EXIT(ch, dir)->to_room, ROOM_TOO_CRAMPED_FOR_CHARACTERS) && !IS_ASTRAL(ch)) {
     if (access_level(ch, LVL_BUILDER)) {
