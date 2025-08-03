@@ -569,7 +569,8 @@ bool install_ware_in_target_character(struct obj_data *ware, struct char_data *i
         GET_BIOWARE_RATING(ware) > GET_REAL_BOD(recipient) / 2)
     {
       if (IS_NPC(installer)) {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " Your body can't support pathogenic defenses that are that strong.");
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " Your body can't support %s that are that strong.",
+                 GET_BIOWARE_TYPE(ware) == BIO_PATHOGENICDEFENSE ? "pathogenic defenses" : "toxin extractors");
         do_say(installer, buf, cmd_say, SCMD_SAYTO);
       } else {
         send_to_char(installer, "The defenses from %s are too powerful for their body.\r\n", GET_OBJ_NAME(ware));
@@ -1425,10 +1426,12 @@ int negotiate_and_payout_sellprice(struct char_data *ch, struct char_data *keepe
     sellprice = negotiate(ch, keeper, 0, sellprice, 0, FALSE, TRUE);
 
   // Pay it out as nuyen.
-  if (shop_table[shop_nr].type == SHOP_BLACK)
+  if (shop_table[shop_nr].type == SHOP_BLACK) {
     gain_nuyen(ch, sellprice, NUYEN_INCOME_SHOP_SALES);
-  else
+  } else {
     gain_bank(ch, sellprice, NUYEN_INCOME_SHOP_SALES);
+    send_to_char(ch, "(It went directly to your bank account.)\r\n");
+  }
 
   // Just in case the caller cares about the negotiated price.
   return sellprice;
@@ -1447,7 +1450,11 @@ void shop_sell(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
   struct shop_sell_data *sell = shop_table[shop_nr].selling;
 
   if (!*arg) {
+#ifdef USE_HAMMERSPACE
     send_to_char("Syntax: SELL <item>, or SELL STOWED to sell your stowed loot.\r\n", ch);
+#else
+    send_to_char("Syntax: SELL <item>.\r\n", ch);
+#endif
     return;
   }
 
@@ -1458,10 +1465,12 @@ void shop_sell(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
     return;
   }
 
+#ifdef USE_HAMMERSPACE
   if (!str_cmp(arg, "stowed")) {
     sell_all_stowed_items(ch, shop_nr, keeper);
     return;
   }
+#endif
 
   // Find the object.
   obj = get_obj_in_list_vis(ch, arg, ch->carrying);
