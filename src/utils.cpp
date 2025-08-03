@@ -1858,6 +1858,13 @@ int negotiate(struct char_data *ch,
   basevalue = _apply_negotiation_results_to_basevalue(ch_successes, t_successes, basevalue, buy, buf3, sizeof(buf3));
   act(buf3, FALSE, ch, 0, 0, TO_ROLLS);
 
+  if (ch_successes - t_successes < 0) {
+    if (buy)
+      send_to_char(ch, "You wince internally as you realize you've been negotiated up above the base price.");
+    else
+      send_to_char(ch, "You wince internally as you realize you've been negotiated below the street price.");
+  }
+
   return basevalue;
 }
 
