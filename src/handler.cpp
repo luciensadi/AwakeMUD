@@ -2503,21 +2503,9 @@ void extract_icon(struct matrix_icon * icon)
     }
   }
 
-  // Clean up host data.
-  if (icon->in_host) {
-    // Wipe out combat info.
-    if (icon->fighting) {
-      for (struct matrix_icon *vict = matrix[icon->in_host].icons; vict; vict = vict->next_in_host)
-        if (vict->fighting == icon) {
-          REMOVE_FROM_LIST(vict, matrix[icon->in_host].fighting, next_fighting);
-          vict->fighting = NULL;
-        }
-      REMOVE_FROM_LIST(icon, matrix[icon->in_host].fighting, next_fighting);
-    }
-
-    // Extract from host.
-    if (icon->in_host != NOWHERE)
-      icon_from_host(icon);
+  // Clean up host data. Also stops fighting, uploads etc.
+  if (icon->in_host && icon->in_host != NOWHERE) {
+    icon_from_host(icon);
   }
 
   if (icon->decker) {
@@ -2525,13 +2513,11 @@ void extract_icon(struct matrix_icon * icon)
       send_to_char(icon->decker->hitcher, "You return to your senses.\r\n");
       clear_hitcher(icon->decker->hitcher, FALSE);
     }
-    struct obj_data *temp;
-    for (struct obj_data *obj = icon->decker->software; obj; obj = temp) {
+    for (struct obj_data *obj = icon->decker->software, *temp; obj; obj = temp) {
       temp = obj->next_content;
       extract_obj(obj);
     }
-    struct seen_data *temp2;
-    for (struct seen_data *seen = icon->decker->seen; seen; seen = temp2) {
+    for (struct seen_data *seen = icon->decker->seen, *temp2; seen; seen = temp2) {
       temp2 = seen->next;
       delete seen;
     }

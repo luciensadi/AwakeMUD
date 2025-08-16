@@ -249,6 +249,11 @@ struct teach_data teachers[] = {
   { 70604, { SKILL_PISTOLS, SKILL_BR_PISTOL, SKILL_STEALTH, SKILL_ATHLETICS,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
   "You learn a few things from the surprisingly-knowledgeable kid.\r\n", AMATEUR },
+
+  // Alexa (CAS)
+  { 102228, { SKILL_FRENCH,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+  "You are drilled in the fine details of the French language by the prim and proper HR manager.\r\n", ADVANCED },
 #endif
 
    { 65106, { SKILL_MEDIA_ETIQUETTE, SKILL_STEALTH, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },

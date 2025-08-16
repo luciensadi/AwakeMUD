@@ -605,10 +605,11 @@ bool do_damage_persona(struct matrix_icon *targ, int dmg)
   return FALSE;
 }
 
-void fry_mpcp(struct matrix_icon *icon, struct matrix_icon *targ, int success)
+// fry_mpcp can kill otaku, so we call that out with a boolean value
+bool fry_mpcp(struct matrix_icon *icon, struct matrix_icon *targ, int success)
 {
-  if (success < 2) return;
-  if (!targ->decker->deck) return;
+  if (success < 2) return FALSE;
+  if (!targ->decker->deck) return FALSE;
 
   if (targ->decker->deck->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_RESONANCE)) {
     // This is an otaku persona! MPCP damage works slightly different on otaku.
@@ -617,14 +618,15 @@ void fry_mpcp(struct matrix_icon *icon, struct matrix_icon *targ, int success)
     // MPCP damage always occurs to decker physical
     while (success >= 2 && GET_PHYSICAL(targ->decker->ch) > 0) {
       success -= 2;
-      damage(targ->decker->ch, targ->decker->ch, 1, TYPE_BLACKIC, PHYSICAL);
+      if (damage(targ->decker->ch, targ->decker->ch, 1, TYPE_BLACKIC, PHYSICAL))
+        return TRUE;
     }
-    return;
+    return FALSE;
   }
   
   if (targ->decker->ch && PLR_FLAGGED(targ->decker->ch, PLR_NEWBIE)) {
     send_to_icon(targ, "(OOC message: Be careful with these enemies; your deck would have taken permanent damage if you weren't a newbie!)");
-    return;
+    return FALSE;
   }
   snprintf(buf, sizeof(buf), "%s^n uses the opportunity to fry your MPCP!\r\n", CAP(icon->name));
   send_to_icon(targ, buf);
@@ -640,7 +642,8 @@ void fry_mpcp(struct matrix_icon *icon, struct matrix_icon *targ, int success)
       GET_PART_TARGET_MPCP(part) = GET_CYBERDECK_MPCP(targ->decker->deck);
       break;
     }
-  }  
+  }
+  return FALSE;
 }
 
 ACMD(do_fry_self) {
@@ -937,8 +940,10 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
         } else {
           icondam = convert_damage(stage(success, dam));
           send_to_icon(targ, "It tears into your living persona!\r\n");
-          if (do_damage_persona(targ, icondam))
+          struct char_data *ch = targ->decker ? targ->decker->ch : NULL;
+          if (do_damage_persona(targ, icondam) || (ch && GET_POS(ch) <= POS_STUNNED)) {
             return;
+          }
         }
         return;
       } else if (success >= 2) {
@@ -949,7 +954,8 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
         } else if (bod <= 0) {
           bod = 0;
           success = success_test(iconrating, targ->decker->mpcp + targ->decker->hardening);
-          fry_mpcp(icon, targ, success);
+          if (fry_mpcp(icon, targ, success))
+            return;
         }
       } else {
         send_to_icon(targ, "It failed to cause any damage.\r\n");
@@ -1164,12 +1170,14 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
       if (targ && targ->decker) {
         if (ch && !AWAKE(ch)) {
           success = success_test(iconrating * 2, targ->decker->mpcp + targ->decker->hardening);
-          fry_mpcp(icon, targ, success);
+          if (fry_mpcp(icon, targ, success))
+            return;
           dumpshock(targ);
           return;
         } else if (!ch) {
           success = success_test(iconrating * 2, targ->decker->mpcp + targ->decker->hardening);
-          fry_mpcp(icon, targ, success);
+          if (fry_mpcp(icon, targ, success))
+            return;
           extract_icon(targ);
           return;
         }
@@ -1205,7 +1213,8 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
         case IC_SPARKY:
           send_to_icon(targ, "%s^n sends jolts of electricity into your deck!\r\n", CAP(icon->name));
           success = success_test(iconrating, targ->decker->mpcp + targ->decker->hardening + 2);
-          fry_mpcp(icon, targ, success);
+          if (fry_mpcp(icon, targ, success))
+            return;
           success = success - success_test(GET_BOD(targ->decker->ch), iconrating - targ->decker->hardening);
           dam = convert_damage(stage(success, MODERATE));
           if (damage(targ->decker->ch, targ->decker->ch, dam, TYPE_BLACKIC, PHYSICAL)) {
@@ -1214,37 +1223,43 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
           break;
         case IC_BLASTER:
           success = success_test(iconrating, targ->decker->mpcp + targ->decker->hardening);
-          fry_mpcp(icon, targ, success);
+          if (fry_mpcp(icon, targ, success))
+            return;
           break;
         }
       }
       if (dumpshock(targ))
         return;
     } else {
-      icon->decker->tally += iconrating;
-      if (icon->decker->located)
-        icon->decker->tally++;
-      snprintf(buf, sizeof(buf), "%s^n shatters into a million pieces and vanishes from the node.\r\n", CAP(targ->name));
-      send_to_host(icon->in_host, buf, targ, TRUE);
-      gain_matrix_karma(icon, targ);
-      if (targ->ic.options.IsSet(IC_TRAP) && real_ic(targ->ic.trap) > 0) {
-        struct matrix_icon *trap = read_ic(targ->ic.trap, VIRTUAL);
-        trap->ic.target = icon->idnum;
-        icon_to_host(trap, icon->in_host);
-      }
+      if (!icon->decker) {
+        mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Got an IC to the decker-killed-target stanza of matrix_fight.");
+      } else {
+        icon->decker->tally += iconrating;
+        if (icon->decker->located)
+          icon->decker->tally++;
+        snprintf(buf, sizeof(buf), "%s^n shatters into a million pieces and vanishes from the node.\r\n", CAP(targ->name));
+        send_to_host(icon->in_host, buf, targ, TRUE);
+        gain_matrix_karma(icon, targ);
+        if (targ->ic.options.IsSet(IC_TRAP) && real_ic(targ->ic.trap) > 0) {
+          struct matrix_icon *trap = read_ic(targ->ic.trap, VIRTUAL);
+          trap->ic.target = icon->idnum;
+          icon_to_host(trap, icon->in_host);
+        }
 
-      if (ICON_IS_IC(targ) && matrix[icon->in_host].ic_bound_paydata > 0) {
-        if (!(number(0, MAX(0, matrix[icon->in_host].color - HOST_COLOR_ORANGE)))) {
-          matrix[icon->in_host].ic_bound_paydata--;
-          struct obj_data *paydata = spawn_paydata(icon);
-          send_to_icon(icon, "A mote labeled '%s^n' drifts away from your kill.\r\n", GET_OBJ_NAME(paydata));
-        } else  {
-          send_to_icon(icon, "The paydata you thought your kill was guarding turns out to have been junk.\r\n");
+        if (ICON_IS_IC(targ) && matrix[icon->in_host].ic_bound_paydata > 0) {
+          if (!(number(0, MAX(0, matrix[icon->in_host].color - HOST_COLOR_ORANGE)))) {
+            matrix[icon->in_host].ic_bound_paydata--;
+            struct obj_data *paydata = spawn_paydata(icon);
+            send_to_icon(icon, "A mote labeled '%s^n' drifts away from your kill.\r\n", GET_OBJ_NAME(paydata));
+          } else  {
+            send_to_icon(icon, "The paydata you thought your kill was guarding turns out to have been junk.\r\n");
+          }
         }
       }
 
       extract_icon(targ);
-      check_trigger(icon->in_host, icon->decker->ch);
+      if (icon->decker)
+        check_trigger(icon->in_host, icon->decker->ch);
       return;
     }
   }
