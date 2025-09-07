@@ -2327,10 +2327,13 @@ void warn_about_apartment_deletion() {
         continue;
       }
 
-      mudlog_vfprintf(NULL, LOG_GRIDLOG, "Sending %d-day rent warning message for apartment %s to %ld.",
+      const char *owner_name = get_player_name(apartment->get_owner_id());
+      mudlog_vfprintf(NULL, LOG_GRIDLOG, "Sending %d-day rent warning message for apartment %s to %ld (%s).",
                       days_until_deletion,
                       apartment->get_full_name(),
-                      apartment->get_owner_id());
+                      apartment->get_owner_id(),
+                      owner_name && *owner_name ? owner_name : "-DNE");
+      delete [] owner_name;
 
       if (apartment->get_owner_pgroup()) {
         // EVENTUALTODO
