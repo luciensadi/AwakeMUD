@@ -349,7 +349,7 @@ void totem_bonus(struct char_data *ch, int action, int type, int &target, int &s
   {
     int spell = type;
     int category = spells[spell].category;
-    skill += totem_bonuses[GET_TOTEM(ch)].casting_skill_mods[spell];
+    skill += totem_bonuses[GET_TOTEM(ch)].casting_skill_mods[category];
 
     switch (GET_TOTEM(ch)) {
       case TOTEM_GECKO:
