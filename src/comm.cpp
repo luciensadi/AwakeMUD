@@ -1043,6 +1043,14 @@ void game_loop(int mother_desc)
       matrix_violence();
     }
 
+    if (!(pulse % ART_QUOTA_REGENERATION_PULSE)) {
+      for (struct descriptor_data *d = descriptor_list; d; d = d->next) {
+        if (d->regenerating_art_quota < MAX_REGENERATING_ART_QUOTA) {
+          d->regenerating_art_quota++;
+        }
+      }
+    }
+
     // Every MUD minute
     if (!(pulse % (SECS_PER_MUD_MINUTE * PASSES_PER_SEC))) {
       update_buildrepair();
@@ -1997,6 +2005,9 @@ int new_descriptor(int s)
   memset((char *) newd, 0, sizeof(struct descriptor_data));
   // Set our canaries.
   set_descriptor_canaries(newd);
+
+  // Set the regenerating art quota.
+  newd->regenerating_art_quota = MAX_REGENERATING_ART_QUOTA;
 
   // Resolve our hostname, if possible.
   strlcpy(newd->host, resolve_hostname_from_ip_str(ip_string), sizeof(newd->host));

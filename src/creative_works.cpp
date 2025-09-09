@@ -95,6 +95,9 @@ void art_edit_parse(struct descriptor_data *d, const char *arg) {
 void create_art(struct char_data *ch) {
   FAILURE_CASE(PLR_FLAGGED(ch, PLR_BLACKLIST), "You can't do that while blacklisted.");
   FAILURE_CASE_PRINTF(GET_NUYEN(ch) < CREATE_ART_COST, "It will cost you %d nuyen in supplies to create a work of art.", CREATE_ART_COST);
+  FAILURE_CASE(!ch->desc || ch->desc->regenerating_art_quota <= 0, "You've done that too much recently. Please wait a while before making more art.");
+
+  ch->desc->regenerating_art_quota--;
   lose_nuyen(ch, CREATE_ART_COST, NUYEN_OUTFLOW_DECORATING);
 
   struct obj_data *art = read_object(OBJ_CUSTOM_ART, VIRTUAL, OBJ_LOAD_REASON_CREATE_ART);

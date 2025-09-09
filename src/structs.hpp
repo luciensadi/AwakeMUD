@@ -1116,6 +1116,8 @@ struct descriptor_data
   int invalid_command_counter;
   char last_sprayed[MAX_INPUT_LENGTH];
 
+  int regenerating_art_quota;
+
   long nuyen_paid_for_wheres_my_car;
   long nuyen_income_this_play_session[NUM_OF_TRACKED_NUYEN_INCOME_SOURCES];
 
