@@ -2870,9 +2870,9 @@ void qedit_disp_menu(struct descriptor_data *d)
   send_to_char(CH, "3) Reputation range: %s%d%s-%s%d%s\r\n", CCCYN(CH, C_CMP),
                QUEST->min_rep, CCNRM(CH, C_CMP), CCCYN(CH, C_CMP),
                QUEST->max_rep, CCNRM(CH, C_CMP));
-  send_to_char(CH, "4) Bonus nuyen: %s%d%s\r\n", CCCYN(CH, C_CMP),
+  send_to_char(CH, "%s) Bonus nuyen: %s%d%s\r\n", GET_LEVEL(CH) >= LVL_ADMIN ? "4" : "-", CCCYN(CH, C_CMP),
                QUEST->nuyen, CCNRM(CH, C_CMP));
-  send_to_char(CH, "5) Bonus karma: %s%0.2f%s\r\n", CCCYN(CH, C_CMP),
+  send_to_char(CH, "%s) Bonus karma: %s%0.2f%s\r\n", GET_LEVEL(CH) >= LVL_ADMIN ? "4" : "-", CCCYN(CH, C_CMP),
                ((float)QUEST->karma / 100), CCNRM(CH, C_CMP));
   send_to_char(CH, "6) Item objective menu\r\n");
   send_to_char(CH, "7) Mobile objective menu\r\n");
@@ -3062,10 +3062,18 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
         d->edit_mode = QEDIT_MIN_REP;
         break;
       case '4':
+        if (GET_LEVEL(CH) < LVL_ADMIN) {
+          send_to_char(CH, "Sorry, overall bonuses can only be configured by Vile / Lucien.\r\n");
+          return;
+        }
         send_to_char("Enter bonus nuyen: ", CH);
         d->edit_mode = QEDIT_NUYEN;
         break;
       case '5':
+        if (GET_LEVEL(CH) < LVL_ADMIN) {
+          send_to_char(CH, "Sorry, overall bonuses can only be configured by Vile / Lucien.\r\n");
+          return;
+        }
         send_to_char("Enter bonus karma: ", CH);
         d->edit_mode = QEDIT_KARMA;
         break;
@@ -3638,9 +3646,14 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
         send_to_char(CH, "Enter M# of mob to equip item on: ('l' to list, 'q' to quit): ");
         break;
       case QOL_TARMOB_C:
+        send_to_char(CH, "Cyberware / bioware installation through quests is deprecated. Please edit the mob directly.\r\n");
+        qedit_disp_obj_objectives(d);
+        break;
+        /*
         d->edit_mode = QEDIT_O_LDATA;
         send_to_char(CH, "Enter M# of mob to install item in: ('l' to list, 'q' to quit): ");
         break;
+        */
       case QOL_HOST:
         d->edit_mode = QEDIT_O_LDATA;
         send_to_char(CH, "Enter vnum of host to load item into: ");

@@ -69,6 +69,7 @@ void switch_weapons(struct char_data *mob, int pos);
 void send_mob_aggression_warnings(struct char_data *pc, struct char_data *mob);
 bool mob_cannot_be_aggressive(struct char_data *ch);
 bool mob_is_aggressive_towards_race(struct char_data *ch, int race);
+bool check_for_mob_weapon_skill_errors(struct char_data *ch, bool output_for_audit);
 
 // This takes up a significant amount of processing time, so let's precompute it.
 #define NUM_AGGRO_OCTETS 3
@@ -1780,42 +1781,8 @@ void do_single_mobile_activity(struct char_data *ch) {
 
   // Confirm we have the skills to wield our current weapon, otherwise ditch it.
   #ifndef SUPPRESS_MOB_SKILL_ERRORS
-  if (GET_EQ(ch, WEAR_WIELD) && GET_OBJ_TYPE(GET_EQ(ch, WEAR_WIELD)) == ITEM_WEAPON) {
-    char build_err_msg[2000];
-
-    int weapon_skill = GET_WEAPON_SKILL(GET_EQ(ch, WEAR_WIELD));
-    int melee_skill = does_weapon_have_bayonet(GET_EQ(ch, WEAR_WIELD)) ? SKILL_POLE_ARMS : SKILL_CLUBS;
-
-    int weapon_skill_dice = GET_SKILL(ch, weapon_skill) ? GET_SKILL(ch, weapon_skill) : GET_SKILL(ch, return_general(weapon_skill));
-    int melee_skill_dice = GET_SKILL(ch, melee_skill) ? GET_SKILL(ch, melee_skill) : GET_SKILL(ch, return_general(melee_skill));
-
-    int indexed_attack_type = MAX(0, MIN(MAX_WEAP - 1, GET_WEAPON_ATTACK_TYPE(GET_EQ(ch, WEAR_WIELD))));
-
-    if (weapon_skill_dice <= 0) {
-      #ifndef SUPPRESS_BUILD_ERROR_MESSAGES
-      snprintf(build_err_msg, sizeof(build_err_msg), "CONTENT ERROR: Mob #%ld is wielding %s %s, but has no weapon skill in %s!",
-              GET_MOB_VNUM(ch),
-              AN(weapon_types[indexed_attack_type]),
-              weapon_types[indexed_attack_type],
-              skills[GET_WEAPON_SKILL(GET_EQ(ch, WEAR_WIELD))].name
-            );
-      mudlog(build_err_msg, ch, LOG_MISCLOG, TRUE);
-      #endif
-
-      switch_weapons(ch, WEAR_WIELD);
-    } else if (WEAPON_IS_GUN(GET_EQ(ch, WEAR_WIELD)) && melee_skill_dice <= 0 && weapon_skill_dice >= 5) {
-      #ifndef SUPPRESS_BUILD_ERROR_MESSAGES
-      snprintf(build_err_msg, sizeof(build_err_msg), "CONTENT ERROR: Skilled mob #%ld is wielding %s %s%s, but has no melee skill in %s!",
-              GET_MOB_VNUM(ch),
-              AN(weapon_types[indexed_attack_type]),
-              weapon_types[indexed_attack_type],
-              melee_skill == SKILL_POLE_ARMS ? " (with bayonet)" : "",
-              skills[melee_skill].name
-            );
-      mudlog(build_err_msg, ch, LOG_MISCLOG, TRUE);
-      #endif
-    }
-  }
+  if (check_for_mob_weapon_skill_errors(ch, false))
+    switch_weapons(ch, WEAR_WIELD);
   #endif
 
   // Manipulate wielded weapon (reload, set fire mode, etc).
@@ -2336,4 +2303,63 @@ void clear_mob_alarm(struct char_data *npc, struct char_data *ch) {
   if (GET_MOB_ALARM_MAP(npc).find(GET_IDNUM(ch)) != GET_MOB_ALARM_MAP(npc).end()) {
     GET_MOB_ALARM_MAP(npc).erase(GET_MOB_ALARM_MAP(npc).find(GET_IDNUM(ch)));
   }
+}
+
+bool check_for_mob_weapon_skill_errors(struct char_data *ch, char *buf_ptr, size_t buf_sz) {
+  if (GET_EQ(ch, WEAR_WIELD) && GET_OBJ_TYPE(GET_EQ(ch, WEAR_WIELD)) == ITEM_WEAPON) {
+
+    int weapon_skill = GET_WEAPON_SKILL(GET_EQ(ch, WEAR_WIELD));
+    int melee_skill = does_weapon_have_bayonet(GET_EQ(ch, WEAR_WIELD)) ? SKILL_POLE_ARMS : SKILL_CLUBS;
+
+    int weapon_skill_dice = GET_SKILL(ch, weapon_skill) ? GET_SKILL(ch, weapon_skill) : GET_SKILL(ch, return_general(weapon_skill));
+    int melee_skill_dice = GET_SKILL(ch, melee_skill) ? GET_SKILL(ch, melee_skill) : GET_SKILL(ch, return_general(melee_skill));
+
+    int indexed_attack_type = MAX(0, MIN(MAX_WEAP - 1, GET_WEAPON_ATTACK_TYPE(GET_EQ(ch, WEAR_WIELD))));
+
+    if (weapon_skill_dice <= 0) {
+      if (buf_ptr) {
+        // Audit log output. Always print.
+        snprintf(ENDOF(buf_ptr), buf_sz - strlen(buf_ptr), "  - ^rMissing weapon skill (needs %s or %s).^n\r\n",
+                 skills[weapon_skill].name,
+                 skills[return_general(weapon_skill)].name
+                );
+      } else {
+#ifndef SUPPRESS_BUILD_ERROR_MESSAGES
+        // Mudlog output. Only print on buildport.
+        mudlog_vfprintf(ch, LOG_MISCLOG, "CONTENT ERROR: Mob #%ld is wielding %s %s, but has no weapon skill in %s!",
+                        GET_MOB_VNUM(ch),
+                        AN(weapon_types[indexed_attack_type]),
+                        weapon_types[indexed_attack_type],
+                        skills[weapon_skill].name
+                      );
+#endif
+      }
+
+      // This is both an issue and a weapon switch cause.
+      return TRUE;
+    } else if (WEAPON_IS_GUN(GET_EQ(ch, WEAR_WIELD)) && melee_skill_dice <= 0 && weapon_skill_dice >= 5) {
+      if (buf_ptr) {
+        // Audit log output. Always print.
+        snprintf(ENDOF(buf_ptr), buf_sz - strlen(buf_ptr), "  - ^rMissing fallback melee skill (needs %s or %s).^n\r\n",
+                 skills[melee_skill].name,
+                 skills[return_general(melee_skill)].name
+                );
+        // Logical oddity: Returns TRUE in this case for audit (this is an issue), but FALSE for other (don't switch weap)
+        return TRUE;
+      } else {
+#ifndef SUPPRESS_BUILD_ERROR_MESSAGES
+        // Mudlog output. Only print on buildport.
+        mudlog_vfprintf(ch, LOG_MISCLOG, "CONTENT ERROR: Skilled mob #%ld is wielding %s %s%s, but has no melee skill in %s!",
+                        GET_MOB_VNUM(ch),
+                        AN(weapon_types[indexed_attack_type]),
+                        weapon_types[indexed_attack_type],
+                        melee_skill == SKILL_POLE_ARMS ? " (with bayonet)" : "",
+                        skills[melee_skill].name
+                      );
+        return FALSE;
+#endif
+      }
+    }
+  }
+  return FALSE;
 }

@@ -1433,6 +1433,7 @@ struct ban_list_element
 // For listing allowed max values for weapon types. Has settings for both ranged and melee.
 struct kosher_weapon_values_struct {
     // Shared
+    bool usable_by_builders;
     int power;
     int damage_code;
     int skill;

@@ -35,6 +35,7 @@ void write_objs_to_disk(vnum_t zone);
 
 // extern vars
 extern int max_weapon_focus_rating;
+#define MAX_WEAPON_FOCUS_RATING(wpn) MIN(max_weapon_focus_rating, GET_WEAPON_REACH(wpn) == 0 ? 3 : 2)
 
 // extern funcs
 extern char *prep_string_for_writing_to_savefile(char *dest, const char *src);
@@ -186,10 +187,13 @@ void iedit_disp_skill_menu(struct descriptor_data *d)
 void iedit_disp_weapon_menu(struct descriptor_data * d)
 {
   CLS(CH);
-  for (int counter = 0; counter < MAX_WEAP; counter += 2)
+  for (int counter = 0; counter < MAX_WEAP; counter += 2) {
     send_to_char(CH, "%2d) %-18s %2d) %-18s\r\n",
-                 counter, weapon_types[counter],
-                 counter + 1, counter + 1 < MAX_WEAP ? weapon_types[counter + 1] : "");
+                 counter,
+                 kosher_weapon_values[counter].usable_by_builders ? weapon_types[counter] : "(do not use)",
+                 counter + 1,
+                 counter + 1 < MAX_WEAP ? (kosher_weapon_values[counter + 1].usable_by_builders ? weapon_types[counter + 1] : "(do not use)") : "");
+  }
 
   send_to_char("Enter weapon type:\r\n", CH);
 }
@@ -1052,7 +1056,7 @@ void iedit_disp_val8_menu(struct descriptor_data * d)
       } else if (GET_WEAPON_ATTACK_TYPE(OBJ) == WEAP_GRENADE) {
         send_to_char("Is this an IPE (-3) or a Flashbang (-4) grenade?: ", CH);
       } else {
-        send_to_char(CH, "Enter weapon focus rating (0 for no focus, up to %d): ", max_weapon_focus_rating);
+        send_to_char(CH, "Enter weapon focus rating (0 for no focus, up to %d): ", MAX_WEAPON_FOCUS_RATING(OBJ));
       }
       break;
     case ITEM_WORN:
@@ -1362,13 +1366,61 @@ void iedit_disp_legality_menu(struct descriptor_data *d) {
     d->edit_mode = IEDIT_LEGAL1;
   }
 }
+
+#define WEAPCLAMP(weap, isset, expect, pname)  if (isset(weap) > kosher_weapon_values[GET_OBJ_VAL(weap, 3)].expect) { \
+  send_to_char(CH, "%s exceeds max of %d: clamped to value.\r\n", pname, kosher_weapon_values[GET_OBJ_VAL(OBJ, 3)].expect); \
+  isset(weap) = kosher_weapon_values[GET_OBJ_VAL(OBJ, 3)].expect; \
+}
+
 /* display main menu */
 void iedit_disp_menu(struct descriptor_data * d)
 {
   CLS(CH);
   if (IS_OBJ_STAT(OBJ, ITEM_EXTRA_DONT_TOUCH)) {
     send_to_char(CH, "^RThis is a templated object. You are unable to edit it while the game is running.\r\n");
+  } else if (GET_LEVEL(CH) < LVL_ADMIN && GET_OBJ_TYPE(OBJ) == ITEM_WEAPON && !IS_OBJ_STAT(OBJ, ITEM_EXTRA_STAFF_ONLY)) {
+    // Auto-clamp weapons that are too stronk, unless they're explicitly staff-only and thus for NPC/staff use exclusively.
+    WEAPCLAMP(OBJ, GET_WEAPON_POWER, power, "power");
+    WEAPCLAMP(OBJ, GET_WEAPON_DAMAGE_CODE, damage_code, "damage code");
+    WEAPCLAMP(OBJ, GET_WEAPON_SKILL, skill, "skill");
+    
+    if (WEAPON_IS_GUN(OBJ)) {
+      WEAPCLAMP(OBJ, GET_WEAPON_MAX_AMMO, max_ammo, "max ammo");
+      if (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(OBJ), MODE_SS) && !kosher_weapon_values[GET_OBJ_VAL(OBJ, 3)].can_ss) {
+        send_to_char(CH, "Single-shot firemode not allowed for this weapon type.\r\n");
+        REMOVE_BIT(GET_WEAPON_POSSIBLE_FIREMODES(OBJ), MODE_SS);
+      }
+      if (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(OBJ), MODE_SA) && !kosher_weapon_values[GET_OBJ_VAL(OBJ, 3)].can_sa) {
+        send_to_char(CH, "Semi-auto firemode not allowed for this weapon type.\r\n");
+        REMOVE_BIT(GET_WEAPON_POSSIBLE_FIREMODES(OBJ), MODE_SA);
+      }
+      if (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(OBJ), MODE_BF) && !kosher_weapon_values[GET_OBJ_VAL(OBJ, 3)].can_bf) {
+        send_to_char(CH, "Burst firemode not allowed for this weapon type.\r\n");
+        REMOVE_BIT(GET_WEAPON_POSSIBLE_FIREMODES(OBJ), MODE_BF);
+      }
+      if (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(OBJ), MODE_FA) && !kosher_weapon_values[GET_OBJ_VAL(OBJ, 3)].can_fa) {
+        send_to_char(CH, "Full-auto firemode not allowed for this weapon type.\r\n");
+        REMOVE_BIT(GET_WEAPON_POSSIBLE_FIREMODES(OBJ), MODE_FA);
+      }
+      WEAPCLAMP(OBJ, GET_WEAPON_INTEGRAL_RECOIL_COMP, recoil_comp, "recoil comp");
+      if (GET_WEAPON_ATTACH_UNDER_VNUM(OBJ) > -1 && !kosher_weapon_values[GET_OBJ_VAL(OBJ, 3)].can_attach_bottom) {
+        send_to_char(CH, "Bottom attachment not allowed for this weapon type.\r\n");
+        GET_WEAPON_ATTACH_UNDER_VNUM(OBJ) = -1;
+      }
+      if (GET_WEAPON_ATTACH_BARREL_VNUM(OBJ) > -1 && !kosher_weapon_values[GET_OBJ_VAL(OBJ, 3)].can_attach_barrel) {
+        send_to_char(CH, "Barrel attachment not allowed for this weapon type.\r\n");
+        GET_WEAPON_ATTACH_BARREL_VNUM(OBJ) = -1;
+      }
+      if (GET_WEAPON_ATTACH_TOP_VNUM(OBJ) > -1 && !kosher_weapon_values[GET_OBJ_VAL(OBJ, 3)].can_attach_top) {
+        send_to_char(CH, "Top attachment not allowed for this weapon type.\r\n");
+        GET_WEAPON_ATTACH_TOP_VNUM(OBJ) = -1;
+      }
+    } else {
+      WEAPCLAMP(OBJ, GET_WEAPON_STR_BONUS, str_bonus, "strength bonus");
+      WEAPCLAMP(OBJ, GET_WEAPON_REACH, reach, "reach");
+    }
   }
+
   send_to_char(CH, "Item number: ^c%ld^n\r\n", d->edit_number);
   send_to_char(CH, "1) Item keywords: ^c%s^n\r\n", d->edit_obj->text.keywords);
   send_to_char(CH, "2) Item name: ^c%s^n\r\n", d->edit_obj->text.name);
@@ -2276,13 +2328,13 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
           }
           break;
         case ITEM_GUN_AMMO:
-          if (number < 1 || number > MAX_WEAP) {
+          if (number < START_OF_AMMO_USING_WEAPONS || number > END_OF_AMMO_USING_WEAPONS || !kosher_weapon_values[number].usable_by_builders) {
             send_to_char("Invalid option!\r\nAmmunition type: ", CH);
             return;
           }
           break;
         case ITEM_GUN_MAGAZINE:
-          if (number < 1 || number > MAX_WEAP) {
+          if (number < START_OF_AMMO_USING_WEAPONS || number > END_OF_AMMO_USING_WEAPONS || !kosher_weapon_values[number].usable_by_builders) {
             send_to_char("Invalid option!\r\nMagazine type: ", CH);
             return;
           }
@@ -2467,7 +2519,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
             return;
           }
         case ITEM_WEAPON:
-          if (number < 0 || number > MAX_WEAP) {
+          if (number < 0 || number >= MAX_WEAP || !kosher_weapon_values[number].usable_by_builders) {
             send_to_char("Invalid choice!\r\n", d->character);
             iedit_disp_weapon_menu(d);
             return;
@@ -2806,6 +2858,12 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
           break;
       }
       GET_OBJ_VAL(d->edit_obj, 6) = number;
+
+      if (GET_OBJ_TYPE(OBJ) == ITEM_WEAPON && !WEAPON_IS_GUN(OBJ) && GET_WEAPON_FOCUS_RATING(OBJ) > MAX_WEAPON_FOCUS_RATING(OBJ)) {
+        send_to_char(CH, "Automatically adjusted focus rating down to maximum.\r\n");
+        GET_WEAPON_FOCUS_RATING(OBJ) = MAX_WEAPON_FOCUS_RATING(OBJ);
+      }
+
       iedit_disp_val8_menu(d);
       break;
 
@@ -2839,8 +2897,8 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
               return;
             }
           } else {
-            if (number < 0 || number > max_weapon_focus_rating) {
-              send_to_char(CH, "Weapon focus rating must be between 0 (no focus) and %d.\r\n", max_weapon_focus_rating);
+            if (number < 0 || number > MAX_WEAPON_FOCUS_RATING(OBJ)) {
+              send_to_char(CH, "Weapon focus rating must be between 0 (no focus) and %d.\r\n", MAX_WEAPON_FOCUS_RATING(OBJ));
               iedit_disp_val8_menu(d);
               return;
             }
