@@ -69,7 +69,7 @@ void switch_weapons(struct char_data *mob, int pos);
 void send_mob_aggression_warnings(struct char_data *pc, struct char_data *mob);
 bool mob_cannot_be_aggressive(struct char_data *ch);
 bool mob_is_aggressive_towards_race(struct char_data *ch, int race);
-bool check_for_mob_weapon_skill_errors(struct char_data *ch, bool output_for_audit);
+bool check_for_mob_weapon_skill_errors(struct char_data *ch, char *buf_ptr, size_t buf_sz);
 
 // This takes up a significant amount of processing time, so let's precompute it.
 #define NUM_AGGRO_OCTETS 3
@@ -1781,7 +1781,7 @@ void do_single_mobile_activity(struct char_data *ch) {
 
   // Confirm we have the skills to wield our current weapon, otherwise ditch it.
   #ifndef SUPPRESS_MOB_SKILL_ERRORS
-  if (check_for_mob_weapon_skill_errors(ch, false))
+  if (check_for_mob_weapon_skill_errors(ch, NULL, 0))
     switch_weapons(ch, WEAR_WIELD);
   #endif
 
