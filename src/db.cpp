@@ -2201,10 +2201,12 @@ void parse_object(File &fl, long nr)
       case ITEM_CYBERWARE:
         price_cyber(obj);
         obj->obj_flags.wear_flags.SetBit(ITEM_WEAR_TAKE);
+        GET_OBJ_MATERIAL(obj) = MATERIAL_ELECTRONICS;
         break;
       case ITEM_BIOWARE:
         price_bio(obj);
         obj->obj_flags.wear_flags.SetBit(ITEM_WEAR_TAKE);
+        GET_OBJ_MATERIAL(obj) = MATERIAL_ORGANIC;
         break;
       case ITEM_PROGRAM:
         if (GET_OBJ_VAL(obj, 0) == SOFT_ATTACK)
