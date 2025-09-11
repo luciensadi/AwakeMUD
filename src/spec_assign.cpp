@@ -1203,6 +1203,7 @@ void assign_rooms(void)
   // CAS dealers.
   ASSIGNROOM(100998, car_dealer);
   ASSIGNROOM(101239, car_dealer);
+  ASSIGNROOM(102581, car_dealer);
 #endif
 
   /* Mitsuhama */
