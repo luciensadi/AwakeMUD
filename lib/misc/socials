@@ -183,7 +183,7 @@ You collapse in a heap.
 $n collapses in a heap.
 #
 
-crack 0 0
+em_crack 0 0
 You crack your knuckles.
 $n noisily cracks $s knuckles.
 #
@@ -393,7 +393,7 @@ You waste a fart on someone who's not even here.
 Quit farting around.
 $n farts all over $mself. Frankly, the spectacle is disgusting.
 
-flip 1 8
+em_flip 1 8
 You flip head over heels.
 $n flips head over heels.
 #
@@ -628,7 +628,7 @@ MMMMEEEEEEEEOOOOOOOOOWWWWWWWWWWWW.
 $n purrs contentedly.
 #
 
-roll 1 0
+em_roll 1 0
 You roll your eyes in disgust.
 $n rolls $s eyes in disgust.
 You look at $M and roll your eyes in disgust.
@@ -803,7 +803,7 @@ No one answers to that name here.
 You thank yourself since nobody else wants to!
 $n thanks $mself since you won't.
 
-think 1 0
+em_think 1 0
 You think about life, the universe and everything.
 $n sinks deeply into thought about the meaning of life.
 You think about what purpose $E has in relation to your part of life.
@@ -1065,7 +1065,8 @@ Hey, leave them alone!
 $n reaches out to scratch $N's head for $M.
 $n reaches out to scratch your head for you! Er.....ok....
 They obviously don't like you scratching them.
-#
+You scratch your head.
+$n scratches $s head.
 
 swear 0 5
 You swear profusely.
@@ -1074,7 +1075,8 @@ You scream abusive comments at $N!
 $n starts screaming truly abusive things at $N! How uncouth.
 $N screams truly abusive remarks at you! You gonna take that?
 Awww, noone to vent your anger on.
-#
+You scream abusive comments at yourself!
+$n starts screaming truly abusive things at $mself! How uncouth.
 
 disregard 0 5
 Disregarding nothing...?
@@ -1168,7 +1170,8 @@ You cheer $N on!
 $n cheers $N on!
 $n cheers you on! Go for it!
 Nope...looks like you're on your own.
-#
+You cheer yourself on!
+$n cheers $mself on!
 
 howl 0 5
 You howl, long and painfully.

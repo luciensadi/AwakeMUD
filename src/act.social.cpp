@@ -329,6 +329,21 @@ char *fread_action(FILE * fl, int nr)
 
 void boot_social_messages(void)
 {
+  /* Definitions in the social file should be either 4 or 9 lines as follows:
+
+      <command> <hide if invisible> <min vict position>
+      <msg to char, no arg provided>
+      <msg to others, no arg provided>
+      <msg to char, arg found>    <-- if this is "#", then stop here
+      <msg to others, arg found>
+      <msg to victim, arg found>
+      <msg to char, arg NOT found>
+      <msg to char, victim is the char>
+      <msg to others, victim is the char>
+  
+    A "#" line indicates a null message (i.e., no message will be sent).
+    A "$" line indicates the end of the definitions (any past this point will be skipped).
+  */
   FILE *fl;
   int nr, hide, min_pos, curr_soc = -1;
   char next_soc[250];
@@ -349,8 +364,14 @@ void boot_social_messages(void)
   /* now read 'em */
   for (;;) {
     fscanf(fl, " %249s ", next_soc);
-    if (*next_soc == '$')
+    if (*next_soc == '$') {
+      log_vfprintf("End of socials file reached");
       break;
+    }
+    if (curr_soc >= list_top+6 - 1) {
+      log_vfprintf("End of allocated socials array, stopping at '%s'", next_soc);
+      break;
+    }
     if ((nr = find_command(next_soc)) < 0)
       log_vfprintf("Unknown social '%s' in social file", next_soc);
 
