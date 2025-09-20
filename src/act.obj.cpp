@@ -1033,10 +1033,17 @@ bool perform_get_from_container(struct char_data *ch, struct obj_data *obj,
 	else if (GET_OBJ_TYPE(cont) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(cont, 0) == TYPE_COMPUTER)
 		computer = TRUE;
 
-	if (mode == FIND_OBJ_INV || ch == get_obj_possessor(obj) || can_take_obj_from_anywhere(ch, obj))
+  bool is_possessor = (ch == get_obj_possessor(obj));
+
+	if (mode == FIND_OBJ_INV || is_possessor || can_take_obj_from_anywhere(ch, obj))
 	{
 		if (IS_CARRYING_N(ch) >= CAN_CARRY_N(ch)) {
 			act("$p: you can't hold any more items.", FALSE, ch, obj, 0, TO_CHAR);
+      return FALSE;
+    }
+
+    if (mode != FIND_OBJ_INV && !is_possessor && GET_OBJ_WEIGHT(obj) + IS_CARRYING_W(ch) > CAN_CARRY_W(ch)) {
+      act("$p: you can't carry that much weight.", FALSE, ch, obj, 0, TO_CHAR);
       return FALSE;
     }
 
