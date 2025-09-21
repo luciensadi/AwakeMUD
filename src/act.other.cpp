@@ -4561,6 +4561,11 @@ ACMD(do_cpool)
     dodge = 0;
   }
 
+  if (dodge < 0 || bod < 0 || off < 0) {
+    send_to_char("Combat pool values cannot be negative!", ch);
+    return;
+  }
+
   total -= ch->real_abils.defense_pool = GET_DODGE(ch) = MIN(dodge, total);
   total -= ch->real_abils.body_pool = GET_BODY_POOL(ch) = MIN(bod, total);
 
@@ -4625,6 +4630,11 @@ ACMD(do_spool)
   half_chop(arg, argument, buf, sizeof(buf));
   def = atoi(argument);
   reflect = atoi(buf);
+
+  if (cast < 0 || drain < 0 || def < 0 || reflect < 0) {
+    send_to_char("Spell pool values cannot be negative!", ch);
+    return;
+  }
 
   set_casting_pools(ch, cast, drain, def, reflect, TRUE);
 }
