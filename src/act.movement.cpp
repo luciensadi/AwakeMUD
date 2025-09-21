@@ -590,7 +590,7 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
   if (ROOM_FLAGGED(ch->in_room, ROOM_FALL) && !IS_ASTRAL(ch) && !IS_AFFECTED(ch, AFF_LEVITATE) && !(IS_SENATOR(ch) && PRF_FLAGGED(ch, PRF_NOHASSLE))) {
     bool character_died;
     // We break the return code paradigm here to avoid having the code check follower data for a dead NPC.
-    if (IS_NPC(ch) && (character_died = perform_fall(ch))) {
+    if ((character_died = perform_fall(ch)) && IS_NPC(ch)) {
       return 0;
     }
     return 1;
