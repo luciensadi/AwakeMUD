@@ -1,4 +1,22 @@
-# AwakeMUD Community Edition
+# AwakeMUD SOLO Edition
+
+I forked the Community edition of Awakened Realms in order to make the game more solo friendly.  I also had a TON of issues running the codebase on my linux machine, so had to debut/trace and fix a lot of errors.  It appears that the original codebase uses a different database/codebase on the server, so what is there isn't downloadable/friendly for a new setup.
+
+This repo will include all changes i've made to make the game more solo-friendly.  This means Qol changes, new solo content, etc.  All changes are in the QOL change readme file, but here is the top level summary of whats included thus far.
+
+- [1. Pickpocket, Hacking, and Heat/Police](#1-pickpocket-hacking-and-heatpolice)
+- [2. Dynamic Art System & Furniture Merchants](#2-dynamic-art-system--furniture-merchants)
+- [3. Housing — Purchase (Ownership) vs. Lease](#3-housing--purchase-ownership-vs-lease)
+- [4. Inner Voice / Entity Companion](#4-inner-voice--entity-companion)
+- [5. Commands & Player-Facing UX](#5-commands--player-facing-ux)
+- [6. Data Files & Content Layout](#6-data-files--content-layout)
+- [7. Integration Points (Hooks)](#7-integration-points-hooks)
+- [8. Operational Notes & Tuning](#8-operational-notes--tuning)
+- [9. Patch Log (What We Changed)](#9-patch-log-what-we-changed)
+
+
+
+OLD/Original Readme:
 A fork of Che's now-retired Awakened Worlds MUD codebase. Issues and pull requests welcome!
 
 **AwakeMUD CE is up and running at awakemud.com port 4000!** Connect with your favorite telnet client. The current build/test instance for AwakeMUD Community Edition can be reached at awakemud.com port 4001; many thanks to Finster for running the previous test port for so long.
