@@ -46,6 +46,7 @@
 #include "player_exdescs.hpp"
 #include "pets.hpp"
 #include "gmcp.hpp"
+#include "innervoice.hpp"
 
 #if defined(__CYGWIN__)
 #include <crypt.h>
@@ -381,6 +382,8 @@ ACMD_DECLARE(do_stand);
 ACMD_DECLARE(do_stat);
 ACMD_DECLARE(do_status);
 ACMD_DECLARE(do_steal);
+ACMD_DECLARE(do_pickpocket);
+ACMD_DECLARE(do_hackbox);
 ACMD_DECLARE(do_stop);
 ACMD_DECLARE(do_stow);
 ACMD_DECLARE(do_stuck);
@@ -493,7 +496,15 @@ ACMD_DECLARE(do_software);
 ACMD_DECLARE(do_design);
 ACMD_DECLARE(do_invitations);
 ACMD_DECLARE(do_debug);
+ACMD_DECLARE(do_doqueue);
+ACMD_DECLARE(do_case);
+ACMD_DECLARE(do_autostash);
+
 ACMD_DECLARE(do_helpedit);
+ACMD_DECLARE(do_auto);
+ACMD_DECLARE(do_attack);
+ACMD_DECLARE(do_selljunk);
+ACMD_DECLARE(do_repairall);
 
 #define BLOCKS_IDLE_REWARD  FALSE
 #define ALLOWS_IDLE_REWARD  TRUE
@@ -519,7 +530,15 @@ struct command_info cmd_info[] =
     { "southwest"  , POS_SITTING, do_move     , 0, SCMD_SOUTHWEST, BLOCKS_IDLE_REWARD },
     { "northwest"  , POS_SITTING, do_move     , 0, SCMD_NORTHWEST, BLOCKS_IDLE_REWARD },
 
-    /* now, the main list -- note that spec-proc commands and socials come after this list. */
+    { "repairall"  , POS_STANDING, do_repairall, 0, 0, ALLOWS_IDLE_REWARD },
+    { "selljunk"   , POS_STANDING, do_selljunk , 0, 0, ALLOWS_IDLE_REWARD },
+    { "a"          , POS_FIGHTING, do_attack   , 0, 0, BLOCKS_IDLE_REWARD },
+    { "auto"       , POS_DEAD    , do_auto     , 0, 0, ALLOWS_IDLE_REWARD },
+    { "do"         , POS_DEAD    , do_doqueue  , 0, 0, ALLOWS_IDLE_REWARD },
+    { "case"       , POS_STANDING, do_case     , 0, 0, BLOCKS_IDLE_REWARD },
+    { "autostash"  , POS_STANDING, do_autostash, 0, 0, BLOCKS_IDLE_REWARD },
+
+/* now, the main list -- note that spec-proc commands and socials come after this list. */
     { "abilities"  , POS_MORTALLYW, do_skills   , 0, SCMD_ABILITIES, ALLOWS_IDLE_REWARD },
     { "abilityset" , POS_SLEEPING, do_abilityset , LVL_DEVELOPER, 0, ALLOWS_IDLE_REWARD },
     { "activate"   , POS_LYING   , do_activate , 0, 0, BLOCKS_IDLE_REWARD },
@@ -946,6 +965,11 @@ struct command_info cmd_info[] =
     { "stat"       , POS_DEAD    , do_stat     , LVL_BUILDER, 0, BLOCKS_IDLE_REWARD },
     { "status"     , POS_MORTALLYW, do_status   , 0, 0, ALLOWS_IDLE_REWARD },
     { "steal"      , POS_LYING   , do_steal    , 0, 0, BLOCKS_IDLE_REWARD },
+    { "pickpocket" , POS_STANDING , do_pickpocket, 0, 0, BLOCKS_IDLE_REWARD },
+    { "pick"       , POS_STANDING , do_pickpocket, 0, 0, BLOCKS_IDLE_REWARD },
+    { "hackbox"   , POS_STANDING , do_hackbox, 0, 0, BLOCKS_IDLE_REWARD },
+    { "hack locker" , POS_STANDING , do_hackbox, 0, 0, BLOCKS_IDLE_REWARD },
+    { "hack lockbox", POS_STANDING , do_hackbox, 0, 0, BLOCKS_IDLE_REWARD },
     { "stop"       , POS_LYING   , do_stop     , 0, 0, BLOCKS_IDLE_REWARD },
 #ifdef USE_HAMMERSPACE
     { "stow"       , POS_LYING   , do_stow     , LVL_BUILDER, SCMD_STOW, BLOCKS_IDLE_REWARD },
@@ -1106,7 +1130,6 @@ struct command_info cmd_info[] =
     { "bat"      , POS_RESTING , do_action   , 0, 0, BLOCKS_IDLE_REWARD },
     { "beam"     , POS_LYING   , do_action   , 0, 0, BLOCKS_IDLE_REWARD },
     { "beg"      , POS_RESTING , do_action   , 0, 0, BLOCKS_IDLE_REWARD },
-    { "bite"     , POS_RESTING , do_action   , 0, 0, BLOCKS_IDLE_REWARD },
     { "blink"    , POS_LYING   , do_action   , 0, 0, BLOCKS_IDLE_REWARD },
     { "bleed"    , POS_LYING   , do_action   , 0, 0, BLOCKS_IDLE_REWARD },
     { "blush"    , POS_LYING   , do_action   , 0, 0, BLOCKS_IDLE_REWARD },
@@ -1140,10 +1163,6 @@ struct command_info cmd_info[] =
     { "doh"      , POS_LYING   , do_action   , 0, 0, BLOCKS_IDLE_REWARD },
     { "drool"    , POS_LYING   , do_action   , 0, 0, BLOCKS_IDLE_REWARD },
     // Socials E
-    { "em_crack" , POS_LYING   , do_action   , 0, 0, BLOCKS_IDLE_REWARD },
-    { "em_flip"  , POS_LYING   , do_action   , 0, 0, BLOCKS_IDLE_REWARD },
-    { "em_roll"  , POS_LYING   , do_action   , 0, 0, BLOCKS_IDLE_REWARD },
-    { "em_think" , POS_LYING   , do_action   , 0, 0, BLOCKS_IDLE_REWARD },
     { "envy"     , POS_LYING   , do_action   , 0, 0, BLOCKS_IDLE_REWARD },
     { "eyebrow"  , POS_LYING   , do_action   , 0, 0, BLOCKS_IDLE_REWARD },
     // Socials F
@@ -1244,7 +1263,6 @@ struct command_info cmd_info[] =
     { "stare"    , POS_LYING   , do_action   , 0, 0, BLOCKS_IDLE_REWARD },
     { "steam"    , POS_RESTING , do_action   , 0, 0, BLOCKS_IDLE_REWARD },
     { "strut"    , POS_STANDING, do_action   , 0, 0, BLOCKS_IDLE_REWARD },
-    { "strangle" , POS_STANDING, do_action   , 0, 0, BLOCKS_IDLE_REWARD },
     { "sulk"     , POS_LYING   , do_action   , 0, 0, BLOCKS_IDLE_REWARD },
     { "swear"    , POS_LYING   , do_action   , 0, 0, BLOCKS_IDLE_REWARD },
     // Socials T
@@ -1282,8 +1300,8 @@ struct command_info cmd_info[] =
     /* End of socials. */
 
   /* this must be last; do not touch anything below this line unless you know what you're doing */
-    { "\n", 0, 0, 0, 0, FALSE }
-  };
+{ "\\n", 0, 0, 0, 0, FALSE }
+};
   /* this must be last; do not touch anything above this line unless you know what you're doing */
 
 ACMD_DECLARE(do_abort);
@@ -3485,6 +3503,12 @@ void nanny(struct descriptor_data * d, char *arg)
       }
       if (!d->character->in_veh)
         char_to_room(d->character, &world[load_room_rnum]);
+
+      // Schedule Inner Voice intro if this is the newbie welcome room (60500).
+      if (!IS_NPC(d->character) && real_room(60500) == load_room_rnum) {
+        InnerVoice::schedule_intro_for_newbie(d->character, 5);
+      }
+
       act("$n has entered the game.", TRUE, d->character, 0, 0, TO_ROOM);
       mudlog_vfprintf(d->character, LOG_CONNLOG, "%s has entered the game.", GET_CHAR_NAME(d->character));
 
@@ -4082,3 +4106,24 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   return -1;
 }
 #undef MAP_TYPO
+
+
+ACMD(do_doqueue)
+{
+  char count_buf[MAX_INPUT_LENGTH];
+  char rest[MAX_INPUT_LENGTH];
+  two_arguments(argument, count_buf, rest);
+  if (!*count_buf || !*rest) {
+    send_to_char("Usage: DO <count> <command>\r\n", ch);
+    return;
+  }
+  int count = atoi(count_buf);
+  if (count <= 0 || count > 50) {
+    send_to_char("Count must be between 1 and 50.\r\n", ch);
+    return;
+  }
+  for (int i = 0; i < count; i++) {
+    command_interpreter(ch, rest, rest);
+    if (GET_POS(ch) <= POS_STUNNED) break;
+  }
+}

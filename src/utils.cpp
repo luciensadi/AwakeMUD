@@ -43,6 +43,7 @@
 #include "awake.hpp"
 #include "comm.hpp"
 #include "handler.hpp"
+#include "creative_works.hpp"
 #include "memory.hpp"
 #include "house.hpp"
 #include "db.hpp"
@@ -61,6 +62,10 @@
 #include "quest.hpp"
 #include "chipjacks.hpp"
 #include "newdb.hpp"
+#include "innervoice.hpp"
+#ifndef GET_OBJ_LOOK
+#define GET_OBJ_LOOK(obj) (GET_OBJ_DESC(obj))
+#endif
 
 extern class memoryClass *Mem;
 extern struct time_info_data time_info;
@@ -216,6 +221,8 @@ int success_test(int number, int target, struct char_data *ch, const char *note_
       act(msgbuf, TRUE, other, 0, 0, TO_ROLLS);
     }
   }
+  if (ch) { InnerVoice::notify_skill_result_from_success_test(ch, total, number, (ones == number)); }
+
 
   if (ones == number)
     return BOTCHED_ROLL_RESULT;
@@ -1906,7 +1913,9 @@ int get_skill(struct char_data *ch, int skill, int &target, char *writeout_buffe
   // Convert NPCs so that they use the correct base skill for fighting (Armed Combat etc)
   skill = get_best_skill_num(ch, skill);
 
-  if (GET_SKILL(ch, skill) <= 0)
+  
+  InnerVoice::notify_skill_used(ch, skill);
+if (GET_SKILL(ch, skill) <= 0)
   {
     // If the base TN is 8 or more and you'd default, you fail instead.
     if (target >= 8)
@@ -9669,4 +9678,258 @@ const char *cleanup_invalid_color_codes(const char *str) {
   }
 
   return cleanup_buf;
+}
+
+// --- QoL: helpers and micro-events (theme-aware + combat/vehicle guard) ---
+bool pay_bank_first(struct char_data *ch, long amount, int category) {
+  if (amount <= 0) return true;
+  long bank = GET_BANK(ch);
+  if (bank >= amount) {
+    lose_bank(ch, amount, category);
+    return true;
+  }
+  long remaining = amount - bank;
+  if (bank > 0) lose_bank(ch, bank, category);
+  if (GET_NUYEN(ch) >= remaining) {
+    lose_nuyen(ch, remaining, category);
+    return true;
+  }
+  // Refund any partial bank deduction if we can't cover the rest.
+  if (bank > 0) gain_bank(ch, bank, category);
+  return false;
+}
+
+// Theme resolution for micro/ambient variant suffixes based on time and weather.
+static const char *get_variant_suffix() {
+  // Night?
+  bool is_night = (time_info.hours < 6 || time_info.hours >= 20);
+  // Rain/lightning?
+  bool is_rain = (weather_info.sky == SKY_RAINING || weather_info.sky == SKY_LIGHTNING);
+  if (is_night && is_rain) return "_night_rain";
+  if (is_night) return "_night";
+  if (is_rain) return "_rain";
+  return "";
+}
+
+// Discovery tracking: count system art found per day with a soft reward cap.
+struct DiscStats { int count; time_t last_reset; };
+static std::unordered_map<long, DiscStats> g_discoveries;
+
+static void maybe_award_discovery(struct char_data *ch) {
+  if (!ch || IS_NPC(ch)) return;
+  // Look for system art in room.
+  bool found = FALSE;
+  for (struct obj_data *obj = ch->in_room ? ch->in_room->contents : NULL; obj; obj = obj->next_content) {
+    if (GET_OBJ_VNUM(obj) == OBJ_CUSTOM_ART && GET_OBJ_VAL(obj, 1) == 424242) { found = TRUE; break; }
+  }
+  if (!found) return;
+
+  long id = GET_IDNUM(ch);
+  time_t now = time(0);
+  DiscStats &ds = g_discoveries[id];
+  if (!ds.last_reset || now - ds.last_reset >= SECS_PER_REAL_DAY) { ds.count = 0; ds.last_reset = now; }
+
+    if (ds.count < 50) {
+    ds.count++;
+    int delta = number(10, 25);
+    InnerVoice::adjust_attitude(ch, delta);
+    send_to_char(ch, "^cStreet art discovered^n (%d/50 today). ^G+%d attitude^n.\r\n", ds.count, delta);
+  }
+}
+
+void maybe_trigger_street_microevent(struct char_data *ch) {
+  if (!ch || !ch->in_room) return;
+  // Per-room cooldown (30 minutes)
+  static std::unordered_map<long, time_t> __micro_last_room;
+  long __room_key = GET_ROOM_VNUM(ch->in_room);
+  time_t __now = time(0);
+  auto __it = __micro_last_room.find(__room_key);
+  if (__it != __micro_last_room.end() && (__now - __it->second) < 1800) return;
+  if (FIGHTING(ch) || ch->in_veh) return; // QoL #2
+
+  static std::unordered_map<long, time_t> last;
+  time_t now = time(0);
+  long key = GET_IDNUM(ch);
+  if (last[key] && now - last[key] < 30) return;
+  if (number(0, 99)) { maybe_award_discovery(ch); return; } // 1% chance; still check discovery
+
+  last[key] = now;
+
+  // Load themed micro bank with variant suffix (#3)
+  std::string theme = "city";
+  if (ch->in_room && ch->in_room->name) {
+    std::string nm; for (const char *p = ch->in_room->name; *p; ++p) nm += (char)tolower(*p);
+    auto has=[&](const char *k){ return nm.find(k) != std::string::npos; };
+    if (has("park") || has("garden")) theme = "park";
+    else if (has("dock") || has("pier") || has("harbor") || has("harbour") || has("waterfront") || has("beach")) theme = "waterfront";
+    else if (has("market") || has("bazaar") || has("mall") || has("plaza")) theme = "market";
+    else if (has("warehouse") || has("factory") || has("plant") || has("yard")) theme = "industrial";
+    else if (has("alley") || has("slum") || has("barrens") || has("tenement")) theme = "slum";
+    else if (has("corporate") || has("tower") || has("lobby") || has("atrium")) theme = "corporate";
+    else if (has("sewer")) theme = "sewer";
+    else if (has("subway") || has("metro") || has("tunnel")) theme = "subway";
+    else if (has("bridge")) theme = "bridge";
+    else if (has("apartment") || has("residential") || has("condo")) theme = "residential";
+    else if (has("arcology")) theme = "arcology";
+  }
+
+  char path[256];
+  const char *suf = get_variant_suffix();
+  // Try variant first
+  snprintf(path, sizeof(path), "lib/etc/micro_%s%s.txt", theme.c_str(), suf);
+  std::vector<std::string> lines;
+  auto load = [](const char *p, std::vector<std::string> &dst) {
+    FILE *fp = fopen(p, "r"); if (!fp) return;
+    char buf[MAX_STRING_LENGTH];
+    while (fgets(buf, sizeof(buf), fp)) {
+      size_t len = strlen(buf);
+      while (len && (buf[len-1]=='\n' || buf[len-1]=='\r')) buf[--len]=0;
+      if (len) dst.emplace_back(buf);
+    }
+    fclose(fp);
+  };
+  load(path, lines);
+  if (lines.empty()) {
+    snprintf(path, sizeof(path), "lib/etc/micro_%s.txt", theme.c_str());
+    load(path, lines);
+  }
+
+  if (!lines.empty()) {
+    int __idx = number(0, lines.size()-1);
+    const std::string &line = lines[__idx];
+    send_to_char(ch, "%s\r\n", line.c_str());
+    if (number(1, 100) <= 50) {
+      InnerVoice::queue_micro_comment(ch, theme.c_str(), suf, __idx);
+    }
+  } else {
+    // Fallback
+    send_to_char(ch, "A delivery drone zips close, scans your face, and rockets away.\r\n");
+  }
+  maybe_award_discovery(ch);
+}
+
+
+
+// --- System-generated creative works seeding (persisted) ---
+#define SYS_ART_FILE "lib/etc/system_art_spawns.txt"
+#define SYS_ART_MARKER 424242
+#define SYS_ART_TARGET_TOTAL 120
+#define SYS_ART_MAX_NEW_PER_RESEED 20
+
+struct sys_art_entry {
+  long room_vnum;
+  std::string name;
+  std::string look;
+  std::string roomdesc;
+};
+
+static void sysart_escape(std::string &s) {
+  std::string out; out.reserve(s.size());
+  for (char c: s) { if (c=='\n') out+="\\n"; else if (c=='\r') {} else if (c=='|') out+="\\p"; else out+=c; }
+  s.swap(out);
+}
+static std::string sysart_unescape(const char *src) {
+  std::string out;
+  for (size_t i=0; src && src[i]; ++i) {
+    if (src[i]=='\\' && src[i+1]) { char n=src[i+1]; if (n=='n'){ out+='\n'; ++i; continue;} if (n=='p'){ out+='|'; ++i; continue;} }
+    out += src[i];
+  }
+  return out;
+}
+static void sysart_load(std::vector<sys_art_entry> &out) {
+  out.clear(); FILE *fp=fopen(SYS_ART_FILE,"r"); if(!fp) return; char buf[MAX_STRING_LENGTH];
+  while (fgets(buf,sizeof(buf),fp)) {
+    char *room=strtok(buf,"|"); char *name=strtok(NULL,"|"); char *look=strtok(NULL,"|"); char *rdesc=strtok(NULL,"\r\n");
+    if(!room||!name||!look||!rdesc) continue; sys_art_entry e; e.room_vnum=atol(room); e.name=sysart_unescape(name); e.look=sysart_unescape(look); e.roomdesc=sysart_unescape(rdesc); out.push_back(e);
+  } fclose(fp);
+}
+static void sysart_save(const std::vector<sys_art_entry> &in) {
+  FILE *fp=fopen(SYS_ART_FILE,"w"); if(!fp) return; for (auto &e: in) {
+    std::string n=e.name,l=e.look,r=e.roomdesc; sysart_escape(n); sysart_escape(l); sysart_escape(r); fprintf(fp,"%ld|%s|%s|%s\n", e.room_vnum,n.c_str(),l.c_str(),r.c_str());
+  } fclose(fp);
+}
+static bool sysart_room_ok(struct room_data *room) {
+  if(!room) return false; if(ROOM_FLAGGED(room, ROOM_DEATH)) return false; if(ROOM_FLAGGED(room, ROOM_NO_DROP)) return false; if(ROOM_FLAGGED(room, ROOM_STORAGE)) return false; return true;
+}
+static std::string sysart_theme_for_room(struct room_data *room) {
+  if(!room||!room->name) return "city"; std::string nm; for(const char*p=room->name;*p;++p) nm+=(char)tolower(*p);
+  auto has=[&](const char*k){ return nm.find(k)!=std::string::npos; };
+  if(has("park")||has("garden")) return "park"; if(has("dock")||has("pier")||has("harbor")||has("harbour")||has("waterfront")||has("beach")) return "waterfront";
+  if(has("market")||has("bazaar")||has("mall")||has("plaza")) return "market"; if(has("warehouse")||has("factory")||has("plant")||has("yard")) return "industrial";
+  if(has("alley")||has("slum")||has("barrens")||has("tenement")) return "slum"; if(has("corporate")||has("tower")||has("lobby")||has("atrium")) return "corporate";
+  if(has("sewer")) return "sewer"; if(has("subway")||has("metro")||has("tunnel")) return "subway"; if(has("bridge")) return "bridge";
+  if(has("apartment")||has("residential")||has("condo")) return "residential"; if(has("arcology")) return "arcology"; return "city";
+}
+static void sysart_spawn_in_room(long room_vnum, const char *name, const char *look, const char *roomdesc) {
+  int rnum=real_room(room_vnum); if(rnum<0) return; struct obj_data *art=read_object(OBJ_CUSTOM_ART, VIRTUAL, OBJ_LOAD_REASON_CREATE_ART); if(!art) return;
+  GET_ART_AUTHOR_IDNUM(art)=0; GET_OBJ_VAL(art,1)=SYS_ART_MARKER; GET_OBJ_WEAR(art).RemoveBit(ITEM_WEAR_TAKE); GET_OBJ_EXTRA(art).SetBit(ITEM_EXTRA_NOSELL); GET_OBJ_EXTRA(art).SetBit(ITEM_EXTRA_NORENT);
+  DELETE_ARRAY_IF_EXTANT(art->restring); art->restring=str_dup(name); DELETE_ARRAY_IF_EXTANT(art->text.look_desc); art->text.look_desc=str_dup(look); DELETE_ARRAY_IF_EXTANT(art->text.room_desc); art->text.room_desc=str_dup(roomdesc);
+  extern struct room_data *world; obj_to_room(art, &world[rnum]);
+}
+static bool sysart_exists_in_room(long room_vnum, const char *name, const char *look) {
+  int rnum=real_room(room_vnum); if(rnum<0) return false; extern struct room_data *world;
+  for(struct obj_data *obj=world[rnum].contents; obj; obj=obj->next_content) if(GET_OBJ_VNUM(obj)==OBJ_CUSTOM_ART && GET_OBJ_VAL(obj,1)==SYS_ART_MARKER) {
+    const char*nm=GET_OBJ_NAME(obj)?GET_OBJ_NAME(obj):""; const char*lk=obj->text.look_desc?obj->text.look_desc:""; if(!str_cmp(nm,name)&&!str_cmp(lk,look)) return true; }
+  return false;
+}
+static void sysart_compose(const std::string &theme, std::string &out_name, std::string &out_look, std::string &out_room) {
+  static const char* types[]={"graffito","stencil","paste-up","projection","holo-sticker","fiberlight scrawl","AR tag","microprint mural"};
+  static const char* adjs[]={"neon","glitched","holographic","spray-splattered","handmade","augmented","pixel-bled","datastream","chrome-edged","UV-reactive"};
+  static const char* signoffs[]={"— no fear","— stay chromed","— no gods, no grids","— trust the run","— frag luck","— optics on","— zero traces"};
+  static const char* corpnames[]={"Renraku","Ares","Aztechnology","Shiawase","Mitsuhama","Saeder-Krupp","Evo","NeoNET","Horizon"};
+  static const char* rivals[]={"NullCat","ChromeWitch","VectorKid","Bytegeist","SilkRazor","GhostShift","NovaFlux","PixeLich","ZephyrJack","GlitchVandal"};
+  static const char* hp[]={"Zero","Nano","Glitch","Chrome","Neon","Ghost","Cipher","Razor","Byte","Phantom","Nova","Static","Zephyr","Viper","Pixel","Flux","Wraith","Echo","Grim","Shock"};
+  static const char* hs[]={"runner","jack","blade","witch","smith","hacker","kid","queen","king","vandal","flux","shift","geist","wolf","cat","spider","rider","shade","mancer","net"};
+  auto pick=[&](const char*const*arr,int n){ return arr[number(0,n-1)]; };
+  auto make_handle=[&](){ std::string h=std::string(pick(hp,20))+pick(hs,20); if(!number(0,2)){ char b[8]; snprintf(b,sizeof(b),"%d",number(0,99)); h+=b;} return h; };
+  std::string type=pick(types,8), adj=pick(adjs,10), handle=make_handle(), rival=rivals[number(0,9)], corp=corpnames[number(0,8)];
+  int mode_roll=number(1,100);
+  if (mode_roll<=35) { // BRAG
+    static const char* brag[]={"Stencil reads: 'Soloed a %s blacksite. Ask @%s.'","Holo-spray boasts: '@%s ghosted %s HQ—first try, no trace.'","Projection flickers: 'Gridrunner @%s cracked a %s vault and left a smile.'","Paste-up lists bounties crossed out—last line: '@%s walked away.'","Fiberlight scrawl: 'Frag your ICE, %s. @%s was here.'"};
+    char buf[MAX_STRING_LENGTH]; const char* fmt=brag[number(0,4)]; snprintf(buf,sizeof(buf),fmt, corp.c_str(), handle.c_str());
+    out_name=std::string("^C")+type+"^n by @"+handle; out_look=buf; out_room=std::string("A ")+adj+" "+type+" signed by @"+handle+" glows with loud confidence.";
+  } else if (mode_roll<=60) { // MOCK
+    static const char* mock[]={"Spray tag jeers: '@%s still sandboxing hello world.'","Stencil jab: 'Hey @%s, your deck throttles like a toaster.'","AR tag tracks you and snickers: 'Looking for @%s? They faceplanted on %s ICE.'","Holo-sticker: '@%s, patch your rig before you brag.'","Paste-up meme shows @%s getting bounced by a %s receptionist."};
+    char buf[MAX_STRING_LENGTH]; const char* fmt=mock[number(0,4)]; snprintf(buf,sizeof(buf),fmt, rival.c_str(), corp.c_str());
+    out_name=std::string("^C")+type+"^n by @"+handle; out_look=buf; out_room="A cheeky "+type+" needles a rival handle—runner drama made permanent.";
+  } else { // DECO
+    static const char* deco[]={"A %s koi loops in AR, scales flickering like code.","A stenciled cherry blossom drifts across a chrome skull.","A glitch-art skyline overlays the real one, half a beat out of sync.","Microprint poetry crawls along the wall if you squint just right.","A neon fox chases its tail around a pillar, leaving light trails."};
+    char buf[MAX_STRING_LENGTH]; const char* fmt=deco[number(0,4)]; snprintf(buf,sizeof(buf),fmt, theme.c_str());
+    out_name=std::string("^C")+type+"^n by @"+handle; out_look=buf; if(!number(0,1)){ out_look+=" "; out_look+=signoffs[number(0,6)]; }
+    out_room=std::string("A ")+adj+" "+type+" by @"+handle+" brightens the "+theme+" here.";
+  }
+}
+void maybe_seed_system_art() {
+  static time_t next=0; time_t now=time(0);
+  if (!next || now>=next) {
+    std::vector<sys_art_entry> entries; sysart_load(entries);
+    for (auto &e: entries) if (!sysart_exists_in_room(e.room_vnum, e.name.c_str(), e.look.c_str())) sysart_spawn_in_room(e.room_vnum, e.name.c_str(), e.look.c_str(), e.roomdesc.c_str());
+    int to_add=SYS_ART_TARGET_TOTAL-(int)entries.size(); if (to_add>SYS_ART_MAX_NEW_PER_RESEED) to_add=SYS_ART_MAX_NEW_PER_RESEED;
+    extern struct room_data *world; extern rnum_t top_of_world;
+    for (int i=0;i<to_add;++i){ int tries=0, rnum=-1; while(tries++<1000){ int cand=number(0,top_of_world); if(sysart_room_ok(&world[cand])){ rnum=cand; break; } } if (rnum<0) break;
+      long rvnum=GET_ROOM_VNUM(&world[rnum]); std::string theme=sysart_theme_for_room(&world[rnum]); std::string nm,lk,rd; sysart_compose(theme,nm,lk,rd);
+      if(sysart_exists_in_room(rvnum,nm.c_str(),lk.c_str())){ --i; continue; } sysart_spawn_in_room(rvnum,nm.c_str(),lk.c_str(),rd.c_str());
+      sys_art_entry e; e.room_vnum=rvnum; e.name=nm; e.look=lk; e.roomdesc=rd; entries.push_back(e); }
+    sysart_save(entries); next = now + SECS_PER_REAL_DAY;
+  }
+}
+
+
+// Provide "a"/"an" prefix with the given string. Uses AN() macro for vowel test.
+const char *a_an(char *string) {
+  static char a_an_buf[1024];
+  if (!string || !*string) return "a";
+  const char *article = AN(string);
+  // Avoid double spaces / capitalization issues
+  snprintf(a_an_buf, sizeof(a_an_buf), "%s %s", article, string);
+  return a_an_buf;
+}
+
+// Periodic reseed hook for ambient room events. Keeps a low-frequency cadence.
+void maybe_reseed_ambient_rooms() {
+  static time_t next = 0;
+  time_t now = time(0);
+  if (!next || now >= next) {
+    next = now + 3600; // once per hour tick
+  }
 }

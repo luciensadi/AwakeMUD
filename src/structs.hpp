@@ -555,8 +555,7 @@ struct char_point_data
   ubyte reach[2];
   int extras[2];
   sh_int projection_ticks;
-
-  /* Adding a field to this struct? If it's a pointer, or if it's important, add it to utils.cpp's copy_over_necessary_info() to avoid breaking mdelete etc. */
+/* Adding a field to this struct? If it's a pointer, or if it's important, add it to utils.cpp's copy_over_necessary_info() to avoid breaking mdelete etc. */
 
   char_point_data() :
     mental(0), max_mental(0), physical(0), max_physical(10), nuyen(0), bank(0), karma(0), rep(0),
@@ -657,6 +656,10 @@ struct char_special_data
   idnum_t npc_faction_membership;
 
   const char *highlight_color_code;
+  // --- Thievery heat system (runtime-only, not saved) ---
+  int theft_heat_level;                 /* 0..3 heat; increases on failed pickpocket */
+  time_t theft_heat_cooldown_end;       /* epoch when heat will decay one step */
+  vnum_t theft_heat_anchor_room;        /* room VNUM where heat events (police spawns) aim */
   /* Adding a field to this struct? If it's a pointer, or if it's important, add it to utils.cpp's copy_over_necessary_info() to avoid breaking mdelete etc. */
   // Touch olc's mclone, medit etc if it's a string.
 
@@ -668,7 +671,10 @@ struct char_special_data
       last_timer(0), last_social_action(0), actions(0), subscribe(NULL), rigging(NULL),
       mindlink(NULL), spirits(NULL), npc_faction_membership(0), highlight_color_code(NULL)
   {
-    ZERO_OUT_ARRAY(conjure, 4);
+        theft_heat_level = 0;
+    theft_heat_cooldown_end = 0;
+    theft_heat_anchor_room = 0;
+ZERO_OUT_ARRAY(conjure, 4);
     ZERO_OUT_ARRAY(coord, 3);
     ZERO_OUT_ARRAY(dirty_bits, NUM_DIRTY_BITS);
   }
@@ -1116,8 +1122,6 @@ struct descriptor_data
   int invalid_command_counter;
   char last_sprayed[MAX_INPUT_LENGTH];
 
-  int regenerating_art_quota;
-
   long nuyen_paid_for_wheres_my_car;
   long nuyen_income_this_play_session[NUM_OF_TRACKED_NUYEN_INCOME_SOURCES];
 
@@ -1172,7 +1176,7 @@ struct descriptor_data
       edit_apartment(NULL), edit_apartment_original(NULL), edit_apartment_room(NULL),
       edit_apartment_room_original(NULL), edit_faction(NULL), edit_pgroup(NULL),
       canary(CANARY_VALUE), pProtocol(NULL)
-  {
+ /* {
     // Zero out the communication history for all channels.
     for (int channel = 0; channel < NUM_COMMUNICATION_CHANNELS; channel++)
       message_history[channel] = listClass<const char *>();
@@ -1184,9 +1188,65 @@ struct descriptor_data
 
     // Wipe last_sprayed.
     last_sprayed[0] = '\0';
+  }+++ old was crashing at delete(d) on user logout*/
+  {
+    // ===== NEW explicit zero-inits that the old memset used to provide =====
+    descriptor   = -1;                    // invalid fd until init_descriptor()
+    peer_port    = 0;
+    host[0]      = '\0';
+
+    bad_pws      = 0;
+    idle_ticks   = 0;
+    invalid_name = 0;
+
+    connected    = 0;                     // will be set to CON_GET_NAME in init_descriptor()
+    wait         = 0;
+    desc_num     = 0;
+    login_time   = 0;
+
+    max_str      = 0;
+    mail_to      = 0;
+    prompt_mode  = 0;
+
+    inbuf[0]     = '\0';
+    last_input[0]= '\0';
+    small_outbuf[0] = '\0';
+
+    output       = NULL;                  // will be set to small_outbuf in init_descriptor()
+    bufptr       = 0;                     // write_to_output will update; 0 is safe base
+    bufspace     = 0;                     // init_descriptor() sets to SMALL_BUFSIZE - 1
+    large_outbuf = NULL;
+
+    // txt_q input has its own ctor (sets head/tail = NULL).
+
+    // creation state
+    std::memset(&ccr, 0, sizeof(ccr));
+
+    last_sprayed[0] = '\0';
+
+    nuyen_paid_for_wheres_my_car = 0;
+    for (int i = 0; i < NUM_OF_TRACKED_NUYEN_INCOME_SOURCES; ++i)
+      nuyen_income_this_play_session[i] = 0;
+
+    // message_history[] default-constructs already; reinforce empty
+    for (int channel = 0; channel < NUM_COMMUNICATION_CHANNELS; ++channel)
+      message_history[channel] = listClass<const char *>();
+
+    // OLC/editing defaults
+    edit_mode = 0;
+    edit_convert_color_codes = false;
+    edit_number = edit_number2 = edit_number3 = 0;
+    edit_zone = 0;
+    edit_obj_secondary = NULL;
+    edit_helpfile = NULL;
+    edit_complex = edit_complex_original = NULL;
+    edit_apartment = edit_apartment_original = NULL;
+    edit_apartment_room = edit_apartment_room_original = NULL;
+    edit_faction = NULL;
+    edit_exdesc = NULL;
+    // ======================================================================
   }
-}
-;
+};
 
 
 /* other miscellaneous structures ***************************************/
@@ -1433,7 +1493,6 @@ struct ban_list_element
 // For listing allowed max values for weapon types. Has settings for both ranged and melee.
 struct kosher_weapon_values_struct {
     // Shared
-    bool usable_by_builders;
     int power;
     int damage_code;
     int skill;

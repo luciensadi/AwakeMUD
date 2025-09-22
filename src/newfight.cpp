@@ -20,6 +20,7 @@
 #include "memory.hpp"
 #include "bullet_pants.hpp"
 #include "newfight.hpp"
+#include "combat_qol.hpp"
 #include "metrics.hpp"
 
 extern void die(struct char_data * ch, idnum_t cause_of_death);
@@ -197,9 +198,19 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
 
   // Precondition: If you're out of ammo, you don't get to fight.
   if (att->weapon && !has_ammo_no_deduct(att->ch, att->weapon)) {
+  // QoL: Attempt auto-reload / auto-swap before aborting for no ammo.
+  if (qol_try_auto_reload(att->ch, att->weapon)) {
+    // Reloaded; continue.
+  } else if (qol_try_auto_swap_to_sidearm(att->ch)) {
+    // Swapped; give it a tick to update.
+    return FALSE;
+  }
+  // Recheck ammo after QoL actions; if still none, abort combat.
+  if (!has_ammo_no_deduct(att->ch, att->weapon)) {
     act("$n unable to fight $N: No ammo", TRUE, att->ch, 0, def->ch, TO_ROLLS);
     return FALSE;
   }
+}
 
   // Remove closing flags if both are melee.
   if ((!att->ranged_combat_mode || AFF_FLAGGED(att->ch, AFF_APPROACH))

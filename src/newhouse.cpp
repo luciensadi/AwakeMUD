@@ -14,6 +14,7 @@ namespace bf = boost::filesystem;
 #include "utils.hpp"
 #include "playergroup_classes.hpp"
 #include "handler.hpp"
+extern bool pay_bank_first(struct char_data *ch, long amount, int category);
 #include "limits.hpp"
 #include "interpreter.hpp"
 #include "newmail.hpp"
@@ -70,6 +71,56 @@ const bf::path global_housing_dir = bf::system_complete("lib") / "housing";
 // TODO: Test HCONTROL DESTROY on an apartment with stuff in it
 
 ACMD(do_decorate) {
+  // Extra: NAMEFRAME / NAMEPAINTING to set object short name (restring), bank-first fee.
+  if (*argument) {
+    char arg1[MAX_INPUT_LENGTH];
+    char arg2[MAX_INPUT_LENGTH];
+    two_arguments(argument, arg1, arg2);
+    if (!str_cmp(arg1, "nameframe") || !str_cmp(arg1, "namepainting")) {
+      char *equals = strchr(argument, '=');
+      if (!equals) {
+        send_to_char(ch, "Usage: DECORATE NAMEFRAME <keywords> = <short name>\r\n");
+        return;
+      }
+      // Parse keywords and new name
+      char keywords[MAX_INPUT_LENGTH]; char newname[MAX_INPUT_LENGTH];
+      // Extract between command and '='
+      const char *after_cmd = argument + strlen(arg1);
+      while (*after_cmd && isspace(*after_cmd)) after_cmd++;
+      size_t kw_len = (size_t)(equals - after_cmd);
+      kw_len = MIN(kw_len, sizeof(keywords)-1);
+      strlcpy(keywords, after_cmd, kw_len+1);
+      // Extract new name after '='
+      const char *after_eq = equals+1; while (*after_eq && isspace(*after_eq)) after_eq++;
+      strlcpy(newname, after_eq, sizeof(newname));
+      // Trim trailing spaces
+      for (int i = strlen(newname)-1; i >= 0 && isspace(newname[i]); --i) newname[i]=0;
+
+      FAILURE_CASE(strlen(newname) < 3, "That name's too short.");
+      FAILURE_CASE(strlen(newname) > 60, "Keep it under 60 characters, chummer.");
+
+      // Find target object (inventory or room)
+      struct obj_data *obj = get_obj_in_list_vis(ch, keywords, ch->carrying);
+      if (!obj && ch->in_room) obj = get_obj_in_list_vis(ch, keywords, ch->in_room->contents);
+      FAILURE_CASE(!obj, "You don't see that here.");
+
+      // Check it's a frame or painting by vnum (99000/99001 from the furniture pack)
+      vnum_t v = GET_OBJ_VNUM(obj);
+      FAILURE_CASE(!(v == 99000 || v == 99001), "You can only name photo frames or paintings.");
+
+      // Charge fee (bank-first)
+      if (!pay_bank_first(ch, COST_TO_DECORATE_APT, NUYEN_OUTFLOW_DECORATING)) {
+        send_to_char(ch, "You don\'t have enough nuyen (bank+wallet) to cover the materials.\r\n");
+        return;
+      }
+
+      // Apply restring (short description / name)
+      if (obj->restring) { delete [] obj->restring; obj->restring = NULL; }
+      obj->restring = str_dup(newname);
+      send_to_char(ch, "Done. Your %s is now called \'%s\'.\r\n", v == 99000 ? "frame" : "painting", newname);
+      return;
+    }
+  }
   FAILURE_CASE(IS_ASTRAL(ch), "You can't seem to touch the decorating supplies!");
   
   if (ch->in_veh) {
@@ -79,7 +130,7 @@ ACMD(do_decorate) {
       FAILURE_CASE_PRINTF(GET_NUYEN(ch) < COST_TO_DECORATE_VEH, "You need %d nuyen on hand to cover the materials.", COST_TO_DECORATE_VEH);
 
       send_to_char(ch, "You spend %d nuyen to purchase decorating materials.\r\n", COST_TO_DECORATE_VEH);
-      lose_nuyen(ch, COST_TO_DECORATE_VEH, NUYEN_OUTFLOW_DECORATING);
+      if (!pay_bank_first(ch, COST_TO_DECORATE_VEH, NUYEN_OUTFLOW_DECORATING)) { send_to_char(ch, "You don't have enough nuyen (bank+wallet) to cover the materials.\r\n"); return; }
     }
 
     STATE(ch->desc) = CON_DECORATE_VEH;
@@ -118,7 +169,7 @@ ACMD(do_decorate) {
     FAILURE_CASE_PRINTF(GET_NUYEN(ch) < COST_TO_DECORATE_APT, "You need %d nuyen on hand to cover the materials.", COST_TO_DECORATE_APT);
 
     send_to_char(ch, "You spend %d nuyen to purchase new decorating materials.\r\n", COST_TO_DECORATE_APT);
-    lose_nuyen(ch, COST_TO_DECORATE_APT, NUYEN_OUTFLOW_DECORATING);
+    if (!pay_bank_first(ch, COST_TO_DECORATE_APT, NUYEN_OUTFLOW_DECORATING)) { send_to_char(ch, "You don't have enough nuyen (bank+wallet) to cover the materials.\r\n"); return; }
   }
 
   PLR_FLAGS(ch).SetBit(PLR_WRITING);
@@ -768,6 +819,13 @@ Apartment::Apartment(ApartmentComplex *complex, bf::path base_directory) :
       _json_parse_from_file(base_directory / LEASE_INFO_FILE_NAME, base_info);
 
       paid_until = base_info["paid_until"].get<time_t>();
+
+// Ownership fields (optional)
+if (base_info.contains("purchased")) purchased = base_info["purchased"].get<bool>(); else purchased = false;
+if (base_info.contains("sale_in_progress")) sale_in_progress = base_info["sale_in_progress"].get<bool>(); else sale_in_progress = false;
+if (base_info.contains("sale_complete_time")) sale_complete_time = base_info["sale_complete_time"].get<time_t>(); else sale_complete_time = 0;
+if (base_info.contains("sale_payout")) sale_payout = base_info["sale_payout"].get<long>(); else sale_payout = 0;
+
       guests = base_info["guests"].get<std::vector<idnum_t>>();
 
       idnum_t owner = base_info["owner"].get<idnum_t>();
@@ -1069,6 +1127,10 @@ void Apartment::save_lease() {
     lease_data["owner"] = get_owner_id();
     lease_data["paid_until"] = paid_until;
     lease_data["guests"] = guests;
+    lease_data["purchased"] = purchased;
+    lease_data["sale_in_progress"] = sale_in_progress;
+    lease_data["sale_complete_time"] = sale_complete_time;
+    lease_data["sale_payout"] = sale_payout;
 
     bf::ofstream o(base_directory / LEASE_INFO_FILE_NAME);
     o << std::setw(4) << lease_data << std::endl;
@@ -1086,24 +1148,27 @@ void Apartment::kick_out_everyone() {
 
 /* Delete <apartment name>/lease and restore default descs. */
 void Apartment::break_lease() {
-  const char *owner_name = get_player_name(owned_by_player);
-  mudlog_vfprintf(NULL, LOG_GRIDLOG, "Cleaning up lease for %s's %s (owned by %ld / %s). See purgelog for details.",
-                  complex->display_name,
-                  name,
-                  owned_by_player,
-                  owner_name && *owner_name ? owner_name : "-DNE");
-  delete [] owner_name;
+  mudlog_vfprintf(NULL, LOG_GRIDLOG, "Cleaning up lease for %s's %s.", complex->display_name, name);
 
   // Mail the owner.
   if (owned_by_pgroup) {
-    // EVENTUALTODO, also modify log line above
+    // EVENTUALTODO
   } else if (owned_by_player > 0) {
     char mail_buf[1000];
     snprintf(mail_buf, sizeof(mail_buf), "The lease on %s has expired, and its contents have been reclaimed.\r\n", get_full_name());
     raw_store_mail(get_owner_id(), 0, "Your former landlord", mail_buf);
   }
 
-  // Iterate over rooms and purge them.
+  // Clear lease data.
+  owned_by_player = 0;
+  owned_by_pgroup = NULL;
+  paid_until = 0;
+  guests.clear();
+
+  // Overwrite the lease file.
+  save_lease();
+
+  // Iterate over rooms and restore them.
   for (auto &room: rooms) {
     room->purge_contents();
     room->delete_decoration();
@@ -1122,19 +1187,16 @@ void Apartment::break_lease() {
       send_to_char("^L(Hint: Your lifestyle went down due to a broken lease. You should select a new lifestyle string with the Change Lifestyle option in ^wCUSTOMIZE PHYSICAL^L.)^n\r\n", plr);
     }
   }
-
-  // Clear lease data.
-  owned_by_player = 0;
-  owned_by_pgroup = NULL;
-  paid_until = 0;
-  guests.clear();
-
-  // Overwrite the lease file.
-  save_lease();
 }
 
 /* Check for entry permissions. */
 bool Apartment::can_enter(struct char_data *ch) {
+
+// Owned units: allow entry regardless of rent if owner or guest.
+if (is_purchased()) {
+  if (has_owner_privs(ch) || is_guest(GET_IDNUM(ch))) return TRUE;
+}
+
   // NPC, but not a spirit or elemental? No entry.
   if (IS_NPC(ch) && !(IS_SPIRIT(ch) || IS_PC_CONJURED_ELEMENTAL(ch)))
     return FALSE;
@@ -1767,6 +1829,13 @@ void Apartment::set_owner(idnum_t owner) {
   save_lease();
 }
 
+
+void Apartment::set_purchased(bool v) {
+  purchased = v;
+  // Save out the lease to persist ownership.
+  save_lease();
+}
+
 void Apartment::set_paid_until(time_t paid_tm) {
   paid_until = paid_tm;
 
@@ -2030,7 +2099,7 @@ void ApartmentRoom::purge_contents() {
   }
 
   // Write a backup storage file to <name>/expired/storage_<ownerid>_<epoch>
-  char filename[100] = {0};
+  char filename[100];
   snprintf(filename, sizeof(filename), "%ld_%ld", time(0), apartment->get_owner_id());
   bf::path expired_storage_path = expired_path / filename;
   Storage_save(expired_storage_path.c_str(), room);
@@ -2333,13 +2402,10 @@ void warn_about_apartment_deletion() {
         continue;
       }
 
-      const char *owner_name = get_player_name(apartment->get_owner_id());
-      mudlog_vfprintf(NULL, LOG_GRIDLOG, "Sending %d-day rent warning message for apartment %s to %ld (%s).",
+      mudlog_vfprintf(NULL, LOG_GRIDLOG, "Sending %d-day rent warning message for apartment %s to %ld.",
                       days_until_deletion,
                       apartment->get_full_name(),
-                      apartment->get_owner_id(),
-                      owner_name && *owner_name ? owner_name : "-DNE");
-      delete [] owner_name;
+                      apartment->get_owner_id());
 
       if (apartment->get_owner_pgroup()) {
         // EVENTUALTODO
@@ -2562,7 +2628,7 @@ SPECIAL(landlord_spec)
 
   if (!(CMD_IS("list") || CMD_IS("retrieve") || CMD_IS("lease")
         || CMD_IS("leave") || CMD_IS("break") || CMD_IS("pay") || CMD_IS("status")
-        || CMD_IS("info") || CMD_IS("check") || CMD_IS("payout")))
+        || CMD_IS("info") || CMD_IS("check") || CMD_IS("payout") || CMD_IS("buy")))
     return FALSE;
 
   if (!CAN_SEE(recep, ch)) {
@@ -2635,6 +2701,39 @@ SPECIAL(landlord_spec)
     mob_say(recep, "Sorry, I don't recognize that unit name.");
     return TRUE;
   }
+else if (CMD_IS("buy")) {
+  if (!*arg) {
+    mob_say(recep, "Which unit would you like to buy? Try LIST.");
+    return TRUE;
+  }
+  for (auto &apartment : complex->get_apartments()) {
+    if (is_abbrev(arg, apartment->get_name()) || is_abbrev(arg, apartment->get_short_name())) {
+      if (apartment->has_owner()) {
+        snprintf(say_string, sizeof(say_string), "Sorry, %s is already taken.", apartment->get_name());
+        mob_say(recep, say_string);
+        return TRUE;
+      }
+      long buy_cost = apartment->get_buy_cost();
+      if (!pay_bank_first(ch, buy_cost, NUYEN_OUTFLOW_HOUSING)) {
+        snprintf(say_string, sizeof(say_string), "Buying %s will cost %ld nuyen. You don't have enough (bank+wallet).", apartment->get_name(), buy_cost);
+        mob_say(recep, say_string);
+        return TRUE;
+      }
+      apartment->set_owner(GET_IDNUM(ch));
+      apartment->set_purchased(true);
+      apartment->set_paid_until(0);
+      apartment->save_lease();
+      mudlog_vfprintf(NULL, LOG_GRIDLOG, "%s bought %s for %ld nuyen.", GET_CHAR_NAME(ch), apartment->get_full_name(), buy_cost);
+      snprintf(say_string, sizeof(say_string), "Congratulations! %s is now yours. Here is your key.", apartment->get_name());
+      mob_say(recep, say_string);
+      apartment->issue_key(ch);
+      return TRUE;
+    }
+  }
+  mob_say(recep, "Sorry, I don't recognize that unit name.");
+  return TRUE;
+}
+
 
   else if (CMD_IS("leave") || CMD_IS("break")) {
     if (!*arg) {
@@ -2672,6 +2771,11 @@ SPECIAL(landlord_spec)
 
     for (auto &apartment : complex->get_apartments()) {
       if (is_abbrev(arg, apartment->get_name()) || is_abbrev(arg, apartment->get_short_name())) {
+if (apartment->is_purchased()) {
+  mob_say(recep, "That unit is owned outright—no rent is due.");
+  return TRUE;
+}
+
         if (access_level(ch, LVL_FIXER)) {
           if (apartment->create_or_extend_lease(ch)) {
             mudlog_vfprintf(ch, LOG_WIZLOG, "Paid another month on %s. New expiry: %ld.", apartment->get_full_name(), apartment->get_paid_until());
@@ -2707,7 +2811,12 @@ SPECIAL(landlord_spec)
         if (!apartment->has_owner()) {
           snprintf(say_string, sizeof(say_string), "%s is currently available for lease.", CAP(apartment->get_name()));
           mob_say(recep, say_string);
-        } else if (!apartment->has_owner_privs(ch) && !apartment->is_guest(GET_IDNUM(ch))) {
+        }
+else if (apartment->is_purchased()) {
+  snprintf(say_string, sizeof(say_string), "%s is owned. No rent is due.", CAP(apartment->get_name()));
+  mob_say(recep, say_string);
+}
+ else if (!apartment->has_owner_privs(ch) && !apartment->is_guest(GET_IDNUM(ch))) {
           snprintf(say_string, sizeof(say_string), "%s has been leased.", CAP(apartment->get_name()));
           mob_say(recep, say_string);
         } else {

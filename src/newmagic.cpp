@@ -3855,12 +3855,6 @@ ACMD(do_cast)
     send_to_char(ch, "You don't know '%s' at that high a force.\r\n", spell_name);
     return;
   }
-
-  if (force <= 0) {
-    send_to_char("Spell force must be greater than zero!", ch);
-    return;
-  }
-
   if (spells[spell->type].physical && IS_PROJECT(ch)) {
     send_to_char("You can't cast physical spells on the astral plane.\r\n", ch);
     return;

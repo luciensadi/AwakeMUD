@@ -477,6 +477,7 @@ void load_single_veh(const char *filename) {
     return;
   }
 
+
   VTable data;
   data.Parse(&file);
   file.Close();

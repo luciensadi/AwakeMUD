@@ -1039,7 +1039,9 @@ void process_regeneration(int half_hour)
 /* Update PCs, NPCs, and objects, called every mud hour */
 void point_update(void)
 {
-  PERF_PROF_SCOPE(pr_, __func__);
+    maybe_reseed_ambient_rooms();
+  maybe_seed_system_art();
+PERF_PROF_SCOPE(pr_, __func__);
   ACMD_DECLARE(do_use);
 
   // Generate the wholist file.

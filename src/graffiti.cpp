@@ -7,6 +7,7 @@
 #include "handler.hpp"
 #include "quest.hpp"
 #include "moderation.hpp"
+#include "innervoice.hpp"
 
 #define MAX_GRAFFITI_SPRAYS_PER_CHARACTER 20
 

@@ -1755,4 +1755,12 @@ struct obj_data *get_datajack(struct char_data *ch, bool is_rigging);
 extern void verify_every_pointer_we_can_think_of();
 #endif
 
+
+bool pay_bank_first(struct char_data *ch, long amount, int category);
+const char *a_an(char *string);
+
 #endif
+
+void maybe_trigger_street_microevent(struct char_data *ch);
+void maybe_reseed_ambient_rooms();
+void maybe_seed_system_art();
