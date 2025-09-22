@@ -4704,6 +4704,11 @@ ACMD(do_activate)
 			}
 		}
 
+		if (desired_level <= 0) {
+			send_to_char("Power level must be greater than zero!", ch);
+			return;
+		}
+
 		// Find powers they have skill in first.
 		for (i = 0; i < ADEPT_NUMPOWER; i++)
 			if (GET_POWER_TOTAL(ch, i) && is_abbrev(name, adept_powers[i]))

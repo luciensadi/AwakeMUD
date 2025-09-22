@@ -1140,6 +1140,10 @@ struct command_info cmd_info[] =
     { "doh"      , POS_LYING   , do_action   , 0, 0, BLOCKS_IDLE_REWARD },
     { "drool"    , POS_LYING   , do_action   , 0, 0, BLOCKS_IDLE_REWARD },
     // Socials E
+    { "em_crack" , POS_LYING   , do_action   , 0, 0, BLOCKS_IDLE_REWARD },
+    { "em_flip"  , POS_LYING   , do_action   , 0, 0, BLOCKS_IDLE_REWARD },
+    { "em_roll"  , POS_LYING   , do_action   , 0, 0, BLOCKS_IDLE_REWARD },
+    { "em_think" , POS_LYING   , do_action   , 0, 0, BLOCKS_IDLE_REWARD },
     { "envy"     , POS_LYING   , do_action   , 0, 0, BLOCKS_IDLE_REWARD },
     { "eyebrow"  , POS_LYING   , do_action   , 0, 0, BLOCKS_IDLE_REWARD },
     // Socials F
