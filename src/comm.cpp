@@ -2002,7 +2002,6 @@ int new_descriptor(int s)
 
   /* create a new descriptor */
   newd = new descriptor_data;
-  memset((char *) newd, 0, sizeof(struct descriptor_data));
   // Set our canaries.
   set_descriptor_canaries(newd);
 
@@ -2633,7 +2632,10 @@ void close_socket(struct descriptor_data *d)
   }
 
   // Free the protocol data when a socket is closed.
-  ProtocolDestroy( d->pProtocol );
+  if (d->pProtocol) {
+    ProtocolDestroy(d->pProtocol);
+    d->pProtocol = NULL;
+  }
 
   close(d->descriptor);
   flush_queues(d);
