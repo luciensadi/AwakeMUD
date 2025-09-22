@@ -13,6 +13,7 @@
 #include "handler.hpp"
 #include "newmagic.hpp"
 #include "awake.hpp"
+#include "innervoice.hpp"
 #include "constants.hpp"
 #include "config.hpp"
 #include "chargen.hpp"
@@ -683,6 +684,7 @@ void init_create_vars(struct descriptor_data *d)
     d->ccr.pr[i] = PR_NONE;
   d->ccr.force_points = 0;
   d->ccr.temp = 0;
+  // (moved) InnerVoice intro now triggers on first entry to room 60500 after a short delay.
 }
 
 int parse_race(struct descriptor_data *d, const char *arg)

@@ -12,6 +12,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
+#include <vector>
+#include <algorithm>
 #include <ctype.h>
 #include <limits.h>
 #include <errno.h>
@@ -69,6 +71,7 @@
 #include "protocol.hpp"
 #include "perfmon.hpp"
 #include "config.hpp"
+#include "innervoice.hpp"
 #include "ignore_system.hpp"
 #include "dblist.hpp"
 #include "moderation.hpp"
@@ -118,6 +121,438 @@ struct timeval zero_time;       // zero-valued time structure, used to be
 // innacurate (=
 
 static bool fCopyOver;
+
+// --- Thievery heat / police response system ---
+struct pending_police_call {
+  long target_idnum;     // player idnum
+  long origin_room_vnum; // room where the crime occurred (for halving odds at check time)
+  int count;
+  time_t eta;
+};
+
+static std::vector<pending_police_call> g_pending_police_calls;
+
+// Track spawned police for cleanup
+struct spawned_police_entry {
+  mob_unique_id_t mob_uid;
+  time_t          expires;
+  long            target_idnum;
+  time_t          next_move_time;
+  time_t          next_chatter_time;
+};
+static std::vector<spawned_police_entry> g_spawned_police;
+
+extern int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *vict);
+extern void do_doorcmd(struct char_data *ch, struct obj_data *obj, int door, int scmd, bool print_message);
+
+// Candidate police VNUMs in preference order (existing ingame police).
+static const int POLICE_VNUMS[] = { 3507, 27502, 4804 };
+static const size_t NUM_POLICE_VNUMS = sizeof(POLICE_VNUMS) / sizeof(POLICE_VNUMS[0]);
+// --- Police radio chatter (loaded lazily from lib/etc/police_chatter.txt) ---
+static bool g_police_chatter_loaded = false;
+static std::vector<std::string> g_chatter_search;
+static std::vector<std::string> g_chatter_pursuit;
+static std::vector<std::string> g_chatter_banter;
+
+static void police_chatter_add_default_lines() {
+  // Fallback defaults ensure > 100 total and >= 50 search lines.
+  const char* search_lines[] = {
+    "Unit Four, suspect last seen near the alley—eyes open.",
+    "Negative visual. Check rooftops and fire escapes.",
+    "Thermal sweep coming up empty—keep moving.",
+    "No footprints on this side; try the loading dock.",
+    "Suspect may be using chameleon—scan for motion.",
+    "AC in the breeze—listen for a running breath.",
+    "Check dumpsters. Yeah, all of them.",
+    "Heat’s fading; suspect’s slowing or hiding.",
+    "Drone feed lost in interference; go eyeballs.",
+    "Watch those back doors—bars close in ten.",
+    "They ditched something? Mark and bag it.",
+    "Look for a half-open window—classic move.",
+    "Lights flickered—someone tripped a breaker.",
+    "Fresh cigarette butt; still warm. Close.",
+    "Sweat scent strong—mask off? They moved east.",
+    "Infrared ping—could be a cat. Or not.",
+    "Boot scuff on the fence—over and gone.",
+    "Freshly wiped keypad—someone smart.",
+    "Window latch is popped. Entry likely.",
+    "Smudged print on the rail—gloves off momentarily.",
+    "Door drifted—air pressure changed. Nearby.",
+    "Tossed ticket stub—this block.",
+    "Crowd noise damped—someone holding still.",
+    "Mirror check—no tail reflection. Keep sweeping.",
+    "Dust swirl near that vent—exhale pattern.",
+    "Thermal shadow in the stairwell—slow approach.",
+    "Wet footprints on tile—north corridor.",
+    "Motion in the AR overlay—unknown signature.",
+    "Ruthenium flicker on cam five—back lot.",
+    "Scanned a cold metal mass behind crates—could be a weapon.",
+    "Soft step echo—third floor fire stairs.",
+    "Heard fabric brush sheet metal—service tunnel.",
+    "Trap door scrape pattern—watch your footing.",
+    "Air freshener spike—someone covered their scent.",
+    "RFID noise—spoofing nearby.",
+    "Chalk mark on the curb—gang lookout symbol.",
+    "Vents breathing—someone held a breath just then.",
+    "Redressed doorknob—print smear, recent.",
+    "Shadow wrong for the lamp—someone masking.",
+    "Movers’ dolly tracks end abruptly—stashed behind curtain?",
+    "Curtain sway without breeze—check windows.",
+    "Studied silence—rat stopped squeaking. Not good.",
+    "Security light reset timer—someone passed recently.",
+    "Old gum wrapper, tacky—minutes old.",
+    "Dog bark chain two blocks back—disturbance path.",
+    "Broken glass inside—entry from outside.",
+    "Dust line on the floor disturbed—crawlspace.",
+    "Scent of cheap soy—fresh takeout near.",
+    "Keycard reader warm—someone used it moments ago.",
+    "Dried rain lines broken at waist height—passage here."
+  };
+  g_chatter_search.assign(search_lines, search_lines + sizeof(search_lines)/sizeof(search_lines[0]));
+
+  const char* pursuit_lines[] = {
+    "Visual! Suspect moving—two o’clock!",
+    "Runner spotted—gray jacket, moving fast!",
+    "They’re cutting right—block the alley!",
+    "Hands where I can see them!",
+    "Stop! Lone Star!",
+    "Suspect hopping the rail—pursuit continuing.",
+    "Drone sees movement—feed clean, push it!",
+    "They’re on the service road—northbound.",
+    "Taser ready—watch your arcs.",
+    "Do not crowd—fan out and contain.",
+    "Watch crossfire!",
+    "Call it—left, left, left!",
+    "They just dumped a wallet—mark location.",
+    "Back door just slammed—rotate in.",
+    "Unit Seven, cut them off at the tram stop!",
+    "Traffic camera picked them up—thirty seconds ago.",
+    "Suspect slowed—could ambush—use shields.",
+    "Going through the market—mind the civilians.",
+    "Down the stairwell—watch your footing.",
+    "Maintain eyes, no hero leaps.",
+    "They’re heading for the docks—salt smell strong.",
+    "I’ve got footprints—fresh.",
+    "Mind the wet tiles—slow and steady.",
+    "They’re vaulted over… that was athletic.",
+    "Keep comms clear—short bursts only.",
+    "Siren off—go soft approach.",
+    "Skater ramp—don’t slip.",
+    "Don’t trip the motion sensor—hug the wall.",
+    "Break contact if they hit the tunnels—regroup.",
+    "They’ve got help on comms—watch for decoys.",
+    "Cam three has a blur—frame match 78%.",
+    "Maglock door cycling—don’t let it slam.",
+    "I’ve got AR trails—chaff in the air.",
+    "Move past the dumpster—cover corners.",
+    "They’re juking—eyes on hips, not shoulders.",
+    "Rooftop jog—ladder on the left!",
+    "Overhang—drop point ahead.",
+    "They’re breathing hard—closing.",
+    "Watch that dog—don’t shoot the dog.",
+    "Bystander recording—helmets on.",
+    "Left is blocked—right route open.",
+    "Bogey at twelve—no, billboard holo.",
+    "They jumped the turnstile—ticket hall.",
+    "Unit Three, stairwell B—now!",
+    "Watch the neon—slick when wet.",
+    "Pull your gloves—better grip.",
+    "Eyes up—catwalk above.",
+    "They ducked into the crowd—stay on the edge.",
+    "Keep your spacing—no pileups."
+  };
+  g_chatter_pursuit.assign(pursuit_lines, pursuit_lines + sizeof(pursuit_lines)/sizeof(pursuit_lines[0]));
+
+  const char* banter_lines[] = {
+    "Anyone else try that soy-kimchi last night? Regretting life choices.",
+    "If this ends near a donut shop I’m stopping. Don’t @ me.",
+    "My AR queue is all holovids of people organizing cable drawers. Send help.",
+    "New episode of '^wBladeheart High^n' dropped—no spoilers on comms.",
+    "Dispatch, advise: runner’s cardio is better than mine.",
+    "Who brought decaf into the squad thermos again? Monsters.",
+    "I swear this alley gets longer every time.",
+    "Remember leg day, people.",
+    "Bet you five cred they duck into the noodle bar.",
+    "Last one back buys the first round of soycaf.",
+    "My taser says 82% battery. My legs say 2%.",
+    "If this perp has a cat, I’m defecting to Animal Control.",
+    "Knees are writing a complaint to HR.",
+    "I can smell the seaweed fries. Focus. Focus.",
+    "Why do perps always pick stairwells? Elevators exist.",
+    "Someone ping the drone to find my dignity.",
+    "Who’s got eyes? My contact lenses are still at the optometrist.",
+    "This felt easier back at the academy.",
+    "Reminder: paperwork doubles if you trip over your own feet.",
+    "If they jump another fence I’m filing a fence ordinance."
+  };
+  g_chatter_banter.assign(banter_lines, banter_lines + sizeof(banter_lines)/sizeof(banter_lines[0]));
+}
+
+static void load_police_chatter() {
+  if (g_police_chatter_loaded) return;
+  police_chatter_add_default_lines();
+  // Try to load from file to override/extend.
+  std::ifstream f("lib/etc/police_chatter.txt");
+  if (f.good()) {
+    std::vector<std::string>* current = NULL;
+    std::string line;
+    while (std::getline(f, line)) {
+      if (line.size() == 0) continue;
+      if (line[0] == '#') continue;
+      if (line[0] == '[') {
+        if (line.find("[SEARCH]") != std::string::npos) current = &g_chatter_search;
+        else if (line.find("[PURSUIT]") != std::string::npos) current = &g_chatter_pursuit;
+        else if (line.find("[BANTER]") != std::string::npos) current = &g_chatter_banter;
+        else current = NULL;
+      } else if (current) {
+        current->push_back(line);
+      }
+    }
+  }
+  g_police_chatter_loaded = true;
+}
+
+// BFS helper that ignores closed doors (so we can open them during pursuit).
+static int find_first_step_ignore_closed(vnum_t src, vnum_t target) {
+  if (src < 0 || src > top_of_world || target < 0 || target > top_of_world) return -1;
+  if (src == target) return -2; // already there
+
+  // Simple BFS queue storing (room, first_dir)
+  struct Node { vnum_t room; int first_dir; };
+  std::vector<char> marked(top_of_world + 1, 0);
+  std::vector<Node> q; q.reserve(256);
+
+  marked[src] = 1;
+  // seed with neighbors
+  for (int dir = 0; dir < NUM_OF_DIRS; ++dir) {
+    if (!world[src].dir_option[dir]) continue;
+    if (!world[src].dir_option[dir]->to_room) continue;
+    vnum_t to = real_room(world[src].dir_option[dir]->to_room->number);
+    if (to < 0) continue;
+    if (marked[to]) continue;
+    marked[to] = 1;
+    q.push_back({ to, dir });
+  }
+
+  // BFS
+  for (size_t qi = 0; qi < q.size(); ++qi) {
+    if (q[qi].room == target) return q[qi].first_dir;
+    for (int dir = 0; dir < NUM_OF_DIRS; ++dir) {
+      if (!world[q[qi].room].dir_option[dir]) continue;
+      if (!world[q[qi].room].dir_option[dir]->to_room) continue;
+      vnum_t to = real_room(world[q[qi].room].dir_option[dir]->to_room->number);
+      if (to < 0) continue;
+      if (marked[to]) continue;
+      marked[to] = 1;
+      q.push_back({ to, q[qi].first_dir });
+    }
+  }
+  return -3; // no path
+}
+
+
+void schedule_police_response_for_target(long target_idnum, long origin_room_vnum, int count, int delay_seconds) {
+  pending_police_call p;
+  p.target_idnum = target_idnum;
+  p.origin_room_vnum = origin_room_vnum;
+  p.count = std::max(1, std::min(count, 3));
+  p.eta = time(0) + std::max(1, delay_seconds);
+  g_pending_police_calls.push_back(p);
+}
+
+static void spawn_police_for_target(long target_idnum, int count) {
+  // Try to find the player by id.
+  struct char_data *tch = find_or_load_ch(NULL, target_idnum, "police scheduler", NULL);
+  if (!tch || !tch->in_room) return;
+  struct room_data *room = tch->in_room;
+
+  for (int i = 0; i < count; ++i) {
+    struct char_data *mob = NULL;
+    for (size_t idx = 0; idx < NUM_POLICE_VNUMS; ++idx) {
+      long mr = real_mobile(POLICE_VNUMS[idx]);
+      if (mr >= 0) {
+        mob = read_mobile(POLICE_VNUMS[idx], VIRTUAL);
+        if (mob) break;
+      }
+    }
+    if (!mob) continue; // Couldn't find any police prototypes.
+
+    char_to_room(mob, room);
+    // Aggro the target immediately if present.
+    if (tch->in_room == room) {
+      set_fighting(mob, tch);
+    }
+    act("$n rushes in, looking for a suspect.", TRUE, mob, 0, 0, TO_ROOM);
+
+    // Track for cleanup in 30 minutes.
+    spawned_police_entry e; e.mob_uid = GET_MOB_UNIQUE_ID(mob); e.expires = time(0) + (30 * 60); e.target_idnum = target_idnum; e.next_move_time = time(0) + (6 + number(0,4));
+    g_spawned_police.push_back(e);
+    // Schedule first chatter a bit later.
+    g_spawned_police.back().next_chatter_time = time(0) + (10 + number(0,10));
+  }
+}
+
+// Heat decay helper: get next decay duration in seconds for a given level.
+static int get_decay_seconds_for_level(int level) {
+  if (level >= 3) return (2 + number(0, 1)) * 60;     // 2–3 minutes
+  if (level == 2) return (5 + number(0, 2)) * 60;     // 5–7 minutes
+  if (level == 1) return (9 + number(0, 4)) * 60;     // 9–13 minutes
+  return 0;
+}
+
+// Chance to call police by level (percent).
+static int get_police_call_chance_for_level(int level) {
+  if (level >= 3) return 80;
+  if (level == 2) return 30;
+  if (level == 1) return 10;
+  return 0;
+}
+
+// Called every second from the main loop.
+void update_thievery_heat_and_police() {
+  time_t now = time(0);
+
+  // Clean up expired spawned police.
+  if (!g_spawned_police.empty()) {
+    for (auto it = g_spawned_police.begin(); it != g_spawned_police.end(); ) {
+      struct char_data *mob = NULL;
+      for (struct char_data *scan = character_list; scan; scan = scan->next_in_character_list) {
+        if (mob_unique_id_matches(GET_MOB_UNIQUE_ID(scan), it->mob_uid)) { mob = scan; break; }
+      }
+      if (it->expires <= now) {
+        if (mob && mob->in_room) {
+          act("$n hurries off.", TRUE, mob, 0, 0, TO_ROOM);
+          extract_char(mob);
+        }
+        it = g_spawned_police.erase(it);
+      } else if (!mob) {
+        it = g_spawned_police.erase(it);
+      } else {
+        ++it;
+      }
+    }
+  }
+
+  // Process pending police calls.
+  if (!g_pending_police_calls.empty()) {
+    for (auto it = g_pending_police_calls.begin(); it != g_pending_police_calls.end(); ) {
+      if (it->eta <= now) {
+        spawn_police_for_target(it->target_idnum, it->count);
+        it = g_pending_police_calls.erase(it);
+      } else {
+        ++it;
+      }
+    }
+  }
+
+  // Decay heat for all characters and perform decay-triggered police checks.
+  for (struct char_data *ch = character_list; ch; ch = ch->next_in_character_list) {
+    if (!ch->in_room && !ch->in_veh) continue; // dead/unplaced
+
+    if (ch->char_specials.theft_heat_level > 0 && ch->char_specials.theft_heat_cooldown_end > 0) {
+      if (now >= ch->char_specials.theft_heat_cooldown_end) {
+        // Decay heat by one.
+        ch->char_specials.theft_heat_level = std::max(0, ch->char_specials.theft_heat_level - 1);
+
+        // Schedule next decay if needed.
+        if (ch->char_specials.theft_heat_level > 0) {
+          int next = get_decay_seconds_for_level(ch->char_specials.theft_heat_level);
+          ch->char_specials.theft_heat_cooldown_end = now + next;
+        } else {
+          ch->char_specials.theft_heat_cooldown_end = 0;
+        }
+
+        // On every decay step, roll chance to call police based on *current* level.
+        int chance = get_police_call_chance_for_level(ch->char_specials.theft_heat_level);
+        if (ch->in_room && ch->char_specials.theft_heat_anchor_room && ch->in_room->number != ch->char_specials.theft_heat_anchor_room) chance /= 2;
+        if (chance > 0 && number(1, 100) <= chance) {
+          int count = number(1, 3);
+          int delay = 3 + number(0, 7); // short interval
+          schedule_police_response_for_target(GET_IDNUM(ch), ch->char_specials.theft_heat_anchor_room, count, delay);
+        }
+      }
+    }
+  }
+
+  // HUNT: move spawned police toward their target (slowly, to give players a chance to hide).
+  load_police_chatter();
+  if (!g_spawned_police.empty()) {
+    for (auto it = g_spawned_police.begin(); it != g_spawned_police.end(); ++it) {
+      if (it->expires <= now) continue; // will be cleaned up separately
+      if (it->next_move_time > now) continue;
+
+      // Locate mob and target.
+      struct char_data *mob = NULL;
+      for (struct char_data *scan = character_list; scan; scan = scan->next_in_character_list) {
+        if (mob_unique_id_matches(GET_MOB_UNIQUE_ID(scan), it->mob_uid)) { mob = scan; break; }
+      }
+      if (!mob || !mob->in_room) { continue; }
+
+      struct char_data *tch = find_or_load_ch(NULL, it->target_idnum, "police hunt", NULL);
+      if (!tch || !tch->in_room) { it->next_move_time = now + (6 + number(0,4)); continue; }
+
+      // If in same room, aggro.
+      if (tch->in_room == mob->in_room) {
+        if (!FIGHTING(mob)) set_fighting(mob, tch);
+        it->next_move_time = now + (6 + number(0,4));
+        continue;
+      }
+
+      // Compute direction ignoring closed doors (we'll handle them below).
+      int dir = find_first_step_ignore_closed(mob->in_room->number, tch->in_room->number);
+      if (dir < 0 || dir >= NUM_OF_DIRS) { it->next_move_time = now + (8 + number(0,6)); continue; }
+
+      // If there's a door and it's closed/locked, handle it.
+      if (EXIT(mob, dir)) {
+        if (IS_SET(EXIT(mob, dir)->exit_info, EX_LOCKED)) {
+          // Can't pass locked doors; delay and try later.
+          it->next_move_time = now + (10 + number(0,8));
+          continue;
+        }
+        if (IS_SET(EXIT(mob, dir)->exit_info, EX_CLOSED)) {
+          // Open the door before moving.
+          do_doorcmd(mob, NULL, dir, SCMD_OPEN, TRUE);
+        }
+      }
+
+      // Attempt to move one step.
+      do_simple_move(mob, dir, 0, NULL);
+
+      // Schedule next step in 6–10 seconds.
+      it->next_move_time = now + (6 + number(0,4));
+
+      // Radio chatter: if it's time, speak based on whether we can see the target.
+      if (it->next_chatter_time <= now) {
+        const char* msg = NULL;
+        bool can_see = (tch && CAN_SEE(mob, tch));
+        // Choose pool: mostly SEARCH if cannot see, else PURSUIT; occasional BANTER.
+        int roll = number(1, 100);
+        if (!can_see) {
+          if (!g_chatter_search.empty() && roll <= 80) {
+            msg = g_chatter_search[number(0, (int)g_chatter_search.size()-1)].c_str();
+          } else if (!g_chatter_banter.empty()) {
+            msg = g_chatter_banter[number(0, (int)g_chatter_banter.size()-1)].c_str();
+          }
+        } else {
+          if (!g_chatter_pursuit.empty() && roll <= 70) {
+            msg = g_chatter_pursuit[number(0, (int)g_chatter_pursuit.size()-1)].c_str();
+          } else if (!g_chatter_banter.empty()) {
+            msg = g_chatter_banter[number(0, (int)g_chatter_banter.size()-1)].c_str();
+          }
+        }
+        if (msg) {
+          // Render as radio chatter.
+          char outbuf[512];
+          snprintf(outbuf, sizeof(outbuf), "$n radios, '^c%s^n'", msg);
+          act(outbuf, TRUE, mob, 0, 0, TO_ROOM);
+        }
+        // Next chatter in 12–30 seconds.
+        it->next_chatter_time = now + (12 + number(0, 18));
+      }
+    }
+  }
+
+}
 int  mother_desc;
 int port;
 
@@ -1028,7 +1463,6 @@ void game_loop(int mother_desc)
     if (!(pulse % PULSE_MONORAIL)) {
       MonorailProcess();
     }
-
     if (!(pulse % PULSE_FLIGHT)) {
       process_flying_vehicles();
     }
@@ -1041,14 +1475,6 @@ void game_loop(int mother_desc)
       decide_combat_pool();
       perform_violence();
       matrix_violence();
-    }
-
-    if (!(pulse % ART_QUOTA_REGENERATION_PULSE)) {
-      for (struct descriptor_data *d = descriptor_list; d; d = d->next) {
-        if (d->regenerating_art_quota < MAX_REGENERATING_ART_QUOTA) {
-          d->regenerating_art_quota++;
-        }
-      }
     }
 
     // Every MUD minute
@@ -1164,6 +1590,8 @@ void game_loop(int mother_desc)
 
     // Every IRL second
     if (!(pulse % PASSES_PER_SEC)) {
+      update_thievery_heat_and_police();
+      InnerVoice::tick_inner_voice();
       EscalatorProcess();
       ElevatorProcess();
       msdp_update();
@@ -1717,6 +2145,31 @@ int make_prompt(struct descriptor_data * d)
           i++;
         }
       }
+      /* HEAT HUD: only when player has heat */
+if (d->character && d->character->char_specials.theft_heat_level > 0) {
+  int lvl = d->character->char_specials.theft_heat_level;
+  time_t nowt = time(0);
+  long rem = 0;
+  if (d->character->char_specials.theft_heat_cooldown_end > nowt)
+    rem = d->character->char_specials.theft_heat_cooldown_end - nowt;
+  /* Build a tiny bar: up to 3 blocks matching heat level */
+  char hud[64]; hud[0]='\0';
+  const char *blk = "\xE2\x96\x88"; /* full block UTF-8 */
+  const char *spc = "\xE2\x96\x91"; /* light shade */
+  int idx=0;
+  idx += snprintf(hud+idx, sizeof(hud)-idx, " ^R[");
+  for (int k=1;k<=3;k++) {
+    idx += snprintf(hud+idx, sizeof(hud)-idx, "%s", (lvl >= k ? blk : spc));
+  }
+  if (rem > 0) {
+    int mins = (int)(rem/60);
+    int secs = (int)(rem%60);
+    idx += snprintf(hud+idx, sizeof(hud)-idx, " %d:%02d", mins, secs);
+  }
+  idx += snprintf(hud+idx, sizeof(hud)-idx, "]^n");
+  for (int j = 0; hud[j] && i < (int)sizeof(temp)-1; j++, i++)
+    temp[i] = hud[j];
+}
       temp[i] = '\0';
       int size = strlen(temp);
       const char *final_str = ProtocolOutput(d, temp, &size, DO_APPEND_GA);
@@ -2001,13 +2454,11 @@ int new_descriptor(int s)
   }
 
   /* create a new descriptor */
-  newd = new descriptor_data;
-  memset((char *) newd, 0, sizeof(struct descriptor_data));
+  //newd = new descriptor_data;
+  //memset((char *) newd, 0, sizeof(struct descriptor_data));  +++this was crashing at delete (d) when user logged out.
+  newd = new descriptor_data;  // constructed object; don't zero it
   // Set our canaries.
   set_descriptor_canaries(newd);
-
-  // Set the regenerating art quota.
-  newd->regenerating_art_quota = MAX_REGENERATING_ART_QUOTA;
 
   // Resolve our hostname, if possible.
   strlcpy(newd->host, resolve_hostname_from_ip_str(ip_string), sizeof(newd->host));
@@ -2633,7 +3084,11 @@ void close_socket(struct descriptor_data *d)
   }
 
   // Free the protocol data when a socket is closed.
-  ProtocolDestroy( d->pProtocol );
+  //+++ ProtocolDestroy( d->pProtocol );
+  if (d->pProtocol) {
+    ProtocolDestroy(d->pProtocol);
+    d->pProtocol = NULL;
+  }
 
   close(d->descriptor);
   flush_queues(d);
@@ -2645,7 +3100,7 @@ void close_socket(struct descriptor_data *d)
   REMOVE_FROM_LIST(d, descriptor_list, next);
   global_descriptor_list_invalidated = TRUE;
 
-  DELETE_ARRAY_IF_EXTANT(d->showstr_head);
+  //DELETE_ARRAY_IF_EXTANT(d->showstr_head);
 
   // Clean up message history lists.
   delete_message_history(d);

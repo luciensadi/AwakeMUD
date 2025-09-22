@@ -334,11 +334,6 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 // When do things expire on the ground?
 #define DROPPED_OBJ_EXPIRATION_TIME_IN_SECONDS  (2 * SECS_PER_REAL_HOUR)
 
-// How many art objects can you make at once?
-#define MAX_REGENERATING_ART_QUOTA 10
-// How quickly does a point of art quota regenerate?
-#define ART_QUOTA_REGENERATION_PULSE (30 RL_SEC)
-
 /////////////// OLC and staff permissions configuration /////////////////////////
 #define LVL_FOR_SETTING_ZONE_EDITOR_ID_NUMBERS                 LVL_VICEPRES
 #define LVL_FOR_SETTING_ZONE_CONNECTED_STATUS                  LVL_FIXER

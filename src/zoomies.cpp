@@ -13,6 +13,7 @@
 #include "playergroups.hpp"
 #include "newhouse.hpp"
 #include "zoomies.hpp"
+#include "innervoice.hpp"
 
 // External prototypes.
 extern void chkdmg(struct veh_data * veh);
@@ -656,6 +657,7 @@ void process_flying_vehicles() {
       }
     } else {
       // Successful roll: Tick down flight duration.
+      for (struct char_data *occ = veh->people; occ; occ = occ->next_in_veh) { if (!IS_NPC(occ)) InnerVoice::notify_vehicle_travel_tick(occ, veh); }
       veh->flight_duration--;
 
       // If the flight duration has ended, land it.

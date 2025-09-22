@@ -606,8 +606,8 @@ void boot_world(void)
   require_that_field_meets_constraints("Attempt", "pfiles_worn", "SQL/Migrations/attempt_value_fix.sql", 0, "mediumint");
   require_that_field_meets_constraints("LastFix", "pfiles_drugs", "SQL/Migrations/lastfix_bigint.sql", 0, "bigint", TRUE);
   #else
-  require_that_field_meets_constraints("Attempt", "pfiles_inv", "SQL/Migrations/attempt_value_fix.sql", 6, "mediumint");
-  require_that_field_meets_constraints("Attempt", "pfiles_worn", "SQL/Migrations/attempt_value_fix.sql", 6, "mediumint");
+  require_that_field_meets_constraints("Attempt", "pfiles_inv", "SQL/Migrations/attempt_value_fix.sql", 0, "mediumint");
+  require_that_field_meets_constraints("Attempt", "pfiles_worn", "SQL/Migrations/attempt_value_fix.sql", 0, "mediumint");
   require_that_field_meets_constraints("LastFix", "pfiles_drugs", "SQL/Migrations/lastfix_bigint.sql", 12, "bigint", TRUE);
   #endif
   require_that_sql_table_exists("pfiles_ignore_v2", "SQL/ignore_system_v2.sql");
@@ -1703,11 +1703,11 @@ bool can_load_this_thing_in_zone_commands(DBIndex::rnum_t rnum, int zone, int cm
     log_zone_error(zone, cmd_no, "Money cannot be loaded in zone commands.");
     return FALSE;
   }
-  if (GET_OBJ_VNUM(&obj_proto[rnum]) == OBJ_OLD_BLANK_MAGAZINE_FROM_CLASSIC) {
+  //if (GET_OBJ_VNUM(&obj_proto[rnum]) == OBJ_OLD_BLANK_MAGAZINE_FROM_CLASSIC) {
     // Zoneloading 601, which used to be a blank empty mag, is not allowed.
-    log_zone_error(zone, cmd_no, "Object 601 (old Classic magazine) cannot be loaded in zone commands.");
-    return FALSE;
-  }
+   // log_zone_error(zone, cmd_no, "Object 601 (old Classic magazine) cannot be loaded in zone commands.");
+    //return FALSE;
+  //}
   if (GET_OBJ_VNUM(&obj_proto[rnum]) == OBJ_BLANK_MAGAZINE) {
     // Zoneloading 601, which used to be a blank empty mag, is not allowed.
     log_zone_error(zone, cmd_no, "Object 127 (blank magazine) cannot be loaded in zone commands.");
@@ -2201,12 +2201,10 @@ void parse_object(File &fl, long nr)
       case ITEM_CYBERWARE:
         price_cyber(obj);
         obj->obj_flags.wear_flags.SetBit(ITEM_WEAR_TAKE);
-        GET_OBJ_MATERIAL(obj) = MATERIAL_ELECTRONICS;
         break;
       case ITEM_BIOWARE:
         price_bio(obj);
         obj->obj_flags.wear_flags.SetBit(ITEM_WEAR_TAKE);
-        GET_OBJ_MATERIAL(obj) = MATERIAL_ORGANIC;
         break;
       case ITEM_PROGRAM:
         if (GET_OBJ_VAL(obj, 0) == SOFT_ATTACK)

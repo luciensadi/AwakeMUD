@@ -139,6 +139,12 @@ class Apartment {
     idnum_t owned_by_player = 0;
     Playergroup *owned_by_pgroup = NULL;
     time_t paid_until = 0;
+    // Ownership purchase (no-rent) support.
+    bool purchased = FALSE;            // If true, this unit was bought outright (no rent due; does not expire).
+    bool sale_in_progress = FALSE;     // If true, a sale has been initiated and will complete after a delay.
+    time_t sale_complete_time = 0;     // When the sale can be completed.
+    long sale_payout = 0;              // How much the owner will receive for selling.
+
     std::vector<long> guests = {};
 
     // Backlink information.
@@ -169,6 +175,13 @@ class Apartment {
     vnum_t get_key_vnum() { return key_vnum; }
     vnum_t get_atrium_vnum() { return atrium; }
     long get_rent_cost() { return nuyen_per_month; }
+    // Purchasing helpers.
+    long get_buy_cost() { return nuyen_per_month * 8; }
+    bool is_purchased() { return purchased; }
+    bool is_sale_in_progress() { return sale_in_progress; }
+    time_t get_sale_complete_time() { return sale_complete_time; }
+    long get_sale_payout() { return sale_payout; }
+
     time_t get_paid_until() { return paid_until; }
     std::vector<long> get_guests() { return guests; }
     ApartmentComplex *get_complex() { return complex; }
@@ -180,6 +193,7 @@ class Apartment {
     void cleanup_deleted_guests();
 
     // Mutators
+    void set_purchased(bool);
     void set_owner(idnum_t);
     void set_paid_until(time_t);
     void set_complex(ApartmentComplex *new_complex);

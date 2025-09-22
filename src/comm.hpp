@@ -124,3 +124,10 @@ int socket(int domain, int type, int protocol);
 #endif /* #ifdef __COMM_C__ */
 
 #endif /* #ifdef _comm_h_ */
+
+// Thievery heat / police scheduling API
+void update_thievery_heat_and_police();
+
+// Thievery heat / police scheduling API (target-based)
+void schedule_police_response_for_target(long target_idnum, long origin_room_vnum, int count, int delay_seconds);
+void update_thievery_heat_and_police();

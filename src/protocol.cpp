@@ -359,9 +359,9 @@ protocol_t *ProtocolCreate( void )
   return pProtocol;
 }
 
-void ProtocolDestroy( protocol_t *apProtocol )
+/*void ProtocolDestroy( protocol_t *apProtocol )
 {
-  int i; /* Loop counter */
+  int i; /* Loop counter */ /*
 
   for ( i = eMSDP_NONE+1; i < eMSDP_MAX; ++i )
   {
@@ -372,6 +372,32 @@ void ProtocolDestroy( protocol_t *apProtocol )
   delete [] apProtocol->pVariables;
   delete [] apProtocol->pLastTTYPE;
   delete [] apProtocol->pMXPVersion;
+  delete apProtocol;
+}*/
+
+void ProtocolDestroy(protocol_t *apProtocol)
+{
+  if (!apProtocol) return;
+
+  if (apProtocol->pVariables) {
+    for (int i = eMSDP_NONE+1; i < eMSDP_MAX; ++i) {
+      if (apProtocol->pVariables[i]) {
+        delete [] apProtocol->pVariables[i]->pValueString;
+        apProtocol->pVariables[i]->pValueString = NULL;
+        delete apProtocol->pVariables[i];
+        apProtocol->pVariables[i] = NULL;
+      }
+    }
+    delete [] apProtocol->pVariables;
+    apProtocol->pVariables = NULL;
+  }
+
+  delete [] apProtocol->pLastTTYPE;
+  apProtocol->pLastTTYPE = NULL;
+
+  delete [] apProtocol->pMXPVersion;
+  apProtocol->pMXPVersion = NULL;
+
   delete apProtocol;
 }
 
@@ -1857,7 +1883,7 @@ static void Negotiate( descriptor_t *apDescriptor )
     ConfirmNegotiation(apDescriptor, eNEGOTIATED_MCCP, TRUE, TRUE);
     ConfirmNegotiation(apDescriptor, eNEGOTIATED_GMCP, TRUE, TRUE);
     
-    Write(apDescriptor, (char[]) { (char)IAC, (char)DO, TELOPT_NEW_ENVIRON, '\0' });
+    do { const char RequestNewEnv[] = { (char)IAC, (char)DO, (char)TELOPT_NEW_ENVIRON, '\0' }; Write(apDescriptor, RequestNewEnv); } while(0);
   }
 }
 
@@ -2106,7 +2132,7 @@ static void PerformHandshake( descriptor_t *apDescriptor, char aCmd, char aProto
         PROTO_DEBUG_MSG("Received IAC WILL NEW-ENVIRON from client, requesting all available info.");
         // IAC SB NEW-ENVIRON SEND VAR "IPADDRESS" IAC SE
         // Write(apDescriptor, (char[]) { (char)IAC, (char)SB, TELOPT_NEW_ENVIRON, NEW_ENV_SEND, NEW_ENV_USERVAR, 'I', 'P', 'A', 'D', 'D', 'R', 'E', 'S', 'S', (char)IAC, (char)SE, 0 });
-        Write(apDescriptor, (char[]) { (char)IAC, (char)SB, TELOPT_NEW_ENVIRON, NEW_ENV_SEND, (char)IAC, (char)SE, 0 });
+        do { const char RequestNewEnvAll[] = { (char)IAC, (char)SB, (char)TELOPT_NEW_ENVIRON, (char)NEW_ENV_SEND, (char)IAC, (char)SE, 0 }; Write(apDescriptor, RequestNewEnvAll); } while(0);
       }
       else if ( aCmd == (char)WONT )
       {

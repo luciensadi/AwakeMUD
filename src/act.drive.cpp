@@ -2537,14 +2537,27 @@ void start_rigging(struct char_data *ch, struct veh_data *veh, bool is_remote) {
   GET_DODGE(ch) = remainder;
 }
 
+static inline bool is_vehicle_in_world(struct veh_data *needle) {
+  for (struct veh_data *v = veh_list; v; v = v->next) {
+    if (v == needle) return true;
+  }
+  return false;
+}
+
 void stop_rigging(struct char_data *ch, bool send_message) {
   if (!ch)
     return;
 
   struct veh_data *veh = ch->char_specials.rigging ? ch->char_specials.rigging : ch->in_veh;
 
-  if (!veh)
+  if (!veh || !is_vehicle_in_world(veh)) {
+    ch->char_specials.rigging = NULL;
+    PLR_FLAGS(ch).RemoveBit(PLR_REMOTE);
+    AFF_FLAGS(ch).RemoveBits(AFF_RIG, AFF_PILOT, ENDBIT);
+    stop_fighting(ch);
+    if (send_message) send_to_char("You return to your senses.\r\n", ch);
     return;
+  }
 
   // Stop their vehicle.
   stop_vehicle(veh);

@@ -537,6 +537,8 @@ ACMD(do_shoot)
   FAILURE_CASE(!CAN_GO(ch, dir), "There seems to be something in the way...");
   FAILURE_CASE(IS_SET(EXIT(ch, dir)->exit_info, EX_CANT_SHOOT_THROUGH), "You can't shoot through that exit.");
 
+  
+  if (PRF_FLAGGED(ch, PRF_REPEAT_SHOOT)) ch->char_specials.shooting_dir = dir;
   range_combat(ch, target, weapon, range, dir);
 }
 
@@ -1135,4 +1137,36 @@ ACMD(do_prone)
     }
     */
   }
+}
+
+
+// === QoL: context-aware 'attack' ===
+ACMD(do_attack)
+{
+  if (FIGHTING(ch) && ch->in_room && FIGHTING(ch)->in_room == ch->in_room) {
+    struct obj_data *cweap = GET_EQ(ch, WEAR_WIELD) ? GET_EQ(ch, WEAR_WIELD) : GET_EQ(ch, WEAR_HOLD);
+    struct obj_data *vweap = GET_EQ(FIGHTING(ch), WEAR_WIELD) ? GET_EQ(FIGHTING(ch), WEAR_WIELD) : GET_EQ(FIGHTING(ch), WEAR_HOLD);
+    hit(ch, FIGHTING(ch), cweap, vweap, NULL);
+    return;
+  }
+  struct obj_data *weapon = NULL;
+  if (GET_EQ(ch, WEAR_WIELD) && GET_OBJ_TYPE(GET_EQ(ch, WEAR_WIELD)) == ITEM_WEAPON)
+    weapon = GET_EQ(ch, WEAR_WIELD);
+  else if (GET_EQ(ch, WEAR_HOLD) && GET_OBJ_TYPE(GET_EQ(ch, WEAR_HOLD)) == ITEM_WEAPON)
+    weapon = GET_EQ(ch, WEAR_HOLD);
+  if (weapon && PRF_FLAGGED(ch, PRF_REPEAT_SHOOT) && ch->char_specials.shooting_dir) {
+    extern int find_weapon_range(struct char_data *ch, struct obj_data *weapon);
+    extern void range_combat(struct char_data *ch, char target[MAX_INPUT_LENGTH], struct obj_data *weapon, int range, int dir);
+    int range = find_weapon_range(ch, weapon);
+    range_combat(ch, (char *)"", weapon, range, ch->char_specials.shooting_dir);
+    return;
+  }
+  extern bool has_ammo_no_deduct(struct char_data *ch, struct obj_data *wielded);
+  if (weapon && !has_ammo_no_deduct(ch, weapon)) {
+    extern bool qol_try_auto_reload(struct char_data *ch, struct obj_data *weapon);
+    extern bool qol_try_auto_swap_to_sidearm(struct char_data *ch);
+    if (qol_try_auto_reload(ch, weapon)) return;
+    if (qol_try_auto_swap_to_sidearm(ch)) return;
+  }
+  send_to_char("No valid attack target. Try ^Wshoot <dir>^n or engage in melee.\r\n", ch);
 }

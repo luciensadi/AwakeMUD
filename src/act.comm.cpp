@@ -17,6 +17,7 @@
 // using namespace std;
 
 #include "structs.hpp"
+#include "innervoice.hpp"
 #include "utils.hpp"
 #include "comm.hpp"
 #include "interpreter.hpp"
@@ -53,6 +54,8 @@ ACMD_CONST(do_say) {
 
 ACMD(do_say)
 {
+  InnerVoice::maybe_parse_rename_from_speech(ch, argument);
+
   struct char_data *tmp, *to = NULL;
 
   int language = !SKILL_IS_LANGUAGE(GET_LANGUAGE(ch)) ? SKILL_ENGLISH : GET_LANGUAGE(ch);

@@ -14,6 +14,8 @@
 
 #include <time.h>
 #include <iostream>
+#include "compat_strl.h"
+#include "inner_voice_shim.hpp"
 
 #if (!defined(WIN32) || defined(__CYGWIN__)) && !defined(osx)
 // using namespace std;
@@ -488,7 +490,17 @@ enum {
 #define PRF_NOFOLLOW                           69
 #define PRF_SUPPRESS_PROMPT_CHANGE             70
 #define PRF_PASSIVE_IN_COMBAT                  71
-#define PRF_MAX                                72
+#define PRF_AUTO_RELOAD 73
+#define PRF_AUTO_SWAP 74
+#define PRF_REPEAT_SHOOT 75
+#define PRF_AUTO_ADVANCE 76
+#define PRF_AUTO_CPOOL_BALANCED 77
+#define PRF_AUTO_CPOOL_OFFENSE 78
+#define PRF_AUTO_CPOOL_DEFENSE 79
+#define PRF_AUTO_OPEN 80
+#define PRF_AUTO_HEAL 81
+#define PRF_AUTO_FLEE 82
+#define PRF_MAX                                82
 
 /* log watch */
 
