@@ -3856,7 +3856,7 @@ ACMD(do_cast)
     return;
   }
 
-  if (force <= 0) {
+  if (force < 0) {
     send_to_char("Spell force must be greater than zero!", ch);
     return;
   }
