@@ -1,0 +1,4 @@
+Test light: truth in a tiny bulb.
+Clip, touch, and ask the current a polite yes/no question.
+If it winks, proceed. If it glares, reconsider life choices.
+Never lick the leads. You’d think that’s obvious.

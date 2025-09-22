@@ -37,6 +37,7 @@
 #include "list.hpp"
 #include "awake.hpp"
 #include "constants.hpp"
+#include "innervoice.hpp"
 #include "quest.hpp"
 #include "transport.hpp"
 #include "newdb.hpp"
@@ -4921,6 +4922,47 @@ ACMD(do_score)
   } else {
     // Switches for the specific score types.
     skip_spaces(&argument);
+    if (*argument && is_abbrev(argument, "auto")) {
+      static char txt[] =
+"^WHELP AUTO^n\r\n"
+"\r\n"
+"Tablet-friendly automations you can toggle:\r\n"
+"  ^Wauto list^n\r\n"
+"    Shows the current states of all auto features.\r\n"
+"\r\n"
+"  ^Wauto reload on|off^n\r\n"
+"    When your ranged weapon is empty, reload from your bullet pants.\r\n"
+"\r\n"
+"  ^Wauto swap on|off^n\r\n"
+"    If reloading isn't possible, auto-draw a sidearm with ammo.\r\n"
+"\r\n"
+"  ^Wauto repeatshoot on|off^n\r\n"
+"    Keep firing in the last ^Wshoot <dir>^n direction each combat tick.\r\n"
+"\r\n"
+"  ^Wauto open on|off^n\r\n"
+"    When moving into a closed/locked exit, auto-unlock (if you have the key)\r\n"
+"    and open it, then retry the move.\r\n"
+"\r\n"
+"  ^Wauto advance on|off^n\r\n"
+"    Take one step toward your current target each combat tick.\r\n"
+"\r\n"
+"  ^Wauto heal on|off^n  ^w(25%%)^n\r\n"
+"    If you are at or below 25%% HP, auto-apply a trauma or stim patch.\r\n"
+"\r\n"
+"  ^Wauto flee on|off^n  ^w(15%%)^n\r\n"
+"    If you are at or below 15%% HP at the start of your tick, auto-flee.\r\n"
+"\r\n"
+"Helper commands:\r\n"
+"  ^Wattack^n (or ^Wa^n): Context attack. Melee if engaged; otherwise repeats ranged.\r\n"
+"  ^Wselljunk [max_value]^n: At a shopkeeper, sell inventory items with value <= threshold.\r\n"
+"  ^Wrepairall [cash|credstick]^n: At a fixer, queue repairs for all damaged gear.\r\n"
+"\r\n"
+"Notes:\r\n"
+"  • All features respect normal lag and legality checks.\r\n"
+"  • Auto flags persist across logout/restart; auto-heal is fixed at 25%% while on.\r\n";
+      page_string(ch->desc, txt, 1);
+      return;
+    }
 
     if (*argument) {
       int cmd_index;

@@ -1,0 +1,14 @@
+HEAT
+
+HEAT
+
+^RHeat^n is attention from the authorities. When you have heat, your prompt shows a small red meter like ^R[▉▉▉ m:ss]^n.
+- The blocks indicate rough heat tier (1–3).
+- The timer shows time to the next drop in heat.
+- The HUD only appears while you have heat and disappears at 0.
+
+^yHow do I get heat?^n Crimes, suspicious activity, or getting caught.
+
+^yHow do I lower it?^n Lay low, avoid crowds, stop causing trouble, and give it time to decay.
+
+^WSee also:^n POLICEPROC, STEAL, PICKPOCKET, CASE

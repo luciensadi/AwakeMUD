@@ -1780,8 +1780,9 @@ RoomType:	0
 	BackgroundType:	0
 	StaffLockLevel:	0
 [EXIT south]
+	Keywords: apartment door
 	ToVnum:	22617
-	Flags:	0
+	Flags:	1
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
@@ -2277,8 +2278,9 @@ RoomType:	0
 	BackgroundType:	0
 	StaffLockLevel:	0
 [EXIT south]
+	Keywords: apartment door
 	ToVnum:	22627
-	Flags:	0
+	Flags:	2
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0

@@ -1,0 +1,13 @@
+PICKPOCKET
+
+PICKPOCKET
+
+Steal from an ^yalert^n target’s pockets.
+
+- Your odds come from stealth (sneak/visibility) vs. the target’s awareness.
+- Crowds and bright light make it harder; being sneaky helps.
+- Failure can raise ^RHEAT^n and draw attention.
+
+For a quick preview before acting, try ^gCASE <target>^n.
+
+^WSee also:^n STEAL, CASE, HEAT

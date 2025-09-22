@@ -1742,7 +1742,7 @@ SecType:	Inside
 A mirror fills the north wall. 
 ~
 	ToVnum:	19662
-	Flags:	0
+	Flags:	2
 	Material:	glass
 	Barrier:	2
 	KeyVnum:	0

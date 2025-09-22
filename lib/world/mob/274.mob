@@ -39,3 +39,159 @@ AttackType:	Pistol
 	pistols:	50
 BREAK
 END
+
+#27407
+
+Keywords:	dr kestrel vale cyberdoc cyberware surgeon merchant
+Name:	Dr. Kestrel Vale, Cyberdoc
+RoomDesc:$
+A surgeon in stained graphene scrubs calibrates a humming implant cradle.
+~
+LookDesc:$
+Kestrel’s eyes glow faintly—burn-in from years of night shifts. A surgical drone rests on her shoulder like a steel vulture.
+“Cash up front. Anesthesia optional.” She says it like a joke, but doesn’t smile.
+~
+ArriveMsg:	glides in from
+LeaveMsg:	glides off to the
+MobFlags:	1000000000000000100000000001010
+AffFlags:	1000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pistol
+[ATTRIBUTES]
+	Bod:	50
+	Qui:	50
+	Str:	50
+	Cha:	50
+	Int:	50
+	Wil:	50
+	Mag:	14
+[POINTS]
+	Height:	180
+	Weight:	60
+	Level:	9
+	Ballistic:	1000
+	Impact:	1000
+[SKILLS]
+	sorcery:	50
+	pistols:	50
+
+BREAK
+
+#27499
+
+Keywords:	mara torque ilyin broker arms heavy weapons merchant
+Name:	Mara "Torque" Ilyin, Heavy Weapons Broker
+RoomDesc:$
+A broker in armored streetwear watches you over a stack of sealed rifle cases.
+~
+LookDesc:$
+Torque’s chrome jaw ticks when she smiles. Bandoliers cross her chest like silver sashes.
+“Paperwork’s extra. Discretion’s included.”
+~
+ArriveMsg:	glides in from
+LeaveMsg:	glides off to the
+MobFlags:	1000000000000000100000000001010
+AffFlags:	1000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pistol
+[ATTRIBUTES]
+	Bod:	50
+	Qui:	50
+	Str:	50
+	Cha:	50
+	Int:	50
+	Wil:	50
+	Mag:	14
+[POINTS]
+	Height:	180
+	Weight:	60
+	Level:	9
+	Ballistic:	1000
+	Impact:	1000
+[SKILLS]
+	sorcery:	50
+	pistols:	50
+
+BREAK
+
+#27410
+
+Keywords:	bren halvorsen quartermaster corp security merchant
+Name:	Bren Halvorsen, Corporate Quartermaster
+RoomDesc:$
+A corporate quartermaster audits a wall of monitors and locked cages.
+~
+LookDesc:$
+Bren’s badge reads ACCESS LEVEL 4. His pen clicks in precise, metronomic beats.
+“If it isn’t in the manifest, it doesn’t exist.” He means it.
+~
+ArriveMsg:	glides in from
+LeaveMsg:	glides off to the
+MobFlags:	1000000000000000100000000001010
+AffFlags:	1000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pistol
+[ATTRIBUTES]
+	Bod:	50
+	Qui:	50
+	Str:	50
+	Cha:	50
+	Int:	50
+	Wil:	50
+	Mag:	14
+[POINTS]
+	Height:	180
+	Weight:	60
+	Level:	9
+	Ballistic:	1000
+	Impact:	1000
+[SKILLS]
+	sorcery:	50
+	pistols:	50
+
+BREAK
+
+#27469
+
+Keywords:	nari chao munitions ammo clerk merchant
+Name:	Nari Chao, Munitions Clerk
+RoomDesc:$
+A munitions clerk weighs linked belts with a powder-stained scale.
+~
+LookDesc:$
+Nari hums through a respirator as she counts by touch. The counter smells like solvent and cordite.
+“Loose rounds cost extra. My time isn’t cheap.”
+~
+ArriveMsg:	glides in from
+LeaveMsg:	glides off to the
+MobFlags:	1000000000000000100000000001010
+AffFlags:	1000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pistol
+[ATTRIBUTES]
+	Bod:	50
+	Qui:	50
+	Str:	50
+	Cha:	50
+	Int:	50
+	Wil:	50
+	Mag:	14
+[POINTS]
+	Height:	180
+	Weight:	60
+	Level:	9
+	Ballistic:	1000
+	Impact:	1000
+[SKILLS]
+	sorcery:	50
+	pistols:	50
+
+BREAK

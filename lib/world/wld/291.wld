@@ -1597,8 +1597,8 @@ RoomType:	0
 	Barrier:	4
 	KeyVnum:	0
 [EXIT down]
-	ToVnum:	29197
-	Flags:	0
+ToVnum:	29197
+	Flags:	1
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
@@ -2711,8 +2711,8 @@ RoomType:	0
 	Barrier:	4
 	KeyVnum:	0
 [EXIT down]
-	ToVnum:	29167
-	Flags:	0
+ToVnum:	29167
+	Flags:	1
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
@@ -2871,8 +2871,8 @@ RoomType:	0
 	Barrier:	4
 	KeyVnum:	0
 [EXIT down]
-	ToVnum:	29176
-	Flags:	0
+ToVnum:	29176
+	Flags:	1
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
@@ -2908,8 +2908,8 @@ RoomType:	0
 	Barrier:	4
 	KeyVnum:	0
 [EXIT down]
-	ToVnum:	29175
-	Flags:	0
+ToVnum:	29175
+	Flags:	1
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0

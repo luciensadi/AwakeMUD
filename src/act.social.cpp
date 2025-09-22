@@ -14,6 +14,7 @@
 #include <ctype.h>
 
 #include "structs.hpp"
+#include "innervoice.hpp"
 #include "utils.hpp"
 #include "comm.hpp"
 #include "interpreter.hpp"
@@ -107,6 +108,10 @@ ACMD(do_action)
       }
     }
   }
+
+  InnerVoice::maybe_grant_emote_attitude(ch);
+
+  InnerVoice::notify_social(ch, vict);
 }
 
 void perform_wizsocial(char *orig, struct char_data * ch, struct char_data *vict,

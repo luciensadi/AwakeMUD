@@ -8,3 +8,5 @@ you. This will also give you a copy of the key needed to
 unlock the door.
 
 ^WSee Also: HOUSE, PAY, LEAVE, HOUSES, RETRIEVE, LIST^n
+
+^GUpdate:^n Leasing is separate from owning. ^gBUY^n converts a unit to ownership (no rent). ^gPAY^n does not apply to owned units.

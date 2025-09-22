@@ -3304,7 +3304,8 @@ RoomType:	0
 	StaffLockLevel:	0
 [EXIT northeast]
 	ToVnum:	19496
-	Flags:	0
+	Keywords: door
+	Flags:	2
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0

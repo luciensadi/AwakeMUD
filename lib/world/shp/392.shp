@@ -626,6 +626,35 @@ Etiquette:	44
 		Vnum:	39365
 		Type:	Always
 		Stock:	0
+
+	[SELL 8]
+		Vnum:	99000
+		Type:	Always
+		Stock:	0
+	[SELL 9]
+		Vnum:	99001
+		Type:	Always
+		Stock:	0
+	[SELL 10]
+		Vnum:	99002
+		Type:	Always
+		Stock:	0
+	[SELL 11]
+		Vnum:	99003
+		Type:	Always
+		Stock:	0
+	[SELL 12]
+		Vnum:	99004
+		Type:	Always
+		Stock:	0
+	[SELL 13]
+		Vnum:	99005
+		Type:	Always
+		Stock:	0
+	[SELL 14]
+		Vnum:	99006
+		Type:	Always
+		Stock:	0
 BREAK
 #39305
 Keeper:	39305

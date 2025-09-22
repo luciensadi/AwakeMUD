@@ -180,7 +180,7 @@ struct dest_data portland_taxi_destinations[] =
     { "powell's", "powell", "Powell's Technical Books", 14724, TAXI_DEST_TYPE_SHOPPING, TRUE },
     { "davis", "offices", "Davis Street Offices", 14667, TAXI_DEST_TYPE_CORPORATE_PARK, TRUE},
     { "max", "station", "Downtown MAX Station", 20800, TAXI_DEST_TYPE_TRANSPORTATION, TRUE  },
-    { "airport", "pia", "Portland International Airport", 24141, TAXI_DEST_TYPE_TRANSPORTATION, TRUE},
+    //{ "airport", "pia", "Portland International Airport", 24141, TAXI_DEST_TYPE_TRANSPORTATION, TRUE},
     { "\n", "", "", 0, 0, 0 } // this MUST be last
 
   };

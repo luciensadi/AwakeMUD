@@ -15,6 +15,7 @@
 
 #include "structs.hpp"
 #include "newdb.hpp"
+#include "innervoice.hpp"
 #include "db.hpp"
 #include "comm.hpp"       // for shutdown()
 #include "file.hpp"
@@ -38,6 +39,17 @@
 /* mysql_config.h must be filled out with your own connection info. */
 /* For obvious reasons, DO NOT ADD THIS FILE TO SOURCE CONTROL AFTER CUSTOMIZATION. */
 #include "mysql_config.hpp"
+
+
+// Persist InnerVoice state for all currently loaded characters.
+namespace {
+  static inline void iv_persist_all_loaded() {
+    for (descriptor_data *d = ::descriptor_list; d; d = d->next) {
+      if (d->character) InnerVoice::persist_state(d->character);
+      if (d->original && d->original != d->character) InnerVoice::persist_state(d->original);
+    }
+  }
+}
 
 char buf4[MAX_STRING_LENGTH];
 
@@ -1258,6 +1270,7 @@ bool load_char(const char *name, char_data *ch, bool logon, int pc_load_origin)
     }
   }
 
+    InnerVoice::load_state(ch);
   return true;
 }
 
@@ -1583,6 +1596,9 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
 
   // Exdescs are not saved here, and are instead only saved when updated.
 
+  // Persist Inner Voice (entity name etc) on character save.
+  InnerVoice::persist_state(player);
+  
   return TRUE;
 }
 
@@ -1602,9 +1618,12 @@ PCIndex::~PCIndex()
 
 bool PCIndex::Save()
 {
-  if (!needs_save)
+  if (!needs_save) {
+    iv_persist_all_loaded();
     return true;
+  }
 
+  
   FILE *index = fopen(INDEX_FILENAME, "w");
 
   if (!tab) {

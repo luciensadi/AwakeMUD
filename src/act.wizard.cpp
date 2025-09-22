@@ -114,8 +114,6 @@ extern void turn_hardcore_off_for_character(struct char_data *ch);
 extern void stop_rigging(struct char_data *ch, bool send_message);
 extern void stop_driving(struct char_data *ch, bool is_involuntary);
 extern void write_zone_to_disk(int vnum);
-extern bool check_for_mob_weapon_skill_errors(struct char_data *ch, char *buf_ptr, size_t buf_sz);
-extern bool mob_has_ammo_for_weapon(struct char_data *ch, struct obj_data *weapon);
 
 extern void DBFinalize();
 
@@ -1737,7 +1735,7 @@ void do_stat_character(struct char_data * ch, struct char_data * k)
       }
     }
     if (access_level(ch, LVL_FIXER)) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "ShotsFired: ^c%d^n, ShotsTriggered: ^c%d^n, ArtQuota: ^c%d^n\r\n", SHOTS_FIRED(k), SHOTS_TRIGGERED(k), k->desc ? k->desc->regenerating_art_quota : -1);
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "ShotsFired: ^c%d^n, ShotsTriggered: ^c%d^n\r\n", SHOTS_FIRED(k), SHOTS_TRIGGERED(k));
     }
   }
 
@@ -8417,26 +8415,6 @@ int audit_zone_mobs_(struct char_data *ch, int zone_num, bool verbose) {
                  ANOMALOUS_SKILL_THRESHOLD);
         issues++;
       }
-
-    // Flag missing weapon skills
-    if (check_for_mob_weapon_skill_errors(mob, buf, sizeof(buf))) {
-      // todo this needs to append to buf
-      issues++;
-    }
-
-    if (GET_EQ(mob, WEAR_WIELD)) {
-      struct obj_data *weap = GET_EQ(mob, WEAR_WIELD);
-
-      if (GET_OBJ_TYPE(weap) == ITEM_WEAPON
-          && WEAPON_IS_GUN(weap)
-          && GET_WEAPON_MAX_AMMO(weap) > 0
-          && !mob_has_ammo_for_weapon(mob, weap))
-      {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - missing ammo for weapon, will default to %d mags of normal ammo.\r\n",
-                 GET_WEAPON_MAX_AMMO(weap) * NUMBER_OF_MAGAZINES_TO_GIVE_TO_UNEQUIPPED_MOBS);
-        issues++;
-      }
-    }
 
     // Flag shopkeepers with no negotiation or low int
     if (is_shopkeeper || is_johnson) {

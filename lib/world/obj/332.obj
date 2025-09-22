@@ -211,8 +211,8 @@ Material:	paper
 [VALUES]
 	Val0:	39
 	Val2:	1
-	Val4:	120
-[AFFECT 0]
+	Val3:	1
+	Val4:	120AFFECT 0]
 	Location:	Body
 	Modifier:	1
 BREAK
@@ -240,8 +240,8 @@ Material:	paper
 [VALUES]
 	Val0:	39
 	Val2:	2
-	Val4:	89
-[AFFECT 0]
+	Val3:	1
+	Val4:	89AFFECT 0]
 	Location:	Body
 	Modifier:	1
 BREAK
@@ -329,8 +329,8 @@ Material:	paper
 [VALUES]
 	Val0:	38
 	Val2:	1
+	Val3:	1
 	Val4:	60
-BREAK
 #33212
 Keywords:	cyberskull obvious skull
 Name:	an obvious cyberskull -beta
@@ -355,8 +355,8 @@ Material:	paper
 [VALUES]
 	Val0:	38
 	Val2:	2
+	Val3:	1
 	Val4:	44
-BREAK
 #33213
 Keywords:	cyberskull synthetic skull
 Name:	a synthetic cyberskull -alpha

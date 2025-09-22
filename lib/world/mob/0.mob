@@ -2228,7 +2228,7 @@ is golden.  He wears his hair in a shaved haircut, what would be called a
 British Mohawk, shaved around on all sides, and long on top.  He wears seven
 crystalline earrings in his left ear. 
 ~
-ArriveMsg:	•´Ë˘@from
+ArriveMsg:	@from
 LeaveMsg:	leaves
 MobFlags:	11010
 AffFlags:	0
@@ -2733,3 +2733,38 @@ DefaultPos:	Standing
 [SKILLS]
 BREAK
 END
+
+#1
+
+Keywords:	vinnie russo broker smuggler fence merchant
+Name:	Vinnie Russo, Black-Market Broker
+RoomDesc:$
+A legless broker leans back in a battered wheelchair, eyes glittering under neon.
+~
+LookDesc:$
+Vinnie‚Äôs grin shows gold caps and bad decisions. A thermoptic cloak hangs like a hole in the air behind him.
+‚ÄúYou bring the cred. I‚Äôll make the introductions.‚Äù
+~
+ArriveMsg:	wheels himself in from
+LeaveMsg:	rolls
+MobFlags:	1010000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	1
+	Weight:	80
+	Cash:	50000
+[SKILLS]
+
+BREAK

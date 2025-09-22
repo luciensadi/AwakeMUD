@@ -2884,7 +2884,48 @@ SPECIAL(fence)
   struct obj_data *obj;
   int value = 0;
 
-  if (CMD_IS("sell")) {
+  
+
+/* SOLO bulk fence */
+if (CMD_IS("fence")) {
+  skip_spaces(&argument);
+  if (!*argument || str_cmp(argument, "all")) {
+    send_to_char("Syntax: FENCE ALL\r\n", ch);
+    return TRUE;
+  }
+  if (!AWAKE(fence))
+    return FALSE;
+  if (!CAN_SEE(fence, ch)) {
+    do_say(fence, "I don't buy from someone I can't see!", 0, 0);
+    return TRUE;
+  }
+  int total = 0; int count = 0;
+  struct obj_data *next_obj;
+  for (obj = ch->carrying; obj; obj = next_obj) {
+    next_obj = obj->next_content;
+    if ((GET_OBJ_TYPE(obj) == ITEM_DECK_ACCESSORY
+        && GET_DECK_ACCESSORY_TYPE(obj) == TYPE_FILE
+        && GET_DECK_ACCESSORY_FILE_HOST_VNUM(obj))) {
+      int negotiated_value = negotiate(ch, fence, SKILL_DATA_BROKERAGE, market[GET_DECK_ACCESSORY_FILE_HOST_COLOR(obj)], 2, FALSE, TRUE);
+      int value = negotiated_value / MAX(1, (time(0) - GET_DECK_ACCESSORY_FILE_CREATION_TIME(obj)) / SECS_PER_MUD_DAY);
+      gain_nuyen(ch, value, NUYEN_INCOME_DECKING);
+      market[GET_DECK_ACCESSORY_FILE_HOST_COLOR(obj)] -= (int)(market[GET_DECK_ACCESSORY_FILE_HOST_COLOR(obj)] * ((float)(5 - GET_DECK_ACCESSORY_FILE_HOST_COLOR(obj))/ 50));
+      if (market[GET_DECK_ACCESSORY_FILE_HOST_COLOR(obj)] < get_paydata_market_minimum(GET_DECK_ACCESSORY_FILE_HOST_COLOR(obj)))
+        market[GET_DECK_ACCESSORY_FILE_HOST_COLOR(obj)] = get_paydata_market_minimum(GET_DECK_ACCESSORY_FILE_HOST_COLOR(obj));
+      obj_from_char(obj);
+      extract_obj(obj);
+      total += value; count++;
+    }
+  }
+  if (count == 0) {
+    do_say(fence, "You don't have any paydata I can use.", 0, 0);
+  } else {
+    send_to_char(ch, "You fence %d datafile%s for %d nuyen.\r\n", count, (count==1?"":"s"), total);
+  }
+  return TRUE;
+}
+
+if (CMD_IS("sell")) {
     if (!*argument) {
       send_to_char("Sell what?\r\n", ch);
       return(TRUE);
@@ -8181,3 +8222,96 @@ SPECIAL(business_card_printer) {
   return FALSE;
 }
 */
+
+
+// --- Ambient room flavor (theme-aware, file-backed, variant by time/weather) ---
+extern struct time_info_data time_info;
+extern struct weather_data weather_info;
+
+static std::string lc_copy2(const char *s) {
+  if (!s) return std::string();
+  std::string out(s);
+  std::transform(out.begin(), out.end(), out.begin(), [](unsigned char c){ return std::tolower(c); });
+  return out;
+}
+static const char *get_variant_suffix2() {
+  bool is_night = (time_info.hours < 6 || time_info.hours >= 20);
+  bool is_rain = (weather_info.sky == SKY_RAINING || weather_info.sky == SKY_LIGHTNING);
+  if (is_night && is_rain) return "_night_rain";
+  if (is_night) return "_night";
+  if (is_rain) return "_rain";
+  return "";
+}
+
+static std::string _theme_for_room2(struct room_data *room) {
+  std::string nm = lc_copy2(room->name);
+  auto has=[&](const char *k){ return nm.find(k) != std::string::npos; };
+  if (has("park") || has("garden")) return "park";
+  if (has("dock") || has("pier") || has("harbor") || has("harbour") || has("waterfront") || has("beach")) return "waterfront";
+  if (has("market") || has("bazaar") || has("mall") || has("plaza")) return "market";
+  if (has("warehouse") || has("factory") || has("plant") || has("yard")) return "industrial";
+  if (has("alley") || has("slum") || has("barrens") || has("tenement")) return "slum";
+  if (has("corporate") || has("tower") || has("lobby") || has("atrium")) return "corporate";
+  if (has("sewer")) return "sewer";
+  if (has("subway") || has("metro") || has("tunnel")) return "subway";
+  if (has("bridge")) return "bridge";
+  if (has("apartment") || has("residential") || has("condo")) return "residential";
+  if (has("arcology")) return "arcology";
+  return "city";
+}
+
+static std::vector<std::string> &_load_ambient_bank2(const std::string &theme) {
+  static std::unordered_map<std::string, std::vector<std::string>> cache;
+  std::string key = theme + get_variant_suffix2();
+  auto it = cache.find(key);
+  if (it != cache.end()) return it->second;
+  std::vector<std::string> lines;
+  char path[256];
+  snprintf(path, sizeof(path), "lib/etc/ambient_%s%s.txt", theme.c_str(), get_variant_suffix2());
+  FILE *fp = fopen(path, "r");
+  char buf[MAX_STRING_LENGTH];
+  if (fp) {
+    while (fgets(buf, sizeof(buf), fp)) {
+      size_t len = strlen(buf);
+      while (len && (buf[len-1]=='\n' || buf[len-1]=='\r')) buf[--len]=0;
+      if (len) lines.emplace_back(buf);
+    }
+    fclose(fp);
+  }
+  if (lines.empty()) {
+    snprintf(path, sizeof(path), "lib/etc/ambient_%s.txt", theme.c_str());
+    fp = fopen(path, "r");
+    if (fp) {
+      while (fgets(buf, sizeof(buf), fp)) {
+        size_t len = strlen(buf);
+        while (len && (buf[len-1]=='\n' || buf[len-1]=='\r')) buf[--len]=0;
+        if (len) lines.emplace_back(buf);
+      }
+      fclose(fp);
+    }
+  }
+  cache[key] = lines;
+  return cache[key];
+}
+
+SPECIAL(ambient_room)
+{
+  struct room_data *room = (struct room_data *) me;
+  if (cmd || !room || !room->people)
+    return FALSE;
+
+  static std::unordered_map<long, time_t> last;
+  time_t now = time(0);
+  long key = GET_ROOM_VNUM(room);
+  if (number(0, 39)) return FALSE;
+  if (last[key] && now - last[key] < 60) return FALSE;
+  last[key] = now;
+
+  std::string theme = _theme_for_room2(room);
+  auto &bank = _load_ambient_bank2(theme);
+  if (bank.empty()) return FALSE;
+  const std::string &line = bank[number(0, bank.size()-1)];
+  send_to_room((line + "\r\n").c_str(), room);
+  return FALSE;
+}
+

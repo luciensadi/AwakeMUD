@@ -745,86 +745,106 @@ struct preference_bit_struct preference_bits_v2[] = {
   { "No Follow"            , FALSE, TRUE  },
   { "No Prompt Change Message", FALSE, TRUE  },
   { "Passive Combat"       , FALSE, TRUE  },
+  { "Auto Reload"          , FALSE, TRUE  },
+  { "Auto Swap Sidearm"          , FALSE, TRUE  },
+  { "Repeat Shoot"          , FALSE, TRUE  },
+  { "Auto Advance"          , FALSE, TRUE  },
+  { "Auto CPool: Balanced"          , FALSE, TRUE  },
+  { "Auto CPool: Offense"          , FALSE, TRUE  },
+  { "Auto CPool: Defense"          , FALSE, TRUE  },
+  { "Auto Open Doors"          , FALSE, TRUE  },
+  { "Auto Heal"          , FALSE, TRUE  },
+  { "Auto Flee (15%)"          , FALSE, TRUE  },
   { "\n"                   , 0    , 0     }
 };
 
 /* PRF_x */
 const char *preference_bits[] =
   {
-    "PACIFY",
-    "COMPACT",
-    "AUTOEX",
-    "FIGHTGAG",
-    "MOVEGAG",
-    "DEAF",
-    "!TELL",
-    "!RADIO",
-    "!NEWBIE",
-    "!REPEAT",
-    "HARDCORE",
-    "PKER",
-    "QUEST",
-    "AFK",
-    "STAFF_RADSUPPRESS",
-    "NOTRAFFIC",
-    "NOHASSLE",
-    "ROOMFLAGS",
-    "HOLYLIGHT",
-    "CONNLOG",
-    "DEATHLOG",
-    "MISCLOG",
-    "WIZLOG",
-    "SYSLOG",
-    "ZONELOG",
-    "LONGEXIT",
-    "ROLLS",
-    "!OOC",
-    "AUTOINVIS",
-    "CHEATLOG",
-    "ASSIST",
-    "BANLOG",
-    "!RPE",
-    "!HIRED",
-    "GRIDLOG",
-    "WRECKLOG",
-    "QUESTOR",
-    "NEWBIEHELPER",
-    "MENUGAG",
-    "LONGWEAPON",
-    "PGROUPLOG",
-    "SHOWGROUPTAG",
-    "KEEPALIVE",
-    "SCREENREADER",
-    "!COLOR",
-    "!PROMPT",
-    "HELPLOG",
-    "PURGELOG",
-    "!AUTOKILL",
-    "NO_RADIO_NAMES",
-    "FUCKUPLOG",
-    "ECONLOG",
-    "BRIEF",
-    "!HIGHLIGHTS",
-    "!PSEUDOLANGUAGE",
-    "!IDLE_NUYEN_REWARD_MESSAGE",
-    "CYBERDOC_PERMITTED",
-    "NO_VOID",
-    "RADLOG",
-    "ANONYMOUS_ON_WHERE",
-    "IGNORELOG",
-    "TIPS",
-    "AUTOSTAND",
-    "AUTOKIPUP",
-    "!WEATHER",
-    "!XTERM256",
-    "COERCE_ANSI",
-    "ALERT_DOCTORS_ON_MORT",
-    "MAILLOG",
-    "NOFOLLOW",
-    "!PROMPT_CHANGE_MSG",
-    "PASSIVE_COMBAT",
-    MAX_FLAG_MARKER
-  };
+  "PACIFY",
+  "COMPACT",
+  "AUTOEX",
+  "FIGHTGAG",
+  "MOVEGAG",
+  "DEAF",
+  "!TELL",
+  "!RADIO",
+  "!NEWBIE",
+  "!REPEAT",
+  "HARDCORE",
+  "PKER",
+  "QUEST",
+  "AFK",
+  "STAFF_RADSUPPRESS",
+  "NOTRAFFIC",
+  "NOHASSLE",
+  "ROOMFLAGS",
+  "HOLYLIGHT",
+  "CONNLOG",
+  "DEATHLOG",
+  "MISCLOG",
+  "WIZLOG",
+  "SYSLOG",
+  "ZONELOG",
+  "LONGEXIT",
+  "ROLLS",
+  "!OOC",
+  "AUTOINVIS",
+  "CHEATLOG",
+  "ASSIST",
+  "BANLOG",
+  "!RPE",
+  "!HIRED",
+  "GRIDLOG",
+  "WRECKLOG",
+  "QUESTOR",
+  "NEWBIEHELPER",
+  "MENUGAG",
+  "LONGWEAPON",
+  "PGROUPLOG",
+  "SHOWGROUPTAG",
+  "KEEPALIVE",
+  "SCREENREADER",
+  "!COLOR",
+  "!PROMPT",
+  "HELPLOG",
+  "PURGELOG",
+  "!AUTOKILL",
+  "NO_RADIO_NAMES",
+  "FUCKUPLOG",
+  "ECONLOG",
+  "BRIEF",
+  "!HIGHLIGHTS",
+  "!PSEUDOLANGUAGE",
+  "!IDLE_NUYEN_REWARD_MESSAGE",
+  "CYBERDOC_PERMITTED",
+  "NO_VOID",
+  "RADLOG",
+  "ANONYMOUS_ON_WHERE",
+  "IGNORELOG",
+  "TIPS",
+  "AUTOSTAND",
+  "AUTOKIPUP",
+  "!WEATHER",
+  "!XTERM256",
+  "COERCE_ANSI",
+  "ALERT_DOCTORS_ON_MORT",
+  "MAILLOG",
+  "NOFOLLOW",
+  "!PROMPT_CHANGE_MSG",
+  "PASSIVE_COMBAT",
+  "UNUSED",
+  "AUTO_RELOAD",
+  "AUTO_SWAP",
+  "REPEAT_SHOOT",
+  "AUTO_ADVANCE",
+  "AUTO_CPOOL_BALANCED",
+  "AUTO_CPOOL_OFFENSE",
+  "AUTO_CPOOL_DEFENSE",
+  "AUTO_OPEN",
+  "AUTO_HEAL",
+  "AUTO_FLEE"
+};
 
 /* AFF_x */
 const char *affected_bits[] =
@@ -3586,29 +3606,29 @@ int bone_lacing_power_lookup[] = {
 };
 
 struct kosher_weapon_values_struct kosher_weapon_values[MAX_WEAP] = {
-/*                    USABLE, POWER, DAM CODE, SKILL                  , CONC, AMMO, FM_SS, FM_SA, FM_BF, FM_FA, COMP, BOTTM, BARRL, TOP  , STR+, REACH */
-/* EDGED          */ {   1  ,   0  , SERIOUS , SKILL_EDGED_WEAPONS    , 0   , 0   , FALSE, FALSE, FALSE, FALSE, 0   , FALSE, FALSE, FALSE, 3   , 1    }, // WEAP_EDGED          
-/* CLUB           */ {   1  ,   0  , SERIOUS , SKILL_CLUBS            , 0   , 0   , FALSE, FALSE, FALSE, FALSE, 0   , FALSE, FALSE, FALSE, 3   , 1    }, // WEAP_CLUB           
-/* POLEARM        */ {   1  ,   0  , SERIOUS , SKILL_POLE_ARMS        , 0   , 0   , FALSE, FALSE, FALSE, FALSE, 0   , FALSE, FALSE, FALSE, 4   , 2    }, // WEAP_POLEARM        
-/* WHIP           */ {   1  ,   0  , MODERATE, SKILL_WHIPS_FLAILS     , 0   , 0   , FALSE, FALSE, FALSE, FALSE, 0   , FALSE, FALSE, FALSE, 2   , 2    }, // WEAP_WHIP           
-/* GLOVE          */ {   1  ,   0  , MODERATE, SKILL_UNARMED_COMBAT   , 0   , 0   , FALSE, FALSE, FALSE, FALSE, 0   , FALSE, FALSE, FALSE, 1   , 0    }, // WEAP_GLOVE          
-/* HOLDOUT        */ {   1  ,   5  , LIGHT   , SKILL_PISTOLS          , 8   , 7   , FALSE, TRUE , FALSE, FALSE, 0   , FALSE, FALSE, FALSE, 0   , 0    }, // WEAP_HOLDOUT        
-/* LIGHT_PISTOL   */ {   1  ,   7  , LIGHT   , SKILL_PISTOLS          , 6   , 24  , FALSE, TRUE , TRUE , FALSE, 0   , FALSE, TRUE , TRUE , 0   , 0    }, // WEAP_LIGHT_PISTOL   
-/* MACHINE_PISTOL */ {   0  ,   7  , LIGHT   , SKILL_PISTOLS          , 6   , 40  , FALSE, TRUE , TRUE , TRUE , 1   , FALSE, TRUE , TRUE , 0   , 0    }, // WEAP_MACHINE_PISTOL 
-/* HEAVY_PISTOL   */ {   1  ,   10 , MODERATE, SKILL_PISTOLS          , 5   , 24  , FALSE, TRUE , TRUE , FALSE, 1   , FALSE, TRUE , TRUE , 0   , 0    }, // WEAP_HEAVY_PISTOL   
-/* TASER          */ {   1  ,   10 , SERIOUS , SKILL_TASERS           , 5   , 8   , FALSE, TRUE , FALSE, FALSE, 0   , FALSE, FALSE, TRUE , 0   , 0    }, // WEAP_TASER          
-/* SMG            */ {   1  ,   7  , MODERATE, SKILL_SMG              , 4   , 40  , FALSE, TRUE , TRUE , TRUE , 2   , TRUE , TRUE , TRUE , 0   , 0    }, // WEAP_SMG            
-/* SPORT_RIFLE    */ {   1  ,   10 , SERIOUS , SKILL_RIFLES           , 2   , 10  , TRUE , TRUE , TRUE , FALSE, 1   , TRUE , TRUE , TRUE , 0   , 0    }, // WEAP_SPORT_RIFLE    
-/* SNIPER_RIFLE   */ {   1  ,   14 , SERIOUS , SKILL_RIFLES           , 0   , 14  , TRUE , TRUE , FALSE, FALSE, 1   , TRUE , TRUE , TRUE , 0   , 0    }, // WEAP_SNIPER_RIFLE   
-/* ASSAULT_RIFLE  */ {   1  ,   9  , MODERATE, SKILL_ASSAULT_RIFLES   , 3   , 50  , FALSE, TRUE , TRUE , TRUE , 2   , TRUE , TRUE , TRUE , 0   , 0    }, // WEAP_ASSAULT_RIFLE  
-/* SHOTGUN        */ {   1  ,   10 , SERIOUS , SKILL_SHOTGUNS         , 0   , 50  , TRUE , TRUE , TRUE , FALSE, 1   , TRUE , TRUE , TRUE , 0   , 0    }, // WEAP_SHOTGUN        
-/* LMG            */ {   1  ,   8  , SERIOUS , SKILL_MACHINE_GUNS     , 0   , 100 , FALSE, TRUE , TRUE , TRUE , 2   , TRUE , TRUE , TRUE , 0   , 0    }, // WEAP_LMG            
-/* MMG            */ {   1  ,   10 , SERIOUS , SKILL_MACHINE_GUNS     , 0   , 100 , FALSE, FALSE, FALSE, TRUE , 2   , TRUE , TRUE , TRUE , 0   , 0    }, // WEAP_MMG            
-/* HMG            */ {   1  ,   11 , SERIOUS , SKILL_MACHINE_GUNS     , 0   , 100 , FALSE, FALSE, FALSE, TRUE , 2   , TRUE , TRUE , TRUE , 0   , 0    }, // WEAP_HMG            
-/* CANNON         */ {   1  ,   20 , DEADLY  , SKILL_ASSAULT_CANNON   , 0   , 100 , TRUE , FALSE, FALSE, FALSE, 0   , TRUE , TRUE , TRUE , 0   , 0    }, // WEAP_CANNON         
-/* MINIGUN        */ {   1  ,   0  , SERIOUS , SKILL_MACHINE_GUNS     , 0   , 100 , FALSE, FALSE, FALSE, TRUE , 0   , TRUE , TRUE , TRUE , 0   , 0    }, // WEAP_MINIGUN        
-/* GREN_LAUNCHER  */ {   0  ,   0  , 0       , SKILL_GRENADE_LAUNCHERS, 0   , 6   , FALSE, TRUE , FALSE, FALSE, 0   , TRUE , TRUE , TRUE , 0   , 0    }, // WEAP_GREN_LAUNCHER  
-/* MISS_LAUNCHER  */ {   0  ,   0  , 0       , SKILL_MISSILE_LAUNCHERS, 0   , 1   , TRUE , FALSE, FALSE, FALSE, 0   , TRUE , TRUE , TRUE , 0   , 0    }, // WEAP_MISS_LAUNCHER  
-/* REVOLVER       */ {   0  ,   9  , MODERATE, SKILL_PISTOLS          , 0   , 7   , TRUE , TRUE , FALSE, FALSE, 1   , TRUE , TRUE , TRUE , 0   , 0    }, // WEAP_REVOLVER       
-/* GRENADE        */ {   0  ,   0  , 0       , 0                      , 0   , 0   , FALSE, FALSE, FALSE, FALSE, 0   , FALSE, TRUE , TRUE , 0   , 0    }  // WEAP_GRENADE        
+/*                    POWER, DAM CODE, SKILL                  , CONC, AMMO, FM_SS, FM_SA, FM_BF, FM_FA, COMP, BOTTM, BARRL, TOP  , STR+, REACH */
+/* EDGED          */ {  0  , SERIOUS , SKILL_EDGED_WEAPONS    , 0   , 0   , FALSE, FALSE, FALSE, FALSE, 0   , FALSE, FALSE, FALSE, 3   , 1    }, // WEAP_EDGED          
+/* CLUB           */ {  0  , SERIOUS , SKILL_CLUBS            , 0   , 0   , FALSE, FALSE, FALSE, FALSE, 0   , FALSE, FALSE, FALSE, 3   , 1    }, // WEAP_CLUB           
+/* POLEARM        */ {  0  , SERIOUS , SKILL_POLE_ARMS        , 0   , 0   , FALSE, FALSE, FALSE, FALSE, 0   , FALSE, FALSE, FALSE, 4   , 2    }, // WEAP_POLEARM        
+/* WHIP           */ {  0  , MODERATE, SKILL_WHIPS_FLAILS     , 0   , 0   , FALSE, FALSE, FALSE, FALSE, 0   , FALSE, FALSE, FALSE, 2   , 2    }, // WEAP_WHIP           
+/* GLOVE          */ {  0  , MODERATE, SKILL_UNARMED_COMBAT   , 0   , 0   , FALSE, FALSE, FALSE, FALSE, 0   , FALSE, FALSE, FALSE, 1   , 0    }, // WEAP_GLOVE          
+/* HOLDOUT        */ {  5  , LIGHT   , SKILL_PISTOLS          , 8   , 7   , FALSE, TRUE , FALSE, FALSE, 0   , FALSE, FALSE, FALSE, 0   , 0    }, // WEAP_HOLDOUT        
+/* LIGHT_PISTOL   */ {  7  , LIGHT   , SKILL_PISTOLS          , 6   , 24  , FALSE, TRUE , TRUE , FALSE, 0   , FALSE, TRUE , TRUE , 0   , 0    }, // WEAP_LIGHT_PISTOL   
+/* MACHINE_PISTOL */ {  7  , LIGHT   , SKILL_PISTOLS          , 6   , 40  , FALSE, TRUE , TRUE , TRUE , 1   , FALSE, TRUE , TRUE , 0   , 0    }, // WEAP_MACHINE_PISTOL 
+/* HEAVY_PISTOL   */ {  10 , MODERATE, SKILL_PISTOLS          , 5   , 24  , FALSE, TRUE , TRUE , FALSE, 1   , FALSE, TRUE , TRUE , 0   , 0    }, // WEAP_HEAVY_PISTOL   
+/* TASER          */ {  10 , SERIOUS , SKILL_TASERS           , 5   , 8   , FALSE, TRUE , FALSE, FALSE, 0   , FALSE, FALSE, TRUE , 0   , 0    }, // WEAP_TASER          
+/* SMG            */ {  7  , MODERATE, SKILL_SMG              , 4   , 40  , FALSE, TRUE , TRUE , TRUE , 2   , TRUE , TRUE , TRUE , 0   , 0    }, // WEAP_SMG            
+/* SPORT_RIFLE    */ {  10 , SERIOUS , SKILL_RIFLES           , 2   , 10  , TRUE , TRUE , TRUE , FALSE, 1   , TRUE , TRUE , TRUE , 0   , 0    }, // WEAP_SPORT_RIFLE    
+/* SNIPER_RIFLE   */ {  14 , SERIOUS , SKILL_RIFLES           , 0   , 14  , TRUE , TRUE , FALSE, FALSE, 1   , TRUE , TRUE , TRUE , 0   , 0    }, // WEAP_SNIPER_RIFLE   
+/* ASSAULT_RIFLE  */ {  9  , MODERATE, SKILL_ASSAULT_RIFLES   , 3   , 50  , FALSE, TRUE , TRUE , TRUE , 2   , TRUE , TRUE , TRUE , 0   , 0    }, // WEAP_ASSAULT_RIFLE  
+/* SHOTGUN        */ {  10 , SERIOUS , SKILL_SHOTGUNS         , 0   , 50  , TRUE , TRUE , TRUE , FALSE, 1   , TRUE , TRUE , TRUE , 0   , 0    }, // WEAP_SHOTGUN        
+/* LMG            */ {  8  , SERIOUS , SKILL_MACHINE_GUNS     , 0   , 100 , FALSE, TRUE , TRUE , TRUE , 2   , TRUE , TRUE , TRUE , 0   , 0    }, // WEAP_LMG            
+/* MMG            */ {  10 , SERIOUS , SKILL_MACHINE_GUNS     , 0   , 100 , FALSE, FALSE, FALSE, TRUE , 2   , TRUE , TRUE , TRUE , 0   , 0    }, // WEAP_MMG            
+/* HMG            */ {  11 , SERIOUS , SKILL_MACHINE_GUNS     , 0   , 100 , FALSE, FALSE, FALSE, TRUE , 2   , TRUE , TRUE , TRUE , 0   , 0    }, // WEAP_HMG            
+/* CANNON         */ {  20 , DEADLY  , SKILL_ASSAULT_CANNON   , 0   , 100 , TRUE , FALSE, FALSE, FALSE, 0   , TRUE , TRUE , TRUE , 0   , 0    }, // WEAP_CANNON         
+/* MINIGUN        */ {  0  , SERIOUS , SKILL_MACHINE_GUNS     , 0   , 100 , FALSE, FALSE, FALSE, TRUE , 0   , TRUE , TRUE , TRUE , 0   , 0    }, // WEAP_MINIGUN        
+/* GREN_LAUNCHER  */ {  0  , 0       , SKILL_GRENADE_LAUNCHERS, 0   , 6   , FALSE, TRUE , FALSE, FALSE, 0   , TRUE , TRUE , TRUE , 0   , 0    }, // WEAP_GREN_LAUNCHER  
+/* MISS_LAUNCHER  */ {  0  , 0       , SKILL_MISSILE_LAUNCHERS, 0   , 1   , TRUE , FALSE, FALSE, FALSE, 0   , TRUE , TRUE , TRUE , 0   , 0    }, // WEAP_MISS_LAUNCHER  
+/* REVOLVER       */ {  9  , MODERATE, SKILL_PISTOLS          , 0   , 7   , TRUE , TRUE , FALSE, FALSE, 1   , TRUE , TRUE , TRUE , 0   , 0    }, // WEAP_REVOLVER       
+/* GRENADE        */ {  0  , 0       , 0                      , 0   , 0   , FALSE, FALSE, FALSE, FALSE, 0   , FALSE, TRUE , TRUE , 0   , 0    }  // WEAP_GRENADE        
 };

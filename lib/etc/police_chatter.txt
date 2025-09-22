@@ -1,0 +1,160 @@
+[SEARCH]
+Unit 4, suspect last seen cutting through the alley behind the ramen stand.
+Negative contact, checking rooftops for fresh scuffs.
+Infrared is noisy—switching to eyeballs.
+Thermal bloom on the fire escape, could be a pigeon. Or not.
+Dumpster lid is warm—someone just rifled it.
+Door closer still swinging—moved through seconds ago.
+Fresh shoeprint on wet paint—heel pattern matches.
+Keypad has smudges on 1, 3, 7—note it.
+Security cam is looped—runner knows tricks.
+Glass crunch underfoot—entry from outside.
+Curtain sway without a draft—window passage.
+Smell of soy and spice—takeout in hand, maybe a decoy.
+Dust line broken near the crawlspace hatch.
+RF ping—burner commlink nearby.
+Chalk arrow on the curb—gang trail marker.
+Steam disturbed on the grate—footfalls recent.
+Stage whisper heard—two voices, one nervous.
+Sirens spooked the pigeons—watch the flight.
+Light motion sensor reset timer—someone passed.
+Drip pattern on the stairs—sweat or bottle leak.
+Locked door forced quietly—hinge scrape minimal.
+Window latch unseated—entry technique clean.
+Smeared palm on railing—no gloves for a second.
+Vent dust rings disturbed—small frame through?
+Coin on the floor, recent drop—still rolling.
+Holoposter flicker—somebody brushed it hard.
+Ruthenium ripple on cam—possible cloak user.
+Maglock touchpad warm—recent use.
+Trash bag torn neatly—someone searched it.
+Soda can still fizzing—close by.
+Bench imprint still warm on thermal.
+Stale cologne spike—north corridor.
+Dog barking in sequence—path to the east.
+Loose tile clicks—watch for trap.
+Floor is scuffed toward the maintenance door.
+Emergency exit bar glows—opened moments ago.
+Ticket gate alarm reset—turnstile jump.
+Mirror shows a shadow without a source—back wall.
+Graffiti was wet earlier—now tacky—time marker.
+RFID tag pings from jacket sleeve—spoofed ID.
+Air vent hum changes pitch—someone covering it.
+Spilled noodles trail—messy runner.
+Fresh mud splatter on wall at knee height.
+Card reader cycles—someone with a key passed in.
+Light footprints across the grit—small boots.
+Motion halts when we halt—smart suspect.
+Camera saw a blur—enhance failed—keep sweeping.
+Wireless jamming spike—suspect masking trail.
+Quiet crowd is too quiet—somebody’s holding breath.
+Open window latch without dust—used exit.
+Loose screws at fence panel—swing point.
+Search pattern sweep variant 52, hold angles.
+Search pattern sweep variant 53, hold angles.
+Search pattern sweep variant 54, hold angles.
+Search pattern sweep variant 55, hold angles.
+
+[PURSUIT]
+Visual on suspect—gray hoodie, moving fast!
+Runner at two o’clock—converge!
+They’re cutting right—block the alley!
+Hands up! Lone Star!
+Do not resist!
+Keep distance—no tackles in the market!
+They vaulted the rail—watch your knees!
+Drone feed shows them heading northbound.
+Over the tram barrier—ticket hall pursuit!
+Left turn ahead—Unit Three cover the corner.
+Down the stairs—mind the slick step!
+They dumped a wallet—tag it for evidence.
+Back door slam—follow through, do not crowd.
+Camera shows a blur—77% match—continue!
+Watch crossfire—fan out!
+Eyes on hips, not shoulders—they’re juking.
+Keep comms short, no chatter.
+Hoload slow—don’t chase ghosts.
+They’re breathing hard—closing distance.
+Call it left-left-right!
+They’re hugging the wall—watch for ambush.
+Unit Seven, cut them at the noodle stand!
+Mind the street vendor—no collisions.
+Rooftop ladder—go vertical.
+Catwalk above—eyes up!
+Through the turnstiles—jump or pay later.
+Siren off—soft approach.
+Bystander recording—helmets on.
+Keep spacing—no pileup.
+Don’t shoot the dog. Seriously.
+Maglock cycling—catch before it seals.
+Jumped the barrier—over and go!
+AR chaff in the air—visuals only!
+Wet neon—slick footing—slow it down!
+Unit Four on the service road, eyes on.
+Target faked left—still right!
+Tram arriving—don’t get boxed!
+Low fence ahead—take it!
+Footprint pattern repeats—same shoes.
+They’re on the boardwalk—watch for nails.
+Big crowd—use the edges!
+Under the scaffold—helmets.
+Side gate is ajar—through there!
+Shortcut through the print shop!
+Open loader—don’t trip the sensor.
+Keep it professional—no heroics.
+Close the distance then call compliance.
+Hands visible—no sudden moves.
+Taser arcs hot—don’t blue-on-blue.
+Containment net ready if they stall.
+Intercept in three… two… one…
+Pursuit update 52: maintain visual, adjust route.
+Pursuit update 53: maintain visual, adjust route.
+Pursuit update 54: maintain visual, adjust route.
+Pursuit update 55: maintain visual, adjust route.
+Pursuit update 56: maintain visual, adjust route.
+Pursuit update 57: maintain visual, adjust route.
+Pursuit update 58: maintain visual, adjust route.
+Pursuit update 59: maintain visual, adjust route.
+Pursuit update 60: maintain visual, adjust route.
+Pursuit update 61: maintain visual, adjust route.
+Pursuit update 62: maintain visual, adjust route.
+Pursuit update 63: maintain visual, adjust route.
+Pursuit update 64: maintain visual, adjust route.
+Pursuit update 65: maintain visual, adjust route.
+Pursuit update 66: maintain visual, adjust route.
+Pursuit update 67: maintain visual, adjust route.
+Pursuit update 68: maintain visual, adjust route.
+Pursuit update 69: maintain visual, adjust route.
+Pursuit update 70: maintain visual, adjust route.
+
+[BANTER]
+Anyone else try that soy-kimchi last night? Regretting life choices.
+If this ends near a donut shop I’m stopping. Don’t @ me.
+My AR queue is all holovids of organizing cable drawers. Send help.
+New '^wBladeheart High^n' dropped—no spoilers on comms.
+Dispatch, advise: runner’s cardio is better than mine.
+Who put decaf in the squad thermos again? Monsters.
+This alley gets longer every week.
+Remember leg day, people.
+Five cred says they duck into the noodle bar.
+Last one back buys soycaf.
+My taser says 82%, my legs say 2%.
+If they have a cat, I’m defecting to Animal Control.
+Knees are filing an HR complaint.
+I can smell seaweed fries. Focus.
+Why is it always stairwells? Elevators exist.
+Drone, please find my dignity.
+Who’s got eyes? My contacts are at the optometrist.
+This felt easier at the academy.
+Paperwork doubles if you faceplant.
+If they jump another fence I’m filing a fence ordinance.
+Anyone catch last night’s trideo derby? Go Krakens.
+Holovid review: 'Cooking with Soy'—three stars, needs more spice.
+Diet starts tomorrow. Again.
+My boots are new; suspect better appreciate the scuff.
+Note to self: buy better socks.
+Who left snack wrappers in the van? Not cool.
+My bodycam caught me tripping. Great.
+Dispatch, schedule me for yoga. Stat.
+I miss desk duty. There, I said it.
+If we catch them, I’m naming my cramps after them.

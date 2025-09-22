@@ -902,7 +902,7 @@ RoomType:	7
 [EXIT northeast]
 	Keywords:	Door
 	ToVnum:	32323
-	Flags:	0
+	Flags:	1
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
@@ -916,7 +916,7 @@ RoomType:	7
 [EXIT southeast]
 	Keywords:	door
 	ToVnum:	32324
-	Flags:	0
+	Flags:	1
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0

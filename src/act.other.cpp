@@ -23,7 +23,9 @@
 #include "interpreter.hpp"
 #include "handler.hpp"
 #include "db.hpp"
+#include "combat_qol.hpp"
 #include "newdb.hpp"
+#include "innervoice.hpp"
 #include "house.hpp"
 #include "newmagic.hpp"
 #include "olc.hpp"
@@ -43,10 +45,88 @@
 #include "chipjacks.hpp"
 #include "player_exdescs.hpp"
 #include "gmcp.hpp"
+#include "newshop.hpp"
+
+// QoL forward declarations (unconditional)
+extern int ok_pick(struct char_data *ch, int keynum, int pickproof, int scmd, int lock_level);
+void award_pickpocket_loot(struct char_data *ch, struct char_data *vict);
+void qol_set_auto_heal_threshold(struct char_data *ch, int pct);
 
 #ifdef GITHUB_INTEGRATION
 #include <curl/curl.h>
 #include "github_config.hpp"
+#include "nlohmann/json.hpp"
+using nlohmann::json;
+#include <boost/filesystem.hpp>
+#include "newshop.hpp"
+// Forward declarations for QoL helpers to satisfy references
+extern int ok_pick(struct char_data *ch, int keynum, int pickproof, int scmd, int lock_level);
+void award_pickpocket_loot(struct char_data *ch, struct char_data *vict);
+void qol_set_auto_heal_threshold(struct char_data *ch, int pct);
+namespace bf = boost::filesystem;
+extern void _json_parse_from_file(bf::path path, json &target);
+
+// Pickpocket loot table (loaded from lib/etc/pickpocket_loot.json)
+static std::vector<int> g_pickpocket_t1, g_pickpocket_t2, g_pickpocket_t3, g_pickpocket_t4;
+static bool g_pickpocket_loaded = false;
+
+static void load_pickpocket_loot() {
+  if (g_pickpocket_loaded) return;
+  json j;
+  bf::path lootfile = bf::system_complete("lib") / "etc" / "pickpocket_loot.json";
+  _json_parse_from_file(lootfile, j);
+  try {
+    for (auto v : j["tiers"]["T1"]) g_pickpocket_t1.push_back((int)v);
+    for (auto v : j["tiers"]["T2"]) g_pickpocket_t2.push_back((int)v);
+    for (auto v : j["tiers"]["T3"]) g_pickpocket_t3.push_back((int)v);
+    for (auto v : j["tiers"]["T4"]) g_pickpocket_t4.push_back((int)v);
+    g_pickpocket_loaded = true;
+  } catch (...) {
+    // leave empty; we'll just not award items on success
+    g_pickpocket_loaded = true;
+  }
+}
+
+static int pickpocket_tier_for_cash(int cash) {
+  if (cash <= 50) return 1;
+  if (cash <= 150) return 2;
+  if (cash <= 600) return 3;
+  return 4;
+}
+
+static int roll_from_table_for_tier(int tier) {
+  std::vector<int> *vec = NULL;
+  switch (tier) {
+    case 1: vec = &g_pickpocket_t1; break;
+    case 2: vec = &g_pickpocket_t2; break;
+    case 3: vec = &g_pickpocket_t3; break;
+    default: vec = &g_pickpocket_t4; break;
+  }
+  if (!vec || vec->empty()) return -1;
+  int idx = number(0, (int)vec->size()-1);
+  return (*vec)[idx];
+}
+
+// Post-process credsticks to be: used (contains currency) and locked (owned by someone else).
+static void prepare_credstick_for_loot(struct obj_data *obj, int tier, struct char_data *receiver) {
+  if (!obj) return;
+  if (GET_OBJ_TYPE(obj) != ITEM_MONEY) return;
+  if (!GET_ITEM_MONEY_IS_CREDSTICK(obj)) return;
+
+  // Amount ranges by tier.
+  int amount = 0;
+  switch (tier) {
+    case 1: amount = number(10, 100); break;
+    case 2: amount = number(50, 300); break;
+    case 3: amount = number(250, 1000); break;
+    default: amount = number(500, 5000); break;
+  }
+  GET_OBJ_VAL(obj, 0) = amount;  // value
+  if (GET_OBJ_VAL(obj, 2) <= 0 || GET_OBJ_VAL(obj, 2) > 3) GET_OBJ_VAL(obj, 2) = number(1,3); // grade 1-3
+  GET_OBJ_VAL(obj, 3) = 1;       // is_pc_owned
+  GET_OBJ_VAL(obj, 4) = GET_IDNUM(receiver) + 100000 + number(1, 99999); // someone else (not receiver)
+  GET_OBJ_VAL(obj, 5) = number(1000, 9999); // lockcode set
+}
 #endif
 
 bool is_reloadable_weapon(struct obj_data *weapon, int ammotype);
@@ -4235,6 +4315,11 @@ ACMD(do_upload_headware)
   FAILURE_CASE(!(deck = find_cyberdeck(ch)), "You need to have a working cyberdeck to transfer data into headware memory.");
 
   obj = get_obj_in_list_vis(ch, argument, ch->carrying);
+  // InnerVoice item hook (do_use)
+  if (obj) {
+    InnerVoice::notify_item_interaction(ch, obj, "use");
+  }
+
   FAILURE_CASE(!obj, "You aren't carrying that file.");
   FAILURE_CASE((GET_OBJ_TYPE(obj) != ITEM_DECK_ACCESSORY) || (GET_DECK_ACCESSORY_TYPE(obj) != TYPE_FILE), "You can only upload photos and data.");
   FAILURE_CASE_PRINTF(GET_DECK_ACCESSORY_FILE_SIZE(obj) > GET_CYBERWARE_MEMORY_FREE(memory),
@@ -5085,11 +5170,11 @@ ACMD(do_syspoints) {
     if (is_abbrev(arg, "analyze")) {
 #define ANALYZE_COST 2
       FAILURE_CASE_PRINTF(!*buf,
-                          "This will spend %d syspoint%s to tell you the min-max rep range and number of jobs available from a given Johnson.\r\nSyntax: SYSPOINTS ANALYZE <target Johnson>\r\n",
+                          "This will spend %d syspoint%s to analyze a Johnson's rep range and job availability.\r\nSyntax: SYSPOINTS ANALYZE <target Johnson>\r\n",
                           ANALYZE_COST,
                           ANALYZE_COST == 1 ? "" : "s");
 
-      struct char_data *to = ch->in_veh ? get_char_veh(ch, buf, ch->in_veh) : to = get_char_room_vis(ch, buf);
+      struct char_data *to = ch->in_veh ? get_char_veh(ch, buf, ch->in_veh) : get_char_room_vis(ch, buf);
 
       FAILURE_CASE_PRINTF(!to, "You don't see any Johnsons named '%s' here.\r\n", buf);
       FAILURE_CASE_PRINTF(!IS_NPC(to) || !(mob_index[GET_MOB_RNUM(to)].func == johnson || mob_index[GET_MOB_RNUM(to)].sfunc == johnson), "%s is not a Johnson.", GET_NAME(to));
@@ -5468,4 +5553,519 @@ ACMD(do_changelog) {
   // Put them back where they came from.
   ch->in_room = old_in_room;
   ch->in_veh = old_in_veh;
+}
+
+ACMD(do_pickpocket)
+{
+  char vict_name[MAX_INPUT_LENGTH];
+  struct char_data *vict = NULL;
+
+  one_argument(argument, vict_name);
+
+  if (!*vict_name) {
+    send_to_char("Pickpocket who?\r\n", ch);
+    return;
+  }
+
+  if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED)) {
+    send_to_char(ch, "You cannot pickpocket until you are authed.\r\n");
+    return;
+  }
+
+  if (!(vict = get_char_room_vis(ch, vict_name))) {
+    send_to_char("They're not here.\r\n", ch);
+    return;
+  }
+
+  if (vict == ch) {
+    send_to_char("You fumble around in your own pockets. Classy.\r\n", ch);
+    return;
+  }
+
+  if (!IS_NPC(vict)) {
+    send_to_char("You can only pickpocket NPCs.\r\n", ch);
+    return;
+  }
+
+  if (!AWAKE(vict)) {
+    send_to_char("They're not awake—use 'steal' instead.\r\n", ch);
+    return;
+  }
+
+  // Base dice pools.
+  int thief_dice = GET_SKILL(ch, SKILL_STEALTH);
+  int observer_dice = GET_INT(vict);
+
+  if (AFF_FLAGGED(ch, AFF_SNEAK) || AFF_FLAGGED(ch, AFF_SPELLINVIS) || AFF_FLAGGED(ch, AFF_SPELLIMPINVIS)) {
+  observer_dice += MAX(0, GET_LEVEL(vict) / 5);
+  if (observer_dice < 1) observer_dice = 1;
+
+  // From shadows: 50% better odds.
+  if (AFF_FLAGGED(ch, AFF_SNEAK) || AFF_FLAGGED(ch, AFF_RUTHENIUM) || AFF_FLAGGED(ch, AFF_SPELLINVIS) || AFF_FLAGGED(ch, AFF_SPELLIMPINVIS)) {
+    thief_dice = (int) ((thief_dice * 3) / 2);
+  }
+
+  if (thief_dice < 1) thief_dice = 1;
+
+  // Opposed success test, flat TN 4 on both sides.
+  int thief_succ = success_test(thief_dice, 4, ch, "Pickpocket", vict);
+  int vict_succ  = success_test(observer_dice, 4, vict, "Pickpocket Defense", ch);
+
+  if (thief_succ == BOTCHED_ROLL_RESULT) thief_succ = 0;
+  if (vict_succ == BOTCHED_ROLL_RESULT) vict_succ = 0;
+
+  if (thief_succ > vict_succ) {
+    // SUCCESS: award from tiered loot table.
+    award_pickpocket_loot(ch, vict);
+    return;
+  }
+
+  // FAILURE: victim notices.
+  act("$n catches your hand and jerks away!", TRUE, vict, 0, ch, TO_VICT);
+  act("You catch $N's hand rooting around in your pockets!", TRUE, vict, 0, ch, TO_CHAR);
+  act("$n yanks away from $N with a shout.", TRUE, vict, 0, ch, TO_NOTVICT);
+
+  // Have the NPC speak out.
+  do_say(vict, const_cast<char*>("Hey! Thief! I'm calling the cops!"), 0, 0);
+
+  if (ch->char_specials.theft_heat_level < 3)
+    ch->char_specials.theft_heat_level += 1;
+
+  // Anchor the heat to this room for responses.
+  ch->char_specials.theft_heat_anchor_room = (ch->in_room ? (ch->in_room->number) : (ch->in_veh && ch->in_veh->in_room ? ch->in_veh->in_room->number : 0));
+
+  // Start / refresh decay timer appropriate to current level.
+  extern int number(int from, int to); // already defined elsewhere
+  // Helper protos from comm.cpp
+  extern void schedule_police_response_for_target(long target_idnum, long origin_room_vnum, int count, int delay_seconds);
+
+  // Set the cooldown for the current level.
+  int decay_secs;
+  if (ch->char_specials.theft_heat_level == 3)      decay_secs = (2 + number(0,1)) * 60; // 2-3 min
+  else if (ch->char_specials.theft_heat_level == 2) decay_secs = (5 + number(0,2)) * 60; // 5-7 min
+  else                                              decay_secs = (9 + number(0,4)) * 60; // 9-13 min
+  ch->char_specials.theft_heat_cooldown_end = time(0) + decay_secs;
+
+  // Determine if police are called immediately based on current level.
+  int chance = (ch->char_specials.theft_heat_level == 1) ? 10 : (ch->char_specials.theft_heat_level == 2) ? 30 : 80;
+  if (ch->in_room && ch->char_specials.theft_heat_anchor_room && ch->in_room->number != ch->char_specials.theft_heat_anchor_room) chance /= 2;
+  if (number(1, 100) <= chance) {
+    int count = number(1, 3);
+    int delay = 3 + number(0, 7); // short interval
+    if (ch->char_specials.theft_heat_anchor_room)
+      schedule_police_response_for_target(GET_IDNUM(ch), ch->char_specials.theft_heat_anchor_room, count, delay);
+  }
+}
+
+
+
+#define OBJ_LOCKER 9825
+#define OBJ_LOCKER_TERMINAL 9826
+// --- Hack lockbox / locker ---
+}
+ACMD(do_hackbox)
+{
+  char arg[MAX_INPUT_LENGTH];
+  struct obj_data *obj = NULL;
+
+  one_argument(argument, arg);
+  if (!*arg) {
+    // Auto-discover likely lockbox/locker in room.
+    for (obj = ch->in_room ? ch->in_room->contents : NULL; obj; obj = obj->next_content) {
+      const char *nm = GET_OBJ_NAME(obj);
+      if (!nm) continue;
+      if (GET_OBJ_TYPE(obj) != ITEM_CONTAINER) continue;
+      if (str_str(nm, "locker") || str_str(nm, "lockbox") || str_str(nm, "lock box") || IS_SET(GET_OBJ_VAL(obj, 1), CONT_CLOSEABLE)) {
+        break;
+      }
+    }
+    if (!obj) {
+      send_to_char("You don't see any lockboxes or lockers here to hack.\r\n", ch);
+      return;
+    }
+  } else {
+    // Find by name.
+    for (obj = ch->in_room ? ch->in_room->contents : NULL; obj; obj = obj->next_content) {
+      if (GET_OBJ_TYPE(obj) != ITEM_CONTAINER) continue;
+      if (isname(arg, GET_OBJ_KEYWORDS(obj))) break;
+    }
+    if (!obj) {
+      send_to_char(ch, "You don't see '%s' here.\r\n", arg);
+      return;
+    }
+  }
+
+  if (GET_OBJ_TYPE(obj) != ITEM_CONTAINER) {
+    send_to_char(ch, "That's not something you can hack open.\r\n", ch);
+    return;
+  }
+
+  // Require an electronics kit like maglock bypass.
+  if (!has_kit(ch, TYPE_ELECTRONIC)) {
+    send_to_char("You need an electronic kit to hack electronic locks.\r\n", ch);
+    return;
+  }
+
+  // Pull lock properties similar to do_gen_door.
+  int keynum = GET_OBJ_VAL(obj, 2); // typical Circle: value[2] is key vnum; adjust if needed
+  int pickproof = IS_SET(GET_OBJ_VAL(obj, 1), CONT_PICKPROOF);
+  int lock_level = GET_OBJ_VAL(obj, 4); // use container rating if present
+
+  // Perform the standard Electronics-based bypass test via ok_pick.
+  if (!ok_pick(ch, keynum, pickproof, SCMD_PICK, lock_level)) {
+// Failure: escalate heat identical to pickpocket failure.
+    act("$n fumbles with the lockbox's panel, to no avail.", TRUE, ch, 0, 0, TO_ROOM);
+    send_to_char("You fail to hack the lockbox.\r\n", ch);
+
+    // Heat / police logic.
+    if (ch->char_specials.theft_heat_level < 3)
+      ch->char_specials.theft_heat_level += 1;
+
+  ch->char_specials.theft_heat_anchor_room = (ch->in_room ? (ch->in_room->number) : (ch->in_veh && ch->in_veh->in_room ? ch->in_veh->in_room->number : 0));
+
+    int decay_secs;
+    if (ch->char_specials.theft_heat_level == 3)      decay_secs = (2 + number(0,1)) * 60;
+    else if (ch->char_specials.theft_heat_level == 2) decay_secs = (5 + number(0,2)) * 60;
+    else                                              decay_secs = (9 + number(0,4)) * 60;
+    ch->char_specials.theft_heat_cooldown_end = time(0) + decay_secs;
+
+    int chance = (ch->char_specials.theft_heat_level == 1) ? 10 : (ch->char_specials.theft_heat_level == 2) ? 30 : 80;
+    if (ch->in_room && ch->char_specials.theft_heat_anchor_room && ch->in_room->number != ch->char_specials.theft_heat_anchor_room) chance /= 2;
+
+    extern void schedule_police_response_for_target(long target_idnum, long origin_room_vnum, int count, int delay_seconds);
+    if (number(1, 100) <= chance) {
+      int count = number(1, 3);
+      int delay = 3 + number(0, 7);
+      if (ch->char_specials.theft_heat_anchor_room)
+        schedule_police_response_for_target(GET_IDNUM(ch), ch->char_specials.theft_heat_anchor_room, count, delay);
+    }
+    
+    // Thematic keypad/terminal warning
+    {
+      struct obj_data *term = NULL;
+      for (term = ch->in_room ? ch->in_room->contents : NULL; term; term = term->next_content) {
+        if (GET_OBJ_VNUM(term) == OBJ_LOCKER_TERMINAL) break;
+      }
+      if (term) {
+        // Virtual storage terminal present: flash terminal warning
+        act("$p's screen flashes ^rWARNING^n: Unauthorized access detected. Police have been notified.", TRUE, ch, term, 0, TO_ROOM);
+        act("The terminal flashes ^rWARNING^n: Unauthorized access detected. Police have been notified.", TRUE, ch, term, 0, TO_CHAR);
+      } else if (obj) {
+        // Physical container: beep/blare
+        act("$p's keypad blares: ^rTamper detected.^n Police have been notified.", TRUE, ch, obj, 0, TO_ROOM);
+        act("The keypad blares: ^rTamper detected.^n Police have been notified.", TRUE, ch, obj, 0, TO_CHAR);
+      }
+    }
+    return;
+  }
+
+// Success.
+  // If a virtual locker terminal is present in the room, simulate a data heist and do NOT toggle the physical lock.
+  bool virtual_storage = false;
+  {
+    struct obj_data *term = NULL;
+    for (term = ch->in_room ? ch->in_room->contents : NULL; term; term = term->next_content) {
+      if (GET_OBJ_VNUM(term) == OBJ_LOCKER_TERMINAL) { virtual_storage = true; break; }
+    }
+  }
+  if (!virtual_storage) {
+    // Flip container lock like do_gen_door's SCMD_PICK does.
+    if (IS_SET(GET_OBJ_VAL(obj, 1), CONT_LOCKED))
+      TOGGLE_BIT(GET_OBJ_VAL(obj, 1), CONT_LOCKED);
+    else
+      SET_BIT(GET_OBJ_VAL(obj, 1), CONT_LOCKED); // simulate lock light change
+  }
+
+  act("$n bypasses the lockbox's security panel.", TRUE, ch, 0, 0, TO_ROOM);
+  send_to_char(virtual_storage ? "The terminal chirps as your hack completes.\r\n" : "The lockbox's status light flickers and changes color.\r\n", ch);
+
+// Loot generation: 40% empty, 50% one item, 5% two items, 5% four items.
+  int roll = number(1, 100);
+  int qty = 0;
+  if (roll <= 40) qty = 0;
+  else if (roll <= 90) qty = 1;
+  else if (roll <= 95) qty = 2;
+  else qty = 4;
+
+  if (qty <= 0) {
+    send_to_char("It's empty. Figures.\r\n", ch);
+    return;
+  }
+
+  // Load lockbox loot JSON (100-item list) and award.
+  std::ifstream in("lib/etc/lockbox_loot.json");
+  if (!in.good()) {
+    send_to_char("You pop it, but there's nothing useful inside.\r\n", ch);
+    return;
+  }
+  std::string raw((std::istreambuf_iterator<char>(in)), std::istreambuf_iterator<char>());
+  std::vector<int> items;
+  long val = 0; bool innum=false;
+  for (size_t i = 0; i < raw.size(); ++i) {
+    if (isdigit((unsigned char)raw[i])) { if (!innum) { val=0; innum=true; } val = val*10 + (raw[i]-'0'); }
+    else { if (innum) { items.push_back((int)val); innum=false; } }
+  }
+  if (innum) items.push_back((int)val);
+
+  if (items.empty()) {
+    send_to_char("You pop it, but find nothing of value.\r\n", ch);
+    return;
+  }
+
+  for (int i = 0; i < qty; ++i) {
+    int vnum = items[number(0, (int)items.size()-1)];
+    struct obj_data *lo = read_object(vnum, VIRTUAL, 0, 0, 0);
+    if (!lo) continue;
+    // If credstick/money, randomize amount like T2-T4 tiers.
+    if (GET_OBJ_TYPE(lo) == ITEM_MONEY && GET_ITEM_MONEY_IS_CREDSTICK(lo)) {
+      int amt = number(100, 5000);
+      GET_ITEM_MONEY_VALUE(lo) = amt;
+      if (GET_ITEM_MONEY_CREDSTICK_GRADE(lo) <= 0 || GET_ITEM_MONEY_CREDSTICK_GRADE(lo) > 3)
+        GET_ITEM_MONEY_CREDSTICK_GRADE(lo) = number(1,3);
+      if (GET_ITEM_MONEY_CREDSTICK_GRADE(lo) == 1) {
+        GET_ITEM_MONEY_CREDSTICK_LOCKCODE(lo) = number(100000, 999999);
+      }
+      GET_ITEM_MONEY_CREDSTICK_OWNER_ID(lo) = 0; // owner unknown
+      GET_ITEM_MONEY_CREDSTICK_IS_PC_OWNED(lo) = 0;
+    }
+    obj_to_char(lo, ch);
+  }
+  send_to_char("You scoop out whatever was inside.\r\n", ch);
+}
+
+
+// === QoL: 'auto' command ===
+ACMD(do_auto)
+{
+  if (IS_NPC(ch)) { send_to_char("NPCs can't change automation.\r\n", ch); return; }
+  char arg1[MAX_INPUT_LENGTH], arg2[MAX_INPUT_LENGTH];
+  two_arguments(argument, arg1, arg2);
+
+  if (!*arg1) {
+    send_to_char("^WAuto settings:^n Use ^Wauto <feature> on|off^n or ^Wauto heal <percent>^n, ^Wauto list^n.\r\n"
+                 "  reload, swap, repeatshoot, open, advance, flee\r\n"
+                 "  cpool: off | balanced | offense | defense\r\n"
+                 "  heal: on | off\r\n", ch);
+    return;
+  }
+
+  if (is_abbrev(arg1, "list")) {
+    send_to_char("^WAuto settings:^n\r\n", ch);
+    send_to_char(ch, "  reload:      %s\r\n", PRF_FLAGGED(ch, PRF_AUTO_RELOAD) ? "^Gon^n" : "^Roff^n");
+    send_to_char(ch, "  swap:        %s\r\n", PRF_FLAGGED(ch, PRF_AUTO_SWAP) ? "^Gon^n" : "^Roff^n");
+    send_to_char(ch, "  repeatshoot: %s\r\n", PRF_FLAGGED(ch, PRF_REPEAT_SHOOT) ? "^Gon^n" : "^Roff^n");
+    send_to_char(ch, "  open:        %s\r\n", PRF_FLAGGED(ch, PRF_AUTO_OPEN) ? "^Gon^n" : "^Roff^n");
+    send_to_char(ch, "  advance:     %s\r\n", PRF_FLAGGED(ch, PRF_AUTO_ADVANCE) ? "^Gon^n" : "^Roff^n");
+    send_to_char(ch, "  cpool:       %s%s%s\r\n",
+      PRF_FLAGGED(ch, PRF_AUTO_CPOOL_BALANCED) ? "^Wbalanced^n " : "",
+      PRF_FLAGGED(ch, PRF_AUTO_CPOOL_OFFENSE)  ? "^Woffense^n "  : "",
+      PRF_FLAGGED(ch, PRF_AUTO_CPOOL_DEFENSE)  ? "^Wdefense^n "  : "");
+  #define TOGGLE(_flag) do { if (PRF_TOG_CHK(ch, _flag)) send_to_char("^GEnabled.^n\r\n", ch); else send_to_char("^RDisabled.^n\r\n", ch); } while (0)
+    send_to_char(ch, "  flee(15%%):  %s\r\n", PRF_FLAGGED(ch, PRF_AUTO_FLEE) ? "^Gon^n" : "^Roff^n");
+    return;
+  }
+
+  #define TOGGLE(_flag) do { if (PRF_TOG_CHK(ch, _flag)) send_to_char("^GEnabled.^n\r\n", ch); else send_to_char("^RDisabled.^n\r\n", ch); } while (0)
+
+  if (is_abbrev(arg1, "reload")) {
+    if (!*arg2) { send_to_char("auto reload ^Won|off^n\r\n", ch); return; }
+    TOGGLE(PRF_AUTO_RELOAD);
+  } else if (is_abbrev(arg1, "swap")) {
+    if (!*arg2) { send_to_char("auto swap ^Won|off^n\r\n", ch); return; }
+    TOGGLE(PRF_AUTO_SWAP);
+  } else if (is_abbrev(arg1, "repeatshoot") || is_abbrev(arg1, "repeat")) {
+    if (!*arg2) { send_to_char("auto repeatshoot ^Won|off^n\r\n", ch); return; }
+    TOGGLE(PRF_REPEAT_SHOOT);
+  } else if (is_abbrev(arg1, "open")) {
+    if (!*arg2) { send_to_char("auto open ^Won|off^n\r\n", ch); return; }
+    TOGGLE(PRF_AUTO_OPEN);
+  } else if (is_abbrev(arg1, "advance")) {
+    if (!*arg2) { send_to_char("auto advance ^Won|off^n\r\n", ch); return; }
+    TOGGLE(PRF_AUTO_ADVANCE);
+  } else if (is_abbrev(arg1, "cpool")) {
+    if (!*arg2) { send_to_char("auto cpool ^Woff|balanced|offense|defense^n\r\n", ch); return; }
+    PRF_FLAGS(ch).RemoveBit(PRF_AUTO_CPOOL_BALANCED);
+    PRF_FLAGS(ch).RemoveBit(PRF_AUTO_CPOOL_OFFENSE);
+    PRF_FLAGS(ch).RemoveBit(PRF_AUTO_CPOOL_DEFENSE);
+    if (is_abbrev(arg2, "balanced")) PRF_FLAGS(ch).SetBit(PRF_AUTO_CPOOL_BALANCED);
+    else if (is_abbrev(arg2, "offense")) PRF_FLAGS(ch).SetBit(PRF_AUTO_CPOOL_OFFENSE);
+    else if (is_abbrev(arg2, "defense")) PRF_FLAGS(ch).SetBit(PRF_AUTO_CPOOL_DEFENSE);
+    else send_to_char("auto cpool ^Woff|balanced|offense|defense^n\r\n", ch);
+  }
+ else if (is_abbrev(arg1, "heal")) {
+    if (!*arg2) { send_to_char("auto heal ^Won|off^n\r\n", ch); return; }
+    // If arg2 is on/off, toggle and report; otherwise treat it as a percentage threshold.
+    if (is_abbrev(arg2, "on") || is_abbrev(arg2, "off")) {
+      if (PRF_TOG_CHK(ch, PRF_AUTO_HEAL)) send_to_char("Auto-heal ^WON^n at 25%.\r\n", ch);
+      else send_to_char("Auto-heal ^WOFF^n.\r\n", ch);
+    } else {
+      int pct = MIN(99, MAX(1, atoi(arg2)));
+      PRF_FLAGS(ch).SetBit(PRF_AUTO_HEAL);
+      qol_set_auto_heal_threshold(ch, pct);
+      send_to_char(ch, "Auto-heal enabled at ^W%d%%^n.\r\n", pct);
+    }
+  } else if (is_abbrev(arg1, "flee")) {
+    if (!*arg2) { send_to_char("auto flee ^Won|off^n\r\n", ch); return; }
+    TOGGLE(PRF_AUTO_FLEE);
+  } else {
+    send_to_char("Unknown auto feature. Try: reload, swap, repeatshoot, open, advance, heal, flee, cpool, list\r\n", ch);
+  }
+}
+
+// === QoL: selljunk ===
+ACMD(do_selljunk)
+{
+  int max_value = atoi(argument);
+  if (max_value <= 0) max_value = 500;
+
+  struct char_data *keeper = NULL;
+  for (keeper = ch->in_room ? ch->in_room->people : NULL; keeper; keeper = keeper->next_in_room) {
+    if (!IS_NPC(keeper)) continue;
+    extern rnum_t top_of_shopt;
+    extern struct shop_data *shop_table;
+    for (int shop_nr = 0; shop_nr <= top_of_shopt; shop_nr++) {
+      if (shop_table[shop_nr].keeper == GET_MOB_VNUM(keeper)) {
+        for (struct obj_data *obj = ch->carrying; obj; obj = obj->next_content) {
+          if (IS_OBJ_STAT(obj, ITEM_EXTRA_NODROP) || IS_OBJ_STAT(obj, ITEM_EXTRA_NOSELL)) continue;
+          if (GET_OBJ_COST(obj) > max_value) continue;
+          extern bool shop_will_buy_item_from_ch(rnum_t shop_nr, struct obj_data *obj, struct char_data *ch);
+          if (!shop_will_buy_item_from_ch(shop_nr, obj, ch)) continue;
+          const char *kw = fname(const_cast<char *>(GET_OBJ_NAME(obj)));
+          char cmd[MAX_INPUT_LENGTH];
+          snprintf(cmd, sizeof(cmd), "sell %s", kw);
+          command_interpreter(ch, cmd, "selljunk");
+        }
+        send_to_char(ch, "Autosell complete up to value %d.\r\n", max_value);
+        return;
+      }
+    }
+  }
+  send_to_char("There's no shopkeeper here who will buy your stuff.\r\n", ch);
+}
+
+// === QoL: repairall ===
+ACMD(do_repairall)
+{
+  bool use_credstick = FALSE;
+  char arg1[MAX_INPUT_LENGTH];
+  one_argument(argument, arg1);
+  if (*arg1 && is_abbrev(arg1, "credstick")) use_credstick = TRUE;
+
+  struct char_data *fixer = NULL;
+  for (fixer = ch->in_room ? ch->in_room->people : NULL; fixer; fixer = fixer->next_in_room) {
+    if (!IS_NPC(fixer)) continue;
+    break;
+  }
+  if (!fixer) { send_to_char("There's no fixer here to repair your gear.\r\n", ch); return; }
+
+  int count = 0;
+  for (struct obj_data *obj = ch->carrying; obj; obj = obj->next_content) {
+    if (GET_OBJ_CONDITION(obj) >= GET_OBJ_BARRIER(obj)) continue;
+    const char *kw = fname(const_cast<char*>(GET_OBJ_NAME(obj)));
+    char cmd[MAX_INPUT_LENGTH];
+    if (use_credstick) snprintf(cmd, sizeof(cmd), "repair credstick %s", kw);
+    else snprintf(cmd, sizeof(cmd), "repair %s", kw);
+    command_interpreter(ch, cmd, "repairall");
+    count++;
+  }
+  for (int w = 0; w < NUM_WEARS; w++) {
+    struct obj_data *obj = GET_EQ(ch, w);
+    if (!obj) continue;
+    if (GET_OBJ_CONDITION(obj) >= GET_OBJ_BARRIER(obj)) continue;
+    const char *kw = fname(const_cast<char*>(GET_OBJ_NAME(obj)));
+    char cmd[MAX_INPUT_LENGTH];
+    if (use_credstick) snprintf(cmd, sizeof(cmd), "repair credstick %s", kw);
+    else snprintf(cmd, sizeof(cmd), "repair %s", kw);
+    command_interpreter(ch, cmd, "repairall");
+    count++;
+  }
+  if (count == 0) send_to_char("No items needed repair.\r\n", ch);
+  else send_to_char(ch, "Issued repair requests for %d item(s).\r\n", count);
+}
+
+/* ===== QoL helper implementations (added to resolve missing symbols) ===== */
+void award_pickpocket_loot(struct char_data *ch, struct char_data *vict) {
+/* Repaired body: compute a modest loot amount and transfer nuyen safely. */
+long amt = 0;
+/* Try to derive amount from victim's cash; clamp to sane range */
+if (vict) {
+  long pool = GET_NUYEN(vict);
+  if (pool > 0) {
+    /* take up to 5% of victim's nuyen, max 500, at least 1 */
+    amt = pool / 20;
+    if (amt < 1) amt = 1;
+    if (amt > 500) amt = 500;
+  }
+}
+if (amt <= 0) {
+  send_to_char(ch, "You come up empty-handed.^n\r\n");
+  return;
+}
+/* Transfer */
+GET_NUYEN_RAW(vict) -= amt;
+if (GET_NUYEN_RAW(vict) < 0) GET_NUYEN_RAW(vict) = 0;
+GET_NUYEN_RAW(ch) += amt;
+send_to_char(ch, "You quietly lift ^W%ld^n nuyen.\r\n", amt);
+}
+
+void qol_set_auto_heal_threshold(struct char_data *ch, int pct) {
+  qol_set_auto_heal_threshold_backend(ch, pct);
+}
+
+
+/* SOLO QoL: CASE <target>
+ * Provide a non-invasive estimate of pickpocket odds and bystander risk.
+ */
+ACMD(do_case)
+{
+  char vict_name[MAX_INPUT_LENGTH];
+  struct char_data *vict = NULL;
+
+  one_argument(argument, vict_name);
+  if (!*vict_name) {
+    send_to_char("Case who?\r\n", ch);
+    return;
+  }
+  if (!(vict = get_char_room_vis(ch, vict_name))) {
+    send_to_char("They aren't here.\r\n", ch);
+    return;
+  }
+  if (!IS_NPC(vict)) {
+    send_to_char("You only case NPCs.\r\n", ch);
+    return;
+  }
+  if (!AWAKE(vict)) {
+    send_to_char("They're not awake—use 'steal' instead.\r\n", ch);
+    return;
+  }
+
+  int thief_pool = GET_SKILL(ch, SKILL_STEALTH);
+  int observe_pool = GET_INT(vict);
+
+  if (AFF_FLAGGED(ch, AFF_SNEAK) || AFF_FLAGGED(ch, AFF_RUTHENIUM) ||
+      AFF_FLAGGED(ch, AFF_SPELLINVIS) || AFF_FLAGGED(ch, AFF_SPELLIMPINVIS)) {
+    thief_pool = (int)((thief_pool * 3) / 2);
+  }
+  if (thief_pool < 1) thief_pool = 1;
+  if (observe_pool < 1) observe_pool = 1;
+
+  double exp_thief = thief_pool * 0.5;
+  double exp_obs   = observe_pool * 0.5;
+  int odds = 50;
+  if (exp_thief + exp_obs > 0.0) {
+    odds = (int)((exp_thief / (exp_thief + exp_obs)) * 100.0);
+    if (odds < 1) odds = 1;
+    if (odds > 99) odds = 99;
+  }
+
+  int bystanders = 0;
+  for (struct char_data *t = ch->in_room ? ch->in_room->people : NULL; t; t = t->next_in_room) {
+    if (t != ch && t != vict && !IS_ASTRAL(t) && CAN_SEE(ch, t)) bystanders++;
+  }
+  const char *risk = "^glow^n";
+  if (bystanders >= 3) risk = "^ymoderate^n";
+  if (bystanders >= 6) risk = "^rhigh^n";
+
+  send_to_char(ch, "You size up ^c%s^n: odds ~^W%d%%^n, bystanders %d (^n%s^n). Use PICKPOCKET %s to try.\r\n",
+               GET_CHAR_NAME(vict), odds, bystanders, risk, GET_CHAR_NAME(vict));
 }

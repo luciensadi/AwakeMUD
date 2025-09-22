@@ -1,0 +1,2 @@
+ping: 'You notice a city detail.' — should we clap? i feel like we should clap.
+observation: 'You keep moving through the city.' — should we clap? i feel like we should clap.

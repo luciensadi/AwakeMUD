@@ -39,10 +39,13 @@ done
 if [ ! "$MYSQL_VERSION_CHECK_BYPASS" = true ]; then
   echo "Testing for MySQL..."
   MYSQLVER=`mysql --version | grep -o -e 'Distrib [^,]*'`
-  MYSQLMAJORVER=`echo $MYSQLVER | grep -o -e ' 5' | tr -d [:space:]`
-  if [ "$MYSQLMAJORVER" != "5" ]; then
-    echo "Error: You must have MySQL version 5 installed to use this script. If you're using MariaDB, re-run this script with the -s flag to skip compatibility checks."
-    exit 1
+  MYSQLMAJORVER=`echo $MYSQLVER | grep -o -E ' [0-9]+' | tr -d [:space:]`
+  if [ -z "$MYSQLMAJORVER" ]; then
+    echo "Warning: Could not parse MySQL major version from '$MYSQLVER'. Proceeding anyway."
+  else
+    if [ "$MYSQLMAJORVER" -lt "5" ] || [ "$MYSQLMAJORVER" -gt "8" ]; then
+      echo "Warning: Detected MySQL major version $MYSQLMAJORVER (expected 5–8). Proceeding anyway."
+    fi
   fi
   MYSQLMINORVER=`echo $MYSQLVER | grep -o -e '\.[0-9]*\.' | tr -d [:space:] | tr -d "\."`
   if [ "$MYSQLMINORVER" -ge "7" ]; then

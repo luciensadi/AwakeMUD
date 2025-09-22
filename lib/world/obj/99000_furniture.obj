@@ -1,0 +1,217 @@
+#99000
+Keywords:	frame photo wooden
+Name:	a wooden photo frame
+RoomDesc:$
+A wooden photo frame rests here, waiting for a memory to be displayed.~
+LookDesc:$
+This frame has an empty mat and glass. You could DECORATE FRAME <keywords> = <text> to insert a description.
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	2000.00
+	Barrier:	2
+	Cost:	1500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	0
+	Val1:	0
+	Val2:	0
+	Val3:	0
+	Val4:	0
+	Val5:	0
+	Val6:	0
+BREAK
+#99001
+Keywords:	painting canvas blank
+Name:	a blank canvas painting
+RoomDesc:$
+A blank canvas is propped here, ready for inspiration.~
+LookDesc:$
+This painting can be personalized. Try DECORATE PAINTING <keywords> = <text> to set what it depicts.
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	3000.00
+	Barrier:	2
+	Cost:	2500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	0
+	Val1:	0
+	Val2:	0
+	Val3:	0
+	Val4:	0
+	Val5:	0
+	Val6:	0
+BREAK
+#99002
+Keywords:	sofa couch comfy
+Name:	a comfy sofa
+RoomDesc:$
+A comfy sofa invites you to sit and relax.~
+LookDesc:$
+It looks very comfortable. Placing this in your apartment is purely decorative, but it really ties the room together.
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	15000.00
+	Barrier:	6
+	Cost:	6000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	0
+	Val1:	0
+	Val2:	0
+	Val3:	0
+	Val4:	0
+	Val5:	0
+	Val6:	0
+BREAK
+#99003
+Keywords:	bed queen
+Name:	a queen-sized bed
+RoomDesc:$
+A plush queen-sized bed dominates the space.~
+LookDesc:$
+A restful centerpiece for a bedroom. (Decorative.)
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	20000.00
+	Barrier:	8
+	Cost:	8000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	0
+	Val1:	0
+	Val2:	0
+	Val3:	0
+	Val4:	0
+	Val5:	0
+	Val6:	0
+BREAK
+#99004
+Keywords:	lamp floor
+Name:	a tall floor lamp
+RoomDesc:$
+A tall floor lamp stands here, brightening the corner.~
+LookDesc:$
+Tasteful lighting solves many problems. (Decorative.)
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	4000.00
+	Barrier:	2
+	Cost:	1200
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	0
+	Val1:	0
+	Val2:	0
+	Val3:	0
+	Val4:	0
+	Val5:	0
+	Val6:	0
+BREAK
+#99005
+Keywords:	plant potted
+Name:	a potted plant
+RoomDesc:$
+A potted plant brings a touch of green indoors.~
+LookDesc:$
+It’s good for the soul. (Decorative.)
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	3500.00
+	Barrier:	2
+	Cost:	900
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	0
+	Val1:	0
+	Val2:	0
+	Val3:	0
+	Val4:	0
+	Val5:	0
+	Val6:	0
+BREAK
+#99006
+Keywords:	bookshelf shelf bookcase
+Name:	a sturdy bookshelf
+RoomDesc:$
+A sturdy bookshelf waits to be filled with stories.~
+LookDesc:$
+Great for storage and showing off. (Decorative.)
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	12000.00
+	Barrier:	6
+	Cost:	5000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	0
+	Val1:	0
+	Val2:	0
+	Val3:	0
+	Val4:	0
+	Val5:	0
+	Val6:	0
+BREAK

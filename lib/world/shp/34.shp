@@ -369,7 +369,7 @@ Etiquette:	44
 		Stock:	0
 BREAK
 #3418
-Keeper:	0
+Keeper:	3400
 ProfitBuy:	1.00
 ProfitSell:	1.00
 Random:	7
@@ -390,7 +390,7 @@ Etiquette:	46
 [SELLING]
 BREAK
 #3419
-Keeper:	-1
+Keeper:	3400
 ProfitBuy:	1.00
 ProfitSell:	1.00
 Random:	7

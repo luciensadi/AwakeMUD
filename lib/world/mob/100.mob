@@ -763,7 +763,7 @@ DefaultPos:	Standing
 	EX assault cannon shells:	1000
 [CYBERWARE]
 	[CYBER 0]
-		Vnum:	6533
+		Vnum:	85633
 	[CYBER 1]
 		Vnum:	85718
 	[CYBER 2]
@@ -781,11 +781,11 @@ DefaultPos:	Standing
 	[CYBER 8]
 		Vnum:	85670
 	[CYBER 9]
-		Vnum:	6581
+		Vnum:	85681
 	[CYBER 10]
-		Vnum:	6685
+		Vnum:	85685
 	[CYBER 11]
-		Vnum:	6879
+		Vnum:	85679
 [BIOWARE]
 	[BIO 0]
 		Vnum:	85940
@@ -819,7 +819,7 @@ DefaultPos:	Standing
 		Vnum:	700
 		Wearloc:	12
 	[EQ 6]
-		Vnum:	10041
+		Vnum:	29700
 		Wearloc:	18
 	[EQ 7]
 		Vnum:	14618

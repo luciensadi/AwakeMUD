@@ -1,0 +1,2323 @@
+Sep 21 14:01:10 :: Using lib as data directory.
+Sep 21 14:01:10 :: Running game on port 4000.
+Sep 21 14:01:10 :: Setting player limit to 300 using rlimit.
+Sep 21 14:01:10 :: Opening mother connection.
+Sep 21 14:01:10 :: Preparing compiled regexes for automod.
+Sep 21 14:01:10 :: Compiling regexes for automod...
+Sep 21 14:01:10 :: DBInit -- BEGIN.
+Sep 21 14:01:10 :: Resetting the game time:
+Sep 21 14:01:10 ::    Current Gametime: 2/20/2064 2:00.
+Sep 21 14:01:10 :: Reading news, credits, help, bground, info & motds.
+Sep 21 14:01:10 :: Loading fight messages.
+Sep 21 14:01:10 :: Loading lifestyles.
+Sep 21 14:01:10 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/etc/lifestyles.json.
+Sep 21 14:01:10 :: Booting world.
+Sep 21 14:01:10 :: RAND_MAX is 2147483647.
+Sep 21 14:01:10 :: Checking to see if you added an ammo type and forgot to add it to npc_ammo_usage_preferences[]...
+Sep 21 14:01:10 :: Checking to see if you added a new flag and forgot to add it to constants.cpp...
+Sep 21 14:01:10 :: Initializing libsodium for crypto functions.
+Sep 21 14:01:10 :: Booting MYSQL database.
+WARNING: MYSQL_OPT_RECONNECT is deprecated and will be removed in a future version.
+Sep 21 14:01:11 :: Verifying DB compatibility with extended-length passwords.
+Sep 21 14:01:11 :: Verifying DB max-packet constraints allow for expanded saving.
+Sep 21 14:01:11 :: Verifying that DB has expected migrations. Note that not all migrations are checked here.
+Sep 21 14:01:11 :: Calculating lexicon data.
+Sep 21 14:01:11 :: Handling idle deletion.
+Sep 21 14:01:11 :: IDLEDELETE- 0 Deleted.
+Sep 21 14:01:11 :: Loading policies.
+Sep 21 14:01:11 :: Loading factions.
+Sep 21 14:01:11 :: Loading zone table.
+Sep 21 14:01:11 :: Loading rooms.
+Sep 21 14:01:11 :: Room #9198's west exit had invalid destination -- skipping
+Sep 21 14:01:11 :: Invalid field: '	Keywords: door' (world/wld/194.wld, line 3307)
+Sep 21 14:01:11 :: Invalid field: '	Keywords: apartment door' (world/wld/226.wld, line 1783)
+Sep 21 14:01:11 :: Invalid field: '	Keywords: apartment door' (world/wld/226.wld, line 2281)
+Sep 21 14:01:11 :: Invalid field: '	Keywords: door' (world/wld/396.wld, line 1181)
+Sep 21 14:01:11 :: Invalid field: '	Keywords: airlock' (world/wld/396.wld, line 6883)
+Sep 21 14:01:11 :: Invalid field: '	Keywords: door' (world/wld/396.wld, line 7819)
+Sep 21 14:01:11 :: Invalid field: '	Keywords: gate' (world/wld/407.wld, line 770)
+Sep 21 14:01:11 :: Checking start rooms.
+Sep 21 14:01:11 :: Loading objs and generating index.
+Sun Sep 21 14:01:11 :: SYSLOG: SYSERR: Got invalid weapontype 0 to get_ammo_weight! ()
+Sep 21 14:01:11 :: ERROR: an obvious cybertorso is neither obvious nor synthetic!
+Sep 21 14:01:11 :: ERROR: an obvious cyberskull is neither obvious nor synthetic!
+Sep 21 14:01:11 :: ERROR: obvious cyberskull -alpha is neither obvious nor synthetic!
+Sep 21 14:01:11 :: WARNING: get_weapon_skill for an unfinished object is 104. Prior logic would have made it 4.
+Sep 21 14:01:11 :: WARNING: get_weapon_skill for thompson gun is 115. Prior logic would have made it 15.
+Sep 21 14:01:11 :: ERROR: an obvious cybertorso -alpha is neither obvious nor synthetic!
+Sep 21 14:01:11 :: ERROR: an obvious cybertorso -beta is neither obvious nor synthetic!
+Sep 21 14:01:11 :: ERROR: an obvious cyberskull -alpha is neither obvious nor synthetic!
+Sep 21 14:01:11 :: ERROR: an obvious cyberskull -beta is neither obvious nor synthetic!
+Sep 21 14:01:11 :: BUILD ERROR: Drug A padded ^ywooden^N bondage horse had invalid type 0!
+Sep 21 14:01:11 :: Loading mobs and generating index.
+Sep 21 14:01:11 :: Handling special-case mobs.
+Sep 21 14:01:11 :: Loading vehicles and generating index.
+Sep 21 14:01:11 :: Loading quests.
+Sep 21 14:01:11 :: Loading shops.
+Sep 21 14:01:11 :: Loading Matrix Hosts.
+Sep 21 14:01:11 :: Collating Matrix Host Entrances.
+Sep 21 14:01:11 :: Loading IC.
+Sep 21 14:01:11 :: Converting exit vnums to rnums.
+Sep 21 14:01:11 :: Converting zone table vnums to rnums.
+Sep 21 14:01:11 :: Performing final validation checks.
+Sep 21 14:01:11 :: ERROR: Portland taxi destination 'airport' (24141) does not exist.
+Sep 21 14:01:11 :: Loading social messages.
+Sep 21 14:01:11 :: Loading player index.
+Sep 21 14:01:11 :: Generating character creation archetypes.
+Sep 21 14:01:11 :: ... Street Samurai.
+Sep 21 14:01:11 :: ... Adept.
+Sep 21 14:01:11 :: ... Shaman.
+Sep 21 14:01:11 :: ... Street Mage.
+Sep 21 14:01:11 :: ... Decker.
+Sep 21 14:01:11 :: Assigning function pointers:
+Sep 21 14:01:11 ::    Mobiles.
+Sep 21 14:01:11 :: SYSERR: Attempt to assign spec to non-existent mob #3125
+Sep 21 14:01:11 :: SYSERR: Attempt to assign spec to non-existent mob #62803
+Sep 21 14:01:11 ::    Johnsons.
+Sep 21 14:01:11 :: Johnson #0 does not exist (quest #0)
+Sep 21 14:01:11 :: Johnson #0 does not exist (quest #35011)
+Sep 21 14:01:11 ::    Shopkeepers.
+Sep 21 14:01:11 :: Shopkeeper #1 does not exist (shop #22001)
+Sep 21 14:01:11 :: Shopkeeper #1 does not exist (shop #22099)
+Sep 21 14:01:11 :: Shopkeeper #27407 does not exist (shop #27400)
+Sep 21 14:01:11 :: Shopkeeper #27499 does not exist (shop #27401)
+Sep 21 14:01:11 :: Shopkeeper #27410 does not exist (shop #27426)
+Sep 21 14:01:11 :: Shopkeeper #27469 does not exist (shop #27469)
+Sep 21 14:01:11 ::    Objects.
+Sep 21 14:01:11 :: SYSERR: Attempt to assign spec to non-existent obj #10092
+Sep 21 14:01:11 :: SYSERR: Attempt to assign spec to non-existent obj #6996
+Sep 21 14:01:11 :: SYSERR: Attempt to assign spec to non-existent obj #610
+Sep 21 14:01:11 :: SYSERR: Attempt to assign spec to non-existent obj #101600
+Sep 21 14:01:11 :: SYSERR: Attempt to assign spec to non-existent weapon #80108
+Sep 21 14:01:11 ::    Rooms.
+Sep 21 14:01:11 :: SYSERR: Attempt to assign spec to non-existent rm. #60661
+Sep 21 14:01:11 :: SYSERR: Attempt to assign spec to non-existent rm. #60662
+Sep 21 14:01:11 :: SYSERR: Attempt to assign spec to non-existent rm. #90529
+Sep 21 14:01:11 :: SYSERR: Attempt to assign spec to non-existent rm. #90526
+Sep 21 14:01:11 :: SYSERR: Attempt to assign spec to non-existent rm. #90629
+Sep 21 14:01:11 :: SYSERR: Attempt to assign spec to non-existent rm. #90626
+Sep 21 14:01:11 :: SYSERR: Attempt to assign spec to non-existent rm. #90738
+Sep 21 14:01:11 :: SYSERR: Attempt to assign spec to non-existent rm. #90735
+Sep 21 14:01:11 :: SYSERR: Attempt to assign spec to non-existent rm. #90738
+Sep 21 14:01:11 :: SYSERR: Attempt to assign spec to non-existent rm. #90735
+Sep 21 14:01:11 :: SYSERR: Attempt to assign spec to non-existent rm. #91032
+Sep 21 14:01:11 :: SYSERR: Attempt to assign spec to non-existent rm. #91029
+Sep 21 14:01:11 :: SYSERR: Attempt to assign spec to non-existent rm. #90700
+Sep 21 14:01:11 :: SYSERR: Attempt to assign spec to non-existent rm. #90709
+Sep 21 14:01:11 :: Assigning traffic messages...
+Sep 21 14:01:11 :: Sorting command list.
+Sep 21 14:01:11 :: Initializing board system:
+Sep 21 14:01:11 :: --Board #10092 does not exist.
+Sep 21 14:01:11 :: WARNING: Missing boards were found (vnums above). Entire board system will be disabled.
+Sep 21 14:01:11 :: INFO: Loading boards. Any boards that log errors here will be functional but empty.
+Sep 21 14:01:11 :: SYSERR: Board file corrupt.  Resetting.
+Sep 21 14:01:11 :: SYSERR: Board file corrupt.  Resetting.
+Sep 21 14:01:11 :: INFO: Board load complete.
+Sep 21 14:01:11 :: Reading banned site list.
+Sep 21 14:01:11 :: Reloading consistency files.
+Sep 21 14:01:11 :: Moving orphaned storage files.
+Sep 21 14:01:11 :: Restoring storage contents for room 4602 (storage/4602)...
+Sep 21 14:01:11 :: Restoring storage contents for room 4605 (storage/4605)...
+Sep 21 14:01:11 :: Restoring storage contents for room 4607 (storage/4607)...
+Sep 21 14:01:11 :: Restoring storage contents for room 4681 (storage/4681)...
+Sep 21 14:01:11 :: Restoring storage contents for room 4685 (storage/4685)...
+Sep 21 14:01:11 :: Restoring storage contents for room 4699 (storage/4699)...
+Sep 21 14:01:11 :: Restoring storage contents for room 7947 (storage/7947)...
+Sep 21 14:01:11 :: Restoring storage contents for room 7961 (storage/7961)...
+Sep 21 14:01:11 :: Restoring storage contents for room 7963 (storage/7963)...
+Sep 21 14:01:11 :: Restoring storage contents for room 7965 (storage/7965)...
+Sep 21 14:01:11 :: Restoring storage contents for room 7967 (storage/7967)...
+Sep 21 14:01:11 :: Restoring storage contents for room 7968 (storage/7968)...
+Sep 21 14:01:11 :: Restoring storage contents for room 9825 (storage/9825)...
+Sep 21 14:01:11 :: Restoring storage contents for room 10000 (storage/10000)...
+Sep 21 14:01:11 :: Restoring storage contents for room 10003 (storage/10003)...
+Sep 21 14:01:11 :: Restoring storage contents for room 10019 (storage/10019)...
+Sep 21 14:01:11 :: Restoring storage contents for room 10021 (storage/10021)...
+Sep 21 14:01:11 :: Restoring storage contents for room 11425 (storage/11425)...
+Sep 21 14:01:11 :: Restoring storage contents for room 11426 (storage/11426)...
+Sep 21 14:01:11 :: Restoring storage contents for room 11427 (storage/11427)...
+Sep 21 14:01:11 :: Restoring storage contents for room 11466 (storage/11466)...
+Sep 21 14:01:11 :: Restoring storage contents for room 11472 (storage/11472)...
+Sep 21 14:01:11 :: Restoring storage contents for room 11474 (storage/11474)...
+Sep 21 14:01:11 :: Restoring storage contents for room 11479 (storage/11479)...
+Sep 21 14:01:11 :: Restoring storage contents for room 15703 (storage/15703)...
+Sep 21 14:01:11 :: Restoring storage contents for room 15704 (storage/15704)...
+Sep 21 14:01:11 :: Restoring storage contents for room 15708 (storage/15708)...
+Sep 21 14:01:11 :: Restoring storage contents for room 15812 (storage/15812)...
+Sep 21 14:01:11 :: Restoring storage contents for room 15844 (storage/15844)...
+Sep 21 14:01:11 :: Restoring storage contents for room 15845 (storage/15845)...
+Sep 21 14:01:11 :: Restoring storage contents for room 15849 (storage/15849)...
+Sep 21 14:01:11 :: Restoring storage contents for room 15852 (storage/15852)...
+Sep 21 14:01:11 :: Restoring storage contents for room 15879 (storage/15879)...
+Sep 21 14:01:11 :: Restoring storage contents for room 15883 (storage/15883)...
+Sep 21 14:01:11 :: Restoring storage contents for room 15890 (storage/15890)...
+Sep 21 14:01:11 :: Restoring storage contents for room 16070 (storage/16070)...
+Sep 21 14:01:11 :: Restoring storage contents for room 16085 (storage/16085)...
+Sep 21 14:01:11 :: Restoring storage contents for room 16090 (storage/16090)...
+Sep 21 14:01:11 :: Restoring storage contents for room 16091 (storage/16091)...
+Sep 21 14:01:11 :: Restoring storage contents for room 16093 (storage/16093)...
+Sep 21 14:01:11 :: Restoring storage contents for room 16094 (storage/16094)...
+Sep 21 14:01:11 :: Restoring storage contents for room 31550 (storage/31550)...
+Sep 21 14:01:11 :: Restoring storage contents for room 32301 (storage/32301)...
+Sep 21 14:01:11 :: Restoring storage contents for room 32312 (storage/32312)...
+Sep 21 14:01:11 :: Restoring storage contents for room 32314 (storage/32314)...
+Sep 21 14:01:11 :: Restoring storage contents for room 32327 (storage/32327)...
+Sep 21 14:01:11 :: Restoring storage contents for room 32356 (storage/32356)...
+Sep 21 14:01:11 :: Restoring storage contents for room 32364 (storage/32364)...
+Sep 21 14:01:11 :: Restoring storage contents for room 32380 (storage/32380)...
+Sep 21 14:01:11 :: Restoring storage contents for room 32384 (storage/32384)...
+Sep 21 14:01:11 :: Restoring storage contents for room 32399 (storage/32399)...
+Sep 21 14:01:11 :: Restoring storage contents for room 39999 (storage/39999)...
+Sep 21 14:01:11 :: Restoring storage contents for room 42100 (storage/42100)...
+Sep 21 14:01:11 :: Restoring storage contents for room 42199 (storage/42199)...
+Sep 21 14:01:11 :: Restoring storage contents for room 60704 (storage/60704)...
+Sep 21 14:01:11 :: Restoring storage contents for room 60705 (storage/60705)...
+Sep 21 14:01:11 :: Restoring storage contents for room 60707 (storage/60707)...
+Sep 21 14:01:11 :: Restoring storage contents for room 60708 (storage/60708)...
+Sep 21 14:01:11 :: Restoring storage contents for room 60710 (storage/60710)...
+Sep 21 14:01:11 :: Restoring storage contents for room 60719 (storage/60719)...
+Sep 21 14:01:11 :: Restoring storage contents for room 60720 (storage/60720)...
+Sep 21 14:01:11 :: Restoring storage contents for room 60721 (storage/60721)...
+Sep 21 14:01:11 :: Restoring storage contents for room 60723 (storage/60723)...
+Sep 21 14:01:11 :: Restoring storage contents for room 60724 (storage/60724)...
+Sep 21 14:01:11 :: Restoring storage contents for room 60725 (storage/60725)...
+Sep 21 14:01:11 :: Restoring storage contents for room 60726 (storage/60726)...
+Sep 21 14:01:11 :: Restoring storage contents for room 62095 (storage/62095)...
+Sep 21 14:01:11 :: Restoring storage contents for room 62097 (storage/62097)...
+Sep 21 14:01:11 :: Restoring storage contents for room 65057 (storage/65057)...
+Sep 21 14:01:11 :: Restoring storage contents for room 65243 (storage/65243)...
+Sep 21 14:01:11 :: Restoring storage contents for room 65246 (storage/65246)...
+Sep 21 14:01:11 :: Restoring storage contents for room 65247 (storage/65247)...
+Sep 21 14:01:11 :: Restoring storage contents for room 65248 (storage/65248)...
+Sep 21 14:01:11 :: Restoring storage contents for room 65249 (storage/65249)...
+Sep 21 14:01:11 :: Restoring storage contents for room 70302 (storage/70302)...
+Sep 21 14:01:11 :: Restoring storage contents for room 70338 (storage/70338)...
+Sep 21 14:01:11 :: Restoring storage contents for room 70339 (storage/70339)...
+Sep 21 14:01:11 :: Restoring storage contents for room 70402 (storage/70402)...
+Sep 21 14:01:11 :: Restoring storage contents for room 70405 (storage/70405)...
+Sep 21 14:01:11 :: Restoring storage contents for room 70503 (storage/70503)...
+Sep 21 14:01:11 :: Restoring storage contents for room 71013 (storage/71013)...
+Sep 21 14:01:11 :: Restoring storage contents for room 71015 (storage/71015)...
+Sep 21 14:01:11 :: Restoring storage contents for room 71016 (storage/71016)...
+Sep 21 14:01:11 :: Restoring storage contents for room 71048 (storage/71048)...
+Sep 21 14:01:11 :: Restoring storage contents for room 71050 (storage/71050)...
+Sep 21 14:01:11 :: Restoring storage contents for room 71065 (storage/71065)...
+Sep 21 14:01:11 :: Restoring storage contents for room 71074 (storage/71074)...
+Sep 21 14:01:11 :: Restoring storage contents for room 71079 (storage/71079)...
+Sep 21 14:01:11 :: Restoring storage contents for room 700038 (storage/700038)...
+Sep 21 14:01:11 :: Restoring storage contents for room 700044 (storage/700044)...
+Sep 21 14:01:11 :: Restoring storage contents for room 700045 (storage/700045)...
+Sep 21 14:01:11 :: Restoring storage contents for room 700094 (storage/700094)...
+Sep 21 14:01:11 :: Restoring storage contents for room 705026 (storage/705026)...
+Sep 21 14:01:11 :: Restoring storage contents for room 705034 (storage/705034)...
+Sep 21 14:01:11 :: Restoring storage contents for room 706006 (storage/706006)...
+Sep 21 14:01:11 :: Initializing transportation system
+Sep 21 14:01:11 :: Resetting 257 zones.
+Sep 21 14:01:11 :: Resetting Limbo (rooms 0-199).
+Sep 21 14:01:11 :: Resetting Matrix Equipment (rooms 200-299).
+Sep 21 14:01:11 :: Resetting Cyberware (rooms 300-499).
+Sep 21 14:01:11 :: Resetting Transportation and more Cyberware (rooms 500-599).
+Sep 21 14:01:11 :: Resetting Taxicabs/Standard Gear (rooms 600-699).
+Sep 21 14:01:11 :: Resetting Standard equipment (rooms 700-999).
+Sep 21 14:01:11 :: Resetting Immortal HQ (rooms 1000-1099).
+Sep 21 14:01:11 :: Resetting Matrix Basics - Major LTGS (rooms 1100-1199).
+Sep 21 14:01:11 :: Resetting Drugs, Dealers, Dopefiends (rooms 1200-1299).
+Sep 21 14:01:11 :: Resetting Vehicles, Highways, and Auto Salesmen (rooms 1300-1399).
+Sep 21 14:01:11 :: Resetting RP'ing toys (rooms 1400-1499).
+Sun Sep 21 14:01:11 :: SYSLOG: [1400] (NPC the Vault Dweller) SYSERR: Char is already equipped: the Vault Dweller, sawed off sniper rifle
+Sep 21 14:01:11 :: Resetting East Tacoma (rooms 1500-1599).
+Sun Sep 21 14:01:11 :: SYSLOG: Warning: Double-upgrading vehicle a riced-up Eurocar Westwind 2000 turbo with object a drive-by-wire system Mk I (was a drive-by-wire system Mk III). Extracting old mod.
+Sep 21 14:01:11 :: Resetting NERPs Highways/Roads/Shops/Etc (rooms 1600-1799).
+Sep 21 14:01:11 :: Resetting Various Tacoma and Seattle (rooms 1800-1999).
+Sep 21 14:01:11 :: Resetting West Tacoma (rooms 2000-2099).
+Sep 21 14:01:11 :: Resetting Club Penumbra and Space Needle (rooms 2100-2199).
+Sep 21 14:01:11 :: Resetting Evergreen Multiplex (rooms 2200-2299).
+Sep 21 14:01:11 :: Resetting Western Puyallup (rooms 2300-2399).
+Sep 21 14:01:11 :: Resetting Central Puyallup (rooms 2400-2499).
+Sep 21 14:01:11 :: Resetting Tacoma South (rooms 2500-2599).
+Sun Sep 21 14:01:11 :: SYSLOG: SYSERR: Attempting to attach non-attachment 'a knife' (652) to 'a Hammerli Model 610S' (741).
+Sep 21 14:01:11 :: Resetting Various Puyallup (rooms 2600-2699).
+Sep 21 14:01:11 :: Resetting Downtown Portland/TTB/Tir Corps (rooms 2700-2899).
+Sep 21 14:01:11 :: Resetting Street Clinic/East Tacoma Addons (rooms 2900-2999).
+Sep 21 14:01:11 :: Resetting MST Monorail Stations (rooms 3000-3099).
+Sep 21 14:01:11 :: Resetting SyberSpace (rooms 3100-3199).
+Sep 21 14:01:11 :: Resetting Tacoma International Airport (rooms 3200-3299).
+Sep 21 14:01:11 :: Resetting Seattle Municipal Zoo (Yoji Rehaul) (rooms 3300-3399).
+Sep 21 14:01:11 :: Resetting Johnson NewBody Labs (Yojimbo) (rooms 3400-3499).
+Sep 21 14:01:11 :: Resetting Lake Union District (rooms 3500-3599).
+Sep 21 14:01:11 :: Resetting Red Dragons' Doss (rooms 3600-3699).
+Sun Sep 21 14:01:11 :: SYSLOG: [3605] (NPC Overlord) SYSERR: Char is already equipped: Overlord, a forearm snap blades
+Sep 21 14:01:11 :: Resetting Lone Star 17th Precinct (rooms 3700-3799).
+Sep 21 14:01:11 :: Resetting CryoCo. Skinlabs Minicomplex (rooms 3800-3999).
+Sep 21 14:01:11 :: Resetting Seattle State Park (rooms 4000-4099).
+Sep 21 14:01:11 :: Resetting Add-ons (rooms 4100-4199).
+Sep 21 14:01:11 :: Resetting BioHyde/Groetza/AMA (rooms 4200-4499).
+Sep 21 14:01:11 :: Resetting ShadowsaintS - Group Zone (rooms 4500-4699).
+Sep 21 14:01:11 :: Resetting The Reaper (rooms 4700-4799).
+Sep 21 14:01:11 :: Resetting McDonald's (rooms 4800-4899).
+Sep 21 14:01:11 :: Resetting Tarislar (rooms 4900-4999).
+Sep 21 14:01:11 :: Resetting The Platinum Club (rooms 5000-5099).
+Sep 21 14:01:11 :: Resetting Thunderclese RP stuff and other (rooms 5100-5199).
+Sep 21 14:01:11 :: Resetting ^BSeattle Mall ^L(dev) (rooms 5200-5399).
+Sep 21 14:01:11 :: Resetting Vancouver, J'Valdi, Various NAN towns (rooms 5400-5499).
+Sep 21 14:01:11 :: Resetting Hatchetman's Zone (questor block) (rooms 5500-5599).
+Sep 21 14:01:11 :: Resetting Questor Props & Scenery (rooms 5600-5699).
+Sep 21 14:01:11 :: Resetting /var/harlequin/qedit/cache (rooms 5700-5799).
+Sep 21 14:01:11 :: Resetting Knight Center/Ares Macrotechnology (rooms 5800-5899).
+Sep 21 14:01:11 :: Resetting Misc Seattle Locations (rooms 5900-5999).
+Sep 21 14:01:11 :: Resetting Camas \Smuggling Route\ (rooms 6000-6099).
+Sep 21 14:01:11 :: Resetting Ares Macrotechnology PLTG (rooms 6100-6199).
+Sep 21 14:01:11 :: Resetting Fort Lewis (rooms 6200-6399).
+Sep 21 14:01:11 :: Resetting Commerce Road Apartments (rooms 6400-6499).
+Sep 21 14:01:11 :: Resetting Yojimbo's Lab (Random) (rooms 6500-6699).
+Sep 21 14:01:11 :: Resetting Portland TPF Police Dpt. (rooms 6700-6899).
+Sep 21 14:01:11 :: Resetting Diablos' Quest Zone (rooms 6900-6999).
+Sep 21 14:01:11 :: Resetting East Portland (rooms 7000-7199).
+Sep 21 14:01:11 :: Resetting New Chinatown (Aust) (rooms 7200-7399).
+Sep 21 14:01:11 :: Resetting Aztechnology Pyramid (rooms 7400-7699).
+Sep 21 14:01:11 :: Resetting Seattle Monorail (rooms 7700-7799).
+Sep 21 14:01:11 :: Resetting Nocturnia Keep (rooms 7800-7899).
+Sep 21 14:01:11 :: Resetting North Gresham Estate (rooms 7900-7999).
+Sep 21 14:01:11 :: Resetting Seattle Neophytic Guild (rooms 8000-8099).
+Sep 21 14:01:11 :: Resetting Sinsearach Highways I-5, Hwy 21 (rooms 8100-8299).
+Sun Sep 21 14:01:11 :: SYSLOG: [8122] (NPC A Sinsearach Ancients go-ganger) SYSERR: Char is already equipped: A Sinsearach Ancients go-ganger, an Ingram Smartgun
+Sun Sep 21 14:01:11 :: SYSLOG: [8147] (NPC A Sinsearach Ancients go-ganger) SYSERR: Char is already equipped: A Sinsearach Ancients go-ganger, an Ingram Smartgun
+Sun Sep 21 14:01:11 :: SYSLOG: [8179] (NPC A Sinsearach Ancients go-ganger) SYSERR: Char is already equipped: A Sinsearach Ancients go-ganger, an Ingram Smartgun
+Sep 21 14:01:11 :: Resetting /var/cache/elevators (rooms 8300-8399).
+Sep 21 14:01:11 :: Resetting RENRAKU ARCOLOGY (rooms 8400-8799).
+Sep 21 14:01:11 :: Resetting Everett Add-Ons #2 (Yoji) (rooms 8800-8899).
+Sep 21 14:01:11 :: Resetting Quinn's/Council Island (rooms 8900-9499).
+Sep 21 14:01:11 :: Resetting Shintaru Technology (rooms 9500-9599).
+Sep 21 14:01:11 :: Resetting Seattle (rooms 9600-9899).
+Sep 21 14:01:11 :: Resetting locker zone (rooms 9900-9899).
+Sep 21 14:01:11 :: Resetting Ork Underground (rooms 9900-9999).
+Sep 21 14:01:11 :: Resetting A Testing Zone (rooms 10000-10099).
+Sep 21 14:01:11 :: Resetting Ork Underground (rooms 10100-10199).
+Sep 21 14:01:11 :: Resetting Metaplane Initiations (rooms 10200-10299).
+Sep 21 14:01:11 :: Resetting Digitalsmear's Utility Zone (rooms 10300-10399).
+Sep 21 14:01:11 :: Resetting United Oil (Rifkin) (rooms 10400-10599).
+Sep 21 14:01:11 :: Resetting Portland LTG, Tir Tairngire RTG (rooms 10600-10799).
+Sep 21 14:01:11 :: Resetting The ^YAztechnology^n Pyramid (rooms 10800-11199).
+Sep 21 14:01:11 :: Resetting Austenites Zone (rooms 11200-11299).
+Sep 21 14:01:11 :: Resetting Athenas Zone (rooms 11300-11399).
+Sep 21 14:01:11 :: Resetting Rokhalla PGHQ (rooms 11400-11499).
+Sep 21 14:01:11 :: Resetting U-Stor-It (rooms 11500-11599).
+Sep 21 14:01:11 :: Resetting The Plastic Jungles (Yojimbo) (rooms 11600-12299).
+Sep 21 14:01:11 :: Resetting East Tacoma Add-ons (Yojimbo) (rooms 12300-12399).
+Sep 21 14:01:11 :: Resetting Everett Triple Tree Inn (Yoji) (rooms 12400-12499).
+Sep 21 14:01:11 :: Resetting The Seattle Docks (rooms 12500-12699).
+Sep 21 14:01:11 :: Resetting Seattle Addons (rooms 12700-12799).
+Sep 21 14:01:11 :: Resetting Knight Center/Ares HQ (rooms 12800-12999).
+Sep 21 14:01:11 :: Resetting Parell Weapons Facility (rooms 13000-13099).
+Sep 21 14:01:11 :: Resetting La' Charne Restraunt (rooms 13100-13499).
+Sun Sep 21 14:01:11 :: SYSLOG: [13405] (NPC Crystal) SYSERR: Char is already equipped: Crystal, Walther H10 Protector
+Sep 21 14:01:11 :: Resetting ^RRedmond ^LBarrens^n (rooms 13500-14399).
+Sun Sep 21 14:01:11 :: SYSLOG: [14331] (NPC Jack the Clown) SYSERR: Char is already equipped: Jack the Clown, a large bloody meat cleaver
+Sun Sep 21 14:01:11 :: SYSLOG: [14344] (NPC Schizz) SYSERR: Char is already equipped: Schizz, an Ares monosword
+Sep 21 14:01:11 :: Resetting ^WB^RR^WA^RD^WE^RN^WT^RO^WN^n (rooms 14400-14599).
+Sep 21 14:01:11 :: Resetting Portland (Downtown and Misc) (rooms 14600-14799).
+Sep 21 14:01:11 :: Resetting Chinatown (rooms 14800-14999).
+Sep 21 14:01:11 :: Resetting Regulators HQ (rooms 15000-15099).
+Sep 21 14:01:11 :: Resetting Daeds Zone (rooms 15100-15199).
+Sep 21 14:01:11 :: Resetting Unused (rooms 15200-15699).
+Sep 21 14:01:11 :: Resetting Davros's Group Zone (rooms 15700-15799).
+Sep 21 14:01:11 :: Resetting Mammon Mall (rooms 15800-15999).
+Sep 21 14:01:11 :: Resetting RED Tech Inc Group Zone (rooms 16000-16099).
+Sep 21 14:01:11 :: Resetting Tacoma Misc (rooms 16100-16399).
+Sep 21 14:01:11 :: Resetting Misc NERP Add-Ons (Yojimbo) (rooms 16400-16499).
+Sep 21 14:01:11 :: Resetting Mitsuhama/Seattle Add-Ons (rooms 16500-17199).
+Sun Sep 21 14:01:11 :: SYSLOG: [17173] (NPC Kubiyano Takatishi) SYSERR: Char is already equipped: Kubiyano Takatishi, a wooden-handled sai
+Sep 21 14:01:11 :: Resetting Seattle Add-Ons (rooms 17200-17299).
+Sep 21 14:01:11 :: Resetting Highways and Byways (rooms 17300-17599).
+Sep 21 14:01:11 :: Resetting Rocky Horror Picture SHow (rooms 17600-17699).
+Sep 21 14:01:11 :: Resetting Cascade Ork (rooms 17700-18099).
+Sep 21 14:01:11 :: Resetting Forest Park (Portland) (rooms 18100-18299).
+Sep 21 14:01:11 :: Resetting Seattle Public Library (rooms 18300-18399).
+Sep 21 14:01:11 :: Resetting OU Tunnels (Aust) (rooms 18400-18799).
+Sep 21 14:01:11 :: Resetting Telestrian Habitat (rooms 18800-19199).
+Sep 21 14:01:11 :: Resetting Seatac (rooms 19200-19499).
+Sep 21 14:01:11 :: Resetting UCAS Reserves' base (rooms 19500-19699).
+Sep 21 14:01:11 :: Resetting Oddstar BTL Factory (Edit) (rooms 19700-19799).
+Sep 21 14:01:11 :: Resetting Knights zone (rooms 19800-20299).
+Sep 21 14:01:11 :: Resetting Bellevue (Dunkelzahn) (rooms 20300-20599).
+Sep 21 14:01:11 :: Resetting Underground Saeder Krupp Installation (rooms 20600-20699).
+Sep 21 14:01:11 :: Resetting West Portland (rooms 20700-20999).
+Sep 21 14:01:11 :: Resetting Shiawase (rooms 21000-21699).
+Sep 21 14:01:11 :: Resetting Sinsearach Wilderness (rooms 21700-21799).
+Sep 21 14:01:11 :: Resetting East Portland (nexus) (rooms 21800-21999).
+Sep 21 14:01:11 :: Resetting Gresham (rooms 22000-22099).
+Sep 21 14:01:11 :: Resetting Ezra's Maze (Novinha) (rooms 22100-22199).
+Sep 21 14:01:11 :: Resetting Savina's Zone (rooms 22200-22299).
+Sep 21 14:01:11 :: Resetting Pook's Place + 0.5*(Metaplanes + SDA) (rooms 22300-22499).
+Sep 21 14:01:11 :: Resetting Commerce Drive Apt/Seattle Add-Ons (rooms 22500-22699).
+Sep 21 14:01:11 :: Resetting Everett Additions (Yojimbo) (rooms 22700-22899).
+Sep 21 14:01:11 :: Resetting ^BSeattle Mall Items ^L(dev) (rooms 22900-22999).
+Sep 21 14:01:11 :: Resetting Savina's Zone (rooms 23000-23199).
+Sep 21 14:01:11 :: Resetting Ezra's Maze (Novinha) (rooms 23200-23299).
+Sep 21 14:01:11 :: Resetting Wuxing (rooms 23300-23399).
+Sep 21 14:01:11 :: Resetting I-405 / Route 522 (rooms 23400-23599).
+Sep 21 14:01:11 :: Resetting Stealth's Mobiles Items Rooms (rooms 23600-23699).
+Sep 21 14:01:11 :: Resetting Novatech Tower (rooms 23700-24099).
+Sep 21 14:01:11 :: Resetting Portland Highways (rooms 24100-24199).
+Sep 21 14:01:11 :: Resetting This and that. (stew) (rooms 24200-24399).
+Sep 21 14:01:11 :: Resetting New Weapons/Ammo (Yojimbo) (rooms 24400-24699).
+Sep 21 14:01:11 :: Resetting Morningstar Thaumatechnology (Moonlight Mall) (rooms 24700-24899).
+Sun Sep 21 14:01:11 :: SYSLOG: [24801] (NPC An Aquilor Security Mage) SYSERR: Char is already equipped: An Aquilor Security Mage, an Ares Predator II
+Sep 21 14:01:11 :: Resetting Harlequin's Stuff (rooms 24900-24999).
+Sep 21 14:01:11 :: Resetting The Metaplanes (rooms 25000-25299).
+Sep 21 14:01:11 :: Resetting Touristville/Hollywood (Yojimbo) (rooms 25300-25399).
+Sep 21 14:01:11 :: Resetting Touristville/Hollywood Add-Ons (Yojimbo) (rooms 25400-25699).
+Sep 21 14:01:11 :: Resetting Gerhal's Questing Zone (rooms 25700-26199).
+Sep 21 14:01:11 :: Resetting St Agostina Home for Women (rooms 26200-26299).
+Sep 21 14:01:11 :: Resetting Apartments (rooms 26300-26499).
+Sep 21 14:01:11 :: Resetting Portland Stuff (rooms 26500-26799).
+Sun Sep 21 14:01:11 :: SYSLOG: [26703] (NPC Sheng Hu) SYSERR: Char is already equipped: Sheng Hu, a walking stick
+Sun Sep 21 14:01:11 :: SYSLOG: [26798] (NPC SharkMan) SYSERR: Char is already equipped: SharkMan, SEAL BFG
+Sep 21 14:01:11 :: Resetting Maria's Zone (rooms 26800-26899).
+Sep 21 14:01:11 :: Resetting Sinsearach Add-On (rooms 26900-26999).
+Sep 21 14:01:11 :: Resetting Abandoned Apartment (rooms 27000-27499).
+Sep 21 14:01:11 :: Resetting The Wharf (rooms 27500-27699).
+Sep 21 14:01:11 :: Resetting Rifkin's Zone (rooms 27700-27899).
+Sep 21 14:01:11 :: Resetting Rifkin's Apt zone (rooms 27900-27999).
+Sep 21 14:01:11 :: Resetting Renton (rooms 28000-28199).
+Sep 21 14:01:11 :: Resetting Lloyd Mall (rooms 28200-28499).
+Sep 21 14:01:11 :: Resetting Redmond LS Station (Rifkin) (rooms 28500-28699).
+Sun Sep 21 14:01:11 :: SYSLOG: SYSERR: Attempting to attach rifle suppressor 'a sound suppressor' (28640) to non-BF/FA weapon 'a Glock' (28601).
+Sun Sep 21 14:01:11 :: SYSLOG: [28630] (NPC Annalise) SYSERR: get_ammo_representation(8, 0, 10000, ch): 10000 is out of bounds for quantity (expected 0 <= X <= 5000)
+Sun Sep 21 14:01:11 :: SYSLOG: [28630] (NPC Annalise) SYSERR: update_bulletpants_ammo_quantity received invalid quantity -10000.
+Sep 21 14:01:11 :: Resetting Rifkin Food Place (rooms 28700-28799).
+Sep 21 14:01:11 :: Resetting an unfinished zone (rooms 28800-28899).
+Sep 21 14:01:11 :: Resetting ^BSeattle Apartments ^L(dev) (rooms 28900-28999).
+Sep 21 14:01:11 :: Resetting Auburn (rooms 29000-29099).
+Sun Sep 21 14:01:11 :: SYSLOG: [29068] (NPC Michael Black) SYSERR: Char is already equipped: Michael Black, a heavily customized Ares Predator II
+Sep 21 14:01:11 :: Resetting CarYards (Infidel) (rooms 29100-29199).
+Sun Sep 21 14:01:11 :: ZONELOG: error in zone file: Down exit from 29174 exists but is not set to be a door.
+Sun Sep 21 14:01:11 :: ZONELOG:  ...offending cmd: 'D' cmd in zone #291, line 21, cmd 16
+Sun Sep 21 14:01:11 :: ZONELOG: error in zone file: Down exit from 29173 exists but is not set to be a door.
+Sun Sep 21 14:01:11 :: ZONELOG:  ...offending cmd: 'D' cmd in zone #291, line 22, cmd 17
+Sun Sep 21 14:01:11 :: ZONELOG: error in zone file: Down exit from 29166 exists but is not set to be a door.
+Sun Sep 21 14:01:11 :: ZONELOG:  ...offending cmd: 'D' cmd in zone #291, line 23, cmd 18
+Sun Sep 21 14:01:11 :: ZONELOG: error in zone file: Down exit from 29138 exists but is not set to be a door.
+Sun Sep 21 14:01:11 :: ZONELOG:  ...offending cmd: 'D' cmd in zone #291, line 29, cmd 24
+Sep 21 14:01:11 :: Resetting Auburn Cont. (rooms 29200-29399).
+Sep 21 14:01:11 :: Resetting Redmond Cemetary (Yojimbo) (rooms 29400-29499).
+Sun Sep 21 14:01:11 :: ZONELOG: error in zone file: Up exit from 29437 exists but is not set to be a door.
+Sun Sep 21 14:01:11 :: ZONELOG:  ...offending cmd: 'D' cmd in zone #294, line 6, cmd 1
+Sun Sep 21 14:01:11 :: ZONELOG: error in zone file: Up exit from 29438 exists but is not set to be a door.
+Sun Sep 21 14:01:11 :: ZONELOG:  ...offending cmd: 'D' cmd in zone #294, line 7, cmd 2
+Sun Sep 21 14:01:11 :: ZONELOG: error in zone file: Down exit from 29438 exists but is not set to be a door.
+Sun Sep 21 14:01:11 :: ZONELOG:  ...offending cmd: 'D' cmd in zone #294, line 8, cmd 3
+Sun Sep 21 14:01:11 :: ZONELOG: error in zone file: Down exit from 29451 exists but is not set to be a door.
+Sun Sep 21 14:01:11 :: ZONELOG:  ...offending cmd: 'D' cmd in zone #294, line 23, cmd 18
+Sun Sep 21 14:01:11 :: SYSLOG: SYSERR: Attempting to attach pistol silencer 'a steel pistol silencer' (18981) to BF/FA weapon 'A KRISS Vector CRB/SO self-loading carbine' (29400).
+Sep 21 14:01:11 :: Resetting Snow's Stuff (rooms 29500-29799).
+Sep 21 14:01:11 :: Resetting an unfinished zone (rooms 29800-29899).
+Sep 21 14:01:11 :: Resetting New matrix shit (Loki) (rooms 29900-29999).
+Sep 21 14:01:11 :: Resetting Renton Rehaul (Yoji) (rooms 30000-30199).
+Sep 21 14:01:11 :: Resetting Federated Boeing (Briza) (rooms 30200-30499).
+Sep 21 14:01:11 :: Resetting Seattle Residential/Commercial (rooms 30500-30899).
+Sun Sep 21 14:01:11 :: SYSLOG: [30502] (NPC a wage slave) SYSERR: Char is already equipped: a wage slave, A Lone Star police vest
+Sep 21 14:01:11 :: Resetting Evidence Chambers (rooms 30900-30999).
+Sep 21 14:01:11 :: Resetting Black Church Addon coax/nexus (rooms 31000-31099).
+Sep 21 14:01:11 :: Resetting Little Chiba (rooms 31100-31199).
+Sun Sep 21 14:01:11 :: SYSLOG: [31130] (NPC a Steel Dragon warrior) SYSERR: Char is already equipped: a Steel Dragon warrior, a monokatana
+Sep 21 14:01:11 :: Resetting kyrin's zone (rooms 31200-31299).
+Sep 21 14:01:11 :: Resetting Che's Zone (rooms 31300-31599).
+Sun Sep 21 14:01:11 :: SYSLOG: SYSERR: Attempting to attach rifle suppressor 'a sound suppressor' (28640) to non-BF/FA weapon 'An old Thompson submachinegun' (31500).
+Sun Sep 21 14:01:11 :: SYSLOG: SYSERR: Attempting to attach rifle suppressor 'a sound suppressor' (28640) to non-BF/FA weapon 'A chrome plated .38' (31507).
+Sep 21 14:01:11 :: Resetting The newbie builder zone. (rooms 31600-31699).
+Sep 21 14:01:11 :: Resetting More 'Ware Than God HQ (rooms 31700-31799).
+Sep 21 14:01:11 :: Resetting Kridder's Stuff (rooms 31800-31899).
+Sep 21 14:01:11 :: Resetting Fort Case (rooms 31900-32099).
+Sun Sep 21 14:01:11 :: SYSLOG: [32098] (NPC an LSMP Mobile Suit) SYSERR: Char is already equipped: an LSMP Mobile Suit, An LSMP Assault Cannon
+Sep 21 14:01:11 :: Resetting Custom Player Items (rooms 32100-32199).
+Sep 21 14:01:11 :: Resetting ^GAmazonia^n - ^gManaus^n (rooms 32200-32299).
+Sep 21 14:01:11 :: Resetting Black Guard - Group Zone (rooms 32300-32399).
+Sep 21 14:01:11 :: Resetting Seattle 2.0 (rooms 32400-32799).
+Sep 21 14:01:11 :: Resetting Ares Macrotech (rooms 32800-32899).
+Sep 21 14:01:11 :: Resetting Additional Ammo - New Types (rooms 32900-32999).
+Sep 21 14:01:11 :: Resetting Downtown Portland Additions (Yojimbo) (rooms 33000-33199).
+Sep 21 14:01:11 :: Resetting New Ware/Gear (Yojimbo) (rooms 33200-33299).
+Sep 21 14:01:11 :: Resetting Activesofts/Linguasofts (Yoji) (rooms 33300-33399).
+Sep 21 14:01:11 :: Resetting Telestrian Habitat - Arcology Levels (rooms 33400-35199).
+Sun Sep 21 14:01:11 :: SYSLOG: SYSERR: Attempting to attach rifle suppressor 'a sound supressor' (28614) to non-BF/FA weapon 'a polished platinum Ares Predator II' (3418).
+Sep 21 14:01:11 :: Resetting Glow City (East Redmond) (rooms 35200-35299).
+Sep 21 14:01:11 :: Resetting /var/digitaimos/qedit/cache (rooms 35300-35399).
+Sep 21 14:01:11 :: Resetting ^rDante's Inferno^N^N (rooms 35400-35699).
+Sun Sep 21 14:01:11 :: SYSLOG: [35525] (NPC Nikklaus) SYSERR: Char is already equipped: Nikklaus, a customized Predator II
+Sep 21 14:01:11 :: Resetting Weapons World 2062 (rooms 35700-35799).
+Sep 21 14:01:11 :: Resetting Portland Streets (rooms 35800-36199).
+Sep 21 14:01:11 :: Resetting Drones and Misc (rooms 36200-37599).
+Sep 21 14:01:11 :: Resetting ECW and More NERPs (rooms 37600-38199).
+Sep 21 14:01:11 :: Resetting I5, North of Seattle (rooms 38200-38399).
+Sep 21 14:01:11 :: Resetting Pike's Place Market (Dran) (rooms 38400-38499).
+Sep 21 14:01:11 :: Resetting Everett (Yojimbo) (rooms 38500-39399).
+Sep 21 14:01:11 :: Resetting Himura's Zone (rooms 39400-39499).
+Sep 21 14:01:11 :: Resetting New Renton (rooms 39500-39799).
+Sun Sep 21 14:01:11 :: ZONELOG: error in zone file: Ne exit from 39628 exists but is not set to be a door.
+Sun Sep 21 14:01:11 :: ZONELOG:  ...offending cmd: 'D' cmd in zone #396, line 52, cmd 47
+Sep 21 14:01:11 :: Resetting Lysleul Plaza (rooms 39800-39999).
+Sep 21 14:01:11 :: Resetting Portland Neophyte Guild (rooms 40000-40099).
+Sep 21 14:01:11 :: Resetting Sixth World University Portland (rooms 40100-40299).
+Sep 21 14:01:11 :: Resetting Jonz Schizz - rename me later (rooms 40300-40399).
+Sep 21 14:01:11 :: Resetting The Void (rooms 40400-40499).
+Sep 21 14:01:11 :: Resetting Beaverton (Wyrgrym) (rooms 40500-40599).
+Sep 21 14:01:11 :: Resetting Powell's Books and Media (rooms 40600-40699).
+Sep 21 14:01:11 :: Resetting New Renton Maestra/Yoda (rooms 40700-40799).
+Sep 21 14:01:11 :: Resetting New Renton (rooms 40800-40899).
+Sep 21 14:01:11 :: Resetting Women's Wear (Non-Armor Bearing) (rooms 40900-41099).
+Sep 21 14:01:11 :: Resetting hestaby's zone (rooms 41100-41399).
+Sep 21 14:01:11 :: Resetting jordans zone (rooms 41400-42099).
+Sep 21 14:01:11 :: Resetting Enola's Add-Ons (all over) (rooms 42100-42199).
+Sep 21 14:01:11 :: Resetting Bargain Basement + Redmond Addons (rooms 42200-45199).
+Sep 21 14:01:11 :: Resetting New Highway System (rooms 45200-45299).
+Sep 21 14:01:11 :: Resetting More Highways and Misc Roads (rooms 45300-50099).
+Sep 21 14:01:11 :: Resetting Serge's Custom RP Stuff (rooms 50100-50399).
+Sep 21 14:01:11 :: Resetting Lysleul Plaza Apartments (rooms 50400-60199).
+Sep 21 14:01:11 :: Resetting East Tacoma Locations: Clubs (rooms 60200-60299).
+Sep 21 14:01:11 :: Resetting Novatech Incorporated (rooms 60300-60499).
+Sep 21 14:01:11 :: Resetting New Neophyte Guild (rooms 60500-60699).
+Sep 21 14:01:11 :: Resetting P-Nut's HQ, by Scrier (rooms 60700-60799).
+Sep 21 14:01:11 :: Resetting Arn's playground (rooms 60800-60899).
+Sep 21 14:01:11 :: Resetting Seatac Airport, Redux by Weeble (rooms 60900-61199).
+Sep 21 14:01:11 :: Resetting Glow City, Redux by Weeble (rooms 61200-61699).
+Sep 21 14:01:11 :: Resetting Yodas Area/Nico's Lair (rooms 61700-62099).
+Sep 21 14:01:11 :: Resetting Grenada/Sauteurs (Yoji) (rooms 62100-62199).
+Sep 21 14:01:11 :: Resetting Grenada/Victoria (Yoji) (rooms 62200-62299).
+Sep 21 14:01:11 :: Resetting Grenada/Add-Ons (Yoji) (rooms 62300-62399).
+Sep 21 14:01:11 :: Resetting Pelagie Apartments (Yoji) (rooms 62400-62499).
+Sep 21 14:01:11 :: Resetting Grenada/Ocean (Yoji) (rooms 62500-62799).
+Sep 21 14:01:11 :: Resetting Bob's Zone / Gerhals FRT. (rooms 62800-64999).
+Sep 21 14:01:11 :: Resetting Veo/Bob's Zone (rooms 65000-65099).
+Sep 21 14:01:11 :: Resetting Enola's Zone (rooms 65100-65199).
+Sep 21 14:01:11 :: Resetting Group Zone - Backstage (rooms 65200-65299).
+Sep 21 14:01:11 :: Resetting Zinks zones (rooms 65300-65499).
+Sep 21 14:01:11 :: Resetting Clothing (rooms 65500-70099).
+Sep 21 14:01:11 :: Resetting Ammunition Boxes (rooms 70100-70299).
+Sep 21 14:01:11 :: Resetting TT RTG, Portland LTG, Tir Grid (rooms 70300-70299).
+Sep 21 14:01:11 :: Resetting Star Sapphire PGHQ (rooms 70300-70399).
+Sep 21 14:01:11 :: Resetting Ronde Island Estate (rooms 70400-70499).
+Sep 21 14:01:11 :: Resetting Junkyard, Veh Mods, Attachments (rooms 70500-70799).
+Sep 21 14:01:11 :: Resetting Shadow Couriers PGHQ (rooms 70800-71099).
+Sep 21 14:01:11 :: Resetting Spare PGHQ Zone (rooms 71100-71199).
+Sep 21 14:01:11 :: Resetting A random warehouse (rooms 71200-72099).
+Sep 21 14:01:11 :: Resetting an A corp (rooms 72100-72199).
+Sep 21 14:01:11 :: Resetting Canon Clothing/Armor (rooms 72200-80999).
+Sep 21 14:01:11 :: Resetting Canon Cyberware - Standard (rooms 81000-85199).
+Sep 21 14:01:11 :: Resetting Canon Cyberware - Alpha (rooms 85200-85399).
+Sep 21 14:01:11 :: Resetting Canon Cyberware - Beta (rooms 85400-85599).
+Sep 21 14:01:11 :: Resetting Canon Cyberware - Delta (rooms 85600-85799).
+Sep 21 14:01:11 :: Resetting Canon Bioware - Standard (rooms 85800-85899).
+Sep 21 14:01:11 :: Resetting Canon Bioware - Cultured (rooms 85900-85999).
+Sep 21 14:01:11 :: Resetting Canon Skillsofts (rooms 86000-86999).
+Sep 21 14:01:11 :: Resetting Puyallup Crime Mall (rooms 87000-100099).
+Sep 21 14:01:11 :: Resetting Haven Apartments PGHQ (rooms 100100-700099).
+Sep 21 14:01:11 :: Resetting Opera House (rooms 700100-705099).
+Sep 21 14:01:11 :: Resetting Sinless Inc PGHQ (rooms 705100-706099).
+Sep 21 14:01:11 :: Offloading all zones now that we've loaded J's, specs, etc...
+Sep 21 14:01:11 :: Skipping zone offload check-- USE_ZONE_HOTLOADING is not defined.
+Sep 21 14:01:11 :: Migrating pocket secretaries in database.
+Sep 21 14:01:11 :: Booting houses.
+Sep 21 14:01:11 :: Loading apartment complexes:
+Sep 21 14:01:11 ::  - Initializing apartment complex from file /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/6401.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/6401/complex_info.json.
+Sep 21 14:01:11 ::  -- Loaded apartment complex Redmond apartment manager's Housing Complex with landlord 6401.
+Sep 21 14:01:11 ::  --- Initializing apartment 1H.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 1H.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/6401/1H/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 1H.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '6458'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/6401/1H/6458/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 6458: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 1H's 6458 at 6458.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 1H.
+Sep 21 14:01:11 ::  --- Initializing apartment 1J.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 1J.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/6401/1J/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 1J.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '6460'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/6401/1J/6460/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 6460: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 1J's 6460 at 6460.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 1J.
+Sep 21 14:01:11 ::  --- Initializing apartment 1O.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 1O.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/6401/1O/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 1O.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '6465'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/6401/1O/6465/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 6465: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 1O's 6465 at 6465.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 1O.
+Sep 21 14:01:11 ::  --- Initializing apartment 1I.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 1I.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/6401/1I/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 1I.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '6459'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/6401/1I/6459/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 6459: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 1I's 6459 at 6459.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 1I.
+Sep 21 14:01:11 ::  --- Initializing apartment 1K.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 1K.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/6401/1K/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 1K.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '6461'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/6401/1K/6461/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 6461: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 1K's 6461 at 6461.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 1K.
+Sep 21 14:01:11 ::  --- Initializing apartment 1E.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 1E.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/6401/1E/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 1E.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '6455'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/6401/1E/6455/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 6455: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 1E's 6455 at 6455.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 1E.
+Sep 21 14:01:11 ::  --- Initializing apartment 1G.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 1G.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/6401/1G/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 1G.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '6457'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/6401/1G/6457/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 6457: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 1G's 6457 at 6457.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 1G.
+Sep 21 14:01:11 ::  --- Initializing apartment 1C.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 1C.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/6401/1C/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 1C.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '6453'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/6401/1C/6453/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 6453: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 1C's 6453 at 6453.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 1C.
+Sep 21 14:01:11 ::  --- Initializing apartment 1B.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 1B.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/6401/1B/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 1B.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '6452'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/6401/1B/6452/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 6452: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 1B's 6452 at 6452.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 1B.
+Sep 21 14:01:11 ::  --- Initializing apartment 1M.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 1M.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/6401/1M/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 1M.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '6463'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/6401/1M/6463/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 6463: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 1M's 6463 at 6463.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 1M.
+Sep 21 14:01:11 ::  --- Initializing apartment 1D.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 1D.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/6401/1D/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 1D.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '6454'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/6401/1D/6454/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 6454: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 1D's 6454 at 6454.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 1D.
+Sep 21 14:01:11 ::  --- Initializing apartment 1L.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 1L.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/6401/1L/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 1L.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '6462'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/6401/1L/6462/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 6462: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 1L's 6462 at 6462.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 1L.
+Sep 21 14:01:11 ::  --- Initializing apartment 1F.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 1F.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/6401/1F/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 1F.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '6456'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/6401/1F/6456/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 6456: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 1F's 6456 at 6456.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 1F.
+Sep 21 14:01:11 ::  --- Initializing apartment 1A.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 1A.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/6401/1A/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 1A.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '6451'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/6401/1A/6451/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 6451: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 1A's 6451 at 6451.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 1A.
+Sep 21 14:01:11 ::  --- Initializing apartment 1N.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 1N.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/6401/1N/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 1N.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '6464'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/6401/1N/6464/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 6464: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 1N's 6464 at 6464.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 1N.
+Sep 21 14:01:11 ::  - Fully loaded Redmond apartment manager's Housing Complex.
+Sep 21 14:01:11 ::  - Initializing apartment complex from file /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/26400.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/26400/complex_info.json.
+Sep 21 14:01:11 ::  -- Loaded apartment complex Makaila's Housing Complex with landlord 26400.
+Sep 21 14:01:11 ::  --- Initializing apartment O.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for O.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/26400/O/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit O.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '26432'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/26400/O/26432/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 26432: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit O's 26432 at 26432.
+Sep 21 14:01:11 ::  --- Fully loaded Unit O.
+Sep 21 14:01:11 ::  --- Initializing apartment H.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for H.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/26400/H/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit H.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '26425'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/26400/H/26425/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 26425: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit H's 26425 at 26425.
+Sep 21 14:01:11 ::  --- Fully loaded Unit H.
+Sep 21 14:01:11 ::  --- Initializing apartment U.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for U.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/26400/U/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit U.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '26438'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/26400/U/26438/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 26438: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit U's 26438 at 26438.
+Sep 21 14:01:11 ::  --- Fully loaded Unit U.
+Sep 21 14:01:11 ::  --- Initializing apartment Y.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for Y.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/26400/Y/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit Y.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '26442'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/26400/Y/26442/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 26442: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit Y's 26442 at 26442.
+Sep 21 14:01:11 ::  --- Fully loaded Unit Y.
+Sep 21 14:01:11 ::  --- Initializing apartment K.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for K.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/26400/K/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit K.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '26428'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/26400/K/26428/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 26428: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit K's 26428 at 26428.
+Sep 21 14:01:11 ::  --- Fully loaded Unit K.
+Sep 21 14:01:11 ::  --- Initializing apartment Q.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for Q.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/26400/Q/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit Q.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '26434'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/26400/Q/26434/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 26434: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit Q's 26434 at 26434.
+Sep 21 14:01:11 ::  --- Fully loaded Unit Q.
+Sep 21 14:01:11 ::  --- Initializing apartment G.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for G.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/26400/G/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit G.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '26424'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/26400/G/26424/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 26424: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit G's 26424 at 26424.
+Sep 21 14:01:11 ::  --- Fully loaded Unit G.
+Sep 21 14:01:11 ::  --- Initializing apartment X.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for X.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/26400/X/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit X.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '26441'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/26400/X/26441/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 26441: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit X's 26441 at 26441.
+Sep 21 14:01:11 ::  --- Fully loaded Unit X.
+Sep 21 14:01:11 ::  --- Initializing apartment A.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for A.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/26400/A/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit A.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '26418'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/26400/A/26418/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 26418: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit A's 26418 at 26418.
+Sep 21 14:01:11 ::  --- Fully loaded Unit A.
+Sep 21 14:01:11 ::  --- Initializing apartment R.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for R.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/26400/R/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit R.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '26435'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/26400/R/26435/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 26435: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit R's 26435 at 26435.
+Sep 21 14:01:11 ::  --- Fully loaded Unit R.
+Sep 21 14:01:11 ::  --- Initializing apartment I.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for I.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/26400/I/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit I.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '26426'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/26400/I/26426/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 26426: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit I's 26426 at 26426.
+Sep 21 14:01:11 ::  --- Fully loaded Unit I.
+Sep 21 14:01:11 ::  --- Initializing apartment W.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for W.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/26400/W/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit W.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '26440'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/26400/W/26440/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 26440: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit W's 26440 at 26440.
+Sep 21 14:01:11 ::  --- Fully loaded Unit W.
+Sep 21 14:01:11 ::  --- Initializing apartment P.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for P.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/26400/P/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit P.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '26433'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/26400/P/26433/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 26433: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit P's 26433 at 26433.
+Sep 21 14:01:11 ::  --- Fully loaded Unit P.
+Sep 21 14:01:11 ::  --- Initializing apartment E.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for E.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/26400/E/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit E.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '26422'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/26400/E/26422/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 26422: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit E's 26422 at 26422.
+Sep 21 14:01:11 ::  --- Fully loaded Unit E.
+Sep 21 14:01:11 ::  --- Initializing apartment M.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for M.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/26400/M/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit M.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '26431'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/26400/M/26431/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 26431: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit M's 26431 at 26431.
+Sep 21 14:01:11 ::  --- Fully loaded Unit M.
+Sep 21 14:01:11 ::  --- Initializing apartment T.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for T.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/26400/T/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit T.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '26437'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/26400/T/26437/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 26437: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit T's 26437 at 26437.
+Sep 21 14:01:11 ::  --- Fully loaded Unit T.
+Sep 21 14:01:11 ::  --- Initializing apartment B.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for B.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/26400/B/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit B.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '26419'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/26400/B/26419/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 26419: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit B's 26419 at 26419.
+Sep 21 14:01:11 ::  --- Fully loaded Unit B.
+Sep 21 14:01:11 ::  --- Initializing apartment S.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for S.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/26400/S/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit S.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '26436'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/26400/S/26436/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 26436: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit S's 26436 at 26436.
+Sep 21 14:01:11 ::  --- Fully loaded Unit S.
+Sep 21 14:01:11 ::  --- Initializing apartment F.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for F.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/26400/F/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit F.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '26423'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/26400/F/26423/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 26423: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit F's 26423 at 26423.
+Sep 21 14:01:11 ::  --- Fully loaded Unit F.
+Sep 21 14:01:11 ::  --- Initializing apartment D.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for D.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/26400/D/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit D.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '26421'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/26400/D/26421/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 26421: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit D's 26421 at 26421.
+Sep 21 14:01:11 ::  --- Fully loaded Unit D.
+Sep 21 14:01:11 ::  --- Initializing apartment J.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for J.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/26400/J/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit J.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '26427'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/26400/J/26427/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 26427: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit J's 26427 at 26427.
+Sep 21 14:01:11 ::  --- Fully loaded Unit J.
+Sep 21 14:01:11 ::  --- Initializing apartment C.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for C.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/26400/C/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit C.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '26420'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/26400/C/26420/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 26420: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit C's 26420 at 26420.
+Sep 21 14:01:11 ::  --- Fully loaded Unit C.
+Sep 21 14:01:11 ::  --- Initializing apartment V.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for V.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/26400/V/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit V.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '26439'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/26400/V/26439/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 26439: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit V's 26439 at 26439.
+Sep 21 14:01:11 ::  --- Fully loaded Unit V.
+Sep 21 14:01:11 ::  --- Initializing apartment N.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for N.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/26400/N/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit N.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '26430'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/26400/N/26430/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 26430: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit N's 26430 at 26430.
+Sep 21 14:01:11 ::  --- Fully loaded Unit N.
+Sep 21 14:01:11 ::  --- Initializing apartment Z.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for Z.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/26400/Z/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit Z.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '26443'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/26400/Z/26443/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 26443: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit Z's 26443 at 26443.
+Sep 21 14:01:11 ::  --- Fully loaded Unit Z.
+Sep 21 14:01:11 ::  --- Initializing apartment L.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for L.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/26400/L/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit L.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '26429'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/26400/L/26429/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 26429: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit L's 26429 at 26429.
+Sep 21 14:01:11 ::  --- Fully loaded Unit L.
+Sep 21 14:01:11 ::  - Fully loaded Makaila's Housing Complex.
+Sep 21 14:01:11 ::  - Initializing apartment complex from file /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/30701.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/30701/complex_info.json.
+Sep 21 14:01:11 ::  -- Loaded apartment complex Olivia the receptionist's Housing Complex with landlord 30701.
+Sep 21 14:01:11 ::  --- Initializing apartment 4C.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 4C.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/30701/4C/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 4C.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '30749'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/30701/4C/30749/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 30749: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 4C's 30749 at 30749.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 4C.
+Sep 21 14:01:11 ::  --- Initializing apartment 3C.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 3C.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/30701/3C/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 3C.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '30741'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/30701/3C/30741/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 30741: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 3C's 30741 at 30741.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 3C.
+Sep 21 14:01:11 ::  --- Initializing apartment 2D.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 2D.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/30701/2D/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 2D.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '30735'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/30701/2D/30735/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 30735: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 2D's 30735 at 30735.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 2D.
+Sep 21 14:01:11 ::  --- Initializing apartment 5C.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 5C.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/30701/5C/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 5C.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '30757'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/30701/5C/30757/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 30757: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 5C's 30757 at 30757.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 5C.
+Sep 21 14:01:11 ::  --- Initializing apartment 5D.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 5D.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/30701/5D/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 5D.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '30759'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/30701/5D/30759/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 30759: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 5D's 30759 at 30759.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 5D.
+Sep 21 14:01:11 ::  --- Initializing apartment 1C.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 1C.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/30701/1C/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 1C.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '30725'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/30701/1C/30725/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 30725: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 1C's 30725 at 30725.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 1C.
+Sep 21 14:01:11 ::  --- Initializing apartment 2C.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 2C.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/30701/2C/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 2C.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '30733'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/30701/2C/30733/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 30733: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 2C's 30733 at 30733.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 2C.
+Sep 21 14:01:11 ::  --- Initializing apartment 4D.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 4D.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/30701/4D/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 4D.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '30751'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/30701/4D/30751/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 30751: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 4D's 30751 at 30751.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 4D.
+Sep 21 14:01:11 ::  --- Initializing apartment 3D.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 3D.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/30701/3D/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 3D.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '30743'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/30701/3D/30743/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 30743: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 3D's 30743 at 30743.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 3D.
+Sep 21 14:01:11 ::  --- Initializing apartment 1B.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 1B.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/30701/1B/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 1B.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '30723'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/30701/1B/30723/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 30723: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 1B's 30723 at 30723.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 1B.
+Sep 21 14:01:11 ::  --- Initializing apartment 4B.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 4B.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/30701/4B/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 4B.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '30747'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/30701/4B/30747/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 30747: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 4B's 30747 at 30747.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 4B.
+Sep 21 14:01:11 ::  --- Initializing apartment 1D.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 1D.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/30701/1D/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 1D.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '30727'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/30701/1D/30727/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 30727: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 1D's 30727 at 30727.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 1D.
+Sep 21 14:01:11 ::  --- Initializing apartment 5B.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 5B.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/30701/5B/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 5B.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '30755'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/30701/5B/30755/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 30755: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 5B's 30755 at 30755.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 5B.
+Sep 21 14:01:11 ::  --- Initializing apartment 2B.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 2B.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/30701/2B/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 2B.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '30732'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/30701/2B/30732/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 30732: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 2B's 30732 at 30732.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 2B.
+Sep 21 14:01:11 ::  --- Initializing apartment 2A.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 2A.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/30701/2A/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 2A.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '30731'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/30701/2A/30731/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 30731: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 2A's 30731 at 30731.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 2A.
+Sep 21 14:01:11 ::  --- Initializing apartment 5A.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 5A.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/30701/5A/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 5A.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '30753'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/30701/5A/30753/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 30753: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 5A's 30753 at 30753.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 5A.
+Sep 21 14:01:11 ::  --- Initializing apartment 4A.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 4A.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/30701/4A/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 4A.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '30745'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/30701/4A/30745/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 30745: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 4A's 30745 at 30745.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 4A.
+Sep 21 14:01:11 ::  --- Initializing apartment 3A.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 3A.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/30701/3A/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 3A.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '30737'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/30701/3A/30737/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 30737: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 3A's 30737 at 30737.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 3A.
+Sep 21 14:01:11 ::  --- Initializing apartment 1A.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 1A.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/30701/1A/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 1A.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '30721'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/30701/1A/30721/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 30721: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 1A's 30721 at 30721.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 1A.
+Sep 21 14:01:11 ::  --- Initializing apartment 3B.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 3B.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/30701/3B/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 3B.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '30739'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/30701/3B/30739/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 30739: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 3B's 30739 at 30739.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 3B.
+Sep 21 14:01:11 ::  - Fully loaded Olivia the receptionist's Housing Complex.
+Sep 21 14:01:11 ::  - Initializing apartment complex from file /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/12401.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/12401/complex_info.json.
+Sep 21 14:01:11 ::  -- Loaded apartment complex a garage security guard's Housing Complex with landlord 12401.
+Sep 21 14:01:11 ::  --- Initializing apartment B10.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for B10.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/12401/B10/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit B10.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '12456'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/12401/B10/12456/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 12456: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit B10's 12456 at 12456.
+Sep 21 14:01:11 ::  --- Fully loaded Unit B10.
+Sep 21 14:01:11 ::  --- Initializing apartment B4.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for B4.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/12401/B4/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit B4.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '12450'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/12401/B4/12450/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 12450: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit B4's 12450 at 12450.
+Sep 21 14:01:11 ::  --- Fully loaded Unit B4.
+Sep 21 14:01:11 ::  --- Initializing apartment B14.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for B14.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/12401/B14/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit B14.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '12467'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/12401/B14/12467/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 12467: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit B14's 12467 at 12467.
+Sep 21 14:01:11 ::  --- Fully loaded Unit B14.
+Sep 21 14:01:11 ::  --- Initializing apartment B9.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for B9.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/12401/B9/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit B9.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '12455'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/12401/B9/12455/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 12455: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit B9's 12455 at 12455.
+Sep 21 14:01:11 ::  --- Fully loaded Unit B9.
+Sep 21 14:01:11 ::  --- Initializing apartment B7.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for B7.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/12401/B7/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit B7.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '12453'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/12401/B7/12453/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 12453: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit B7's 12453 at 12453.
+Sep 21 14:01:11 ::  --- Fully loaded Unit B7.
+Sep 21 14:01:11 ::  --- Initializing apartment B18.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for B18.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/12401/B18/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit B18.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '12471'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/12401/B18/12471/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 12471: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit B18's 12471 at 12471.
+Sep 21 14:01:11 ::  --- Fully loaded Unit B18.
+Sep 21 14:01:11 ::  --- Initializing apartment B1.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for B1.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/12401/B1/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit B1.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '12447'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/12401/B1/12447/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 12447: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit B1's 12447 at 12447.
+Sep 21 14:01:11 ::  --- Fully loaded Unit B1.
+Sep 21 14:01:11 ::  --- Initializing apartment B12.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for B12.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/12401/B12/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit B12.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '12465'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/12401/B12/12465/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 12465: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit B12's 12465 at 12465.
+Sep 21 14:01:11 ::  --- Fully loaded Unit B12.
+Sep 21 14:01:11 ::  --- Initializing apartment B19.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for B19.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/12401/B19/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit B19.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '12472'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/12401/B19/12472/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 12472: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit B19's 12472 at 12472.
+Sep 21 14:01:11 ::  --- Fully loaded Unit B19.
+Sep 21 14:01:11 ::  --- Initializing apartment B8.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for B8.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/12401/B8/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit B8.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '12454'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/12401/B8/12454/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 12454: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit B8's 12454 at 12454.
+Sep 21 14:01:11 ::  --- Fully loaded Unit B8.
+Sep 21 14:01:11 ::  --- Initializing apartment B13.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for B13.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/12401/B13/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit B13.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '12466'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/12401/B13/12466/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 12466: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit B13's 12466 at 12466.
+Sep 21 14:01:11 ::  --- Fully loaded Unit B13.
+Sep 21 14:01:11 ::  --- Initializing apartment B2.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for B2.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/12401/B2/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit B2.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '12448'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/12401/B2/12448/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 12448: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit B2's 12448 at 12448.
+Sep 21 14:01:11 ::  --- Fully loaded Unit B2.
+Sep 21 14:01:11 ::  --- Initializing apartment B15.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for B15.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/12401/B15/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit B15.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '12468'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/12401/B15/12468/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 12468: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit B15's 12468 at 12468.
+Sep 21 14:01:11 ::  --- Fully loaded Unit B15.
+Sep 21 14:01:11 ::  --- Initializing apartment B16.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for B16.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/12401/B16/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit B16.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '12469'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/12401/B16/12469/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 12469: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit B16's 12469 at 12469.
+Sep 21 14:01:11 ::  --- Fully loaded Unit B16.
+Sep 21 14:01:11 ::  --- Initializing apartment B6.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for B6.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/12401/B6/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit B6.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '12452'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/12401/B6/12452/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 12452: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit B6's 12452 at 12452.
+Sep 21 14:01:11 ::  --- Fully loaded Unit B6.
+Sep 21 14:01:11 ::  --- Initializing apartment B20.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for B20.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/12401/B20/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit B20.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '12473'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/12401/B20/12473/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 12473: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit B20's 12473 at 12473.
+Sep 21 14:01:11 ::  --- Fully loaded Unit B20.
+Sep 21 14:01:11 ::  --- Initializing apartment B5.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for B5.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/12401/B5/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit B5.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '12451'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/12401/B5/12451/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 12451: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit B5's 12451 at 12451.
+Sep 21 14:01:11 ::  --- Fully loaded Unit B5.
+Sep 21 14:01:11 ::  --- Initializing apartment B17.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for B17.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/12401/B17/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit B17.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '12470'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/12401/B17/12470/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 12470: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit B17's 12470 at 12470.
+Sep 21 14:01:11 ::  --- Fully loaded Unit B17.
+Sep 21 14:01:11 ::  --- Initializing apartment B3.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for B3.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/12401/B3/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit B3.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '12449'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/12401/B3/12449/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 12449: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit B3's 12449 at 12449.
+Sep 21 14:01:11 ::  --- Fully loaded Unit B3.
+Sep 21 14:01:11 ::  --- Initializing apartment B11.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for B11.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/12401/B11/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit B11.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '12464'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/12401/B11/12464/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 12464: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit B11's 12464 at 12464.
+Sep 21 14:01:11 ::  --- Fully loaded Unit B11.
+Sep 21 14:01:11 ::  - Fully loaded a garage security guard's Housing Complex.
+Sep 21 14:01:11 ::  - Initializing apartment complex from file /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/complex_info.json.
+Sep 21 14:01:11 ::  -- Loaded apartment complex Natalia the Receptionist's Housing Complex with landlord 2201.
+Sep 21 14:01:11 ::  --- Initializing apartment 4C.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 4C.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/4C/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 4C.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '2279'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/4C/2279/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 2279: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 4C's 2279 at 2279.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 4C.
+Sep 21 14:01:11 ::  --- Initializing apartment 13B.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 13B.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/13B/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 13B.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '2240'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/13B/2240/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 2240: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 13B's 2240 at 2240.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 13B.
+Sep 21 14:01:11 ::  --- Initializing apartment 3C.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 3C.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/3C/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 3C.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '2277'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/3C/2277/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 2277: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 3C's 2277 at 2277.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 3C.
+Sep 21 14:01:11 ::  --- Initializing apartment 6D.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 6D.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/6D/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 6D.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '2287'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/6D/2287/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 2287: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 6D's 2287 at 2287.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 6D.
+Sep 21 14:01:11 ::  --- Initializing apartment 6B.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 6B.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/6B/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 6B.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '2254'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/6B/2254/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 2254: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 6B's 2254 at 2254.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 6B.
+Sep 21 14:01:11 ::  --- Initializing apartment 2D.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 2D.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/2D/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 2D.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '2297'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/2D/2297/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 2297: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 2D's 2297 at 2297.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 2D.
+Sep 21 14:01:11 ::  --- Initializing apartment 12B.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 12B.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/12B/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 12B.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '2245'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/12B/2245/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 2245: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 12B's 2245 at 2245.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 12B.
+Sep 21 14:01:11 ::  --- Initializing apartment 5C.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 5C.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/5C/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 5C.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '2274'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/5C/2274/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 2274: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 5C's 2274 at 2274.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 5C.
+Sep 21 14:01:11 ::  --- Initializing apartment 9A.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 9A.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/9A/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 9A.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '2229'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/9A/2229/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 2229: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 9A's 2229 at 2229.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 9A.
+Sep 21 14:01:11 ::  --- Initializing apartment 14C.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 14C.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/14C/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 14C.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '2264'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/14C/2264/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 2264: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 14C's 2264 at 2264.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 14C.
+Sep 21 14:01:11 ::  --- Initializing apartment 8C.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 8C.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/8C/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 8C.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '2273'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/8C/2273/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 2273: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 8C's 2273 at 2273.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 8C.
+Sep 21 14:01:11 ::  --- Initializing apartment 5D.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 5D.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/5D/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 5D.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '2285'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/5D/2285/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 2285: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 5D's 2285 at 2285.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 5D.
+Sep 21 14:01:11 ::  --- Initializing apartment 6A.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 6A.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/6A/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 6A.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '2225'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/6A/2225/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 2225: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 6A's 2225 at 2225.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 6A.
+Sep 21 14:01:11 ::  --- Initializing apartment 9C.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 9C.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/9C/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 9C.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '2268'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/9C/2268/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 2268: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 9C's 2268 at 2268.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 9C.
+Sep 21 14:01:11 ::  --- Initializing apartment 12A.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 12A.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/12A/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 12A.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '2234'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/12A/2234/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 2234: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 12A's 2234 at 2234.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 12A.
+Sep 21 14:01:11 ::  --- Initializing apartment 7A.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 7A.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/7A/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 7A.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '2226'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/7A/2226/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 2226: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 7A's 2226 at 2226.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 7A.
+Sep 21 14:01:11 ::  --- Initializing apartment 1C.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 1C.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/1C/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 1C.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '2280'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/1C/2280/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 2280: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 1C's 2280 at 2280.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 1C.
+Sep 21 14:01:11 ::  --- Initializing apartment 11A.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 11A.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/11A/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 11A.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '2232'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/11A/2232/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 2232: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 11A's 2232 at 2232.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 11A.
+Sep 21 14:01:11 ::  --- Initializing apartment 11C.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 11C.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/11C/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 11C.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '2265'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/11C/2265/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 2265: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 11C's 2265 at 2265.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 11C.
+Sep 21 14:01:11 ::  --- Initializing apartment 2C.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 2C.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/2C/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 2C.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '2282'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/2C/2282/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 2282: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 2C's 2282 at 2282.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 2C.
+Sep 21 14:01:11 ::  --- Initializing apartment 4D.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 4D.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/4D/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 4D.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '2292'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/4D/2292/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 2292: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 4D's 2292 at 2292.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 4D.
+Sep 21 14:01:11 ::  --- Initializing apartment 9B.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 9B.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/9B/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 9B.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '2246'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/9B/2246/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 2246: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 9B's 2246 at 2246.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 9B.
+Sep 21 14:01:11 ::  --- Initializing apartment 3D.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 3D.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/3D/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 3D.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '2290'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/3D/2290/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 2290: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 3D's 2290 at 2290.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 3D.
+Sep 21 14:01:11 ::  --- Initializing apartment 14B.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 14B.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/14B/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 14B.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '2242'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/14B/2242/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 2242: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 14B's 2242 at 2242.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 14B.
+Sep 21 14:01:11 ::  --- Initializing apartment 11B.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 11B.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/11B/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 11B.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '2243'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/11B/2243/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 2243: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 11B's 2243 at 2243.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 11B.
+Sep 21 14:01:11 ::  --- Initializing apartment 1B.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 1B.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/1B/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 1B.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '2258'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/1B/2258/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 2258: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 1B's 2258 at 2258.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 1B.
+Sep 21 14:01:11 ::  --- Initializing apartment 4B.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 4B.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/4B/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 4B.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '2257'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/4B/2257/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 2257: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 4B's 2257 at 2257.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 4B.
+Sep 21 14:01:11 ::  --- Initializing apartment 1D.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 1D.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/1D/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 1D.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '2295'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/1D/2295/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 2295: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 1D's 2295 at 2295.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 1D.
+Sep 21 14:01:11 ::  --- Initializing apartment 5B.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 5B.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/5B/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 5B.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '2252'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/5B/2252/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 2252: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 5B's 2252 at 2252.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 5B.
+Sep 21 14:01:11 ::  --- Initializing apartment 2B.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 2B.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/2B/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 2B.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '2260'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/2B/2260/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 2260: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 2B's 2260 at 2260.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 2B.
+Sep 21 14:01:11 ::  --- Initializing apartment 2A.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 2A.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/2A/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 2A.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '2219'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/2A/2219/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 2219: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 2A's 2219 at 2219.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 2A.
+Sep 21 14:01:11 ::  --- Initializing apartment 5A.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 5A.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/5A/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 5A.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '2223'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/5A/2223/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 2223: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 5A's 2223 at 2223.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 5A.
+Sep 21 14:01:11 ::  --- Initializing apartment 8A.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 8A.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/8A/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 8A.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '2228'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/8A/2228/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 2228: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 8A's 2228 at 2228.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 8A.
+Sep 21 14:01:11 ::  --- Initializing apartment 10C.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 10C.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/10C/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 10C.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '2270'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/10C/2270/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 2270: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 10C's 2270 at 2270.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 10C.
+Sep 21 14:01:11 ::  --- Initializing apartment 6C.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 6C.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/6C/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 6C.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '2276'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/6C/2276/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 2276: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 6C's 2276 at 2276.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 6C.
+Sep 21 14:01:11 ::  --- Initializing apartment 10B.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 10B.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/10B/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 10B.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '2248'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/10B/2248/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 2248: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 10B's 2248 at 2248.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 10B.
+Sep 21 14:01:11 ::  --- Initializing apartment 7B.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 7B.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/7B/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 7B.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '2249'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/7B/2249/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 2249: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 7B's 2249 at 2249.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 7B.
+Sep 21 14:01:11 ::  --- Initializing apartment 13A.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 13A.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/13A/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 13A.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '2235'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/13A/2235/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 2235: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 13A's 2235 at 2235.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 13A.
+Sep 21 14:01:11 ::  --- Initializing apartment 4A.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 4A.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/4A/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 4A.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '2222'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/4A/2222/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 2222: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 4A's 2222 at 2222.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 4A.
+Sep 21 14:01:11 ::  --- Initializing apartment 3A.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 3A.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/3A/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 3A.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '2220'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/3A/2220/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 2220: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 3A's 2220 at 2220.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 3A.
+Sep 21 14:01:11 ::  --- Initializing apartment 1A.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 1A.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/1A/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 1A.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '2217'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/1A/2217/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 2217: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 1A's 2217 at 2217.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 1A.
+Sep 21 14:01:11 ::  --- Initializing apartment 12C.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 12C.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/12C/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 12C.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '2267'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/12C/2267/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 2267: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 12C's 2267 at 2267.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 12C.
+Sep 21 14:01:11 ::  --- Initializing apartment 8B.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 8B.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/8B/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 8B.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '2251'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/8B/2251/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 2251: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 8B's 2251 at 2251.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 8B.
+Sep 21 14:01:11 ::  --- Initializing apartment 13C.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 13C.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/13C/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 13C.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '2262'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/13C/2262/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 2262: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 13C's 2262 at 2262.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 13C.
+Sep 21 14:01:11 ::  --- Initializing apartment 3B.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 3B.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/3B/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 3B.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '2255'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/3B/2255/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 2255: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 3B's 2255 at 2255.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 3B.
+Sep 21 14:01:11 ::  --- Initializing apartment 14A.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 14A.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/14A/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 14A.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '2237'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/14A/2237/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 2237: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 14A's 2237 at 2237.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 14A.
+Sep 21 14:01:11 ::  --- Initializing apartment 7C.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 7C.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/7C/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 7C.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '2271'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2201/7C/2271/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 2271: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 7C's 2271 at 2271.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 7C.
+Sep 21 14:01:11 ::  - Fully loaded Natalia the Receptionist's Housing Complex.
+Sep 21 14:01:11 ::  - Initializing apartment complex from file /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/12400.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/12400/complex_info.json.
+Sep 21 14:01:11 ::  -- Loaded apartment complex a receptionist for the Triple Tree Inn's Housing Complex with landlord 12400.
+Sep 21 14:01:11 ::  --- Initializing apartment 17A.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 17A.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/12400/17A/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 17A.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '12436'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/12400/17A/12436/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 12436: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 17A's 12436 at 12436.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 17A.
+Sep 21 14:01:11 ::  --- Initializing apartment 18A.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 18A.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/12400/18A/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 18A.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '12437'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/12400/18A/12437/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 12437: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 18A's 12437 at 12437.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 18A.
+Sep 21 14:01:11 ::  --- Initializing apartment 9A.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 9A.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/12400/9A/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 9A.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '12422'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/12400/9A/12422/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 12422: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 9A's 12422 at 12422.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 9A.
+Sep 21 14:01:11 ::  --- Initializing apartment 6A.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 6A.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/12400/6A/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 6A.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '12419'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/12400/6A/12419/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 12419: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 6A's 12419 at 12419.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 6A.
+Sep 21 14:01:11 ::  --- Initializing apartment 12A.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 12A.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/12400/12A/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 12A.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '12431'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/12400/12A/12431/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 12431: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 12A's 12431 at 12431.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 12A.
+Sep 21 14:01:11 ::  --- Initializing apartment 7A.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 7A.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/12400/7A/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 7A.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '12420'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/12400/7A/12420/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 12420: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 7A's 12420 at 12420.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 7A.
+Sep 21 14:01:11 ::  --- Initializing apartment 11A.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 11A.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/12400/11A/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 11A.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '12430'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/12400/11A/12430/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 12430: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 11A's 12430 at 12430.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 11A.
+Sep 21 14:01:11 ::  --- Initializing apartment 16A.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 16A.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/12400/16A/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 16A.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '12435'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/12400/16A/12435/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 12435: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 16A's 12435 at 12435.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 16A.
+Sep 21 14:01:11 ::  --- Initializing apartment 19A.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 19A.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/12400/19A/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 19A.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '12438'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/12400/19A/12438/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 12438: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 19A's 12438 at 12438.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 19A.
+Sep 21 14:01:11 ::  --- Initializing apartment 2A.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 2A.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/12400/2A/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 2A.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '12415'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/12400/2A/12415/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 12415: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 2A's 12415 at 12415.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 2A.
+Sep 21 14:01:11 ::  --- Initializing apartment 5A.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 5A.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/12400/5A/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 5A.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '12418'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/12400/5A/12418/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 12418: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 5A's 12418 at 12418.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 5A.
+Sep 21 14:01:11 ::  --- Initializing apartment 10A.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 10A.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/12400/10A/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 10A.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '12423'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/12400/10A/12423/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 12423: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 10A's 12423 at 12423.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 10A.
+Sep 21 14:01:11 ::  --- Initializing apartment 8A.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 8A.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/12400/8A/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 8A.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '12421'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/12400/8A/12421/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 12421: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 8A's 12421 at 12421.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 8A.
+Sep 21 14:01:11 ::  --- Initializing apartment 15A.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 15A.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/12400/15A/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 15A.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '12434'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/12400/15A/12434/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 12434: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 15A's 12434 at 12434.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 15A.
+Sep 21 14:01:11 ::  --- Initializing apartment 13A.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 13A.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/12400/13A/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 13A.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '12432'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/12400/13A/12432/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 12432: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 13A's 12432 at 12432.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 13A.
+Sep 21 14:01:11 ::  --- Initializing apartment 4A.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 4A.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/12400/4A/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 4A.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '12417'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/12400/4A/12417/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 12417: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 4A's 12417 at 12417.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 4A.
+Sep 21 14:01:11 ::  --- Initializing apartment 3A.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 3A.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/12400/3A/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 3A.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '12416'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/12400/3A/12416/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 12416: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 3A's 12416 at 12416.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 3A.
+Sep 21 14:01:11 ::  --- Initializing apartment 1A.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 1A.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/12400/1A/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 1A.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '12414'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/12400/1A/12414/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 12414: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 1A's 12414 at 12414.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 1A.
+Sep 21 14:01:11 ::  --- Initializing apartment 20A.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 20A.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/12400/20A/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 20A.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '12439'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/12400/20A/12439/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 12439: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 20A's 12439 at 12439.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 20A.
+Sep 21 14:01:11 ::  --- Initializing apartment 14A.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 14A.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/12400/14A/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 14A.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '12433'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/12400/14A/12433/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 12433: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 14A's 12433 at 12433.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 14A.
+Sep 21 14:01:11 ::  - Fully loaded a receptionist for the Triple Tree Inn's Housing Complex.
+Sep 21 14:01:11 ::  - Initializing apartment complex from file /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/18911.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/18911/complex_info.json.
+Sep 21 14:01:11 ::  -- Loaded apartment complex Andrew Drovitch's Housing Complex with landlord 18911.
+Sep 21 14:01:11 ::  --- Initializing apartment 108.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 108.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/18911/108/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 108.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '18944'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/18911/108/18944/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 18944: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 108's 18944 at 18944.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 108.
+Sep 21 14:01:11 ::  --- Initializing apartment 105.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 105.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/18911/105/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 105.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '18941'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/18911/105/18941/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 18941: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 105's 18941 at 18941.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 105.
+Sep 21 14:01:11 ::  --- Initializing apartment 104.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 104.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/18911/104/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 104.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '18940'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/18911/104/18940/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 18940: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 104's 18940 at 18940.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 104.
+Sep 21 14:01:11 ::  --- Initializing apartment 107.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 107.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/18911/107/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 107.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '18943'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/18911/107/18943/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 18943: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 107's 18943 at 18943.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 107.
+Sep 21 14:01:11 ::  --- Initializing apartment 106.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 106.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/18911/106/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 106.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '18942'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/18911/106/18942/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 18942: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 106's 18942 at 18942.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 106.
+Sep 21 14:01:11 ::  --- Initializing apartment 109.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 109.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/18911/109/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 109.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '18945'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/18911/109/18945/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 18945: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 109's 18945 at 18945.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 109.
+Sep 21 14:01:11 ::  --- Initializing apartment 103.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 103.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/18911/103/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 103.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '18939'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/18911/103/18939/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 18939: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 103's 18939 at 18939.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 103.
+Sep 21 14:01:11 ::  --- Initializing apartment 101.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 101.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/18911/101/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 101.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '18937'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/18911/101/18937/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 18937: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 101's 18937 at 18937.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 101.
+Sep 21 14:01:11 ::  --- Initializing apartment 100.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 100.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/18911/100/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 100.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '18946'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/18911/100/18946/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 18946: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 100's 18946 at 18946.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 100.
+Sep 21 14:01:11 ::  --- Initializing apartment 102.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 102.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/18911/102/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 102.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '18938'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/18911/102/18938/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 18938: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 102's 18938 at 18938.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 102.
+Sep 21 14:01:11 ::  - Fully loaded Andrew Drovitch's Housing Complex.
+Sep 21 14:01:11 ::  - Initializing apartment complex from file /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/22608.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/22608/complex_info.json.
+Sep 21 14:01:11 ::  -- Loaded apartment complex the Slumlord's Housing Complex with landlord 22608.
+Sep 21 14:01:11 ::  --- Initializing apartment 6B.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 6B.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/22608/6B/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 6B.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '22640'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/22608/6B/22640/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 22640: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 6B's 22640 at 22640.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 6B.
+Sep 21 14:01:11 ::  --- Initializing apartment 6A.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 6A.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/22608/6A/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 6A.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '22647'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/22608/6A/22647/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 22647: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 6A's 22647 at 22647.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 6A.
+Sep 21 14:01:11 ::  --- Initializing apartment 1B.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 1B.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/22608/1B/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 1B.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '22637'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/22608/1B/22637/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 22637: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 1B's 22637 at 22637.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 1B.
+Sep 21 14:01:11 ::  --- Initializing apartment 4B.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 4B.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/22608/4B/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 4B.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '22639'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/22608/4B/22639/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 22639: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 4B's 22639 at 22639.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 4B.
+Sep 21 14:01:11 ::  --- Initializing apartment 2A.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 2A.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/22608/2A/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 2A.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '22644'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/22608/2A/22644/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 22644: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 2A's 22644 at 22644.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 2A.
+Sep 21 14:01:11 ::  --- Initializing apartment 5A.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 5A.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/22608/5A/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 5A.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '22646'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/22608/5A/22646/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 22646: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 5A's 22646 at 22646.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 5A.
+Sep 21 14:01:11 ::  --- Initializing apartment 4A.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 4A.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/22608/4A/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 4A.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '22645'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/22608/4A/22645/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 22645: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 4A's 22645 at 22645.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 4A.
+Sep 21 14:01:11 ::  --- Initializing apartment 1A.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 1A.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/22608/1A/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 1A.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '22643'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/22608/1A/22643/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 22643: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 1A's 22643 at 22643.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 1A.
+Sep 21 14:01:11 ::  --- Initializing apartment 3B.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 3B.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/22608/3B/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 3B.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '22638'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/22608/3B/22638/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 22638: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 3B's 22638 at 22638.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 3B.
+Sep 21 14:01:11 ::  - Fully loaded the Slumlord's Housing Complex.
+Sep 21 14:01:11 ::  - Initializing apartment complex from file /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2952.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2952/complex_info.json.
+Sep 21 14:01:11 ::  -- Loaded apartment complex Edgar the Security Guard's Housing Complex with landlord 2952.
+Sep 21 14:01:11 ::  --- Initializing apartment 1.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 1.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2952/1/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 1.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '2957'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2952/1/2957/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 2957: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 1's 2957 at 2957.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 1.
+Sep 21 14:01:11 ::  --- Initializing apartment 2.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 2.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2952/2/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 2.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '2958'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2952/2/2958/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 2958: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 2's 2958 at 2958.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 2.
+Sep 21 14:01:11 ::  --- Initializing apartment 5.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 5.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2952/5/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 5.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '2961'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2952/5/2961/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 2961: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 5's 2961 at 2961.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 5.
+Sep 21 14:01:11 ::  --- Initializing apartment 3.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 3.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2952/3/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 3.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '2959'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2952/3/2959/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 2959: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 3's 2959 at 2959.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 3.
+Sep 21 14:01:11 ::  --- Initializing apartment 7.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 7.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2952/7/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 7.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '2963'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2952/7/2963/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 2963: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 7's 2963 at 2963.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 7.
+Sep 21 14:01:11 ::  --- Initializing apartment 4.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 4.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2952/4/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 4.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '2960'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2952/4/2960/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 2960: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 4's 2960 at 2960.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 4.
+Sep 21 14:01:11 ::  --- Initializing apartment 8.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 8.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2952/8/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 8.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '2964'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2952/8/2964/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 2964: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 8's 2964 at 2964.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 8.
+Sep 21 14:01:11 ::  --- Initializing apartment 6.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 6.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2952/6/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 6.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '2962'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/2952/6/2962/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 2962: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 6's 2962 at 2962.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 6.
+Sep 21 14:01:11 ::  - Fully loaded Edgar the Security Guard's Housing Complex.
+Sep 21 14:01:11 ::  - Initializing apartment complex from file /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/10110.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/10110/complex_info.json.
+Sep 21 14:01:11 ::  -- Loaded apartment complex Rob Bryner's Housing Complex with landlord 10110.
+Sep 21 14:01:11 ::  --- Initializing apartment 6B.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 6B.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/10110/6B/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 6B.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '10133'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/10110/6B/10133/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 10133: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 6B's 10133 at 10133.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 6B.
+Sep 21 14:01:11 ::  --- Initializing apartment 6A.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 6A.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/10110/6A/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 6A.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '10127'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/10110/6A/10127/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 10127: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 6A's 10127 at 10127.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 6A.
+Sep 21 14:01:11 ::  --- Initializing apartment 1B.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 1B.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/10110/1B/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 1B.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '10128'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/10110/1B/10128/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 10128: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 1B's 10128 at 10128.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 1B.
+Sep 21 14:01:11 ::  --- Initializing apartment 4B.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 4B.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/10110/4B/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 4B.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '10131'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/10110/4B/10131/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 10131: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 4B's 10131 at 10131.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 4B.
+Sep 21 14:01:11 ::  --- Initializing apartment 5B.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 5B.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/10110/5B/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 5B.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '10132'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/10110/5B/10132/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 10132: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 5B's 10132 at 10132.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 5B.
+Sep 21 14:01:11 ::  --- Initializing apartment 2B.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 2B.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/10110/2B/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 2B.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '10129'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/10110/2B/10129/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 10129: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 2B's 10129 at 10129.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 2B.
+Sep 21 14:01:11 ::  --- Initializing apartment 2A.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 2A.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/10110/2A/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 2A.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '10123'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/10110/2A/10123/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 10123: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 2A's 10123 at 10123.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 2A.
+Sep 21 14:01:11 ::  --- Initializing apartment 5A.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 5A.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/10110/5A/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 5A.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '10126'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/10110/5A/10126/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 10126: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 5A's 10126 at 10126.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 5A.
+Sep 21 14:01:11 ::  --- Initializing apartment 4A.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 4A.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/10110/4A/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 4A.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '10125'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/10110/4A/10125/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 10125: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 4A's 10125 at 10125.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 4A.
+Sep 21 14:01:11 ::  --- Initializing apartment 3A.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 3A.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/10110/3A/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 3A.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '10124'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/10110/3A/10124/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 10124: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 3A's 10124 at 10124.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 3A.
+Sep 21 14:01:11 ::  --- Initializing apartment 1A.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 1A.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/10110/1A/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 1A.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '10122'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/10110/1A/10122/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 10122: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 1A's 10122 at 10122.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 1A.
+Sep 21 14:01:11 ::  --- Initializing apartment 3B.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for 3B.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/10110/3B/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit 3B.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '10130'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/10110/3B/10130/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 10130: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit 3B's 10130 at 10130.
+Sep 21 14:01:11 ::  --- Fully loaded Unit 3B.
+Sep 21 14:01:11 ::  - Fully loaded Rob Bryner's Housing Complex.
+Sep 21 14:01:11 ::  - Initializing apartment complex from file /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/10004.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/10004/complex_info.json.
+Sep 21 14:01:11 ::  -- Loaded apartment complex the Shamanic receptionist's Housing Complex with landlord 10004.
+Sep 21 14:01:11 ::  --- Initializing apartment NW.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for NW.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/10004/NW/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit NW.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '10012'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/10004/NW/10012/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 10012: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit NW's 10012 at 10012.
+Sep 21 14:01:11 ::  --- Fully loaded Unit NW.
+Sep 21 14:01:11 ::  --- Initializing apartment W.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for W.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/10004/W/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit W.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '10011'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/10004/W/10011/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 10011: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit W's 10011 at 10011.
+Sep 21 14:01:11 ::  --- Fully loaded Unit W.
+Sep 21 14:01:11 ::  --- Initializing apartment E.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for E.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/10004/E/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit E.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '10007'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/10004/E/10007/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 10007: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit E's 10007 at 10007.
+Sep 21 14:01:11 ::  --- Fully loaded Unit E.
+Sep 21 14:01:11 ::  --- Initializing apartment NE.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for NE.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/10004/NE/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit NE.
+Sep 21 14:01:11 ::  ----- Skipping sub-room '10006': No info path.
+Sep 21 14:01:11 ::  --- Fully loaded Unit NE.
+Sep 21 14:01:11 ::  --- Initializing apartment SE.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for SE.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/10004/SE/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit SE.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '10008'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/10004/SE/10008/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 10008: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit SE's 10008 at 10008.
+Sep 21 14:01:11 ::  --- Fully loaded Unit SE.
+Sep 21 14:01:11 ::  --- Initializing apartment SW.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for SW.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/10004/SW/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit SW.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '10010'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/10004/SW/10010/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 10010: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit SW's 10010 at 10010.
+Sep 21 14:01:11 ::  --- Fully loaded Unit SW.
+Sep 21 14:01:11 ::  --- Initializing apartment N.
+Sep 21 14:01:11 ::  ---- Loading apartment base data for N.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/10004/N/apartment_info.json.
+Sep 21 14:01:11 ::  ---- Loading sub-rooms for Unit N.
+Sep 21 14:01:11 ::  ----- Initializing sub-room '10009'.
+Sep 21 14:01:11 :: Reading JSON data from /home/fu/Games/Awakensolo/AwakenSolo/lib/housing/10004/N/10009/room_info.json.
+Sun Sep 21 14:01:11 :: SYSLOG: Refusing to load decoration and storage for 10009: Lease is expired, or owner does not exist.
+Sep 21 14:01:11 ::  ----- Fully loaded Unit N's 10009 at 10009.
+Sep 21 14:01:11 ::  --- Fully loaded Unit N.
+Sep 21 14:01:11 ::  - Fully loaded the Shamanic receptionist's Housing Complex.
+Sep 21 14:01:11 :: Loading saved vehicles.
+Sep 21 14:01:11 :: Purging unowned vehicles.
+Sep 21 14:01:11 :: Loading shop orders.
+Sep 21 14:01:11 :: Setting up mobact aggression octets.
+Sep 21 14:01:11 :: Building escalator vector.
+Sep 21 14:01:11 :: - Added escalator room Escalator (1904)
+Sep 21 14:01:11 :: - Added escalator room Escalator (1920)
+Sep 21 14:01:11 :: - Added escalator room Escalator (1923)
+Sep 21 14:01:11 :: - Added escalator room Escalator (1937)
+Sep 21 14:01:11 :: - Added escalator room Escalators Up (18859)
+Sep 21 14:01:11 :: - Added escalator room Going Down The Escalator (18860)
+Sep 21 14:01:11 :: DBInit -- DONE.
+Sep 21 14:01:11 :: Signal trapping.
+Sep 21 14:01:11 :: Entering game loop.
+

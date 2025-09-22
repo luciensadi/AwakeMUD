@@ -1583,8 +1583,9 @@ RoomType:	0
 	Background:	0
 	BackgroundType:	0
 [EXIT northeast]
+	Keywords:	security door
 	ToVnum:	11429
-	Flags:	0
+	Flags:	1
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0

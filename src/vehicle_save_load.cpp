@@ -474,6 +474,7 @@ void load_single_veh(const char *filename) {
   log_vfprintf("Loading vehicle file %s.", filename);
   if (!(file.Open(filename, "r"))) {
     log_vfprintf("Warning: Unable to open vehfile %s for reading. Skipping.", filename);
+    return;
   }
 
 

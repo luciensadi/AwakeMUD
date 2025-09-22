@@ -13,9 +13,10 @@ SHELL = /bin/sh
 .DELETE_ON_ERROR :
 .PHONY : unittest
 #CXX = g++
-CXX = clang
+#CXX = clang
+CXX ?= g++
 #CXX = /opt/homebrew/Cellar/gcc/11.2.0_3/bin/aarch64-apple-darwin21-g++-11 -Wno-format-truncation -Wno-deprecated-copy
-CC = g++
+CC ?= gcc
 #CC = /opt/homebrew/Cellar/gcc/11.2.0_3/bin/aarch64-apple-darwin21-g++-11 -Wno-format-truncation -Wno-deprecated-copy
 
 PROFILE = -ggdb
@@ -31,15 +32,15 @@ BOOST_FLAGS = -lboost_filesystem -lboost_system
 
 # You probably want to comment this out: This is the makefile specification for the GitHub runner.
 LIBS = -lcrypt -L/usr/local/lib $(COMMON_FLAGS) $(BOOST_FLAGS) -lnsl -lcurl
-MYFLAGS = -DNOCRYPT -Dlinux -I /usr/local/include/ -Wall -Wextra -Wno-unused-parameter -Wno-vla -std=c++11
+MYFLAGS = -DNOCRYPT -Dlinux -I /usr/local/include/ -Wall -Wextra -Wno-unused-parameter -Wno-vla -std=c++11 -DUSE_MYSQL_8
 
 # OSX? Uncomment these:
 #LIBS = -L/usr/local/lib $(COMMON_FLAGS) $(BOOST_FLAGS) -lsodium -lcurl
 #MYFLAGS = -DUSE_MEMORY_CANARIES -DDEBUG -DSELFADVANCE -Dosx -I /usr/local/include/ -Wall -Wextra -Wno-unused-parameter -std=c++11 -DSUPPRESS_MOB_SKILL_ERRORS -DACCELERATE_FOR_TESTING -D_GLIBCXX_DEBUG
 
 # Linux / others? Uncomment these:
-#LIBS = -lcrypt -L/usr/local/lib $(COMMON_FLAGS) $(BOOST_FLAGS) -lnsl -lsodium -lcurl
-#MYFLAGS = -DDEBUG_CRYPTO -DDEBUG -DSELFADVANCE -DIDLEDELETE_DRYRUN -Dlinux -I /usr/local/include/ -Wall -Wextra -Wno-unused-parameter -DSUPPRESS_MOB_SKILL_ERRORS -std=c++11
+LIBS = -lcrypt -L/usr/local/lib $(COMMON_FLAGS) $(BOOST_FLAGS) -lnsl -lsodium -lcurl
+MYFLAGS = -DDEBUG_CRYPTO -DDEBUG -DSELFADVANCE -DIDLEDELETE_DRYRUN -Dlinux -I /usr/local/include/ -Wall -Wextra -Wno-unused-parameter -DSUPPRESS_MOB_SKILL_ERRORS -std=c++11 -DUSE_MYSQL_8
 # If you want GitHub integration, add -DGITHUB_INTEGRATION to the above and fill out your basic auth credentials in github_config.cpp.
 
 # Cygwin:

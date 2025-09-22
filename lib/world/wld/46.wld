@@ -2339,7 +2339,7 @@ RoomType:	0
 [EXIT east]
 	Keywords:	door
 	ToVnum:	4697
-	Flags:	0
+	Flags:	1
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0

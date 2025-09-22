@@ -91,3 +91,56 @@ If you get an error like `MYSQLERROR: Table 'awakemud.pfiles_mail' doesn't exist
 If it takes an exceedingly long time between you entering your password and the MUD responding, but the MUD is responsive for all other input, the machine that's hosting the MUD is not powerful enough for the password storage algorithm used by default. You may opt to either endure the delay (more secure, less convenient) or either lessen the work factor or add `-DNOCRYPT` to your Makefile (not at all secure, convenient, will break all current passwords and require you to either fix them by hand or purge and re-create your database and all characters in it).
 
 If you log on for the first time and you're not a staff member, quit out and change your rank in the database. Rank 10 is the maximum. Your MySQL command will look something like: `update pfiles set rank=10 where idnum=1;`
+
+Mysql setup:
+Step 2 — Create DB, user, and grant privileges (with a password)
+
+From a MySQL shell (mysql -u root -p):
+
+CREATE DATABASE awakemud CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- Choose a strong password here:
+CREATE USER 'awake'@'127.0.0.1' IDENTIFIED BY 'changeme';
+CREATE USER 'awake'@'localhost' IDENTIFIED BY 'changeme';
+
+GRANT ALL PRIVILEGES ON awakemud.* TO 'awake'@'127.0.0.1';
+GRANT ALL PRIVILEGES ON awakemud.* TO 'awake'@'localhost';
+FLUSH PRIVILEGES;
+
+
+Notes:
+
+If your code connects to 127.0.0.1, the 'awake'@'127.0.0.1' account is used.
+
+If it connects to localhost, MySQL may use the Unix socket path and the 'awake'@'localhost' account.
+
+Step 3 — Provide the credentials to the server process
+
+Preferred (no code changes): set environment variables before running your binary:
+
+export AWAKE_MYSQL_HOST=127.0.0.1
+export AWAKE_MYSQL_USER=awake
+export AWAKE_MYSQL_PASSWORD='changeme'
+export AWAKE_MYSQL_DB=awakemud
+
+./bin/awake
+
+
+If you run the service via systemd, add these to an override:
+
+sudo systemctl edit awake.service
+
+
+Paste:
+
+[Service]
+Environment=AWAKE_MYSQL_HOST=127.0.0.1
+Environment=AWAKE_MYSQL_USER=awake
+Environment=AWAKE_MYSQL_PASSWORD=changeme
+Environment=AWAKE_MYSQL_DB=awakemud
+
+
+Then:
+
+sudo systemctl daemon-reload
+sudo systemctl restart awake

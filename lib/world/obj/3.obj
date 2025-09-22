@@ -5443,8 +5443,8 @@ Material:	paper
 	LegalPermit:	0
 [VALUES]
 	Val0:	39
-	Val4:	150
-[AFFECT 0]
+	Val3:	1
+	Val4:	150AFFECT 0]
 	Location:	Body
 	Modifier:	1
 BREAK
@@ -5500,8 +5500,8 @@ Material:	paper
 	LegalPermit:	0
 [VALUES]
 	Val0:	38
+	Val3:	1
 	Val4:	75
-BREAK
 #485
 Keywords:	synthetic cyberskull skull
 Name:	a synthetic cyberskull

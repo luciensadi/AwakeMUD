@@ -531,8 +531,8 @@ Material:	paper
 [VALUES]
 	Val0:	38
 	Val2:	1
+	Val3:	1
 	Val4:	60
-BREAK
 #521
 Keywords:	data compactor III alpha
 Name:	a data compactor III -alpha

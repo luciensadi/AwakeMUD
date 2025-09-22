@@ -119,6 +119,16 @@ Etiquette:	48
 		Vnum:	33029
 		Type:	Avail
 		Stock:	0
+
+	[SELL 10]
+		Vnum:	99000
+		Type:	Always
+		Stock:	0
+
+	[SELL 11]
+		Vnum:	99001
+		Type:	Always
+		Stock:	0
 BREAK
 #33010
 Keeper:	33010

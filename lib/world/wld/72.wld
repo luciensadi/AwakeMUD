@@ -2558,7 +2558,7 @@ RoomType:	0
 [EXIT west]
 	Keywords:	double
 	ToVnum:	7262
-	Flags:	0
+	Flags:	1
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0

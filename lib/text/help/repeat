@@ -16,3 +16,5 @@ syntax is the same as in csh: "|old-string|replacement"  For example:
 
 ^WSee also: ALIAS^n
 
+^GUpdate:^n In addition to ^g!^n and ^g|old|new|^n history, you can use a single dot ^g.^n to repeat your ^ylast full command line^n. 
+Note: A literal ^g.^n is not saved as your last command.

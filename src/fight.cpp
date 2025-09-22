@@ -13,6 +13,8 @@
 #include "handler.hpp"
 #include "interpreter.hpp"
 #include "db.hpp"
+#include "innervoice.hpp"
+#include "combat_qol.hpp"
 #include "screen.hpp"
 #include "newmagic.hpp"
 #include "constants.hpp"
@@ -31,7 +33,6 @@
 #include "factions.hpp"
 #include "metrics.hpp"
 #include "gmcp.hpp"
-
 int initiative_until_global_reroll = 0;
 
 /* Structures */
@@ -130,36 +131,35 @@ extern void Storage_save(const char *file_name, struct room_data *room);
 /* Weapon attack texts */
 struct attack_hit_type attack_hit_text[] =
 {
-  {"hit", "hits", "hit"
-  }
-  ,               /* 0 */
+  {"hit", "hits", "hit"},
   {"sting", "stings", "sting"},
   {"whip", "whips", "whip"},
   {"slash", "slashes", "slash"},
   {"bite", "bites", "bite"},
-  {"bludgeon", "bludgeons", "bludgeon"},        /* 5 */
+  {"bludgeon", "bludgeons", "bludgeon"},
   {"crush", "crushes", "crush"},
   {"pound", "pounds", "pound"},
   {"claw", "claws", "claw"},
   {"maul", "mauls", "maul"},
-  {"gore", "gores", "gore"},     /* 10 */
+  {"gore", "gores", "gore"},
   {"pierce", "pierces", "pierce"},
   {"punch", "punches", "punch"},
   {"stab", "stabs", "stab"},
   {"shock", "shocks", "shock"},
-  {"shuriken", "shurikens", "shuriken"}, /* 15 */
+  {"shuriken", "shurikens", "shuriken"},
   {"pierce", "pierces", "pierce"},
   {"pierce", "pierces", "pierce"},
   {"grenade", "grenades", "grenade"},
   {"grenade", "grenades", "grenade"},
-  {"rocket", "rockets", "rocket"},  /* 20 */
+  {"rocket", "rockets", "rocket"},
   {"shoot", "shoots", "shot"},
   {"blast", "blasts", "blast"},
   {"shoot", "shoots", "shot"},
   {"blast", "blasts", "blast"},
-  {"blast", "blasts", "burst fire"},    /* 25 */
+  {"blast", "blasts", "burst fire"},
   {"blast", "blasts", "blast"},
-  {"bifurcate", "bifurcates", "BIFURCATION"}
+  {"bifurcate", "bifurcates", "BIFURCATION"},
+
 };
 
 /* The Fight related routines */
@@ -920,6 +920,15 @@ void death_cry(struct char_data * ch, idnum_t cause_of_death_idnum)
 
 void raw_kill(struct char_data * ch, idnum_t cause_of_death_idnum)
 {
+  if (IS_NPC(ch) && cause_of_death_idnum > 0 && number(1,100) <= 10) {
+    for (struct descriptor_data *d = descriptor_list; d; d = d->next) {
+      if (d->character && GET_IDNUM(d->character) == cause_of_death_idnum) {
+        InnerVoice::notify_enemy_death(d->character, GET_MOB_VNUM(ch));
+        break;
+      }
+    }
+  }
+
   struct obj_data *obj, *o;
   struct room_data *dest_room;
 
@@ -3038,6 +3047,16 @@ bool damage_without_message(struct char_data *ch, struct char_data *victim, int 
 // Note that dam is in BOXES, not wound types
 bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int attacktype, bool is_physical, bool send_message)
 {
+
+  // QoL: Auto-stand when hit
+  if (victim && PRF_FLAGGED(victim, PRF_AUTOSTAND)
+      && GET_POS(victim) < POS_FIGHTING && GET_POS(victim) > POS_SLEEPING) {
+    ACMD_DECLARE(do_stand);
+    do_stand(victim, (char *)"", 0, 0);
+    WAIT_STATE(victim, PULSE_VIOLENCE / 2);
+  }
+
+
   if (dam > convert_damage(DEADLY)) {
     mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Received greater-than-deadly damage integer %d to raw_damage(%s, %s, ...): Capping to Deadly.", dam, GET_CHAR_NAME(ch), GET_CHAR_NAME(victim));
     dam = convert_damage(DEADLY);
@@ -3306,6 +3325,9 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
     // Physical damage. This one's simple-- no overflow to deal with.
     if (is_physical) {
       GET_PHYSICAL(real_body) -= MAX(dam * 100, 0);
+      if (!IS_NPC(victim) && number(1,100) == 1 && GET_MAX_PHYSICAL(victim) > 0 && (GET_PHYSICAL(victim) * 100) < (GET_MAX_PHYSICAL(victim) * 25)) {
+        InnerVoice::notify_low_health(victim);
+      }
       AFF_FLAGS(real_body).SetBit(AFF_DAMAGED);
       if (trauma) {
         if (GET_MENTAL(real_body) >= 100) {
@@ -3327,6 +3349,9 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
     // Mental damage. We need to calculate overflow here.
     else {
       GET_MENTAL(real_body) -= MAX(dam * 100, 0);
+      if (!IS_NPC(victim) && number(1,100) == 1 && GET_MAX_PHYSICAL(victim) > 0 && (GET_PHYSICAL(victim) * 100) < (GET_MAX_PHYSICAL(victim) * 25)) {
+        InnerVoice::notify_low_health(victim);
+      }
       AFF_FLAGS(real_body).SetBit(AFF_DAMAGED);
       if (trauma) {
         GET_MENTAL(real_body) += 100;
@@ -6014,6 +6039,15 @@ bool next_combat_list_is_valid(struct char_data *ncl) {
 // aka combat_loop
 void perform_violence(void)
 {
+  // QoL automation tickers
+  for (struct char_data *qolch = character_list; qolch; qolch = qolch->next_in_character_list) {
+    if (IS_NPC(qolch) || !qolch->desc) continue;
+    (void) qol_tick_auto_flee(qolch);
+    qol_tick_auto_heal(qolch);
+    qol_tick_repeat_shoot(qolch);
+    qol_tick_auto_advance(qolch);
+  }
+
   PERF_PROF_SCOPE(pr_, __func__);
   struct char_data *ch = NULL;
   bool engulfed;
@@ -6038,6 +6072,10 @@ void perform_violence(void)
   ch = NULL;
   bool first_iteration = TRUE;
   while (ch || first_iteration) {
+
+// Inner Voice Tier 2 combat assist
+innervoice_tier2_combat_assist(ch);
+
     // First iteration: Set ch to combat list. We don't check next_combat_list_is_valid() in this case.
     if (first_iteration)
       ch = combat_list;

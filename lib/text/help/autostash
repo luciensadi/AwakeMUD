@@ -1,0 +1,12 @@
+AUTOSTASH
+
+AUTOSTASH
+
+Usage: ^gAUTOSTASH <container>^n
+
+Stashes your carried (non-equipped, droppable) items into a container ^yinside your own purchased home^n.
+- Refuses to work outside your owned home.
+- Skips worn and non-droppable items.
+- Great for cleaning up quickly after a job.
+
+^WSee also:^n HOUSES, LEASE, FENCE, PAYDATA

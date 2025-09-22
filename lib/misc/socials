@@ -183,11 +183,6 @@ You collapse in a heap.
 $n collapses in a heap.
 #
 
-crack 0 0
-You crack your knuckles.
-$n noisily cracks $s knuckles.
-#
-
 flex 0 8
 You flex your muscles and pose.
 $n poses and flexes $s muscles.
@@ -392,11 +387,6 @@ $n farts in your general direction!
 You waste a fart on someone who's not even here.
 Quit farting around.
 $n farts all over $mself. Frankly, the spectacle is disgusting.
-
-flip 1 8
-You flip head over heels.
-$n flips head over heels.
-#
 
 flirt 1 5
 You flirt outrageously.
@@ -628,16 +618,6 @@ MMMMEEEEEEEEOOOOOOOOOWWWWWWWWWWWW.
 $n purrs contentedly.
 #
 
-roll 1 0
-You roll your eyes in disgust.
-$n rolls $s eyes in disgust.
-You look at $M and roll your eyes in disgust.
-$n looks at $N in contempt and rolls $s eyes with disgust.
-$n stares at you and rolls $s eyes in digust.
-Um... who?
-You roll your eyes, disgusted with your own incompetence.
-$n rolls $s eyes, disgusted with $mself.
-
 scream 0 0
 ARRRRRRRRRRGH!!!!!
 $n screams loudly!
@@ -802,16 +782,6 @@ $n thanks you heartily.
 No one answers to that name here.
 You thank yourself since nobody else wants to!
 $n thanks $mself since you won't.
-
-think 1 0
-You think about life, the universe and everything.
-$n sinks deeply into thought about the meaning of life.
-You think about what purpose $E has in relation to your part of life.
-$n stops and thinks about $N, completely lost in thought.
-Your ears burn as $n thinks about you.. you wonder what about.
-You'd better think harder, if you hope to make contact!
-You think about yourself (for once).
-$n thinks about $mself for a change.....(?)
 
 touch 0 0
 You touch nothing.
@@ -1066,6 +1036,7 @@ $n reaches out to scratch $N's head for $M.
 $n reaches out to scratch your head for you! Er.....ok....
 They obviously don't like you scratching them.
 #
+#
 
 swear 0 5
 You swear profusely.
@@ -1074,6 +1045,7 @@ You scream abusive comments at $N!
 $n starts screaming truly abusive things at $N! How uncouth.
 $N screams truly abusive remarks at you! You gonna take that?
 Awww, noone to vent your anger on.
+#
 #
 
 disregard 0 5
@@ -1168,6 +1140,7 @@ You cheer $N on!
 $n cheers $N on!
 $n cheers you on! Go for it!
 Nope...looks like you're on your own.
+#
 #
 
 howl 0 5

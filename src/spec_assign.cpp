@@ -219,7 +219,7 @@ struct teach_data teachers[] = {
      SKILL_RUSSIAN, SKILL_SALISH, SKILL_SIOUX, SKILL_SPANISH, SKILL_SPERETHIEL, SKILL_UTE, SKILL_HEBREW, 
      SKILL_IROQUOIS, SKILL_MANDARIN, SKILL_HAITIAN_CREOLE, 0 }, "Socrates shows you the intricacies "
        "of the language and you emerge with a greater understanding.\r\n", ADVANCED },
-
+// 
    { 3125, { SKILL_COMPUTER, SKILL_ELECTRONICS, SKILL_BR_COMPUTER, SKILL_BR_ELECTRONICS, SKILL_PROGRAM_COMBAT, SKILL_PROGRAM_DEFENSIVE, SKILL_PROGRAM_CYBERTERM, SKILL_CYBERTERM_DESIGN, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "Brian explains some concepts you had yet to understand "
      "and\r\nyou feel like you've learned something.\r\n", AMATEUR },
 
@@ -303,7 +303,7 @@ struct teach_data teachers[] = {
    { 60540, { SKILL_BR_PISTOL, SKILL_BR_SHOTGUN, SKILL_BR_SMG, SKILL_BR_RIFLE, SKILL_BR_HEAVYWEAPON, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "Gary teaches you the finer points of gunsmithing.\r\n", NEWBIE },
 
    { 22871, { SKILL_BR_PISTOL, SKILL_BR_SHOTGUN, SKILL_BR_SMG, SKILL_BR_RIFLE, SKILL_BR_HEAVYWEAPON, 0, 0, 0, 0, 0, 0, 0, 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, "You spend some time reading through the library.\r\n", AMATEUR },
-
+// 
    { 62803, { SKILL_PILOT_CAR, SKILL_PILOT_BIKE, SKILL_PISTOLS, SKILL_UNARMED_COMBAT, SKILL_EDGED_WEAPONS, SKILL_STREET_ETIQUETTE, SKILL_STEALTH, SKILL_NEGOTIATION, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, "You spend some time listening to Axehead's stories, and you feel like you've learned something.\r\n", AMATEUR },
 
   { 0, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "Report this bug!\r\n", 0 } // this MUST be last
@@ -883,8 +883,8 @@ void assign_mobiles(void)
   ASSIGNMOB(24199, multnomah_guard);
 
   /* Slitch Pit */
-  ASSIGNMOB(62803, axehead);
-  ASSIGNMOB(62807, receptionist);
+  // removed missing mob assignment (62803 -> axehead)
+ASSIGNMOB(62807, receptionist);
 
   /* Neophyte expansion */
   ASSIGNMOB(60599, chargen_docwagon_checker);
@@ -936,7 +936,7 @@ void assign_objects(void)
   ASSIGNOBJ(OBJ_ONE_SHOT_HEALING_INJECTOR, one_shot_self_heal);
 
   // Adding a board? Add it to the index in boards.cpp too!
-  ASSIGNOBJ(26, gen_board);
+// disabled: ASSIGNOBJ(26, gen_board);
   ASSIGNOBJ(10018, gen_board);  /* ImmHQ Board */
   ASSIGNOBJ(OBJ_CHANGELOG_BOARD, gen_board);  /* Changelog */
 #ifdef USE_PRIVATE_CE_WORLD
@@ -1008,7 +1008,7 @@ void assign_objects(void)
   ASSIGNOBJ(60500, chargen_hopper);
   ASSIGNOBJ(10033, quest_debug_scanner);
   ASSIGNOBJ(OBJ_INITIATIVE_TRACKER, initiative_tracker);
-  ASSIGNOBJ(10093, slot_machine);
+  ASSIGNOBJ(39920, slot_machine); // replaced missing 10093
 #ifdef USE_PRIVATE_CE_WORLD
   ASSIGNOBJ(102208, trideo);
   ASSIGNOBJ(94331, trideo);
@@ -1055,7 +1055,7 @@ void assign_objects(void)
 
   ASSIGNOBJ(15811, medical_workshop);
   ASSIGNOBJ(16242, medical_workshop);
-  ASSIGNOBJ(70611, medical_workshop);
+  ASSIGNOBJ(15811, medical_workshop); // replaced missing 70611
 #ifdef USE_PRIVATE_CE_WORLD
   ASSIGNOBJ(10039, medical_workshop);
 #endif

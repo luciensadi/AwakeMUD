@@ -22,3 +22,4 @@ beginning.
 < 10P 10M > remove 6
 < 10P 10M > reply 7
 
+^GNote:^n Some locations provide ^gvirtual storage^n via terminals. Lockboxes and terminals have different feedback (terminal chirps vs. lockbox status lights) when you complete a hack.

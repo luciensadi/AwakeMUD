@@ -767,7 +767,8 @@ RoomType:	0
 	BackgroundType:	8
 [EXIT north]
 	ToVnum:	40707
-	Flags:	0
+	Keywords: gate
+	Flags:	2
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0

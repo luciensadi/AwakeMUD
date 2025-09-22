@@ -19,6 +19,7 @@
 #include "interpreter.hpp"
 #include "handler.hpp"
 #include "db.hpp"
+#include "innervoice.hpp"
 #include "awake.hpp"
 #include "constants.hpp"
 #include "newmatrix.hpp"
@@ -3320,6 +3321,16 @@ ACMD(do_drink)
 	float weight;
 
 	one_argument(argument, arg);
+// InnerVoice item hook (do_drink)
+if (*arg) {
+  struct obj_data* iv_obj = get_obj_in_list_vis(ch, arg, ch->carrying);
+  if (!iv_obj && ch->in_room)
+    iv_obj = get_obj_in_list_vis(ch, arg, ch->in_room->contents);
+  if (iv_obj) {
+    InnerVoice::notify_item_interaction(ch, iv_obj, "drink");
+  }
+}
+
 
 	if (IS_ASTRAL(ch))
 	{
@@ -3457,6 +3468,8 @@ ACMD(do_drink)
 			return;
 	}
 	return;
+
+  InnerVoice::notify_drink(ch, temp);
 }
 
 ACMD(do_eat)
@@ -3471,6 +3484,16 @@ ACMD(do_eat)
 		return;
 	}
 	one_argument(argument, arg);
+// InnerVoice item hook (do_eat)
+if (*arg) {
+  struct obj_data* iv_obj = get_obj_in_list_vis(ch, arg, ch->carrying);
+  if (!iv_obj && ch->in_room)
+    iv_obj = get_obj_in_list_vis(ch, arg, ch->in_room->contents);
+  if (iv_obj) {
+    InnerVoice::notify_item_interaction(ch, iv_obj, "eat");
+  }
+}
+
 
 	if (!*arg)
 	{
@@ -3548,6 +3571,8 @@ ACMD(do_eat)
 			extract_obj(food);
 		}
 	}
+
+  InnerVoice::notify_eat(ch, food);
 }
 
 ACMD(do_pour)
@@ -4218,6 +4243,8 @@ void perform_wear(struct char_data *ch, struct obj_data *obj, int where, bool pr
 			break;
 		}
 	}
+
+  InnerVoice::notify_wear(ch, obj, where);
 }
 
 int find_eq_pos(struct char_data *ch, struct obj_data *obj, char *arg)
@@ -4569,6 +4596,8 @@ void perform_remove(struct char_data *ch, int pos)
 	}
 
 	return;
+
+  InnerVoice::notify_remove(ch, obj, pos);
 }
 
 ACMD(do_remove)
@@ -5861,4 +5890,65 @@ ACMD(do_conceal_reveal)
 	send_to_char("You rearrange your equipment.\r\n", ch);
 	act("$n rearranges $s equipment.", TRUE, ch, 0, 0, TO_ROOM);
 	playerDB.SaveChar(ch);
+}
+
+
+ACMD(do_autostash)
+{
+  char container_name[MAX_INPUT_LENGTH];
+  one_argument(argument, container_name);
+  if (!*container_name) {
+    send_to_char("Usage: AUTOSTASH <container keyword>\r\n", ch);
+    return;
+  }
+  if (!ch->in_room) { send_to_char("You are nowhere.\r\n", ch); return; }
+
+  /* Verify current room belongs to a purchased apartment the player owns */
+  bool ok = FALSE;
+  Apartment *found = NULL;
+  for (auto &complex : global_apartment_complexes) {
+    for (auto &apartment : complex->get_apartments()) {
+      if (!apartment->is_purchased()) continue;
+      if (!apartment->has_owner_privs(ch)) continue;
+      /* Check if current room is one of the apartment's rooms */
+      for (auto &aroom : apartment->get_rooms()) {
+        if (aroom->get_vnum() == ch->in_room->number) { ok = TRUE; found = apartment; break; }
+      }
+      if (ok) break;
+    }
+    if (ok) break;
+  }
+  if (!ok) {
+    send_to_char("You can only AUTOSTASH in a container inside a house you own.\r\n", ch);
+    return;
+  }
+
+  struct obj_data *cont = get_obj_in_list_vis(ch, container_name, ch->in_room->contents);
+  if (!cont || GET_OBJ_TYPE(cont) != ITEM_CONTAINER) {
+    send_to_char("You don't see that container here.\r\n", ch);
+    return;
+  }
+
+  int moved = 0;
+  struct obj_data *objnxt;
+  for (struct obj_data *it = ch->carrying; it; it = objnxt) {
+    objnxt = it->next_content;
+    if (it->worn_by) continue; /* skip equipped */
+    #ifdef ITEM_NODROP
+
+      if (IS_OBJ_STAT(it, ITEM_NODROP)) continue;
+
+    #endif
+/* Move to container */
+    obj_from_char(it);
+    obj_to_obj(it, cont);
+    moved++;
+  }
+
+  if (moved == 0) {
+    send_to_char("You have nothing suitable to stash.\r\n", ch);
+    return;
+  }
+  act("You quickly stash your gear into $p.", TRUE, ch, cont, 0, TO_CHAR);
+  act("$n quickly stashes some gear into $p.", TRUE, ch, cont, 0, TO_ROOM);
 }

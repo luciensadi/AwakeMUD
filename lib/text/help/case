@@ -1,0 +1,13 @@
+CASE
+
+CASE
+
+Usage: ^gCASE <target>^n
+
+Quietly sizes up a target for pickpocketing without taking any action.
+- Shows your estimated odds (your stealth vs. target awareness).
+- Shows bystander count and a quick risk label.
+- Use ^gPICKPOCKET <target>^n to attempt the lift.
+
+^WTip:^n Odds improve if you're sneaking, dim, or less visible; crowds increase risk.
+^WSee also:^n PICKPOCKET, STEAL, HEAT

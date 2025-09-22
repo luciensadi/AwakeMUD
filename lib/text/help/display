@@ -43,3 +43,4 @@ would produce a prompt similar to:
 
 ^WSee Also: ANSI COLOR, TOGGLE^n
 
+^GNote:^n A small ^RHeat HUD^n may appear in your prompt while you have heat. It hides automatically when your heat reaches 0.

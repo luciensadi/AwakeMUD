@@ -2870,8 +2870,9 @@ void extract_char(struct char_data * ch, bool do_save)
     log_vfprintf("Extracting PC %s (%ld), DB save flag %s.", GET_CHAR_NAME(ch), GET_IDNUM(ch), do_save ? "TRUE" : "FALSE");
   }
 
-  if (ch->in_room)
+  if (ch->in_room){
     ch->in_room->dirty_bit = TRUE;
+  }
 
   if ((ch->in_veh && AFF_FLAGGED(ch, AFF_PILOT)) || PLR_FLAGGED(ch, PLR_REMOTE)) {
     RIG_VEH(ch, veh);
@@ -2882,7 +2883,6 @@ void extract_char(struct char_data * ch, bool do_save)
     if (!veh->dest)
       veh->cspeed = SPEED_OFF;
   }
-
   stop_watching(ch);
 
   if (!IS_NPC(ch)) {
@@ -2893,8 +2893,9 @@ void extract_char(struct char_data * ch, bool do_save)
     }
 
     // Save the player.
-    if (do_save)
+    if (do_save){
       playerDB.SaveChar(ch, GET_LOADROOM(ch));
+    }
 
     // Hollow player body? Figure out who this was supposed to belong to and return them.
     if (!ch->desc) {
@@ -2929,8 +2930,9 @@ void extract_char(struct char_data * ch, bool do_save)
       }
     }
   }
-  if (ch->followers || ch->master)
+  if (ch->followers || ch->master){
     die_follower(ch);
+  }
 
   /* Forget snooping, if applicable */
   if (ch->desc)
@@ -3023,7 +3025,6 @@ void extract_char(struct char_data * ch, bool do_save)
     if (FIGHTING(k) == ch)
       stop_fighting(k);
   }
-
   /* handle vehicle cases */
   if (ch->in_veh) {
     if (AFF_FLAGGED(ch, AFF_PILOT)) {
@@ -3106,6 +3107,7 @@ void extract_char(struct char_data * ch, bool do_save)
 
   if (!IS_NPC(ch))
   {
+
     /* clean up their flags */
     PLR_FLAGS(ch).RemoveBits(PLR_MATRIX, PLR_PROJECT, PLR_SWITCHED,
                              PLR_WRITING, PLR_MAILING, PLR_EDITING,
@@ -3114,7 +3116,6 @@ void extract_char(struct char_data * ch, bool do_save)
 
     /* restore them to their room, because corpses love rooms */
     ch->in_room = in_room;
-
     /* throw them back in the menus */
     if (ch->desc) {
       if (STATE(ch->desc) == CON_QMENU)

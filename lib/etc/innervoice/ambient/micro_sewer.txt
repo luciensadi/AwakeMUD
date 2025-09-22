@@ -1,0 +1,2 @@
+observation: 'You notice a sewer detail.' — add it to our scrapbook of suspicious moments.
+confession: 'You keep moving through the sewer.' — screenshot it with your memory—mine is vibes-only.

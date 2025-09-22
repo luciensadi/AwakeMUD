@@ -211,7 +211,7 @@ Etiquette:	46
 		Stock:	0
 BREAK
 #65404
-Keeper:	-1
+Keeper:	65400
 ProfitBuy:	1.00
 ProfitSell:	1.00
 Random:	0
@@ -354,7 +354,7 @@ Etiquette:	46
 		Stock:	0
 BREAK
 #65499
-Keeper:	0
+Keeper:	65400
 ProfitBuy:	1.00
 ProfitSell:	1.00
 Random:	0

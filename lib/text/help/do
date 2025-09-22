@@ -1,0 +1,11 @@
+DO
+
+DO
+
+Usage: ^gDO <count> <command>^n
+
+Repeats any command up to 50 times. This is server-side (no client aliases needed).
+- Stops early if you become stunned, mortally wounded, etc.
+- Works with most commands: ^gdo 5 pickpocket guard^n, ^gdo 3 scan^n, etc.
+
+^WSee also:^n REPEAT

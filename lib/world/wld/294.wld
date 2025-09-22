@@ -1904,12 +1904,12 @@ RoomType:	4
 	Background:	1
 	BackgroundType:	7
 [EXIT up]
-	Keywords:	grave
+Keywords:	grave
 	Desc:$
 The sky can be seen above, offering a glimpse out of this open grave. 
 ~
 	ToVnum:	29413
-	Flags:	0
+	Flags:	1
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
@@ -1942,23 +1942,23 @@ RoomType:	4
 	Background:	1
 	BackgroundType:	7
 [EXIT up]
-	Keywords:	grave
+Keywords:	grave
 	Desc:$
 The sky can be seen above as one peers out from this open grave. 
 ~
 	ToVnum:	29412
-	Flags:	0
+	Flags:	1
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 	HiddenRating:	8
 [EXIT down]
-	Keywords:	grave
+Keywords:	grave
 	Desc:$
 The bottom of the grave seems to go deeper. 
 ~
 	ToVnum:	29441
-	Flags:	0
+	Flags:	1
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
@@ -2515,12 +2515,12 @@ RoomType:	6
 	Barrier:	4
 	KeyVnum:	0
 [EXIT down]
-	Keywords:	plywood plank wood
+Keywords:	plywood plank wood
 	Desc:$
 A rotten plank of plywood threatens to give way underfoot here. 
 ~
 	ToVnum:	29461
-	Flags:	0
+	Flags:	1
 	Material:	wood
 	Barrier:	4
 	KeyVnum:	0
