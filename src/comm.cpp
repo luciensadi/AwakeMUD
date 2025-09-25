@@ -384,7 +384,7 @@ void copyover_recover()
 
     /* create a new descriptor */
     d = new descriptor_data;
-    memset ((char *) d, 0, sizeof (struct descriptor_data));
+    // memset ((char *) d, 0, sizeof (struct descriptor_data));
     init_descriptor (d,desc); /* set up various stuff */
 
     strlcpy(d->host, host, sizeof(d->host));
