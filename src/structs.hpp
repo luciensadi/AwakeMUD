@@ -1045,7 +1045,7 @@ struct txt_block
   struct txt_block *next;
 
   txt_block() :
-      text(NULL), next(NULL)
+      text(NULL), aliased(0), next(NULL)
   {}
 }
 ;
@@ -1072,6 +1072,14 @@ struct ccreate_t
   idnum_t prestige_bagholder;
   int prestige_cost;
   bool is_otaku;
+
+  ccreate_t() :
+    mode(0), force_points(0), temp(0), points(0), prestige_race(0), prestige_bagholder(0), prestige_cost(0), is_otaku(false)
+  {
+    for (int idx=0; idx < NUM_CCR_PR_POINTS; idx++) {
+      pr[idx] = 0;
+    }
+  }
 };
 
 struct descriptor_data
@@ -1158,19 +1166,21 @@ struct descriptor_data
   int canary;
   protocol_t *pProtocol;
 
-  // this is for spell creation
-
-  // This is mostly a just-in-case section. Descriptors are zeroed out when created in comm.cpp's new_descriptor().
   descriptor_data() :
-      showstr_head(NULL), showstr_point(NULL), str(NULL),
-      output(NULL), output_canary(CANARY_VALUE), large_outbuf(NULL), input_and_character_canary(CANARY_VALUE),
+      descriptor(0), peer_port(0), bad_pws(0), idle_ticks(0), invalid_name(0), connected(0), wait(0),
+      desc_num(0), login_time(0), showstr_head(NULL), showstr_point(NULL), str(NULL),
+      max_str(0), mail_to(0), prompt_mode(0), inbuf_canary(CANARY_VALUE), last_input_canary(CANARY_VALUE),
+      small_outbuf_canary(CANARY_VALUE), output(NULL), output_canary(CANARY_VALUE), bufptr(0), bufspace(0),
+      large_outbuf(NULL), input_and_character_canary(CANARY_VALUE),
       character(NULL), original(NULL), snooping(NULL), snoop_by(NULL), next(NULL), watching(NULL), watcher(NULL),
-      invalid_command_counter(0), iedit_limit_edits(0), misc_data(NULL),
-      edit_obj(NULL), edit_room(NULL), edit_mob(NULL), edit_quest(NULL), edit_shop(NULL),
+      invalid_command_counter(0), regenerating_art_quota(0), nuyen_paid_for_wheres_my_car(0),
+      edit_mode(0), edit_convert_color_codes(false), edit_number(0), edit_number2(0), edit_number3(0),
+      edit_zone(0), iedit_limit_edits(0), misc_data(NULL),
+      edit_obj(NULL), edit_obj_secondary(NULL), edit_room(NULL), edit_mob(NULL), edit_quest(NULL), edit_shop(NULL),
       edit_zon(NULL), edit_cmd(NULL), edit_veh(NULL), edit_host(NULL), edit_icon(NULL),
       edit_helpfile(NULL), edit_complex(NULL), edit_complex_original(NULL),
       edit_apartment(NULL), edit_apartment_original(NULL), edit_apartment_room(NULL),
-      edit_apartment_room_original(NULL), edit_faction(NULL), edit_pgroup(NULL),
+      edit_apartment_room_original(NULL), edit_faction(NULL), edit_exdesc(NULL), edit_pgroup(NULL),
       canary(CANARY_VALUE), pProtocol(NULL)
   {
     // Zero out the communication history for all channels.
@@ -1182,7 +1192,11 @@ struct descriptor_data
       nuyen_income_this_play_session[i] = 0;
     }
 
-    // Wipe last_sprayed.
+    // Clear buffers.
+    host[0] = '\0';
+    inbuf[0] = '\0';
+    last_input[0] = '\0';
+    small_outbuf[0] = '\0';
     last_sprayed[0] = '\0';
   }
 }
@@ -1223,7 +1237,7 @@ struct message_list
   struct message_type *msg;      /* List of messages.                    */
 
   message_list() :
-    msg(NULL)
+    a_type(0), number_of_attacks(0), msg(NULL)
   {}
 };
 
@@ -1235,6 +1249,10 @@ struct weather_data
   int sunlight;       /* And how much sun. */
   int moonphase;      /* What is the Moon Phae */
   int lastrain;       /* cycles since last rain */
+
+  weather_data() :
+    pressure(0), change(0), sky(0), sunlight(0), moonphase(0), lastrain(0)
+  {}
 };
 
 /* element in monster and object index-tables   */
@@ -1247,7 +1265,7 @@ struct index_data
   WSPEC(*wfunc);
 
   index_data() :
-      func(NULL), sfunc(NULL), wfunc(NULL)
+      vnum(0), number(0), func(NULL), sfunc(NULL), wfunc(NULL)
   {}
 }
 ;
@@ -1259,7 +1277,7 @@ struct remem
   struct remem *next;
 
   remem() :
-    mem(NULL), next(NULL)
+    idnum(0), mem(NULL), next(NULL)
   {}
 };
 
