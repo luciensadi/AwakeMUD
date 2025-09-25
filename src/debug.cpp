@@ -240,6 +240,133 @@ ACMD(do_debug) {
     return;
   }
 
+  struct sustain_data_no_init {
+    ush_int spell;
+    unsigned char subtype;
+    unsigned char force;
+    unsigned char success;
+    int idnum; // This is distinct from caster idnum etc, so does not necessarily need to be idnum_t.
+    int time;
+    unsigned char time_to_take_effect;
+    bool is_caster_record;
+    int ritual_cast_cost;
+    struct obj_data *focus;
+    struct char_data *spirit;
+    struct char_data *other;
+    struct sustain_data *next;
+    struct txt_q input;
+  };
+
+  if (!str_cmp(arg1, "testinitializing")) {
+    sustain_data_no_init *data;
+    send_to_char(ch, "OK, testing value-initialization...\r\n");
+
+    data = new sustain_data_no_init();
+    send_to_char(ch, "After default initialization:   "
+                 "Spell=%u, "
+                 "Subtype=%u, "
+                 "Force=%u, "
+                 "Success=%u, "
+                 "Idnum=%d, "
+                 "Time=%d, "
+                 "TimeToTakeEffect=%u, "
+                 "IsCasterRecord=%s, "
+                 "RitualCastCost=%d, "
+                 "Focus=%s(%p), "
+                 "Spirit=%s(%p), "
+                 "Other=%s(%p), "
+                 "Next=%p, "
+                 "txt_q->head=%p, "
+                 "txt_q->tail=%p\r\n",
+                 data->spell,
+                 data->subtype,
+                 data->force,
+                 data->success,
+                 data->idnum,
+                 data->time,
+                 data->time_to_take_effect,
+                 data->is_caster_record ? "true" : "false",
+                 data->ritual_cast_cost,
+                 data->focus ? "obj" : "null", (void*)data->focus,
+                 data->spirit ? "char" : "null", (void*)data->spirit,
+                 data->other ? "char" : "null", (void*)data->other,
+                 (void*)data->next,
+                 (void*)data->input.head,
+                 (void*)data->input.tail);
+    delete data;
+
+    data = new sustain_data_no_init();
+    send_to_char(ch, "After parenthetical initialization:   "
+                 "Spell=%u, "
+                 "Subtype=%u, "
+                 "Force=%u, "
+                 "Success=%u, "
+                 "Idnum=%d, "
+                 "Time=%d, "
+                 "TimeToTakeEffect=%u, "
+                 "IsCasterRecord=%s, "
+                 "RitualCastCost=%d, "
+                 "Focus=%s(%p), "
+                 "Spirit=%s(%p), "
+                 "Other=%s(%p), "
+                 "Next=%p, "
+                 "txt_q->head=%p, "
+                 "txt_q->tail=%p\r\n",
+                 data->spell,
+                 data->subtype,
+                 data->force,
+                 data->success,
+                 data->idnum,
+                 data->time,
+                 data->time_to_take_effect,
+                 data->is_caster_record ? "true" : "false",
+                 data->ritual_cast_cost,
+                 data->focus ? "obj" : "null", (void*)data->focus,
+                 data->spirit ? "char" : "null", (void*)data->spirit,
+                 data->other ? "char" : "null", (void*)data->other,
+                 (void*)data->next,
+                 (void*)data->input.head,
+                 (void*)data->input.tail);
+    delete data;
+
+    data = new sustain_data_no_init();
+    memset(data, 0, sizeof(sustain_data_no_init));
+    send_to_char(ch, "After memset initialization:  "
+                 "Spell=%u, "
+                 "Subtype=%u, "
+                 "Force=%u, "
+                 "Success=%u, "
+                 "Idnum=%d, "
+                 "Time=%d, "
+                 "TimeToTakeEffect=%u, "
+                 "IsCasterRecord=%s, "
+                 "RitualCastCost=%d, "
+                 "Focus=%s(%p), "
+                 "Spirit=%s(%p), "
+                 "Other=%s(%p), "
+                 "Next=%p, "
+                 "txt_q->head=%p, "
+                 "txt_q->tail=%p\r\n",
+                 data->spell,
+                 data->subtype,
+                 data->force,
+                 data->success,
+                 data->idnum,
+                 data->time,
+                 data->time_to_take_effect,
+                 data->is_caster_record ? "true" : "false",
+                 data->ritual_cast_cost,
+                 data->focus ? "obj" : "null", (void*)data->focus,
+                 data->spirit ? "char" : "null", (void*)data->spirit,
+                 data->other ? "char" : "null", (void*)data->other,
+                 (void*)data->next,
+                 (void*)data->input.head,
+                 (void*)data->input.tail);
+    delete data;
+
+    return;
+  }
+
   if (!str_cmp(arg1, "makesecs")) {
     extern void initialize_pocket_secretary(struct obj_data *sec);
 

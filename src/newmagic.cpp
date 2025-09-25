@@ -4337,6 +4337,11 @@ ACMD(do_learn)
     for (struct spirit_data *spir = GET_SPIRIT(ch); spir && skill == GET_SKILL(ch, SKILL_SORCERY); spir = spir->next)
       if (spir->called) {
         struct char_data *spirit = find_spirit_by_id(spir->id, GET_IDNUM(ch));
+
+        if (!spirit) {
+          mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: spir->called true for elemental %d, but no matching char found!", spir->id);
+          continue;
+        }
         if (MOB_FLAGS(spirit).IsSet(MOB_STUDY)) {
           switch(spir->type) {
           case ELEM_FIRE:
