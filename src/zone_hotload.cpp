@@ -58,7 +58,7 @@ REMOVE from the vehicle's amount when:
 #include "handler.hpp"
 #include "structs.hpp"
 
-extern void reset_zone(rnum_t zone, int reboot);
+extern void reset_zone(rnum_t zone, int reboot, bool reset_doors=true);
 extern void do_single_mobile_activity(struct char_data *ch);
 
 bool zone_has_pc_occupied_vehicles(struct zone_data *zone)
