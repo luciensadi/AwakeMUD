@@ -213,7 +213,7 @@ void assign_rooms(void);
 void assign_shopkeepers(void);
 void assign_johnsons(void);
 void randomize_shop_prices(void);
-void reset_zone(rnum_t zone, int reboot);
+void reset_zone(rnum_t zone, int reboot, bool process_doors=true);
 int file_to_string(const char *name, char *buf, size_t buf_size);
 int file_to_string_alloc(const char *name, char **buf);
 void check_start_rooms(void);
@@ -4695,7 +4695,7 @@ void zcmd_repair_door(struct room_data *room, int dir) {
 #define ZONE_ERROR(message) {log_zone_error(zone, cmd_no, message); last_cmd = 0;}
 
 /* execute the reset command table of a given zone */
-void reset_zone(rnum_t zone, int reboot)
+void reset_zone(rnum_t zone, int reboot, bool process_doors)
 {
   SPECIAL(fixer);
   int cmd_no, last_cmd = 0, found = 0, no_mob = 0, temp_qty = 0;
@@ -5331,7 +5331,7 @@ void reset_zone(rnum_t zone, int reboot)
 #define DOOR_STRUCT world[ZCMD.arg1].dir_option[ZCMD.arg2]
 #define REV_DOOR_STRUCT opposite_room->dir_option[rev_dir[ZCMD.arg2]]
     case 'D':                 /* set state of door */
-      {
+      if (process_doors) {
         if (ZCMD.arg2 < 0 || ZCMD.arg2 >= NUM_OF_DIRS) {
           ZONE_ERROR("Invalid direction specified.");
           break;

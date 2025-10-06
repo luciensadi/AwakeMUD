@@ -4140,7 +4140,7 @@ ACMD(do_wizwho)
 
 ACMD(do_zreset)
 {
-  void reset_zone(rnum_t zone, int reboot);
+  void reset_zone(rnum_t zone, int reboot, bool process_doors=true);
 
   int i;
 

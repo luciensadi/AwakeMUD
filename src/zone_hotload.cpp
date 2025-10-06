@@ -323,7 +323,8 @@ void hotload_zone(rnum_t zone_idx)
   for (int resets_to_do = NUM_RESETS_TO_DO_WHEN_HOTLOADING; resets_to_do > 0;
        resets_to_do--)
   {
-    reset_zone(zone_idx, false);
+    // Reset zone without processing doors.
+    reset_zone(zone_idx, false, false);
 
     for (vnum_t room_vnum = zone->number * 100; room_vnum <= zone->top;
          room_vnum++)
