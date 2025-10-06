@@ -3140,8 +3140,7 @@ SPECIAL(fixer)
       return TRUE;
     }
     for (obj = fixer->carrying; obj && j <= extra; obj = obj->next_content)
-      if (GET_OBJ_TIMER(obj) == GET_IDNUM(ch) &&
-          isname(temp, obj->text.keywords))
+      if (GET_OBJ_TIMER(obj) == GET_IDNUM(ch) && keyword_appears_in_obj(temp, obj))
         if (++j == extra)
           break;
     if (!obj) {
