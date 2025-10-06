@@ -3654,6 +3654,10 @@ void do_probe_object(struct char_data * ch, struct obj_data * j, bool is_in_shop
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n  ^c%s^n.", eye_bits);
       }
 
+      if (GET_CYBERWARE_TYPE(j) == CYB_DERMALSHEATHING && GET_CYBERWARE_FLAGS(j)) {
+        strlcat(buf, "\r\nSince the ruthenium is applied as a skin coating, ^Ythe invisibility stops working when you wear anything over it^n.", sizeof(buf));
+      }
+
       if (IS_OBJ_STAT(j, ITEM_EXTRA_MAGIC_INCOMPATIBLE)) {
         strlcat(buf, "\r\n^yIt is incompatible with magic.^n", sizeof(buf));
       }
