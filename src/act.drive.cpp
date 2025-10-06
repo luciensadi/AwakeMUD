@@ -1824,6 +1824,7 @@ ACMD(do_gridguide)
         case JURISDICTION_CAS:
           destination_list = cas_taxi_destinations;
           location_string = " or the CAS gridguide system";
+          break;
         default:
           destination_list = NULL;
           break;
