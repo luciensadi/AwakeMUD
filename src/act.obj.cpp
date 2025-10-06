@@ -5729,18 +5729,18 @@ ACMD(do_break)
 		if (!obj)
 			send_to_char("You don't have a breakable tooth compartment.\r\n", ch);
 		else if (!(contents = obj->contains))
-			send_to_char("Your tooth compartment is empty, so breaking it now would be a waste.\r\n", ch);
+			send_to_char("Your one-time use tooth compartment is empty, so breaking it now would be a waste.\r\n", ch);
 		else
 		{
 			if (GET_OBJ_TYPE(contents) != ITEM_DRUG)
 			{
-				send_to_char(ch, "Your tooth compartment contains something that isn't drugs! Aborting.\r\n");
+				send_to_char(ch, "Your one-time use tooth compartment contains something that isn't drugs! Aborting.\r\n");
 				snprintf(buf, sizeof(buf), "%s's tooth compartment contains non-drug item %s!", GET_CHAR_NAME(ch), GET_OBJ_NAME(contents));
 				mudlog(buf, ch, LOG_SYSLOG, TRUE);
 				return;
 			}
 
-			send_to_char("You bite down hard on the tooth compartment, breaking it open.\r\n", ch);
+			send_to_char("You bite down hard on your one-time use tooth compartment, ^rbreaking it open^n.\r\n", ch);
 			obj_from_cyberware(obj);
 			GET_ESSHOLE(ch) += calculate_ware_essence_or_index_cost(ch, obj);
 			obj_from_obj(contents);
@@ -5754,7 +5754,7 @@ ACMD(do_break)
 	// No matches found.
 	if (*argument)
 	{
-		send_to_char("You can only break mindlinks and tooth compartments. Are you looking for the ^WDESTROY^n or ^WJUNK^n commands?\r\n", ch);
+		send_to_char("You can only break mindlinks and one-time use tooth compartments. Are you looking for the ^WDESTROY^n or ^WJUNK^n commands?\r\n", ch);
 	}
 	else
 	{
