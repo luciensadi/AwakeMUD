@@ -3,7 +3,7 @@
 
 extern int get_weapon_damage_type(struct obj_data* weapon);
 extern int check_recoil(struct char_data *ch, struct obj_data *gun, bool is_using_gyromount=FALSE);
-extern int check_smartlink(struct char_data *ch, struct obj_data *weapon);
+extern int check_smartlink(struct char_data *ch, struct obj_data *weapon, bool only_check_cyberware=false);
 
 bool does_weapon_have_bayonet(struct obj_data *weapon);
 bool perform_nerve_strike(struct combat_data *att, struct combat_data *def, char *rbuf, size_t rbuf_len);

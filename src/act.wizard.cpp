@@ -121,6 +121,8 @@ extern void DBFinalize();
 
 extern void display_characters_ignore_entries(struct char_data *viewer, struct char_data *target);
 extern int count_objects(struct obj_data *obj);
+extern const struct obj_data *get_weapon_smartlink_proto(struct obj_data *weapon);
+extern int check_smartlink(struct char_data *ch, struct obj_data *weapon, bool only_check_cyberware);
 
 ACMD_DECLARE(do_goto);
 
@@ -8426,14 +8428,17 @@ int audit_zone_mobs_(struct char_data *ch, int zone_num, bool verbose) {
     if (GET_EQ(mob, WEAR_WIELD)) {
       struct obj_data *weap = GET_EQ(mob, WEAR_WIELD);
 
-      if (GET_OBJ_TYPE(weap) == ITEM_WEAPON
-          && WEAPON_IS_GUN(weap)
-          && GET_WEAPON_MAX_AMMO(weap) > 0
-          && !mob_has_ammo_for_weapon(mob, weap))
-      {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - missing ammo for weapon, will default to %d mags of normal ammo.\r\n",
+      if (GET_OBJ_TYPE(weap) == ITEM_WEAPON && WEAPON_IS_GUN(weap)) {
+        if (GET_WEAPON_MAX_AMMO(weap) > 0  && !mob_has_ammo_for_weapon(mob, weap)) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - missing ammo for weapon, will default to %d mags of normal ammo.\r\n",
                  GET_WEAPON_MAX_AMMO(weap) * NUMBER_OF_MAGAZINES_TO_GIVE_TO_UNEQUIPPED_MOBS);
-        issues++;
+          issues++;
+        }
+
+        if (get_weapon_smartlink_proto(weap) && !check_smartlink(mob, weap, true)) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - wielding smartlink'd weapon with no 'ware, will default to goggles (-1 TN).\r\n");
+          issues++;
+        }
       }
     }
 

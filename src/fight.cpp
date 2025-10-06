@@ -3900,40 +3900,58 @@ bool has_ammo_no_deduct(struct char_data *ch, struct obj_data *wielded) {
   return process_has_ammo(ch, wielded, FALSE);
 }
 
-int check_smartlink(struct char_data *ch, struct obj_data *weapon)
+// Returns the PROTO of the object. DON'T TOUCH IT.
+const struct obj_data *get_weapon_smartlink_proto(struct obj_data *weapon) {
+  rnum_t real_obj;
+  struct obj_data *accessory = NULL;
+
+  if (!weapon || !WEAPON_IS_GUN(weapon)) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Got null/invalid weapon '%s' (%ld) to get_weapon_smartlink_proto", GET_OBJ_NAME(weapon), GET_OBJ_VNUM(weapon));
+    return NULL;
+  }
+
+  for (int access_idx = ACCESS_LOCATION_TOP; access_idx <= ACCESS_LOCATION_UNDER; access_idx++) {
+    if (GET_WEAPON_ATTACH_LOC(weapon, access_idx) > 0
+        && (real_obj = real_object(GET_WEAPON_ATTACH_LOC(weapon, access_idx))) > 0
+        && (accessory = &obj_proto[real_obj])
+        && GET_ACCESSORY_TYPE(accessory) == ACCESS_SMARTLINK)
+    {
+      return accessory;
+    }
+  }
+
+  return NULL;
+}
+
+int check_smartlink(struct char_data *ch, struct obj_data *weapon, bool only_check_cyberware=false)
 {
-  struct obj_data *obj, *accessory;
+  struct obj_data *cyberware;
+  const struct obj_data *accessory;
 
   // are they wielding two weapons?
   if (GET_EQ(ch, WEAR_WIELD) && GET_EQ(ch, WEAR_HOLD) &&
       CAN_WEAR(GET_EQ(ch, WEAR_HOLD), ITEM_WEAR_WIELD))
     return 0;
 
-  int real_obj;
-  for (int i = ACCESS_LOCATION_TOP; i <= ACCESS_LOCATION_UNDER; i++) {
-    // If they have a smartlink attached:
-    if (GET_OBJ_VAL(weapon, i) > 0
-        && (real_obj = real_object(GET_OBJ_VAL(weapon, i))) > 0
-        && (accessory = &obj_proto[real_obj])
-        && GET_ACCESSORY_TYPE(accessory) == ACCESS_SMARTLINK) {
+  if ((accessory = get_weapon_smartlink_proto(weapon))) {
+    if ((cyberware = find_cyberware(ch, CYB_SMARTLINK))) {
+      // 2-mod if it's a SL-II with SL-II cyberware, otherwise treat it as SL-I.
+      return (GET_CYBERWARE_RATING(cyberware) == 2 && GET_ACCESSORY_RATING(accessory) == 2) ? SMARTLINK_II_MODIFIER : SMARTLINK_I_MODIFIER;
+    }
 
-      // Iterate through their cyberware and look for a matching smartlink.
-      for (obj = ch->cyberware; obj; obj = obj->next_content) {
-        if (GET_CYBERWARE_TYPE(obj) == CYB_SMARTLINK) {
-          if (GET_CYBERWARE_RATING(obj) == 2 && GET_ACCESSORY_RATING(accessory) == 2) {
-            // Smartlink II with compatible cyberware.
-            return SMARTLINK_II_MODIFIER;
-          }
-          // Smartlink I.
-          return SMARTLINK_I_MODIFIER;
-        }
-      }
-      if (get_smartgoggle(ch)) {
-        // Smartlink plus goggle found-- half value.
-        return 1;
-      }
+    // Bail out if only-cyberware mode is set. This is only used by the zone audit code.
+    if (only_check_cyberware)
+      return 0;
+
+    // Having goggles (or being an NPC with no 'ware) gives half value, which is 1 per round-down logic.
+    if (IS_NPC(ch) || get_smartgoggle(ch)) {
+      return 1;
     }
   }
+
+  // Bail out if only-cyberware mode is set. This is only used by the zone audit code.
+  if (only_check_cyberware)
+    return 0;
 
   if (AFF_FLAGGED(ch, AFF_LASER_SIGHT)) {
     // Lasers apply when no smartlink was found.
