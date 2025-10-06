@@ -1353,6 +1353,11 @@ void do_doorcmd(struct char_data *ch, struct obj_data *obj, int door, int scmd, 
       REMOVE_BIT(EXITN(other_room, rev_dir[door])->exit_info, EX_HIDDEN);
   }
 
+  // Set zone activity status properly for the other side of the door.
+  if (other_room) {
+    zone_table[other_room->zone].last_player_action = time(0);
+  }
+
   switch (scmd)
   {
   case SCMD_OPEN:
