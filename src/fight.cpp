@@ -650,19 +650,19 @@ void make_corpse(struct char_data * ch)
   {
     if (MOB_FLAGGED(ch, MOB_INANIMATE)) {
       snprintf(buf, sizeof(buf), "remains corpse %s", GET_KEYWORDS(ch));
-      snprintf(buf1, sizeof(buf1), "^rThe remains of %s are lying here.^n", color_replaced_name);
+      snprintf(buf1, sizeof(buf1), "^rThe remains of %s are %s here.^n", color_replaced_name, IS_WATER(get_ch_in_room(ch)) ? "floating" : "lying");
       snprintf(buf2, sizeof(buf2), "^rthe remains of %s^n", color_replaced_name);
       strlcpy(buf3, "It's been powered down permanently.\r\n", sizeof(buf3));
     } else {
       snprintf(buf, sizeof(buf), "corpse %s", GET_KEYWORDS(ch));
-      snprintf(buf1, sizeof(buf1), "^rThe corpse of %s is lying here.^n", color_replaced_name);
+      snprintf(buf1, sizeof(buf1), "^rThe corpse of %s is %s here.^n", color_replaced_name, IS_WATER(get_ch_in_room(ch)) ? "floating" : "lying");
       snprintf(buf2, sizeof(buf2), "^rthe corpse of %s^n", color_replaced_name);
       strlcpy(buf3, "What once was living is no longer. Poor sap.\r\n", sizeof(buf3));
     }
     GET_OBJ_QUEST_CHAR_ID(corpse) = GET_MOB_QUEST_CHAR_ID(ch);
   } else {
     snprintf(buf, sizeof(buf), "belongings %s", GET_KEYWORDS(ch));
-    snprintf(buf1, sizeof(buf1), "^rThe belongings of %s are lying here.^n", color_replaced_name);
+    snprintf(buf1, sizeof(buf1), "^rThe belongings of %s are %s here.^n", color_replaced_name, IS_WATER(get_ch_in_room(ch)) ? "floating" : "lying");
     snprintf(buf2, sizeof(buf2), "^rthe belongings of %s^n", color_replaced_name);
     strlcpy(buf3, "Looks like the DocWagon trauma team wasn't able to bring this stuff along.\r\n", sizeof(buf3));
     corpse->item_number = real_object(OBJ_SPECIAL_PC_CORPSE);
