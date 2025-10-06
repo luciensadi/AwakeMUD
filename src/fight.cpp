@@ -389,6 +389,18 @@ void set_fighting(struct char_data * ch, struct char_data * vict, ...)
     set_mob_alarm(ch, vict, 20);
   }
 
+  // Refresh zone lifespan for both sides of the fight. Only really matters when shooting between zones.
+  {
+    struct room_data *ch_room = get_ch_in_room(ch);
+    if (ch_room) {
+      zone_table[ch_room->zone].last_player_action = time(0);
+    }
+    struct room_data *vict_room = get_ch_in_room(vict);
+    if (vict_room) {
+      zone_table[vict_room->zone].last_player_action = time(0);
+    }
+  }
+
   if (!AWAKE(ch)) {
     mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Got unconscious/morted char to set_fighting(ch, %s, ...)", GET_CHAR_NAME(vict));
     return;
