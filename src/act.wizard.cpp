@@ -4194,9 +4194,8 @@ ACMD(do_wiztitle)
 
   skip_spaces(&argument);
 
-  FAILURE_CASE(!*argument, "You must specify the title you want to change to.");
-
   if (subcmd == SCMD_WHOTITLE) {
+    FAILURE_CASE(!*argument, "You must specify the title you want to change to.");
     FAILURE_CASE(!access_level(ch, LVL_BUILDER) && !PLR_FLAGGED(ch, PLR_PAID_FOR_WHOTITLE),
                "Setting your whotitle replaces your race in the wholist. You'll need to purchase this vanity ability with the ^WSYSPOINTS WHOTITLE^n command.");
     FAILURE_CASE(str_cmp(argument, get_string_after_color_code_removal(argument, NULL)), "Whotitles can't contain colors.");
@@ -4215,7 +4214,7 @@ ACMD(do_wiztitle)
     if (GET_LEVEL(ch) < LVL_BUILDER && *argument)
       strlcat(buf, "^n", sizeof(buf));
     
-    FAILURE_CASE(strstr(argument, "^l"), "Whotitles can't contain pure black.");
+    FAILURE_CASE(strstr(argument, "^l"), "Pretitles can't contain pure black.");
     FAILURE_CASE_PRINTF(strlen(argument) > (MAX_TITLE_LENGTH -2), "Sorry, pretitles can't be longer than %d characters.", MAX_TITLE_LENGTH - 2);
     
     set_pretitle(ch, argument);
