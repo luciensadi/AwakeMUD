@@ -1802,14 +1802,14 @@ float gen_size(int race, bool height, int size, int pronouns)
     case RACE_WAKYAMBI:
       if (pronouns == PRONOUNS_MASCULINE) {
         if (height)
-          return number(180, 205) * mod;
+          return number(270, 295) * mod;
         else
-          return number(70, 82) * mod;
+          return number(100, 115) * mod;
       } else {
         if (height)
-          return number(175, 195) * mod;
+          return number(255, 280) * mod;
         else
-          return number(60, 75) * mod;
+          return number(90, 105) * mod;
       }
       break;
     case RACE_OGRE:
