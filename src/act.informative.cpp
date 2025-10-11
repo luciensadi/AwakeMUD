@@ -1441,6 +1441,10 @@ void list_one_char(struct char_data * i, struct char_data * ch)
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s only has work for less-experienced 'runners.^n\r\n",
                      HSSH(i),
                      already_printed ? " also" : "");
+            if (PRF_FLAGGED(ch, PRF_FAVOURS)) {
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...but %s might need to call in a favor.^n\r\n",
+                     HSSH(i));
+            }
           }
           already_printed = TRUE;
         }

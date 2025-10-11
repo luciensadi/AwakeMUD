@@ -488,7 +488,8 @@ enum {
 #define PRF_NOFOLLOW                           69
 #define PRF_SUPPRESS_PROMPT_CHANGE             70
 #define PRF_PASSIVE_IN_COMBAT                  71
-#define PRF_MAX                                72
+#define PRF_FAVOURS                            72
+#define PRF_MAX                                73
 
 /* log watch */
 
