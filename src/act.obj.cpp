@@ -2540,11 +2540,11 @@ int perform_drop(struct char_data *ch, struct obj_data *obj, byte mode,
 				send_to_char("There is too much in the vehicle already!\r\n", ch);
 				return 0;
 			}
-			if (ch->vfront && ch->in_veh->seating[SEATING_REAR] > 0 && ch->in_veh->usedload + GET_OBJ_WEIGHT(obj) > ch->in_veh->load / 10)
-			{
-				send_to_char("There is too much in the front of the vehicle! Try using the ^WSWITCH^n command.\r\n", ch);
-				return 0;
-			}
+			// if (ch->vfront && ch->in_veh->seating[SEATING_REAR] > 0 && ch->in_veh->usedload + GET_OBJ_WEIGHT(obj) > ch->in_veh->load / 10)
+			// {
+			// 	send_to_char("There is too much in the front of the vehicle! Try using the ^WSWITCH^n command.\r\n", ch);
+			// 	return 0;
+			// }
 		}
 
 		snprintf(buf, sizeof(buf), "%s %ss %s.%s\r\n", GET_NAME(ch), sname, GET_OBJ_NAME(obj), VANISH(mode));
