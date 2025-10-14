@@ -629,7 +629,8 @@ void affect_total(struct char_data * ch)
 
   // Set reach, depending on race. Stripped out the 'you only get it at X height' thing since it's not canon and a newbie trap.
   if ((GET_RACE(ch) == RACE_TROLL || GET_RACE(ch) == RACE_CYCLOPS || GET_RACE(ch) == RACE_FOMORI || GET_RACE(ch) == RACE_GIANT ||
-       GET_RACE(ch) == RACE_MINOTAUR || GET_RACE(ch) == RACE_GHOUL_TROLL || GET_RACE(ch) == RACE_DRAKE_TROLL) /* && GET_HEIGHT(ch) > 260 */)
+       GET_RACE(ch) == RACE_MINOTAUR || GET_RACE(ch) == RACE_GHOUL_TROLL || GET_RACE(ch) == RACE_DRAKE_TROLL || GET_RACE(ch) == RACE_WAKYAMBI)
+      /* && GET_HEIGHT(ch) > 260 */)
     GET_REACH(ch) = 1;
   else
     GET_REACH(ch) = 0;
