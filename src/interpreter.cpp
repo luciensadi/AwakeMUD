@@ -101,6 +101,16 @@ const char *get_descriptor_fingerprint(struct descriptor_data *d);
 extern void verify_every_pointer_we_can_think_of();
 #endif
 
+#ifdef IS_BUILDPORT
+void validate_that_shops_still_exist() {
+  if (real_shop(102709) < 0 || real_shop(102710) < 0 || real_shop(102712) < 0 || real_shop(102713) < 0) {
+    log_vfprintf("SHOP VANISHED! Killing game.");
+    assert(1==0);
+    exit(1);
+  }
+}
+#endif
+
 void verify_data(struct char_data *ch, const char *line, int cmd, int subcmd, const char *section);
 
 #ifdef LOG_COMMANDS
@@ -1767,6 +1777,9 @@ void command_interpreter(struct char_data * ch, char *argument, const char *tcna
       argument[0] = ' ';
       skip_spaces(&argument);
       if (!*argument) {
+#ifdef IS_BUILDPORT
+        validate_that_shops_still_exist();
+#endif
 #ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
         verify_every_pointer_we_can_think_of();
 #endif
@@ -1783,6 +1796,9 @@ void command_interpreter(struct char_data * ch, char *argument, const char *tcna
   if (AFF_FLAGGED(ch, AFF_FEAR))
   {
     send_to_char("You are crazy with fear!\r\n", ch);
+#ifdef IS_BUILDPORT
+    validate_that_shops_still_exist();
+#endif
 #ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
     verify_every_pointer_we_can_think_of();
 #endif
@@ -1792,6 +1808,9 @@ void command_interpreter(struct char_data * ch, char *argument, const char *tcna
   {
     send_to_char("^RThe flames cause you to panic!^n\r\n", ch);
     WAIT_STATE(ch, 1 RL_SEC);
+#ifdef IS_BUILDPORT
+    validate_that_shops_still_exist();
+#endif
 #ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
     verify_every_pointer_we_can_think_of();
 #endif
@@ -1828,6 +1847,9 @@ void command_interpreter(struct char_data * ch, char *argument, const char *tcna
         if (!send_command_as_custom_channel_message(ch, arg)) {
           nonsensical_reply(ch, arg, "rigging");
         }
+#ifdef IS_BUILDPORT
+        validate_that_shops_still_exist();
+#endif
 #ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
         verify_every_pointer_we_can_think_of();
 #endif
@@ -1844,6 +1866,9 @@ void command_interpreter(struct char_data * ch, char *argument, const char *tcna
       if ((rig_info[cmd].minimum_level >= LVL_BUILDER) && !access_level(ch, rig_info[cmd].minimum_level)) {
         send_to_char(ch, "Sorry, that's a staff-only command.\r\n", ch);
         mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: %s was able to trigger staff-only rigging command %s!", GET_CHAR_NAME(ch), rig_info[cmd].command);
+#ifdef IS_BUILDPORT
+        validate_that_shops_still_exist();
+#endif
 #ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
         verify_every_pointer_we_can_think_of();
 #endif
@@ -1861,6 +1886,9 @@ void command_interpreter(struct char_data * ch, char *argument, const char *tcna
         verify_data(ch, line, cmd, rig_info[cmd].subcmd, "rig special");
       }
     }
+#ifdef IS_BUILDPORT
+    validate_that_shops_still_exist();
+#endif
 #ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
     verify_every_pointer_we_can_think_of();
 #endif
@@ -1880,6 +1908,9 @@ void command_interpreter(struct char_data * ch, char *argument, const char *tcna
       if (!send_command_as_custom_channel_message(ch, arg)) {
         nonsensical_reply(ch, arg, "standard");
       }
+#ifdef IS_BUILDPORT
+      validate_that_shops_still_exist();
+#endif
 #ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
       verify_every_pointer_we_can_think_of();
 #endif
@@ -1891,6 +1922,9 @@ void command_interpreter(struct char_data * ch, char *argument, const char *tcna
 
     if (IS_PROJECT(ch) && ch->desc && ch->desc->original && AFF_FLAGGED(ch->desc->original, AFF_TRACKING) && cmd != find_command("track")) {
       send_to_char("You are too busy astrally tracking someone...\r\n", ch);
+#ifdef IS_BUILDPORT
+      validate_that_shops_still_exist();
+#endif
 #ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
       verify_every_pointer_we_can_think_of();
 #endif
@@ -1900,6 +1934,9 @@ void command_interpreter(struct char_data * ch, char *argument, const char *tcna
     if (PLR_FLAGGED(ch, PLR_FROZEN)) {
       if (!access_level(ch, LVL_PRESIDENT)) {
         send_to_char(ch, "Sorry, this character has been frozen by staff and is unable to take any input. If you're seeing this message, it usually means that you've connected to a character that is pending review or has been banned. If you believe that this has been done in error, reach out to %s for next steps.\r\n", STAFF_CONTACT_EMAIL);
+#ifdef IS_BUILDPORT
+        validate_that_shops_still_exist();
+#endif
 #ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
         verify_every_pointer_we_can_think_of();
 #endif
@@ -1910,6 +1947,9 @@ void command_interpreter(struct char_data * ch, char *argument, const char *tcna
 
     if (cmd_info[cmd].command_pointer == NULL) {
       send_to_char("Sorry, that command hasn't been implemented yet.\r\n", ch);
+#ifdef IS_BUILDPORT
+      validate_that_shops_still_exist();
+#endif
 #ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
       verify_every_pointer_we_can_think_of();
 #endif
@@ -1919,6 +1959,9 @@ void command_interpreter(struct char_data * ch, char *argument, const char *tcna
     if (affected_by_power(ch, ENGULF) && cmd_info[cmd].minimum_position != POS_DEAD) {
       if (!access_level(ch, LVL_VICEPRES)) {
         send_to_char("You are currently being engulfed!\r\n", ch);
+#ifdef IS_BUILDPORT
+        validate_that_shops_still_exist();
+#endif
 #ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
         verify_every_pointer_we_can_think_of();
 #endif
@@ -1930,6 +1973,9 @@ void command_interpreter(struct char_data * ch, char *argument, const char *tcna
     if (GET_QUI(ch) <= 0 && cmd_info[cmd].minimum_position != POS_DEAD) {
       if (!access_level(ch, LVL_VICEPRES)) {
         send_to_char("You are paralyzed!\r\n", ch);
+#ifdef IS_BUILDPORT
+        validate_that_shops_still_exist();
+#endif
 #ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
         verify_every_pointer_we_can_think_of();
 #endif
@@ -1986,6 +2032,9 @@ void command_interpreter(struct char_data * ch, char *argument, const char *tcna
         send_to_char("No way!  You're fighting for your life!\r\n", ch);
         break;
       }
+#ifdef IS_BUILDPORT
+      validate_that_shops_still_exist();
+#endif
 #ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
       verify_every_pointer_we_can_think_of();
 #endif
@@ -1996,6 +2045,9 @@ void command_interpreter(struct char_data * ch, char *argument, const char *tcna
     if ((cmd_info[cmd].minimum_level >= LVL_BUILDER) && !access_level(ch, cmd_info[cmd].minimum_level)) {
       send_to_char(ch, "Sorry, that's a staff-only command.\r\n", ch);
       mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: %s was able to trigger staff-only command %s!", GET_CHAR_NAME(ch), cmd_info[cmd].command);
+#ifdef IS_BUILDPORT
+      validate_that_shops_still_exist();
+#endif
 #ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
       verify_every_pointer_we_can_think_of();
 #endif
@@ -2010,12 +2062,18 @@ void command_interpreter(struct char_data * ch, char *argument, const char *tcna
     } else {
       verify_data(ch, line, cmd, cmd_info[cmd].subcmd, "command special");
     }
+#ifdef IS_BUILDPORT
+    validate_that_shops_still_exist();
+#endif
 #ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
     verify_every_pointer_we_can_think_of();
 #endif
     return;
   }
 
+#ifdef IS_BUILDPORT
+  validate_that_shops_still_exist();
+#endif
 #ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
   verify_every_pointer_we_can_think_of();
 #endif
