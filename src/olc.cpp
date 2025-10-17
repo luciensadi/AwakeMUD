@@ -61,7 +61,7 @@ extern class memoryClass *Mem;
 
 #define REQUIRE_ZONE_EDIT_ACCESS(real_zonenum) {                                                                                               \
   if (real_zonenum < 0 || real_zonenum > top_of_zone_table) {                                                                                  \
-    send_to_char("That's not a zone.", ch);                                                                                                    \
+    send_to_char("That's not a zone.\r\n", ch);                                                                                                \
     return;                                                                                                                                    \
   }                                                                                                                                            \
                                                                                                                                                \

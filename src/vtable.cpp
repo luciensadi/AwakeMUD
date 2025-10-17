@@ -77,6 +77,11 @@ bool VTable::DoesFieldExist(const char *where)
 
 int  VTable::Parse(File *in)
 {
+#ifdef IS_BUILDPORT
+  char parsebuf[10000];
+  snprintf(parsebuf, sizeof(parsebuf), "entering vtable parse(%s): ", in->Filename());
+#endif
+
   char line[MAX_LINE_LENGTH*2];
   int depth = 0, total_fields = 0;
   section *sec_ptr = &top;
@@ -98,7 +103,9 @@ int  VTable::Parse(File *in)
       d++;
     }
 
-    //    printf("depth=%d, d=%d, line_ptr=%s\n", depth, d, line_ptr);
+#ifdef IS_BUILDPORT
+    snprintf(ENDOF(parsebuf), sizeof(parsebuf) - strlen(parsebuf), "\n parse(%s): depth=%d, d=%d, line_ptr=%s", in->Filename(), depth, d, line_ptr);
+#endif
 
     if (d > depth) {
       log_vfprintf("Warning: depth doesn't match field depth (%d != %d) (%s, line %d)",

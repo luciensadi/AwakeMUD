@@ -2659,11 +2659,14 @@ void parse_shop(File &fl, long virtual_nr)
     log_vfprintf("FATAL ERROR: Shop #%ld is below zone %d.\n", virtual_nr, zone_table[zone].number);
     exit(ERROR_WORLD_BOOT_FORMAT_ERROR);
   }
-  while (virtual_nr > zone_table[zone].top)
+  
+  while (virtual_nr > zone_table[zone].top) {
     if (++zone > top_of_zone_table) {
       log_vfprintf("FATAL ERROR: Shop %ld is outside of any zone.\n", virtual_nr);
       exit(ERROR_WORLD_BOOT_FORMAT_ERROR);
     }
+  }
+
   shop_data *shop = shop_table+rnum;
   shop->vnum = virtual_nr;
   VTable data;
@@ -2704,14 +2707,14 @@ void parse_shop(File &fl, long virtual_nr)
     }
   }
 
-  // snprintf(buf3, sizeof(buf3), "Parsing shop items for shop %ld (%d found).", virtual_nr, num_fields);
+  snprintf(buf3, sizeof(buf3), "Parsing shop items for shop %ld (%d found).", virtual_nr, num_fields);
   for (int x = 0; x < num_fields; x++) {
     const char *name = data.GetIndexSection("SELLING", x);
     snprintf(field, sizeof(field), "%s/Vnum", name);
     vnum = data.GetLong(field, 0);
-    // snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "\r\n - %s (%d)", name, vnum);
+    snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "\r\n - %s (%d)", name, vnum);
     if (real_object(vnum) < 1) {
-      // snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), " - nonexistant! Skipping.");
+      snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), " - nonexistant! Skipping.");
       continue;
     }
     shop_sell_data *sell = new shop_sell_data;
@@ -2728,9 +2731,9 @@ void parse_shop(File &fl, long virtual_nr)
           temp->next = sell;
           break;
         }
-    // snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), ": type %d, stock %d.", sell->type, sell->stock);
+    snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), ": type %d, stock %d.", sell->type, sell->stock);
   }
-  // mudlog(buf3, NULL, LOG_SYSLOG, TRUE);
+  mudlog(buf3, NULL, LOG_SYSLOG, TRUE);
   shop->selling = templist;
   top_of_shopt = rnum++;
 }

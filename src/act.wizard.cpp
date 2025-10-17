@@ -7982,7 +7982,7 @@ ACMD(do_fuckups) {
     return;
   }
 
-  send_to_char("Syntax: `fuckups [count]` to list, or `fuckups delete <command>` to remove.", ch);
+  send_to_char("Syntax: `fuckups [count]` to list, or `fuckups delete <command>` to remove.\r\n", ch);
 }
 
 ACMD(do_rewrite_world) {
@@ -10091,7 +10091,7 @@ ACMD(do_forceput) {
   }
 
   if (!*arg2) {
-    send_to_char("You must specify a container to put it into.", ch);
+    send_to_char("You must specify a container to put it into.\r\n", ch);
     return;
   }
 

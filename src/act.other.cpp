@@ -4562,7 +4562,7 @@ ACMD(do_cpool)
   }
 
   if (dodge < 0 || bod < 0 || off < 0) {
-    send_to_char("Combat pool values cannot be negative!", ch);
+    send_to_char("Combat pool values cannot be negative!\r\n", ch);
     return;
   }
 
@@ -4632,7 +4632,7 @@ ACMD(do_spool)
   reflect = atoi(buf);
 
   if (cast < 0 || drain < 0 || def < 0 || reflect < 0) {
-    send_to_char("Spell pool values cannot be negative!", ch);
+    send_to_char("Spell pool values cannot be negative!\r\n", ch);
     return;
   }
 

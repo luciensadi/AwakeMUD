@@ -1860,9 +1860,9 @@ int negotiate(struct char_data *ch,
 
   if (ch_successes - t_successes < 0) {
     if (buy)
-      send_to_char(ch, "You wince internally as you realize you've been negotiated up above the base price.");
+      send_to_char(ch, "You wince internally as you realize you've been negotiated up above the base price.\r\n");
     else
-      send_to_char(ch, "You wince internally as you realize you've been negotiated below the street price.");
+      send_to_char(ch, "You wince internally as you realize you've been negotiated below the street price.\r\n");
   }
 
   return basevalue;
@@ -3452,7 +3452,7 @@ bool char_can_make_noise(struct char_data *ch, const char *message)
     if (spell_affecting_ch_is_cast_by_ch_or_group_member(ch, SPELL_SILENCE))
     {
       send_to_char(message, ch);
-      send_to_char("(OOC: You're in a silent room.)", ch);
+      send_to_char("(OOC: You're in a silent room.)\r\n", ch);
       return FALSE;
     }
     // fall through: spell was cast by non group member.

@@ -1151,7 +1151,7 @@ ACMD(do_progress)
   if (AFF_FLAGS(ch).IsSet(AFF_COMPLEX_FORM_PROGRAM)) {
     amount_left = GET_COMPLEX_FORM_LEARNING_TICKS_LEFT(GET_BUILDING(ch));
     amount_needed = GET_COMPLEX_FORM_ORIGINAL_TICKS_LEFT(GET_BUILDING(ch));
-    send_to_char(ch, "You are about %2.2f%% of the way through learning %s.\r\n",
+    send_to_char(ch, "You are about %2.2f%% of the way through learning %s (form).\r\n",
            (((float)(amount_needed - amount_left) * 100) / amount_needed), GET_OBJ_NAME(GET_BUILDING(ch)));
     return;
   }

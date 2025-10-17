@@ -450,13 +450,13 @@ void submersion_parse(struct descriptor_data *d, char *arg)
     case SUBMERSION_CONFIRM:
       if (*arg == 'y') {
         if (!submersion_cost(CH, TRUE)) { // Actually spends the points for submersion
-          send_to_char("Returning to main menu.", CH);
+          send_to_char("Returning to main menu.\r\n", CH);
           d->edit_mode = SUBMERSION_MAIN;
           return;
         }
         GET_GRADE(CH)++;
         send_to_char(CH, "You feel yourself grow closer to the resonance, opening new echoes for you to learn.\r\n");
-        send_to_char("Returning to main menu.", CH);
+        send_to_char("Returning to main menu.\r\n", CH);
         d->edit_mode = SUBMERSION_MAIN;
       } else {
         disp_submersion_menu(d);
@@ -466,7 +466,7 @@ void submersion_parse(struct descriptor_data *d, char *arg)
       // learning a new echo here
       number = atoi(arg);
       if (*arg == 'q') {
-        send_to_char("Returning to main menu.", CH);
+        send_to_char("Returning to main menu.\r\n", CH);
         d->edit_mode = SUBMERSION_MAIN;
       }
       else if (number >= ECHO_MAX) 
@@ -476,7 +476,7 @@ void submersion_parse(struct descriptor_data *d, char *arg)
       else {
         SET_ECHO(CH, number, GET_ECHO(CH, number) + 1);
         send_to_char(CH, "New ways to manipulate the resonance open up before you as you learn %s.\r\n", echoes[number].name);
-        send_to_char("Returning to main menu.", CH);
+        send_to_char("Returning to main menu.\r\n", CH);
         d->edit_mode = SUBMERSION_MAIN;
       }
       break;   

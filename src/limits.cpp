@@ -1196,7 +1196,7 @@ void point_update(void)
         if (i->desc && IS_PROJECT(i)) {
           if (AFF_FLAGGED(i->desc->original, AFF_TRACKING) && HUNTING(i->desc->original) && !--HOURS_LEFT_TRACK(i->desc->original)) {
             if (!HUNTING(i->desc->original)->in_room || !CH_CAN_ENTER_APARTMENT(HUNTING(i->desc->original)->in_room, i)) {
-              send_to_char("The astral signature fades... you can't follow it all the way back.", i);
+              send_to_char("The astral signature fades... you can't follow it all the way back.\r\n", i);
             } else {
               act("The astral signature leads you to $N.", FALSE, i, 0, HUNTING(i->desc->original), TO_CHAR);
               char_from_room(i);

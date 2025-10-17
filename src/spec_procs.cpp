@@ -7332,7 +7332,7 @@ SPECIAL(medical_workshop) {
   }
 
   if (!found_char->desc) {
-    send_to_char("They're disconnected right now, try again later.", ch);
+    send_to_char("They're disconnected right now, try again later.\r\n", ch);
     return TRUE;
   }
 

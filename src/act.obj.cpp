@@ -4705,7 +4705,7 @@ ACMD(do_activate)
 		}
 
 		if (desired_level < 0) {
-			send_to_char("Power level must be greater than zero!", ch);
+			send_to_char("Power level must be greater than zero!\r\n", ch);
 			return;
 		}
 

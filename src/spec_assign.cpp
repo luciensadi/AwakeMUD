@@ -105,16 +105,16 @@ struct teach_data teachers[] = {
     SKILL_STREET_ETIQUETTE, SKILL_TRIBAL_ETIQUETTE, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
     "You spend a long time learning how to make small talk and directing conversations.\r\n", ADVANCED },
   { 790, { SKILL_ATHLETICS, SKILL_BIOTECH, SKILL_STEALTH, SKILL_MEDICINE, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-    "After hours of study and physical practice, you feel like you've learned\r\nsomething.\r\n.", ADVANCED },
+    "After hours of study and physical practice, you feel like you've learned\r\nsomething.\r\n", ADVANCED },
   { 100976, { SKILL_ATHLETICS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-    "After hours of study and physical practice, you feel like you've learned\r\nsomething.\r\n.", ADVANCED },
+    "After hours of study and physical practice, you feel like you've learned\r\nsomething.\r\n", ADVANCED },
 #endif
 
                        { 2508, { SKILL_BIOTECH, SKILL_MEDICINE, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "After hours of medical research and instruction, you begin "
                          "to\r\nunderstand more of the basic biotech procedures.\r\n", AMATEUR },
                        { 2701, { SKILL_ATHLETICS, SKILL_STEALTH, SKILL_UNARMED_COMBAT, SKILL_EDGED_WEAPONS,
                          SKILL_WHIPS_FLAILS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                         "Toh Li gives you the workout of your life, but you come out more learned.", AMATEUR },
+                         "Toh Li gives you the workout of your life, but you come out more learned.\r\n", AMATEUR },
                        { 3722, { SKILL_ATHLETICS, SKILL_RIFLES, SKILL_PISTOLS, SKILL_TASERS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
                          "After hours of study and physical practice, you feel like you've learned something.\r\n", AMATEUR },
                        { 4101, { SKILL_SHOTGUNS, SKILL_PISTOLS, SKILL_RIFLES, SKILL_SMG, SKILL_ASSAULT_RIFLES, SKILL_TASERS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -298,7 +298,7 @@ struct teach_data teachers[] = {
    { 60235, { SKILL_SIOUX, SKILL_MAKAW, SKILL_CROW, SKILL_UTE, SKILL_SALISH, SKILL_NAVAJO, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
      "Speaks-with-Many goes over his lessons with you until they become second nature.\r\n", AMATEUR },
 
-   { 39226, { SKILL_LATIN, SKILL_ARABIC, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "The gentleman demonstrates the finer points of articulation and pronunciation until you feel you've learn something new", AMATEUR },
+   { 39226, { SKILL_LATIN, SKILL_ARABIC, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "The gentleman demonstrates the finer points of articulation and pronunciation until you feel you've learn something new.\r\n", AMATEUR },
 
    { 60540, { SKILL_BR_PISTOL, SKILL_BR_SHOTGUN, SKILL_BR_SMG, SKILL_BR_RIFLE, SKILL_BR_HEAVYWEAPON, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "Gary teaches you the finer points of gunsmithing.\r\n", NEWBIE },
 

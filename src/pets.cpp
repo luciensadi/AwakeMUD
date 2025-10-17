@@ -39,7 +39,7 @@ std::unordered_map<idnum_t, class PetEchoSet> pet_echo_sets = {
         "$p streeeetches.",
         "A low, rumbling purr comes from $p.",
         "$p stretches lazily before jumping onto something to explore.",
-        "$p flops down on somethng soft."
+        "$p flops down on something soft."
       }}},
   {2, {0, TRUE, "Cat, Playful", "", "", {
         "$p bounds past, chasing a toy.",

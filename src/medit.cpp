@@ -935,7 +935,7 @@ void medit_parse(struct descriptor_data *d, const char *arg)
 
   case MEDIT_HIGHLIGHT:
     if (!arg || !*arg || get_string_length_after_color_code_removal(arg, CH) > 0) {
-      send_to_char("That's not a valid color code. Leaving it untouched.", CH);
+      send_to_char("That's not a valid color code. Leaving it untouched.\r\n", CH);
     } else {
       DELETE_ARRAY_IF_EXTANT(SETTABLE_CHAR_COLOR_HIGHLIGHT(MOB));
       SETTABLE_CHAR_COLOR_HIGHLIGHT(MOB) = str_dup(arg);
