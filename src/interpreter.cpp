@@ -103,7 +103,7 @@ extern void verify_every_pointer_we_can_think_of();
 
 #ifdef IS_BUILDPORT
 void validate_that_shops_still_exist() {
-  if (real_shop(102709) < 0 || real_shop(102710) < 0 || real_shop(102712) < 0 || real_shop(102713) < 0) {
+  if (real_shop(102709) < 0 || real_shop(102710) < 0 || real_shop(102712) < 0 || real_shop(102713) < 0 || real_shop(102741) < 0) {
     log_vfprintf("SHOP VANISHED! Killing game.");
     assert(1==0);
     exit(1);
