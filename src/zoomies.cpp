@@ -658,6 +658,12 @@ void process_flying_vehicles() {
       // Successful roll: Tick down flight duration.
       veh->flight_duration--;
 
+      // It's super effective!
+      if (result > 2) {
+        send_to_char(controller, "You're a leaf on the wind. Skill and luck speed you towards your destination.\r\n");
+        veh->flight_duration--;
+      }
+
       // If the flight duration has ended, land it.
       if (veh->flight_duration <= 0) {
         send_to_char(controller, "You guide %s in for a landing at %s...\r\n", GET_VEH_NAME(veh), GET_ROOM_NAME(veh->flight_target));
