@@ -462,8 +462,68 @@ const char *depressing_traffic_messages[] = {
   "A shrill scream rises up before abruptly being silenced.\r\n",
   "The sickly-sweet smell of decomposing flesh assaults your nostrils.\r\n", // 60
   "The sound of a collapsing billboard echoes through the streets, the squeal of failing metal cutting through the air.\r\n",
+  "The rhythmic thump-thump-thump of a helicopter passes far overhead.\r\n",
+  "A low, mournful tone, like a distant foghorn, sounds from the direction of the water.\r\n",
+  "A cascade of glass tinkles down to the pavement as a window frame finally gives way.\r\n",
+  "The faint, discordant notes of a piano drift down from a ruined apartment building.\r\n", // 65
+  "A low hum emanates from a nearby power transformer before sputtering into silence.\r\n",
+  "The gurgle of liquids moving through a broken sewer pipe briefly occupies your hearing.\r\n",
+  "A loose manhole cover rattles as something moves in the tunnels below.\r\n",
+  "The unexpected roar of an engine echoes through the streets, loud and close, before quickly receding.\r\n",
+  "A swarm of flies buzzes loudly over something unseen in a darkened alley.\r\n", // 70
+  "The high-pitched whine of stressed metal comes from a damaged bridge in the distance.\r\n",
+  "A child's laughter, tinny and distorted, echoes from a broken toy somewhere nearby.\r\n",
+  "The crunch of gravel under a heavy boot sounds from just around the corner, then fades.\r\n",
+  "A series of short, sharp barks echoes from a nearby tenement.\r\n",
+  "The ground trembles faintly, a deep vibration coming from far below the surface.\r\n", // 75
+  "A curtain flutters from a shattered window high above you.\r\n",
+  "Steam vents from a manhole cover, hissing into the cold air.\r\n",
+  "A flock of crows takes to the sky, cawing loudly as they scatter from a nearby roof.\r\n",
+  "For a moment, a powerful searchlight sweeps across the sky from the city's quarantine wall.\r\n",
+  "A puddle of iridescent, oily fluid shimmers on the asphalt.\r\n", // 80
+  "Light glints off something metallic from a rooftop several blocks away.\r\n",
+  "A pack of gaunt, wild dogs trots across a distant intersection, vanishing into the ruins.\r\n",
+  "A lone shopping cart rolls slowly across the street, pushed by the wind.\r\n",
+  "The air suddenly thickens with the coppery smell of old blood.\r\n",
+  "A sharp, sterile scent, like antiseptic, drifts out of a shattered window.\r\n", // 85
+  "A wave of ozone, sharp and electric, washes over you after a distant flash.\r\n",
+  "An overpowering floral scent, incongruous in the decay, drifts from a rooftop garden gone wild.\r\n",
+  "A thick, yeasty smell, like a brewery left to rot, hangs heavy in the air.\r\n",
+  "The air smells of salt and drying seaweed from the nearby coast.\r\n",
+  "A bitter, almond-like chemical smell catches in the back of your throat for a moment.\r\n", // 90
+  "The wind picks up, carrying a fine grit that stings your eyes.\r\n",
+  "The grating sound of a heavy metal panel being dragged somewhere nearby stops as abruptly as it began.\r\n",
+  "A single, clear bell tone rings out and is then suddenly muffled.\r\n",
+  "The frantic flapping of wings erupts from just inside a darkened doorway.\r\n",
+  "A sharp hiss, like a punctured tank releasing pressure, sounds from a wrecked vehicle.\r\n", // 95
+  "An automated voice from a derelict public bus sputters a fragment of a route number before dying.\r\n",
+  "A car alarm begins to blare, only to short out with a pathetic, descending squeal.\r\n",
+  "A single, dry cough echoes from a floor above you, followed by silence.\r\n",
+  "A reflection of rapid movement flashes across a shard of glass, but when you look, nothing is there.\r\n",
+  "A huge sheet of plastic, torn from some forgotten advertisement, unfurls in the wind like a sail before collapsing again.\r\n", // 100
+  "A stream of rusty water suddenly gushes from a high downspout, staining the wall, and then trickles to a stop.\r\n",
+  "A vacant window flickers with light several blocks away, but it's immediately extinguished.\r\n",
+  "A vortex of leaves and street garbage swirls up into the air, held there for a moment before scattering.\r\n",
+  "A chunk of concrete falls from a high ledge, shattering on the sidewalk with a loud crack.\r\n",
+  "You hear the hollow, repetitive bang of a windblown door slamming somewhere above you.\r\n", // 105
+  "A loose piece of sheet metal on a roof flips over in the wind, flashing a brief, brilliant burst of reflected light.\r\n",
+  "The sharp, acrid smell of burning plastic assaults your nostrils and is just as quickly gone.\r\n",
+  "A sudden, thick wave of rotgut alcohol, sharp and cheap, washes over you.\r\n",
+  "For a moment, the air is thick with the smell of leaking natural gas.\r\n",
+  "A foul, sulfurous stench bubbles up from a sewer grate and then dissipates into the wind.\r\n", // 110
+  "The unsettlingly savory scent of burning meat wafts from somewhere nearby before vanishing.\r\n",
+  "The pungent, earthy smell of freshly disturbed mold rises from a nearby pile of rubble.\r\n",
+  "A phantom smell, like old, wet books, hangs in the air for a moment before vanishing.\r\n",
+  "The air briefly carries the heavy, metallic tang of rust and decay.\r\n",
+  "The ground shudders as a deep, resonant boom echoes from across the city.\r\n", // 115
+  "A sudden, cold downdraft pours out of a narrow alley, raising goosebumps on your skin.\r\n",
+  "A fine, greasy mist settles on your exposed skin for a moment before the wind carries it away.\r\n",
+  "A metal can, propelled by a gust of wind, clatters loudly down the street before coming to a rest in the gutter.\r\n",
+  "A sheet of metal siding tears loose from a rooftop and spins to the ground with a deafening shriek and crash.\r\n",
+  "A sudden silence falls as the constant wind dies down, making the quiet feel heavy and oppressive.\r\n", // 120
+  "depressing traffic messages index error - alert staff if you see this\r\n" // MUST BE LAST
 };
-#define NUM_DEPRESSING_MESSAGES 62
+#define NUM_DEPRESSING_MESSAGES 121
 
 void regenerate_traffic_msgs() {
   for (int which = 0; which < NUM_TRAFFIC_MESSAGE_TYPES; which++) {
