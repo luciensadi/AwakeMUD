@@ -1453,30 +1453,29 @@ bool can_take_obj_from_room(struct char_data *ch, struct obj_data *obj)
 		switch (GET_MAGIC_TOOL_TYPE(obj))
 		{
 		case TYPE_LIBRARY_SPELL:
-			// Nobody can be spelldesigning.
-			for (struct char_data *vict = obj->in_veh ? obj->in_veh->people : obj->in_room->people;
+    case TYPE_LIBRARY_CONJURE:
+			// Nobody can be spelldesigning or conjuring with this.
+      // Trace it back to its parent in case this is a digital library on a computer etc.
+      struct obj_data *superobj = obj;
+      while (superobj->in_obj) superobj = superobj->in_obj;
+
+      if (superobj->in_veh || superobj->in_room) {
+        for (struct char_data *vict = obj->in_veh ? obj->in_veh->people : obj->in_room->people;
 					 vict;
 					 vict = vict->in_veh ? vict->next_in_veh : vict->next_in_room)
-			{
-				if (AFF_FLAGGED(vict, AFF_SPELLDESIGN))
-				{
-					FALSE_CASE_PRINTF(vict == ch, "You are using %s to design your spell.", decapitalize_a_an(obj));
-					FALSE_CASE_PRINTF(vict != ch, "%s is in use.", CAP(GET_OBJ_NAME(obj)));
-				}
-			}
-			break;
-		case TYPE_LIBRARY_CONJURE:
-			// Nobody can be conjuring.
-			for (struct char_data *vict = obj->in_veh ? obj->in_veh->people : obj->in_room->people;
-					 vict;
-					 vict = vict->in_veh ? vict->next_in_veh : vict->next_in_room)
-			{
-				if (AFF_FLAGGED(vict, AFF_CONJURE))
-				{
-					FALSE_CASE_PRINTF(vict == ch, "You are using %s to conjure.", decapitalize_a_an(obj));
-					FALSE_CASE_PRINTF(vict != ch, "%s is in use.", CAP(GET_OBJ_NAME(obj)));
-				}
-			}
+			  {
+          if (GET_MAGIC_TOOL_TYPE(obj) == TYPE_LIBRARY_SPELL && AFF_FLAGGED(vict, AFF_SPELLDESIGN))
+          {
+            FALSE_CASE_PRINTF(vict == ch, "You are using %s to design your spell.", decapitalize_a_an(obj));
+            FALSE_CASE_PRINTF(vict != ch, "%s is in use.", CAP(GET_OBJ_NAME(obj)));
+          }
+          else if (GET_MAGIC_TOOL_TYPE(obj) == TYPE_LIBRARY_CONJURE && AFF_FLAGGED(vict, AFF_CONJURE))
+          {
+            FALSE_CASE_PRINTF(vict == ch, "You are using %s to conjure.", decapitalize_a_an(obj));
+					  FALSE_CASE_PRINTF(vict != ch, "%s is in use.", CAP(GET_OBJ_NAME(obj)));
+          }
+        }
+      }
 			break;
 		}
 	}
