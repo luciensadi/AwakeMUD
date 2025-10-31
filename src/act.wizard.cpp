@@ -8104,7 +8104,7 @@ int audit_zone_rooms_(struct char_data *ch, int zone_num, bool verbose) {
     if (!strcmp(GET_ROOM_NAME(room), STRING_ROOM_TITLE_UNFINISHED)) {
       strlcat(buf, "  - ^YDefault room title used.^n This room will NOT be saved in the world files.\r\n", sizeof(buf));
       issues++;
-    } else if (is_invalid_ending_punct((candidate = get_final_character_from_string(GET_ROOM_NAME(room))))) {
+    } else if (is_invalid_ending_punct((candidate = get_final_character_from_string(get_string_after_color_code_removal(GET_ROOM_NAME(room), ch))))) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^yname ending in punctuation (%c)^n.\r\n", candidate);
       issues++;
     }
@@ -8499,7 +8499,7 @@ int audit_zone_mobs_(struct char_data *ch, int zone_num, bool verbose) {
       
       issues++;
     } else {
-      if (is_invalid_ending_punct((candidate = get_final_character_from_string(mob->player.physical_text.name)))) {
+      if (is_invalid_ending_punct((candidate = get_final_character_from_string(get_string_after_color_code_removal(mob->player.physical_text.name, ch))))) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^yname ending in punctuation (%c)^n.\r\n", candidate);
         issues++;
       }
@@ -8519,7 +8519,7 @@ int audit_zone_mobs_(struct char_data *ch, int zone_num, bool verbose) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^ymissing room desc^n.\r\n");
       issues++;
     } else {
-      if (!ispunct((candidate = get_final_character_from_string(mob->player.physical_text.room_desc)))) {
+      if (!ispunct((candidate = get_final_character_from_string(get_string_after_color_code_removal(mob->player.physical_text.room_desc, ch))))) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^yroom desc not ending in punctuation (%c)^n.\r\n", candidate);
         issues++;
       }
@@ -8788,7 +8788,7 @@ int audit_zone_objects_(struct char_data *ch, int zone_num, bool verbose) {
       
       issues++;
     } else {
-      if (is_invalid_ending_punct((candidate = get_final_character_from_string(obj->text.name)))) {
+      if (is_invalid_ending_punct((candidate = get_final_character_from_string(get_string_after_color_code_removal(obj->text.name, ch))))) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^yname ending in punctuation (%c)^n.\r\n", candidate);
         
         issues++;
@@ -9236,7 +9236,7 @@ int audit_zone_quests_(struct char_data *ch, int zone_num, bool verbose) {
       
       issues++;
     } else {
-      if (!ispunct(get_final_character_from_string(quest->intro))) {
+      if (!ispunct(get_final_character_from_string(get_string_after_color_code_removal(quest->intro, ch)))) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^yintro string does not end in punctuation^n.\r\n");
         issues++;
       }
@@ -9247,7 +9247,7 @@ int audit_zone_quests_(struct char_data *ch, int zone_num, bool verbose) {
       
       issues++;
     } else {
-      if (!ispunct(get_final_character_from_string(quest->decline))) {
+      if (!ispunct(get_final_character_from_string(get_string_after_color_code_removal(quest->decline, ch)))) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^ydecline string does not end in punctuation^n.\r\n");
         issues++;
       }
@@ -9258,7 +9258,7 @@ int audit_zone_quests_(struct char_data *ch, int zone_num, bool verbose) {
       
       issues++;
     } else {
-      if (!ispunct(get_final_character_from_string(quest->finish))) {
+      if (!ispunct(get_final_character_from_string(get_string_after_color_code_removal(quest->finish, ch)))) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^yfinish string does not end in punctuation^n.\r\n");
         issues++;
       }
@@ -9269,7 +9269,7 @@ int audit_zone_quests_(struct char_data *ch, int zone_num, bool verbose) {
       
       issues++;
     } else {
-      if (!ispunct(get_final_character_from_string(quest->info))) {
+      if (!ispunct(get_final_character_from_string(get_string_after_color_code_removal(quest->info, ch)))) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^yinfo string does not end in punctuation^n.\r\n");
         
         issues++;
@@ -9281,7 +9281,7 @@ int audit_zone_quests_(struct char_data *ch, int zone_num, bool verbose) {
       
       issues++;
     } else {
-      if (!ispunct(get_final_character_from_string(quest->quit))) {
+      if (!ispunct(get_final_character_from_string(get_string_after_color_code_removal(quest->quit, ch)))) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^yquit string does not end in punctuation^n.\r\n");
         
         issues++;
@@ -9293,7 +9293,7 @@ int audit_zone_quests_(struct char_data *ch, int zone_num, bool verbose) {
       
       issues++;
     } else {
-      if (!ispunct(get_final_character_from_string(quest->done))) {
+      if (!ispunct(get_final_character_from_string(get_string_after_color_code_removal(quest->done, ch)))) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^ydone string does not end in punctuation^n.\r\n");
         
         issues++;
@@ -9306,7 +9306,7 @@ int audit_zone_quests_(struct char_data *ch, int zone_num, bool verbose) {
       
       issues++;
     } else {
-      if (ispunct(get_final_character_from_string(quest->location))) {
+      if (ispunct(get_final_character_from_string(get_string_after_color_code_removal(quest->location, ch)))) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^ylocation string ends in punctuation^n.\r\n");
         
         issues++;
@@ -9516,7 +9516,7 @@ int audit_zone_ics_(struct char_data *ch, int zone_num, bool verbose) {
       issues++;
     }
 
-    if (!ispunct((candidate = get_final_character_from_string(ic->look_desc)))) {
+    if (!ispunct((candidate = get_final_character_from_string(get_string_after_color_code_removal(ic->look_desc, ch))))) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^yroom desc not ending in punctuation (%c)^n.\r\n", candidate);
       issues++;
     }
