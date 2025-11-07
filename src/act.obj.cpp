@@ -1424,22 +1424,28 @@ void get_from_container(struct char_data *ch, struct obj_data *cont,
 
 bool can_take_obj_from_room(struct char_data *ch, struct obj_data *obj)
 {
+  // Trace it back to its parent in case this is in a container etc.
+  struct obj_data *superobj = obj;
+  while (superobj->in_obj) superobj = superobj->in_obj;
+
 	if (GET_OBJ_TYPE(obj) == ITEM_DECK_ACCESSORY)
 	{
 		switch (GET_DECK_ACCESSORY_TYPE(obj))
 		{
 		case TYPE_COMPUTER:
 			// You can only get computers that are not in use.
-			for (struct char_data *vict = obj->in_veh ? obj->in_veh->people : obj->in_room->people;
-					 vict;
-					 vict = vict->in_veh ? vict->next_in_veh : vict->next_in_room)
-			{
-				if (vict->char_specials.programming && vict->char_specials.programming->in_obj == obj)
-				{
-					FALSE_CASE_PRINTF(vict == ch, "You are using %s already.", decapitalize_a_an(obj));
-					FALSE_CASE_PRINTF(vict != ch, "%s is in use.", CAP(GET_OBJ_NAME(obj)));
-				}
-			}
+      if (superobj->in_veh || superobj->in_room) {
+        for (struct char_data *vict = obj->in_veh ? obj->in_veh->people : obj->in_room->people;
+            vict;
+            vict = vict->in_veh ? vict->next_in_veh : vict->next_in_room)
+        {
+          if (vict->char_specials.programming && vict->char_specials.programming->in_obj == obj)
+          {
+            FALSE_CASE_PRINTF(vict == ch, "You are using %s already.", decapitalize_a_an(obj));
+            FALSE_CASE_PRINTF(vict != ch, "%s is in use.", CAP(GET_OBJ_NAME(obj)));
+          }
+        }
+      }
 			break;
 		case TYPE_COOKER:
 			// Cookers can't be cooking.
@@ -1455,10 +1461,6 @@ bool can_take_obj_from_room(struct char_data *ch, struct obj_data *obj)
 		case TYPE_LIBRARY_SPELL:
     case TYPE_LIBRARY_CONJURE:
 			// Nobody can be spelldesigning or conjuring with this.
-      // Trace it back to its parent in case this is a digital library on a computer etc.
-      struct obj_data *superobj = obj;
-      while (superobj->in_obj) superobj = superobj->in_obj;
-
       if (superobj->in_veh || superobj->in_room) {
         for (struct char_data *vict = obj->in_veh ? obj->in_veh->people : obj->in_room->people;
 					 vict;
