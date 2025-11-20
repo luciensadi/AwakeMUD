@@ -1432,8 +1432,24 @@ struct program_data programs[] =
     {"MPCP", 8 },
     {"Reality Filter", 10 },
     {"Response Increase", 1 },
-    {"Shield", 4},
-    {"Radio Link", 1}
+    {"Shield", 4 },
+    {"Radio Link", 1 },
+    {"Doorstop", 2 },
+    {"Mirrors", 3 },
+    {"Purge", 2 },
+    {"Redecorate", 2 },
+    {"Spoof", 3 },
+    {"Triangulation", 2 },
+    {"Countierfeit", 10 },
+    {"Guardian", 2 },
+    {"Remote Control", 3 },
+    {"Black Hammer", 20 },
+    {"Erosion", 3 },
+    {"Hog", 3 },
+    {"Killjoy", 10 },
+    {"Slow", 4 },
+    {"Steamroller", 3 },
+    {"Restore", 3 }
   };
 
 int attack_multiplier[] = { 0, 2, 3, 4, 5 };
