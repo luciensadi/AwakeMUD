@@ -1447,7 +1447,6 @@ struct program_data programs[] =
     {"Erosion", 3 },
     {"Hog", 3 },
     {"Killjoy", 10 },
-    {"Slow", 4 },
     {"Steamroller", 3 },
     {"Restore", 3 }
   };
