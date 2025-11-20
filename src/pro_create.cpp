@@ -273,7 +273,6 @@ int get_program_skill(char_data *ch, obj_data *prog, int target)
   case SOFT_EROSION:
   case SOFT_HOG:
   case SOFT_KILLJOY:
-  case SOFT_SLOW:
   case SOFT_STEAMROLLER:
     skill = get_skill(ch, SKILL_PROGRAM_COMBAT, target);
     break;
