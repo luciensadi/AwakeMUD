@@ -1765,10 +1765,9 @@ enum {
 #define SOFT_EROSION            52
 #define SOFT_HOG                53
 #define SOFT_KILLJOY            54
-#define SOFT_SLOW               55
-#define SOFT_STEAMROLLER        56
-#define SOFT_RESTORE            57
-#define NUM_PROGRAMS            58
+#define SOFT_STEAMROLLER        55
+#define SOFT_RESTORE            56
+#define NUM_PROGRAMS            57
 
 #define PART_ACTIVE    1
 #define PART_STORAGE    2
