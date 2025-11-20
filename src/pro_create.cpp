@@ -269,6 +269,12 @@ int get_program_skill(char_data *ch, obj_data *prog, int target)
     break;
   case SOFT_ATTACK:
   case SOFT_SLOW:
+  case SOFT_BLACK_HAMMER:
+  case SOFT_EROSION:
+  case SOFT_HOG:
+  case SOFT_KILLJOY:
+  case SOFT_SLOW:
+  case SOFT_STEAMROLLER:
     skill = get_skill(ch, SKILL_PROGRAM_COMBAT, target);
     break;
   case SOFT_CLOAK:
@@ -276,6 +282,7 @@ int get_program_skill(char_data *ch, obj_data *prog, int target)
   case SOFT_MEDIC:
   case SOFT_ARMOR:
   case SOFT_SHIELD:
+  case SOFT_RESTORE:
     skill = get_skill(ch, SKILL_PROGRAM_DEFENSIVE, target);
     break;
   case SOFT_BATTLETEC:
@@ -284,6 +291,9 @@ int get_program_skill(char_data *ch, obj_data *prog, int target)
   case SOFT_TRACK:
   case SOFT_SUITE:
   case SOFT_RADIO:
+  case SOFT_COUNTERFEIT:
+  case SOFT_GUARDIAN:
+  case SOFT_REMOTE_CONTROL:
     skill = get_skill(ch, SKILL_PROGRAM_SPECIAL, target);
     break;
   case SOFT_CAMO:
@@ -301,6 +311,12 @@ int get_program_skill(char_data *ch, obj_data *prog, int target)
   case SOFT_BROWSE:
   case SOFT_READ:
   case SOFT_COMMLINK:
+  case SOFT_DOORSTOP:
+  case SOFT_MIRRORS:
+  case SOFT_PURGE:
+  case SOFT_REDECORATE:
+  case SOFT_SPOOF:
+  case SOFT_TRIANGULATION:
     skill = get_skill(ch, SKILL_PROGRAM_OPERATIONAL, target);
     break;
   default:
