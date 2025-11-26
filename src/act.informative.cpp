@@ -2498,7 +2498,7 @@ void look_in_direction(struct char_data * ch, int dir)
 }
 
 void _send_obj_contents_info_to_char(struct obj_data *obj, struct char_data *ch, int bits) {
-  send_to_char(GET_OBJ_NAME(obj), ch);
+  // send_to_char(GET_OBJ_NAME(obj), ch);
   switch (bits) {
     case FIND_OBJ_INV:
       send_to_char(" (carried): \r\n", ch);
