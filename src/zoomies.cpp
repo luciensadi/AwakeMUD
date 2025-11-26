@@ -172,9 +172,17 @@ ACMD(do_flyto) {
   float distance = get_flight_distance_to_room(veh->in_room, target_room);
   int fuel_cost = calculate_flight_cost(veh, distance);
 
-  FAILURE_CASE_PRINTF(GET_NUYEN(ch) < fuel_cost, "It will cost %d nuyen for fuel, maintenance, and fees, but you only have %d on hand.", fuel_cost, GET_NUYEN(ch));
-  send_to_char(ch, "After paying %d nuyen for the requisite fuel, maintenance, and fees, you begin the takeoff process.\r\n", fuel_cost);
-  lose_nuyen(ch, fuel_cost, NUYEN_OUTFLOW_FLIGHT_FUEL);
+  if (GET_NUYEN(ch) < fuel_cost) {
+    if (GET_BANK(ch) >= fuel_cost) {
+      send_to_char(ch, "You arrange a bank transfer of %d nuyen for fuel, maintenance, and fees, and begin the takeoff process.\r\n", fuel_cost);
+      lose_bank(ch, fuel_cost, NUYEN_OUTFLOW_FLIGHT_FUEL);
+    } else {
+      FAILURE_CASE_PRINTF(GET_NUYEN(ch) < fuel_cost, "It will cost %d nuyen for fuel, maintenance, and fees, but you only have %d on hand.", fuel_cost, GET_NUYEN(ch));
+    }
+  } else {
+    send_to_char(ch, "After paying %d nuyen for the requisite fuel, maintenance, and fees, you begin the takeoff process.\r\n", fuel_cost);
+    lose_nuyen(ch, fuel_cost, NUYEN_OUTFLOW_FLIGHT_FUEL);
+  }
 
   // Roll your flight test, which is modified by weather etc.
   int result = flight_test(ch, veh);
