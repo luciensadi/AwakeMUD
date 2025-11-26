@@ -1538,12 +1538,12 @@ ACMD(do_matrix_score)
       echoes_found++;
       if (echoes[ci].incremental)
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s%s (%d)",
-          echoes_found > 0 ? ", " : "",
+          echoes_found > 0 ? ci  > 1 ? ", " : "" : "",
           echoes[ci].name,
           GET_ECHO(ch, ci));
       else
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s%s",
-          echoes_found > 0 ? ", " : "",
+          echoes_found > 0 ? ci  > 1 ? ", " : "" : "",
           echoes[ci].name);
     }
     if (echoes_found > 0) snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n");
