@@ -659,7 +659,7 @@ void process_flying_vehicles() {
       veh->flight_duration--;
 
       // It's super effective!
-      if (result > 2) {
+      if (result >= 4) {
         send_to_char(controller, "You're a leaf on the wind. Skill and luck speed you towards your destination.\r\n");
         veh->flight_duration--;
       }
