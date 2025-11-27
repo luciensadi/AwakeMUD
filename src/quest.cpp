@@ -3930,21 +3930,25 @@ ACMD(do_endrun) {
   for (struct char_data *johnson = character_list; johnson; johnson = johnson->next_in_character_list) {
     if (IS_NPC(johnson) && (GET_MOB_VNUM(johnson) == quest_table[GET_QUEST(ch)].johnson)) {
       // try a regular quit before the phone instead of after
-      if (ch->in_room && ch->in_room == johnson->in_room) {
-        attempt_quit_job(ch, johnson);
-      } else if (phone) {
-        send_to_char(ch, "You call your Johnson, and after a short wait the phone is picked up.\r\n"
-                         "^Y%s on the other end of the line says, \"%s\"^n\r\n"
-                         "With your run abandoned, you hang up the phone.\r\n",
-                         GET_CHAR_NAME(johnson),
-                         quest_table[GET_QUEST(ch)].quit);
-        if (ch->in_room)
-          act("$n makes a brief phone call to $s Johnson to quit $s current run. Scandalous.", FALSE, ch, 0, 0, TO_ROOM);
-        snprintf(buf, sizeof(buf), "$z's phone rings. $e answers, listens for a moment, then says into it, \"%s\"", quest_table[GET_QUEST(ch)].quit);
-        act(buf, FALSE, johnson, NULL, NULL, TO_ROOM);
+        if (ch->in_room && ch->in_room == johnson->in_room) {
+          continue;
+          } else if (phone) {
+            send_to_char(ch, "You call your Johnson, and after a short wait the phone is picked up.\r\n"
+                             "^Y%s on the other end of the line says, \"%s\"^n\r\n"
+                             "With your run abandoned, you hang up the phone.\r\n",
+                             GET_CHAR_NAME(johnson),
+                             quest_table[GET_QUEST(ch)].quit);
+            if (ch->in_room)
+              act("$n makes a brief phone call to $s Johnson to quit $s current run. Scandalous.", FALSE, ch, 0, 0, TO_ROOM);
+            snprintf(buf, sizeof(buf), "$z's phone rings. $e answers, listens for a moment, then says into it, \"%s\"", quest_table[GET_QUEST(ch)].quit);
+            act(buf, FALSE, johnson, NULL, NULL, TO_ROOM);
 
-        end_quest(ch, FALSE);
-        forget(johnson, ch);
+            end_quest(ch, FALSE);
+            forget(johnson, ch);
+            break;
+          }
+        }
+        attempt_quit_job(ch, johnson);
       } else {
         send_to_char(ch, "You'll either need to head back and talk to %s^n in person or get a phone you can use to call %s.\r\n", GET_CHAR_NAME(johnson), HMHR(johnson));
       }
