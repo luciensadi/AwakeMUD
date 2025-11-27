@@ -48,6 +48,9 @@ extern void weather_change();
 extern bool ranged_response(struct char_data *combatant, struct char_data *ch);
 extern void docwagon_retrieve(struct char_data *ch);
 extern void convert_and_write_string_to_file(const char *str, const char *path);
+extern int calculate_players_in_vehicle(struct veh_data *veh);
+extern void recalculate_whole_game_players_in_zone();
+extern void attempt_to_offload_unused_zones();
 
 #ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
 extern void verify_every_pointer_we_can_think_of();
@@ -169,7 +172,17 @@ extern void load_saved_veh(bool purge_existing);
 extern void save_vehicles(bool);
 extern void debug_pet_menu(struct char_data *ch);
 
+extern void SendGMCPDiscordInfo ( descriptor_t *apDescriptor );
+extern void SendGMCPDiscordStatus ( descriptor_t *apDescriptor );
+extern void SendCustomGMCPDiscordStatus ( descriptor_t *apDescriptor, const char *smallimage, const char *smallimagetext, const char *details, const char *state);
+
 extern bf::path global_vehicles_dir;
+
+// Discord debug vars.
+char _discord_state[200] = {0};
+char _discord_details[200] = {0};
+char _discord_smallimage[100] = {0};
+char _discord_smallimagetext[200] = {0};
 
 bool drinks_are_unfucked = TRUE;
 ACMD(do_debug) {
@@ -191,19 +204,281 @@ ACMD(do_debug) {
   rest_of_argument = any_one_arg(argument, arg1);
   skip_spaces(&rest_of_argument);
 
+  if (!str_cmp(arg1, "formatting")) {
+    send_to_char(ch, "\e[3mitalics test\e[0m\r\n");
+    send_to_char(ch, "\e[4munderline test\e[0m\r\n");
+    send_to_char(ch, "\e[5mslow blink test\e[0m\r\n");
+    send_to_char(ch, "\e[6mrapid blink test\e[0m\r\n");
+    send_to_char(ch, "\e[7minvert test\e[0m\r\n");
+    send_to_char(ch, "\e[8mconceal test\e[0m\r\n");
+    send_to_char(ch, "\e[9mstrikethrough test\e[0m\r\n");
+    send_to_char(ch, "\e[20mgothic font test\e[0m\r\n");
+    send_to_char(ch, "\e[21mdouble underline test\e[0m\r\n");
+    send_to_char(ch, "\e[51mframed test\e[0m\r\n");
+    send_to_char(ch, "\e[52mencircled test\e[0m\r\n");
+    send_to_char(ch, "\e[53moverlined test\e[0m\r\n");
+    return;
+  }
+
   if (!str_cmp(arg1, "pointers")) {
     send_to_char(ch, "OK, validating every pointer we can think of.\r\n");
     verify_every_pointer_we_can_think_of();
     return;
   }
 
-#ifdef TEMPORARY_COMPILATION_GUARD
-  if (!str_cmp(arg1, "minigame")) {
-    extern void minigame_debug(struct char_data *ch, char *rest_of_argument);
-    minigame_debug(ch, rest_of_argument);
+  if (!str_cmp(arg1, "offloadzones")) {
+    send_to_char(ch, "OK, offloading all zones that don't have PCs in them...\r\n");
+    attempt_to_offload_unused_zones();
+    send_to_char(ch, "Done.\r\n");
     return;
   }
-#endif
+
+  if (!str_cmp(arg1, "cleanup_zone_pcs")) {
+    send_to_char(ch, "OK, validating zone and vehicle character counts...\r\n");
+    recalculate_whole_game_players_in_zone();
+    send_to_char(ch, "Done.\r\n");
+    return;
+  }
+
+  struct sustain_data_no_init {
+    ush_int spell;
+    unsigned char subtype;
+    unsigned char force;
+    unsigned char success;
+    int idnum; // This is distinct from caster idnum etc, so does not necessarily need to be idnum_t.
+    int time;
+    unsigned char time_to_take_effect;
+    bool is_caster_record;
+    int ritual_cast_cost;
+    struct obj_data *focus;
+    struct char_data *spirit;
+    struct char_data *other;
+    struct sustain_data *next;
+    struct txt_q input;
+  };
+
+  if (!str_cmp(arg1, "testinitializing")) {
+    sustain_data_no_init *data;
+    send_to_char(ch, "OK, testing value-initialization...\r\n");
+
+    data = new sustain_data_no_init();
+    send_to_char(ch, "After default initialization:   "
+                 "Spell=%u, "
+                 "Subtype=%u, "
+                 "Force=%u, "
+                 "Success=%u, "
+                 "Idnum=%d, "
+                 "Time=%d, "
+                 "TimeToTakeEffect=%u, "
+                 "IsCasterRecord=%s, "
+                 "RitualCastCost=%d, "
+                 "Focus=%s(%p), "
+                 "Spirit=%s(%p), "
+                 "Other=%s(%p), "
+                 "Next=%p, "
+                 "txt_q->head=%p, "
+                 "txt_q->tail=%p\r\n",
+                 data->spell,
+                 data->subtype,
+                 data->force,
+                 data->success,
+                 data->idnum,
+                 data->time,
+                 data->time_to_take_effect,
+                 data->is_caster_record ? "true" : "false",
+                 data->ritual_cast_cost,
+                 data->focus ? "obj" : "null", (void*)data->focus,
+                 data->spirit ? "char" : "null", (void*)data->spirit,
+                 data->other ? "char" : "null", (void*)data->other,
+                 (void*)data->next,
+                 (void*)data->input.head,
+                 (void*)data->input.tail);
+    delete data;
+
+    data = new sustain_data_no_init();
+    send_to_char(ch, "After parenthetical initialization:   "
+                 "Spell=%u, "
+                 "Subtype=%u, "
+                 "Force=%u, "
+                 "Success=%u, "
+                 "Idnum=%d, "
+                 "Time=%d, "
+                 "TimeToTakeEffect=%u, "
+                 "IsCasterRecord=%s, "
+                 "RitualCastCost=%d, "
+                 "Focus=%s(%p), "
+                 "Spirit=%s(%p), "
+                 "Other=%s(%p), "
+                 "Next=%p, "
+                 "txt_q->head=%p, "
+                 "txt_q->tail=%p\r\n",
+                 data->spell,
+                 data->subtype,
+                 data->force,
+                 data->success,
+                 data->idnum,
+                 data->time,
+                 data->time_to_take_effect,
+                 data->is_caster_record ? "true" : "false",
+                 data->ritual_cast_cost,
+                 data->focus ? "obj" : "null", (void*)data->focus,
+                 data->spirit ? "char" : "null", (void*)data->spirit,
+                 data->other ? "char" : "null", (void*)data->other,
+                 (void*)data->next,
+                 (void*)data->input.head,
+                 (void*)data->input.tail);
+    delete data;
+
+    data = new sustain_data_no_init();
+    memset(data, 0, sizeof(sustain_data_no_init));
+    send_to_char(ch, "After memset initialization:  "
+                 "Spell=%u, "
+                 "Subtype=%u, "
+                 "Force=%u, "
+                 "Success=%u, "
+                 "Idnum=%d, "
+                 "Time=%d, "
+                 "TimeToTakeEffect=%u, "
+                 "IsCasterRecord=%s, "
+                 "RitualCastCost=%d, "
+                 "Focus=%s(%p), "
+                 "Spirit=%s(%p), "
+                 "Other=%s(%p), "
+                 "Next=%p, "
+                 "txt_q->head=%p, "
+                 "txt_q->tail=%p\r\n",
+                 data->spell,
+                 data->subtype,
+                 data->force,
+                 data->success,
+                 data->idnum,
+                 data->time,
+                 data->time_to_take_effect,
+                 data->is_caster_record ? "true" : "false",
+                 data->ritual_cast_cost,
+                 data->focus ? "obj" : "null", (void*)data->focus,
+                 data->spirit ? "char" : "null", (void*)data->spirit,
+                 data->other ? "char" : "null", (void*)data->other,
+                 (void*)data->next,
+                 (void*)data->input.head,
+                 (void*)data->input.tail);
+    delete data;
+
+    return;
+  }
+
+  if (!str_cmp(arg1, "makesecs")) {
+    extern void initialize_pocket_secretary(struct obj_data *sec);
+
+    send_to_char(ch, "*suggestive eyebrow wriggling*\r\n");
+    struct obj_data *eggplant_emoji = read_object(39865, VIRTUAL, OBJ_LOAD_REASON_STAFF_DECK);
+    
+    initialize_pocket_secretary(eggplant_emoji);
+
+    for (struct obj_data *folder = eggplant_emoji->contains; folder; folder = folder->next_content) {
+      if (!str_cmp(folder->restring, "Phonebook")) {
+        for (int idx = 0; idx < 3; idx++) {
+          struct obj_data *entry = read_object(OBJ_POCKET_SECRETARY_FOLDER, VIRTUAL, OBJ_LOAD_REASON_POCSEC_PHONEADD);
+
+          int rand_num = number(10000000, 99999999);
+
+          snprintf(buf3, sizeof(buf3), "restring-%d", rand_num);
+          entry->restring = str_dup(buf3);
+          snprintf(buf3, sizeof(buf3), "%d", rand_num);
+          entry->photo = str_dup(buf3);
+
+          obj_to_obj(entry, folder);
+        }
+      }
+
+      if (!str_cmp(folder->restring, "Mail")) {
+        for (int idx = 0; idx < 3; idx++) {
+          struct obj_data *entry = read_object(OBJ_PIECE_OF_MAIL, VIRTUAL, OBJ_LOAD_REASON_POCSEC_PHONEADD);
+
+          snprintf(buf3, sizeof(buf3), "mail from your mother");
+          entry->restring = str_dup(buf3);
+          snprintf(buf3, sizeof(buf3), "go to bed");
+          entry->photo = str_dup(buf3);
+
+          obj_to_obj(entry, folder);
+        }
+      }
+    }
+
+    obj_to_char(eggplant_emoji, ch);
+    return;
+  }
+
+  if (!str_cmp(arg1, "migration_tests")) {
+    extern void test_phonebook_entry_migration_query_generation();
+    test_phonebook_entry_migration_query_generation();
+    send_to_char(ch, "Passed!\r\n");
+    return;
+  }
+
+  if (!str_cmp(arg1, "bitfield")) {
+    send_to_char(ch, "OK, checking bitfield consistency.\r\n");
+
+    unsigned long long test_number = (1 << ITEM_WEAR_LAPEL) | (1 << ITEM_WEAR_ABOUT) | (1 << ITEM_WEAR_ANKLE) | (1 << ITEM_WEAR_FACE) | (1 << ITEM_WEAR_TAKE) | (1 << ITEM_WEAR_WRIST);
+
+    Bitfield correct_one;
+    correct_one.SetBits(ITEM_WEAR_LAPEL, ITEM_WEAR_ABOUT, ITEM_WEAR_ANKLE, ITEM_WEAR_FACE, ITEM_WEAR_TAKE, ITEM_WEAR_WRIST, ENDBIT);
+
+    Bitfield test_value(test_number);
+
+    if (correct_one != test_value) {
+      send_to_char(ch, "Did NOT match. Correct is %s, test is %s. Test number prints as %ld\r\n", correct_one.ToString(), test_value.ToString(), test_number);
+    } else {
+      send_to_char("Yay, matched.\r\n", ch);
+    }
+    return;
+  }
+
+  if (!str_cmp(arg1, "discord")) {
+    rest_of_argument = any_one_arg(rest_of_argument, arg2);
+
+    if (!str_cmp(arg2, "state")) {
+      strlcpy(_discord_state, rest_of_argument, sizeof(_discord_state));
+      send_to_char(ch, "OK, will send discord state '%s' on next DEBUG DISCORD SEND.", _discord_state);
+      return;
+    }
+
+    if (!str_cmp(arg2, "details")) {
+      strlcpy(_discord_details, rest_of_argument, sizeof(_discord_details));
+      send_to_char(ch, "OK, will send discord details '%s' on next DEBUG DISCORD SEND.", _discord_details);
+      return;
+    }
+
+    if (!str_cmp(arg2, "smallimagetext")) {
+      strlcpy(_discord_smallimagetext, rest_of_argument, sizeof(_discord_smallimagetext));
+      send_to_char(ch, "OK, will send discord smallimagetext '%s' on next DEBUG DISCORD SEND.", _discord_smallimagetext);
+      return;
+    }
+
+    if (!str_cmp(arg2, "smallimage")) {
+      strlcpy(_discord_smallimage, rest_of_argument, sizeof(_discord_smallimage));
+      send_to_char(ch, "OK, will send discord smallimage '%s' on next DEBUG DISCORD SEND.", _discord_smallimage);
+      return;
+    }
+
+    if (!*_discord_state) {
+      strlcpy(_discord_state, "state string", sizeof(_discord_state));
+    }
+    if (!*_discord_details) {
+      strlcpy(_discord_details, "details string", sizeof(_discord_details));
+    }
+    if (!*_discord_smallimage) {
+      strlcpy(_discord_smallimage, "steering-wheel", sizeof(_discord_smallimage));
+    }
+    if (!*_discord_smallimagetext) {
+      strlcpy(_discord_smallimagetext, "Cruising the Shadows", sizeof(_discord_smallimagetext));
+    }
+
+    send_to_char(ch, "OK, sending discord info state='%s', details='%s', smallimage='%s', smallimagetext='%s'\r\n", _discord_state, _discord_details, _discord_smallimage, _discord_smallimagetext);
+    SendGMCPDiscordInfo(ch->desc);
+    SendCustomGMCPDiscordStatus(ch->desc, _discord_smallimage, _discord_smallimagetext, _discord_details, _discord_state);
+    return;
+  }
 
   if (!str_cmp(arg1, "idledelete")) {
     idnum_t idnum = atol(rest_of_argument);

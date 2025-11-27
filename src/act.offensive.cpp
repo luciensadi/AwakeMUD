@@ -42,64 +42,61 @@ extern int find_weapon_range(struct char_data *ch, struct obj_data *weapon);
 extern void roll_individual_initiative(struct char_data *ch);
 extern bool has_ammo(struct char_data *ch, struct obj_data *wielded);
 extern void damage_door(struct char_data *ch, struct room_data *room, int dir, int power, int type);
-extern void perform_get_from_container(struct char_data *, struct obj_data *, struct obj_data *, int);
 extern int can_wield_both(struct char_data *, struct obj_data *, struct obj_data *);
 extern void find_and_draw_weapon(struct char_data *);
 extern bool can_hurt(struct char_data *ch, struct char_data *victim, int attacktype, bool include_func_protections);
 extern bool does_weapon_have_bayonet(struct obj_data *weapon);
 extern int calculate_vision_penalty(struct char_data *ch, struct char_data *victim);
 extern int check_recoil(struct char_data *ch, struct obj_data *gun, bool is_using_gyromount);
+extern bool would_become_killer(struct char_data * ch, struct char_data * vict);
 
 
 ACMD(do_assist)
 {
   struct char_data *helpee, *opponent;
 
-  if (CH_IN_COMBAT(ch)) {
-    send_to_char("You're already fighting!  How can you assist someone else?\r\n", ch);
-    return;
-  }
+  FAILURE_CASE(CH_IN_COMBAT(ch), "You're already fighting!  How can you assist someone else?");
+
   one_argument(argument, arg);
 
   FAILURE_CASE(PRF_FLAGGED(ch, PRF_PASSIVE_IN_COMBAT), "You can't do that while in passive combat mode. ^WTOGGLE PASSIVE^n to disable it.");
 
-  if (!*arg)
-    send_to_char("Whom do you wish to assist?\r\n", ch);
-  else if (!(helpee = get_char_room_vis(ch, arg)))
-    send_to_char(ch, "You don't see anyone named '%s' here.\r\n", arg);
-  else if (helpee == ch)
-    send_to_char("You can't help yourself any more than this!\r\n", ch);
-  else {
-    for (opponent = ch->in_room->people; opponent && (FIGHTING(opponent) != helpee);
-         opponent = opponent->next_in_room)
-      ;
+  FAILURE_CASE(!*arg, "Syntax: ASSIST <target>");
+  FAILURE_CASE_PRINTF(!(helpee = get_char_room_vis(ch, arg)), "You don't see anyone named '%s' here.", arg);
+  FAILURE_CASE_PRINTF(helpee == ch, "You attempt to assist yourself by picking yourself up by your bootstraps. HNNNGH--");
 
-    if (!opponent)
-      opponent = FIGHTING(helpee);
-    if (!opponent)
-      act("But nobody is fighting $M!", FALSE, ch, 0, helpee, TO_CHAR);
-    else if (!CAN_SEE(ch, opponent))
-      act("You can't see who is fighting $M!", FALSE, ch, 0, helpee, TO_CHAR);
-    else {
-      if (IS_IGNORING(opponent, is_blocking_ic_interaction_from, ch)) {
-        act("You can't see who is fighting $M!", FALSE, ch, 0, helpee, TO_CHAR);
-        log_attempt_to_bypass_ic_ignore(ch, opponent, "do_assist");
-        return;
-      }
-
-      if (IS_IGNORING(ch, is_blocking_ic_interaction_from, opponent)) {
-        send_to_char("You can't attack someone you've blocked IC interaction with.\r\n", ch);
-        return;
-      }
-      send_to_char("You join the fight!\r\n", ch);
-      act("$N assists you!", FALSE, helpee, 0, ch, TO_CHAR);
-      act("$n assists $N.", FALSE, ch, 0, helpee, TO_NOTVICT);
-      // here we add the chars to the respective lists
-      set_fighting(ch, opponent);
-      if (!FIGHTING(opponent) && AWAKE(opponent))
-        set_fighting(opponent, ch);
-    }
+  // Iterate through people in the room, skipping over anyone who's not attacking your helpee.
+  for (opponent = ch->in_room->people; opponent; opponent = opponent->next_in_room) {
+    if (FIGHTING(opponent) == helpee)
+      break;
   }
+
+  if (!opponent && !(opponent = FIGHTING(helpee))) {
+    act("But nobody is fighting $M!", FALSE, ch, 0, helpee, TO_CHAR);
+    return;
+  }
+
+  if (!CAN_SEE(ch, opponent)) {
+    act("You can't see who is fighting $M!", FALSE, ch, 0, helpee, TO_CHAR);
+    return;
+  }
+  
+  if (IS_IGNORING(opponent, is_blocking_ic_interaction_from, ch)) {
+    act("You can't see who is fighting $M!", FALSE, ch, 0, helpee, TO_CHAR);
+    log_attempt_to_bypass_ic_ignore(ch, opponent, "do_assist");
+    return;
+  }
+
+  FAILURE_CASE(IS_IGNORING(ch, is_blocking_ic_interaction_from, opponent), "You can't attack someone you've blocked IC interaction with.");
+  FAILURE_CASE_PRINTF(would_become_killer(ch, opponent), "You can't assist %s against other players.", CAP(arg));
+
+  send_to_char("You join the fight!\r\n", ch);
+  act("$N assists you!", FALSE, helpee, 0, ch, TO_CHAR);
+  act("$n assists $N.", FALSE, ch, 0, helpee, TO_NOTVICT);
+  // here we add the chars to the respective lists
+  set_fighting(ch, opponent);
+  if (!FIGHTING(opponent) && AWAKE(opponent))
+    set_fighting(opponent, ch);
 }
 
 int messageless_find_door(struct char_data *ch, char *type, char *dir, const char *cmdname)
@@ -466,7 +463,7 @@ ACMD(do_kill)
       act("$n brutally slays $N!", FALSE, ch, 0, vict, TO_NOTVICT);
       if (!IS_NPC(vict)) {
         snprintf(buf2, sizeof(buf2), "%s raw killed by %s. {%s (%ld)}", GET_CHAR_NAME(vict),
-                GET_NAME(ch), vict->in_room->name,
+                GET_CHAR_NAME(ch), GET_ROOM_NAME(vict->in_room),
                 vict->in_room->number);
 
         mudlog(buf2, vict, LOG_DEATHLOG, TRUE);
@@ -498,9 +495,7 @@ ACMD(do_shoot)
   for (i = WEAR_WIELD; i <= WEAR_HOLD; i++)
     if ((weapon = GET_EQ(ch, i)) &&
         (GET_OBJ_TYPE(weapon) == ITEM_FIREWEAPON ||
-         (GET_OBJ_TYPE(weapon) == ITEM_WEAPON && (IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon))
-                                                  || GET_WEAPON_ATTACK_TYPE(weapon) == WEAP_GREN_LAUNCHER
-                                                  || GET_WEAPON_ATTACK_TYPE(weapon) == WEAP_MISS_LAUNCHER))))
+         (GET_OBJ_TYPE(weapon) == ITEM_WEAPON && (WEAPON_IS_GUN(weapon)))))
       if (find_weapon_range(ch, weapon) > range)
         pos = i;
 
@@ -713,10 +708,15 @@ ACMD(do_flee)
     }
   }
 
+  WAIT_STATE(ch, PULSE_VIOLENCE);
+
   if (valid_directions.empty()) {
     send_to_char("PANIC! There's nowhere you can flee to!\r\n", ch);
-    WAIT_STATE(ch, PULSE_VIOLENCE);
   } else {
+    // Some totems can't withdraw from combat.
+    FAILURE_CASE(IS_COMBAT_ENTHRALLED_SHAMAN(ch) && success_test(GET_WIL(ch), 6, ch, "shaman conflict withdraw test", NULL) <= 0,
+                 "You fail to fight off your baser instincts, instead committing to the fight once more.");
+
     // Sort our list of valid directions by weight.
     std::sort(valid_directions.begin(), valid_directions.end(), _sort_pairs_by_weight);
 
@@ -725,7 +725,6 @@ ACMD(do_flee)
 
     // Supply messaging and put the character into a wait state half that of perform_move.
     act("$n panics, and attempts to flee!", TRUE, ch, 0, 0, TO_ROOM);
-    WAIT_STATE(ch, PULSE_VIOLENCE);
 
     // If the character is fighting in melee combat with someone they can hurt, they must pass a test to escape.
     struct char_data *blocker = find_a_character_that_blocks_fleeing_for_ch(ch);
@@ -968,7 +967,7 @@ ACMD(do_mode)
     return;
   }
 
-  if (GET_OBJ_TYPE(weapon) != ITEM_WEAPON || !IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon))) {
+  if (GET_OBJ_TYPE(weapon) != ITEM_WEAPON || !WEAPON_IS_GUN(weapon)) {
     send_to_char(ch, "%s isn't a firearm.\r\n", CAP(GET_OBJ_NAME(weapon)));
     return;
   }
@@ -1119,7 +1118,7 @@ ACMD(do_prone)
     struct sustain_data *next;
     for (struct sustain_data *sust = GET_SUSTAINED(victim); sust; sust = next) {
       next = sust->next;
-      if (sust->caster && !sust->focus && !sust->spirit) {
+      if (sust->is_caster_record && !sust->focus && !sust->spirit) {
         strlcat(buf, "Maintain-sustain-while-prone test: ", sizeof(buf));
 
         int dice = GET_WILL(ch);

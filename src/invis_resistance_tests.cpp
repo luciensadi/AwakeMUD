@@ -155,8 +155,8 @@ bool can_see_through_invis(struct char_data *ch, struct char_data *vict) {
 
   // Scan through their spells and find the invis spell on them, if any.
   for (invis_spell_sust = GET_SUSTAINED(vict); invis_spell_sust; invis_spell_sust = invis_spell_sust->next) {
-    // Note the use of the negated ->caster here-- we only want spells affecting them, not the caster records.
-    if (!invis_spell_sust->caster && (invis_spell_sust->spell == SPELL_IMP_INVIS || invis_spell_sust->spell == SPELL_INVIS))
+    // Note the use of the negated ->is_caster_record here-- we only want spells affecting them, not the caster records.
+    if (!invis_spell_sust->is_caster_record && (invis_spell_sust->spell == SPELL_IMP_INVIS || invis_spell_sust->spell == SPELL_INVIS))
       break;
   }
 

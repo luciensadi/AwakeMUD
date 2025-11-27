@@ -35,6 +35,7 @@ extern bool can_hurt(struct char_data *ch, struct char_data *victim, int attackt
 extern int get_weapon_damage_type(struct obj_data* weapon);
 extern bool damage(struct char_data *ch, struct char_data *victim, int dam, int attacktype, bool is_physical);
 extern bool damage_without_message(struct char_data *ch, struct char_data *victim, int dam, int attacktype, bool is_physical);
+extern bool weapon_has_usable_bipod_or_tripod(struct char_data *ch, struct obj_data *gun, bool is_using_gyromount=FALSE);
 
 void engage_close_combat_if_appropriate(struct combat_data *att, struct combat_data *def, int net_reach);
 
@@ -48,7 +49,7 @@ void remove_riot_shield_bonuses(struct combat_data *wearer, struct combat_data *
 
 #define IS_RANGED(eq)   (GET_OBJ_TYPE(eq) == ITEM_FIREWEAPON || \
 (GET_OBJ_TYPE(eq) == ITEM_WEAPON && \
-(IS_GUN(GET_OBJ_VAL(eq, 3)))))
+(WEAPON_IS_GUN(eq))))
 
 #define HAS_IMMUNITY_TO_NORMAL_WEAPONS(ch) (IS_SPIRIT(ch) || IS_ANY_ELEMENTAL(ch))
 
@@ -128,6 +129,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
         act("A crackling shot of energy erupts from $n's Dominator and slams into $N, disabling $M!", FALSE, att->ch, 0, def->ch, TO_NOTVICT);
         act("A crackling shot of energy erupts from $n's Dominator and slams into you! Your vision fades as your muscles lock up.", FALSE, att->ch, 0, def->ch, TO_VICT);
         GET_MENTAL(def->ch) = -10;
+        mudlog_vfprintf(att->ch, LOG_WIZLOG, "%s used a Dominator to stun %s.", GET_CHAR_NAME(att->ch), GET_CHAR_NAME(def->ch));
         update_pos(def->ch);
         return FALSE;
       case WEAP_HEAVY_PISTOL:
@@ -135,6 +137,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
         act("A ball of coherent light leaps from your Dominator, tearing into $N. With a scream, $E crumples, bubbles, and explodes in a shower of gore!", FALSE, att->ch, 0, def->ch, TO_CHAR);
         act("A ball of coherent light leaps from $n's Dominator, tearing into $N. With a scream, $E crumples, bubbles, and explodes in a shower of gore!", FALSE, att->ch, 0, def->ch, TO_NOTVICT);
         act("A ball of coherent light leaps from $n's Dominator, tearing into you! A horrible rending sensation tears through you as your vision fades.", FALSE, att->ch, 0, def->ch, TO_VICT);
+        mudlog_vfprintf(att->ch, LOG_WIZLOG, "%s used a Dominator to kill %s.", GET_CHAR_NAME(att->ch), GET_CHAR_NAME(def->ch));
         die(def->ch, GET_IDNUM(att->ch));
         return TRUE;
       case WEAP_CANNON:
@@ -142,6 +145,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
         act("A roaring column of force explodes from your Dominator, erasing $N from existence!", FALSE, att->ch, 0, def->ch, TO_CHAR);
         act("A roaring column of force explodes from $n's Dominator, erasing $N from existence!", FALSE, att->ch, 0, def->ch, TO_NOTVICT);
         act("A roaring column of force explodes from $n's Dominator, erasing you from existence!", FALSE, att->ch, 0, def->ch, TO_VICT);
+        mudlog_vfprintf(att->ch, LOG_WIZLOG, "%s used a Dominator to erase %s.", GET_CHAR_NAME(att->ch), GET_CHAR_NAME(def->ch));
         die(def->ch, GET_IDNUM(att->ch));
         if (def->ch->desc) {
           STATE(def->ch->desc) = CON_CLOSE;
@@ -355,8 +359,8 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
         if (!IS_NPC(att->ch)) {
           att->ranged->modifiers[COMBAT_MOD_DISTANCE] += SAME_ROOM_SNIPER_RIFLE_PENALTY;
 
-          // 1-round single-shot snipers get an extra +1.
-          if (GET_WEAPON_FIREMODE(att->weapon) == MODE_SS && GET_WEAPON_MAX_AMMO(att->weapon) == 1) {
+          // Specific 1-round single-shot snipers get an extra +1.
+          if (GET_OBJ_VNUM(att->weapon) == 33600 && GET_WEAPON_FIREMODE(att->weapon) == MODE_SS && GET_WEAPON_MAX_AMMO(att->weapon) == 1) {
             att->ranged->modifiers[COMBAT_MOD_DISTANCE] += 1;
           }
         }
@@ -365,8 +369,13 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
       else {
         att->ranged->modifiers[COMBAT_MOD_DISTANCE] -= 2;
 
-        // 1-round single-shot snipers get an extra -1, but only if prone.
-        if (GET_WEAPON_FIREMODE(att->weapon) == MODE_SS && GET_WEAPON_MAX_AMMO(att->weapon) == 1 && AFF_FLAGGED(att->ch, AFF_PRONE)) {
+        // Specific 1-round single-shot snipers get an extra -1, but only if proned with a bipod or tripod.
+        if (GET_OBJ_VNUM(att->weapon) == 33600
+            && GET_WEAPON_FIREMODE(att->weapon) == MODE_SS
+            && GET_WEAPON_MAX_AMMO(att->weapon) == 1
+            && AFF_FLAGGED(att->ch, AFF_PRONE)
+            && weapon_has_usable_bipod_or_tripod(att->ch, att->weapon, att->using_gyro))
+        {
           att->ranged->modifiers[COMBAT_MOD_DISTANCE] -= 1;
         }
       }
@@ -1275,7 +1284,7 @@ bool hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
 
 bool does_weapon_have_bayonet(struct obj_data *weapon) {
   // Precondition: Weapon must exist, must be a weapon-class item, and must be a gun.
-  if (!(weapon && GET_OBJ_TYPE(weapon) == ITEM_WEAPON && IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon))))
+  if (!(weapon && GET_OBJ_TYPE(weapon) == ITEM_WEAPON && WEAPON_IS_GUN(weapon)))
     return FALSE;
 
   struct obj_data *attach_proto = get_obj_proto_for_vnum(GET_WEAPON_ATTACH_UNDER_VNUM(weapon));
@@ -1339,7 +1348,7 @@ bool handle_flame_aura(struct combat_data *att, struct combat_data *def) {
   } else {
     // Iterate through their spells, find the flame aura that's applied to them, and extract its force.
     for (struct sustain_data *sust = GET_SUSTAINED(def->ch); sust; sust = sust->next) {
-      if (!sust->caster && sust->spell == SPELL_FLAME_AURA) {
+      if (!sust->is_caster_record && sust->spell == SPELL_FLAME_AURA) {
         force = sust->force;
         break;
       }
@@ -1512,7 +1521,7 @@ bool perform_nerve_strike(struct combat_data *att, struct combat_data *def, char
     int prior_tn = att->melee->tn;
     att->melee->dice = get_skill(att->ch, SKILL_UNARMED_COMBAT, att->melee->tn);
     if (att->melee->tn != prior_tn) {
-      snprintf(rbuf, sizeof(rbuf), "TN modified in get_skill() to %d.", att->melee->tn);
+      snprintf(rbuf, rbuf_len, "TN modified in get_skill() to %d.", att->melee->tn);
       SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
     }
   }

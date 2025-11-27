@@ -14,20 +14,19 @@ void convert_and_write_string_to_file(const char *str, const char *path) {
   fprintf(fl, "<HTML><BODY bgcolor=#11191C><PRE>");
   // convert lines here
 
-  char result[MAX_STRING_LENGTH] = { '\0' };
+  char result[MAX_STRING_LENGTH * 10] = { '\0' };
 
   for (const char *ptr = str; *ptr; ptr++) {
     // It's a color. Pull it out.
     if (*ptr == '^') {
-      char color[8];
-      memset(color, 0, sizeof(color));
+      char color[8] = {0};
 
-      int max_sz = 2;
+      size_t max_sz = 2;
       if (*(ptr + 1) == '[' && strlen(ptr) >= sizeof(color) - 1) {
         max_sz = sizeof(color) - 1;
       }
     
-      for (int idx = 0; idx < max_sz; idx++)
+      for (size_t idx = 0; idx < max_sz; idx++)
         color[idx] = *(ptr++);
       ptr--;
       
@@ -43,15 +42,6 @@ void convert_and_write_string_to_file(const char *str, const char *path) {
 
   fprintf(fl, "</PRE></BODY></HTML>\r\n");
   fclose(fl);
-}
-
-const char *convert_string_to_html(const char *str) {
-  static char result[MAX_STRING_LENGTH * 64];
-  memset(result, 0, sizeof(result));
-
-  
-
-  return result;
 }
 
 #define CONVERT_TO_HEX(character, value) case character: strlcpy(color_to_convert, value, sizeof(color_to_convert)); break;
@@ -119,7 +109,7 @@ const char *color_to_html(const char *color) {
   }
 
   // Once we've gotten here, the color is an xterm color.
-  if (*(color_to_convert + 1) == '[' && *(color_to_convert + 2) == 'F') {
+  if (*(color_to_convert + 1) == '[' && (*(color_to_convert + 2) == 'F' || *(color_to_convert + 2) == 'f')) {
     unsigned int r_base = *(color_to_convert + 3) - '0';
     unsigned int g_base = *(color_to_convert + 4) - '0';
     unsigned int b_base = *(color_to_convert + 5) - '0';

@@ -214,7 +214,6 @@ struct dest_data caribbean_taxi_destinations[] =
     { "eastern", "shore", "Eastern Shore", 98044, TAXI_DEST_TYPE_AREA_OF_TOWN, TRUE},
     { "NASA", "wallops", "Ares Nasa Wallops Island", 98057, TAXI_DEST_TYPE_CORPORATE_PARK, TRUE}, 
     { "universal", "omnitech", "Universal Omnitech", 100928, TAXI_DEST_TYPE_CORPORATE_PARK, TRUE}, 
-    { "ford", "motor", "Ford Motor Company", 100944, TAXI_DEST_TYPE_CORPORATE_PARK, TRUE}, 
     { "CDC", "", "Center for Disease Control", 100942, TAXI_DEST_TYPE_CORPORATE_PARK, TRUE}, 
     { "meridional", "agronomic", "Meridional Agronomics", 101292, TAXI_DEST_TYPE_CORPORATE_PARK, TRUE},
     { "foundation", "atlantean", "The Atlantean Foundation", 100937, TAXI_DEST_TYPE_CORPORATE_PARK, TRUE},
@@ -228,11 +227,11 @@ struct dest_data caribbean_taxi_destinations[] =
     { "diego's", "pizza", "Diego's Pizza and Gyros", 98021, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE}, 
     { "stingray's", "", "Stingray's", 98045, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE}, 
     { "creamery", "chincoteague", "Chincoteague Island Creamery", 98060, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE}, 
+    { "steakhouse", "carolina", "Carolina Steakhouse", 100208, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE},
     { "tea", "shoppe", "The Tea Shoppe", 100931, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE},
     { "june's", "mama", "Mama June's", 100265, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE},
     { "moe's", "pub", "Moe's Pub", 100214, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE},
     { "kelley's", "", "Kelley's Bar", 100246, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE},
-    { "steakhouse", "carolina", "Carolina Steakhouse", 100208, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE},
     { "captain", "seafood", "Captain T's Seafood Restaurant", 100210, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE},
     { "rosco's", "", "Rosco's Bar", 100935, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE},
     { "beerman's", "elder", "Elder Beerman's", 100955, TAXI_DEST_TYPE_SHOPPING, TRUE}, 
@@ -245,6 +244,7 @@ struct dest_data caribbean_taxi_destinations[] =
     { "taxidermy", "stevenson's", "Irwin Stevenson's Taxidermy & Hunting", 100256, TAXI_DEST_TYPE_SHOPPING, TRUE},
     { "rotorcraft", "sport", "Virginia Beach Sport Rotorcraft", 100927, TAXI_DEST_TYPE_SHOPPING, TRUE},
     { "motorlodge", "scott's", "Scott's Motorlodge", 98082, TAXI_DEST_TYPE_HOTELS_MOTELS, TRUE},
+    { "ford", "motor", "Ford Motor Company", 100944, TAXI_DEST_TYPE_CORPORATE_PARK, TRUE}, 
     { "bayview", "apartments", "Bayview Apartments", 98011, TAXI_DEST_TYPE_ACCOMMODATIONS, TRUE},
     { "docwagon", "wagon", "DocWagon", 98010, TAXI_DEST_TYPE_HOSPITALS, TRUE}, 
     { "cart", "crash", "Crash Cart", 100945, TAXI_DEST_TYPE_HOSPITALS, TRUE},
@@ -1293,6 +1293,13 @@ SPECIAL(taxi)
       GET_SPARE2(driver) = destination_list[GET_SPARE2(driver)].vnum;
     GET_ACTIVE(driver) = ACT_DRIVING;
 
+    // Log it.
+#ifndef IS_BUILDPORT
+    if (IS_SENATOR(ch)) {
+      mudlog_vfprintf(ch, LOG_WIZLOG, "Staffer taking cab to game world location %ld (%s).", GET_SPARE2(driver), destination_list[GET_SPARE2(driver)].str);
+    }
+#endif
+
     raw_taxi_leaves(real_room(GET_ROOM_VNUM(ch->in_room)));
   } else if (comm == CMD_TAXI_NO && memory(driver, ch) && GET_ACTIVE(driver) == ACT_AWAIT_YESNO) {
     if (destination_list == portland_taxi_destinations)
@@ -2161,7 +2168,7 @@ void process_sauteurs_plane(void)
 #ifdef USE_PRIVATE_CE_WORLD
 #define RM_CAS_PLANE             8892
 #define RM_NORFOLK_INTL_AIRPORT  98000
-#define RM_PAINE_TO_CAS_AIRFIELD 8898
+#define RM_PAINE_TO_CAS_AIRFIELD 8834
 #else
 #define RM_CAS_PLANE             15
 #define RM_NORFOLK_INTL_AIRPORT  8897

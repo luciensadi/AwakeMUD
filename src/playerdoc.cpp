@@ -58,6 +58,10 @@ int alert_player_doctors_of_mort(struct char_data *ch, struct obj_data *docwagon
   if (!docwagon && !(docwagon = find_best_active_docwagon_modulator(ch)))
     return 0;
 
+  // Skip newbies. They have no death penalty.
+  if (PLR_FLAGGED(ch, PLR_NEWBIE))
+    return 0;
+
   // They don't want to participate-- not an error, just bail.
   if (PRF_FLAGGED(ch, PRF_DONT_ALERT_PLAYER_DOCTORS_ON_MORT))
     return 0;
@@ -276,7 +280,7 @@ bool handle_player_docwagon_track(struct char_data *ch, char *argument) {
     }
 
     // Wrong target?
-    if (!keyword_appears_in_char(argument, ch)) {
+    if (!isname(argument, get_string_after_color_code_removal(get_char_representation_for_docwagon(d->character, ch), NULL))) {
       if (access_level(ch, LVL_PRESIDENT)) {
         send_to_char(ch, "DEBUG: Skipping %s (%s): '%s' does not match their representation.\r\n", get_char_representation_for_docwagon(d->character, ch), GET_CHAR_NAME(d->character), argument);
       }

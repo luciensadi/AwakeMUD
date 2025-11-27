@@ -349,7 +349,7 @@ int gain_karma(struct char_data * ch, int gain, bool rep, bool limits, bool mult
       } else if (GET_TKE(ch) >= 100 && GET_TKE(ch) < 500) {
         gain = MIN(MAX_MIDCHAR_GAIN, gain);
       } else {
-        gain = MIN(MAX_OLDCHAR_GAIN, gain);
+        gain = MIN((int) (MAX_OLDCHAR_GAIN), gain);
       }
     }
 
@@ -435,7 +435,6 @@ void _raw_gain_nuyen(struct char_data *ch, long amount, int category, bool bank,
       GET_NUYEN_RAW(ch) = 0;
     }
   }
-
   SendGMCPCharVitals(ch);
 }
 
@@ -888,11 +887,11 @@ void process_regeneration(int half_hour)
   {
     bool should_loop = TRUE;
     int loop_rand = rand();
-    int loop_runs = 0;
+    int loop_counter = 0;
 
     while (should_loop) {
       should_loop = FALSE;
-      loop_runs++;
+      loop_counter++;
 
       for (struct char_data *ch = character_list; ch; ch = ch->next_in_character_list) {
         bool is_npc = IS_NPC(ch);
@@ -946,6 +945,7 @@ void process_regeneration(int half_hour)
           if (!is_npc && IS_WATER(ch->in_room) && half_hour) {
             if (check_swimming(ch)) {
               // They died. Stop evaluating and start again.
+              log_vfprintf("process_regeneration(): recycling loop due to check_swimming() death");
               should_loop = TRUE;
               break;
             }
@@ -993,6 +993,7 @@ void process_regeneration(int half_hour)
             // Deal a box of physical damage.
             if (damage(ch, ch, 1, TYPE_SUFFERING, PHYSICAL)) {
               // They died. Loop again.
+              log_vfprintf("process_regeneration(): recycling loop due to bleedout() death");
               should_loop = TRUE;
               break;
             }
@@ -1004,8 +1005,8 @@ void process_regeneration(int half_hour)
       }
     }
 
-    if (loop_runs > 1) {
-      log_vfprintf("Ran process_regeneration() %d times due to mid-run alterations and extractions.", loop_runs);
+    if (loop_counter > 1) {
+      log_vfprintf("Ran process_regeneration() %d times due to mid-run alterations and extractions.", loop_counter);
     }
   }
 
@@ -1169,6 +1170,7 @@ void point_update(void)
                 // Damage them. This also strips all sustained spells.
                 if (damage(i, i, convert_damage(DEADLY) - 1, TYPE_FOCUS_OVERUSE, TRUE)) {
                   // They died? Time to restart the loop.
+                  log_vfprintf("point_update(): recycling loop due to old focus addiction death");
                   should_loop = TRUE;
                   break;
                 }
@@ -1183,6 +1185,7 @@ void point_update(void)
           if (i->bioware)
             if (check_bioware(i)) {
               // They died? Time to restart the loop.
+              log_vfprintf("point_update(): recycling loop due to check_bioware() death");
               should_loop = TRUE;
               break;
             }
@@ -1194,7 +1197,7 @@ void point_update(void)
         if (i->desc && IS_PROJECT(i)) {
           if (AFF_FLAGGED(i->desc->original, AFF_TRACKING) && HUNTING(i->desc->original) && !--HOURS_LEFT_TRACK(i->desc->original)) {
             if (!HUNTING(i->desc->original)->in_room || !CH_CAN_ENTER_APARTMENT(HUNTING(i->desc->original)->in_room, i)) {
-              send_to_char("The astral signature fades... you can't follow it all the way back.", i);
+              send_to_char("The astral signature fades... you can't follow it all the way back.\r\n", i);
             } else {
               act("The astral signature leads you to $N.", FALSE, i, 0, HUNTING(i->desc->original), TO_CHAR);
               char_from_room(i);
@@ -1237,6 +1240,7 @@ void point_update(void)
               damage(victim, victim, 100, TYPE_SUFFERING, TRUE);
 
               // Restart the loop: We extracted someone.
+              log_vfprintf("point_update(): recycling loop due to projection snapback");
               should_loop = TRUE;
               break;
             } else if (GET_ESS(i) <= 100) {
@@ -1265,15 +1269,24 @@ void point_update(void)
     }
   
     if (loop_counter > 1) {
-      // mudlog_vfprintf(NULL, LOG_SYSLOG, "Ran point_update() for %d loops. Fix the logic.", loop_counter);
+      log_vfprintf("Ran point_update() %d times due to mid-run alterations and extractions.", loop_counter);
     }
   }
 
   /* save shop order updates */
   save_shop_orders();
 
+  if (world[0].contents) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Room 0 already contains objects before UpdateCounters(), they will be destroyed now. First content is %s.", GET_OBJ_NAME(world[0].contents));
+  }
+
   /* update object counters */
   ObjList.UpdateCounters();
+
+  // Purge out room 0.
+  while (world[0].contents) {
+    extract_obj(world[0].contents);
+  }
 }
 
 void update_paydata_market() {
@@ -1328,9 +1341,11 @@ void misc_update(void)
   {
     bool should_loop = TRUE;
     int loop_rand = rand();
+    int loop_counter = 0;
 
     while (should_loop) {
       should_loop = FALSE;
+      loop_counter++;
 
       for (struct char_data *ch = character_list, *next_ch; ch; ch = next_ch) {
         next_ch = ch->next_in_character_list;
@@ -1377,7 +1392,7 @@ void misc_update(void)
               continue;
             }
 
-            if (sus && sus->caster && spells[sus->spell].duration == PERMANENT) {
+            if (sus && sus->is_caster_record && spells[sus->spell].duration == PERMANENT) {
               int time_to_take_effect = sus->time_to_take_effect;
               if (sus->spell == SPELL_IGNITE) {
                 // no-op
@@ -1421,7 +1436,7 @@ void misc_update(void)
 
           // This is an optimized affected_by_spell() call.
           for (struct sustain_data *hjp = GET_SUSTAINED(ch); hjp; hjp = hjp->next) {
-            if (hjp->caster == FALSE && (hjp->spell == SPELL_CONFUSION || hjp->spell == SPELL_CHAOS)) {
+            if (hjp->is_caster_record == FALSE && (hjp->spell == SPELL_CONFUSION || hjp->spell == SPELL_CHAOS)) {
               affected_by_chaos_or_confusion = TRUE;
               break;
 
@@ -1481,6 +1496,7 @@ void misc_update(void)
           // Burn down adrenaline. This can kill the target, so break out if it returns true.
           if (check_adrenaline(ch, 0)) {
             // They died. Start the loop again.
+            log_vfprintf("misc_update(): recycling loop due to check_adrenaline() death");
             should_loop = TRUE;
             break;
           }
@@ -1488,6 +1504,7 @@ void misc_update(void)
           // Apply new doses of everything. If they die, bail out.
           if (process_drug_point_update_tick(ch)) {
             // They died. Start the loop again.
+            log_vfprintf("misc_update(): recycling loop due to process_drug_point_update_tick() death");
             should_loop = TRUE;
             break;
           }
@@ -1509,6 +1526,7 @@ void misc_update(void)
             extract_char(ch);
 
             // They died or were extracted. Start the loop again.
+            log_vfprintf("misc_update(): recycling loop due to astral projection cleanup");
             should_loop = TRUE;
             break;
           }
@@ -1573,11 +1591,16 @@ void misc_update(void)
           GET_CHAR_FIRE_BONUS_DAMAGE(ch)++;
           if (damage(ch, ch, dam, TYPE_SUFFERING, PHYSICAL)) {
             // They died or were extracted. Start the loop again.
+            log_vfprintf("misc_update(): recycling loop due to flame-induced death");
             should_loop = TRUE;
             break;
           }
         }
       }
+    }
+
+    if (loop_counter > 1) {
+      log_vfprintf("Ran misc_update() %d times due to mid-run alterations and extractions.", loop_counter);
     }
   }
 
@@ -1780,14 +1803,14 @@ float gen_size(int race, bool height, int size, int pronouns)
     case RACE_WAKYAMBI:
       if (pronouns == PRONOUNS_MASCULINE) {
         if (height)
-          return number(180, 205) * mod;
+          return number(270, 295) * mod;
         else
-          return number(70, 82) * mod;
+          return number(100, 115) * mod;
       } else {
         if (height)
-          return number(175, 195) * mod;
+          return number(255, 280) * mod;
         else
-          return number(60, 75) * mod;
+          return number(90, 105) * mod;
       }
       break;
     case RACE_OGRE:

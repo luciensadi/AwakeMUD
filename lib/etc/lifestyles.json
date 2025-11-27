@@ -56,7 +56,8 @@
       "Their clothing looks like a cheap knock-off, but it mostly fits and isn't falling apart.",
       "They don't look like they've had to miss any meals recently.",
       "They look like their nuyen only covers the necessities.",
-      "They're a step above a frathouse tenant."
+      "They're a step above a frathouse tenant.",
+      "They look like they live out of a locker in the monorail station."
     ],
     "default_strings_gendered": [
       "$e looks like $e's fallen on hard times.",
@@ -65,7 +66,8 @@
       "$s clothing looks like a cheap knock-off, but it mostly fits and isn't falling apart.",
       "$e doesn't look like $e's had to miss any meals recently.",
       "$e looks like $s nuyen only covers the necessities.",
-      "$e's a step above a frathouse tenant."
+      "$e's a step above a frathouse tenant.",
+      "$e looks like $e lives out of a locker in the monorail station."
     ],
     "garage_strings_neutral": [
       "Bits of automotive rust speckle their outfit.",

@@ -83,6 +83,9 @@ extern int max_ability(int i);
 extern int count_objects(struct obj_data *obj);
 extern void list_mob_precast_spells_to_ch(struct char_data *mob, struct char_data *ch);
 extern const char *get_faction_name(idnum_t idnum, struct char_data *viewer);
+extern void modify_players_in_zone(rnum_t in_zone, int amount, const char *origin);
+extern void modify_players_in_veh(struct veh_data *veh, int amount, const char *origin);
+extern void hotload_zone(rnum_t zone_idx);
 
 extern const char *wound_arr[];
 extern const char *material_names[];
@@ -108,14 +111,18 @@ extern const char *render_door_type_string(struct room_direction_data *door);
 extern void save_shop_orders();
 extern void turn_hardcore_on_for_character(struct char_data *ch);
 extern void turn_hardcore_off_for_character(struct char_data *ch);
-extern void stop_rigging(struct char_data *ch);
+extern void stop_rigging(struct char_data *ch, bool send_message);
 extern void stop_driving(struct char_data *ch, bool is_involuntary);
 extern void write_zone_to_disk(int vnum);
+extern bool check_for_mob_weapon_skill_errors(struct char_data *ch, char *buf_ptr, size_t buf_sz);
+extern bool mob_has_ammo_for_weapon(struct char_data *ch, struct obj_data *weapon);
 
 extern void DBFinalize();
 
 extern void display_characters_ignore_entries(struct char_data *viewer, struct char_data *target);
 extern int count_objects(struct obj_data *obj);
+extern const struct obj_data *get_weapon_smartlink_proto(struct obj_data *weapon);
+extern int check_smartlink(struct char_data *ch, struct obj_data *weapon, bool only_check_cyberware);
 
 ACMD_DECLARE(do_goto);
 
@@ -432,7 +439,7 @@ ACMD(do_copyover)
       GET_NUYEN_RAW(och) += MAX_CAB_FARE;
     }
 
-    fprintf (fp, "%d %s %s %s\n", d->descriptor, GET_CHAR_NAME(och), d->host, CopyoverGet(d));
+    fprintf (fp, "%d\t%s\t%s\t%s\t%s\n", d->descriptor, GET_CHAR_NAME(och), d->host, CopyoverGet(d), CopyoverGetJSON(d));
     GET_LAST_IN(och) = get_ch_in_room(och)->number;
     if (!GET_LAST_IN(och) || GET_LAST_IN(och) == NOWHERE) {
       // Fuck it, send them to Grog's.
@@ -519,9 +526,11 @@ ACMD(do_playerrolls)
   if (_OVERRIDE_ALLOW_PLAYERS_TO_USE_ROLLS_) {
     _OVERRIDE_ALLOW_PLAYERS_TO_USE_ROLLS_ = FALSE;
     send_gamewide_annoucement("We hope you enjoyed being able to see the debug information! This ability has now been disabled.", TRUE);
+    mudlog_vfprintf(ch, LOG_WIZLOG, "%s disabled global rolls output.", GET_CHAR_NAME(ch));
   } else {
     _OVERRIDE_ALLOW_PLAYERS_TO_USE_ROLLS_ = TRUE;
     send_gamewide_annoucement("Players can now see the details on rolls by using the ^WTOGGLE ROLLS^n command.", TRUE);
+    mudlog_vfprintf(ch, LOG_WIZLOG, "%s enabled global rolls output.", GET_CHAR_NAME(ch));
   }
 }
 
@@ -796,25 +805,18 @@ ACMD(do_at)
   struct char_data *vict = NULL;
 
   half_chop(argument, buf, command, sizeof(command));
-  if (!*buf) {
-    send_to_char("You must supply a room number or a name.\r\n", ch);
-    return;
-  }
-
-  if (!*command) {
-    send_to_char("What do you want to do there?\r\n", ch);
-    return;
-  }
+  
+  FAILURE_CASE(!*buf, "You must supply a room number or a name.");
+  FAILURE_CASE(!*command, "What do you want to do there?");
 
   if (!(location = find_target_room(ch, buf))) {
     if (!(vict = get_char_vis(ch, buf)))
       return;
     veh = vict->in_veh;
   }
-  if (vict && PLR_FLAGGED(vict, PLR_EDITING)) {
-    send_to_char("They are editing a room at the moment.\r\n", ch);
-    return;
-  }
+
+  FAILURE_CASE_PRINTF(vict && PLR_FLAGGED(vict, PLR_EDITING), "%s is editing at the moment.", GET_CHAR_NAME(vict));
+  
   if (ch->in_veh)
     oveh = ch->in_veh;
   else
@@ -826,7 +828,7 @@ ACMD(do_at)
     char_to_veh(veh, ch);
   else {
     char_from_room(ch);
-    ch->in_room = location;
+    char_to_room(ch, location);
   }
   command_interpreter(ch, command, GET_CHAR_NAME(ch));
   char_from_room(ch);
@@ -1153,7 +1155,7 @@ ACMD(do_vnum)
 {
   char *remainder = one_argument(argument, buf);
 
-  if (!*buf || !*buf2) {
+  if (!*buf || !*remainder) {
     send_to_char(VNUM_USAGE_STRING, ch);
     return;
   }
@@ -1718,13 +1720,26 @@ void do_stat_character(struct char_data * ch, struct char_data * k)
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Multiplier: ^c%.2f^n\r\n", (float) GET_CHAR_MULTIPLIER(k) / 100);
     }
     if (access_level(ch, LVL_VICEPRES)) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Email: ^y%s^n", GET_EMAIL(k));
-      if (ch->desc && ch->desc->pProtocol && ch->desc->pProtocol->pVariables[eMSDP_CLIENT_ID] && ch->desc->pProtocol->pVariables[eMSDP_CLIENT_ID]->pValueString) {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "; Current Client: ^c%s^n\r\n", ch->desc->pProtocol->pVariables[eMSDP_CLIENT_ID]->pValueString);
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Email: ^y%s^n; ", GET_EMAIL(k));
+      if (k->desc && k->desc->pProtocol) {
+        if (k->desc->pProtocol->pVariables[eMSDP_CLIENT_ID] && k->desc->pProtocol->pVariables[eMSDP_CLIENT_ID]->pValueString) {
+          extern const char *get_descriptor_fingerprint(struct descriptor_data *d);
+
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Current Client: ^c%s v%s^n; ",
+                   k->desc->pProtocol->pVariables[eMSDP_CLIENT_ID]->pValueString,
+                   k->desc->pProtocol->pVariables[eMSDP_CLIENT_VERSION]->pValueString ? k->desc->pProtocol->pVariables[eMSDP_CLIENT_VERSION]->pValueString : "NULL");
+          
+          if (k->desc->pProtocol->new_environ_info.find("IPADDRESS") != k->desc->pProtocol->new_environ_info.end()) {
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " (reported IP %s)", k->desc->pProtocol->new_environ_info["IPADDRESS"].get<std::string>().c_str());
+          }
+          
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "; Fingerprint ^c%s^n\r\n",
+                   get_descriptor_fingerprint(k->desc));
+        }
       }
     }
     if (access_level(ch, LVL_FIXER)) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "ShotsFired: ^c%d^n, ShotsTriggered: ^c%d^n\r\n", SHOTS_FIRED(k), SHOTS_TRIGGERED(k));
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "ShotsFired: ^c%d^n, ShotsTriggered: ^c%d^n, ArtQuota: ^c%d^n\r\n", SHOTS_FIRED(k), SHOTS_TRIGGERED(k), k->desc ? k->desc->regenerating_art_quota : -1);
     }
   }
 
@@ -1761,7 +1776,7 @@ void do_stat_character(struct char_data * ch, struct char_data * k)
              status_ratings[(int)GET_LEVEL(k)],
              GET_SYSTEM_POINTS(k));
   else
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", Status: Mortal \r\nRep: [^y%3d^n] Not: [^y%3d^n] TKE: [^y%3d^n] ^WSysP^n: [^y%3d^n]\r\n",
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", Status: Mortal \r\nRep: [^y%3ld^n] Not: [^y%3ld^n] TKE: [^y%3ld^n] ^WSysP^n: [^y%3d^n]\r\n",
              GET_REP(k),
              GET_NOT(k),
              GET_TKE(k),
@@ -1961,7 +1976,7 @@ void do_stat_mobile(struct char_data * ch, struct char_data * k)
 
   base = calc_karma(NULL, k);
 
-  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Nuyen: [%ld], Credstick: [%ld], Bonus karma: [%4d], Total karma: [%4d]\r\n",
+  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Nuyen: [%ld], Credstick: [%ld], Bonus karma: [%4ld], Total karma: [%4d]\r\n",
           GET_NUYEN(k), GET_BANK(k), GET_KARMA(k), base);
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "B: %d, I: %d, I-Dice: %d, I-Roll: %d, Sus: %d, TargMod: %d, Reach: %d\r\n",
           GET_BALLISTIC(k), GET_IMPACT(k), GET_INIT_DICE(k), GET_INIT_ROLL(k),
@@ -2305,7 +2320,7 @@ ACMD(do_wizpossess)
     send_to_char("Hee hee... we are jolly funny today, eh?\r\n", ch);
   else if (victim->desc)
     send_to_char("You can't do that, the body is already in use!\r\n", ch);
-  else if ((!access_level(ch, LVL_DEVELOPER)) && !IS_NPC(victim))
+  else if ((!access_level(ch, LVL_PRESIDENT)) && !IS_NPC(victim))
     send_to_char("You aren't holy enough to use a mortal's body.\r\n", ch);
   else {
     send_to_char(OK, ch);
@@ -2318,6 +2333,15 @@ ACMD(do_wizpossess)
     snprintf(buf, sizeof(buf),"%s assumes the role of %s.",
             GET_CHAR_NAME(ch),GET_NAME(victim));
     mudlog(buf, ch, LOG_WIZLOG, TRUE);
+
+    // Add the possessing staff record to the vehicle and room they're in.
+    if (victim->in_veh) {
+      modify_players_in_veh(victim->in_veh, +1, "staff possession");
+    }
+    if (get_ch_in_room(victim)) {
+      rnum_t in_zone = get_ch_in_room(victim)->zone;
+      modify_players_in_zone(in_zone, +1, "staff possession");
+    }
 
     victim->desc = ch->desc;
     ch->desc = NULL;
@@ -2335,7 +2359,7 @@ ACMD(do_return)
   struct char_data *vict;
 
   if (PLR_FLAGGED(ch, PLR_REMOTE)) {
-    stop_rigging(ch);
+    stop_rigging(ch, true);
     return;
   }
 
@@ -2351,8 +2375,20 @@ ACMD(do_return)
         if (IS_NPC(ch))
           MOB_FLAGS(ch).SetBit(MOB_NOKILL);
       }
-      if (PLR_FLAGGED(ch->desc->original, PLR_SWITCHED))
+      
+      if (PLR_FLAGGED(ch->desc->original, PLR_SWITCHED)) {
+        // Staff switch. Pull their zone and vehicle player tracker info.
         PLR_FLAGS(ch->desc->original).RemoveBit(PLR_SWITCHED);
+
+        // Remove the possessing staff record from the vehicle and room they're in.
+        if (ch->in_veh) {
+          modify_players_in_veh(ch->in_veh, -1, "do_return (staff possession)");
+        }
+        if (get_ch_in_room(ch)) {
+          rnum_t in_zone = get_ch_in_room(ch)->zone;
+          modify_players_in_zone(in_zone, -1, "do_return (staff possession)");
+        }
+      }
 
       /* JE 2/22/95 */
       /* if someone switched into your original body, disconnect them */
@@ -3248,9 +3284,9 @@ ACMD(do_charge) {
   mudlog(buf2, ch, LOG_WIZLOG, TRUE);
 }
 
-void staff_induced_karma_alteration_for_online_char(struct char_data *ch, struct char_data *vict, int karma_times_100, const char *reason, bool add_karma) {
+void staff_induced_karma_alteration_for_online_char(struct char_data *ch, struct char_data *vict, long karma_times_100, const char *reason, bool add_karma) {
   float karma = ((float) karma_times_100) / 100;
-  int old_karma = GET_KARMA(vict);
+  long old_karma = GET_KARMA(vict);
 
   if (add_karma) {
     if (GET_KARMA(vict) + karma_times_100 > MYSQL_UNSIGNED_MEDIUMINT_MAX) {
@@ -3301,7 +3337,7 @@ void staff_induced_karma_alteration_for_online_char(struct char_data *ch, struct
                ispunct(get_final_character_from_string(reason)) ? "" : ".");
 
   // Log it.
-  snprintf(buf2, sizeof(buf2), "%s %s %0.2f karma to %s for %s^g (%d to %d).",
+  snprintf(buf2, sizeof(buf2), "%s %s %0.2f karma to %s for %s^g (%ld to %ld).",
            GET_CHAR_NAME(ch),
            add_karma ? "awarded" : "deducted",
            karma,
@@ -4106,7 +4142,7 @@ ACMD(do_wizwho)
 
 ACMD(do_zreset)
 {
-  void reset_zone(int zone, int reboot);
+  void reset_zone(rnum_t zone, int reboot, bool process_doors=true);
 
   int i;
 
@@ -4120,8 +4156,13 @@ ACMD(do_zreset)
       send_to_char("You can't reset the entire world.\r\n", ch);
       return;
     }
-    for (i = 0; i <= top_of_zone_table; i++)
+    for (i = 0; i <= top_of_zone_table; i++) {
+      // Ensure it's loaded.
+      zone_table[i].last_player_action = time(0);
+      hotload_zone(i);
+      // Reset it.
       reset_zone(i, 0);
+    }
     snprintf(buf, sizeof(buf), "%s reset world.", GET_CHAR_NAME(ch));
     mudlog(buf, ch, LOG_WIZLOG, TRUE);
     send_to_char("Reset world.\r\n", ch);
@@ -4149,41 +4190,39 @@ ACMD(do_wiztitle)
   send_to_char("Titles are disabled on the buildport.\r\n", ch);
   return;
 #else
-  if (IS_NPC(ch))
-    send_to_char("Your title is fine... go away.\r\n", ch);
-  else if (PLR_FLAGGED(ch, PLR_NOTITLE))
-    send_to_char("You can't title yourself.\r\n", ch);
-  else if (subcmd == SCMD_WHOTITLE) {
-    skip_spaces(&argument);
-    if (strstr((const char *)argument, "^"))
-      send_to_char("Whotitles can't contain the ^^ character.\r\n", ch);
-    else if (strlen(argument) > MAX_WHOTITLE_LENGTH) {
-      send_to_char(ch, "Sorry, whotitles can't be longer than %d characters.\r\n", MAX_WHOTITLE_LENGTH);
-    } else {
-      set_whotitle(ch, argument);
-      send_to_char(ch, "Okay, your whotitle is now %s.\r\n", GET_WHOTITLE(ch));
-      snprintf(buf, sizeof(buf), "UPDATE pfiles SET Whotitle='%s' WHERE idnum=%ld;", prepare_quotes(buf2, GET_WHOTITLE(ch), sizeof(buf2) / sizeof(buf2[0])), GET_IDNUM(ch));
-      mysql_wrapper(mysql, buf);
-    }
-  } else if (subcmd == SCMD_PRETITLE) {
-    if (GET_TKE(ch) < 100 && GET_LEVEL(ch) < LVL_BUILDER) {
-      send_to_char(ch, "You aren't erudite enough to do that.\r\n");
-      return;
-    }
-    skip_spaces(&argument);
+  
+  FAILURE_CASE(IS_NPC(ch), "Your title is fine... go away.");
+  FAILURE_CASE(PLR_FLAGGED(ch, PLR_NOTITLE), "Your ability to set your title has been restricted.");
+
+  skip_spaces(&argument);
+
+  if (subcmd == SCMD_WHOTITLE) {
+    FAILURE_CASE(!*argument, "You must specify the title you want to change to.");
+    FAILURE_CASE(!access_level(ch, LVL_BUILDER) && !PLR_FLAGGED(ch, PLR_PAID_FOR_WHOTITLE),
+               "Setting your whotitle replaces your race in the wholist. You'll need to purchase this vanity ability with the ^WSYSPOINTS WHOTITLE^n command.");
+    FAILURE_CASE(str_cmp(argument, get_string_after_color_code_removal(argument, NULL)), "Whotitles can't contain colors.");
+    FAILURE_CASE_PRINTF(strlen(argument) > MAX_WHOTITLE_LENGTH, "Sorry, whotitles can't be longer than %d characters.", MAX_WHOTITLE_LENGTH);
+    
+    set_whotitle(ch, argument);
+    send_to_char(ch, "Okay, your whotitle is now %s.\r\n", GET_WHOTITLE(ch));
+    snprintf(buf, sizeof(buf), "UPDATE pfiles SET Whotitle='%s' WHERE idnum=%ld;", prepare_quotes(buf2, GET_WHOTITLE(ch), sizeof(buf2) / sizeof(buf2[0])), GET_IDNUM(ch));
+    mysql_wrapper(mysql, buf);
+    return;
+  }
+  
+  if (subcmd == SCMD_PRETITLE) {
+    FAILURE_CASE(GET_TKE(ch) < 100 && GET_LEVEL(ch) < LVL_BUILDER, "You don't have enough TKE for that. You need at least 100.");
+
     if (GET_LEVEL(ch) < LVL_BUILDER && *argument)
       strlcat(buf, "^n", sizeof(buf));
-    if (strstr((const char *)argument, "^l")) {
-      send_to_char("Whotitles can't contain pure black.\r\n", ch);
-    } else if (strlen(argument) > (MAX_TITLE_LENGTH -2)) {
-      send_to_char(ch, "Sorry, pretitles can't be longer than %d characters.\r\n", MAX_TITLE_LENGTH - 2);
-    } else {
-      set_pretitle(ch, argument);
-      snprintf(buf, sizeof(buf), "Okay, you're now %s %s %s.\r\n", GET_PRETITLE(ch), GET_CHAR_NAME(ch), GET_TITLE(ch));
-      send_to_char(buf, ch);
-      snprintf(buf, sizeof(buf), "UPDATE pfiles SET Pretitle='%s' WHERE idnum=%ld;", prepare_quotes(buf2, GET_PRETITLE(ch), sizeof(buf2) / sizeof(buf2[0])), GET_IDNUM(ch));
-      mysql_wrapper(mysql, buf);
-    }
+    
+    FAILURE_CASE(strstr(argument, "^l"), "Pretitles can't contain pure black.");
+    FAILURE_CASE_PRINTF(strlen(argument) > (MAX_TITLE_LENGTH -2), "Sorry, pretitles can't be longer than %d characters.", MAX_TITLE_LENGTH - 2);
+    
+    set_pretitle(ch, argument);
+    send_to_char(ch, "Okay, you're now %s %s %s.\r\n", GET_PRETITLE(ch), GET_CHAR_NAME(ch), GET_TITLE(ch));
+    snprintf(buf, sizeof(buf), "UPDATE pfiles SET Pretitle='%s' WHERE idnum=%ld;", prepare_quotes(buf2, GET_PRETITLE(ch), sizeof(buf2) / sizeof(buf2[0])), GET_IDNUM(ch));
+    mysql_wrapper(mysql, buf);
   }
 #endif
 }
@@ -4390,13 +4429,14 @@ void print_zone_to_buf(char *bufptr, int buf_size, int zone, int detailed, struc
       else if (zone_table[zone].security >= 7)
         sec_color = "^y";
 
-      snprintf(ENDOF(bufptr), buf_size - strlen(bufptr), "%s%s (%-3.3s) Age: %3d; Res: %3d (%1d); Top: ^c%6d^n; Sec: %s%2d^n\r\n",
+      snprintf(ENDOF(bufptr), buf_size - strlen(bufptr), "%s%s (%-3.3s) Age: %3d; Res: %3d (%1d); Top: ^c%6d^n; Sec: %s%2d^n; Offloaded: %s^n\r\n",
             zone_table[zone].editing_restricted_to_admin ? "L" : " ",
             zone_table[zone].approved ? "A" : " ",
             jurisdictions[zone_table[zone].jurisdiction],
             zone_table[zone].age, zone_table[zone].lifespan,
             zone_table[zone].reset_mode, zone_table[zone].top,
-            sec_color, zone_table[zone].security);
+            sec_color, zone_table[zone].security,
+            zone_table[zone].offloaded_at ? "^gY^n" : "N");
     }
   } else if (detailed == 1) {
     int rooms = 0, objs = 0, mobs = 0, shops = 0, vehs = 0;
@@ -4626,7 +4666,7 @@ ACMD(do_show)
       mudlog_vfprintf(ch, LOG_WIZLOG, "Viewed %s (%ld)'s info.", GET_CHAR_NAME(vict), GET_IDNUM(vict));
       snprintf(buf, sizeof(buf), "Player: %-12s (%s) [%2d]\r\n", GET_NAME(vict),
               genders[(int) GET_PRONOUNS(vict)], GET_LEVEL(vict));
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Y: %-8ld  Bal: %-8ld  Karma: %-8d\r\n",
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Y: %-8ld  Bal: %-8ld  Karma: %-8ld\r\n",
               GET_NUYEN(vict), GET_BANK(vict), GET_KARMA(vict));
       strlcpy(birth, ctime(&vict->player.time.birth), sizeof(birth));
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Started: %-20.16s  Last: %-20.16s  Played: %3dh %2dm\r\n",
@@ -5704,9 +5744,9 @@ ACMD(do_set)
                { "maxmental",       LVL_VICEPRES,      BOTH,   NUMBER },       // 5
                { "physical",        LVL_ADMIN, BOTH,   NUMBER },
                { "mental",   LVL_ADMIN, BOTH,   NUMBER },
-               { "align",           LVL_VICEPRES,      BOTH,   NUMBER },
-               { "str",             LVL_ADMIN, BOTH,   NUMBER },
-               { "ess",             LVL_ADMIN, BOTH,   NUMBER },       // 10
+               { "donotusealign",           LVL_VICEPRES,      BOTH,   NUMBER },
+               { "ess",             LVL_ADMIN, BOTH,   NUMBER },
+               { "str",             LVL_ADMIN, BOTH,   NUMBER },       // 10
                { "int",             LVL_ADMIN, BOTH,   NUMBER },
                { "wil",             LVL_ADMIN, BOTH,   NUMBER },
                { "qui",             LVL_ADMIN, BOTH,   NUMBER },
@@ -5734,7 +5774,7 @@ ACMD(do_set)
                { "nowizlist",       LVL_VICEPRES,      PC,     BINARY },//35
                { "loadroom",        LVL_ADMIN, PC,     MISC },
                { "color",           LVL_ADMIN, PC,     BINARY },
-               { "idnum",           LVL_VICEPRES,      PC,     NUMBER },
+               { "idnum",           LVL_PRESIDENT,      PC,     NUMBER },
                { "password",  LVL_VICEPRES,      PC,     MISC },
                { "nodelete",        LVL_VICEPRES,      PC,     BINARY }, // 40
                { "cha",             LVL_ADMIN, BOTH,   NUMBER },
@@ -5930,29 +5970,30 @@ ACMD(do_set)
     SET_OR_REMOVE(PRF_FLAGS(vict), PRF_AFK);
     on = !on;                   /* so output will be correct */
     break;
-  case 4:
+  case 4: // max physical
     RANGE(0, 100);
     vict->points.max_physical = value * 100;
     affect_total(vict);
     break;
-  case 5:
+  case 5: // max mental
     RANGE(0, 100);
     vict->points.max_mental = value * 100;
     affect_total(vict);
     break;
-  case 6:
+  case 6: // physical
     RANGE(-(GET_BOD(vict) - 1), (int)(vict->points.max_physical / 100));
     vict->points.physical = value * 100;
     affect_total(vict);
     update_pos(vict);
     break;
-  case 7:
+  case 7: // mental
     RANGE(-9, (int)(vict->points.max_mental / 100));
     vict->points.mental = value * 100;
     affect_total(vict);
     update_pos(vict);
     break;
-  case 9:
+  // case 8 would be align, but that's not used
+  case 9: // str
     if (IS_NPC(vict) || access_level(vict, LVL_ADMIN))
       RANGE(1, 50);
     else
@@ -5962,7 +6003,7 @@ ACMD(do_set)
     GET_REAL_STR(vict) = value;
     affect_total(vict);
     break;
-  case 10:
+  case 10: // ess
     if (IS_NPC(vict) || (IS_SENATOR(vict) && access_level(vict, LVL_ADMIN)))
       RANGE(1, 1000);
     else
@@ -5970,7 +6011,7 @@ ACMD(do_set)
     GET_REAL_ESS(vict) = value;
     affect_total(vict);
     break;
-  case 11:
+  case 11: // int
     if (IS_NPC(vict) || (IS_SENATOR(vict) && access_level(vict, LVL_ADMIN)))
       RANGE(1, 50);
     else
@@ -5980,7 +6021,7 @@ ACMD(do_set)
     GET_REAL_INT(vict) = value;
     affect_total(vict);
     break;
-  case 12:
+  case 12: // wil
     if (IS_NPC(vict) || (IS_SENATOR(vict) && access_level(vict, LVL_ADMIN)))
       RANGE(1, 50);
     else
@@ -5990,7 +6031,7 @@ ACMD(do_set)
     GET_REAL_WIL(vict) = value;
     affect_total(vict);
     break;
-  case 13:
+  case 13: // qui
     if (IS_NPC(vict) || (IS_SENATOR(vict) && access_level(vict, LVL_ADMIN)))
       RANGE(1, 50);
     else
@@ -6000,7 +6041,7 @@ ACMD(do_set)
     GET_REAL_QUI(vict) = value;
     affect_total(vict);
     break;
-  case 14:
+  case 14: // bod
     if (IS_NPC(vict) || (IS_SENATOR(vict) && access_level(vict, LVL_ADMIN)))
       RANGE(1, 50);
     else
@@ -6010,7 +6051,7 @@ ACMD(do_set)
     GET_REAL_BOD(vict) = value;
     affect_total(vict);
     break;
-  case 15:
+  case 15: // pronouns / sex
     if (!str_cmp(val_arg, "male"))
       vict->player.pronouns = PRONOUNS_MASCULINE;
     else if (!str_cmp(val_arg, "female"))
@@ -6025,61 +6066,55 @@ ACMD(do_set)
       return;
     }
     break;
-  case 16:
+  case 16: // innate ballistic
     RANGE(0, 100);
     GET_INNATE_BALLISTIC(vict) = value;
     affect_total(vict);
     break;
-  case 17:
+  case 17: // nuyen
     RANGE(0, 100000000);
     GET_NUYEN_RAW(vict) = value;
     break;
-  case 18:
+  case 18: // bank
     RANGE(0, 100000000);
     GET_BANK_RAW(vict) = value;
     break;
-  case 19:
-    RANGE(0, 7500);
+  case 19: // rep
+    RANGE(0, INT_MAX - 1);
     GET_REP(vict) = value;
     break;
-  case 20:
+  case 20: // init dice
     RANGE(0, 10);
     vict->points.init_dice = value;
     affect_total(vict);
     break;
-  case 21:
+  case 21: // init roll
     RANGE(0, 50);
     vict->points.init_roll = value;
     affect_total(vict);
     break;
-  case 22:
+  case 22: // invis
     if (!access_level(ch, LVL_ADMIN) && ch != vict) {
-      send_to_char("You aren't erudite enough for that!\r\n", ch);
-
+      send_to_char("You aren't erudite enough to do that on others!\r\n", ch);
       SET_CLEANUP(false);
-
       return;
     }
     if(!access_level(vict, value))
       RANGE(0, GET_LEVEL(vict));
     GET_INVIS_LEV(vict) = value;
     break;
-  case 23:
+  case 23: // nohassle
     if (!access_level(ch, LVL_ADMIN) && ch != vict) {
-      send_to_char("You aren't erudite enough for that!\r\n", ch);
-
+      send_to_char("You aren't erudite enough to do that on others!\r\n", ch);
       SET_CLEANUP(false);
-
       return;
     }
     SET_OR_REMOVE(PRF_FLAGS(vict), PRF_NOHASSLE);
     break;
-  case 24:
+  case 24: // frozen
     if (ch == vict) {
       send_to_char("Better not -- could be a long winter!\r\n", ch);
-
       SET_CLEANUP(false);
-
       return;
     }
     SET_OR_REMOVE(PLR_FLAGS(vict), PLR_FROZEN);
@@ -6089,14 +6124,14 @@ ACMD(do_set)
       GET_FREEZE_LEV(vict) = GET_LEVEL(ch);
 
     break;
-  case 25:
+  case 25: // karma
     RANGE(0, MYSQL_UNSIGNED_MEDIUMINT_MAX);
     //GET_KARMA(vict) = value;
     vict->points.karma = value;
     break;
-  case 26:
-  case 27:
-  case 28:
+  case 26: // drunk
+  case 27: // hunger
+  case 28: // thirst
     if (!str_cmp(val_arg, "off")) {
       GET_COND(vict, (l - 26)) = (char) -1;
       snprintf(buf, sizeof(buf), "%s's %s now off.", GET_NAME(vict), fields[l].cmd);
@@ -6113,31 +6148,27 @@ ACMD(do_set)
       return;
     }
     break;
-  case 29:
+  case 29: // killer
     SET_OR_REMOVE(PLR_FLAGS(vict), PLR_KILLER);
     break;
-  case 30:
-    if (!access_level(ch, value) || value > LVL_MAX) {
+  case 30: // level (shittier form of advance)
+    if (!access_level(ch, value) || !access_level(ch, GET_LEVEL(vict))) {
       send_to_char("You can't do that.\r\n", ch);
-
       SET_CLEANUP(false);
-
       return;
     }
 
     /* Can't demote other owners this way, unless it's yourself */
     if ( access_level(vict, LVL_PRESIDENT) && vict != ch ) {
       send_to_char("You can't demote other presidents.\r\n",ch);
-
       SET_CLEANUP(false);
-
       return;
     }
 
     RANGE(1, LVL_MAX);
     GET_LEVEL(vict) = (byte) value;
     break;
-  case 31:
+  case 31: // room (like a transfer I guess?)
     if ((i = real_room(value)) < 0) {
       send_to_char("No room exists with that number.\r\n", ch);
 
@@ -6147,19 +6178,17 @@ ACMD(do_set)
     char_from_room(vict);
     char_to_room(vict, &world[i]);
     break;
-  case 32:
+  case 32: // roomflags visible to vict
     SET_OR_REMOVE(PRF_FLAGS(vict), PRF_ROOMFLAGS);
     break;
-  case 33:
+  case 33: // can log in on this character from a half-banned site
     SET_OR_REMOVE(PLR_FLAGS(vict), PLR_SITEOK);
     break;
-  case 34:
+  case 34: // deleted flag
     SET_OR_REMOVE(PLR_FLAGS(vict), PLR_DELETED);
     break;
-  case 35:
-    //    SET_OR_REMOVE(PLR_FLAGS(vict), PLR_NOWIZLIST);
-    break;
-  case 36:
+  // 35 is nowizlist, invalid
+  case 36: // loadroom
     if (!str_cmp(val_arg, "off"))
       GET_LOADROOM(vict) = 0;
     else if (is_number(val_arg)) {
@@ -6172,14 +6201,16 @@ ACMD(do_set)
     } else
       strlcpy(buf, "Must be 'off' or a room's virtual number.\r\n", sizeof(buf));
     break;
-  case 38:
+  // 37: color
+  case 38: // idnum (bad idea)
     if (GET_IDNUM(ch) != 1 || !IS_NPC(vict)) {
       SET_CLEANUP(false);
       return;
     }
+    mudlog_vfprintf(ch, LOG_WIZLOG, "Changing %s's idnum from %ld to %d. THIS WILL BREAK DATABASE ENTRIES.", GET_CHAR_NAME(vict), GET_IDNUM(vict), value);
     GET_IDNUM(vict) = value;
     break;
-  case 39:
+  case 39: // password
     if (!is_file) {
       send_to_char("You can only do that to offline characters.\r\n", ch);
       SET_CLEANUP(false);
@@ -6328,7 +6359,7 @@ ACMD(do_set)
     SET_OR_REMOVE(PLR_FLAGS(vict), PLR_EDCON);
     break;
   case 61:
-    RANGE(0, 7500);
+    RANGE(0, INT_MAX - 1);
     GET_NOT(vict) = value;
     break;
   case 63:
@@ -6355,7 +6386,7 @@ ACMD(do_set)
     SET_OR_REMOVE(PLR_FLAGS(vict), PLR_NO_IDLE_OUT);
     break;
   case 70:
-    RANGE(0, 10000);
+    RANGE(0, INT_MAX - 1);
     GET_TKE(vict) = value;
     break;
   case 71:
@@ -7271,8 +7302,14 @@ ACMD(do_hlist)
     if (!ch_can_bypass_edit_lock(ch, get_zone_from_vnum(matrix[nr].vnum)))
       continue;
 
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%5d. [%8ld] %s\r\n", ++found,
-            matrix[nr].vnum, matrix[nr].name);
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%5d. [%8ld] %s^n: %s-%d^n (%s^n)\r\n",
+             ++found,
+             matrix[nr].vnum,
+             matrix[nr].name,
+             host_color[matrix[nr].color],
+             matrix[nr].security,
+             intrusion[matrix[nr].intrusion]
+            );
   }
 
   if (!found)
@@ -7945,7 +7982,7 @@ ACMD(do_fuckups) {
     return;
   }
 
-  send_to_char("Syntax: `fuckups [count]` to list, or `fuckups delete <command>` to remove.", ch);
+  send_to_char("Syntax: `fuckups [count]` to list, or `fuckups delete <command>` to remove.\r\n", ch);
 }
 
 ACMD(do_rewrite_world) {
@@ -8067,7 +8104,7 @@ int audit_zone_rooms_(struct char_data *ch, int zone_num, bool verbose) {
     if (!strcmp(GET_ROOM_NAME(room), STRING_ROOM_TITLE_UNFINISHED)) {
       strlcat(buf, "  - ^YDefault room title used.^n This room will NOT be saved in the world files.\r\n", sizeof(buf));
       issues++;
-    } else if (is_invalid_ending_punct((candidate = get_final_character_from_string(GET_ROOM_NAME(room))))) {
+    } else if (is_invalid_ending_punct((candidate = get_final_character_from_string(get_string_after_color_code_removal(GET_ROOM_NAME(room), ch))))) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^yname ending in punctuation (%c)^n.\r\n", candidate);
       issues++;
     }
@@ -8382,6 +8419,29 @@ int audit_zone_mobs_(struct char_data *ch, int zone_num, bool verbose) {
         issues++;
       }
 
+    // Flag missing weapon skills
+    if (check_for_mob_weapon_skill_errors(mob, buf, sizeof(buf))) {
+      // todo this needs to append to buf
+      issues++;
+    }
+
+    if (GET_EQ(mob, WEAR_WIELD)) {
+      struct obj_data *weap = GET_EQ(mob, WEAR_WIELD);
+
+      if (GET_OBJ_TYPE(weap) == ITEM_WEAPON && WEAPON_IS_GUN(weap)) {
+        if (GET_WEAPON_MAX_AMMO(weap) > 0  && !mob_has_ammo_for_weapon(mob, weap)) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - missing ammo for weapon, will default to %d mags of normal ammo.\r\n",
+                 GET_WEAPON_MAX_AMMO(weap) * NUMBER_OF_MAGAZINES_TO_GIVE_TO_UNEQUIPPED_MOBS);
+          issues++;
+        }
+
+        if (get_weapon_smartlink_proto(weap) && !check_smartlink(mob, weap, true)) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - wielding smartlink'd weapon with no 'ware, will default to goggles (-1 TN).\r\n");
+          issues++;
+        }
+      }
+    }
+
     // Flag shopkeepers with no negotiation or low int
     if (is_shopkeeper || is_johnson) {
       if (GET_SKILL(mob, SKILL_NEGOTIATION) == 0) {
@@ -8439,13 +8499,13 @@ int audit_zone_mobs_(struct char_data *ch, int zone_num, bool verbose) {
       
       issues++;
     } else {
-      if (is_invalid_ending_punct((candidate = get_final_character_from_string(mob->player.physical_text.name)))) {
+      if (is_invalid_ending_punct((candidate = get_final_character_from_string(get_string_after_color_code_removal(mob->player.physical_text.name, ch))))) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^yname ending in punctuation (%c)^n.\r\n", candidate);
         issues++;
       }
     }
 
-    if (!mob->player.physical_text.keywords || !*mob->player.physical_text.keywords || !strcmp(mob->player.physical_text.keywords, STRING_MOB_KEYWORDS_UNFINISHED)) {
+    if (!GET_KEYWORDS(mob) || !strcmp(mob->player.physical_text.keywords, STRING_MOB_KEYWORDS_UNFINISHED)) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^ymissing keywords^n.\r\n");
       issues++;
     }
@@ -8459,7 +8519,7 @@ int audit_zone_mobs_(struct char_data *ch, int zone_num, bool verbose) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^ymissing room desc^n.\r\n");
       issues++;
     } else {
-      if (!ispunct((candidate = get_final_character_from_string(mob->player.physical_text.room_desc)))) {
+      if (!ispunct((candidate = get_final_character_from_string(get_string_after_color_code_removal(mob->player.physical_text.room_desc, ch))))) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^yroom desc not ending in punctuation (%c)^n.\r\n", candidate);
         issues++;
       }
@@ -8728,7 +8788,7 @@ int audit_zone_objects_(struct char_data *ch, int zone_num, bool verbose) {
       
       issues++;
     } else {
-      if (is_invalid_ending_punct((candidate = get_final_character_from_string(obj->text.name)))) {
+      if (is_invalid_ending_punct((candidate = get_final_character_from_string(get_string_after_color_code_removal(obj->text.name, ch))))) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^yname ending in punctuation (%c)^n.\r\n", candidate);
         
         issues++;
@@ -8824,7 +8884,17 @@ int audit_zone_objects_(struct char_data *ch, int zone_num, bool verbose) {
 
         // Notify on ANY recoil comp, erroneous or not
         if (GET_WEAPON_INTEGRAL_RECOIL_COMP(obj)) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - has ^c%d^n integral recoil comp^n.\r\n", GET_WEAPON_INTEGRAL_RECOIL_COMP(obj));
+          switch (GET_WEAPON_INTEGRAL_RECOIL_COMP(obj)) {
+            case 1:
+              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - has ^c%d^n integral recoil comp^n.\r\n", GET_WEAPON_INTEGRAL_RECOIL_COMP(obj));
+              break;
+            case 2:
+              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - has ^Y%d^n integral recoil comp^n.\r\n", GET_WEAPON_INTEGRAL_RECOIL_COMP(obj));
+              break;
+            default:
+              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - has ^R%d^n integral recoil comp^n.\r\n", GET_WEAPON_INTEGRAL_RECOIL_COMP(obj));
+              break;
+          }
           
           issues++;
         }
@@ -9166,7 +9236,7 @@ int audit_zone_quests_(struct char_data *ch, int zone_num, bool verbose) {
       
       issues++;
     } else {
-      if (!ispunct(get_final_character_from_string(quest->intro))) {
+      if (!ispunct(get_final_character_from_string(get_string_after_color_code_removal(quest->intro, ch)))) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^yintro string does not end in punctuation^n.\r\n");
         issues++;
       }
@@ -9177,7 +9247,7 @@ int audit_zone_quests_(struct char_data *ch, int zone_num, bool verbose) {
       
       issues++;
     } else {
-      if (!ispunct(get_final_character_from_string(quest->decline))) {
+      if (!ispunct(get_final_character_from_string(get_string_after_color_code_removal(quest->decline, ch)))) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^ydecline string does not end in punctuation^n.\r\n");
         issues++;
       }
@@ -9188,7 +9258,7 @@ int audit_zone_quests_(struct char_data *ch, int zone_num, bool verbose) {
       
       issues++;
     } else {
-      if (!ispunct(get_final_character_from_string(quest->finish))) {
+      if (!ispunct(get_final_character_from_string(get_string_after_color_code_removal(quest->finish, ch)))) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^yfinish string does not end in punctuation^n.\r\n");
         issues++;
       }
@@ -9199,7 +9269,7 @@ int audit_zone_quests_(struct char_data *ch, int zone_num, bool verbose) {
       
       issues++;
     } else {
-      if (!ispunct(get_final_character_from_string(quest->info))) {
+      if (!ispunct(get_final_character_from_string(get_string_after_color_code_removal(quest->info, ch)))) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^yinfo string does not end in punctuation^n.\r\n");
         
         issues++;
@@ -9211,7 +9281,7 @@ int audit_zone_quests_(struct char_data *ch, int zone_num, bool verbose) {
       
       issues++;
     } else {
-      if (!ispunct(get_final_character_from_string(quest->quit))) {
+      if (!ispunct(get_final_character_from_string(get_string_after_color_code_removal(quest->quit, ch)))) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^yquit string does not end in punctuation^n.\r\n");
         
         issues++;
@@ -9223,7 +9293,7 @@ int audit_zone_quests_(struct char_data *ch, int zone_num, bool verbose) {
       
       issues++;
     } else {
-      if (!ispunct(get_final_character_from_string(quest->done))) {
+      if (!ispunct(get_final_character_from_string(get_string_after_color_code_removal(quest->done, ch)))) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^ydone string does not end in punctuation^n.\r\n");
         
         issues++;
@@ -9236,7 +9306,7 @@ int audit_zone_quests_(struct char_data *ch, int zone_num, bool verbose) {
       
       issues++;
     } else {
-      if (ispunct(get_final_character_from_string(quest->location))) {
+      if (ispunct(get_final_character_from_string(get_string_after_color_code_removal(quest->location, ch)))) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^ylocation string ends in punctuation^n.\r\n");
         
         issues++;
@@ -9446,7 +9516,7 @@ int audit_zone_ics_(struct char_data *ch, int zone_num, bool verbose) {
       issues++;
     }
 
-    if (!ispunct((candidate = get_final_character_from_string(ic->look_desc)))) {
+    if (!ispunct((candidate = get_final_character_from_string(get_string_after_color_code_removal(ic->look_desc, ch))))) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^yroom desc not ending in punctuation (%c)^n.\r\n", candidate);
       issues++;
     }
@@ -10021,7 +10091,7 @@ ACMD(do_forceput) {
   }
 
   if (!*arg2) {
-    send_to_char("You must specify a container to put it into.", ch);
+    send_to_char("You must specify a container to put it into.\r\n", ch);
     return;
   }
 
@@ -10034,6 +10104,8 @@ ACMD(do_forceput) {
     send_to_char(ch, "You aren't carrying %s %s.\r\n", AN(arg2), arg2);
     return;
   }
+
+  FAILURE_CASE_PRINTF(obj == cont, "You can't put %s inside itself.", GET_OBJ_NAME(obj));
 
   send_to_char(ch, "Bypassing all restrictions and calculations, you forcibly put %s in %s. Hope you know what you're doing!\r\n", GET_OBJ_NAME(obj), GET_OBJ_NAME(cont));
   obj_from_char(obj);

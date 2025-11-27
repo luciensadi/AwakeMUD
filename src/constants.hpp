@@ -57,6 +57,7 @@ extern struct spirit_table spirits[];
 extern int convert_look[];
 extern int convert_dir[];
 extern const char *where[];
+extern const int worn_on_to_wearloc[NUM_WEARS];
 extern const char *hands[];
 extern const char *wielding_hands[];
 extern const char *color_liquid[];

@@ -49,7 +49,7 @@ int     dice(int number, int size);
 void    sprintbit(long vektor, const char *names[], char *result, size_t result_size);
 void    sprinttype(int type, const char *names[], char *result, size_t result_size);
 void    sprint_obj_mods(struct obj_data *obj, char *result, size_t result_size);
-int     get_line(FILE *fl, char *buf);
+int     get_line(FILE *fl, char *buf, size_t buf_sz=256);
 struct  time_info_data age(struct char_data *ch);
 int     convert_damage(int damage);
 int     srdice(void);
@@ -194,6 +194,11 @@ void   set_dropped_by_info(struct obj_data *obj, struct char_data *ch);
 bool   restore_to_full_health_if_still_in_chargen(struct char_data *victim);
 char * format_for_logging__returns_new(const char *input);
 int    calculate_ware_essence_or_index_cost(struct char_data *ch, struct obj_data *ware);
+bool   check_if_sitting_and_force_sit_command_if_not(struct char_data *ch);
+const char *cleanup_invalid_color_codes(const char *str);
+
+// GMCP / Discord update method. Does nothing if GMCP isn't turned on.
+void update_gmcp_discord_info(struct descriptor_data *desc);
 
 // RCD subscription functions.
 bool   add_veh_to_chs_subscriber_list(struct veh_data *veh, struct char_data *ch, const char *caller, bool ignore_veh_sub_marker, bool mute_duplication_alarm=FALSE);
@@ -517,7 +522,8 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define GET_OBJ_RAW_NAME(obj)          ((obj)->text.name)
 #define GET_OBJ_NAME(obj)              (!(obj) ? "<null>" : (obj)->restring ? (obj)->restring : GET_OBJ_RAW_NAME(obj))
 #define GET_OBJ_DESC(obj)              ((obj)->photo ? (obj)->photo : (obj)->text.look_desc)
-#define GET_KEYWORDS(ch)               ((ch)->player.physical_text.keywords)
+#define GET_KEYWORDS(ch)               (((ch) && (ch)->player.physical_text.keywords) ? (ch)->player.physical_text.keywords : "<null>")
+#define GET_SETTABLE_KEYWORDS(ch)      ((ch)->player.physical_text.keywords)
 #define GET_NAME(ch)                   ((ch)->player.physical_text.name)
 #define GET_CHAR_NAME(ch) \
   (!(ch) ? "<null>" : \
@@ -697,6 +703,8 @@ int get_armor_penalty_grade(struct char_data *ch);
 #define GET_FOCI(ch)            ((ch)->char_specials.foci)
 #define GET_QUEST(ch)           ((ch)->desc && (ch)->desc->original ? (ch)->desc->original->player_specials->questnum : \
                                                                       (ch)->player_specials->questnum)
+#define GET_QUEST_STARTED(ch)   ((ch)->desc && (ch)->desc->original ? (ch)->desc->original->player_specials->quest_started : \
+                                                                      (ch)->player_specials->quest_started)
 #define GET_LQUEST(ch, i)       ((ch)->player_specials->last_quest[i])
 #define GET_CQUEST(ch, i)       ((ch)->player_specials->completed_quest[i])
 #define GET_PLAYER_WHERE_COMMANDS(ch) ((ch)->player_specials->wherelist_checks)
@@ -768,6 +776,8 @@ int get_armor_penalty_grade(struct char_data *ch);
 #define GET_ECHOES_DIRTY_BIT(ch)        ((ch)->char_specials.dirty_bits[DIRTY_BIT_ECHOES])
 #define GET_MEMORY_DIRTY_BIT(ch)        ((ch)->char_specials.dirty_bits[DIRTY_BIT_MEMORY])
 #define GET_ALIAS_DIRTY_BIT(ch)         ((ch)->char_specials.dirty_bits[DIRTY_BIT_ALIAS])
+#define GET_QUEST_DIRTY_BIT(ch)         ((ch)->char_specials.dirty_bits[DIRTY_BIT_QUESTS])
+#define GET_BULLETPANTS_DIRTY_BIT(ch)   ((ch)->char_specials.dirty_bits[DIRTY_BIT_BULLETPANTS])
 
 #define GET_CONGREGATION_BONUS(ch) ((ch)->congregation_bonus_pool)
 
@@ -891,7 +901,13 @@ float get_proto_weight(struct obj_data *obj);
 #define CAN_WEAR(obj, part) ((obj)->obj_flags.wear_flags.IsSet((part)))
 
 #define IS_WEAPON(type) (((type) >= TYPE_HIT) && ((type) < TYPE_SUFFERING))
+
+#ifdef IS_BUILDPORT
+#define IS_GUN(type) ((((type) >= WEAP_HOLDOUT) && ((type) < WEAP_GRENADE)))
+#else
 #define IS_GUN(type) ((((type) >= WEAP_HOLDOUT) && ((type) < WEAP_GREN_LAUNCHER)) || (type) == WEAP_REVOLVER)
+#endif
+
 #define WEAPON_IS_GUN(weapon) ((weapon) && IS_GUN(GET_WEAPON_ATTACK_TYPE((weapon))) && (GET_WEAPON_SKILL((weapon)) >= SKILL_PISTOLS && GET_WEAPON_SKILL((weapon)) <= SKILL_ASSAULT_CANNON))
 
 #define IS_MONOWHIP(obj) (GET_OBJ_RNUM((obj)) >= 0 && obj_index[GET_OBJ_RNUM((obj))].wfunc == monowhip)
@@ -1083,7 +1099,7 @@ bool CAN_SEE_ROOM_SPECIFIED(struct char_data *subj, struct char_data *obj, struc
 #define GUN_IS_CYBER_GYRO_MOUNTABLE(gun)         (GET_WEAPON_ATTACK_TYPE((gun)) != WEAP_MMG && GET_WEAPON_ATTACK_TYPE((gun)) != WEAP_HMG && GET_WEAPON_ATTACK_TYPE((gun)) != WEAP_CANNON)
 #define GUN_IS_HEAVY_WEAPON(gun)                 (GET_WEAPON_SKILL((gun)) >= SKILL_MACHINE_GUNS && GET_WEAPON_SKILL((gun)) <= SKILL_ARTILLERY)
 
-#define WEAPON_IS_FOCUS(obj)                     (GET_OBJ_TYPE((obj)) == ITEM_WEAPON && !IS_GUN(GET_WEAPON_ATTACK_TYPE((obj))) && GET_WEAPON_FOCUS_RATING((obj)) > 0)
+#define WEAPON_IS_FOCUS(obj)                     (GET_OBJ_TYPE((obj)) == ITEM_WEAPON && !WEAPON_IS_GUN((obj)) && GET_WEAPON_FOCUS_RATING((obj)) > 0)
 bool is_weapon_focus_usable_by(struct obj_data *focus, struct char_data *ch);
 
 #define WEAPON_CAN_USE_FIREMODE(weapon, mode)    (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(weapon), 1 << (mode)))
@@ -1125,13 +1141,14 @@ bool is_weapon_focus_usable_by(struct obj_data *focus, struct char_data *ch);
 #define GET_VEHCONTAINER_VEH_OWNER(cont)          (GET_OBJ_VAL((cont), 3))
 #define GET_VEHCONTAINER_WEIGHT(cont)             (GET_OBJ_VAL((cont), 11))
 
-#define GET_RITUAL_COMPONENT_CASTER(components)   (GET_OBJ_VAL((components), 0))
-#define GET_RITUAL_COMPONENT_SPELL(components)    (GET_OBJ_VAL((components), 1))
-#define GET_RITUAL_COMPONENT_SUBTYPE(components)  (GET_OBJ_VAL((components), 2))
-#define GET_RITUAL_COMPONENT_FORCE(components)    (GET_OBJ_VAL((components), 3))
-#define GET_RITUAL_COMPONENT_TARGET(components)   (GET_OBJ_VAL((components), 4))
-#define GET_RITUAL_TICKS_LEFT(components)         (GET_OBJ_VAL((components), 5))
-#define GET_RITUAL_TICKS_AT_START(components)     (GET_OBJ_VAL((components), 6))
+#define GET_RITUAL_COMPONENT_CASTER(components)       (GET_OBJ_VAL((components), 0))
+#define GET_RITUAL_COMPONENT_SPELL(components)        (GET_OBJ_VAL((components), 1))
+#define GET_RITUAL_COMPONENT_SUBTYPE(components)      (GET_OBJ_VAL((components), 2))
+#define GET_RITUAL_COMPONENT_FORCE(components)        (GET_OBJ_VAL((components), 3))
+#define GET_RITUAL_COMPONENT_TARGET(components)       (GET_OBJ_VAL((components), 4))
+#define GET_RITUAL_TICKS_LEFT(components)             (GET_OBJ_VAL((components), 5))
+#define GET_RITUAL_TICKS_AT_START(components)         (GET_OBJ_VAL((components), 6))
+#define GET_RITUAL_COMPONENT_SPENT_NUYEN(components)  (GET_OBJ_VAL((components), 7))
 
 #define GET_POCKET_SECRETARY_LOCKED_BY(obj)       (GET_OBJ_VAL((obj), 1))
 #define GET_POCKET_SECRETARY_SILENCED(obj)        (GET_OBJ_VAL((obj), 2))
@@ -1259,6 +1276,11 @@ bool is_weapon_focus_usable_by(struct obj_data *focus, struct char_data *ch);
 #define GET_CYBERWARE_RADIO_CRYPT(cyberware)      (GET_OBJ_VAL((cyberware), 7)) // Settable by player
 #define GET_CYBERWARE_SOULBOND(cyberware)         (GET_OBJ_VAL((cyberware), 11))
 // Cyberware phones use 6, 7, and 8 for... stuff?
+#define GET_CYBERWARE_PHONE_NUMBER_PART_ONE(cyberware) (GET_OBJ_VAL((cyberware), 3))
+#define GET_CYBERWARE_PHONE_NUMBER_PART_TWO(cyberware) (GET_OBJ_VAL((cyberware), 6))
+#define GET_CYBERWARE_PHONE_NUMBER_IS_ON(cyberware) (GET_OBJ_VAL((cyberware), 7))
+#define GET_CYBERWARE_PHONE_NUMBER_RINGER_IS_ON(cyberware) (GET_OBJ_VAL((cyberware), 8))
+
 #define GET_CYBERWARE_IS_DISABLED(cyberware)      (GET_OBJ_VAL((cyberware), 9))
 #define GET_CYBERWARE_MEMORY_FREE(cyberware)      (GET_CYBERWARE_MEMORY_MAX((cyberware)) - GET_CYBERWARE_MEMORY_USED((cyberware)))
 
@@ -1599,6 +1621,26 @@ char    *crypt(const char *key, const char *salt);
   }                                               \
 }                                                 \
 
+// 'message optional' version
+#define FAILURE_CASE_MO(condition, message) { \
+  if ((condition)) {                          \
+    if (send_messages) {                      \
+      send_to_char(ch, "%s\r\n", (message));  \
+    }                                         \
+    return;                                   \
+  }                                           \
+}                                             \
+
+#define FAILURE_CASE_PRINTF_MO(condition, ...) {    \
+  if ((condition)) {                                \
+    if (send_messages) {                            \
+      send_to_char(ch, __VA_ARGS__);                \
+      send_to_char(ch, "\r\n"); /*force a newline*/ \
+    }                                               \
+    return;                                         \
+  }                                                 \
+}                                                   \
+
 #define FALSE_CASE(condition, message) {   \
   if ((condition)) {                       \
     send_to_char(ch, "%s\r\n", (message)); \
@@ -1614,6 +1656,25 @@ char    *crypt(const char *key, const char *salt);
   }                                               \
 }                                                 \
 
+#define FALSE_CASE_MO(condition, message) {  \
+  if ((condition)) {                         \
+    if (send_messages) {                     \
+      send_to_char(ch, "%s\r\n", (message)); \
+    }                                        \
+    return FALSE;                            \
+  }                                          \
+}                                            \
+
+#define FALSE_CASE_PRINTF_MO(condition, ...) {      \
+  if ((condition)) {                                \
+    if (send_messages) {                            \
+      send_to_char(ch, __VA_ARGS__);                \
+      send_to_char(ch, "\r\n"); /*force a newline*/ \
+    }                                               \
+    return FALSE;                                   \
+  }                                                 \
+}                                                   \
+
 #define TRUE_CASE(condition, message) {    \
   if ((condition)) {                       \
     send_to_char(ch, "%s\r\n", (message)); \
@@ -1626,6 +1687,21 @@ char    *crypt(const char *key, const char *salt);
     send_to_char(ch, __VA_ARGS__);                \
     send_to_char(ch, "\r\n"); /*force a newline*/ \
     return TRUE;                                  \
+  }                                               \
+}                                                 \
+
+#define NULL_CASE(condition, message) {    \
+  if ((condition)) {                       \
+    send_to_char(ch, "%s\r\n", (message)); \
+    return NULL;                           \
+  }                                        \
+}                                          \
+
+#define NULL_CASE_PRINTF(condition, ...) {        \
+  if ((condition)) {                              \
+    send_to_char(ch, __VA_ARGS__);                \
+    send_to_char(ch, "\r\n"); /*force a newline*/ \
+    return NULL;                                  \
   }                                               \
 }                                                 \
 

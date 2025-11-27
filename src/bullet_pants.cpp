@@ -431,6 +431,7 @@ void load_bullet_pants(struct char_data *ch) {
     // All taser ammo must be normal.
     if (weapon == WEAP_TASER) {
       for (int atype = AMMO_APDS; atype < NUM_AMMOTYPES; atype++) {
+        // This specifically does not set dirty_bit to true since it's a load from DB.
         GET_BULLETPANTS_AMMO_AMOUNT(ch, weapon, AMMO_NORMAL) += GET_BULLETPANTS_AMMO_AMOUNT(ch, weapon, atype);
         GET_BULLETPANTS_AMMO_AMOUNT(ch, weapon, atype) = 0;
       }
@@ -465,12 +466,18 @@ bool update_bulletpants_ammo_quantity(struct char_data *ch, int weapon, int ammo
     return FALSE;
   }
 
+  if (ammotype == AMMO_AV && !access_level(ch, LVL_BUILDER) && quantity > 0) {
+    mudlog("SYSERR: update_bulletpants_ammo_quantity received positive AV ammo quantity to non-staff character.", ch, LOG_SYSLOG, TRUE);
+    return FALSE;
+  }
+
   if (quantity > MAX_NUMBER_OF_BULLETS_IN_PANTS || quantity < -MAX_NUMBER_OF_BULLETS_IN_PANTS) {
     snprintf(buf, sizeof(buf), "SYSERR: update_bulletpants_ammo_quantity received invalid quantity %d.", quantity);
     mudlog(buf, ch, LOG_SYSLOG, TRUE);
     return FALSE;
   }
 
+  GET_BULLETPANTS_DIRTY_BIT(ch) = TRUE;
   GET_BULLETPANTS_AMMO_AMOUNT(ch, weapon, ammotype) += quantity;
   calc_weight(ch);
   return TRUE;

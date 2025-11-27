@@ -224,30 +224,29 @@ void create_program(struct char_data *ch)
 struct obj_data *can_program(struct char_data *ch)
 {
   struct obj_data *comp;
-  if (IS_ASTRAL(ch))
-    send_to_char("You can't read the screen in your current astral form.\r\n", ch);
-  else if (IS_WORKING(ch))
-    send_to_char("You are already working on something.\r\n", ch);
-  else if (ch->in_veh && (ch->vfront || !ch->in_veh->flags.IsSet(VFLAG_WORKSHOP)))
-    send_to_char("You can't do that in here.\r\n", ch);
-  else {
-    for (struct char_data *vict = ch->in_veh ? ch->in_veh->people : ch->in_room->people; vict; vict = vict->next_in_room)
-      if (AFF_FLAGS(vict).AreAnySet(AFF_PROGRAM, AFF_DESIGN, ENDBIT)) {
-        send_to_char(ch, "Someone is already using the computer.\r\n");
-        return NULL;
-      }
-    FOR_ITEMS_AROUND_CH(ch, comp)
-      if (GET_OBJ_TYPE(comp) == ITEM_DECK_ACCESSORY && GET_DECK_ACCESSORY_TYPE(comp) == TYPE_COMPUTER)
-        break;
-    if (ch->in_veh && comp && comp->vfront)
-      comp = NULL;
-    if (!comp) {
-      send_to_char(ch, "There is no computer here for you to use.\r\n");
+  NULL_CASE(IS_ASTRAL(ch), "You can't read the screen in your current astral form.");
+  NULL_CASE(IS_WORKING(ch), "You are already working on something.");
+  NULL_CASE(ch->in_veh && !ch->in_veh->flags.IsSet(VFLAG_WORKSHOP), "You don't have the right tools here.");
+  
+  for (struct char_data *vict = ch->in_veh ? ch->in_veh->people : ch->in_room->people; vict; vict = vict->next_in_room)
+    if (AFF_FLAGS(vict).AreAnySet(AFF_PROGRAM, AFF_DESIGN, ENDBIT)) {
+      send_to_char("Someone is already using the computer.\r\n", ch);
       return NULL;
     }
-    return comp;
+  FOR_ITEMS_AROUND_CH(ch, comp) {
+    if (GET_OBJ_TYPE(comp) == ITEM_DECK_ACCESSORY && GET_DECK_ACCESSORY_TYPE(comp) == TYPE_COMPUTER)
+      break;
   }
-  return NULL;
+  if (ch->in_veh && comp && (comp->vfront != ch->vfront))
+    comp = NULL;
+  if (!comp) {
+    send_to_char(ch, "There is no computer here for you to use.\r\n");
+    // A computer isn't used to design a complex form, but we use a different command for that
+    if (PRF_FLAGGED(ch, PRF_SEE_TIPS) && IS_OTAKU(ch))
+      send_to_char("[OOC: To learn a complex form, try ^WFORMS LEARN <FORM>^n.]\r\n", ch);
+    return NULL;
+  }
+  return comp;
 }
 
 int get_program_skill(char_data *ch, obj_data *prog, int target)
@@ -325,14 +324,9 @@ ACMD(do_design)
       send_to_char(ch, "Design what?\r\n");
     return;
   }
-  if (GET_POS(ch) > POS_SITTING) {
-    GET_POS(ch) = POS_SITTING;
-    send_to_char(ch, "You find a place to sit and work with your materials.\r\n");
-  }
-  if (IS_WORKING(ch)) {
-    send_to_char(TOOBUSY, ch);
-    return;
-  }
+
+  FAILURE_CASE(IS_WORKING(ch), TOOBUSY);
+  FAILURE_CASE(!check_if_sitting_and_force_sit_command_if_not(ch), "You have to be sitting to do that.");
 
   skip_spaces(&argument);
   prog = get_obj_in_list_vis(ch, argument, ch->carrying);
@@ -358,6 +352,9 @@ ACMD(do_design)
 
   if (!prog) {
     send_to_char(ch, "The program design isn't on %s.\r\n", decapitalize_a_an(GET_OBJ_NAME(comp)));
+    // A computer isn't used to design a complex form, but we use a different command for that
+    if (PRF_FLAGGED(ch, PRF_SEE_TIPS) && IS_OTAKU(ch))
+      send_to_char("[OOC: To learn a complex form, try ^WFORMS LEARN <FORM>^n.]\r\n", ch);
     return;
   }
   if (GET_DESIGN_COMPLETED(prog) || GET_DESIGN_PROGRAMMING_TICKS_LEFT(prog)) {
@@ -411,14 +408,10 @@ ACMD(do_program)
       send_to_char(ch, "Program What?\r\n");
     return;
   }
-  if (GET_POS(ch) > POS_SITTING) {
-    GET_POS(ch) = POS_SITTING;
-    send_to_char(ch, "You find a place to sit and work.\r\n");
-  }
-  if (IS_WORKING(ch)) {
-    send_to_char(TOOBUSY, ch);
-    return;
-  }
+  
+  FAILURE_CASE(IS_WORKING(ch), TOOBUSY);
+  FAILURE_CASE(!check_if_sitting_and_force_sit_command_if_not(ch), "You have to be sitting to do that.");
+
   if (!(comp = can_program(ch)))
     return;
   skip_spaces(&argument);

@@ -24,9 +24,6 @@
   To answer:
     We want folks to pay syspoints for exdesc usage, when does that happen? Pay sysp to increase your exdesc quota
 
-  // TODO: Add visibility filters for looking at someone with descs, listing them, etc: if covered, don't show
-  // TODO STRETCH: Alter wear/remove to add reveal/hide for exdescs.
-
 
   table: pfiles_exdescs
   idnum
@@ -42,8 +39,10 @@
 
 extern MYSQL *mysql;
 extern std::map<std::string, int> wear_flag_map_for_exdescs;
+extern Bitfield wearloc_shadowing_locations[ITEM_WEAR_MAX];
 
 extern void cedit_disp_menu(struct descriptor_data *d, int mode);
+extern const char *remove_final_punctuation(const char *str);
 
 // Prototypes.
 void list_exdescs(struct char_data *viewer, struct char_data *vict, bool list_is_for_editing=FALSE);
@@ -200,7 +199,7 @@ void syspoints_purchase_exdescs(struct char_data *ch, char *buf, bool is_confirm
 
   // Have they entered the confirmation command?
   FAILURE_CASE_PRINTF(!is_confirmed && !is_abbrev(buf, "confirm"),
-                      "You can spend %d system points to increase your extra description maximum by %d. To do so, type SYSPOINT PURCHASE CONFIRM.",
+                      "You can spend %d system points to increase your extra description maximum by %d. To do so, type SYSPOINT EXDESC CONFIRM.",
                       SYSP_EXDESC_MAX_PURCHASE_COST, SYSP_EXDESC_MAX_PURCHASE_GETS_YOU_X_SLOTS);
 
   // Do it.
@@ -250,7 +249,7 @@ bool can_see_exdesc(struct char_data *viewer, struct char_data *vict, PCExDesc *
   if (!vict->player_specials)
     return FALSE;
 
-  if (IS_SENATOR(viewer) && !without_staff_override)
+  if (viewer && IS_SENATOR(viewer) && !without_staff_override)
     return TRUE;
 
   Bitfield comparison_field;
@@ -258,19 +257,136 @@ bool can_see_exdesc(struct char_data *viewer, struct char_data *vict, PCExDesc *
   comparison_field.RemoveAll(GET_CHAR_COVERED_WEARLOCS(vict));
 
   // Additional filter-downs
-  if (comparison_field.IsSet(ITEM_WEAR_UNDERWEAR)) {
-    if (GET_CHAR_COVERED_WEARLOCS(vict).AreAnySet(ITEM_WEAR_UNDER, ITEM_WEAR_LEGS, ITEM_WEAR_BODY, ITEM_WEAR_ABOUT, ENDBIT)) {
-      comparison_field.RemoveBit(ITEM_WEAR_UNDERWEAR);
-    }
-  }
-
-  if (comparison_field.IsSet(ITEM_WEAR_CHEST)) {
-    if (GET_CHAR_COVERED_WEARLOCS(vict).AreAnySet(ITEM_WEAR_UNDER, ITEM_WEAR_BODY, ITEM_WEAR_ABOUT, ENDBIT)) {
-      comparison_field.RemoveBit(ITEM_WEAR_CHEST);
+  for (int wear_idx = 0; wear_idx < ITEM_WEAR_MAX; wear_idx++) {
+    if (comparison_field.IsSet(wear_idx) && GET_CHAR_COVERED_WEARLOCS(vict).AreAnyShared(wearloc_shadowing_locations[wear_idx])) {
+      comparison_field.RemoveBit(wear_idx);
     }
   }
 
   return comparison_field.HasAnythingSetAtAll();
+}
+
+std::vector<PCExDesc *> exdescs_with_visibility_changed_by_wearloc(struct char_data *vict, int wearloc, bool check_for_reveal) {
+  static std::vector<PCExDesc *> result = {0};
+  result.clear();
+
+#ifndef USE_EXDESC_CONCEAL_REVEAL
+  // short circuit: do nothing
+  return result;
+#else
+
+  // send_to_char(vict, "exdescs_with_visibility_changed_by_wearloc(%s, %d, %s)\r\n", GET_CHAR_NAME(vict), wearloc, check_for_reveal ? "T" : "F");
+
+  if (!vict->player_specials) {
+    // send_to_char(vict, "no specials\r\n");
+    return result;
+  }
+
+  if (GET_CHAR_COVERED_WEARLOCS(vict).AreAnyShared(wearloc_shadowing_locations[wearloc])) {
+    send_to_char(vict, "debug: no alteration to exdesc %s, concealed by other slots\r\n", check_for_reveal ? "reveal" : "conceal");
+    return result;
+  }
+  
+  for (auto exdesc : GET_CHAR_EXDESCS(vict)) {
+    Bitfield comparison_field;
+    // First, we put all of this exdesc's shown-on slots into the comparison field.
+    comparison_field.SetAll(*(exdesc->get_wear_slots()));
+    // Then, we remove all the slots that are already covered. comparison_field now exclusively contains bits that are part of the exdesc and not covered.
+    comparison_field.RemoveAll(GET_CHAR_COVERED_WEARLOCS(vict));
+
+    int num_already_set = comparison_field.GetNumSet();
+
+    send_to_char(vict, "^bDEBUG (%s): Comparing '%s's wearlocs of %s to your already-covered wearlocs of %s yields %s (%d set).^n\r\n",
+                 check_for_reveal ? "reveal" : "conceal",
+                 exdesc->get_keyword(),
+                 exdesc->get_wear_slots()->ToString(),
+                 GET_CHAR_COVERED_WEARLOCS(vict).ToString(),
+                 comparison_field.ToString(),
+                 num_already_set
+                );
+
+    // Check for something that's being revealed.
+    if (check_for_reveal) {
+      // It's already revealed, so we won't reveal it with this action.
+      if (num_already_set > 0) {
+        send_to_char(vict, "^cdebug: reveal won't show %s, already set is too high at %d^n\r\n", exdesc->get_keyword(), num_already_set);
+        continue;
+      }
+
+      // At this point, we know the exdesc is completely hidden (no revealed slots).
+      
+      // Check to see if the wearloc we're revealing is in the exdesc's set. If it is, that means we're revealing this item.
+      if (exdesc->get_wear_slots()->IsSet(wearloc) /* todo: reverse map so that removing body reveals chest etc */) {
+        send_to_char(vict, "^cdebug: reveal found %s^n\r\n", exdesc->get_keyword());
+        result.push_back(exdesc);
+      }
+
+      // No overlap, exdesc won't be revealed by this action.
+      else {
+        send_to_char(vict, "^cdebug: reveal falling through %s^n^n\r\n", exdesc->get_keyword());
+      }
+    }
+    // Checking for something that's being hidden.
+    else {
+      // It's already hidden.
+      if (num_already_set == 0) {
+        send_to_char(vict, "^cdebug: conceal won't show %s, already set is too low at %d^n\r\n", exdesc->get_keyword(), num_already_set);
+        continue;
+      }
+
+      // It's revealed, but changing a single wearloc won't change this.
+      if (num_already_set > 1) {
+        send_to_char(vict, "^cdebug: conceal won't show %s, already set is too high at %d (v2)^n\r\n", exdesc->get_keyword(), num_already_set);
+        continue;
+      }
+
+      // Check to see if the sole set wearloc is the one we're covering.
+      if (comparison_field.IsSet(wearloc)) {
+        send_to_char(vict, "^cdebug: conceal found %s\r\n", exdesc->get_keyword());
+        result.push_back(exdesc);
+      }
+
+      else {
+        send_to_char(vict, "^cdebug: conceal falling through %s: comparison_field = %s^n\r\n", exdesc->get_keyword(), comparison_field.ToString());
+      }
+    }
+  }
+
+  return result;
+#endif
+}
+
+void exdesc_conceal_reveal(struct char_data *vict, int wearloc, bool check_for_reveal) {
+  auto vec = exdescs_with_visibility_changed_by_wearloc(vict, wearloc, check_for_reveal);
+
+#ifndef USE_EXDESC_CONCEAL_REVEAL
+  return;
+#else
+  if (vec.empty()) {
+    return;
+  }
+
+  char exdesc_buf[10000] = {0};
+  int remaining_items = vec.size();
+  for (auto exdesc : vec) {
+    remaining_items--;
+
+    if (*exdesc_buf) {
+      strlcat(exdesc_buf, ",", sizeof(exdesc_buf));
+      if (remaining_items == 0) {
+        strlcat(exdesc_buf, " and", sizeof(exdesc_buf));
+      }
+    } else {
+      strlcpy(exdesc_buf, check_for_reveal ? "This reveals" : "This conceals", sizeof(exdesc_buf));
+    }
+
+    snprintf(ENDOF(exdesc_buf), sizeof(exdesc_buf) - strlen(exdesc_buf), " %s^n", decapitalize_a_an(remove_final_punctuation(exdesc->get_name())));
+  }
+  strlcat(exdesc_buf, ".", sizeof(exdesc_buf));
+
+  act(exdesc_buf, TRUE, vict, 0, 0, TO_CHAR);
+  act(exdesc_buf, TRUE, vict, 0, 0, TO_ROOM);
+#endif
 }
 
 bool viewer_can_see_at_least_one_exdesc_on_vict(struct char_data *viewer, struct char_data *victim) {
@@ -569,7 +685,7 @@ void pc_exdesc_edit_parse_olc_menu(struct descriptor_data *d, const char *arg) {
       d->edit_mode = PC_EXDESC_EDIT_OLC_SET_KEYWORD;
       break;
     case '2':  // Edit name.
-      send_to_char("Good exdesc names are full sentences with capitalization and punctuation, like 'An inky dragon tattoo is frozen in a roar across his back.'\r\nEnter a new name for this exdesc: ", CH);
+      send_to_char("Good exdesc names are tense-less names with capitalization and punctuation, like 'An inky dragon tattoo frozen in a roar across his back.'\r\nEnter a new name for this exdesc: ", CH);
       d->edit_mode = PC_EXDESC_EDIT_OLC_SET_NAME;
       break;
     case '3':  // Edit desc.

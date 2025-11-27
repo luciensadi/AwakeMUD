@@ -3,7 +3,7 @@
 
 extern int get_weapon_damage_type(struct obj_data* weapon);
 extern int check_recoil(struct char_data *ch, struct obj_data *gun, bool is_using_gyromount=FALSE);
-extern int check_smartlink(struct char_data *ch, struct obj_data *weapon);
+extern int check_smartlink(struct char_data *ch, struct obj_data *weapon, bool only_check_cyberware=false);
 
 bool does_weapon_have_bayonet(struct obj_data *weapon);
 bool perform_nerve_strike(struct combat_data *att, struct combat_data *def, char *rbuf, size_t rbuf_len);
@@ -145,6 +145,10 @@ struct ranged_combat_data {
 
       // Get a pointer to the magazine.
       magazine = weapon->contains;
+      if (magazine && !IS_NPC(ch) && !access_level(ch, LVL_BUILDER) && GET_MAGAZINE_AMMO_TYPE(magazine) == AMMO_AV) {
+        mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: PC %s had AV ammo in newfight struct init. Changing to APDS.", GET_CHAR_NAME(ch));
+        GET_MAGAZINE_AMMO_TYPE(magazine) = AMMO_APDS;
+      }
 
       // Determine the initial burst value of the weapon.
       if (WEAPON_IS_BF(weapon))
@@ -368,6 +372,8 @@ struct combat_data
   int dodge_pool;
   int body_pool;
 
+  bool using_gyro;
+
   combat_data(struct char_data *character, struct obj_data *weap) :
     ch(NULL),
     veh(NULL),
@@ -389,8 +395,7 @@ struct combat_data
 
     ranged_combat_mode = (weap
                           && GET_OBJ_TYPE(weap) == ITEM_WEAPON
-                          && IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon))
-                          && (GET_WEAPON_SKILL(weapon) >= SKILL_PISTOLS && GET_WEAPON_SKILL(weapon) <= SKILL_ASSAULT_CANNON));
+                          && WEAPON_IS_GUN(weapon));
 
     cyber = new struct cyberware_data(ch);
     ranged = new struct ranged_combat_data(ch, weapon, ranged_combat_mode);
@@ -406,6 +411,9 @@ struct combat_data
 
     // Figure out if they're unable to move at all (paralyzed, asleep, jacked in, etc)
     is_paralyzed_or_insensate = !AWAKE(ch) || GET_QUI(ch) <= 0;
+
+    // Check if they're using a gyromount.
+    using_gyro = (ranged->gyro || cyber->cyberarm_gyromount);
   }
 
   ~combat_data() {

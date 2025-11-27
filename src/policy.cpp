@@ -131,6 +131,7 @@ void initialize_policy_tree() {
     section_root->add_child("Botting (aka setting up your client to play the game for you, whether or not you're at the keyboard) is not allowed.");
     section_root->add_child("Triggers are restricted. They can only be used to produce non-material outcomes that don't directly benefit or harm anyone. For example, an answering machine trigger that recites a canned message after a certain number of rings is allowed, but an auto-killing trigger is not.");
     section_root->add_child("Auto-looting is a specific type of trigger that you're allowed to write, but tune it so that you don't steal things from other players' kills-- if we get complaints about auto-looters, they will no longer be allowed.");
+    section_root->add_child("Aspirin-eating triggers are also specifically allowed.");
   }
 
   // Restringing

@@ -29,6 +29,8 @@ extern void end_all_caster_records(struct char_data *ch, bool keep_sustained_by_
 extern void end_all_spells_of_type_cast_by_ch(int spell, int subtype, struct char_data *ch);
 extern void end_all_sustained_spells(struct char_data *ch);
 extern bool spell_affecting_ch_is_cast_by_ch_or_group_member(struct char_data *ch, int spell_type);
+extern void end_all_spells_cast_ON_ch(struct char_data *ch, bool keep_sustained_by_other);
+extern void end_all_spells_cast_BY_ch(struct char_data *ch, bool keep_sustained_by_other);
 
 #define DAMOBJ_NONE                     0
 #define DAMOBJ_ACID                     1
@@ -65,5 +67,8 @@ extern bool spell_affecting_ch_is_cast_by_ch_or_group_member(struct char_data *c
 #define VARIABLE_DRAIN_DAMAGE_CODE                 -5
 #define PACK_VARIABLE_DRAIN_DAMAGE(modifier)       (VARIABLE_DRAIN_DAMAGE_CODE + modifier)
 #define UNPACK_VARIABLE_DRAIN_DAMAGE(damage_code)  (-VARIABLE_DRAIN_DAMAGE_CODE + damage_code)
+
+#define IS_COMBAT_ENTHRALLED_SHAMAN(ch) (GET_TRADITION(ch) == TRAD_SHAMANIC && (GET_TOTEM(ch) == TOTEM_BOAR || GET_TOTEM(ch) == TOTEM_POLECAT || GET_TOTEM(ch) == TOTEM_GATOR      \
+                                                                                || GET_TOTEM(ch) == TOTEM_MOUNTAIN || GET_TOTEM(ch) == TOTEM_DOG))
 
 #endif

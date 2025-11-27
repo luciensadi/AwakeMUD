@@ -69,6 +69,7 @@ void switch_weapons(struct char_data *mob, int pos);
 void send_mob_aggression_warnings(struct char_data *pc, struct char_data *mob);
 bool mob_cannot_be_aggressive(struct char_data *ch);
 bool mob_is_aggressive_towards_race(struct char_data *ch, int race);
+bool check_for_mob_weapon_skill_errors(struct char_data *ch, char *buf_ptr, size_t buf_sz);
 
 // This takes up a significant amount of processing time, so let's precompute it.
 #define NUM_AGGRO_OCTETS 3
@@ -471,7 +472,7 @@ void mobact_change_firemode(struct char_data *ch) {
   int proning_desire = 0;
 
   // Precheck: Weapon must exist and must be a gun.
-  if (!(weapon = GET_EQ(ch, WEAR_WIELD)) || !IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon))) {
+  if (!(weapon = GET_EQ(ch, WEAR_WIELD)) || !WEAPON_IS_GUN(weapon)) {
     // Melee fighters never want to be prone, so they'll stand up from that.
     if (AFF_FLAGGED(ch, AFF_PRONE)) {
 #ifdef MOBACT_DEBUG
@@ -1057,7 +1058,7 @@ void send_mob_aggression_warnings(struct char_data *pc, struct char_data *mob) {
       }
       act(buf, TRUE, mob, NULL, pc, TO_VICT);
     } else {
-      if (GET_EQ(mob, WEAR_WIELD) && GET_OBJ_TYPE(GET_EQ(mob, WEAR_WIELD)) == ITEM_WEAPON && IS_GUN(GET_WEAPON_ATTACK_TYPE(GET_EQ(mob, WEAR_WIELD)))) {
+      if (GET_EQ(mob, WEAR_WIELD) && GET_OBJ_TYPE(GET_EQ(mob, WEAR_WIELD)) == ITEM_WEAPON && WEAPON_IS_GUN(GET_EQ(mob, WEAR_WIELD))) {
         send_to_char("^yThe glint of a scope aiming your way catches your eye!^n\r\n", pc);
       } else {
         switch(number(0, 2)) {
@@ -1350,6 +1351,10 @@ bool mobact_process_guard(struct char_data *ch, struct room_data *room) {
 
 bool mobact_process_self_buff(struct char_data *ch) {
   if (!GET_SKILL(ch, SKILL_SORCERY) || GET_MAG(ch) < 100  || MOB_FLAGGED(ch, MOB_SPEC))
+    return FALSE;
+
+  // Prevent casting in heavily polluted rooms.
+  if (ch->in_room && GET_BACKGROUND_COUNT(ch->in_room) >= 4)
     return FALSE;
 
   // Skip broken-ass characters.
@@ -1709,241 +1714,209 @@ void ensure_mob_has_ammo_for_weapon(struct char_data *ch, struct obj_data *weapo
   GET_BULLETPANTS_AMMO_AMOUNT(ch, GET_WEAPON_ATTACK_TYPE(weapon), AMMO_NORMAL) = GET_WEAPON_MAX_AMMO(weapon) * NUMBER_OF_MAGAZINES_TO_GIVE_TO_UNEQUIPPED_MOBS;
 }
 
-void mobile_activity(void)
-{
-  PERF_PROF_SCOPE(pr_, __func__);
-  struct char_data *ch, *next_ch;
+void do_single_mobile_activity(struct char_data *ch) {
   int dir, distance;
   struct room_data *current_room = NULL;
-
   extern int no_specials;
 
-  // Iterate through all characters in the game.
-  for (ch = character_list; ch; ch = next_ch) {
-    next_ch = ch->next_in_character_list;
+  // Skip them if they're a player character, are sleeping, or are operated by a player (ex: projections, possessed).
+  if (!IS_NPC(ch) || !AWAKE(ch) || ch->desc)
+    return;
 
-    // Skip them if they're a player character, are sleeping, or are operated by a player (ex: projections, possessed).
-    if (!IS_NPC(ch) || !AWAKE(ch) || ch->desc)
-      continue;
+  // Skip broken-ass characters.
+  if (!ch->in_room && !ch->in_veh) {
+    snprintf(buf, sizeof(buf), "SYSERR: Encountered char '%s' with no room, no veh in mobile_activity().", GET_CHAR_NAME(ch));
+    mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+    return;
+  }
 
-    // Skip broken-ass characters.
-    if (!ch->in_room && !ch->in_veh) {
-      snprintf(buf, sizeof(buf), "SYSERR: Encountered char '%s' with no room, no veh in mobile_activity().", GET_CHAR_NAME(ch));
-      mudlog(buf, NULL, LOG_SYSLOG, TRUE);
-      continue;
+  if (ch->nr == 0) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Encountered zeroed char %s (%ld) in mobile_activity().", GET_CHAR_NAME(ch), GET_MOB_VNUM(ch));
+    return;
+  }
+
+  current_room = get_ch_in_room(ch);
+
+  // Skip them if they have no current room.
+  if (!current_room)
+    return;
+
+  // Skip NPCs that are currently fighting. This state is removed in the combat code.
+  if (FIGHTING(ch) || FIGHTING_VEH(ch))
+    return;
+
+  // Cool down mob alert status. This is a hack-- !empty() means anything in map, then !mob_is_alert means nothing in map after expiration of contents.
+  if (!GET_MOB_ALARM_MAP(ch).empty() && !mob_is_alert(ch)) {
+    // If you just entered calm state and have a weapon, you get your ammo back.
+    // check if they have ammo in proto-- if so, paste in proto ammo, if not, give max * 3 normal ammo
+    // real_mobile is guaranteed to resolve here since we're referencing a vnum from an existing NPC
+    struct char_data *proto_mob = &mob_proto[real_mobile(GET_MOB_VNUM(ch))];
+
+    // Copy over their ammo data. We scan the whole thing instead of just their weapon to prevent someone
+    // giving them a holdout pistol so they never regain their ammo stores.
+    for (int wp = START_OF_AMMO_USING_WEAPONS; wp <= END_OF_AMMO_USING_WEAPONS; wp++) {
+      for (int am = 0; am < NUM_AMMOTYPES; am++) {
+        GET_BULLETPANTS_AMMO_AMOUNT(ch, wp, am) = GET_BULLETPANTS_AMMO_AMOUNT(proto_mob, wp, am);
+      }
     }
 
-    if (ch->nr == 0) {
-      mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Encountered zeroed char %s (%ld) in mobile_activity().", GET_CHAR_NAME(ch), GET_MOB_VNUM(ch));
-      continue;
+    // Carried weapons.
+    for (struct obj_data *weapon = ch->carrying; weapon; weapon = weapon->next_content) {
+      if (GET_OBJ_TYPE(weapon) == ITEM_WEAPON && WEAPON_IS_GUN(weapon) && GET_WEAPON_MAX_AMMO(weapon) > 0) {
+        ensure_mob_has_ammo_for_weapon(ch, weapon);
+      }
     }
 
-    current_room = get_ch_in_room(ch);
+    // Wielded weapons.
+    for (int index = WEAR_WIELD; index < WEAR_HOLD; index++) {
+      if (GET_EQ(ch, index)
+          && GET_OBJ_TYPE(GET_EQ(ch, index)) == ITEM_WEAPON
+          && WEAPON_IS_GUN(GET_EQ(ch, index))
+          && GET_WEAPON_MAX_AMMO(GET_EQ(ch, index)) > 0)
+      {
+        ensure_mob_has_ammo_for_weapon(ch, GET_EQ(ch, index));
+      }
+    }
+  }
 
-    // Skip them if they have no current room.
-    if (!current_room)
-      continue;
+  // Confirm we have the skills to wield our current weapon, otherwise ditch it.
+  #ifndef SUPPRESS_MOB_SKILL_ERRORS
+  if (check_for_mob_weapon_skill_errors(ch, NULL, 0))
+    switch_weapons(ch, WEAR_WIELD);
+  #endif
 
-    // Skip NPCs that are currently fighting. This state is removed in the combat code.
-    if (FIGHTING(ch) || FIGHTING_VEH(ch))
-      continue;
+  // Manipulate wielded weapon (reload, set fire mode, etc).
+  mobact_change_firemode(ch);
 
-    // Cool down mob alert status. This is a hack-- !empty() means anything in map, then !mob_is_alert means nothing in map after expiration of contents.
-    if (!GET_MOB_ALARM_MAP(ch).empty() && !mob_is_alert(ch)) {
-      // If you just entered calm state and have a weapon, you get your ammo back.
-      // check if they have ammo in proto-- if so, paste in proto ammo, if not, give max * 3 normal ammo
-      // real_mobile is guaranteed to resolve here since we're referencing a vnum from an existing NPC
-      struct char_data *proto_mob = &mob_proto[real_mobile(GET_MOB_VNUM(ch))];
+  // Look for special procedures. If one fires successfully, do nothing else for this NPC.
+  if (!no_specials && MOB_FLAGGED(ch, MOB_SPEC) && mobact_evaluate_spec_proc(ch)) {
+    return;
+  }
 
-      // Copy over their ammo data. We scan the whole thing instead of just their weapon to prevent someone
-      // giving them a holdout pistol so they never regain their ammo stores.
-      for (int wp = START_OF_AMMO_USING_WEAPONS; wp <= END_OF_AMMO_USING_WEAPONS; wp++) {
-        for (int am = 0; am < NUM_AMMOTYPES; am++) {
-          GET_BULLETPANTS_AMMO_AMOUNT(ch, wp, am) = GET_BULLETPANTS_AMMO_AMOUNT(proto_mob, wp, am);
+  // Character in nested vehicle? Stop processing.
+  if (ch->in_veh && ch->in_veh->in_veh) {
+    return;
+  }
+
+  // All these aggressive checks require the character to not be in a peaceful room.
+  if (!current_room->peaceful) {
+    // Ensure faction mobs are alerted if an enemy is nearby.
+    if (GET_MOB_FACTION_IDNUM(ch)) {
+      for (struct char_data *occupant = current_room->people; occupant; occupant = occupant->next_in_room) {
+        if (!IS_NPNPC(occupant)) {
+          if (get_faction_status(occupant, GET_MOB_FACTION_IDNUM(ch)) <= faction_statuses::CAUTIOUS) {
+            extend_mob_alarm_time(ch, occupant, 15);
+            break;
+          }
         }
       }
-
-      // Carried weapons.
-      for (struct obj_data *weapon = ch->carrying; weapon; weapon = weapon->next_content) {
-        if (GET_OBJ_TYPE(weapon) == ITEM_WEAPON && IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon)) && GET_WEAPON_MAX_AMMO(weapon) > 0) {
-          ensure_mob_has_ammo_for_weapon(ch, weapon);
-        }
-      }
-
-      // Wielded weapons.
-      for (int index = 0; index < NUM_WEARS; index++) {
-        if (GET_EQ(ch, index)
-            && GET_OBJ_TYPE(GET_EQ(ch, index)) == ITEM_WEAPON
-            && IS_GUN(GET_WEAPON_ATTACK_TYPE(GET_EQ(ch, index)))
-            && GET_WEAPON_MAX_AMMO(GET_EQ(ch, index)) > 0)
-        {
-          ensure_mob_has_ammo_for_weapon(ch, GET_EQ(ch, index));
-        }
-      }
     }
 
-    // Confirm we have the skills to wield our current weapon, otherwise ditch it.
-#ifndef SUPPRESS_MOB_SKILL_ERRORS
-    if (GET_EQ(ch, WEAR_WIELD) && GET_OBJ_TYPE(GET_EQ(ch, WEAR_WIELD)) == ITEM_WEAPON) {
-      char build_err_msg[2000];
+    // Handle aggressive mobs.
+    if (mobact_process_aggro(ch, current_room)) {
+      return;
+    }
 
-      int weapon_skill = GET_WEAPON_SKILL(GET_EQ(ch, WEAR_WIELD));
-      int melee_skill = does_weapon_have_bayonet(GET_EQ(ch, WEAR_WIELD)) ? SKILL_POLE_ARMS : SKILL_CLUBS;
+    // Guard NPCs.
+    if (MOB_FLAGGED(ch, MOB_GUARD) && mobact_process_guard(ch, current_room)) {
+      return;
+    }
 
-      int weapon_skill_dice = GET_SKILL(ch, weapon_skill) ? GET_SKILL(ch, weapon_skill) : GET_SKILL(ch, return_general(weapon_skill));
-      int melee_skill_dice = GET_SKILL(ch, melee_skill) ? GET_SKILL(ch, melee_skill) : GET_SKILL(ch, return_general(melee_skill));
-
-      int indexed_attack_type = MAX(0, MIN(MAX_WEAP - 1, GET_WEAPON_ATTACK_TYPE(GET_EQ(ch, WEAR_WIELD))));
-
-      if (weapon_skill_dice <= 0) {
-        #ifndef SUPPRESS_BUILD_ERROR_MESSAGES
-        snprintf(build_err_msg, sizeof(build_err_msg), "CONTENT ERROR: Mob #%ld is wielding %s %s, but has no weapon skill in %s!",
-                 GET_MOB_VNUM(ch),
-                 AN(weapon_types[indexed_attack_type]),
-                 weapon_types[indexed_attack_type],
-                 skills[GET_WEAPON_SKILL(GET_EQ(ch, WEAR_WIELD))].name
-               );
-        mudlog(build_err_msg, ch, LOG_MISCLOG, TRUE);
-        #endif
-
-        switch_weapons(ch, WEAR_WIELD);
-      } else if (IS_GUN(GET_WEAPON_ATTACK_TYPE(GET_EQ(ch, WEAR_WIELD))) && melee_skill_dice <= 0 && weapon_skill_dice >= 5) {
-        #ifndef SUPPRESS_BUILD_ERROR_MESSAGES
-        snprintf(build_err_msg, sizeof(build_err_msg), "CONTENT ERROR: Skilled mob #%ld is wielding %s %s%s, but has no melee skill in %s!",
-                 GET_MOB_VNUM(ch),
-                 AN(weapon_types[indexed_attack_type]),
-                 weapon_types[indexed_attack_type],
-                 melee_skill == SKILL_POLE_ARMS ? " (with bayonet)" : "",
-                 skills[melee_skill].name
-               );
-        mudlog(build_err_msg, ch, LOG_MISCLOG, TRUE);
-        #endif
+    // These checks additionally require that the NPC is not in a vehicle.
+    if (!ch->in_veh) {
+      if (mobact_process_memory(ch, ch->in_room)) {
+        return;
       }
-    }
-#endif
 
-    // Manipulate wielded weapon (reload, set fire mode, etc).
-    mobact_change_firemode(ch);
+      if (mobact_process_helper(ch)) {
+        return;
+      }
 
-    // Look for special procedures. If one fires successfully, do nothing else for this NPC.
-    if (!no_specials && MOB_FLAGGED(ch, MOB_SPEC) && mobact_evaluate_spec_proc(ch)) {
-      continue;
-    }
+      // Sniper? Check surrounding players and re-apply above for each applicable room.
+      if (MOB_FLAGGED(ch, MOB_SNIPER) && GET_EQ(ch, WEAR_WIELD)) {
+        // When this is true, we'll stop evaluating sniper and continue to next NPC.
+        bool has_acted = FALSE;
 
-    // Character in nested vehicle? Stop processing.
-    if (ch->in_veh && ch->in_veh->in_veh)
-      continue;
+        // Calculate their maximum firing range (lesser of vision range and weapon range).
+        int max_distance = MIN(find_sight(ch), find_weapon_range(ch, GET_EQ(ch, WEAR_WIELD)));
 
-    // All these aggressive checks require the character to not be in a peaceful room.
-    if (!current_room->peaceful) {
-      // Ensure faction mobs are alerted if an enemy is nearby.
-      if (GET_MOB_FACTION_IDNUM(ch)) {
-        for (struct char_data *occupant = current_room->people; occupant; occupant = occupant->next_in_room) {
-          if (!IS_NPNPC(occupant)) {
-            if (get_faction_status(occupant, GET_MOB_FACTION_IDNUM(ch)) <= faction_statuses::CAUTIOUS) {
-              extend_mob_alarm_time(ch, occupant, 15);
+        for (dir = 0; !has_acted && !FIGHTING(ch) && dir < NUM_OF_DIRS; dir++) {
+          // Check each room in a straight line until we are either out of range or cannot go further.
+          current_room = get_ch_in_room(ch);
+
+          for (distance = 1; !has_acted && distance <= max_distance; distance++) {
+            // Exit must be valid, and room must belong to same zone as character's room.
+            if (CAN_GO2(current_room, dir) && EXIT2(current_room, dir)->to_room->zone == ch->in_room->zone) {
+              current_room = EXIT2(current_room, dir)->to_room;
+            } else {
+              // If we can't get to a further room, stop and move to next direction in for loop.
+              break;
+            }
+
+            // No shooting into peaceful rooms.
+            if (current_room->peaceful)
+              continue;
+
+            // Aggro sniper.
+            if ((has_acted = mobact_process_aggro(ch, current_room))) {
+              break;
+            }
+
+            // Memory sniper.
+            if ((has_acted = mobact_process_memory(ch, current_room))) {
+              break;
+            }
+
+            // No such thing as a helper sniper.
+
+            // Guard sniper.
+            if ((has_acted = mobact_process_guard(ch, current_room))) {
               break;
             }
           }
         }
+
+        if (has_acted)
+          return;
       }
-
-      // Handle aggressive mobs.
-      if (mobact_process_aggro(ch, current_room)) {
-        continue;
-      }
-
-      // Guard NPCs.
-      if (MOB_FLAGGED(ch, MOB_GUARD) && mobact_process_guard(ch, current_room)) {
-        continue;
-      }
-
-      // These checks additionally require that the NPC is not in a vehicle.
-      if (!ch->in_veh) {
-        if (mobact_process_memory(ch, ch->in_room)) {
-          continue;
-        }
-
-        if (mobact_process_helper(ch)) {
-          continue;
-        }
-
-        // Sniper? Check surrounding players and re-apply above for each applicable room.
-        if (MOB_FLAGGED(ch, MOB_SNIPER) && GET_EQ(ch, WEAR_WIELD)) {
-          // When this is true, we'll stop evaluating sniper and continue to next NPC.
-          bool has_acted = FALSE;
-
-          // Calculate their maximum firing range (lesser of vision range and weapon range).
-          int max_distance = MIN(find_sight(ch), find_weapon_range(ch, GET_EQ(ch, WEAR_WIELD)));
-
-          for (dir = 0; !has_acted && !FIGHTING(ch) && dir < NUM_OF_DIRS; dir++) {
-            // Check each room in a straight line until we are either out of range or cannot go further.
-            current_room = get_ch_in_room(ch);
-
-            for (distance = 1; !has_acted && distance <= max_distance; distance++) {
-              // Exit must be valid, and room must belong to same zone as character's room.
-              if (CAN_GO2(current_room, dir) && EXIT2(current_room, dir)->to_room->zone == ch->in_room->zone) {
-                current_room = EXIT2(current_room, dir)->to_room;
-              } else {
-                // If we can't get to a further room, stop and move to next direction in for loop.
-                break;
-              }
-
-              // No shooting into peaceful rooms.
-              if (current_room->peaceful)
-                continue;
-
-              // Aggro sniper.
-              if ((has_acted = mobact_process_aggro(ch, current_room))) {
-                break;
-              }
-
-              // Memory sniper.
-              if ((has_acted = mobact_process_memory(ch, current_room))) {
-                break;
-              }
-
-              // No such thing as a helper sniper.
-
-              // Guard sniper.
-              if ((has_acted = mobact_process_guard(ch, current_room))) {
-                break;
-              }
-            }
-          }
-
-          if (has_acted)
-            continue;
-        }
-      }
-    } /* End NPC-is-not-in-a-vehicle section. */
-
-    /**********************************************************************\
-      If we've gotten here, the NPC has not acted and has no valid targets.
-      Add passive things like self-buffing and idle actions here.
-    \**********************************************************************/
-
-    // Not in combat? Put your weapon away, assuming you can.
-    if (mobact_holster_weapon(ch)) {
-      continue;
     }
+  } /* End NPC-is-not-in-a-vehicle section. */
 
-    // Cast spells to buff self. NPC must have sorcery skill and must not have any special procedures attached to it.
-    if (mobact_process_self_buff(ch)) {
-      continue;
-    }
+  /**********************************************************************\
+    If we've gotten here, the NPC has not acted and has no valid targets.
+    Add passive things like self-buffing and idle actions here.
+  \**********************************************************************/
 
-    if (mobact_process_scavenger(ch)) {
-      continue;
-    }
+  // Not in combat? Put your weapon away, assuming you can.
+  if (mobact_holster_weapon(ch)) {
+    return;
+  }
 
-    if (mobact_process_movement(ch)) {
-      continue;
-    }
+  // Cast spells to buff self. NPC must have sorcery skill and must not have any special procedures attached to it.
+  if (mobact_process_self_buff(ch)) {
+    return;
+  }
 
-    /* Add new mobile actions here */
+  if (mobact_process_scavenger(ch)) {
+    return;
+  }
 
-  }                             /* end for() */
+  if (mobact_process_movement(ch)) {
+    return;
+  }
+
+  /* Add new mobile actions here */
+}
+
+void mobile_activity(void)
+{
+  PERF_PROF_SCOPE(pr_, __func__);
+
+  // Iterate through all characters in the game.
+  for (struct char_data *ch = character_list, *next_ch; ch; ch = next_ch) {
+    next_ch = ch->next_in_character_list;
+    do_single_mobile_activity(ch);
+  }
 }
 
 int violates_zsp(int security, struct char_data *ch, int pos, struct char_data *mob)
@@ -2134,7 +2107,7 @@ void switch_weapons(struct char_data *mob, int pos)
 
     // Classify our weapons by ammo usage and type. Only allow weapons we can actually use, though.
     if (GET_OBJ_TYPE(i) == ITEM_WEAPON && (GET_SKILL(mob, GET_WEAPON_SKILL(i)) > 0 || GET_SKILL(mob, return_general(GET_WEAPON_SKILL(i))) > 0)) {
-      if (IS_GUN(GET_WEAPON_ATTACK_TYPE(i))) {
+      if (WEAPON_IS_GUN(i)) {
         // Check for an unlimited-ammo weapon.
         if (GET_WEAPON_MAX_AMMO(i) == -1) {
           // TODO: Check if it's a better weapon.
@@ -2330,4 +2303,63 @@ void clear_mob_alarm(struct char_data *npc, struct char_data *ch) {
   if (GET_MOB_ALARM_MAP(npc).find(GET_IDNUM(ch)) != GET_MOB_ALARM_MAP(npc).end()) {
     GET_MOB_ALARM_MAP(npc).erase(GET_MOB_ALARM_MAP(npc).find(GET_IDNUM(ch)));
   }
+}
+
+bool check_for_mob_weapon_skill_errors(struct char_data *ch, char *buf_ptr, size_t buf_sz) {
+  if (GET_EQ(ch, WEAR_WIELD) && GET_OBJ_TYPE(GET_EQ(ch, WEAR_WIELD)) == ITEM_WEAPON) {
+
+    int weapon_skill = GET_WEAPON_SKILL(GET_EQ(ch, WEAR_WIELD));
+    int melee_skill = does_weapon_have_bayonet(GET_EQ(ch, WEAR_WIELD)) ? SKILL_POLE_ARMS : SKILL_CLUBS;
+
+    int weapon_skill_dice = GET_SKILL(ch, weapon_skill) ? GET_SKILL(ch, weapon_skill) : GET_SKILL(ch, return_general(weapon_skill));
+    int melee_skill_dice = GET_SKILL(ch, melee_skill) ? GET_SKILL(ch, melee_skill) : GET_SKILL(ch, return_general(melee_skill));
+
+    int indexed_attack_type = MAX(0, MIN(MAX_WEAP - 1, GET_WEAPON_ATTACK_TYPE(GET_EQ(ch, WEAR_WIELD))));
+
+    if (weapon_skill_dice <= 0) {
+      if (buf_ptr) {
+        // Audit log output. Always print.
+        snprintf(ENDOF(buf_ptr), buf_sz - strlen(buf_ptr), "  - ^rMissing weapon skill (needs %s or %s).^n\r\n",
+                 skills[weapon_skill].name,
+                 skills[return_general(weapon_skill)].name
+                );
+      } else {
+#ifndef SUPPRESS_BUILD_ERROR_MESSAGES
+        // Mudlog output. Only print on buildport.
+        mudlog_vfprintf(ch, LOG_MISCLOG, "CONTENT ERROR: Mob #%ld is wielding %s %s, but has no weapon skill in %s!",
+                        GET_MOB_VNUM(ch),
+                        AN(weapon_types[indexed_attack_type]),
+                        weapon_types[indexed_attack_type],
+                        skills[weapon_skill].name
+                      );
+#endif
+      }
+
+      // This is both an issue and a weapon switch cause.
+      return TRUE;
+    } else if (WEAPON_IS_GUN(GET_EQ(ch, WEAR_WIELD)) && melee_skill_dice <= 0 && weapon_skill_dice >= 5) {
+      if (buf_ptr) {
+        // Audit log output. Always print.
+        snprintf(ENDOF(buf_ptr), buf_sz - strlen(buf_ptr), "  - ^rMissing fallback melee skill (needs %s or %s).^n\r\n",
+                 skills[melee_skill].name,
+                 skills[return_general(melee_skill)].name
+                );
+        // Logical oddity: Returns TRUE in this case for audit (this is an issue), but FALSE for other (don't switch weap)
+        return TRUE;
+      } else {
+#ifndef SUPPRESS_BUILD_ERROR_MESSAGES
+        // Mudlog output. Only print on buildport.
+        mudlog_vfprintf(ch, LOG_MISCLOG, "CONTENT ERROR: Skilled mob #%ld is wielding %s %s%s, but has no melee skill in %s!",
+                        GET_MOB_VNUM(ch),
+                        AN(weapon_types[indexed_attack_type]),
+                        weapon_types[indexed_attack_type],
+                        melee_skill == SKILL_POLE_ARMS ? " (with bayonet)" : "",
+                        skills[melee_skill].name
+                      );
+        return FALSE;
+#endif
+      }
+    }
+  }
+  return FALSE;
 }

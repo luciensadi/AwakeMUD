@@ -105,16 +105,16 @@ struct teach_data teachers[] = {
     SKILL_STREET_ETIQUETTE, SKILL_TRIBAL_ETIQUETTE, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
     "You spend a long time learning how to make small talk and directing conversations.\r\n", ADVANCED },
   { 790, { SKILL_ATHLETICS, SKILL_BIOTECH, SKILL_STEALTH, SKILL_MEDICINE, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-    "After hours of study and physical practice, you feel like you've learned\r\nsomething.\r\n.", ADVANCED },
+    "After hours of study and physical practice, you feel like you've learned\r\nsomething.\r\n", ADVANCED },
   { 100976, { SKILL_ATHLETICS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-    "After hours of study and physical practice, you feel like you've learned\r\nsomething.\r\n.", ADVANCED },
+    "After hours of study and physical practice, you feel like you've learned\r\nsomething.\r\n", ADVANCED },
 #endif
 
                        { 2508, { SKILL_BIOTECH, SKILL_MEDICINE, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "After hours of medical research and instruction, you begin "
                          "to\r\nunderstand more of the basic biotech procedures.\r\n", AMATEUR },
                        { 2701, { SKILL_ATHLETICS, SKILL_STEALTH, SKILL_UNARMED_COMBAT, SKILL_EDGED_WEAPONS,
                          SKILL_WHIPS_FLAILS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                         "Toh Li gives you the workout of your life, but you come out more learned.", AMATEUR },
+                         "Toh Li gives you the workout of your life, but you come out more learned.\r\n", AMATEUR },
                        { 3722, { SKILL_ATHLETICS, SKILL_RIFLES, SKILL_PISTOLS, SKILL_TASERS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
                          "After hours of study and physical practice, you feel like you've learned something.\r\n", AMATEUR },
                        { 4101, { SKILL_SHOTGUNS, SKILL_PISTOLS, SKILL_RIFLES, SKILL_SMG, SKILL_ASSAULT_RIFLES, SKILL_TASERS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -249,6 +249,11 @@ struct teach_data teachers[] = {
   { 70604, { SKILL_PISTOLS, SKILL_BR_PISTOL, SKILL_STEALTH, SKILL_ATHLETICS,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
   "You learn a few things from the surprisingly-knowledgeable kid.\r\n", AMATEUR },
+
+  // Alexa (CAS)
+  { 102228, { SKILL_FRENCH,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+  "You are drilled in the fine details of the French language by the prim and proper HR manager.\r\n", ADVANCED },
 #endif
 
    { 65106, { SKILL_MEDIA_ETIQUETTE, SKILL_STEALTH, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -293,7 +298,7 @@ struct teach_data teachers[] = {
    { 60235, { SKILL_SIOUX, SKILL_MAKAW, SKILL_CROW, SKILL_UTE, SKILL_SALISH, SKILL_NAVAJO, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
      "Speaks-with-Many goes over his lessons with you until they become second nature.\r\n", AMATEUR },
 
-   { 39226, { SKILL_LATIN, SKILL_ARABIC, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "The gentleman demonstrates the finer points of articulation and pronunciation until you feel you've learn something new", AMATEUR },
+   { 39226, { SKILL_LATIN, SKILL_ARABIC, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "The gentleman demonstrates the finer points of articulation and pronunciation until you feel you've learn something new.\r\n", AMATEUR },
 
    { 60540, { SKILL_BR_PISTOL, SKILL_BR_SHOTGUN, SKILL_BR_SMG, SKILL_BR_RIFLE, SKILL_BR_HEAVYWEAPON, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "Gary teaches you the finer points of gunsmithing.\r\n", NEWBIE },
 
@@ -561,7 +566,7 @@ void assign_mobiles(void)
 {
   int i;
 
-  SPECIAL(postmaster);
+//  SPECIAL(postmaster);
   SPECIAL(generic_guard);
   SPECIAL(receptionist);
   SPECIAL(cryogenicist);
@@ -659,6 +664,12 @@ void assign_mobiles(void)
   SPECIAL(marksmanship_trainer);
   SPECIAL(receptionist_95902);
   SPECIAL(graffiti_cleaner);
+
+  // CAS
+  ASSIGNMOB(102050, receptionist);
+  ASSIGNMOB(102053, receptionist);
+  ASSIGNMOB(102068, receptionist);
+  ASSIGNMOB(102067, fence);
   
 
   ASSIGNMOB(22870, marksmanship_first);
@@ -716,17 +727,17 @@ void assign_mobiles(void)
 
   /* Immortal HQ */
   ASSIGNMOB(1002, janitor);
-  ASSIGNMOB(1005, postmaster);
+//  ASSIGNMOB(1005, postmaster);
 
   ASSIGNMOB(1151, terell_davis);
   /* SWU */
-  ASSIGNMOB(60526, postmaster);
+//  ASSIGNMOB(60526, postmaster);
 
   /* Various Tacoma */
   ASSIGNMOB(1823, aegnor);
   ASSIGNMOB(1832, fixer);
   ASSIGNMOB(1833, purple_haze_bartender);
-  ASSIGNMOB(1900, postmaster);
+//  ASSIGNMOB(1900, postmaster);
   ASSIGNMOB(1902, receptionist);
   ASSIGNMOB(1916, generic_guard);
 
@@ -764,7 +775,7 @@ void assign_mobiles(void)
   ASSIGNMOB(4019, takehero_tsuyama);
 
   /* Various - zone 116 */
-  ASSIGNMOB(4100, postmaster);
+//  ASSIGNMOB(4100, postmaster);
 
   /*BioHyde Complex*/
   ASSIGNMOB(4202, bio_secretary);
@@ -781,7 +792,7 @@ void assign_mobiles(void)
   ASSIGNMOB(5101, janitor);
 
   /* Neophytic Guild */
-  ASSIGNMOB(8010, postmaster);
+//  ASSIGNMOB(8010, postmaster);
   ASSIGNMOB(60523, receptionist);
 
   /* Council Island */
@@ -803,7 +814,7 @@ void assign_mobiles(void)
 
   /* Portland */
   ASSIGNMOB(14605, receptionist);
-  ASSIGNMOB(1102, postmaster);
+//  ASSIGNMOB(1102, postmaster);
 
   /* Mitsuhama */
   ASSIGNMOB(17112, yukiya_dahoto);
@@ -834,6 +845,9 @@ void assign_mobiles(void)
   #ifdef USE_PRIVATE_CE_WORLD
   // Airport painter.
   ASSIGNMOB(65501, painter);
+
+  // CAS
+  ASSIGNMOB(102046, fixer);
 
   // Secret area fixer.
   ASSIGNMOB(33802, fixer);
@@ -996,6 +1010,7 @@ void assign_objects(void)
   ASSIGNOBJ(OBJ_INITIATIVE_TRACKER, initiative_tracker);
   ASSIGNOBJ(10093, slot_machine);
 #ifdef USE_PRIVATE_CE_WORLD
+  ASSIGNOBJ(102208, trideo);
   ASSIGNOBJ(94331, trideo);
   ASSIGNOBJ(70605, desktop);
   ASSIGNOBJ(39799, bank);
@@ -1188,6 +1203,7 @@ void assign_rooms(void)
   // CAS dealers.
   ASSIGNROOM(100998, car_dealer);
   ASSIGNROOM(101239, car_dealer);
+  ASSIGNROOM(102581, car_dealer);
 #endif
 
   /* Mitsuhama */

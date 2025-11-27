@@ -50,6 +50,12 @@ extern int calculate_vehicle_entry_load(struct veh_data *veh);
 extern void end_quest(struct char_data *ch, bool succeeded);
 extern void set_casting_pools(struct char_data *ch, int casting, int drain, int spell_defense, int reflection, bool message);
 extern void calc_weight(struct char_data *);
+extern void exdesc_conceal_reveal(struct char_data *vict, int wearloc, bool check_for_reveal);
+#ifdef USE_ZONE_HOTLOADING
+extern void stop_rigging(struct char_data *ch, bool send_message);
+extern void modify_players_in_zone(rnum_t in_zone, int amount, const char *origin);
+extern void modify_players_in_veh(struct veh_data *veh, int amount, const char *origin);
+#endif
 
 int get_skill_num_in_use_for_weapons(struct char_data *ch);
 int get_skill_dice_in_use_for_weapons(struct char_data *ch);
@@ -571,9 +577,13 @@ void affect_total(struct char_data * ch)
 
   // remove the effects of spells
   AFF_FLAGS(ch).RemoveBit(AFF_RUTHENIUM);
-  for (sust = GET_SUSTAINED(ch); sust; sust = sust->next)
-    if (!sust->caster)
+  for (sust = GET_SUSTAINED(ch); sust; sust = sust->next) {
+    if (!sust->is_caster_record)
       spell_modify(ch, sust, FALSE);
+    // Don't iterate back into PC's spell list.
+    if (IS_PC_CONJURED_ELEMENTAL(ch))
+      break;
+  }
 
   // Because equipment-granted vision AFFs are notoriously sticky, clear them deliberately.
   if (!IS_NPC(ch))
@@ -619,7 +629,8 @@ void affect_total(struct char_data * ch)
 
   // Set reach, depending on race. Stripped out the 'you only get it at X height' thing since it's not canon and a newbie trap.
   if ((GET_RACE(ch) == RACE_TROLL || GET_RACE(ch) == RACE_CYCLOPS || GET_RACE(ch) == RACE_FOMORI || GET_RACE(ch) == RACE_GIANT ||
-       GET_RACE(ch) == RACE_MINOTAUR || GET_RACE(ch) == RACE_GHOUL_TROLL || GET_RACE(ch) == RACE_DRAKE_TROLL) /* && GET_HEIGHT(ch) > 260 */)
+       GET_RACE(ch) == RACE_MINOTAUR || GET_RACE(ch) == RACE_GHOUL_TROLL || GET_RACE(ch) == RACE_DRAKE_TROLL || GET_RACE(ch) == RACE_WAKYAMBI)
+      /* && GET_HEIGHT(ch) > 260 */)
     GET_REACH(ch) = 1;
   else
     GET_REACH(ch) = 0;
@@ -823,9 +834,13 @@ void affect_total(struct char_data * ch)
   GET_INIT_DICE(ch) = 0;
 
   /* effects of magic */
-  for (sust = GET_SUSTAINED(ch); sust; sust = sust->next)
-    if (!sust->caster)
+  for (sust = GET_SUSTAINED(ch); sust; sust = sust->next) {
+    if (!sust->is_caster_record)
       spell_modify(ch, sust, TRUE);
+    // Don't iterate back into PC's spell list.
+    if (IS_PC_CONJURED_ELEMENTAL(ch))
+      break;
+  }
 
   if (GET_TRADITION(ch) == TRAD_ADEPT)
   {
@@ -1006,7 +1021,7 @@ void affect_total(struct char_data * ch)
   // Apply gyromount penalties, but only if you're wielding a gun.
   // TODO: Ideally, this would only apply if you have uncompensated recoil, but that's a looot of code.
   struct obj_data *wielded = GET_EQ(ch, WEAR_WIELD);
-  if (wielded && GET_OBJ_TYPE(wielded) == ITEM_WEAPON && IS_GUN(GET_WEAPON_ATTACK_TYPE(wielded))) {
+  if (wielded && GET_OBJ_TYPE(wielded) == ITEM_WEAPON && WEAPON_IS_GUN(wielded)) {
     bool added_gyro_penalty = FALSE;
     for (i = 0; !added_gyro_penalty && i < NUM_WEARS; i++) {
       if (GET_EQ(ch, i) && GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_GYRO) {
@@ -1192,7 +1207,7 @@ void affect_total(struct char_data * ch)
   struct obj_data *weapon = GET_EQ(ch, WEAR_WIELD);
   if (weapon && GET_OBJ_TYPE(weapon) == ITEM_WEAPON) {
     // Melee weapons grant reach according to their set stat.
-    if (!IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon))) {
+    if (!WEAPON_IS_GUN(weapon)) {
       if (GET_WEAPON_REACH(weapon) > 0)
         GET_REACH(ch) += GET_WEAPON_REACH(weapon);
     }
@@ -1217,7 +1232,7 @@ int affected_by_spell(struct char_data * ch, int type)
     return 0;
 
   for (struct sustain_data *hjp = GET_SUSTAINED(ch); hjp; hjp = hjp->next) {
-    if ((hjp->spell == type) && (hjp->caster == FALSE))
+    if ((hjp->spell == type) && (hjp->is_caster_record == FALSE))
       return hjp->force;
   
     // Elementals shouldn't have anything cast on them.
@@ -1246,6 +1261,14 @@ void veh_from_room(struct veh_data * veh)
     log("SYSERR: veh->in_room and veh->in_veh are both null; did you call veh_from_room twice?");
     return;
   }
+
+#ifdef USE_ZONE_HOTLOADING
+  // Remove them from the zone's player counter.
+  if (veh->players_in_veh && get_veh_in_room(veh)) {
+    modify_players_in_zone(get_veh_in_room(veh)->zone, -(veh->players_in_veh), "veh_from_room");
+  }
+#endif
+
   if (veh->in_veh) {
     REMOVE_FROM_LIST(veh, veh->in_veh->carriedvehs, next_veh);
     veh->in_veh->usedload -= calculate_vehicle_entry_load(veh);
@@ -1287,6 +1310,12 @@ void char_from_room(struct char_data * ch)
     if (IS_SENATOR(ch) && PRF_FLAGGED(ch, PRF_PACIFY) && ch->in_room->peaceful > 0)
       ch->in_room->peaceful--;
 
+#ifdef USE_ZONE_HOTLOADING
+    if (ch->desc || !IS_NPC(ch) || GET_MOB_VNUM(ch) == MOB_PROJECTION) {
+      modify_players_in_zone(ch->in_room->zone, -1, "char_from_room (in_room stanza)");
+    }
+#endif
+
     // Remove them from the room.
     REMOVE_FROM_LIST(ch, ch->in_room->people, next_in_room);
     ch->in_room = NULL;
@@ -1298,7 +1327,16 @@ void char_from_room(struct char_data * ch)
   }
 
   if (ch->in_veh) {
-    // Character is in a vehicle. Remove them from it.
+  #ifdef USE_ZONE_HOTLOADING
+    // Character is in a vehicle. Remove them from it AND from the zone's counter (they'll be added back in with their next to_room)
+    if (ch->desc || !IS_NPC(ch) || GET_MOB_VNUM(ch) == MOB_PROJECTION) {
+      modify_players_in_veh(ch->in_veh, -1, "char_from_room (in_veh stanza)");
+      if (get_veh_in_room(ch->in_veh)) {
+        modify_players_in_zone(get_veh_in_room(ch->in_veh)->zone, -1, "char_from_room (in_veh stanza)");
+      }
+    }
+  #endif
+
     REMOVE_FROM_LIST(ch, ch->in_veh->people, next_in_veh);
     stop_manning_weapon_mounts(ch, TRUE);
     ch->in_veh->seating[ch->vfront]++;
@@ -1319,6 +1357,15 @@ void char_to_veh(struct veh_data * veh, struct char_data * ch)
     // Remove vehicle brain if one exists.
     remove_vehicle_brain(veh);
 
+#ifdef USE_ZONE_HOTLOADING
+    if (ch->desc || !IS_NPC(ch) || GET_MOB_VNUM(ch) == MOB_PROJECTION) {
+      modify_players_in_veh(veh, +1, "char_to_veh");
+      if (get_veh_in_room(veh)) {
+        modify_players_in_zone(get_veh_in_room(veh)->zone, +1, "char_to_veh");
+      }
+    }
+#endif
+
     ch->next_in_veh = veh->people;
     veh->people = ch;
     ch->in_veh = veh;
@@ -1329,18 +1376,25 @@ void char_to_veh(struct veh_data * veh, struct char_data * ch)
 
 void veh_to_room(struct veh_data * veh, struct room_data *room)
 {
-  if (!veh || !room)
+  if (!veh || !room) {
     mudlog("SYSLOG: Illegal value(s) passed to veh_to_room", NULL, LOG_SYSLOG, TRUE);
-  else
-  {
-    if (veh->in_veh || veh->in_room)
-      veh_from_room(veh);
-
-    veh->next_veh = room->vehicles;
-    room->vehicles = veh;
-    veh->in_room = room;
-    recalculate_room_light(room);
+    return;
   }
+
+  if (veh->in_veh || veh->in_room)
+    veh_from_room(veh);
+
+#ifdef USE_ZONE_HOTLOADING
+  // Add them to the zone's player counter.
+  if (veh->players_in_veh) {
+    modify_players_in_zone(room->zone, +veh->players_in_veh, "veh_to_room");
+  }
+#endif
+
+  veh->next_veh = room->vehicles;
+  room->vehicles = veh;
+  veh->in_room = room;
+  recalculate_room_light(room);
 }
 
 void veh_to_veh(struct veh_data *veh, struct veh_data *dest)
@@ -1452,8 +1506,7 @@ void icon_from_host(struct matrix_icon *icon)
 /* place a character in a room */
 void char_to_room(struct char_data * ch, struct room_data *room)
 {
-  if (!ch || !room)
-  {
+  if (!ch || !room) {
     mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Illegal value(s) passed to char_to_room(%s, %s).", 
                     ch ? GET_CHAR_NAME(ch) : "NULL",
                     room ? GET_ROOM_NAME(room) : "NULL");
@@ -1467,6 +1520,19 @@ void char_to_room(struct char_data * ch, struct room_data *room)
   if (builder_cant_go_there(ch, room)) {
     mudlog_vfprintf(ch, LOG_WIZLOG, "Warning: Builder %s exceeding allowed bounds. Make sure their loadroom etc is set properly.", GET_CHAR_NAME(ch));
   }
+
+  // Warn on call to char_to_room when ch is already in a room or vehicle.
+  if (ch->in_veh || ch->in_room) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Out of order call-- char_to_room() called before removal from existing room. Removing them from existing room.");
+    char_from_room(ch);
+  }
+
+  // Hotload it BEFORE they enter it so they're not spammed with messages.
+#ifdef USE_ZONE_HOTLOADING
+  if (ch->desc || !IS_NPC(ch) || GET_MOB_VNUM(ch) == MOB_PROJECTION) {
+    modify_players_in_zone(room->zone, +1, "char_to_room");
+  }
+#endif
 
   ch->next_in_room = room->people;
   room->people = ch;
@@ -1835,7 +1901,7 @@ void obj_from_cyberware(struct obj_data * cyber, bool recalc)
   }
 }
 
-bool equip_char(struct char_data * ch, struct obj_data * obj, int pos, bool recalc)
+bool equip_char(struct char_data * ch, struct obj_data * obj, int pos, bool recalc, bool print_hide_message)
 {
   int j;
 
@@ -1900,15 +1966,19 @@ bool equip_char(struct char_data * ch, struct obj_data * obj, int pos, bool reca
   }
 
   // Equipping is easy, just shadow it all.
-  if (ch->player_specials) {
-    GET_CHAR_COVERED_WEARLOCS(ch).SetBit(obj->worn_on);
+  if (ch->player_specials && !IS_OBJ_STAT(obj, ITEM_EXTRA_SHEER)) {
+    int wearloc = worn_on_to_wearloc[obj->worn_on];
+    if (print_hide_message && wearloc != ITEM_WEAR_WIELD) {
+      exdesc_conceal_reveal(ch, wearloc, false);
+    }
+    GET_CHAR_COVERED_WEARLOCS(ch).SetBit(wearloc);
   }
   
   calc_weight(ch);
   return TRUE;
 }
 
-struct obj_data *unequip_char(struct char_data * ch, int pos, bool focus, bool recalc)
+struct obj_data *unequip_char(struct char_data * ch, int pos, bool focus, bool recalc, bool print_reveal_message)
 {
   int j;
   struct obj_data *obj;
@@ -1924,8 +1994,12 @@ struct obj_data *unequip_char(struct char_data * ch, int pos, bool focus, bool r
   }
 
   // Remove the bit that this is worn on from our covered_wearlocs set.
-  if (ch->player_specials) {
-    GET_CHAR_COVERED_WEARLOCS(ch).RemoveBit(GET_EQ(ch, pos)->worn_on);
+  if (ch->player_specials && !IS_OBJ_STAT(GET_EQ(ch, pos), ITEM_EXTRA_SHEER)) {
+    int wearloc = worn_on_to_wearloc[GET_EQ(ch, pos)->worn_on];
+    if (print_reveal_message && wearloc != ITEM_WEAR_WIELD) {
+      exdesc_conceal_reveal(ch, wearloc, true);
+    }
+    GET_CHAR_COVERED_WEARLOCS(ch).RemoveBit(wearloc);
   }
 
   obj = GET_EQ(ch, pos);
@@ -2391,6 +2465,11 @@ void obj_from_obj(struct obj_data * obj)
 
 void extract_icon(struct matrix_icon * icon)
 {
+  if (!icon) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Received NULL icon to extract_icon()!");
+    return;
+  }
+
   struct matrix_icon *temp;
 
   // Clean up phone entries.
@@ -2425,35 +2504,21 @@ void extract_icon(struct matrix_icon * icon)
     }
   }
 
-  // Clean up host data.
-  if (icon->in_host) {
-    // Wipe out combat info.
-    if (icon->fighting) {
-      for (struct matrix_icon *vict = matrix[icon->in_host].icons; vict; vict = vict->next_in_host)
-        if (vict->fighting == icon) {
-          REMOVE_FROM_LIST(vict, matrix[icon->in_host].fighting, next_fighting);
-          vict->fighting = NULL;
-        }
-      REMOVE_FROM_LIST(icon, matrix[icon->in_host].fighting, next_fighting);
-    }
-
-    // Extract from host.
-    if (icon->in_host != NOWHERE)
-      icon_from_host(icon);
+  // Clean up host data. Also stops fighting, uploads etc.
+  if (icon->in_host && icon->in_host != NOWHERE) {
+    icon_from_host(icon);
   }
 
   if (icon->decker) {
     if (icon->decker->hitcher) {
       send_to_char(icon->decker->hitcher, "You return to your senses.\r\n");
-      clear_hitcher(icon->decker->hitcher, FALSE);      
+      clear_hitcher(icon->decker->hitcher, FALSE);
     }
-    struct obj_data *temp;
-    for (struct obj_data *obj = icon->decker->software; obj; obj = temp) {
+    for (struct obj_data *obj = icon->decker->software, *temp; obj; obj = temp) {
       temp = obj->next_content;
       extract_obj(obj);
     }
-    struct seen_data *temp2;
-    for (struct seen_data *seen = icon->decker->seen; seen; seen = temp2) {
+    for (struct seen_data *seen = icon->decker->seen, *temp2; seen; seen = temp2) {
       temp2 = seen->next;
       delete seen;
     }
@@ -2477,6 +2542,11 @@ void extract_icon(struct matrix_icon * icon)
 
 void extract_veh(struct veh_data * veh)
 {
+  if (!veh) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Received NULL veh to extract_veh()!");
+    return;
+  }
+
   if (veh->in_room == NULL && veh->in_veh == NULL) {
     if (veh->carriedvehs || veh->people) {
       strncpy(buf, "SYSERR: extract_veh called on vehicle-with-contents without containing room or veh! The game will likely now shit itself and die; GLHF.", sizeof(buf));
@@ -2631,6 +2701,11 @@ void extract_veh(struct veh_data * veh)
 /* Extract an object from the world */
 void extract_obj(struct obj_data * obj, bool dont_warn_on_kept_items)
 {
+  if (!obj) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Received NULL object to extract_obj()!");
+    return;
+  }
+
   struct phone_data *phone, *temp;
   bool set = FALSE;
 
@@ -2775,6 +2850,11 @@ void extract_obj(struct obj_data * obj, bool dont_warn_on_kept_items)
 /* Extract a ch completely from the world, and leave his stuff behind */
 void extract_char(struct char_data * ch, bool do_save)
 {
+  if (!ch) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Received NULL char to extract_ch()!");
+    return;
+  }
+
   struct char_data *k, *temp;
   struct descriptor_data *t_desc;
   struct obj_data *obj, *next;
@@ -2823,6 +2903,20 @@ void extract_char(struct char_data * ch, bool do_save)
         if (t_desc->original == ch)
           do_return(t_desc->character, "", 0, 0);
     }
+  }
+
+    /* end rigging, must come before cyberware extraction */
+  if (PLR_FLAGGED(ch, PLR_REMOTE)) {
+#ifdef USE_ZONE_HOTLOADING
+    stop_rigging(ch, false);
+#else
+    ch->char_specials.rigging->rigger = NULL;
+    ch->char_specials.rigging->cspeed = SPEED_OFF;
+    stop_chase(ch->char_specials.rigging);
+    send_to_veh("You slow to a halt.\r\n", ch->char_specials.rigging, NULL, 0);
+    ch->char_specials.rigging = NULL;
+    PLR_FLAGS(ch).RemoveBit(PLR_REMOTE);
+#endif
   }
 
   if (ch->followers)
@@ -2953,7 +3047,7 @@ void extract_char(struct char_data * ch, bool do_save)
     if (IS_PC_CONJURED_ELEMENTAL(ch) || IS_SPIRIT(ch)) {
       for (struct spirit_sustained *ssust = SPIRIT_SUST(ch); ssust; ssust = next) {
         next = ssust->next;
-        if (ssust->caster)
+        if (ssust->is_caster_record)
           stop_spirit_power(ch, ssust->type);
         else
           stop_spirit_power(ssust->target, ssust->type);
@@ -2979,24 +3073,15 @@ void extract_char(struct char_data * ch, bool do_save)
   }
 
   /* end astral tracking */
-  if (AFF_FLAGGED(ch, AFF_TRACKED))
-    for (struct descriptor_data *d = descriptor_list; d; d = d->next)
+  if (AFF_FLAGGED(ch, AFF_TRACKED)) {
+    for (struct descriptor_data *d = descriptor_list; d; d = d->next) {
       if (d->original && HUNTING(d->original) == ch)
       {
         HUNTING(d->original) = NULL;
         AFF_FLAGS(d->original).RemoveBit(AFF_TRACKING);
         send_to_char("You suddenly lose the trail.\r\n", d->character);
       }
-
-  /* end rigging */
-  if (PLR_FLAGGED(ch, PLR_REMOTE))
-  {
-    ch->char_specials.rigging->rigger = NULL;
-    ch->char_specials.rigging->cspeed = SPEED_OFF;
-    stop_chase(ch->char_specials.rigging);
-    send_to_veh("You slow to a halt.\r\n", ch->char_specials.rigging, NULL, 0);
-    ch->char_specials.rigging = NULL;
-    PLR_FLAGS(ch).RemoveBit(PLR_REMOTE);
+    }
   }
 
   // Clean up playergroup info.
@@ -3026,7 +3111,7 @@ void extract_char(struct char_data * ch, bool do_save)
     PLR_FLAGS(ch).RemoveBits(PLR_MATRIX, PLR_PROJECT, PLR_SWITCHED,
                              PLR_WRITING, PLR_MAILING, PLR_EDITING,
                              PLR_SPELL_CREATE, PLR_PROJECT, PLR_CUSTOMIZE,
-                             PLR_REMOTE, ENDBIT);
+                             PLR_REMOTE, ENDBIT); // note: this plr_remote removal is a sanity check and is covered by above stop_rigging call
 
     /* restore them to their room, because corpses love rooms */
     ch->in_room = in_room;
@@ -3183,7 +3268,7 @@ struct char_data *get_char_vis(struct char_data * ch, const char *name)
 {
   struct char_data *i;
   int j = 0, number;
-  char tmpname[MAX_INPUT_LENGTH];
+  char tmpname[MAX_INPUT_LENGTH] = {0};
   char *tmp = tmpname;
 
   // Short circuit: If you're looking for yourself, we don't have to search very hard.
@@ -3641,7 +3726,7 @@ int find_all_dots(char *arg, size_t arg_size)
 }
 
 #define DEFAULT_TO(skill_name) {if (!dice) {dice = GET_SKILL(ch, (skill_name)); defaulting = TRUE;}}
-int veh_skill(struct char_data *ch, struct veh_data *veh, int *tn)
+int veh_skill(struct char_data *ch, struct veh_data *veh, int *tn, bool include_control_pool)
 {
   int dice = 0;
 
@@ -3727,7 +3812,7 @@ int veh_skill(struct char_data *ch, struct veh_data *veh, int *tn)
     }
   }
 
-  if (AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE))
+  if (include_control_pool && (AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE)))
     dice += GET_CONTROL(ch);
 
   return dice;
@@ -3806,6 +3891,9 @@ void _char_with_spell_to_room(struct char_data *ch, int spell_num, room_spell_t 
         int force = MIN(sust->force, sust->success);
         room_spell_tracker[ROOM_HIGHEST_SPELL_FORCE] = MAX(room_spell_tracker[ROOM_HIGHEST_SPELL_FORCE], force);
       }
+      // Don't iterate back into PC's spell list.
+      if (IS_PC_CONJURED_ELEMENTAL(ch))
+        break;
     }
   }
 }
@@ -3823,10 +3911,13 @@ void _char_with_spell_from_room(struct char_data *ch, int spell_num, room_spell_
           continue;
 
         for (struct sustain_data *sust = GET_SUSTAINED(tmp_ch); sust; sust = sust->next) {
-          if (sust->spell == spell_num && sust->caster) {
+          if (sust->spell == spell_num && sust->is_caster_record) {
             int force = MIN(sust->force, sust->success);
             room_spell_tracker[ROOM_HIGHEST_SPELL_FORCE] = MAX(room_spell_tracker[ROOM_HIGHEST_SPELL_FORCE], force);
           }
+          // Don't iterate back into PC's spell list.
+          if (IS_PC_CONJURED_ELEMENTAL(tmp_ch))
+          break;
         }
       }
     }

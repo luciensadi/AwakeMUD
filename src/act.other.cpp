@@ -1087,24 +1087,28 @@ ACMD(do_gen_write)
   curl_global_cleanup();
 #endif
 
-  if (subcmd == SCMD_TYPO && !PLR_FLAGGED(ch, PLR_NO_AUTO_SYSP_AWARDS)) {
+  if (subcmd == SCMD_TYPO) {
     // Nudge them to report from the correct room.
     struct room_data *room = get_ch_in_room(ch);
     send_to_char(ch, "Got it-- your typo report has been associated with the room you're standing in (%s^n). If you're reporting a typo for somewhere else, please go there to report it instead.\r\n\r\n", GET_ROOM_NAME(room));
 
-    // We reward typos instantly-- they're quick to verify and don't have grey area.
-    send_to_char("Thanks! You've earned +1 system points for your contribution.\r\n", ch);
-    if (GET_SYSTEM_POINTS(ch) < 10) {
-      send_to_char("(See ^WHELP SYSPOINTS^n to see what you can do with them.)\r\n", ch);
-    }
+    if (!PLR_FLAGGED(ch, PLR_NO_AUTO_SYSP_AWARDS)) {
+      // We reward typos instantly-- they're quick to verify and don't have grey area.
+      // All other commands need manual system point awarding from staff. Rationales:
+      // - IDEAS: Auto-awarding the idea command would incentivize frivolous ideas that aren't actionable.
+      // - BUGS: These often stem from misunderstandings and aren't actually bugs.
+      // - PRAISE: Immediate payout would make us question if we were legitimately being given props, or if it was just to get the payout.
+      send_to_char("Thanks! You've earned +1 system points for your contribution.\r\n", ch);
+      if (GET_SYSTEM_POINTS(ch) < 10) {
+        send_to_char("(See ^WHELP SYSPOINTS^n to see what you can do with them.)\r\n", ch);
+      }
 
-    GET_SYSTEM_POINTS(ch)++;
+      GET_SYSTEM_POINTS(ch)++;
+    } else {
+      send_to_char("Thanks! Staff will review this contribution and award system points on the next review cycle.\r\n", ch);
+    }
   } else {
-    // All other commands need manual system point awarding from staff. Rationales:
-    // - IDEAS: Auto-awarding the idea command would incentivize frivolous ideas that aren't actionable.
-    // - BUGS: These often stem from misunderstandings and aren't actually bugs.
-    // - PRAISE: Immediate payout would make us question if we were legitimately being given props, or if it was just to get the payout.
-    send_to_char("Okay. Thanks!\r\n", ch);
+    send_to_char("Received, thank you!\r\n", ch);
   }
 }
 
@@ -1266,8 +1270,9 @@ ACMD(do_toggle)
 
       // Compose and append our line.
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf),
-              "%30s: %-3s%s",
+              "%30s: ^%c%-3s%s",
               preference_bits_v2[i].name,
+              preference_bits_v2[i].on_off ? 'g' : 'n',
               buf2,
               printed%2 == 1 || PRF_FLAGGED(ch, PRF_SCREENREADER) ? "\r\n" : "");
 
@@ -1867,7 +1872,7 @@ ACMD(do_reload)
     }
 
   if (GET_OBJ_TYPE(gun) != ITEM_WEAPON
-      || !IS_GUN(GET_WEAPON_ATTACK_TYPE(gun))
+      || !WEAPON_IS_GUN(gun)
       || GET_WEAPON_MAX_AMMO(gun) <= 0)
   {
     send_to_char(ch, "%s is not a reloadable weapon!\r\n", capitalize(GET_OBJ_NAME(gun)));
@@ -1909,7 +1914,7 @@ ACMD(do_reload)
 ACMD(do_eject)
 {
   struct obj_data *weapon = GET_EQ(ch, WEAR_WIELD);
-  if (!weapon || !IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon))) {
+  if (!weapon || !WEAPON_IS_GUN(weapon)) {
     send_to_char("You're not wielding a firearm.\r\n", ch);
     return;
   }
@@ -1942,13 +1947,21 @@ ACMD(do_eject)
   obj_from_obj(magazine);
   extract_obj(magazine);
   magazine = NULL;
-  if (GET_WEAPON_MAX_AMMO(weapon) == 1 && GET_WEAPON_FIREMODE(weapon) == MODE_SS) {
-    if (had_rounds > 0) {
-      act("$n locks back the bolt on $p, catching and pocketing the round that pops out.", FALSE, ch, GET_EQ(ch, WEAR_WIELD), NULL, TO_ROOM);
-      act("You lock back the bolt on $p, catching and pocketing the round that pops out.", FALSE, ch, GET_EQ(ch, WEAR_WIELD), NULL, TO_CHAR);
+  if (GET_WEAPON_MAX_AMMO(weapon) == 1) {
+    if (GET_WEAPON_FIREMODE(weapon) == MODE_SS && GET_WEAPON_SKILL(weapon) == SKILL_RIFLES) {
+      if (had_rounds > 0) {
+        act("$n locks back the bolt on $p, catching and pocketing the round that pops out.", FALSE, ch, GET_EQ(ch, WEAR_WIELD), NULL, TO_ROOM);
+        act("You lock back the bolt on $p, catching and pocketing the round that pops out.", FALSE, ch, GET_EQ(ch, WEAR_WIELD), NULL, TO_CHAR);
+      } else {
+        act("$n locks back the bolt on $p, revealing an empty chamber.", FALSE, ch, GET_EQ(ch, WEAR_WIELD), NULL, TO_ROOM);
+        act("You lock back the bolt on $p, revealing an empty chamber.", FALSE, ch, GET_EQ(ch, WEAR_WIELD), NULL, TO_CHAR);
+      }
+    } else if (GET_WEAPON_SKILL(weapon) == SKILL_SHOTGUNS || GET_WEAPON_SKILL(weapon) == SKILL_ASSAULT_CANNON) {
+      act("$n ejects and pockets a shell from $p.", FALSE, ch, GET_EQ(ch, WEAR_WIELD), NULL, TO_ROOM);
+      act("You eject and pocket a shell from $p.", FALSE, ch, GET_EQ(ch, WEAR_WIELD), NULL, TO_CHAR);
     } else {
-      act("$n locks back the bolt on $p, revealing an empty chamber.", FALSE, ch, GET_EQ(ch, WEAR_WIELD), NULL, TO_ROOM);
-      act("You lock back the bolt on $p, revealing an empty chamber.", FALSE, ch, GET_EQ(ch, WEAR_WIELD), NULL, TO_CHAR);
+      act("$n ejects and pockets a round from $p.", FALSE, ch, GET_EQ(ch, WEAR_WIELD), NULL, TO_ROOM);
+      act("You eject and pocket a round from $p.", FALSE, ch, GET_EQ(ch, WEAR_WIELD), NULL, TO_CHAR);
     }
   } else {
     act("$n ejects and pockets a magazine from $p.", FALSE, ch, GET_EQ(ch, WEAR_WIELD), NULL, TO_ROOM);
@@ -2029,7 +2042,7 @@ ACMD(do_attach)
       send_to_char("The mount is locked.\r\n", ch);
       return;
     }
-    if (!IS_GUN(GET_WEAPON_ATTACK_TYPE(item))) {
+    if (!WEAPON_IS_GUN(item)) {
       send_to_char(ch, "%s isn't a gun, there'd be no point in attaching it to a mount.\r\n", capitalize(GET_OBJ_NAME(item)));
       return;
     }
@@ -2221,6 +2234,7 @@ ACMD(do_treat)
 
   FAILURE_CASE(IS_SENATOR(ch) && !access_level(ch, LVL_ADMIN) && !IS_NPC(vict) && !IS_SENATOR(vict), "Staff can't treat players this way. Use the RESTORE command if you have it.");
   FAILURE_CASE(CH_IN_COMBAT(vict), "You can't treat someone who's in combat!");
+  FAILURE_CASE(GET_PHYSICAL(vict) == GET_MAX_PHYSICAL(vict), "They don't need your help.");
 
   // There's a LAST_HEAL cap, unless the person is morted-- then you can attempt regardless.
   // Since mages and adepts have additional healing tools (heal spell, empathic), max-cap chars (aka mundanes) get more attempts.
@@ -2633,7 +2647,7 @@ void cedit_disp_menu(struct descriptor_data *d, int mode)
         d->edit_mob->in_room = error_suppressor;
       }
 
-      send_to_char(CH, "A) Optional Extra Descriptions (^c%d^n/^c%d^n set)\r\n", GET_CHAR_EXDESCS(d->edit_mob).size(), GET_CHAR_MAX_EXDESCS(CH));
+      send_to_char(CH, "A) Optional Extra Descriptions (^c%ld^n/^c%d^n set)\r\n", GET_CHAR_EXDESCS(d->edit_mob).size(), GET_CHAR_MAX_EXDESCS(CH));
     }
   }
   if (mode)
@@ -3557,7 +3571,7 @@ ACMD(do_assense)
       if (is_abbrev(buf1, "spell")) {
         bool found = FALSE;
         for (struct sustain_data *sus = GET_SUSTAINED(vict); sus; sus = sus->next)
-          if (!sus->caster) {
+          if (!sus->is_caster_record) {
             found = TRUE;
             success = success_test(GET_INT(ch), 4) + (int)(success_test(GET_SKILL(ch, SKILL_AURA_READING), 4) / 2);
             if (success > 0)
@@ -3953,7 +3967,7 @@ ACMD(do_assense)
         if (mem)
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", and is seems to have been built by %s", mem->mem);
       }
-    } else if (GET_OBJ_TYPE(obj) == ITEM_WEAPON && !IS_GUN(GET_WEAPON_ATTACK_TYPE(obj)) && GET_WEAPON_FOCUS_RATING(obj) > 0) {
+    } else if (GET_OBJ_TYPE(obj) == ITEM_WEAPON && !WEAPON_IS_GUN(obj) && GET_WEAPON_FOCUS_RATING(obj) > 0) {
       strlcat(buf, "a weapon focus", sizeof(buf));
       if (success >= 5) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ". It is of force %d", GET_WEAPON_FOCUS_RATING(obj));
@@ -4548,6 +4562,11 @@ ACMD(do_cpool)
     dodge = 0;
   }
 
+  if (dodge < 0 || bod < 0 || off < 0) {
+    send_to_char("Combat pool values cannot be negative!\r\n", ch);
+    return;
+  }
+
   total -= ch->real_abils.defense_pool = GET_DODGE(ch) = MIN(dodge, total);
   total -= ch->real_abils.body_pool = GET_BODY_POOL(ch) = MIN(bod, total);
 
@@ -4579,6 +4598,14 @@ ACMD(do_cpool)
   }
 
   send_to_char(ch, "Pools set as: Ranged Dodge: %d, Damage Soak: %d, Offense: %d\r\n", GET_DODGE(ch), GET_BODY_POOL(ch), GET_OFFENSE(ch));
+
+#ifdef APPLY_DELAY_ON_POOL_CHANGE_IN_COMBAT
+  // If they're in combat, add a delay to lessen the pool-shoot-pool cheese strat.
+  if (FIGHTING(ch) || FIGHTING_VEH(ch)) {
+    send_to_char(ch, "You shift your stance, timing it out to avoid creating an opening.\r\n");
+    WAIT_STATE(ch, 3);
+  }
+#endif
 }
 
 ACMD(do_spool)
@@ -4604,6 +4631,11 @@ ACMD(do_spool)
   half_chop(arg, argument, buf, sizeof(buf));
   def = atoi(argument);
   reflect = atoi(buf);
+
+  if (cast < 0 || drain < 0 || def < 0 || reflect < 0) {
+    send_to_char("Spell pool values cannot be negative!\r\n", ch);
+    return;
+  }
 
   set_casting_pools(ch, cast, drain, def, reflect, TRUE);
 }
@@ -4754,7 +4786,7 @@ ACMD(do_ammo) {
 
   bool sent_a_message = FALSE;
 
-  if (primary && IS_GUN(GET_WEAPON_ATTACK_TYPE(primary))) {
+  if (primary && WEAPON_IS_GUN(primary)) {
     if (primary->contains) {
       send_to_char(ch, "Primary: %d / %d %s.\r\n",
                    MIN(GET_WEAPON_MAX_AMMO(primary), GET_MAGAZINE_AMMO_COUNT(primary->contains)),
@@ -4772,7 +4804,7 @@ ACMD(do_ammo) {
     sent_a_message = TRUE;
   }
 
-  if (secondary && IS_GUN(GET_WEAPON_ATTACK_TYPE(secondary))) {
+  if (secondary && WEAPON_IS_GUN(secondary)) {
     if (secondary->contains) {
       send_to_char(ch, "Secondary: %d / %d %s.\r\n",
                    MIN(GET_WEAPON_MAX_AMMO(secondary), GET_OBJ_VAL(secondary->contains, 9)),
@@ -4819,6 +4851,7 @@ ACMD(do_syspoints) {
       send_to_char(ch, " - You %s^n purchased ^WNODELETE^n.\r\n", PLR_FLAGGED(ch, PLR_NODELETE) ? "^ghave" : "^yhave not yet");
       send_to_char(ch, " - You %s^n purchased the ability to see ^WROLLS^n output.\r\n", PLR_FLAGGED(ch, PLR_PAID_FOR_ROLLS) ? "^ghave" : "^yhave not yet");
       send_to_char(ch, " - You %s^n purchased the ability to see ^WVNUMS^n in your prompt.\r\n", PLR_FLAGGED(ch, PLR_PAID_FOR_VNUMS) ? "^ghave" : "^yhave not yet");
+      send_to_char(ch, " - You %s^n purchased the ability to set your ^WWHOTITLE^n.\r\n", PLR_FLAGGED(ch, PLR_PAID_FOR_WHOTITLE) ? "^ghave" : "^yhave not yet");
 
       if (GET_CHAR_MAX_EXDESCS(ch) <= 2) {
         send_to_char(" - You ^yhave not yet^n purchased any ^WEXDESC^n slots beyond the default 2.\r\n", ch);
@@ -5100,6 +5133,35 @@ ACMD(do_syspoints) {
       return;
     }
 
+    if (is_abbrev(arg, "whotitle")) {
+      // Already set.
+      if (PLR_FLAGGED(ch, PLR_PAID_FOR_WHOTITLE)) {
+        send_to_char("You've already purchased the ability to set your whotitle! You can set it with ^WWHOTITLE <new title>^n.\r\n", ch);
+        return;
+      }
+
+      // Can they afford it?
+      if (GET_SYSTEM_POINTS(ch) >= SYSP_WHOTITLE_COST) {
+        // Have they entered the confirmation command?
+        if (is_abbrev(buf, "confirm")) {
+          GET_SYSTEM_POINTS(ch) -= SYSP_WHOTITLE_COST;
+          send_to_char(ch, "Congratulations, you can now set your whotitle with the ^WWHOTITLE <new title>^n command! %d syspoints have been deducted from your total.\r\n", SYSP_WHOTITLE_COST);
+          PLR_FLAGS(ch).SetBit(PLR_PAID_FOR_WHOTITLE);
+          mudlog("Purchased whotitle with syspoints.", ch, LOG_SYSLOG, TRUE);
+          playerDB.SaveChar(ch);
+          return;
+        }
+
+        // They can afford it, but didn't use the confirm form.
+        send_to_char(ch, "You can spend %d syspoints to purchase the ability to change the part of the wholist where your race shows up. Type ^WSYSPOINTS WHOTITLE CONFIRM^n to do so.\r\n", SYSP_WHOTITLE_COST);
+        return;
+      }
+
+      // Too broke.
+      send_to_char(ch, "That costs %d syspoints, and you only have %d.\r\n", SYSP_WHOTITLE_COST, GET_SYSTEM_POINTS(ch));
+      return;
+    }
+
     send_to_char(ch, "'%s' is not a valid mode. See ^WHELP SYSPOINTS^n for command syntax.\r\n", arg);
     return;
   }
@@ -5286,7 +5348,7 @@ bool is_reloadable_weapon(struct obj_data *weapon, int ammotype) {
     return FALSE;
 
   // It must be a gun. Bows etc can choke on it.
-  if (GET_OBJ_TYPE(weapon) != ITEM_WEAPON || !IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon)))
+  if (GET_OBJ_TYPE(weapon) != ITEM_WEAPON || !WEAPON_IS_GUN(weapon))
     return FALSE;
 
   // It must take ammo.

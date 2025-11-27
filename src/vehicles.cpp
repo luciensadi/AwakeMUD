@@ -490,7 +490,7 @@ void recalculate_vehicle_usedload(struct veh_data *veh) {
                     GET_VEH_NAME(veh),
                     GET_VEH_VNUM(veh),
                     GET_VEH_IDNUM(veh),
-                    GET_ROOM_NAME(get_veh_in_room(veh)),
+                    GET_ROOM_VNUM(get_veh_in_room(veh)),
                     old_load,
                     veh->usedload);
   }

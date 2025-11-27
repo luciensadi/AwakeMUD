@@ -95,11 +95,6 @@ extern char help[];
 extern void do_secret_ticks(int pulse);
 #endif
 
-#ifdef TEMPORARY_COMPILATION_GUARD
-#include "minigame_container.hpp"
-#include "minigame_module.hpp"
-#endif
-
 bool _GLOBALLY_BAN_OPENVPN_CONNETIONS_ = FALSE;
 
 /* local globals */
@@ -198,6 +193,7 @@ void set_descriptor_canaries(struct descriptor_data *newd);
 extern void process_flying_vehicles();
 extern void cleanup_policy_tree();
 extern void save_all_pcs();
+extern void attempt_to_offload_unused_zones();
 
 extern void save_all_apartments_and_storage_rooms();
 
@@ -325,10 +321,11 @@ void copyover_recover()
   struct descriptor_data *d;
   FILE *fp;
   char host[1024];
-  char copyover_get[1024];
+  char copyover_get[10000];
+  char descriptor_json[10000] = {0};
   bool fOld;
   char name[MAX_NAME_LENGTH + 1];
-  int desc;
+  int desc = -1;
 
   log ("COPYOVERLOG: Copyover recovery initiated.");
 
@@ -344,13 +341,39 @@ void copyover_recover()
 
   unlink (COPYOVER_FILE); // In case something crashes - doesn't prevent reading
 
+#ifdef USE_OLD_COPYOVER_LOGIC
   for (;;) {
     fOld = TRUE;
     fscanf (fp, "%d %20s %1023s %1023s\n", &desc, name, host, copyover_get);
     if (desc == -1)
       break;
+#else
+  char line_buf[99999];
+  while (get_line(fp, line_buf, sizeof(line_buf))) {
+    fOld = TRUE;
 
-    log_vfprintf("COPYOVERLOG: Restoring %s (%s)...", name, host);
+    int retval;
+    // Try with the new style using tab separation.
+    if ((retval = sscanf(line_buf, "%d\t%20s\t%1023s\t%1023s\t%9999s", &desc, name, host, copyover_get, descriptor_json)) < 4) {
+      // That failed-- try with the old style using space separation and no JSON.
+      if ((retval = sscanf(line_buf, "%d %20s %1023s %1023s", &desc, name, host, copyover_get)) < 4) {
+        if (desc == -1) {
+          // -1 signals end of file in the old style. Just stop parsing.
+          break;
+        }
+
+        fprintf(stderr, "COPYOVER ERROR: Format error, '''%s''': Only successfully parsed %d values. This connection will be discarded.\n", line_buf, retval);
+        if (desc != -1) {
+          write_to_descriptor (desc, "\n\rWhoops, something went wrong! Our apologies, but we're unable to restore your connection. Please reconnect and log in normally.\n\r");
+          close (desc); /* nope */
+        }
+        continue;
+      }
+      // If we got here, we successfully scanned out data with the old method.
+    }
+#endif
+
+    log_vfprintf("COPYOVERLOG: Restoring desc %d ('%s' @ '%s') (serialized protocol data '%s', JSON %s)...", desc, name, host, copyover_get, *descriptor_json ? "YES" : "NO");
 
     /* Write something, and check if it goes error-free */
     if (write_to_descriptor (desc, "\n\rJust kidding. Restoring from copyover...\n\r") < 0) {
@@ -361,7 +384,7 @@ void copyover_recover()
 
     /* create a new descriptor */
     d = new descriptor_data;
-    memset ((char *) d, 0, sizeof (struct descriptor_data));
+    // memset ((char *) d, 0, sizeof (struct descriptor_data));
     init_descriptor (d,desc); /* set up various stuff */
 
     strlcpy(d->host, host, sizeof(d->host));
@@ -371,6 +394,9 @@ void copyover_recover()
     // Restore KaVir protocol data.
     CopyoverSet(d, copyover_get);
 
+    // Restore JSON data.
+    CopyoverSetJSON(d, descriptor_json);
+
     d->connected = CON_CLOSE;
 
     /* Now, find the pfile */
@@ -379,10 +405,14 @@ void copyover_recover()
       d->character->desc = d;
       if (!PLR_FLAGGED(d->character, PLR_DELETED))
         PLR_FLAGS(d->character).RemoveBits(PLR_WRITING, PLR_MAILING, ENDBIT);
-      else
+      else {
         fOld = FALSE;
-    } else
+        log_vfprintf("COPYOVERLOG:  - Playerfile for '%s' (%s) was found but marked as deleted. Discarding their connection.", name, host);
+      }
+    } else {
       fOld = FALSE;
+      log_vfprintf("COPYOVERLOG:  - Playerfile for '%s' (%s) was not found??", name, host);
+    }
 
     if (!fOld) /* Player file not found?! */
     {
@@ -877,13 +907,13 @@ void game_loop(int mother_desc)
           d->wait = 1;
           d->prompt_mode = 1;
 
-          if (d->str)                     /* writing boards, mail, etc.   */
+          if (d->str) {                    /* writing boards, mail, etc.   */
             string_add(d, comm);
-          else if (d->showstr_point)      /* reading something w/ pager   */
+          } else if (d->showstr_point) {     /* reading something w/ pager   */
             show_string(d, comm);
-          else if (d->connected != CON_PLAYING)   /* in menus, etc.       */
+          } else if (d->connected != CON_PLAYING) {  /* in menus, etc.       */
             nanny(d, comm);
-          else {                          /* else: we're playing normally */
+          } else {                          /* else: we're playing normally */
             if (aliased) /* to prevent recursive aliases */
               d->prompt_mode = 0;
             else {
@@ -964,6 +994,17 @@ void game_loop(int mother_desc)
 
     pulse++;
 
+#ifdef IS_BUILDPORT
+    // DEBUG. YOU SHOULD REMOVE THIS.
+    if (!(pulse % 10)) {
+      // Send GMCP Vitals
+      for (d = descriptor_list; d; d = next_d) {
+        next_d = d->next;
+        update_gmcp_discord_info(d);
+      }
+    }
+#endif
+
 #ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
     // Every RL second.
     if (!(pulse % PASSES_PER_SEC)) {
@@ -1000,6 +1041,14 @@ void game_loop(int mother_desc)
       decide_combat_pool();
       perform_violence();
       matrix_violence();
+    }
+
+    if (!(pulse % ART_QUOTA_REGENERATION_PULSE)) {
+      for (struct descriptor_data *d = descriptor_list; d; d = d->next) {
+        if (d->regenerating_art_quota < MAX_REGENERATING_ART_QUOTA) {
+          d->regenerating_art_quota++;
+        }
+      }
     }
 
     // Every MUD minute
@@ -1059,6 +1108,9 @@ void game_loop(int mother_desc)
 
     // Every MUD hour
     if (!(pulse % (SECS_PER_MUD_HOUR * PASSES_PER_SEC))) {
+      // This is the big laggy pulse, so offload whatever we can before digging into the rest of this.
+      attempt_to_offload_unused_zones();
+
       matrix_hour_update();
       point_update();
       weather_change();
@@ -1326,8 +1378,10 @@ void keepalive(struct descriptor_data *d) {
     (char) 0
   };
 
-  if (write_to_descriptor(d->descriptor, keepalive) < 0) {
-    mudlog("SYSERR: Failed to write keepalive data to descriptor.", d->character, LOG_SYSLOG, TRUE);
+  int status_code;
+
+  if ((status_code = write_to_descriptor(d->descriptor, keepalive)) < 0) {
+    mudlog_vfprintf(d->character, LOG_SYSLOG, "SYSERR: Failed to write keepalive data to descriptor (status code %d).", status_code);
   }
 }
 
@@ -1404,7 +1458,7 @@ int make_prompt(struct descriptor_data * d)
             case 'A':
               if (GET_EQ(d->character, WEAR_WIELD)) {
 
-                if (IS_GUN(GET_OBJ_VAL(GET_EQ(d->character, WEAR_WIELD), 3)))
+                if (WEAPON_IS_GUN(GET_EQ(d->character, WEAR_WIELD)))
                   switch (GET_OBJ_VAL(GET_EQ(d->character, WEAR_WIELD), 11)) {
                     case MODE_SS:
                       snprintf(str, sizeof(str), "SS");
@@ -1444,17 +1498,17 @@ int make_prompt(struct descriptor_data * d)
             case 'D':
               snprintf(str, sizeof(str), "%d", GET_BODY_POOL(d->character));
               break;
-            case 'e':
+            case 'e':       // persona active memory
               if (ch->persona)
                 snprintf(str, sizeof(str), "%d", ch->persona->decker->active);
               else
-                snprintf(str, sizeof(str), "0");
+                snprintf(str, sizeof(str), "NA");
               break;
             case 'E':
               if (ch->persona && ch->persona->decker->deck)
-                snprintf(str, sizeof(str), "%d", GET_OBJ_VAL(ch->persona->decker->deck, 2));
+                snprintf(str, sizeof(str), "%d", GET_CYBERDECK_ACTIVE_MEMORY(ch->persona->decker->deck));
               else
-                snprintf(str, sizeof(str), "0");
+                snprintf(str, sizeof(str), "NA");
               break;
             case 'f':
               snprintf(str, sizeof(str), "%d", GET_CASTING(d->character));
@@ -1463,8 +1517,7 @@ int make_prompt(struct descriptor_data * d)
               snprintf(str, sizeof(str), "%d", GET_DRAIN(d->character));
               break;
             case 'g':       // current ammo
-              if (GET_EQ(d->character, WEAR_WIELD) &&
-                  IS_GUN(GET_OBJ_VAL(GET_EQ(d->character, WEAR_WIELD), 3)))
+              if (GET_EQ(d->character, WEAR_WIELD) && WEAPON_IS_GUN(GET_EQ(d->character, WEAR_WIELD)))
                 if (GET_EQ(d->character, WEAR_WIELD)->contains) {
                   snprintf(str, sizeof(str), "%d", MIN(GET_OBJ_VAL(GET_EQ(d->character, WEAR_WIELD), 5),
                                          GET_OBJ_VAL(GET_EQ(d->character, WEAR_WIELD)->contains, 9)));
@@ -1474,8 +1527,7 @@ int make_prompt(struct descriptor_data * d)
                   snprintf(str, sizeof(str), "0");
               break;
             case 'G':       // max ammo
-              if (GET_EQ(d->character, WEAR_WIELD) &&
-                  IS_GUN(GET_OBJ_VAL(GET_EQ(d->character, WEAR_WIELD), 3)))
+              if (GET_EQ(d->character, WEAR_WIELD) && WEAPON_IS_GUN(GET_EQ(d->character, WEAR_WIELD)))
                 snprintf(str, sizeof(str), "%d", GET_OBJ_VAL(GET_EQ(d->character, WEAR_WIELD), 5));
               else
                 snprintf(str, sizeof(str), "0");
@@ -1566,21 +1618,26 @@ int make_prompt(struct descriptor_data * d)
                 strlcpy(str, get_ch_domain_str(ch, TRUE), sizeof(str));
               }
               break;
-            case 'r':
+            case 'r':       // persona storage memory
               if (ch->persona && ch->persona->decker->deck)
-                snprintf(str, sizeof(str), "%d", GET_OBJ_VAL(ch->persona->decker->deck, 3) - GET_OBJ_VAL(ch->persona->decker->deck, 5));
+                if (ch->persona->type == ICON_LIVING_PERSONA && ch->persona->decker->proxy_deck)
+                  snprintf(str, sizeof(str), "%d", GET_CYBERDECK_FREE_STORAGE(ch->persona->decker->proxy_deck));
+                else
+                  snprintf(str, sizeof(str), "%d", GET_CYBERDECK_FREE_STORAGE(ch->persona->decker->deck));
               else
-                snprintf(str, sizeof(str), "0");
+                snprintf(str, sizeof(str), "NA");
               break;
             case 'R':
               if (ch->persona && ch->persona->decker && ch->persona->decker->deck)
-                snprintf(str, sizeof(str), "%d", GET_OBJ_VAL(ch->persona->decker->deck, 3));
+                if (ch->persona->type == ICON_LIVING_PERSONA && ch->persona->decker->proxy_deck)
+                  snprintf(str, sizeof(str), "%d", GET_CYBERDECK_TOTAL_STORAGE(ch->persona->decker->proxy_deck));
+                else
+                  snprintf(str, sizeof(str), "%d", GET_CYBERDECK_TOTAL_STORAGE(ch->persona->decker->deck));
               else
-                snprintf(str, sizeof(str), "0");
+                snprintf(str, sizeof(str), "NA");
               break;
             case 's':       // current ammo
-              if (GET_EQ(d->character, WEAR_HOLD) &&
-                  IS_GUN(GET_OBJ_VAL(GET_EQ(d->character, WEAR_HOLD), 3)))
+              if (GET_EQ(d->character, WEAR_HOLD) && WEAPON_IS_GUN(GET_EQ(d->character, WEAR_HOLD)))
                 if (GET_EQ(d->character, WEAR_HOLD)->contains) {
                   snprintf(str, sizeof(str), "%d", MIN(GET_OBJ_VAL(GET_EQ(d->character, WEAR_HOLD), 5),
                                          GET_OBJ_VAL(GET_EQ(d->character, WEAR_HOLD)->contains, 9)));
@@ -1590,8 +1647,7 @@ int make_prompt(struct descriptor_data * d)
                   snprintf(str, sizeof(str), "0");
               break;
             case 'S':       // max ammo
-              if (GET_EQ(d->character, WEAR_HOLD) &&
-                  IS_GUN(GET_OBJ_VAL(GET_EQ(d->character, WEAR_HOLD), 3)))
+              if (GET_EQ(d->character, WEAR_HOLD) && WEAPON_IS_GUN(GET_EQ(d->character, WEAR_HOLD)))
                 snprintf(str, sizeof(str), "%d", GET_OBJ_VAL(GET_EQ(d->character, WEAR_HOLD), 5));
               else
                 snprintf(str, sizeof(str), "0");
@@ -1946,9 +2002,11 @@ int new_descriptor(int s)
 
   /* create a new descriptor */
   newd = new descriptor_data;
-  memset((char *) newd, 0, sizeof(struct descriptor_data));
   // Set our canaries.
   set_descriptor_canaries(newd);
+
+  // Set the regenerating art quota.
+  newd->regenerating_art_quota = MAX_REGENERATING_ART_QUOTA;
 
   // Resolve our hostname, if possible.
   strlcpy(newd->host, resolve_hostname_from_ip_str(ip_string), sizeof(newd->host));
@@ -2420,11 +2478,6 @@ void free_editing_structs(descriptor_data *d, int state)
   DELETE_IF_EXTANT(d->edit_apartment);
   DELETE_IF_EXTANT(d->edit_apartment_room);
   DELETE_IF_EXTANT(d->edit_exdesc);
-
-#ifdef TEMPORARY_COMPILATION_GUARD
-  DELETE_IF_EXTANT(d->edit_minigame_module); 
-  DELETE_IF_EXTANT(d->edit_minigame_container);
-#endif
 }
 
 void close_socket(struct descriptor_data *d)
@@ -2538,8 +2591,7 @@ void close_socket(struct descriptor_data *d)
       }
       playerDB.SaveChar(d->character);
       act("^L[OOC]: $n has lost $s link.^n", TRUE, d->character, 0, 0, TO_ROOM);
-      snprintf(buf, sizeof(buf), "Closing link to: %s. (%s)", GET_CHAR_NAME(d->character), connected_types[d->connected]);
-      mudlog(buf, d->character, LOG_CONNLOG, TRUE);
+      mudlog_vfprintf(d->character, LOG_CONNLOG, "Closing link to: %s. (%s)", GET_CHAR_NAME(d->character), connected_types[d->connected]);
       if (d->character->persona) {
         extract_icon(d->character->persona);
         d->character->persona = NULL;
@@ -2580,7 +2632,10 @@ void close_socket(struct descriptor_data *d)
   }
 
   // Free the protocol data when a socket is closed.
-  ProtocolDestroy( d->pProtocol );
+  if (d->pProtocol) {
+    ProtocolDestroy(d->pProtocol);
+    d->pProtocol = NULL;
+  }
 
   close(d->descriptor);
   flush_queues(d);

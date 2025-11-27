@@ -11,6 +11,14 @@
 #ifndef _handler_h_
 #define _handler_h_
 
+#ifndef TRUE
+#define TRUE 1
+#endif
+
+#ifndef FALSE
+#define FALSE 0
+#endif
+
 /* handling the affected-structures */
 void  affect_total_veh(struct veh_data *veh);
 void    affect_total(struct char_data *ch);
@@ -43,8 +51,8 @@ int find_ability_num(char *name);
 void    obj_to_char(struct obj_data *object, struct char_data *ch);
 void    obj_from_char(struct obj_data *object);
 
-bool    equip_char(struct char_data *ch, struct obj_data *obj, int pos, bool recalc = TRUE);
-struct obj_data *unequip_char(struct char_data *ch, int pos, bool focus, bool recalc = TRUE);
+bool    equip_char(struct char_data *ch, struct obj_data *obj, int pos, bool recalc = TRUE, bool print_message = FALSE);
+struct obj_data *unequip_char(struct char_data *ch, int pos, bool focus, bool recalc = TRUE, bool print_message = FALSE);
 
 struct obj_data *get_obj_in_list(char *name, struct obj_data *list);
 struct obj_data *get_obj_in_list_num(int num, struct obj_data *list);
@@ -80,7 +88,7 @@ void    char_to_veh(struct veh_data *veh, struct char_data *ch);
 void veh_from_room(struct veh_data *veh);
 void veh_to_room(struct veh_data *veh, struct room_data *room);
 void veh_to_veh(struct veh_data *veh, struct veh_data *dest);
-int veh_skill(struct char_data *ch, struct veh_data *veh, int *tn);
+int veh_skill(struct char_data *ch, struct veh_data *veh, int *tn, bool include_control_pool=true);
 void	icon_from_host(struct matrix_icon *icon);
 void	icon_to_host(struct matrix_icon *icon, vnum_t to_host);
 

@@ -921,6 +921,9 @@ bool Apartment::owner_is_valid() {
   return TRUE;
 #endif
 
+  if (!owned_by_player)
+    return FALSE;
+
   if (owned_by_pgroup)
     return !owned_by_pgroup->is_disabled();
 
@@ -1083,27 +1086,24 @@ void Apartment::kick_out_everyone() {
 
 /* Delete <apartment name>/lease and restore default descs. */
 void Apartment::break_lease() {
-  mudlog_vfprintf(NULL, LOG_GRIDLOG, "Cleaning up lease for %s's %s.", complex->display_name, name);
+  const char *owner_name = get_player_name(owned_by_player);
+  mudlog_vfprintf(NULL, LOG_GRIDLOG, "Cleaning up lease for %s's %s (owned by %ld / %s). See purgelog for details.",
+                  complex->display_name,
+                  name,
+                  owned_by_player,
+                  owner_name && *owner_name ? owner_name : "-DNE");
+  delete [] owner_name;
 
   // Mail the owner.
   if (owned_by_pgroup) {
-    // EVENTUALTODO
+    // EVENTUALTODO, also modify log line above
   } else if (owned_by_player > 0) {
     char mail_buf[1000];
     snprintf(mail_buf, sizeof(mail_buf), "The lease on %s has expired, and its contents have been reclaimed.\r\n", get_full_name());
     raw_store_mail(get_owner_id(), 0, "Your former landlord", mail_buf);
   }
 
-  // Clear lease data.
-  owned_by_player = 0;
-  owned_by_pgroup = NULL;
-  paid_until = 0;
-  guests.clear();
-
-  // Overwrite the lease file.
-  save_lease();
-
-  // Iterate over rooms and restore them.
+  // Iterate over rooms and purge them.
   for (auto &room: rooms) {
     room->purge_contents();
     room->delete_decoration();
@@ -1122,6 +1122,15 @@ void Apartment::break_lease() {
       send_to_char("^L(Hint: Your lifestyle went down due to a broken lease. You should select a new lifestyle string with the Change Lifestyle option in ^wCUSTOMIZE PHYSICAL^L.)^n\r\n", plr);
     }
   }
+
+  // Clear lease data.
+  owned_by_player = 0;
+  owned_by_pgroup = NULL;
+  paid_until = 0;
+  guests.clear();
+
+  // Overwrite the lease file.
+  save_lease();
 }
 
 /* Check for entry permissions. */
@@ -2021,7 +2030,7 @@ void ApartmentRoom::purge_contents() {
   }
 
   // Write a backup storage file to <name>/expired/storage_<ownerid>_<epoch>
-  char filename[100];
+  char filename[100] = {0};
   snprintf(filename, sizeof(filename), "%ld_%ld", time(0), apartment->get_owner_id());
   bf::path expired_storage_path = expired_path / filename;
   Storage_save(expired_storage_path.c_str(), room);
@@ -2324,10 +2333,13 @@ void warn_about_apartment_deletion() {
         continue;
       }
 
-      mudlog_vfprintf(NULL, LOG_GRIDLOG, "Sending %d-day rent warning message for apartment %s to %ld.",
+      const char *owner_name = get_player_name(apartment->get_owner_id());
+      mudlog_vfprintf(NULL, LOG_GRIDLOG, "Sending %d-day rent warning message for apartment %s to %ld (%s).",
                       days_until_deletion,
                       apartment->get_full_name(),
-                      apartment->get_owner_id());
+                      apartment->get_owner_id(),
+                      owner_name && *owner_name ? owner_name : "-DNE");
+      delete [] owner_name;
 
       if (apartment->get_owner_pgroup()) {
         // EVENTUALTODO
@@ -2660,12 +2672,18 @@ SPECIAL(landlord_spec)
 
     for (auto &apartment : complex->get_apartments()) {
       if (is_abbrev(arg, apartment->get_name()) || is_abbrev(arg, apartment->get_short_name())) {
+        if (access_level(ch, LVL_FIXER)) {
+          if (apartment->create_or_extend_lease(ch)) {
+            mudlog_vfprintf(ch, LOG_WIZLOG, "Paid another month on %s. New expiry: %ld.", apartment->get_full_name(), apartment->get_paid_until());
+            mob_say(recep, "You are paid up for the next period.");
+          }
+        }
         if (!apartment->has_owner_privs(ch) && !apartment->is_guest(GET_IDNUM(ch))) {
           snprintf(say_string, sizeof(say_string), "You aren't an owner or guest of %s.", apartment->get_name());
           mob_say(recep, say_string);
         } else {
           if (apartment->create_or_extend_lease(ch)) {
-            mudlog_vfprintf(NULL, LOG_GRIDLOG, "%s paid another month on %s. New expiry: %ld.", GET_CHAR_NAME(ch), apartment->get_full_name(), apartment->get_paid_until());
+            mudlog_vfprintf(ch, LOG_GRIDLOG, "Paid another month on %s. New expiry: %ld.", apartment->get_full_name(), apartment->get_paid_until());
             mob_say(recep, "You are paid up for the next period.");
           }
         }

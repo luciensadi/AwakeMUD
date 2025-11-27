@@ -61,7 +61,7 @@ extern class memoryClass *Mem;
 
 #define REQUIRE_ZONE_EDIT_ACCESS(real_zonenum) {                                                                                               \
   if (real_zonenum < 0 || real_zonenum > top_of_zone_table) {                                                                                  \
-    send_to_char("That's not a zone.", ch);                                                                                                    \
+    send_to_char("That's not a zone.\r\n", ch);                                                                                                \
     return;                                                                                                                                    \
   }                                                                                                                                            \
                                                                                                                                                \
@@ -1067,6 +1067,7 @@ ACMD (do_iedit)
 #else
 
     iedit_disp_menu(d);
+    update_gmcp_discord_info(d);
 #endif
 
     return;
@@ -1087,6 +1088,7 @@ ACMD (do_iedit)
     d->edit_obj->obj_flags.condition = d->edit_obj->obj_flags.barrier = 1;
 
     d->edit_mode = IEDIT_CONFIRM_EDIT;
+    update_gmcp_discord_info(d);
 
     return;
   }
@@ -1154,6 +1156,8 @@ ACMD(do_iclone)
     obj->text.room_desc = str_dup(obj_proto[obj_num1].text.room_desc);
   if (obj_proto[obj_num1].text.look_desc)
     obj->text.look_desc = str_dup(obj_proto[obj_num1].text.look_desc);
+  if (obj_proto[obj_num1].source_info)
+    obj->source_info = str_dup(obj_proto[obj_num1].source_info);
 
   // extra descriptions done next
   if (obj_proto[obj_num1].ex_description) {
@@ -1925,7 +1929,7 @@ ACMD(do_shedit)
     d->edit_shop->vnum = d->edit_number;
     d->edit_shop->profit_buy = 1.1;
     d->edit_shop->profit_sell = 0.1;
-    d->edit_shop->buytypes = 0;
+    d->edit_shop->buytypes.Clear();
     d->edit_shop->no_such_itemk = str_dup("Sorry, we don't have that.");
     d->edit_shop->no_such_itemp = str_dup("You don't seem to have that.");
     d->edit_shop->not_enough_nuyen = str_dup("You don't have enough nuyen!");

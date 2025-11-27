@@ -39,7 +39,7 @@ std::unordered_map<idnum_t, class PetEchoSet> pet_echo_sets = {
         "$p streeeetches.",
         "A low, rumbling purr comes from $p.",
         "$p stretches lazily before jumping onto something to explore.",
-        "$p flops down on somethng soft."
+        "$p flops down on something soft."
       }}},
   {2, {0, TRUE, "Cat, Playful", "", "", {
         "$p bounds past, chasing a toy.",
@@ -344,7 +344,7 @@ void pet_acts(struct obj_data *pet, int pet_act_filter) {
   GET_PRONOUNS(dummy_mob_for_pet_pronouns) = GET_PET_PRONOUN_SET(pet);
 
   if (!selected_echo_set) {
-    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Hit pet_acts(%s) with pet that had invalid echo_set %d.", GET_PET_ECHO_SET_IDNUM(pet));
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Hit pet_acts(%s) with pet that had invalid echo_set %d.", GET_OBJ_NAME(pet), GET_PET_ECHO_SET_IDNUM(pet));
     return;
   }
 

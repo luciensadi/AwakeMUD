@@ -157,6 +157,7 @@ void end_quest(struct char_data *ch, bool succeeded);
 void initialize_quest_for_ch(struct char_data *ch, int quest_rnum, struct char_data *johnson) {
   // Assign them the quest.
   GET_QUEST(ch) = quest_rnum;
+  GET_QUEST_STARTED(ch) = time(0);
 
   // Create their memory structures.
   ch->player_specials->obj_complete = new sh_int[quest_table[GET_QUEST(ch)].num_objs];
@@ -223,6 +224,13 @@ bool attempt_quit_job(struct char_data *ch, struct char_data *johnson) {
   return TRUE;
 }
 
+struct obj_data *instantiate_quest_object(rnum_t rnum, int load_reason, struct char_data *questor) {
+  struct obj_data *obj = read_object(rnum, REAL, load_reason);
+  GET_OBJ_QUEST_CHAR_ID(obj) = GET_IDNUM_EVEN_IF_PROJECTING(questor);
+  obj->obj_flags.extra_flags.SetBits(ITEM_EXTRA_NODONATE, ITEM_EXTRA_NORENT, ITEM_EXTRA_NOSELL, ENDBIT);
+  return obj;
+}
+
 void load_quest_targets(struct char_data *johnson, struct char_data *ch)
 {
   struct obj_data *obj;
@@ -247,22 +255,18 @@ void load_quest_targets(struct char_data *johnson, struct char_data *ch)
             (rnum = real_object(quest_table[num].obj[j].vnum)) > -1) {
           switch (quest_table[num].obj[j].load) {
           case QOL_TARMOB_I:
-            obj = read_object(rnum, REAL, OBJ_LOAD_REASON_QUEST_TARMOB_I);
-            GET_OBJ_QUEST_CHAR_ID(obj) = GET_IDNUM(ch);
-            obj->obj_flags.extra_flags.SetBits(ITEM_EXTRA_NODONATE, ITEM_EXTRA_NORENT, ITEM_EXTRA_NOSELL, ENDBIT);
+            obj = instantiate_quest_object(rnum, OBJ_LOAD_REASON_QUEST_TARMOB_I, ch);
             obj_to_char(obj, mob);
             break;
           case QOL_TARMOB_E:
             pos = quest_table[num].obj[j].l_data2;
             if (pos >= 0 && pos < NUM_WEARS && (!GET_EQ(mob, pos) ||
                                                 (pos == WEAR_WIELD && !GET_EQ(mob, WEAR_HOLD)))) {
-              obj = read_object(rnum, REAL, OBJ_LOAD_REASON_QUEST_TARMOB_E);
-              GET_OBJ_QUEST_CHAR_ID(obj) = GET_IDNUM(ch);
-              obj->obj_flags.extra_flags.SetBits(ITEM_EXTRA_NODONATE, ITEM_EXTRA_NORENT, ITEM_EXTRA_NOSELL, ENDBIT);
+              obj = instantiate_quest_object(rnum, OBJ_LOAD_REASON_QUEST_TARMOB_E, ch);
               equip_char(mob, obj, pos);
 
               // Could be a weapon-- make sure it's loaded if it is.
-              if (GET_OBJ_TYPE(obj) == ITEM_WEAPON && IS_GUN(GET_WEAPON_ATTACK_TYPE(obj))) {
+              if (GET_OBJ_TYPE(obj) == ITEM_WEAPON && WEAPON_IS_GUN(obj)) {
                 // If it's carried by an NPC, make sure it's loaded.
                 if (GET_WEAPON_MAX_AMMO(obj) > 0) {
                   // Reload from their ammo.
@@ -299,9 +303,7 @@ void load_quest_targets(struct char_data *johnson, struct char_data *ch)
             }
             break;
           case QOL_TARMOB_C:
-            obj = read_object(rnum, REAL, OBJ_LOAD_REASON_QUEST_TARMOB_C);
-            GET_OBJ_QUEST_CHAR_ID(obj) = GET_IDNUM(ch);
-            obj->obj_flags.extra_flags.SetBits(ITEM_EXTRA_NODONATE, ITEM_EXTRA_NORENT, ITEM_EXTRA_NOSELL, ENDBIT);
+            obj = instantiate_quest_object(rnum, OBJ_LOAD_REASON_QUEST_TARMOB_C, ch);
             if (GET_OBJ_TYPE(obj) == ITEM_CYBERWARE &&
                 GET_ESS(mob) > GET_OBJ_VAL(obj, 1)) {
               obj_to_cyberware(obj, mob);
@@ -329,25 +331,19 @@ void load_quest_targets(struct char_data *johnson, struct char_data *ch)
             (rnum = real_object(quest_table[num].obj[j].vnum)) > -1) {
           switch (quest_table[num].obj[j].load) {
           case QOL_TARMOB_I:
-            obj = read_object(rnum, REAL, OBJ_LOAD_REASON_QUEST_TARMOB_I);
-            GET_OBJ_QUEST_CHAR_ID(obj) = GET_IDNUM(ch);
-            obj->obj_flags.extra_flags.SetBits(ITEM_EXTRA_NODONATE, ITEM_EXTRA_NORENT, ITEM_EXTRA_NOSELL, ENDBIT);
+            obj = instantiate_quest_object(rnum, OBJ_LOAD_REASON_QUEST_TARMOB_I, ch);
             obj_to_char(obj, mob);
             break;
           case QOL_TARMOB_E:
             pos = quest_table[num].obj[j].l_data2;
             if (pos >= 0 && pos < NUM_WEARS && (!GET_EQ(mob, pos) ||
                                                 (pos == WEAR_WIELD && !GET_EQ(mob, WEAR_HOLD)))) {
-              obj = read_object(rnum, REAL, OBJ_LOAD_REASON_QUEST_TARMOB_E);
-              GET_OBJ_QUEST_CHAR_ID(obj) = GET_IDNUM(ch);
-              obj->obj_flags.extra_flags.SetBits(ITEM_EXTRA_NODONATE, ITEM_EXTRA_NORENT, ITEM_EXTRA_NOSELL, ENDBIT);
+              obj = instantiate_quest_object(rnum, OBJ_LOAD_REASON_QUEST_TARMOB_E, ch);
               equip_char(mob, obj, pos);
             }
             break;
           case QOL_TARMOB_C:
-            obj = read_object(rnum, REAL, OBJ_LOAD_REASON_QUEST_TARMOB_C);
-            GET_OBJ_QUEST_CHAR_ID(obj) = GET_IDNUM(ch);
-            obj->obj_flags.extra_flags.SetBits(ITEM_EXTRA_NODONATE, ITEM_EXTRA_NORENT, ITEM_EXTRA_NOSELL, ENDBIT);
+            obj = instantiate_quest_object(rnum, OBJ_LOAD_REASON_QUEST_TARMOB_C, ch);
             if (GET_OBJ_TYPE(obj) == ITEM_CYBERWARE &&
                 GET_ESS(mob) > GET_OBJ_VAL(obj, 1)) {
               obj_to_cyberware(obj, mob);
@@ -371,18 +367,14 @@ void load_quest_targets(struct char_data *johnson, struct char_data *ch)
       {
       case QOL_LOCATION:
         if ((room = real_room(quest_table[num].obj[i].l_data)) > -1) {
-          obj = read_object(rnum, REAL, OBJ_LOAD_REASON_QUEST_LOCATION);
-          GET_OBJ_QUEST_CHAR_ID(obj) = GET_IDNUM(ch);
-          obj->obj_flags.extra_flags.SetBits(ITEM_EXTRA_NODONATE, ITEM_EXTRA_NORENT, ITEM_EXTRA_NOSELL, ENDBIT);
+          obj = instantiate_quest_object(rnum, OBJ_LOAD_REASON_QUEST_LOCATION, ch);
           obj_to_room(obj, &world[room]);
         }
         obj = NULL;
         break;
       case QOL_HOST:
         if ((room = real_host(quest_table[num].obj[i].l_data)) > -1) {
-          obj = read_object(rnum, REAL, OBJ_LOAD_REASON_QUEST_HOST);
-          GET_OBJ_QUEST_CHAR_ID(obj) = GET_IDNUM(ch);
-          obj->obj_flags.extra_flags.SetBits(ITEM_EXTRA_NODONATE, ITEM_EXTRA_NORENT, ITEM_EXTRA_NOSELL, ENDBIT);
+          obj = instantiate_quest_object(rnum, OBJ_LOAD_REASON_QUEST_HOST, ch);
           GET_DECK_ACCESSORY_FILE_FOUND_BY(obj) = GET_IDNUM(ch);
           GET_DECK_ACCESSORY_FILE_REMAINING(obj) = 1;
           obj_to_host(obj, &matrix[room]);
@@ -390,9 +382,7 @@ void load_quest_targets(struct char_data *johnson, struct char_data *ch)
         obj = NULL;
         break;
       case QOL_JOHNSON:
-        obj = read_object(rnum, REAL, OBJ_LOAD_REASON_QUEST_JOHNSON);
-        GET_OBJ_QUEST_CHAR_ID(obj) = GET_IDNUM(ch);
-        obj->obj_flags.extra_flags.SetBits(ITEM_EXTRA_NODONATE, ITEM_EXTRA_NORENT, ITEM_EXTRA_NOSELL, ENDBIT);
+        obj = instantiate_quest_object(rnum, OBJ_LOAD_REASON_QUEST_JOHNSON, ch);
         obj_to_char(obj, johnson);
         if (!perform_give(johnson, ch, obj)) {
           char buf[512];
@@ -842,14 +832,14 @@ bool _raw_check_quest_kill(struct char_data *ch, struct char_data *victim) {
 }
 
 bool _subsection_check_quest_kill(struct char_data *ch, struct char_data *victim) {
-  // You can only share quest ticks if you're grouped.
-  if (!AFF_FLAGGED(ch, AFF_GROUP)) {
+  // You can only share quest ticks if you're grouped. Summoned NPCs are immune to this requirement.
+  if (!AFF_FLAGGED(ch, AFF_GROUP) && !IS_NPNPC(ch)) {
     return FALSE;
   }
 
   // Followers (both projected and not)
   for (struct follow_type *f = ch->followers; f; f = f->next) {
-    if (!AFF_FLAGGED(f->follower, AFF_GROUP)) {
+    if (!AFF_FLAGGED(f->follower, AFF_GROUP) && !IS_NPNPC(ch)) {
       continue;
     }
 
@@ -866,7 +856,7 @@ bool _subsection_check_quest_kill(struct char_data *ch, struct char_data *victim
 
   // Master (both projected and not)
   if (ch->master) {
-    if (!AFF_FLAGGED(ch->master, AFF_GROUP)) {
+    if (!AFF_FLAGGED(ch->master, AFF_GROUP)) {  // No NPNPC check here since the master should never be an elemental etc.
       return FALSE;
     }
 
@@ -920,7 +910,7 @@ void end_quest(struct char_data *ch, bool succeeded)
   if (IS_NPC(ch) || !GET_QUEST(ch))
     return;
 
-  extract_quest_targets(GET_IDNUM(ch));
+  extract_quest_targets(GET_IDNUM_EVEN_IF_PROJECTING(ch));
   // We mark the quest as completed here because if you fail...
   //well you failed. Better luck next time chummer.
   for (int i = QUEST_TIMER - 1; i > 0; i--) {
@@ -935,11 +925,14 @@ void end_quest(struct char_data *ch, bool succeeded)
     GET_CQUEST(ch, 0) = quest_table[GET_QUEST(ch)].vnum;
 
   GET_QUEST(ch) = 0;
+  GET_QUEST_STARTED(ch) = 0;
 
   delete [] ch->player_specials->mob_complete;
   delete [] ch->player_specials->obj_complete;
   ch->player_specials->mob_complete = NULL;
   ch->player_specials->obj_complete = NULL;
+
+  GET_QUEST_DIRTY_BIT(ch) = TRUE;
 }
 
 bool rep_too_high(struct char_data *ch, int num)
@@ -1040,6 +1033,19 @@ bool follower_can_receive_reward(struct char_data *follower, struct char_data *l
   return TRUE;
 }
 
+void award_follower_payout(struct char_data *follower, int karma, int nuyen, struct char_data *questor) {
+  gain_nuyen(follower, nuyen, NUYEN_INCOME_AUTORUNS);
+  int gained = gain_karma(follower, karma, TRUE, FALSE, TRUE);
+  send_to_char(follower, "You gain %0.2f karma and %d nuyen for being in %s's group.\r\n", (float) gained * 0.01, nuyen, GET_CHAR_NAME(questor));
+  mudlog_vfprintf(follower, LOG_GRIDLOG, "%s gains %0.2fk and %dn from job %ld (grouped with %s (%ld))",
+                  GET_CHAR_NAME(follower),
+                  (float) gained * 0.01,
+                  nuyen,
+                  GET_QUEST(questor),
+                  GET_CHAR_NAME(questor),
+                  GET_IDNUM(questor));
+}
+
 void reward(struct char_data *ch, struct char_data *johnson)
 {
   if (vnum_from_non_approved_zone(quest_table[GET_QUEST(ch)].vnum)) {
@@ -1117,16 +1123,26 @@ void reward(struct char_data *ch, struct char_data *johnson)
     rnum_t rnum = real_object(quest_table[GET_QUEST(ch)].reward);
     if (rnum > 0) {
       obj = read_object(rnum, REAL, OBJ_LOAD_REASON_QUEST_REWARD);
-      obj_to_char(obj, ch);
-      soulbind_obj_to_char(obj, ch, FALSE);
-      if (MOB_FLAGGED(johnson, MOB_INANIMATE)) {
-        act("You dispense $p for $N.", FALSE, johnson, obj, ch, TO_CHAR);
-        act("$n dispenses $p, and you pick it up.", FALSE, johnson, obj, ch, TO_VICT);
-        act("$n dispenses $p for $N.", TRUE, johnson, obj, ch, TO_NOTVICT);
-      } else {
-        act("You give $p to $N.", FALSE, johnson, obj, ch, TO_CHAR);
-        act("$n gives you $p.", FALSE, johnson, obj, ch, TO_VICT);
-        act("$n gives $p to $N.", TRUE, johnson, obj, ch, TO_NOTVICT);
+
+      // Check to see if they have it on them already.
+      if (get_carried_vnum(ch, GET_OBJ_VNUM(obj), FALSE)) {
+        act("You already have a copy of $p, so $n doesn't give you another.", FALSE, johnson, obj, ch, TO_VICT);
+        extract_obj(obj);
+        obj = NULL;
+      }
+      // You don't have one, so you get one.
+      else {
+        obj_to_char(obj, ch);
+        soulbind_obj_to_char(obj, ch, FALSE);
+        if (MOB_FLAGGED(johnson, MOB_INANIMATE)) {
+          act("You dispense $p for $N.", FALSE, johnson, obj, ch, TO_CHAR);
+          act("$n dispenses $p, and you pick it up.", FALSE, johnson, obj, ch, TO_VICT);
+          act("$n dispenses $p for $N.", TRUE, johnson, obj, ch, TO_NOTVICT);
+        } else {
+          act("You give $p to $N.", FALSE, johnson, obj, ch, TO_CHAR);
+          act("$n gives you $p.", FALSE, johnson, obj, ch, TO_VICT);
+          act("$n gives $p to $N.", TRUE, johnson, obj, ch, TO_NOTVICT);
+        }
       }
     }
   } else {
@@ -1168,16 +1184,12 @@ void reward(struct char_data *ch, struct char_data *johnson)
         if (!follower_can_receive_reward(f->follower, ch, FALSE))
           continue;
 
-        gain_nuyen(f->follower, nuyen, NUYEN_INCOME_AUTORUNS);
-        int gained = gain_karma(f->follower, karma, TRUE, FALSE, TRUE);
-        send_to_char(f->follower, "You gain %0.2f karma and %d nuyen for being in %s's group.\r\n", (float) gained * 0.01, nuyen, GET_CHAR_NAME(ch));
+        award_follower_payout(f->follower, karma, nuyen, ch);
       }
 
       // Skip invalid leaders WITHOUT sending a message.
       if (ch->master && follower_can_receive_reward(ch->master, ch, FALSE)) {
-        gain_nuyen(ch->master, nuyen, NUYEN_INCOME_AUTORUNS);
-        int gained = gain_karma(ch->master, karma, TRUE, FALSE, TRUE);
-        send_to_char(ch->master, "You gain %0.2f karma and %d nuyen for being in %s's group.\r\n", (float) gained * 0.01, nuyen, GET_CHAR_NAME(ch));
+        award_follower_payout(ch->master, karma, nuyen, ch);
       }
     }
   }
@@ -1189,6 +1201,13 @@ void reward(struct char_data *ch, struct char_data *johnson)
   snprintf(buf, sizeof(buf), "$n gives you %d nuyen.", nuyen);
   act(buf, FALSE, johnson, 0, ch, TO_VICT);
   send_to_char(ch, "You gain %.2f karma.\r\n", ((float) gained / 100));
+
+  mudlog_vfprintf(ch, LOG_GRIDLOG, "%s gains %0.2fk and %dn from job %ld. Elapsed time v2 %0.2f seconds.",
+                  GET_CHAR_NAME(ch),
+                  (float) gained * 0.01,
+                  nuyen,
+                  GET_QUEST(ch),
+                  difftime(time(0), GET_QUEST_STARTED(ch)));
   end_quest(ch, TRUE);
 }
 
@@ -1300,7 +1319,7 @@ int new_quest(struct char_data *mob, struct char_data *ch)
           }
         }
 
-        if (!prereq_found) {
+        if (!prereq_found && rep_too_high(ch, quest_table[quest_idx].prerequisite_quest)) {
           if (access_level(ch, LVL_BUILDER)) {
             send_to_char(ch, "[Skipping quest %ld: You need to have done prerequisite quest %lu first.]\r\n", quest_table[quest_idx].vnum, quest_table[quest_idx].prerequisite_quest);
           }
@@ -1471,7 +1490,7 @@ SPECIAL(johnson)
 
   bool need_to_speak = FALSE;
   bool need_to_act = FALSE;
-  bool is_sayto = CMD_IS("sayto") || CMD_IS("\"");
+  bool is_sayto = CMD_IS("sayto") || CMD_IS("\"") || CMD_IS("ask") || CMD_IS("whisper");
 
   // If there's an astral state mismatch, bail out.
   if ((IS_ASTRAL(johnson) && !SEES_ASTRAL(ch)) || (IS_ASTRAL(ch) && !SEES_ASTRAL(johnson))) {
@@ -1496,7 +1515,7 @@ SPECIAL(johnson)
     // They really are talking to us.
   }
 
-  if (CMD_IS("say") || CMD_IS("'") || is_sayto) {
+  if (CMD_IS("say") || CMD_IS("'") || is_sayto || CMD_IS("exclaim")) {
     if (str_str(argument, "quit"))
       comm = CMD_JOB_QUIT;
     else if (str_str(argument, "collect") || str_str(argument, "complete") || str_str(argument, "done") || str_str(argument, "finish") || str_str(argument, "pay"))
@@ -1516,6 +1535,7 @@ SPECIAL(johnson)
         GET_CQUEST(ch, i) = 0;
       }
       send_to_char("OK, your quest history has been cleared.\r\n", ch);
+      GET_QUEST_DIRTY_BIT(ch) = TRUE;
       return FALSE;
     } else {
       //snprintf(buf, sizeof(buf), "INFO: No Johnson keywords found in %s's speech: '%s'.", GET_CHAR_NAME(ch), argument);
@@ -1868,6 +1888,14 @@ SPECIAL(johnson)
         return TRUE;
       }
 
+      // Precondition: You can't be on a quest. Fixes edge case where you could say 'no' during spiel to cancel run.
+      if (GET_QUEST(ch)) {
+        if (access_level(ch, LVL_BUILDER)) {
+          send_to_char(ch, "Johnson won't react-- you're already on a quest and can't decline one.\r\n");
+        }
+        return TRUE;
+      }
+
       //Clever hack to safely save us a call to new_quest() that compiler will be ok with.
       //If we have a cached quest use that and reset the cache integer back to -2 when
       //it is consumed.
@@ -1883,7 +1911,7 @@ SPECIAL(johnson)
       //-1 if the johnson is broken and has no quests.
       if (new_q == 0) {
         //This is should never really happen but if it does let's log it.
-        snprintf(buf, sizeof(buf), "WARNING: Quest vanished between offered and declined from %s (%ld) due.", GET_NAME(johnson), GET_MOB_VNUM(johnson));
+        snprintf(buf, sizeof(buf), "WARNING: Quest vanished between offering and declining from %s (%ld).", GET_NAME(johnson), GET_MOB_VNUM(johnson));
         mudlog(buf, NULL, LOG_SYSLOG, true);
         do_say(johnson, "What are you talking about?", 0, 0);
         return TRUE;
@@ -1895,6 +1923,7 @@ SPECIAL(johnson)
       // Decline the quest.
       GET_SPARE1(johnson) = -1;
       GET_QUEST(ch) = 0;
+      GET_QUEST_STARTED(ch) = 0;
       forget(johnson, ch);
       if (quest_table[new_q].decline_emote && *quest_table[new_q].decline_emote) {
         // Don't @ me about this, it's the only way to reliably display a newline in this context.
@@ -2841,9 +2870,9 @@ void qedit_disp_menu(struct descriptor_data *d)
   send_to_char(CH, "3) Reputation range: %s%d%s-%s%d%s\r\n", CCCYN(CH, C_CMP),
                QUEST->min_rep, CCNRM(CH, C_CMP), CCCYN(CH, C_CMP),
                QUEST->max_rep, CCNRM(CH, C_CMP));
-  send_to_char(CH, "4) Bonus nuyen: %s%d%s\r\n", CCCYN(CH, C_CMP),
+  send_to_char(CH, "%s) Bonus nuyen: %s%d%s\r\n", GET_LEVEL(CH) >= LVL_ADMIN ? "4" : "-", CCCYN(CH, C_CMP),
                QUEST->nuyen, CCNRM(CH, C_CMP));
-  send_to_char(CH, "5) Bonus karma: %s%0.2f%s\r\n", CCCYN(CH, C_CMP),
+  send_to_char(CH, "%s) Bonus karma: %s%0.2f%s\r\n", GET_LEVEL(CH) >= LVL_ADMIN ? "4" : "-", CCCYN(CH, C_CMP),
                ((float)QUEST->karma / 100), CCNRM(CH, C_CMP));
   send_to_char(CH, "6) Item objective menu\r\n");
   send_to_char(CH, "7) Mobile objective menu\r\n");
@@ -3033,10 +3062,18 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
         d->edit_mode = QEDIT_MIN_REP;
         break;
       case '4':
+        if (GET_LEVEL(CH) < LVL_ADMIN) {
+          send_to_char(CH, "Sorry, overall bonuses can only be configured by Vile / Lucien.\r\n");
+          return;
+        }
         send_to_char("Enter bonus nuyen: ", CH);
         d->edit_mode = QEDIT_NUYEN;
         break;
       case '5':
+        if (GET_LEVEL(CH) < LVL_ADMIN) {
+          send_to_char(CH, "Sorry, overall bonuses can only be configured by Vile / Lucien.\r\n");
+          return;
+        }
         send_to_char("Enter bonus karma: ", CH);
         d->edit_mode = QEDIT_KARMA;
         break;
@@ -3609,9 +3646,14 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
         send_to_char(CH, "Enter M# of mob to equip item on: ('l' to list, 'q' to quit): ");
         break;
       case QOL_TARMOB_C:
+        send_to_char(CH, "Cyberware / bioware installation through quests is deprecated. Please edit the mob directly.\r\n");
+        qedit_disp_obj_objectives(d);
+        break;
+        /*
         d->edit_mode = QEDIT_O_LDATA;
         send_to_char(CH, "Enter M# of mob to install item in: ('l' to list, 'q' to quit): ");
         break;
+        */
       case QOL_HOST:
         d->edit_mode = QEDIT_O_LDATA;
         send_to_char(CH, "Enter vnum of host to load item into: ");

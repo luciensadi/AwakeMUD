@@ -91,6 +91,8 @@ extern void load_apartment_complexes();
 extern void parse_factions();
 extern void initialize_policy_tree();
 extern void initialize_traffic_msgs();
+extern void migrate_pocket_secretaries_in_database();
+extern void attempt_to_offload_unused_zones();
 
 extern void auto_repair_obj(struct obj_data *obj, idnum_t owner);
 
@@ -211,8 +213,7 @@ void assign_rooms(void);
 void assign_shopkeepers(void);
 void assign_johnsons(void);
 void randomize_shop_prices(void);
-int zone_is_empty(int zone_nr);
-void reset_zone(int zone, int reboot);
+void reset_zone(rnum_t zone, int reboot, bool process_doors=true);
 int file_to_string(const char *name, char *buf, size_t buf_size);
 int file_to_string_alloc(const char *name, char **buf);
 void check_start_rooms(void);
@@ -239,6 +240,7 @@ void boot_shop_orders(void);
 void price_cyber(struct obj_data *obj);
 void price_bio(struct obj_data *obj);
 extern void verify_db_password_column_size();
+extern void verify_db_max_packet_constraints();
 void set_elemental_races();
 void initialize_and_alphabetize_flag_maps();
 void set_up_pet_dummy_mob();
@@ -582,6 +584,9 @@ void boot_world(void)
   log("Verifying DB compatibility with extended-length passwords.");
   verify_db_password_column_size();
 
+  log("Verifying DB max-packet constraints allow for expanded saving.");
+  verify_db_max_packet_constraints();
+
   // Search terms below because it always takes me forever to ctrl-f this block -LS
   // ensure table, ensure row, ensure field, database, limits, restrictions
   log("Verifying that DB has expected migrations. Note that not all migrations are checked here.");
@@ -620,6 +625,9 @@ void boot_world(void)
   require_that_sql_table_exists("pfiles_exdescs", "SQL/Migrations/add_exdescs.sql");
   require_that_field_exists_in_table("otaku_path", "pfiles", "SQL/Migrations/add_otaku.sql");
   require_that_sql_table_exists("pfiles_echoes", "SQL/Migrations/add_otaku_echoes.sql");
+  require_that_sql_table_exists("pocsec_phonebook", "SQL/Migrations/add_phonebook.sql");
+  require_that_field_exists_in_table("is_protected", "pfiles_mail", "SQL/Migrations/digitize_mail.sql");
+  require_that_sql_table_exists("pfiles_stowed", "SQL/Migrations/hammerspace.sql");
 
   {
     const char *object_tables[4] = {
@@ -787,6 +795,12 @@ void DBInit()
     write_zone_to_disk(zone_table[i].number);
     // log("Written.");
   }
+
+  log("Offloading all zones now that we've loaded J's, specs, etc...");
+  attempt_to_offload_unused_zones();
+
+  log("Migrating pocket secretaries in database.");
+  migrate_pocket_secretaries_in_database();
 
   log("Booting houses.");
   load_apartment_complexes();
@@ -1821,8 +1835,7 @@ void parse_mobile(File &in, long nr)
   VTable data;
   data.Parse(&in);
 
-  mob->player.physical_text.keywords =
-    str_dup(data.GetString("Keywords", "mob unnamed"));
+  GET_SETTABLE_KEYWORDS(mob) = str_dup(data.GetString("Keywords", "mob unnamed"));
   mob->player.physical_text.name =
     str_dup(data.GetString("Name", "an unnamed mob"));
   mob->player.physical_text.room_desc =
@@ -2188,10 +2201,12 @@ void parse_object(File &fl, long nr)
       case ITEM_CYBERWARE:
         price_cyber(obj);
         obj->obj_flags.wear_flags.SetBit(ITEM_WEAR_TAKE);
+        GET_OBJ_MATERIAL(obj) = MATERIAL_ELECTRONICS;
         break;
       case ITEM_BIOWARE:
         price_bio(obj);
         obj->obj_flags.wear_flags.SetBit(ITEM_WEAR_TAKE);
+        GET_OBJ_MATERIAL(obj) = MATERIAL_ORGANIC;
         break;
       case ITEM_PROGRAM:
         if (GET_OBJ_VAL(obj, 0) == SOFT_ATTACK)
@@ -2644,11 +2659,14 @@ void parse_shop(File &fl, long virtual_nr)
     log_vfprintf("FATAL ERROR: Shop #%ld is below zone %d.\n", virtual_nr, zone_table[zone].number);
     exit(ERROR_WORLD_BOOT_FORMAT_ERROR);
   }
-  while (virtual_nr > zone_table[zone].top)
+  
+  while (virtual_nr > zone_table[zone].top) {
     if (++zone > top_of_zone_table) {
       log_vfprintf("FATAL ERROR: Shop %ld is outside of any zone.\n", virtual_nr);
       exit(ERROR_WORLD_BOOT_FORMAT_ERROR);
     }
+  }
+
   shop_data *shop = shop_table+rnum;
   shop->vnum = virtual_nr;
   VTable data;
@@ -2689,14 +2707,14 @@ void parse_shop(File &fl, long virtual_nr)
     }
   }
 
-  // snprintf(buf3, sizeof(buf3), "Parsing shop items for shop %ld (%d found).", virtual_nr, num_fields);
+  snprintf(buf3, sizeof(buf3), "Parsing shop items for shop %ld (%d found).", virtual_nr, num_fields);
   for (int x = 0; x < num_fields; x++) {
     const char *name = data.GetIndexSection("SELLING", x);
     snprintf(field, sizeof(field), "%s/Vnum", name);
     vnum = data.GetLong(field, 0);
-    // snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "\r\n - %s (%d)", name, vnum);
+    snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), "\r\n - %s (%d)", name, vnum);
     if (real_object(vnum) < 1) {
-      // snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), " - nonexistant! Skipping.");
+      snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), " - nonexistant! Skipping.");
       continue;
     }
     shop_sell_data *sell = new shop_sell_data;
@@ -2713,9 +2731,9 @@ void parse_shop(File &fl, long virtual_nr)
           temp->next = sell;
           break;
         }
-    // snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), ": type %d, stock %d.", sell->type, sell->stock);
+    snprintf(ENDOF(buf3), sizeof(buf3) - strlen(buf3), ": type %d, stock %d.", sell->type, sell->stock);
   }
-  // mudlog(buf3, NULL, LOG_SYSLOG, TRUE);
+  mudlog(buf3, NULL, LOG_SYSLOG, TRUE);
   shop->selling = templist;
   top_of_shopt = rnum++;
 }
@@ -3159,7 +3177,7 @@ int vnum_mobile_attribute(char *attrname, struct char_data *ch) {
   int attr = search_block(attrname, attributes, FALSE);
 
   if (attr >= NUM_ATTRIBUTES || attr < 0) {
-    send_to_char(ch, "'%s' is not a valid attribute. Choices are:\r\n", attributes);
+    send_to_char(ch, "'%s' is not a valid attribute. Choices are:\r\n", attributes[attr]);
     for (attr = 0; attr < NUM_ATTRIBUTES; attr++) {
       send_to_char(ch, "%s%s%s", attr == 0 ? "" : ", ", attributes[attr], attr == NUM_ATTRIBUTES - 1 ? "\r\n" : "");
     }
@@ -3543,7 +3561,7 @@ int vnum_mobile(char *searchname, struct char_data * ch)
     return vnum_mobile_attribute(searchname,ch);
   for (nr = 0; nr <= top_of_mobt; nr++)
   {
-    bool is_keyword = isname(searchname, get_string_after_color_code_removal(mob_proto[nr].player.physical_text.keywords, NULL));
+    bool is_keyword = isname(searchname, get_string_after_color_code_removal(GET_KEYWORDS(&mob_proto[nr]), NULL));
     bool is_name = isname(searchname, get_string_after_color_code_removal(mob_proto[nr].player.physical_text.name, NULL));
     if (is_keyword || is_name) {
       snprintf(buf, sizeof(buf), "%3d. [%5ld] %s\r\n", ++found,
@@ -3572,7 +3590,7 @@ int vnum_object_weapons(char *searchname, struct char_data * ch)
         for (nr = 0; nr <= top_of_objt; nr++) {
           if (GET_OBJ_TYPE(&obj_proto[nr]) != ITEM_WEAPON)
             continue;
-          if (!IS_GUN(GET_WEAPON_ATTACK_TYPE(&obj_proto[nr])))
+          if (!WEAPON_IS_GUN(&obj_proto[nr]))
             continue;
           if (GET_WEAPON_POWER(&obj_proto[nr]) < power && power != 0)
             continue;
@@ -3652,7 +3670,7 @@ int vnum_object_weapons_fa_pro(char *searchname, struct char_data * ch)
     for (nr = 0; nr <= top_of_objt; nr++) {
       if (GET_OBJ_TYPE(&obj_proto[nr]) != ITEM_WEAPON)
         continue;
-      if (!IS_GUN(GET_WEAPON_ATTACK_TYPE(&obj_proto[nr])))
+      if (!WEAPON_IS_GUN(&obj_proto[nr]))
         continue;
       if (GET_WEAPON_POWER(&obj_proto[nr]) < power && power != 0)
         continue;
@@ -3667,6 +3685,54 @@ int vnum_object_weapons_fa_pro(char *searchname, struct char_data * ch)
 
       ++found;
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "[%6ld :%3d] ^c%2d%s ^yIRC:%d^n %s (^W%s^n, ^c%d^n rounds, modes:^c%s%s%s%s^n%s)%s\r\n",
+              OBJ_VNUM_RNUM(nr),
+              ObjList.CountObj(nr),
+              GET_WEAPON_POWER(&obj_proto[nr]),
+              wound_arr[GET_WEAPON_DAMAGE_CODE(&obj_proto[nr])],
+              GET_WEAPON_INTEGRAL_RECOIL_COMP(&obj_proto[nr]),
+              obj_proto[nr].text.name,
+              weapon_types[GET_WEAPON_ATTACK_TYPE(&obj_proto[nr])],
+              GET_WEAPON_MAX_AMMO(&obj_proto[nr]),
+              WEAPON_CAN_USE_FIREMODE(&obj_proto[nr], MODE_SS) ? " SS" : "",
+              WEAPON_CAN_USE_FIREMODE(&obj_proto[nr], MODE_SA) ? " SA" : "",
+              WEAPON_CAN_USE_FIREMODE(&obj_proto[nr], MODE_BF) ? " BF" : "",
+              WEAPON_CAN_USE_FIREMODE(&obj_proto[nr], MODE_FA) ? " FA" : "",
+              CAN_WEAR(&obj_proto[nr], ITEM_WEAR_WIELD) ? ", ^yWieldable^n" : "",
+              obj_proto[nr].source_info ? "  ^g(canon)^n" : "");
+    }
+  }
+  page_string(ch->desc, buf, 1);
+  return (found);
+}
+
+int vnum_object_weapons_singleshot(char *searchname, struct char_data * ch)
+{
+  char buf[MAX_STRING_LENGTH*8];
+  extern const char *wound_arr[];
+  int nr, found = 0;
+  buf[0] = '\0';
+
+  for(int power = 21; power >= 0; power-- ) {
+    for (nr = 0; nr <= top_of_objt; nr++) {
+      if (GET_OBJ_TYPE(&obj_proto[nr]) != ITEM_WEAPON)
+        continue;
+      if (!WEAPON_IS_GUN(&obj_proto[nr]))
+        continue;
+      if (GET_WEAPON_POWER(&obj_proto[nr]) < power && power != 0)
+        continue;
+      if (GET_WEAPON_POWER(&obj_proto[nr]) > power && power != 21)
+        continue;
+      if (IS_OBJ_STAT(&obj_proto[nr], ITEM_EXTRA_STAFF_ONLY))
+        continue;
+      if (!vnum_from_editing_restricted_zone(OBJ_VNUM_RNUM(nr)))
+        continue;
+      if (GET_WEAPON_MAX_AMMO(&obj_proto[nr]) != 1)
+        continue;
+      if (GET_WEAPON_POSSIBLE_FIREMODES(&obj_proto[nr]) != (1 << MODE_SS))
+        continue;
+
+      ++found;
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "[%6ld :%3d] ^c%2d%s ^yIRC:%d^n %s (^W%s^n, ^c%d^n round, modes:^c%s%s%s%s^n%s)%s\r\n",
               OBJ_VNUM_RNUM(nr),
               ObjList.CountObj(nr),
               GET_WEAPON_POWER(&obj_proto[nr]),
@@ -3720,7 +3786,7 @@ int vnum_object_weapons_by_type(char *searchname, struct char_data * ch)
           found++;
           found_of_type++;
 
-          if (IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon))) {
+          if (WEAPON_IS_GUN(weapon)) {
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "[%6ld :%3d] ^c%2d%s ^yIRC:%d^n %s (^W%s^n, ^c%d^n rounds, modes:^c%s%s%s%s^n%s)%s\r\n",
                     OBJ_VNUM_RNUM(nr),
                     ObjList.CountObj(nr),
@@ -4165,6 +4231,8 @@ int vnum_object(char *searchname, struct char_data * ch)
     return vnum_object_weapons_broken(searchname,ch);
   if (!strcmp(searchname,"faweaponslist"))
     return vnum_object_weapons_fa_pro(searchname,ch);
+  if (!strcmp(searchname,"ssweaponslist"))
+    return vnum_object_weapons_singleshot(searchname,ch);
   if (!strcmp(searchname,"weaponsbytype"))
     return vnum_object_weapons_by_type(searchname,ch);
   if (!strcmp(searchname,"armorslist"))
@@ -4471,44 +4539,20 @@ struct obj_data *read_object(int nr, int type, int load_origin, int pc_load_orig
   obj->load_time = time(0);
   obj->pc_load_origin = pc_load_origin;
   obj->pc_load_idnum = pc_load_idnum;
-  if (GET_OBJ_TYPE(obj) == ITEM_PHONE)
-  {
-    switch (GET_OBJ_VAL(obj, 0)) {
-    case 0:
+  if (GET_OBJ_TYPE(obj) == ITEM_PHONE || (GET_OBJ_TYPE(obj) == ITEM_CYBERWARE && GET_OBJ_VAL(obj, 0) == CYB_PHONE)) {
+    // We used to have phone numbers based on jurisdiction / issuing locale, but most people don't notice that and it caused birthday collisions.
+    // We now do a fully random phone number.
+    if (GET_OBJ_TYPE(obj) == ITEM_CYBERWARE) {
+      GET_OBJ_VAL(obj, 8) = 1102; // Don't know what this is, so we persist it.
+      GET_CYBERWARE_PHONE_NUMBER_PART_ONE(obj) = number(0, 9999);
+      GET_CYBERWARE_PHONE_NUMBER_PART_TWO(obj) = number(0, 9999);
+    } else {
       GET_OBJ_VAL(obj, 8) = 1102;
-      snprintf(buf, sizeof(buf), "%d206", number(0, 9));
-      break;
-    case 1:
-      GET_OBJ_VAL(obj, 8) = 1102;
-      snprintf(buf, sizeof(buf), "%d321", number(0, 9));
-      break;
-    case 2:
-      GET_OBJ_VAL(obj, 8) = 1103;
-      snprintf(buf, sizeof(buf), "%d503", number(0, 9));
-      break;
+      GET_ITEM_PHONE_NUMBER_PART_ONE(obj) = number(0, 9999);
+      GET_ITEM_PHONE_NUMBER_PART_TWO(obj) = number(0, 9999);
     }
-    GET_OBJ_VAL(obj, 0) = atoi(buf);
-    GET_OBJ_VAL(obj, 1) = number(0, 9999);
-  } else if (GET_OBJ_TYPE(obj) == ITEM_CYBERWARE && GET_OBJ_VAL(obj, 0) == CYB_PHONE)
-  {
-    switch (GET_OBJ_VAL(obj, 3)) {
-    case 0:
-      GET_OBJ_VAL(obj, 8) = 1102;
-      snprintf(buf, sizeof(buf), "%d206", number(0, 9));
-      break;
-    case 1:
-      GET_OBJ_VAL(obj, 8) = 1102;
-      snprintf(buf, sizeof(buf), "%d321", number(0, 9));
-      break;
-    case 2:
-      GET_OBJ_VAL(obj, 8) = 1103;
-      snprintf(buf, sizeof(buf), "%d503", number(0, 9));
-      break;
-    }
-    GET_OBJ_VAL(obj, 3) = atoi(buf);
-    GET_OBJ_VAL(obj, 6) = number(0, 9999);
   } else if (GET_OBJ_TYPE(obj) == ITEM_GUN_MAGAZINE) {
-    GET_OBJ_VAL(obj, 9) = GET_OBJ_VAL(obj, 0);
+    GET_MAGAZINE_AMMO_COUNT(obj) = GET_MAGAZINE_BONDED_MAXAMMO(obj);
   } else if (GET_OBJ_TYPE(obj) == ITEM_WEAPON)
     handle_weapon_attachments(obj);
 
@@ -4570,14 +4614,15 @@ void zone_update(void)
   if (((++timer * PULSE_ZONE) / PASSES_PER_SEC) >= 60) {
     timer = 0;
     for (i = 0; i <= top_of_zone_table; i++) {
-      if (zone_table[i].age < zone_table[i].lifespan &&
-          zone_table[i].reset_mode != ZONE_RESET_NEVER)
+      if (zone_table[i].age < zone_table[i].lifespan && zone_table[i].reset_mode != ZONE_RESET_NEVER) {
         (zone_table[i].age)++;
+      }
 
-      if (zone_table[i].age >= MAX(zone_table[i].lifespan,5) &&
-          zone_table[i].age < ZO_DEAD && zone_table[i].reset_mode &&
-          (zone_table[i].reset_mode == ZONE_RESET_ALWAYS ||
-           zone_is_empty(i))) {
+      if (zone_table[i].age >= MAX(zone_table[i].lifespan, 5)
+          && zone_table[i].age < ZO_DEAD
+          && zone_table[i].reset_mode
+          && (zone_table[i].reset_mode == ZONE_RESET_ALWAYS || zone_table[i].players_in_zone == 0))
+      {
         reset_zone(i, 0);
       }
     }
@@ -4653,7 +4698,7 @@ void zcmd_repair_door(struct room_data *room, int dir) {
 #define ZONE_ERROR(message) {log_zone_error(zone, cmd_no, message); last_cmd = 0;}
 
 /* execute the reset command table of a given zone */
-void reset_zone(int zone, int reboot)
+void reset_zone(rnum_t zone, int reboot, bool process_doors)
 {
   SPECIAL(fixer);
   int cmd_no, last_cmd = 0, found = 0, no_mob = 0, temp_qty = 0;
@@ -4661,6 +4706,10 @@ void reset_zone(int zone, int reboot)
   struct char_data *mob = NULL;
   struct obj_data *obj = NULL, *obj_to = NULL, *check = NULL;
   struct veh_data *veh = NULL;
+
+  // Refuse to process zone resets for offloaded zones.
+  if (zone_table[zone].offloaded_at)
+    return;
 
   for (cmd_no = 0; cmd_no < zone_table[zone].num_cmds; cmd_no++) {
     /*
@@ -4681,6 +4730,11 @@ void reset_zone(int zone, int reboot)
     case 'M':                 /* read a mobile */
       temp_qty = ZCMD.arg4;
       do {
+#ifndef USE_GLOBAL_ZCMD_LIMITS
+      // Coerce global loads to 'max 1 in room' loads.
+      if (ZCMD.arg2 == 0)
+        ZCMD.arg2 = -2;
+#endif
         bool passed_global_limits = (mob_index[ZCMD.arg1].number < ZCMD.arg2) || (ZCMD.arg2 == -1);
         bool passed_load_on_reboot = (ZCMD.arg2 == 0) && reboot;
         bool passed_room_limits = FALSE;
@@ -4724,6 +4778,12 @@ void reset_zone(int zone, int reboot)
         break;
 
       {
+#ifndef USE_GLOBAL_ZCMD_LIMITS
+        // Coerce global loads to 'max 1 in room' loads.
+        if (ZCMD.arg2 == 0)
+          ZCMD.arg2 = -2;
+#endif
+
         bool passed_global_limits = (mob_index[ZCMD.arg1].number < ZCMD.arg2) || (ZCMD.arg2 == -1);
         bool passed_load_on_reboot = (ZCMD.arg2 == 0) && reboot;
         bool passed_room_limits = FALSE;
@@ -4789,6 +4849,13 @@ void reset_zone(int zone, int reboot)
     case 'U':                 /* mount/upgrades a vehicle with object */
       if (!veh)
         break;
+
+#ifndef USE_GLOBAL_ZCMD_LIMITS
+      // Coerce global loads to 'max 1 in room' loads.
+      if (ZCMD.arg2 == 0)
+        ZCMD.arg2 = -2;
+#endif
+
       if ((obj_index[ZCMD.arg1].number < ZCMD.arg2) || (ZCMD.arg2 == -1) || (ZCMD.arg2 == 0 && reboot)) {
         obj = read_object(ZCMD.arg1, REAL, OBJ_LOAD_REASON_ZONECMD);
 
@@ -4802,7 +4869,7 @@ void reset_zone(int zone, int reboot)
         }
 
         // Special case: Weapons for mounts. Note that this ignores current vehicle load, mount size, etc.
-        else if (GET_OBJ_TYPE(obj) == ITEM_WEAPON && IS_GUN(GET_WEAPON_ATTACK_TYPE(obj))) {
+        else if (GET_OBJ_TYPE(obj) == ITEM_WEAPON && WEAPON_IS_GUN(obj)) {
           struct obj_data *mount = NULL;
 
           // Iterate through every mount on the vehicle.
@@ -4865,6 +4932,13 @@ void reset_zone(int zone, int reboot)
     case 'I':                 /* puts an item into vehicle */
       if (!veh)
         break;
+
+#ifndef USE_GLOBAL_ZCMD_LIMITS
+      // Coerce global loads to 'max 1 in room' loads.
+      if (ZCMD.arg2 == 0)
+        ZCMD.arg2 = -2;
+#endif
+
       if ((obj_index[ZCMD.arg1].number < ZCMD.arg2) || (ZCMD.arg2 == -1) ||
           (ZCMD.arg2 == 0 && reboot)) {
         obj = read_object(ZCMD.arg1, REAL, OBJ_LOAD_REASON_ZONECMD);
@@ -4875,6 +4949,13 @@ void reset_zone(int zone, int reboot)
       break;
     case 'V':                 /* loads a vehicle */
       {
+
+#ifndef USE_GLOBAL_ZCMD_LIMITS
+        // Coerce global loads to 'max 1 in room' loads.
+        if (ZCMD.arg2 == 0)
+          ZCMD.arg2 = -2;
+#endif
+
         bool passed_global_limits = (veh_index[ZCMD.arg1].number < ZCMD.arg2) || (ZCMD.arg2 == -1);
         bool passed_load_on_reboot = (ZCMD.arg2 == 0) && reboot;
         bool passed_room_limits = FALSE;
@@ -4902,6 +4983,13 @@ void reset_zone(int zone, int reboot)
     case 'H':                 /* loads a Matrix file into a host */
       // Count the existing items in this host
       {
+
+#ifndef USE_GLOBAL_ZCMD_LIMITS
+        // Coerce global loads to 'max 1 in room' loads.
+        if (ZCMD.arg2 == 0)
+          ZCMD.arg2 = -2;
+#endif
+
         // Log annoyingly if this is a bitshifted snowflake key.
         if (GET_OBJ_VNUM(&obj_proto[ZCMD.arg1]) == OBJ_SNOWFLAKE_KEY && matrix[ZCMD.arg3].vnum != HOST_SNOWFLAKE_KEY_LOCATION) {
           mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Bitshift happened! The snowflake key is attempting to load in inappropriate host %ld. Redirecting to proper host.", matrix[ZCMD.arg3].vnum);
@@ -4928,6 +5016,13 @@ void reset_zone(int zone, int reboot)
       break;
     case 'O':                 /* read an object */
       {
+
+#ifndef USE_GLOBAL_ZCMD_LIMITS
+      // Coerce global loads to 'max 1 in room' loads.
+      if (ZCMD.arg2 == 0)
+        ZCMD.arg2 = -2;
+#endif
+
         bool passed_global_limits = (obj_index[ZCMD.arg1].number < ZCMD.arg2) || (ZCMD.arg2 == -1);
         bool passed_load_on_reboot = (ZCMD.arg2 == 0) && reboot;
         bool passed_room_limits = FALSE;
@@ -4971,6 +5066,13 @@ void reset_zone(int zone, int reboot)
       break;
     case 'P':                 /* object to object */
       {
+
+#ifndef USE_GLOBAL_ZCMD_LIMITS
+      // Coerce global loads to 'max 1 in room' loads.
+      if (ZCMD.arg2 == 0)
+        ZCMD.arg2 = -2;
+#endif
+
         bool passed_global_limits = (obj_index[ZCMD.arg1].number < ZCMD.arg2) || (ZCMD.arg2 == -1);
         bool passed_load_on_reboot = (ZCMD.arg2 == 0) && reboot;
         bool passed_room_limits = FALSE;
@@ -5000,7 +5102,7 @@ void reset_zone(int zone, int reboot)
           if (GET_OBJ_TYPE(obj_to) == ITEM_HOLSTER) {
             GET_HOLSTER_READY_STATUS(obj_to) = 1;
 
-            if (GET_OBJ_TYPE(obj) == ITEM_WEAPON && IS_GUN(GET_WEAPON_ATTACK_TYPE(obj))) {
+            if (GET_OBJ_TYPE(obj) == ITEM_WEAPON && WEAPON_IS_GUN(obj)) {
               // If it's carried by an NPC, make sure it's loaded.
               if (GET_WEAPON_MAX_AMMO(obj) > 0) {
                 struct obj_data *outermost = obj;
@@ -5055,6 +5157,13 @@ void reset_zone(int zone, int reboot)
       }
 
       {
+
+#ifndef USE_GLOBAL_ZCMD_LIMITS
+        // Coerce global loads to 'max 1 in room' loads.
+        if (ZCMD.arg2 == 0)
+          ZCMD.arg2 = -2;
+#endif
+
         bool passed_global_limits = (obj_index[ZCMD.arg1].number < ZCMD.arg2) || (ZCMD.arg2 == -1);
         bool passed_load_on_reboot = (ZCMD.arg2 == 0) && reboot;
         bool passed_room_limits = FALSE;
@@ -5086,6 +5195,13 @@ void reset_zone(int zone, int reboot)
         break;
       }
       {
+
+#ifndef USE_GLOBAL_ZCMD_LIMITS
+        // Coerce global loads to 'max 1 in room' loads.
+        if (ZCMD.arg2 == 0)
+          ZCMD.arg2 = -2;
+#endif
+
         bool passed_global_limits = (obj_index[ZCMD.arg1].number < ZCMD.arg2) || (ZCMD.arg2 == -1);
         bool passed_load_on_reboot = (ZCMD.arg2 == 0) && reboot;
         
@@ -5103,7 +5219,7 @@ void reset_zone(int zone, int reboot)
 
               // If it's a weapon, reload it.
               if (GET_OBJ_TYPE(obj) == ITEM_WEAPON
-                  && IS_GUN(GET_WEAPON_ATTACK_TYPE(obj))
+                  && WEAPON_IS_GUN(obj)
                   && GET_WEAPON_MAX_AMMO(obj) != -1) 
               {
                 // Reload from their ammo.
@@ -5135,6 +5251,13 @@ void reset_zone(int zone, int reboot)
           ZONE_ERROR("attempt to give obj to non-existent mob");
         break;
       }
+
+#ifndef USE_GLOBAL_ZCMD_LIMITS
+      // Coerce global loads to 'max 1 in room' loads.
+      if (ZCMD.arg2 == 0)
+        ZCMD.arg2 = -2;
+#endif
+
       last_cmd = 0;
       for (i = 0; (i < ZCMD.arg3) && ((obj_index[ZCMD.arg1].number < ZCMD.arg2) ||
                                       (ZCMD.arg2 == -1) || (ZCMD.arg2 == 0 && reboot)); ++i) {
@@ -5211,7 +5334,7 @@ void reset_zone(int zone, int reboot)
 #define DOOR_STRUCT world[ZCMD.arg1].dir_option[ZCMD.arg2]
 #define REV_DOOR_STRUCT opposite_room->dir_option[rev_dir[ZCMD.arg2]]
     case 'D':                 /* set state of door */
-      {
+      if (process_doors) {
         if (ZCMD.arg2 < 0 || ZCMD.arg2 >= NUM_OF_DIRS) {
           ZONE_ERROR("Invalid direction specified.");
           break;
@@ -5312,19 +5435,6 @@ void reset_zone(int zone, int reboot)
     }
   }
 
-}
-
-/* for use in reset_zone; return TRUE if zone 'nr' is Free of non-idle PC's  */
-int zone_is_empty(int zone_nr)
-{
-  struct descriptor_data *i;
-
-  for (i = descriptor_list; i; i = i->next)
-    if (!i->connected && i->character && i->character->char_specials.timer < IDLE_TIMER_ZONE_RESET_THRESHOLD)
-      if (i->character->in_room && i->character->in_room->zone == zone_nr)
-        return 0;
-
-  return 1;
 }
 
 
@@ -7884,7 +7994,6 @@ void initialize_and_alphabetize_item_extra_flags() {
   for (int idx = 0; idx < MAX_ITEM_EXTRA; idx++) {
     switch(idx) {
       case 4:
-      case 5:
       case 14:
       case 22:
         continue;

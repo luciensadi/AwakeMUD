@@ -38,10 +38,6 @@ class ApartmentComplex;
 class Apartment;
 class ApartmentRoom;
 class PCExDesc;
-#ifdef TEMPORARY_COMPILATION_GUARD
-class MinigameContainer;
-class MinigameModule;
-#endif
 
 /***********************************************************************
  * Structures                                                          *
@@ -535,10 +531,10 @@ struct char_point_data
   sh_int impact[3];       /* Impact armor class for clubs and such   */
   long nuyen;           /* Money carried */
   long bank;           /* Nuyen the char has in a bank account */
-  int karma;            /* The experience of the player */
-  unsigned int rep;              /* the reputation of the player  (karma earned via runs) */
-  unsigned int noto;              /* the reputation of the player  (karma earned via kills) */
-  sh_int tke;              /* the reputation of the player  (karma earned total) */
+  long karma;            /* The experience of the player */
+  long rep;              /* the reputation of the player  (karma earned via runs) */
+  long noto;              /* the reputation of the player  (karma earned via kills) */
+  long tke;              /* the reputation of the player  (karma earned total) */
   ush_int sig;
   sbyte init_dice;     /* Bonuses for initiative dice             */
   sh_int init_roll;     /* Total of init roll                      */
@@ -734,6 +730,7 @@ struct player_special_data
   struct remem *remem;         /* Character's Remembers          */
   idnum_t last_tell;              /* idnum of last tell from              */
   sh_int  questnum;
+  time_t quest_started;
   sh_int *obj_complete;
   sh_int *mob_complete;
   long last_quest[QUEST_TIMER];
@@ -750,8 +747,8 @@ struct player_special_data
   Bitfield covered_wearlocs;
 
   player_special_data() :
-      aliases(NULL), remem(NULL), last_tell(0), questnum(0), obj_complete(NULL),
-      mob_complete(NULL), mental_loss(0), physical_loss(0),
+      aliases(NULL), remem(NULL), last_tell(0), questnum(0), quest_started(0),
+      obj_complete(NULL), mob_complete(NULL), mental_loss(0), physical_loss(0),
       perm_bod(0), watching(NULL), wherelist_checks(0), max_exdescs(0)
   {
     ZERO_OUT_ARRAY(last_quest, QUEST_TIMER);
@@ -864,6 +861,7 @@ struct veh_data
   int damage;
   sh_int cspeed;
   int veh_destruction_timer;
+  int players_in_veh;
 
   struct veh_follow *followers;
   struct veh_data *following;
@@ -912,7 +910,7 @@ struct veh_data
   veh_data() :
       in_room(NULL), name(NULL), description(NULL), short_description(NULL), restring(NULL),
       long_description(NULL), restring_long(NULL), decorate_front(NULL), decorate_rear(NULL),
-      inside_description(NULL), rear_description(NULL), veh_destruction_timer(0), 
+      inside_description(NULL), rear_description(NULL), veh_destruction_timer(0), players_in_veh(0),
       followers(NULL), following(NULL), followch(NULL), mount(NULL), sub(FALSE), sub_rank(0),
       idnum(0), owner(0), spare(0), spare2(0), dest(NULL), defined_position(NULL),
       contents(NULL), people(NULL), rigger(NULL), fighting(NULL), fight_veh(NULL), next_veh(NULL),
@@ -1047,7 +1045,7 @@ struct txt_block
   struct txt_block *next;
 
   txt_block() :
-      text(NULL), next(NULL)
+      text(NULL), aliased(0), next(NULL)
   {}
 }
 ;
@@ -1074,6 +1072,14 @@ struct ccreate_t
   idnum_t prestige_bagholder;
   int prestige_cost;
   bool is_otaku;
+
+  ccreate_t() :
+    mode(0), force_points(0), temp(0), points(0), prestige_race(0), prestige_bagholder(0), prestige_cost(0), is_otaku(false)
+  {
+    for (int idx=0; idx < NUM_CCR_PR_POINTS; idx++) {
+      pr[idx] = 0;
+    }
+  }
 };
 
 struct descriptor_data
@@ -1118,6 +1124,8 @@ struct descriptor_data
   int invalid_command_counter;
   char last_sprayed[MAX_INPUT_LENGTH];
 
+  int regenerating_art_quota;
+
   long nuyen_paid_for_wheres_my_car;
   long nuyen_income_this_play_session[NUM_OF_TRACKED_NUYEN_INCOME_SOURCES];
 
@@ -1133,6 +1141,7 @@ struct descriptor_data
   int iedit_limit_edits;        /* Used in iedit to let you cut out of g-menus early. */
   void **misc_data;             /* misc data, usually for extra data crap */
   struct obj_data *edit_obj;    /* iedit */
+  struct obj_data *edit_obj_secondary;    /* iedit */
   struct room_data *edit_room;  /* redit */
   struct char_data *edit_mob;   /* medit */
   struct quest_data *edit_quest;/* qedit */
@@ -1152,31 +1161,26 @@ struct descriptor_data
   Faction *edit_faction;
   PCExDesc *edit_exdesc;
   Playergroup *edit_pgroup; /* playergroups */
-  #ifdef TEMPORARY_COMPILATION_GUARD
-  MinigameModule *edit_minigame_module;
-  MinigameContainer *edit_minigame_container;
-  #endif
   // If you add more of these edit_whatevers, touch comm.cpp's free_editing_structs and add them!
 
   int canary;
   protocol_t *pProtocol;
 
-  // this is for spell creation
-
-  // This is mostly a just-in-case section. Descriptors are zeroed out when created in comm.cpp's new_descriptor().
   descriptor_data() :
-      showstr_head(NULL), showstr_point(NULL), str(NULL),
-      output(NULL), output_canary(CANARY_VALUE), large_outbuf(NULL), input_and_character_canary(CANARY_VALUE),
+      descriptor(0), peer_port(0), bad_pws(0), idle_ticks(0), invalid_name(0), connected(0), wait(0),
+      desc_num(0), login_time(0), showstr_head(NULL), showstr_point(NULL), str(NULL),
+      max_str(0), mail_to(0), prompt_mode(0), inbuf_canary(CANARY_VALUE), last_input_canary(CANARY_VALUE),
+      small_outbuf_canary(CANARY_VALUE), output(NULL), output_canary(CANARY_VALUE), bufptr(0), bufspace(0),
+      large_outbuf(NULL), input_and_character_canary(CANARY_VALUE),
       character(NULL), original(NULL), snooping(NULL), snoop_by(NULL), next(NULL), watching(NULL), watcher(NULL),
-      invalid_command_counter(0), iedit_limit_edits(0), misc_data(NULL),
-      edit_obj(NULL), edit_room(NULL), edit_mob(NULL), edit_quest(NULL), edit_shop(NULL),
+      invalid_command_counter(0), regenerating_art_quota(0), nuyen_paid_for_wheres_my_car(0),
+      edit_mode(0), edit_convert_color_codes(false), edit_number(0), edit_number2(0), edit_number3(0),
+      edit_zone(0), iedit_limit_edits(0), misc_data(NULL),
+      edit_obj(NULL), edit_obj_secondary(NULL), edit_room(NULL), edit_mob(NULL), edit_quest(NULL), edit_shop(NULL),
       edit_zon(NULL), edit_cmd(NULL), edit_veh(NULL), edit_host(NULL), edit_icon(NULL),
       edit_helpfile(NULL), edit_complex(NULL), edit_complex_original(NULL),
       edit_apartment(NULL), edit_apartment_original(NULL), edit_apartment_room(NULL),
-      edit_apartment_room_original(NULL), edit_faction(NULL), edit_pgroup(NULL),
-#ifdef TEMPORARY_COMPILATION_GUARD
-      edit_minigame_module(NULL), edit_minigame_container(NULL),
-#endif
+      edit_apartment_room_original(NULL), edit_faction(NULL), edit_exdesc(NULL), edit_pgroup(NULL),
       canary(CANARY_VALUE), pProtocol(NULL)
   {
     // Zero out the communication history for all channels.
@@ -1188,7 +1192,11 @@ struct descriptor_data
       nuyen_income_this_play_session[i] = 0;
     }
 
-    // Wipe last_sprayed.
+    // Clear buffers.
+    host[0] = '\0';
+    inbuf[0] = '\0';
+    last_input[0] = '\0';
+    small_outbuf[0] = '\0';
     last_sprayed[0] = '\0';
   }
 }
@@ -1229,7 +1237,7 @@ struct message_list
   struct message_type *msg;      /* List of messages.                    */
 
   message_list() :
-    msg(NULL)
+    a_type(0), number_of_attacks(0), msg(NULL)
   {}
 };
 
@@ -1241,6 +1249,10 @@ struct weather_data
   int sunlight;       /* And how much sun. */
   int moonphase;      /* What is the Moon Phae */
   int lastrain;       /* cycles since last rain */
+
+  weather_data() :
+    pressure(0), change(0), sky(0), sunlight(0), moonphase(0), lastrain(0)
+  {}
 };
 
 /* element in monster and object index-tables   */
@@ -1253,7 +1265,7 @@ struct index_data
   WSPEC(*wfunc);
 
   index_data() :
-      func(NULL), sfunc(NULL), wfunc(NULL)
+      vnum(0), number(0), func(NULL), sfunc(NULL), wfunc(NULL)
   {}
 }
 ;
@@ -1265,7 +1277,7 @@ struct remem
   struct remem *next;
 
   remem() :
-    mem(NULL), next(NULL)
+    idnum(0), mem(NULL), next(NULL)
   {}
 };
 
@@ -1343,14 +1355,15 @@ struct sustain_data {
   int idnum; // This is distinct from caster idnum etc, so does not necessarily need to be idnum_t.
   int time;
   unsigned char time_to_take_effect;
-  bool caster;
+  bool is_caster_record;
+  int ritual_cast_cost;
   struct obj_data *focus;
   struct char_data *spirit;
   struct char_data *other;
   struct sustain_data *next;
   sustain_data() :
-    spell(0), subtype(0), force(0), success(0), idnum(0), time(0), time_to_take_effect(0), caster(0),
-    focus(NULL), spirit(NULL), other(NULL), next(NULL)
+    spell(0), subtype(0), force(0), success(0), idnum(0), time(0), time_to_take_effect(0), is_caster_record(0),
+    ritual_cast_cost(0), focus(NULL), spirit(NULL), other(NULL), next(NULL)
   {}
 };
 
@@ -1364,12 +1377,12 @@ struct attack_hit_type
 struct spirit_sustained
 {
   int type;
-  bool caster;
+  bool is_caster_record;
   struct char_data *target;
   struct spirit_sustained *next;
   int force;
   spirit_sustained() :
-    type(0), caster(FALSE), target(NULL), next(NULL), force(0)
+    type(0), is_caster_record(FALSE), target(NULL), next(NULL), force(0)
   {}
 };
 
@@ -1438,6 +1451,7 @@ struct ban_list_element
 // For listing allowed max values for weapon types. Has settings for both ranged and melee.
 struct kosher_weapon_values_struct {
     // Shared
+    bool usable_by_builders;
     int power;
     int damage_code;
     int skill;

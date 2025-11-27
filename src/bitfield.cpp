@@ -25,13 +25,26 @@ static int  buffer_idx = 0;
 // Byte bits-set lookup function, because why the hell are we using so many for-loops for a bitfield?
 uint8_t count_ones (uint8_t byte)
 {
-  static const uint8_t NIBBLE_LOOKUP [16] =
-  {
-    0, 1, 1, 2, 1, 2, 2, 3,
-    1, 2, 2, 3, 2, 3, 3, 4
+  static const int lookupTable[256] = {
+    0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3, 3, 4,
+    1, 2, 2, 3, 2, 3, 3, 4, 2, 3, 3, 4, 3, 4, 4, 5,
+    1, 2, 2, 3, 2, 3, 3, 4, 2, 3, 3, 4, 3, 4, 4, 5,
+    2, 3, 3, 4, 3, 4, 4, 5, 3, 4, 4, 5, 4, 5, 5, 6,
+    1, 2, 2, 3, 2, 3, 3, 4, 2, 3, 3, 4, 3, 4, 4, 5,
+    2, 3, 3, 4, 3, 4, 4, 5, 3, 4, 4, 5, 4, 5, 5, 6,
+    2, 3, 3, 4, 3, 4, 4, 5, 3, 4, 4, 5, 4, 5, 5, 6,
+    3, 4, 4, 5, 4, 5, 5, 6, 4, 5, 5, 6, 5, 6, 6, 7,
+    1, 2, 2, 3, 2, 3, 3, 4, 2, 3, 3, 4, 3, 4, 4, 5,
+    2, 3, 3, 4, 3, 4, 4, 5, 3, 4, 4, 5, 4, 5, 5, 6,
+    2, 3, 3, 4, 3, 4, 4, 5, 3, 4, 4, 5, 4, 5, 5, 6,
+    3, 4, 4, 5, 4, 5, 5, 6, 4, 5, 5, 6, 5, 6, 6, 7,
+    2, 3, 3, 4, 3, 4, 4, 5, 3, 4, 4, 5, 4, 5, 5, 6,
+    3, 4, 4, 5, 4, 5, 5, 6, 4, 5, 5, 6, 5, 6, 6, 7,
+    3, 4, 4, 5, 4, 5, 5, 6, 4, 5, 5, 6, 5, 6, 6, 7,
+    4, 5, 5, 6, 5, 6, 6, 7, 5, 6, 6, 7, 6, 7, 7, 8
   };
 
-  return NIBBLE_LOOKUP[byte & 0x0F] + NIBBLE_LOOKUP[byte >> 4];
+  return lookupTable[byte];
 }
 
 // ______________________________
@@ -43,11 +56,20 @@ Bitfield::Bitfield()
 {
   Clear();
 }
-
+/*
 Bitfield::Bitfield(dword offset)
 {
   Clear();
   SetBit(offset);
+}
+*/
+
+Bitfield::Bitfield(unsigned long long from) {
+  Clear();
+  for (size_t i = 0; i < sizeof(from) * 8; i++) {
+    if (from & (1ULL << i))
+      SetBit(i);
+  }
 }
 
 // ______________________________
@@ -99,8 +121,13 @@ int  Bitfield::GetNumSet() const
 {
   int count = 0;
 
-  for (int i = 0; i < BITFIELD_SIZE; i++)
-    count += count_ones(data[i]);
+  for (int i = 0; i < BITFIELD_SIZE; i++) {
+    // Convert the unsigned long into bytes.
+    unsigned char *bytePtr = (unsigned char *)&(data[i]);
+    for (size_t idx = 0; idx < sizeof(bitfield_t); idx++) {
+      count += count_ones(bytePtr[idx]);
+    }
+  }
 
   return count;
 }
@@ -127,8 +154,14 @@ int  Bitfield::GetNumShared(const Bitfield &test) const
 {
   int count = 0;
 
-  for (int i = 0; i < BITFIELD_SIZE; i++)
-    count += count_ones(data[i] & test.data[i]);
+  for (int i = 0; i < BITFIELD_SIZE; i++) {
+    // Convert the unsigned long into bytes.
+    unsigned char *firstBytePtr = (unsigned char *)&(data[i]);
+    unsigned char *secondBytePtr = (unsigned char *)&(test.data[i]);
+    for (size_t idx = 0; idx < sizeof(bitfield_t); idx++) {
+      count += count_ones(firstBytePtr[idx] & secondBytePtr[idx]);
+    }
+  }
 
   return count;
 }

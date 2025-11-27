@@ -17,9 +17,6 @@
 // Ensure we have enough space for the query cruft plus a fully-quoted mail.
 char mail_query_buf[300 + (MAX_MAIL_SIZE * 2 + 1)];
 
-MYSQL_RES *res;
-MYSQL_ROW row;
-
 // For pocket secretary notifications.
 SPECIAL(pocket_sec);
 
@@ -118,6 +115,9 @@ void raw_store_mail(long to, long from_id, const char *from_name, const char *me
 }
 
 int amount_of_mail_waiting(struct char_data *ch) {
+  MYSQL_RES *res;
+  MYSQL_ROW row;
+
   int amount = 0;
 
   if (!ch || IS_NPC(ch)) {
@@ -126,14 +126,23 @@ int amount_of_mail_waiting(struct char_data *ch) {
   }
 
   // Grab the character's mail count from DB.
-  snprintf(mail_query_buf, sizeof(mail_query_buf), "SELECT COUNT(*) FROM pfiles_mail WHERE recipient = %ld;", GET_IDNUM(ch));
-  mysql_wrapper(mysql, mail_query_buf);
+  snprintf(mail_query_buf, sizeof(mail_query_buf), "SELECT COUNT(*) FROM pfiles_mail WHERE recipient = %ld AND is_received = 0;", GET_IDNUM(ch));
+  if (mysql_wrapper(mysql, mail_query_buf)) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Failed to fetch amount of mail waiting for %s (query error).", GET_CHAR_NAME(ch));
+    send_to_char(ch, "Oops, the mail system is broken! Please contact staff.\r\n");
+    return 0;
+  }
 
-  res = mysql_use_result(mysql);
-  row = mysql_fetch_row(res);
+  if (!(res = mysql_use_result(mysql))) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Failed to fetch amount of mail waiting for %s (use_result error).", GET_CHAR_NAME(ch));
+    send_to_char(ch, "Oops, the mail system is broken! Please contact staff.\r\n");
+    return 0;
+  }
 
   /* On failure, bail out. */
-  if (!row && mysql_field_count(mysql)) {
+  if (!(row = mysql_fetch_row(res))) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Failed to fetch amount of mail waiting for %s (fetch_row error).", GET_CHAR_NAME(ch));
+    send_to_char(ch, "Oops, the mail system is broken! Please contact staff.\r\n");
     mysql_free_result(res);
     return 0;
   }
@@ -145,7 +154,7 @@ int amount_of_mail_waiting(struct char_data *ch) {
   return amount;
 }
 
-
+/*
 char *get_and_delete_one_message(struct char_data *ch, char *sender) {
   if (!ch || IS_NPC(ch)) {
     log("SYSERR: Bad character or NPC attempted to use mail system.");
@@ -159,7 +168,7 @@ char *get_and_delete_one_message(struct char_data *ch, char *sender) {
   res = mysql_use_result(mysql);
   row = mysql_fetch_row(res);
 
-  /* On failure, bail out. */
+  // On failure, bail out.
   if (!row && mysql_field_count(mysql)) {
     log("SYSERR: get_and_delete_one_message failed on SQL query.");
     mysql_free_result(res);
@@ -192,16 +201,17 @@ char *get_and_delete_one_message(struct char_data *ch, char *sender) {
 
   return buf;
 }
+*/
 
 /*******************************************************************
  ** Below is the spec_proc for a postmaster using the above       **
  ** routines.  Written by Jeremy Elson (jelson@server.cs.jhu.edu) **
  *******************************************************************/
-
+/*
 SPECIAL(postmaster)
 {
   if (!ch->desc || IS_NPC(ch))
-    return FALSE;                   /* so mobs don't get caught here */
+    return FALSE;                   // so mobs don't get caught here
 
   if (!(CMD_IS("mail") || CMD_IS("check") || CMD_IS("receive")))
     return FALSE;
@@ -226,50 +236,50 @@ void postmaster_send_mail(struct char_data * ch, struct char_data *mailman, int 
   idnum_t recipient;
   char buf[256];
 
-  /* Require that the user be of the right level to use the mail system. */
+  // Require that the user be of the right level to use the mail system.
   if (!access_level(ch, MIN_MAIL_LEVEL)) {
     snprintf(buf, sizeof(buf), "$n tells you, 'Sorry, you have to be level %d to send mail!'", MIN_MAIL_LEVEL);
     act(buf, FALSE, mailman, 0, ch, TO_VICT);
     return;
   }
 
-  /* Keep astral beings from using mail. */
+  // Keep astral beings from using mail.
   if (IS_ASTRAL(ch)) {
     send_to_char("If the postal employee could detect the astral plane... you would still be ignored!\n\r",ch);
     return;
   }
   one_argument(arg, buf);
 
-  /* Check to ensure that an addressee has been specified. */
-  if (!*buf) {                  /* you'll get no argument from me! */
+  // Check to ensure that an addressee has been specified.
+  if (!*buf) {                  // you'll get no argument from me!
     act("$n tells you, 'You need to specify an addressee!'", FALSE, mailman, 0, ch, TO_VICT);
     return;
   }
 
-  /* Check to ensure that the addressee exists. */
+  // Check to ensure that the addressee exists. 
   if ((recipient = get_player_id(buf)) < 0) {
     act("$n tells you, 'No one by that name is registered here!'", FALSE, mailman, 0, ch, TO_VICT);
     return;
   }
 
-  /* Put the character in edit mode and inform the room. */
+  // Put the character in edit mode and inform the room. 
   act("$n starts to write some mail.", TRUE, ch, 0, 0, TO_ROOM);
   snprintf(buf, sizeof(buf), "$n tells you, 'Write your message, use @ on a new line when done.'");
   act(buf, FALSE, mailman, 0, ch, TO_VICT);
   PLR_FLAGS(ch).SetBits(PLR_MAILING, PLR_WRITING, ENDBIT);
 
-  /* Set up their temporary mail data. */
+  // Set up their temporary mail data. 
   ch->desc->mail_to = recipient;
   ch->desc->max_str = MAX_MAIL_SIZE;
   ch->desc->str = new (char *);
 
-  /* Ensure the setup completed properly. This will only fail if we're out of memory. */
+  // Ensure the setup completed properly. This will only fail if we're out of memory. 
   if (!ch->desc->str) {
     mudlog("New failure!", NULL, LOG_SYSLOG, TRUE);
     exit(ERROR_UNABLE_TO_CREATE_STR_IN_MAIL);
   }
 
-  /* Set the first character of their mail string to 0. */
+  // Set the first character of their mail string to 0. 
   *(ch->desc->str) = NULL;
 }
 
@@ -316,3 +326,4 @@ void postmaster_receive_mail(struct char_data * ch, struct char_data *mailman, i
     act("$N gives $n several pieces of mail.", FALSE, ch, 0, mailman, TO_ROOM);
   }
 }
+*/

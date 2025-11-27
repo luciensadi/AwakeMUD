@@ -410,6 +410,57 @@ void save_vehicles(bool fromCopyover)
   fclose(fl);
 }
 
+void offload_vehicles_for_owner(idnum_t owner_idnum)
+{
+  save_vehicles(FALSE);
+  for (struct veh_data *veh = veh_list, *next_veh; veh; veh = next_veh) {
+    next_veh = veh->next;
+    if (veh->owner == owner_idnum) {
+      bool disqualified = FALSE;
+
+      // Check for rigger, skip if you find one
+      if (veh->rigger)
+        continue;
+      
+      // Check for players or NPCs in it
+      for (struct char_data *people = veh->people; people; people = people->next_in_veh) {
+        if (people->desc || !IS_NPC(people)) {
+          disqualified = TRUE;
+          break;
+        }
+      }
+
+      // Check for carried vehicles belonging to someone else
+      for (struct veh_data *carried = veh->carriedvehs; carried; carried = carried->next_veh) {
+        if (carried->owner && carried->owner != owner_idnum) {
+          disqualified = TRUE;
+          break;
+        }
+      }
+
+      // Check for towed vehicle belonging to someone else, skip if you find one
+      if (veh->towing && veh->towing->owner && veh->towing->owner != owner_idnum)
+        continue;
+      
+      if (disqualified)
+        continue;
+      
+      // Blow it away completely.
+      while (veh->carriedvehs)
+        extract_veh(veh->carriedvehs);
+      while (veh->people)
+        extract_char(veh->people);
+      while (veh->contents)
+        extract_obj(veh->contents);
+      if (veh->towing) {
+        extract_veh(veh->towing);
+        veh->towing = NULL;
+      }
+      extract_veh(veh);
+    }
+  }
+}
+
 void load_single_veh(const char *filename) {
   File file;
   int veh_version = 0;
@@ -423,8 +474,8 @@ void load_single_veh(const char *filename) {
   log_vfprintf("Loading vehicle file %s.", filename);
   if (!(file.Open(filename, "r"))) {
     log_vfprintf("Warning: Unable to open vehfile %s for reading. Skipping.", filename);
+    return;
   }
-
 
   VTable data;
   data.Parse(&file);
@@ -506,10 +557,10 @@ void load_single_veh(const char *filename) {
 
   if (!veh->spare2)
     veh_to_room(veh, &world[veh_room_rnum]);
-  veh->restring = str_dup(data.GetString("VEHICLE/VRestring", NULL));
-  veh->restring_long = str_dup(data.GetString("VEHICLE/VRestringLong", NULL));
-  veh->decorate_front = str_dup(data.GetString("VEHICLE/VDecorateFront", NULL));
-  veh->decorate_rear = str_dup(data.GetString("VEHICLE/VDecorateRear", NULL));
+  veh->restring = str_dup(cleanup_invalid_color_codes(data.GetString("VEHICLE/VRestring", NULL)));
+  veh->restring_long = str_dup(cleanup_invalid_color_codes(data.GetString("VEHICLE/VRestringLong", NULL)));
+  veh->decorate_front = str_dup(cleanup_invalid_color_codes(data.GetString("VEHICLE/VDecorateFront", NULL)));
+  veh->decorate_rear = str_dup(cleanup_invalid_color_codes(data.GetString("VEHICLE/VDecorateRear", NULL)));
   int inside = 0, last_inside = 0;
   int num_objs = data.NumSubsections("CONTENTS");
 
@@ -543,11 +594,11 @@ void load_single_veh(const char *filename) {
       snprintf(buf, sizeof(buf), "%s/Front", sect_name);
       obj->vfront = data.GetInt(buf, TRUE);
       snprintf(buf, sizeof(buf), "%s/Name", sect_name);
-      obj->restring = str_dup(data.GetString(buf, NULL));
+      obj->restring = str_dup(cleanup_invalid_color_codes(data.GetString(buf, NULL)));
       snprintf(buf, sizeof(buf), "%s/Graffiti", sect_name);
-      obj->graffiti = str_dup(data.GetString(buf, NULL));
+      obj->graffiti = str_dup(cleanup_invalid_color_codes(data.GetString(buf, NULL)));
       snprintf(buf, sizeof(buf), "%s/Photo", sect_name);
-      obj->photo = str_dup(data.GetString(buf, NULL));
+      obj->photo = str_dup(cleanup_invalid_color_codes(data.GetString(buf, NULL)));
       snprintf(buf, sizeof(buf), "%s/%s", sect_name, FILESTRING_OBJ_IDNUM);
       GET_OBJ_IDNUM(obj) = data.GetUnsignedLong(buf, 0);
 
@@ -691,7 +742,7 @@ void load_single_veh(const char *filename) {
     struct grid_data *grid = new grid_data;
     const char *sect_name = data.GetIndexSection("GRIDGUIDE", i);
     snprintf(buf, sizeof(buf), "%s/Name", sect_name);
-    grid->name = str_dup(data.GetString(buf, NULL));
+    grid->name = str_dup(cleanup_invalid_color_codes(data.GetString(buf, NULL)));
     snprintf(buf, sizeof(buf), "%s/Room", sect_name);
     grid->room = data.GetLong(buf, 0);
     grid->next = veh->grid;
@@ -726,7 +777,7 @@ void load_single_veh(const char *filename) {
       snprintf(buf, sizeof(buf), "%s/Condition", sect_name);
       GET_OBJ_CONDITION(weapon) = data.GetInt(buf, GET_OBJ_CONDITION(weapon));
       snprintf(buf, sizeof(buf), "%s/Name", sect_name);
-      weapon->restring = str_dup(data.GetString(buf, NULL));
+      weapon->restring = str_dup(cleanup_invalid_color_codes(data.GetString(buf, NULL)));
       for (int x = 0; x < NUM_OBJ_VALUES; x++) {
         snprintf(buf, sizeof(buf), "%s/Value %d", sect_name, x);
         GET_OBJ_VAL(weapon, x) = data.GetInt(buf, GET_OBJ_VAL(weapon, x));
@@ -838,6 +889,7 @@ void load_saved_veh(bool purge_existing)
   }
 
   if (!bf::exists(global_vehicles_dir)) {
+    log(" - Migrating old vehicles directory to new format.");
     // We've never run our migration. Load the old files.
     bf::create_directory(global_vehicles_dir);
 

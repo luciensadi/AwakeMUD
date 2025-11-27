@@ -672,14 +672,14 @@ void process_flying_vehicles() {
         result = flight_test(controller, veh);
         if (result < 0) {
           // Botched landing: Crash.
-          send_to_char("You fuck up the landing, sending your aircraft straight into the ground!\r\n", controller);
+          send_to_char("You frag up the landing, sending your aircraft straight into the ground!\r\n", controller);
           send_to_veh("You scream as a botched landing sends you hurtling towards the ground!\r\n", veh, controller, FALSE);
           snprintf(buf, sizeof(buf), "%s comes hurtling in on a deadly collision course!\r\n", CAP(GET_VEH_NAME_NOFORMAT(veh)));
           send_to_room(buf, veh->in_room, veh);
           crash_flying_vehicle(veh);
         } else if (result == 0) {
           // Zero successes: Land with damage.
-          send_to_char("You fuck up the landing, slamming your aircraft into the ground with a bang!\r\n", controller);
+          send_to_char("You frag up the landing, slamming your aircraft into the ground with a bang!\r\n", controller);
           send_to_veh("There's an almighty BANG as your aircraft slams into the ground!\r\n", veh, controller, FALSE);
           snprintf(buf, sizeof(buf), "%s comes hurtling in on a collision course!\r\n", CAP(GET_VEH_NAME_NOFORMAT(veh)));
           send_to_room(buf, veh->in_room, veh);

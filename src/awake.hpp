@@ -364,7 +364,9 @@ enum {
 #define PLR_OLD_MAN_YELLS_AT_CLOUDS          54
 #define PLR_SUBMERSION                       55
 #define PLR_ADDITIONAL_SCRUTINY              56
-#define PLR_MAX                              57
+#define PLR_RECEIVED_GHOUL_INDEX_DELTA       57  /* Player has had their ghoul index cost reset */
+#define PLR_PAID_FOR_WHOTITLE                58
+#define PLR_MAX                              59
 // Adding something here? Add it to constants.cpp's player_bits too.
 
 
@@ -861,6 +863,7 @@ enum {
 #define HEALTH      3
 #define ILLUSION    4
 #define MANIPULATION    5
+#define NUM_SPELL_CATEGORY_TYPES 5
 
 #define INSTANT      0
 #define SUSTAINED    1
@@ -1349,8 +1352,7 @@ enum {
 #define ITEM_CREATIVE_EFFORT    49
 #define ITEM_PET                50
 #define ITEM_COMPLEX_FORM       51       /* otaku complex form               */
-#define ITEM_MINIGAME_RELATED   52
-#define NUM_ITEMS               53
+#define NUM_ITEMS               52
 // Adding something? Add convenience definees to utils.hpp and put the type's name in constants.cpp.
 
 #define PATCH_ANTIDOTE          0
@@ -1404,7 +1406,7 @@ enum {
 #define ITEM_EXTRA_NORENT             2     /* Item cannot be rented        */
 #define ITEM_EXTRA_NODONATE           3     /* Item cannot be donated       */
 // unused, must remove, was !invis    4, also touch db.cpp item_extra_flag_map
-// unused, must remove, was invisible 5, also touch db.cpp item_extra_flag_map
+#define ITEM_EXTRA_SHEER              5
 #define ITEM_EXTRA_MAGIC              6     /* Item is magical              */
 #define ITEM_EXTRA_NODROP             7     /* Item is cursed: can't drop   */
 #define ITEM_EXTRA_FORMFIT            8     /* Item is blessed              */
@@ -2031,6 +2033,11 @@ enum {
 
 /* Subcommands section: Originally from interpreter.h */
 
+/* do_stow */
+#define SCMD_LIST_STOWED 0
+#define SCMD_STOW        1
+#define SCMD_UNSTOW      2
+
 /* do_dice */
 #define SCMD_STANDARD_ROLL  0
 #define SCMD_PRIVATE_ROLL   1
@@ -2297,9 +2304,9 @@ enum {
 #define CON_ZEDIT               32
 #define CON_HEDIT               33
 #define CON_ICEDIT              34
-#define CON_PRO_CREATE          35
+#define CON_PRO_CREATE          35 // Program creation for deckbuilding
 #define CON_DECK_CREATE         36
-#define CON_SPE_CREATE          37
+// UNUSED 37
 #define CON_INITIATE            38
 #define CON_DECORATE            39
 #define CON_POCKETSEC           40
@@ -2325,6 +2332,7 @@ enum {
 #define IS_VALID_STATE_TO_RECEIVE_COMMS(s) ((s) == CON_PLAYING || ((s) >= CON_PRO_CREATE && (s) <= CON_AMMO_CREATE) || (s) == CON_PGEDIT || ((s) >= CON_DECORATE_VEH && (s) <= CON_ART_CREATE))
 // If you add another state, you need to touch comm.cpp's close_socket and make sure it's reflected there!
 // Also add it to constants's connected_types.
+// And gmcp.cpp's generate_discord_state().
 
 /* arbitrary constants used by index_boot() (must be unique) */
 #define DB_BOOT_WLD     0
@@ -2869,6 +2877,7 @@ enum {
 #define QST_MAGE_INTRO                     5743
 
 #define MOB_BRAIN_IN_A_JAR                 10050
+#define MOB_PROJECTION                     22
 
 #define VEHICLE_JACKRABBIT_E               1302
 #define VEHICLE_EUROCAR_WESTWIND_2000      1303
@@ -2980,6 +2989,7 @@ enum {
 #define EXIT_CODE_REBOOTING                           52   /* what's so great about HHGTTG, anyhow? */
 #define ERROR_WORLD_BOOT_FORMAT_ERROR                 53
 #define ERROR_FLAG_CONSTANT_MISSING                   54
+#define ERROR_MYSQL_MAX_ALLOWED_PACKET_CHECK_FAILURE  55
 
 // Materials.
 #define MATERIAL_PAPER        0
@@ -3125,8 +3135,9 @@ enum {
 #define NUYEN_OUTFLOW_GAMBLING              34
 #define NUYEN_INCOME_GAMBLING               35
 #define NUYEN_INCOME_CREDSTICK_ACTIVATION   36
+#define NUYEN_INCOME_AUTOMATED_REFUNDS      37
 
-#define NUM_OF_TRACKED_NUYEN_INCOME_SOURCES 37
+#define NUM_OF_TRACKED_NUYEN_INCOME_SOURCES 38
 // Make sure you update constants.cpp's nuyen_faucets_and_sinks[] too!
 
 #define NI_IS_SINK   0
@@ -3141,7 +3152,9 @@ enum {
 #define DIRTY_BIT_DRUG        6
 #define DIRTY_BIT_ALIAS       7
 #define DIRTY_BIT_ECHOES      8
-#define NUM_DIRTY_BITS        9
+#define DIRTY_BIT_QUESTS      9
+#define DIRTY_BIT_BULLETPANTS 10
+#define NUM_DIRTY_BITS        11
 
 
 #define SMARTLINK_II_MODIFIER 3
@@ -3283,6 +3296,7 @@ enum {
 #define OBJ_LOAD_REASON_CREATE_PET               59
 #define OBJ_LOAD_REASON_OTAKU_RESONANCE          60
 #define OBJ_LOAD_REASON_CREATE_COMPLEX_FORM      61
+#define OBJ_LOAD_REASON_UNSTOW_CMD               62
 
 #define IDNUM_FOR_MOB_ALERT_STATE  -1
 

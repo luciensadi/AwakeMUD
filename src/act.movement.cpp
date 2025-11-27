@@ -128,6 +128,7 @@ int can_move(struct char_data *ch, int dir, int extra)
     return 0;
   }
   
+#ifdef USE_TUNNEL_LIMITS
   if (ROOM_FLAGGED(EXIT(ch, dir)->to_room, ROOM_TUNNEL) && !IS_ASTRAL(ch)) {
     int num_occupants = 0;
     for (struct char_data *in_room_ptr = EXIT(ch, dir)->to_room->people; in_room_ptr && num_occupants < 2; in_room_ptr = in_room_ptr->next_in_room) {
@@ -143,6 +144,7 @@ int can_move(struct char_data *ch, int dir, int extra)
       }
     }
   }
+#endif
 
   if (ROOM_FLAGGED(EXIT(ch, dir)->to_room, ROOM_TOO_CRAMPED_FOR_CHARACTERS) && !IS_ASTRAL(ch)) {
     if (access_level(ch, LVL_BUILDER)) {
@@ -339,7 +341,7 @@ bool should_tch_see_chs_movement_message(struct char_data *viewer, struct char_d
             act("You notice $N sneaking around.", FALSE, viewer, 0, actor, TO_CHAR);
             if (can_hurt(actor, viewer, 0, TRUE)) {
               act("^T$n^T scowls at you-- your sneaking around has not gone unnoticed.^n", TRUE, viewer, 0, actor, TO_VICT);
-              act("$n scowls at $N-- $s sneaking around has not gone unnoticed.", TRUE, viewer, 0, actor, TO_NOTVICT);
+              act("$n scowls at $N-- $S sneaking around has not gone unnoticed.", TRUE, viewer, 0, actor, TO_NOTVICT);
             }
           } else {
             act("You startle and look around-- you could have sworn you heard something.", FALSE, viewer, 0, 0, TO_CHAR);
@@ -588,7 +590,8 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
   if (ROOM_FLAGGED(ch->in_room, ROOM_FALL) && !IS_ASTRAL(ch) && !IS_AFFECTED(ch, AFF_LEVITATE) && !(IS_SENATOR(ch) && PRF_FLAGGED(ch, PRF_NOHASSLE))) {
     bool character_died;
     // We break the return code paradigm here to avoid having the code check follower data for a dead NPC.
-    if (IS_NPC(ch) && (character_died = perform_fall(ch))) {
+    bool is_npc = IS_NPC(ch);
+    if ((character_died = perform_fall(ch)) && is_npc) {
       return 0;
     }
     return 1;
@@ -911,6 +914,7 @@ void move_vehicle(struct char_data *ch, int dir)
   veh_from_room(veh);
   veh_to_room(veh, was_in);
   veh->lastin[0] = veh->in_room;
+  SendGMCPRoomInfo(ch, veh->in_room);
 
   // People in the room.
   for (struct char_data *tch = veh->in_room->people; tch; tch = tch->next_in_room) {
@@ -1047,6 +1051,11 @@ int perform_move(struct char_data *ch, int dir, int extra, struct char_data *vic
 
   if (GET_POS(ch) >= POS_FIGHTING && FIGHTING(ch)) {
     WAIT_STATE(ch, PULSE_VIOLENCE * 2);
+
+    // Some totems can't withdraw from combat.
+    FALSE_CASE(IS_COMBAT_ENTHRALLED_SHAMAN(ch) && success_test(GET_WIL(ch), 6, ch, "shaman conflict withdraw test", NULL) <= 0,
+               "You fail to fight off your baser instincts, instead committing to the fight once more.");
+
     struct char_data *blocker = find_a_character_that_blocks_fleeing_for_ch(ch);
     if (!blocker
         && (CAN_GO(ch, dir)
@@ -1691,6 +1700,63 @@ ACMD(do_gen_door)
   return;
 }
 
+bool ch_is_in_follow_cluster_with_pc_with_idnum(struct char_data *ch, idnum_t idnum) {
+  // Grouping check. Enable this if people abuse the privilege.
+#ifdef MUST_GROUP_BEFORE_ENTERING_VEHICLE
+  if (!AFF_FLAGGED(ch, AFF_GROUP)) {
+    return FALSE;
+  }
+#endif
+
+  // Followers (both projected and not)
+  for (struct follow_type *f = ch->followers; f; f = f->next) {
+#ifdef MUST_GROUP_BEFORE_ENTERING_VEHICLE
+    if (!AFF_FLAGGED(f->follower, AFF_GROUP)) {
+      continue;
+    }
+#endif
+
+    // Check the follower across projection gaps.
+    if (GET_IDNUM_EVEN_IF_PROJECTING(f->follower) == idnum) {
+      return TRUE;
+    }
+  }
+
+  // Master (both projected and not)
+  if (ch->master) {
+#ifdef MUST_GROUP_BEFORE_ENTERING_VEHICLE
+    if (!AFF_FLAGGED(ch->master, AFF_GROUP)) {
+      return FALSE;
+    }
+#endif
+
+    // Check the master across projection gaps.
+    if (GET_IDNUM_EVEN_IF_PROJECTING(ch->master) == idnum) {
+      return TRUE;
+    }
+
+    // Followers (both projected and not)
+    for (struct follow_type *f = ch->master->followers; f; f = f->next) {
+      if (f->follower == ch)
+        continue;
+      
+  #ifdef MUST_GROUP_BEFORE_ENTERING_VEHICLE
+      if (!AFF_FLAGGED(f->follower, AFF_GROUP)) {
+        continue;
+      }
+  #endif
+  
+      // Check the follower across projection gaps.
+      if (GET_IDNUM_EVEN_IF_PROJECTING(f->follower) == idnum) {
+        return TRUE;
+      }
+    }
+  }
+
+  // Not in a cluster / group with that idnum.
+  return FALSE;
+}
+
 void enter_veh(struct char_data *ch, struct veh_data *found_veh, const char *argument, bool drag)
 {
   struct veh_data *inveh = NULL;
@@ -1743,12 +1809,9 @@ void enter_veh(struct char_data *ch, struct veh_data *found_veh, const char *arg
   // You can only enter PC-owned vehicles if you're the owner, the owner is in control, or you're staff.
   if (found_veh->owner > 0 || found_veh->locked) {
     bool is_staff = access_level(ch, LVL_CONSPIRATOR);
-    bool is_owner = GET_IDNUM_EVEN_IF_PROJECTING(ch) == found_veh->owner;
-    bool is_following_owner = (ch->master && GET_IDNUM(ch->master) == found_veh->owner);
-#ifdef MUST_GROUP_BEFORE_ENTERING_VEHICLE
-    is_following_owner &= AFF_FLAGGED(ch, AFF_GROUP);   // todo: make this grouped with (owner can follow you)
-#endif
-    bool owner_is_remote_rigging = found_veh->rigger && GET_IDNUM(found_veh->rigger);
+    bool is_owner = (GET_IDNUM_EVEN_IF_PROJECTING(ch) == found_veh->owner);
+    bool is_in_group_with_owner = found_veh->owner > 0 && ch_is_in_follow_cluster_with_pc_with_idnum(ch, found_veh->owner);
+    bool owner_is_remote_rigging = found_veh->rigger && (GET_IDNUM(found_veh->rigger) == found_veh->owner);
     bool owner_is_driving = FALSE;
 
     for (struct char_data *occupant = found_veh->people; occupant; occupant = occupant->next_in_veh) {
@@ -1758,13 +1821,15 @@ void enter_veh(struct char_data *ch, struct veh_data *found_veh, const char *arg
       }
     }
 
-    if (ch->desc && !is_owner && !is_following_owner && (found_veh->locked || (!owner_is_remote_rigging && !owner_is_driving))) {
+    if (ch->desc && !is_owner && !is_in_group_with_owner && (found_veh->locked || (!owner_is_remote_rigging && !owner_is_driving))) {
       if (is_staff) {
         send_to_char("You staff-override the fact that the owner isn't explicitly letting you in.\r\n", ch);
       } else {
+        // Check to see if you're grouped with the owner.
+        
         // This error message kinda sucks to write.
         if (!ch->master || GET_IDNUM(ch->master) != found_veh->owner) {
-          send_to_char(ch, "You need to be following the owner to enter %s.\r\n", GET_VEH_NAME(found_veh));
+          send_to_char(ch, "You need to be following or grouped with the owner to enter %s.\r\n", GET_VEH_NAME(found_veh));
         }
 #ifdef MUST_GROUP_BEFORE_ENTERING_VEHICLE
         else if (!AFF_FLAGGED(ch, AFF_GROUP)) {
@@ -2500,7 +2565,7 @@ ACMD(do_sleep)
     break;
   }
   if (GET_POS(ch) == POS_SLEEPING) {
-    end_all_caster_records(ch, TRUE);
+    end_all_spells_cast_BY_ch(ch, TRUE);
   }
   DELETE_ARRAY_IF_EXTANT(GET_DEFPOS(ch));
 }

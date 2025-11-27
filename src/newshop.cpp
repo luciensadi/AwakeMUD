@@ -42,6 +42,7 @@ void shop_install(char *argument, struct char_data *ch, struct char_data *keeper
 void shop_uninstall(char *argument, struct char_data *ch, struct char_data *keeper, vnum_t shop_nr);
 struct obj_data *shop_package_up_ware(struct obj_data *obj);
 int get_cyberware_install_cost(struct obj_data *ware);
+void sell_all_stowed_items(struct char_data *ch, rnum_t shop_nr, struct char_data *keeper);
 
 int cmd_say;
 int cmd_echo;
@@ -568,7 +569,8 @@ bool install_ware_in_target_character(struct obj_data *ware, struct char_data *i
         GET_BIOWARE_RATING(ware) > GET_REAL_BOD(recipient) / 2)
     {
       if (IS_NPC(installer)) {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " Your body can't support pathogenic defenses that are that strong.");
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " Your body can't support %s that are that strong.",
+                 GET_BIOWARE_TYPE(ware) == BIO_PATHOGENICDEFENSE ? "pathogenic defenses" : "toxin extractors");
         do_say(installer, buf, cmd_say, SCMD_SAYTO);
       } else {
         send_to_char(installer, "The defenses from %s are too powerful for their body.\r\n", GET_OBJ_NAME(ware));
@@ -714,7 +716,7 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "displays, \"%s\"", shop_table[shop_nr].not_enough_nuyen);
       do_new_echo(keeper, buf, cmd_echo, 0);
     } else {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s %s", GET_CHAR_NAME(ch), shop_table[shop_nr].not_enough_nuyen);
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %s", shop_table[shop_nr].not_enough_nuyen);
       do_say(keeper, buf, cmd_say, SCMD_SAYTO);
     }
     return FALSE;
@@ -1409,6 +1411,32 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
   }
 }
 
+int negotiate_and_payout_sellprice(struct char_data *ch, struct char_data *keeper, vnum_t shop_nr, int sellprice) {
+#ifdef USE_HAMMERSPACE
+  // Since we added hammerspace/stowage, more loot is being collected faster, and the friction point of having to do loot
+  // runs to drones/cars/etc has gone away. Since the speed at which farming can be done has increased, we must decrease
+  // the nuyen gained from farming. In lieu of builders going through and lowering the value of all items in the game,
+  // we apply a modifier here to reduce the sell price of an item accordingly. This doesn't apply in chargen, of course.
+  if (!shop_table[shop_nr].flags.IsSet(SHOP_CHARGEN))
+    sellprice *= 0.70;
+#endif
+
+  // Negotiate the total cost.
+  if (!shop_table[shop_nr].flags.IsSet(SHOP_WONT_NEGO) && !MOB_FLAGGED(keeper, MOB_INANIMATE))
+    sellprice = negotiate(ch, keeper, 0, sellprice, 0, FALSE, TRUE);
+
+  // Pay it out as nuyen.
+  if (shop_table[shop_nr].type == SHOP_BLACK) {
+    gain_nuyen(ch, sellprice, NUYEN_INCOME_SHOP_SALES);
+  } else {
+    gain_bank(ch, sellprice, NUYEN_INCOME_SHOP_SALES);
+    send_to_char(ch, "(It went directly to your bank account.)\r\n");
+  }
+
+  // Just in case the caller cares about the negotiated price.
+  return sellprice;
+}
+
 void shop_sell(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t shop_nr)
 {
   char buf[MAX_STRING_LENGTH], buf3[MAX_STRING_LENGTH];
@@ -1422,7 +1450,11 @@ void shop_sell(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
   struct shop_sell_data *sell = shop_table[shop_nr].selling;
 
   if (!*arg) {
-    send_to_char("What item do you want to sell?\r\n", ch);
+#ifdef USE_HAMMERSPACE
+    send_to_char("Syntax: SELL <item>, or SELL STOWED to sell your stowed loot.\r\n", ch);
+#else
+    send_to_char("Syntax: SELL <item>.\r\n", ch);
+#endif
     return;
   }
 
@@ -1432,6 +1464,13 @@ void shop_sell(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
     do_say(keeper, buf, cmd_say, SCMD_SAYTO);
     return;
   }
+
+#ifdef USE_HAMMERSPACE
+  if (!str_cmp(arg, "stowed")) {
+    sell_all_stowed_items(ch, shop_nr, keeper);
+    return;
+  }
+#endif
 
   // Find the object.
   obj = get_obj_in_list_vis(ch, arg, ch->carrying);
@@ -1508,8 +1547,6 @@ void shop_sell(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
   }
 
   int sellprice = sell_price(obj, shop_nr, GET_MOB_FACTION_IDNUM(keeper), ch);
-  if (!shop_table[shop_nr].flags.IsSet(SHOP_WONT_NEGO) && !MOB_FLAGGED(keeper, MOB_INANIMATE))
-    sellprice = negotiate(ch, keeper, 0, sellprice, 0, FALSE, TRUE);
 
   if (shop_table[shop_nr].flags.IsSet(SHOP_DOCTOR) && !obj->in_obj) {
     for (struct obj_data *ware_verifier = ch->carrying; ware_verifier; ware_verifier = ware_verifier->next_content) {
@@ -1551,10 +1588,7 @@ void shop_sell(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
     }
   }
 
-  if (!cred || shop_table[shop_nr].type == SHOP_BLACK)
-    gain_nuyen(ch, sellprice, NUYEN_INCOME_SHOP_SALES);
-  else
-    gain_bank(ch, sellprice, NUYEN_INCOME_SHOP_SALES);
+  sellprice = negotiate_and_payout_sellprice(ch, keeper, shop_nr, sellprice);
 
   const char *representation = generate_new_loggable_representation(obj);
   snprintf(buf3, sizeof(buf3), "%s sold %s^g at %s^g (%ld) for %d.", GET_CHAR_NAME(ch), representation, GET_CHAR_NAME(keeper), shop_table[shop_nr].vnum, sellprice);
@@ -2000,7 +2034,7 @@ void shop_info(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
   switch (GET_OBJ_TYPE(obj))
   {
   case ITEM_WEAPON:
-    if (IS_GUN(GET_OBJ_VAL(obj, 3))) {
+    if (WEAPON_IS_GUN(obj)) {
       if (GET_OBJ_VAL(obj, 0) < 3)
         strlcat(buf, " a weak", sizeof(buf));
       else if (GET_OBJ_VAL(obj, 0) < 6)
@@ -3721,11 +3755,11 @@ bool shop_will_buy_item_from_ch(rnum_t shop_nr, struct obj_data *obj, struct cha
 }
 
 int get_eti_test_results(struct char_data *ch, int eti_skill, int availtn, int availoff, int kinesics, int meta_penalty, int lifestyle, int pheromone_dice, int skill_dice) {
-  char rollbuf[10000];
+  char rollbuf[10000] = {0};
   
   // Calculate eti TNs, factoring in settings, powers, and racism.
   int target = availtn;
-  snprintf(rollbuf, sizeof(rollbuf), "Initial TN %d", target);
+  snprintf(rollbuf, sizeof(rollbuf), "Etiquette test. Initial TN %d", target);
 
   if (availoff) {
     snprintf(ENDOF(rollbuf), sizeof(rollbuf) - strlen(rollbuf), ", -%d (availoffset)", availoff);
@@ -3755,7 +3789,7 @@ int get_eti_test_results(struct char_data *ch, int eti_skill, int availtn, int a
   }
 
   // Calculate their skill dice, including from bioware.
-  int skill = skill_dice ? skill_dice : get_skill(ch, eti_skill, target);
+  int skill = (skill_dice || !ch) ? skill_dice : get_skill(ch, eti_skill, target);
   snprintf(ENDOF(rollbuf), sizeof(rollbuf) - strlen(rollbuf), ", final %d after get_skill(). Base skill %d", target, skill);
 
   if (pheromone_dice) {

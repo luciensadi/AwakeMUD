@@ -73,6 +73,7 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 #define SYSP_NODELETE_COST                                     100
 #define SYSP_ROLLS_COST                                        25
 #define SYSP_VNUMS_COST                                        5
+#define SYSP_WHOTITLE_COST                                     50
 
 #define SYSP_NUYEN_PURCHASE_COST                               100000
 
@@ -129,7 +130,9 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 #define WIZLOCK_MSG "Sorry, the game is currently locked. While you wait for it to open, feel free to join our Discord at https://discord.gg/q5VCMkv!"
 
 // Discord server URL. Comment out if you don't have one.
-#define DISCORD_SERVER_URL "https://discord.gg/q5VCMkv"
+#define DISCORD_SERVER_URL "https://discord.gg/bKBpvNj"
+// Discord Rich Presence app ID.
+#define DISCORD_APP_ID "1356080315952660623"
 
 // Credsticks should generate every 1:X kills, and have X * kill's credits. Setting this too high will cause things like wageslaves having silver credsticks, so be cautious.
 #define CREDSTICK_RARITY_FACTOR                                10
@@ -330,6 +333,11 @@ extern const char *CHARACTER_DELETED_NAME_FOR_SQL;
 
 // When do things expire on the ground?
 #define DROPPED_OBJ_EXPIRATION_TIME_IN_SECONDS  (2 * SECS_PER_REAL_HOUR)
+
+// How many art objects can you make at once?
+#define MAX_REGENERATING_ART_QUOTA 10
+// How quickly does a point of art quota regenerate?
+#define ART_QUOTA_REGENERATION_PULSE (30 RL_SEC)
 
 /////////////// OLC and staff permissions configuration /////////////////////////
 #define LVL_FOR_SETTING_ZONE_EDITOR_ID_NUMBERS                 LVL_VICEPRES

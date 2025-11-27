@@ -3140,8 +3140,7 @@ SPECIAL(fixer)
       return TRUE;
     }
     for (obj = fixer->carrying; obj && j <= extra; obj = obj->next_content)
-      if (GET_OBJ_TIMER(obj) == GET_IDNUM(ch) &&
-          isname(temp, obj->text.keywords))
+      if (GET_OBJ_TIMER(obj) == GET_IDNUM(ch) && keyword_appears_in_obj(temp, obj))
         if (++j == extra)
           break;
     if (!obj) {
@@ -3929,7 +3928,7 @@ SPECIAL(circulation_fan) {
       // Deathlog Addendum
       snprintf(buf, sizeof(buf),"%s got chopped up into tiny bits. {%s (%ld)}",
               GET_CHAR_NAME(ch),
-              ch->in_room->name, ch->in_room->number );
+              GET_ROOM_NAME(ch->in_room), GET_ROOM_VNUM(ch->in_room) );
       mudlog(buf, ch, LOG_DEATHLOG, TRUE);
 
       die(ch, 0);
@@ -4174,6 +4173,12 @@ int find_hotel_room(int room)
       return 39288;
     case 62820:
       return 62820;
+    case 102053:
+      return 102073;
+    case 102069:
+      return 102074;
+    case 102050:
+      return 102048;
   }
   return room;
 }
@@ -7327,7 +7332,7 @@ SPECIAL(medical_workshop) {
   }
 
   if (!found_char->desc) {
-    send_to_char("They're disconnected right now, try again later.", ch);
+    send_to_char("They're disconnected right now, try again later.\r\n", ch);
     return TRUE;
   }
 

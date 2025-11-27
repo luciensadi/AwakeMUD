@@ -84,9 +84,24 @@ CREATE TABLE `pfiles` (
   `lifestyle_string` varchar(200) default 'The metallic scent of the Neophyte Guild clings to $m.',
   `exdesc_max` smallint(5) unsigned default 0,
   `otaku_path` tinyint(2) default 0,
-  `submersion_grade` smallint(3),
+  `submersion_grade` smallint(3) default 0,
   PRIMARY KEY (`idnum`),
   KEY (`name`)
+);
+
+CREATE TABLE `pfiles_stowed` (
+  `idnum` mediumint(5) unsigned NOT NULL,
+  `vnum` mediumint(5) unsigned NOT NULL,
+  `qty` smallint(3) unsigned NOT NULL,
+  PRIMARY KEY(`idnum`, `vnum`)
+);
+
+CREATE TABLE `pocsec_phonebook` (
+  `record_id` int NOT NULL AUTO_INCREMENT,
+  `idnum` mediumint(5) unsigned NOT NULL,
+  `phonenum` int(5) NOT NULL,
+  `note` varchar(200) NOT NULL,
+  PRIMARY KEY (`record_id`)
 );
 
 CREATE TABLE `pfiles_exdescs` (

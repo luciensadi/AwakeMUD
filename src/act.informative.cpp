@@ -76,6 +76,7 @@ extern unsigned int get_johnson_overall_max_rep(struct char_data *johnson);
 extern const char *get_crap_count_string(int crap_count, const char *default_color = "^n", bool screenreader = FALSE);
 extern void display_gamba_ledger_leaderboard(struct char_data *ch);
 const char *convert_and_write_string_to_file(const char *str, const char *path);
+extern void hotload_zone(rnum_t zone_rnum);
 
 extern int get_weapon_damage_type(struct obj_data* weapon);
 
@@ -227,7 +228,7 @@ char *make_desc(struct char_data *ch, struct char_data *i, char *buf, int act, b
   {
     bool has_aura = FALSE;
     for (struct sustain_data *sust = GET_SUSTAINED(i); sust; sust = sust->next) {
-      if (!sust->caster) {
+      if (!sust->is_caster_record) {
         strlcat(buf, ", surrounded by a spell aura", buf_size);
         has_aura = TRUE;
         break;
@@ -792,6 +793,7 @@ void diag_char_to_char(struct char_data * i, struct char_data * ch)
 
   make_desc(ch, i, buf, TRUE, FALSE, sizeof(buf));
   CAP(buf);
+  strlcat(buf, "^n", sizeof(buf));
 
   if (IS_NPC(i) && MOB_FLAGGED(i, MOB_INANIMATE)) {
     if (phys >= 100 || (GET_TRADITION(i) == TRAD_ADEPT && phys >= 0 &&
@@ -1572,7 +1574,7 @@ void list_one_char(struct char_data * i, struct char_data * ch)
     bool dual = TRUE;
     if (IS_ASTRAL(i))
       strlcat(buf, " (astral)", sizeof(buf));
-    if (GET_GRADE(i)) {
+    if (GET_GRADE(i) && !IS_OTAKU(i)) {
       bool init = TRUE;
       if (GET_METAMAGIC(i, META_MASKING)) {
         if (IS_SET(GET_MASKING(i), MASK_INIT) || IS_SET(GET_MASKING(i), MASK_COMPLETE))
@@ -1789,7 +1791,7 @@ void disp_long_exits(struct char_data *ch, bool autom)
       if (GET_REAL_LEVEL(ch) >= LVL_BUILDER) {
         snprintf(buf2, sizeof(buf2), "%-5s - [%5ld] %s%s%s%s%s\r\n", dirs[door],
                  EXIT(ch, door)->to_room->number,
-                 replace_neutral_color_codes(EXIT(ch, door)->to_room->name, autom ? "^c" : "^n"),
+                 replace_neutral_color_codes(GET_ROOM_NAME(EXIT(ch, door)->to_room), autom ? "^c" : "^n"),
                  IS_SET(EXIT(ch, door)->exit_info, EX_LOCKED) ? " (locked)" : ((IS_SET(EXIT(ch, door)->exit_info, EX_CLOSED)) ? " (closed)" : ""),
                  IS_SET(EXIT(ch, door)->exit_info, EX_HIDDEN) ? " (hidden)" : "",
                  (veh && !room_accessible_to_vehicle_piloted_by_ch(EXIT(veh, door)->to_room, veh, ch, FALSE)) ? " (impassible)" : "",
@@ -1818,7 +1820,7 @@ void disp_long_exits(struct char_data *ch, bool autom)
             else
               snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "A closed %s", *(fname(EXIT(ch, door)->keyword)) ? fname(EXIT(ch, door)->keyword) : "door");
           } else {
-            strlcat(buf2, replace_neutral_color_codes(EXIT(ch, door)->to_room->name, autom ? "^c" : "^n"), sizeof(buf2));
+            strlcat(buf2, replace_neutral_color_codes(GET_ROOM_NAME(EXIT(ch, door)->to_room), autom ? "^c" : "^n"), sizeof(buf2));
             if (IS_WATER(EXIT(ch, door)->to_room))
               strlcat(buf2, " (flooded)", sizeof(buf2));
           }
@@ -2192,7 +2194,7 @@ void look_at_room(struct char_data * ch, int ignore_brief, int is_quicklook)
         default:
           send_to_char("^RA horrific quantity of astral energy tears at your senses.^n\r\n", ch);
           snprintf(buf, sizeof(buf), "SYSERR: '%s' (%ld) has powersite background count %d, which is greater than displayable max of 5.",
-                  ch->in_room->name, ch->in_room->number, GET_BACKGROUND_COUNT(ch->in_room));
+                   GET_ROOM_NAME(ch->in_room), ch->in_room->number, GET_BACKGROUND_COUNT(ch->in_room));
           mudlog(buf, ch, LOG_SYSLOG, TRUE);
           break;
       }
@@ -2976,7 +2978,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j, bool is_in_shop
       break;
     case ITEM_WEAPON:
       // Ranged weapons first.
-      if (IS_GUN(GET_WEAPON_ATTACK_TYPE(j))) {
+      if (WEAPON_IS_GUN(j)) {
         int burst_count = 0;
 
         // Line 1: "It is a 3-round pistol that uses the Pistols skill to fire. Its base damage code is 2L."
@@ -3652,6 +3654,10 @@ void do_probe_object(struct char_data * ch, struct obj_data * j, bool is_in_shop
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n  ^c%s^n.", eye_bits);
       }
 
+      if (GET_CYBERWARE_TYPE(j) == CYB_DERMALSHEATHING && GET_CYBERWARE_FLAGS(j)) {
+        strlcat(buf, "\r\nSince the ruthenium is applied as a skin coating, ^Ythe invisibility stops working when you wear anything over it^n.", sizeof(buf));
+      }
+
       if (IS_OBJ_STAT(j, ITEM_EXTRA_MAGIC_INCOMPATIBLE)) {
         strlcat(buf, "\r\n^yIt is incompatible with magic.^n", sizeof(buf));
       }
@@ -4235,8 +4241,7 @@ ACMD(do_examine)
         look_in_obj(ch, tmp_object, TRUE, 0);
         send_to_char("\r\n", ch);
       }
-    } else if ((GET_OBJ_TYPE(tmp_object) == ITEM_WEAPON) &&
-               (IS_GUN(GET_OBJ_VAL(tmp_object, 3)))) {
+    } else if (GET_OBJ_TYPE(tmp_object) == ITEM_WEAPON && WEAPON_IS_GUN(tmp_object)) {
       for (i = ACCESS_LOCATION_TOP; i <= ACCESS_LOCATION_UNDER; ++i)
         if (GET_OBJ_VAL(tmp_object, i) >= 0) {
           send_to_char(ch, "There is %s attached to the %s of it.\r\n",
@@ -4758,8 +4763,8 @@ const char *get_plaintext_score_equipment(struct char_data *ch) {
 const char *get_plaintext_score_karma(struct char_data *ch) {
   snprintf(buf2, sizeof(buf2), "Current karma: %.2f\r\n", ((float)GET_KARMA(ch) / 100));
   snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Total karma earned: %.2f\r\n", ((float)GET_TKE(ch)));
-  snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Reputation: %d\r\n", GET_REP(ch));
-  snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Notoriety: %d\r\n", GET_NOT(ch));
+  snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Reputation: %ld\r\n", GET_REP(ch));
+  snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "Notoriety: %ld\r\n", GET_NOT(ch));
   return buf2;
 }
 
@@ -5144,8 +5149,15 @@ ACMD(do_score)
         strlcat(mage_string, "Physical Adept", sizeof(mage_string));
         break;
       default:
-        if (IS_OTAKU(ch)) strlcat(mage_string, "Otaku", sizeof(mage_string));
-        else strlcat(mage_string, "Mundane", sizeof(mage_string));
+        if (IS_OTAKU(ch)) {
+          if (GET_OTAKU_PATH(ch) == OTAKU_PATH_NORMIE) {
+            strlcat(mage_string, "Otaku path missing, contact staff", sizeof(mage_string));
+          } else {
+            strlcat(mage_string, (GET_OTAKU_PATH(ch) == OTAKU_PATH_CYBERADEPT) ? "Cyberadept Otaku" : "Technoshaman Otaku", sizeof(mage_string));
+          }
+        } else {
+          strlcat(mage_string, "Mundane", sizeof(mage_string));
+        }
         break;
     }
 
@@ -5164,7 +5176,7 @@ ACMD(do_score)
                           GET_REAL_QUI(ch), GET_QUI(ch), IS_CARRYING_W(ch) ,CAN_CARRY_W(ch));
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^L/^b/ ^nStrength      ^w%2d (^W%2d^w)    Current session length ^W%2d^w days, ^W%2d^w hours.^b/^L/\r\n",
                           GET_REAL_STR(ch), GET_STR(ch), playing_time.day, playing_time.hours);
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^b/^L/ ^nCharisma      ^w%2d (^W%2d^w)    ^wKarma ^B[^W%7.2f^B] ^wRep ^B[^W%4d^B] ^rNotor ^r[^R%4d^r]  ^L/^b/\r\n",
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^b/^L/ ^nCharisma      ^w%2d (^W%2d^w)    ^wKarma ^B[^W%7.2f^B] ^wRep ^B[^W%4ld^B] ^rNotor ^r[^R%4ld^r]  ^L/^b/\r\n",
                           GET_REAL_CHA(ch), GET_CHA(ch), ((float)GET_KARMA(ch) / 100), GET_REP(ch), GET_NOT(ch));
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^L/^b/ ^nIntelligence  ^w%2d (^W%2d^w)    ^r%-41s^b/^L/\r\n",
                           GET_REAL_INT(ch), GET_INT(ch), get_vision_string(ch, TRUE));
@@ -7102,6 +7114,9 @@ const char *render_room_for_scan(struct char_data *ch, struct room_data *room, s
     return NULL;
   }
 
+  // Ensure it's hotloaded.
+  hotload_zone(room->zone);
+
   // TODO: Add logic to hide ultrasound-visible-only characters in adjacent silent rooms. Not a big urgency unless/until PvP becomes more of a thing.
 
   bool ch_only_sees_with_astral = !LIGHT_OK_ROOM_SPECIFIED(ch, room, FALSE);
@@ -7536,7 +7551,7 @@ ACMD(do_status)
   }
 
   for (struct sustain_data *sust = GET_SUSTAINED(targ); sust; sust = sust->next) {
-    if (!sust->caster) {
+    if (!sust->is_caster_record) {
       snprintf(buf, sizeof(buf), "  %s", spells[sust->spell].name);
       if (sust->spell == SPELL_INCATTR
           || sust->spell == SPELL_INCCYATTR
@@ -7558,7 +7573,7 @@ ACMD(do_status)
     snprintf(ENDOF(aff_buf), sizeof(aff_buf) - strlen(aff_buf), "\r\n%s %s sustaining:\r\n", ch == targ ? "You" : GET_CHAR_NAME(targ), ch == targ ? "are" : "is");
     int i = 1;
     for (struct sustain_data *sust = GET_SUSTAINED(targ); sust; sust = sust->next) {
-      if (sust->caster || sust->spirit == targ) {
+      if (sust->is_caster_record || sust->spirit == targ) {
         snprintf(ENDOF(aff_buf), sizeof(aff_buf) - strlen(aff_buf), "%d) %s (force %d, %d successes%s)", i, get_spell_name(sust->spell, sust->subtype), sust->force, sust->success, warn_if_spell_under_potential(sust));
         if ((IS_SENATOR(ch) || sust->spell == SPELL_MINDLINK)) {
           snprintf(ENDOF(aff_buf), sizeof(aff_buf) - strlen(aff_buf), " (Cast on ^c%s^n)", GET_CHAR_NAME(sust->other));
@@ -7807,6 +7822,8 @@ ACMD(do_search) {
   FAILURE_CASE(!ch->in_room, "You must be standing in a room to do that.");
 
   act("$n searches the area.", TRUE, ch, 0, 0, TO_ROOM);
+
+  WAIT_STATE(ch, 1);
 
   for (int dir = 0; dir < NUM_OF_DIRS; dir++) {
     if (EXIT(ch, dir) && IS_SET(EXIT(ch, dir)->exit_info, EX_HIDDEN)) {
@@ -8412,6 +8429,67 @@ ACMD(do_count) {
 
   // Staff can run a count on a single person as well.
   if (IS_SENATOR(ch)) {
+    // Count everything loaded in vehicles / apartments for all characters, online or not.
+    if (*argument == '!') {
+      FAILURE_CASE(!access_level(ch, LVL_PRESIDENT), "Sorry, for load reasons this is only available to game owners.");
+
+      // Make an unordered map of idnums -> long total.
+      std::unordered_map<idnum_t, long> counts = {};
+
+      // Iterate over all apartments, writing contents to map.
+      for (auto *complex : global_apartment_complexes) {
+        for (auto *apartment : complex->get_apartments()) {
+          if (apartment->owner_is_valid()) {
+            long crap_count = 0, dummy_val = 0;
+            for (auto *room : apartment->get_rooms()) {
+              crap_count += count_objects_in_room(room->get_world_room(), dummy_val);
+            }
+            if (crap_count > 0) {
+              counts[apartment->get_owner_id()] += crap_count;
+              const char *vict_name = apartment->get_owner_name__returns_new();
+              if (vict_name && str_cmp(vict_name, CHARACTER_DELETED_NAME_FOR_SQL))
+                send_to_char(ch, "%20s: %s (%ld): %s\r\n",
+                             vict_name,
+                             apartment->get_full_name(),
+                             apartment->get_root_vnum(),
+                             get_crap_count_string(crap_count, "^n", PRF_FLAGGED(ch, PRF_SCREENREADER)));
+              delete [] vict_name;
+            }
+          }
+        }
+      }
+        
+      // Iterate over all vehicles, writing contents to map.
+      for (struct veh_data *veh = veh_list; veh; veh = veh->next) {
+        if (veh->owner && does_player_exist(veh->owner) && !player_is_dead_hardcore(veh->owner)) {
+          long dummy_val = 0;
+          long crap_count = count_objects_in_veh(veh, dummy_val);
+          if (crap_count > 0) {
+            counts[veh->owner] += crap_count;
+            const char *vict_name = get_player_name(veh->owner);
+            if (vict_name && str_cmp(vict_name, CHARACTER_DELETED_NAME_FOR_SQL))
+              send_to_char(ch, "%20s: %s @ %ld: %s\r\n",
+                           vict_name,
+                           GET_VEH_NAME(veh),
+                           GET_ROOM_VNUM(get_veh_in_room(veh)),
+                           get_crap_count_string(crap_count, "^n", PRF_FLAGGED(ch, PRF_SCREENREADER)));
+            delete [] vict_name;
+          }
+        }
+      }
+
+      // Iterate over map, printing name -> count.
+      send_to_char("\r\n\r\nTOTALS\r\n", ch);
+      for (auto iter : counts) {
+        const char *vict_name = get_player_name(iter.first);
+        if (vict_name && str_cmp(vict_name, CHARACTER_DELETED_NAME_FOR_SQL))
+          send_to_char(ch, "%20s: %s\r\n", vict_name, get_crap_count_string(iter.second, "^n", PRF_FLAGGED(ch, PRF_SCREENREADER)));
+        delete [] vict_name;
+      }
+
+      return;
+    }
+    // Count everything loaded for online characters.
     if (*argument == '*') {
       FAILURE_CASE(!access_level(ch, LVL_PRESIDENT), "Sorry, for load reasons this is only available to game owners.");
 

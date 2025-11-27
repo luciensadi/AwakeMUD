@@ -89,7 +89,7 @@ int get_otaku_int(struct char_data *ch) {
   /* Handling Drugs */
   int detox_force = affected_by_spell(ch, SPELL_DETOX);
   if (GET_DRUG_STAGE(ch, DRUG_PSYCHE) == DRUG_STAGE_ONSET && !IS_DRUG_DETOX(DRUG_PSYCHE, detox_force))
-    int_stat += 2;
+    int_stat++;
 
   return int_stat;
 }
@@ -240,7 +240,6 @@ void _update_living_persona(struct char_data *ch, struct obj_data *cyberdeck, in
   ch->persona->decker->mpcp = mpcp;
   ch->persona->decker->hardening = GET_CYBERDECK_HARDENING(cyberdeck);
   ch->persona->decker->response = GET_CYBERDECK_RESPONSE_INCREASE(cyberdeck);
-  ch->persona->decker->io = GET_CYBERDECK_IO_RATING(cyberdeck);
 
   for (struct obj_data *part = cyberdeck->contains; part; part = part->next_content) {
     if (GET_OBJ_TYPE(part) != ITEM_PART) continue;
@@ -272,6 +271,7 @@ void update_otaku_deck(struct char_data *ch, struct obj_data *cyberdeck) {
   GET_CYBERDECK_HARDENING(cyberdeck) = MIN(get_otaku_wil(ch), GET_CYBERDECK_HARDENING(cyberdeck));
   GET_CYBERDECK_ACTIVE_MEMORY(cyberdeck) = 0; // Otaku do not have active memory.
   GET_CYBERDECK_TOTAL_STORAGE(cyberdeck) = 0;
+  // Otaku don't have response increase, so use this for matrix reaction instead
   GET_CYBERDECK_RESPONSE_INCREASE(cyberdeck) = get_otaku_rea(ch) + GET_ECHO(ch, ECHO_IMPROVED_REA);
   GET_CYBERDECK_RESPONSE_INCREASE(cyberdeck) = MIN(mpcp * 1.5, GET_CYBERDECK_RESPONSE_INCREASE(cyberdeck));
   GET_CYBERDECK_IO_RATING(cyberdeck) = (get_otaku_int(ch) * 100) + (GET_ECHO(ch, ECHO_IMPROVED_IO) * 100);
@@ -450,13 +450,13 @@ void submersion_parse(struct descriptor_data *d, char *arg)
     case SUBMERSION_CONFIRM:
       if (*arg == 'y') {
         if (!submersion_cost(CH, TRUE)) { // Actually spends the points for submersion
-          send_to_char("Returning to main menu.", CH);
+          send_to_char("Returning to main menu.\r\n", CH);
           d->edit_mode = SUBMERSION_MAIN;
           return;
         }
         GET_GRADE(CH)++;
         send_to_char(CH, "You feel yourself grow closer to the resonance, opening new echoes for you to learn.\r\n");
-        send_to_char("Returning to main menu.", CH);
+        send_to_char("Returning to main menu.\r\n", CH);
         d->edit_mode = SUBMERSION_MAIN;
       } else {
         disp_submersion_menu(d);
@@ -466,7 +466,7 @@ void submersion_parse(struct descriptor_data *d, char *arg)
       // learning a new echo here
       number = atoi(arg);
       if (*arg == 'q') {
-        send_to_char("Returning to main menu.", CH);
+        send_to_char("Returning to main menu.\r\n", CH);
         d->edit_mode = SUBMERSION_MAIN;
       }
       else if (number >= ECHO_MAX) 
@@ -476,7 +476,7 @@ void submersion_parse(struct descriptor_data *d, char *arg)
       else {
         SET_ECHO(CH, number, GET_ECHO(CH, number) + 1);
         send_to_char(CH, "New ways to manipulate the resonance open up before you as you learn %s.\r\n", echoes[number].name);
-        send_to_char("Returning to main menu.", CH);
+        send_to_char("Returning to main menu.\r\n", CH);
         d->edit_mode = SUBMERSION_MAIN;
       }
       break;   
