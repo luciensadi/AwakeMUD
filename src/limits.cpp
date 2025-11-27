@@ -381,6 +381,7 @@ int gain_karma(struct char_data * ch, int gain, bool rep, bool limits, bool mult
       GET_NOT(ch) += (int)(GET_KARMA(ch) / 100) - old;
 
     SendGMCPCharInfo(ch);
+    SendGMCPCharVitals(ch);
   }
 
   return gain;
