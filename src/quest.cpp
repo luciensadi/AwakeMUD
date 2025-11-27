@@ -3929,7 +3929,10 @@ ACMD(do_endrun) {
   // Drop the quest.
   for (struct char_data *johnson = character_list; johnson; johnson = johnson->next_in_character_list) {
     if (IS_NPC(johnson) && (GET_MOB_VNUM(johnson) == quest_table[GET_QUEST(ch)].johnson)) {
-      if (phone) {
+      // try a regular quit before the phone instead of after
+      if (ch->in_room && ch->in_room == johnson->in_room) {
+        attempt_quit_job(ch, johnson);
+      } else if (phone) {
         send_to_char(ch, "You call your Johnson, and after a short wait the phone is picked up.\r\n"
                          "^Y%s on the other end of the line says, \"%s\"^n\r\n"
                          "With your run abandoned, you hang up the phone.\r\n",
@@ -3942,8 +3945,6 @@ ACMD(do_endrun) {
 
         end_quest(ch, FALSE);
         forget(johnson, ch);
-      } else if (ch->in_room && ch->in_room == johnson->in_room) {
-        attempt_quit_job(ch, johnson);
       } else {
         send_to_char(ch, "You'll either need to head back and talk to %s^n in person or get a phone you can use to call %s.\r\n", GET_CHAR_NAME(johnson), HMHR(johnson));
       }
