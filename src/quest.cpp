@@ -3947,9 +3947,8 @@ ACMD(do_endrun) {
             forget(johnson, ch);
             break;
           }
-        }
-        attempt_quit_job(ch, johnson);
-      } else {
+          attempt_quit_job(ch, johnson);
+        } else {
         send_to_char(ch, "You'll either need to head back and talk to %s^n in person or get a phone you can use to call %s.\r\n", GET_CHAR_NAME(johnson), HMHR(johnson));
       }
       return;
