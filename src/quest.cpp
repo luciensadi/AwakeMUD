@@ -221,6 +221,9 @@ bool attempt_quit_job(struct char_data *ch, struct char_data *johnson) {
 
   end_quest(ch, FALSE);
   forget(johnson, ch);
+  if (PLR_FLAGGED(ch, PLR_DOING_FAVOUR)) {
+    PLR_FLAGS(ch).RemoveBit(PLR_DOING_FAVOUR);
+  }
   return TRUE;
 }
 
@@ -1568,6 +1571,13 @@ SPECIAL(johnson)
     } else {
       return FALSE;
     }
+  } else if (CMD_IS("favor") || CMD_IS("favors") || CMD_IS("favour") || CMD_IS("favours")) {
+    if (!GET_QUEST(ch)) {
+      do_say(ch, "Are you calling in any favors?", 0, 0);
+      comm = CMD_JOB_FAVOUR;
+    } else {
+      return FALSE;
+    }
   } else if (CMD_IS("complete")) {
     if (GET_QUEST(ch)) {
       do_say(ch, "I've finished the job.", 0, 0);
@@ -1611,8 +1621,6 @@ SPECIAL(johnson)
   if (need_to_act)
     do_action(ch, argument, cmd, 0);
 
-  bool doing_favours = PRF_FLAGGED(ch, PRF_FAVOURS);
-
   switch (comm) {
     case CMD_JOB_QUIT:
       return attempt_quit_job(ch, johnson);
@@ -1647,6 +1655,9 @@ SPECIAL(johnson)
           do_say(johnson, "You fragged it up, and you still want to get paid?", 0, 0);
           end_quest(ch, FALSE);
           forget(johnson, ch);
+          if (PLR_FLAGGED(ch, PLR_DOING_FAVOUR)) {
+            PLR_FLAGS(ch).RemoveBit(PLR_DOING_FAVOUR);
+          }
           return TRUE;
         }
       }
@@ -1685,6 +1696,9 @@ SPECIAL(johnson)
           do_say(johnson, "Well done.", 0, 0);
         }
         reward(ch, johnson, quest_table[GET_QUEST(ch)].max_rep < GET_REP(ch));
+        if (PLR_FLAGGED(ch, PLR_DOING_FAVOUR)) {
+          PLR_FLAGS(ch).RemoveBit(PLR_DOING_FAVOUR);
+        }
         forget(johnson, ch);
 
         if (GET_QUEST(ch) == QST_MAGE_INTRO && GET_TRADITION(ch) != TRAD_MUNDANE)
@@ -1696,14 +1710,8 @@ SPECIAL(johnson)
     case CMD_JOB_START:
     case CMD_JOB_FAVOUR: {
       favour = (comm == CMD_JOB_FAVOUR);
-      
       if (favour) {
-        if (PRF_FLAGGED(ch, PRF_FAVOURS)) {
-          do_say(johnson, "Yeah, I might need to call in a favor...", 0, 0);
-        } else {
-          do_say(johnson, "I don't need any favors from you, come back when you want some real work.", 0, 0);
-          return TRUE;
-        }
+        PLR_FLAGS(ch).SetBit(PLR_DOING_FAVOUR);
       }
 
       // Reject high-rep characters.
@@ -1713,8 +1721,10 @@ SPECIAL(johnson)
         send_to_char(ch, "[OOC: This Johnson caps out at %d reputation, so you won't get any further work from them.]\r\n", johnson_max_rep);
 
         GET_SPARE1(johnson) = -1;
-        if (memory(johnson, ch))
+        //We need to ensure that trying to start a job when you are already doing a favour won't get you blanked
+        if (memory(johnson, ch) && !PLR_FLAGGED(ch, PLR_DOING_FAVOUR)) {
             forget(johnson, ch);
+          }
         return TRUE;
       }
 
@@ -1760,8 +1770,12 @@ SPECIAL(johnson)
       if (PLR_FLAGGED(ch, PLR_KILLER) || PLR_FLAGGED(ch, PLR_BLACKLIST)) {
         do_say(johnson, "Word on the street is you can't be trusted.", 0, 0);
         GET_SPARE1(johnson) = -1;
-        if (memory(johnson, ch))
+        if (memory(johnson, ch)) {
+          if (PLR_FLAGGED(ch, PLR_DOING_FAVOUR)) {
+            PLR_FLAGS(ch).RemoveBit(PLR_DOING_FAVOUR);
+          }
           forget(johnson, ch);
+        }
       }
 
       // Reject low-rep characters.
@@ -1811,8 +1825,9 @@ SPECIAL(johnson)
         }
 
         GET_SPARE1(johnson) = -1;
-        if (memory(johnson, ch))
+        if (memory(johnson, ch)) {
           forget(johnson, ch);
+        }
         return TRUE;
       }
 
@@ -1831,7 +1846,11 @@ SPECIAL(johnson)
       else {
         snprintf(buf, sizeof(buf), "WARNING: Null intro string in quest %ld!", quest_table[new_q].vnum);
         mudlog(buf, ch, LOG_SYSLOG, TRUE);
-        do_say(johnson, "I've got a job for you.", 0, 0);
+        if (favour) {
+          do_say(johnson, "I need to call in a favour.", 0, 0);
+        } else {
+          do_say(johnson, "I've got a job for you.", 0, 0);
+        }
       }
       do_say(johnson, "Are you interested?", 0, 0);
       if (!memory(johnson, ch))
@@ -1856,14 +1875,14 @@ SPECIAL(johnson)
       //Clever hack to safely save us a call to new_quest() that compiler will be ok with.
       //If we have a cached quest use that and reset the cache integer back to -2 when
       //it is consumed.
-      if (cached_new_q != -2 && !doing_favours) {
+      if (cached_new_q != -2 && !PLR_FLAGGED(ch, PLR_DOING_FAVOUR)) {
         new_q = cached_new_q;
         cached_new_q = -2;
-      } else if (cached_new_f != -2 && doing_favours) {
+      } else if (cached_new_f != -2 && PLR_FLAGGED(ch, PLR_DOING_FAVOUR)) {
         new_q = cached_new_f;
         cached_new_f = -2;
       } else {
-        new_q = new_quest(johnson, ch, doing_favours);
+        new_q = new_quest(johnson, ch, PLR_FLAGGED(ch, PLR_DOING_FAVOUR));
       }
 
       //Handle out of quests and broken johnsons.
@@ -1929,14 +1948,14 @@ SPECIAL(johnson)
       //Clever hack to safely save us a call to new_quest() that compiler will be ok with.
       //If we have a cached quest use that and reset the cache integer back to -2 when
       //it is consumed.
-      if (cached_new_q != -2 && !doing_favours) {
+      if (cached_new_q != -2 && !PLR_FLAGGED(ch, PLR_DOING_FAVOUR)) {
         new_q = cached_new_q;
         cached_new_q = -2;
-      } else if (cached_new_f != -2 && doing_favours) {
+      } else if (cached_new_f != -2 && PLR_FLAGGED(ch, PLR_DOING_FAVOUR)) {
         new_q = cached_new_f;
         cached_new_f = -2;
       } else {
-        new_q = new_quest(johnson, ch, doing_favours);
+        new_q = new_quest(johnson, ch, PLR_FLAGGED(ch, PLR_DOING_FAVOUR));
       }
 
       //Handle out of quests and broken johnsons.
@@ -1957,6 +1976,9 @@ SPECIAL(johnson)
       GET_SPARE1(johnson) = -1;
       GET_QUEST(ch) = 0;
       GET_QUEST_STARTED(ch) = 0;
+      if (PLR_FLAGGED(ch, PLR_DOING_FAVOUR)) {
+        PLR_FLAGS(ch).RemoveBit(PLR_DOING_FAVOUR);
+      }
       forget(johnson, ch);
       if (quest_table[new_q].decline_emote && *quest_table[new_q].decline_emote) {
         // Don't @ me about this, it's the only way to reliably display a newline in this context.
@@ -4027,6 +4049,26 @@ unsigned int get_johnson_overall_min_rep(struct char_data *johnson) {
   }
 
   return min_rep;
+}
+
+unsigned int get_johnson_lowest_max_rep(struct char_data *johnson) {
+  unsigned int max_rep = UINT_MAX;
+
+  bool johnson_is_from_disconnected_zone = vnum_from_non_approved_zone(GET_MOB_VNUM(johnson));
+#ifdef IS_BUILDPORT
+  johnson_is_from_disconnected_zone = TRUE;
+#endif
+
+  for (int i = 0; i <= top_of_questt; i++) {
+    if (quest_table[i].johnson == GET_MOB_VNUM(johnson)
+        && (johnson_is_from_disconnected_zone
+            || !vnum_from_non_approved_zone(quest_table[i].vnum)))
+    {
+      max_rep = MIN(max_rep, quest_table[i].max_rep);
+    }
+  }
+
+  return max_rep;
 }
 
 // TODO: Have quests able to disable this printout (mystery quests etc)

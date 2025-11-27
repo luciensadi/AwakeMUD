@@ -684,6 +684,8 @@ struct command_info cmd_info[] =
 
     // TODO: Make this a rigging and matrix command too
     { "factions"   , POS_MORTALLYW, do_factions, LVL_PRESIDENT, 0, ALLOWS_IDLE_REWARD },
+    { "favors"     , POS_DEAD    , do_recap    , 0, 0, BLOCKS_IDLE_REWARD },
+    { "favours"    , POS_DEAD    , do_recap    , 0, 0, BLOCKS_IDLE_REWARD },
     { "force"      , POS_SLEEPING, do_force    , LVL_EXECUTIVE, 0, BLOCKS_IDLE_REWARD },
     { "forceget"   , POS_SLEEPING, do_forceget , LVL_PRESIDENT, 0, BLOCKS_IDLE_REWARD },
     { "forceput"   , POS_SLEEPING, do_forceput , LVL_PRESIDENT, 0, BLOCKS_IDLE_REWARD },
@@ -1333,6 +1335,8 @@ struct command_info mtx_htr_info[] =
     { "look", 0, do_not_here, 0, 0, BLOCKS_IDLE_REWARD }, // shadows 'l' so people reflexively looking don't get DC'd from hitch session
     { "logoff", 0, do_logoff, 0, 0, BLOCKS_IDLE_REWARD },
     { "emote", 0, do_echo, 0, SCMD_EMOTE , BLOCKS_IDLE_REWARD },
+    { "favors", 0, do_recap, 0, 0, BLOCKS_IDLE_REWARD },
+    { "favours", 0, do_recap, 0, 0, BLOCKS_IDLE_REWARD },
     { ":", 0, do_echo, 0, SCMD_EMOTE , BLOCKS_IDLE_REWARD },
     { "exit", 0, do_logoff, 0, 0, BLOCKS_IDLE_REWARD },
     { "help", 0, do_help, 0, 0, BLOCKS_IDLE_REWARD },
@@ -1397,6 +1401,8 @@ struct command_info mtx_info[] =
     { "emote", 0, do_echo, 0, SCMD_EMOTE , BLOCKS_IDLE_REWARD },
     { ":", 0, do_echo, 0, SCMD_EMOTE , BLOCKS_IDLE_REWARD },
     { "exit", 0, do_logoff, 0, 0, BLOCKS_IDLE_REWARD },
+    { "favors", 0, do_recap, 0, 0, BLOCKS_IDLE_REWARD },
+    { "favours", 0, do_recap, 0, 0, BLOCKS_IDLE_REWARD },
     { "hangup", 0, do_comcall, 0, SCMD_HANGUP, BLOCKS_IDLE_REWARD },
     { "help", 0, do_help, 0, 0, BLOCKS_IDLE_REWARD },
     { "ht", 0, do_gen_comm , 0, SCMD_HIREDTALK, BLOCKS_IDLE_REWARD },
@@ -1498,6 +1504,8 @@ struct command_info rig_info[] =
     { "enter", 0, do_enter, 0, 0, BLOCKS_IDLE_REWARD },
     { "examine", 0, do_look_while_rigging, 0, 0, BLOCKS_IDLE_REWARD },
     { "exits", 0, do_exits, 0, 0, BLOCKS_IDLE_REWARD },
+    { "favors", 0, do_recap, 0, 0, BLOCKS_IDLE_REWARD },
+    { "favours", 0, do_recap, 0, 0, BLOCKS_IDLE_REWARD },
     { "flyto", 0, do_flyto, 0, 0, BLOCKS_IDLE_REWARD },
     { "get", 0, do_get, 0, 0, BLOCKS_IDLE_REWARD },
     { "gridguide", 0, do_gridguide, 0, 0, BLOCKS_IDLE_REWARD },

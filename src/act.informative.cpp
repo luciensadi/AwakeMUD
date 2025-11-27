@@ -73,6 +73,7 @@ extern int find_sight(struct char_data *ch);
 extern int belongs_to(struct char_data *ch, struct obj_data *obj);
 extern int calculate_vehicle_entry_load(struct veh_data *veh);
 extern unsigned int get_johnson_overall_max_rep(struct char_data *johnson);
+extern unsigned int get_johnson_lowest_max_rep(struct char_data *johnson);
 extern const char *get_crap_count_string(int crap_count, const char *default_color = "^n", bool screenreader = FALSE);
 extern void display_gamba_ledger_leaderboard(struct char_data *ch);
 const char *convert_and_write_string_to_file(const char *str, const char *path);
@@ -1432,19 +1433,21 @@ void list_one_char(struct char_data * i, struct char_data * ch)
         }
         if (MOB_HAS_SPEC(i, johnson)) {
           unsigned int max_rep = get_johnson_overall_max_rep(i);
+          unsigned int lowest_rep = get_johnson_lowest_max_rep(i);
           if (max_rep >= GET_REP(ch) || max_rep >= 10000) {
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s might have a job for you.%s^n\r\n",
                      HSSH(i),
                      already_printed ? " also" : "",
                      SHOULD_SEE_TIPS(ch) ? " See ^YHELP JOB^y for instructions." : "");
+          } else if (GET_TKE(ch) >= NEWBIE_KARMA_THRESHOLD && lowest_rep < GET_REP(ch)) {
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s might need to call in a favor.^n\r\n",
+                     HSSH(i),
+                     already_printed ? " also" : "",
+                     SHOULD_SEE_TIPS(ch) ? " See ^YHELP FAVOR^y for instructions." : "");
           } else {
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s only has work for less-experienced 'runners.^n\r\n",
                      HSSH(i),
                      already_printed ? " also" : "");
-            if (PRF_FLAGGED(ch, PRF_FAVOURS)) {
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...but %s might need to call in a favor.^n\r\n",
-                     HSSH(i));
-            }
           }
           already_printed = TRUE;
         }

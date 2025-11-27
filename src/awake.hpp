@@ -366,7 +366,8 @@ enum {
 #define PLR_ADDITIONAL_SCRUTINY              56
 #define PLR_RECEIVED_GHOUL_INDEX_DELTA       57  /* Player has had their ghoul index cost reset */
 #define PLR_PAID_FOR_WHOTITLE                58
-#define PLR_MAX                              59
+#define PLR_DOING_FAVOUR                     59
+#define PLR_MAX                              60
 // Adding something here? Add it to constants.cpp's player_bits too.
 
 
@@ -488,8 +489,7 @@ enum {
 #define PRF_NOFOLLOW                           69
 #define PRF_SUPPRESS_PROMPT_CHANGE             70
 #define PRF_PASSIVE_IN_COMBAT                  71
-#define PRF_FAVOURS                            72
-#define PRF_MAX                                73
+#define PRF_MAX                                72
 
 /* log watch */
 

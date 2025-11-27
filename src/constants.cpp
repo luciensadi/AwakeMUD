@@ -620,6 +620,7 @@ const char *player_bits[] =
     "STAFF_SCRUTINY",
     "GHOUL_IDX_DONE",
     "PAID_FOR_WHOTITLE",
+    "DOING_FAVOUR",
     "\n"
   };
 
@@ -745,7 +746,6 @@ struct preference_bit_struct preference_bits_v2[] = {
   { "No Follow"            , FALSE, TRUE  },
   { "No Prompt Change Message", FALSE, TRUE  },
   { "Passive Combat"       , FALSE, TRUE  },
-  { "Johnson Favors"       , TRUE , TRUE  },
   { "\n"                   , 0    , 0     }
 };
 
@@ -824,7 +824,6 @@ const char *preference_bits[] =
     "NOFOLLOW",
     "!PROMPT_CHANGE_MSG",
     "PASSIVE_COMBAT",
-    "FAVOURS",
     MAX_FLAG_MARKER
   };
 
