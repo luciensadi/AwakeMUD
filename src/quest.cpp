@@ -1213,12 +1213,19 @@ void reward(struct char_data *ch, struct char_data *johnson, bool favour = FALSE
     send_to_char(ch, "^L[OOC: Karma and nuyen rewards for this run were suppressed as it was a favor.]^n\r\n");
   }
 
-  mudlog_vfprintf(ch, LOG_GRIDLOG, "%s gains %0.2fk and %dn from job %ld. Elapsed time v2 %0.2f seconds.",
-                  GET_CHAR_NAME(ch),
-                  (float) gained * 0.01,
-                  nuyen,
-                  GET_QUEST(ch),
-                  difftime(time(0), GET_QUEST_STARTED(ch)));
+  if (favour) {
+    mudlog_vfprintf(ch, LOG_GRIDLOG, "%s completed job %ld as a favor. Elapsed time v2 %0.2f seconds.",
+                    GET_CHAR_NAME(ch),
+                    GET_QUEST(ch),
+                    difftime(time(0), GET_QUEST_STARTED(ch)));
+  } else {
+    mudlog_vfprintf(ch, LOG_GRIDLOG, "%s gains %0.2fk and %dn from job %ld. Elapsed time v2 %0.2f seconds.",
+                    GET_CHAR_NAME(ch),
+                    (float) gained * 0.01,
+                    nuyen,
+                    GET_QUEST(ch),
+                    difftime(time(0), GET_QUEST_STARTED(ch)));
+  }
   end_quest(ch, TRUE);
 }
 
