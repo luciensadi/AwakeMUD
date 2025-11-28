@@ -1774,10 +1774,14 @@ SPECIAL(johnson)
       return TRUE;
     case CMD_JOB_START:
     case CMD_JOB_FAVOUR: {
+      // set the favour bool and flag, if we said job and the favour flag is still dangling for any reason, drop it
       favour = (comm == CMD_JOB_FAVOUR);
       if (favour) {
         PLR_FLAGS(ch).SetBit(PLR_DOING_FAVOUR);
-      }
+      } else
+        if (PLR_FLAGGED(ch, PLR_DOING_FAVOUR)) {
+          PLR_FLAGS(ch).RemoveBit(PLR_DOING_FAVOUR);
+        }
 
       // Reject high-rep characters.
       unsigned int johnson_max_rep = get_johnson_overall_max_rep(johnson);
