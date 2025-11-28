@@ -17,6 +17,7 @@
 // External prototypes.
 extern void chkdmg(struct veh_data * veh);
 extern int get_vehicle_modifier(struct veh_data *veh, bool include_weather);
+extern bool has_valid_pocket_secretary(struct char_data *ch);
 
 ACMD_DECLARE(do_drive);
 
@@ -172,9 +173,24 @@ ACMD(do_flyto) {
   float distance = get_flight_distance_to_room(veh->in_room, target_room);
   int fuel_cost = calculate_flight_cost(veh, distance);
 
-  FAILURE_CASE_PRINTF(GET_NUYEN(ch) < fuel_cost, "It will cost %d nuyen for fuel, maintenance, and fees, but you only have %d on hand.", fuel_cost, GET_NUYEN(ch));
-  send_to_char(ch, "After paying %d nuyen for the requisite fuel, maintenance, and fees, you begin the takeoff process.\r\n", fuel_cost);
-  lose_nuyen(ch, fuel_cost, NUYEN_OUTFLOW_FLIGHT_FUEL);
+  if (GET_NUYEN(ch) < fuel_cost) {
+    // QoL: you can use nuyen in a bank account if you don't have enough on you provided you have a pocket secretary handy
+    if (has_valid_pocket_secretary(ch)) {
+      if (GET_BANK(ch) >= fuel_cost) {
+      send_to_char(ch, "You arrange a wire transfer of %d nuyen for fuel, maintenance, and fees, and begin the takeoff process.\r\n", fuel_cost);
+      lose_bank(ch, fuel_cost, NUYEN_OUTFLOW_FLIGHT_FUEL);
+      } else {
+        FAILURE_CASE_PRINTF(GET_NUYEN(ch) < fuel_cost && GET_BANK(ch) < fuel_cost,
+                            "It will cost %d nuyen for fuel, maintenance, and fees, but you only have %d on hand and %d in your bank accounts.",
+                            fuel_cost, GET_NUYEN(ch), GET_BANK(ch));
+      }
+    } else {
+      FAILURE_CASE_PRINTF(GET_NUYEN(ch) < fuel_cost, "It will cost %d nuyen for fuel, maintenance, and fees, but you only have %d on hand and no way to arrange a wire transfer.", fuel_cost, GET_NUYEN(ch));
+    }
+  } else {
+    send_to_char(ch, "After paying %d nuyen for the requisite fuel, maintenance, and fees, you begin the takeoff process.\r\n", fuel_cost);
+    lose_nuyen(ch, fuel_cost, NUYEN_OUTFLOW_FLIGHT_FUEL);
+  }
 
   // Roll your flight test, which is modified by weather etc.
   int result = flight_test(ch, veh);
