@@ -987,6 +987,17 @@ bool rep_too_low(struct char_data *ch, int num)
   return FALSE;
 }
 
+bool rep_cap_too_high(struct char_data *ch, int num)
+{
+  if (num < 0 || num > top_of_questt)
+    return TRUE;
+
+  if (quest_table[num].max_rep >= 10000 || GET_REP(ch) < quest_table[num].max_rep)
+    return TRUE;
+
+  return FALSE;
+}
+
 bool would_be_rewarded_for_turnin(struct char_data *ch) {
   int nuyen = 0, karma = 0;
 
@@ -1315,6 +1326,13 @@ int new_quest(struct char_data *mob, struct char_data *ch, bool favour = FALSE)
       if (rep_too_high(ch, quest_idx) && !favour) {
         if (access_level(ch, LVL_BUILDER)) {
           send_to_char(ch, "[Skipping quest %ld: You exceed rep cap of %d.]\r\n", quest_table[quest_idx].vnum, quest_table[quest_idx].max_rep);
+        }
+        continue;
+      }
+
+      if (favour && rep_cap_too_high(ch, quest_idx)) {
+        if (access_level(ch, LVL_BUILDER)) {
+          send_to_char(ch, "[Skipping quest %ld as a favor: You are under the rep cap of %d.]\r\n", quest_table[quest_idx].vnum, quest_table[quest_idx].max_rep);
         }
         continue;
       }
@@ -1818,7 +1836,7 @@ SPECIAL(johnson)
         do_say(johnson, "Word on the street is you can't be trusted.", 0, 0);
         GET_SPARE1(johnson) = -1;
         if (memory(johnson, ch)) {
-          if (PLR_FLAGGED(ch, PLR_DOING_FAVOUR)) {
+          if (favour) {
             PLR_FLAGS(ch).RemoveBit(PLR_DOING_FAVOUR);
           }
           forget(johnson, ch);
@@ -1894,7 +1912,7 @@ SPECIAL(johnson)
         snprintf(buf, sizeof(buf), "WARNING: Null intro string in quest %ld!", quest_table[new_q].vnum);
         mudlog(buf, ch, LOG_SYSLOG, TRUE);
         if (favour) {
-          do_say(johnson, "I need to call in a favour.", 0, 0);
+          do_say(johnson, "I'm calling in a favour.", 0, 0);
         } else {
           do_say(johnson, "I've got a job for you.", 0, 0);
         }
