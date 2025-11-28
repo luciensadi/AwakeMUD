@@ -156,8 +156,13 @@ void end_quest(struct char_data *ch, bool succeeded);
 
 void initialize_quest_for_ch(struct char_data *ch, int quest_rnum, struct char_data *johnson) {
   // Assign them the quest.
-  GET_QUEST(ch) = quest_rnum;
-  GET_QUEST_STARTED(ch) = time(0);
+  if (PLR_FLAGGED(ch, PLR_DOING_FAVOUR)) {
+    GET_QUEST(ch) = quest_rnum;
+    GET_QUEST_STARTED(ch) = time(0);
+  } else {
+    GET_QUEST(ch) = quest_rnum;
+    GET_QUEST_STARTED(ch) = time(0);
+  }
 
   // Create their memory structures.
   ch->player_specials->obj_complete = new sh_int[quest_table[GET_QUEST(ch)].num_objs];
@@ -179,6 +184,8 @@ void initialize_quest_for_ch(struct char_data *ch, int quest_rnum, struct char_d
 }
 
 bool attempt_quit_job(struct char_data *ch, struct char_data *johnson) {
+  bool favour = PLR_FLAGGED(ch, PLR_DOING_FAVOUR);
+
   // Precondition: I cannot be talking right now.
   if (GET_SPARE1(johnson) == 0) {
     if (!memory(johnson, ch)) {
@@ -221,7 +228,7 @@ bool attempt_quit_job(struct char_data *ch, struct char_data *johnson) {
 
   end_quest(ch, FALSE);
   forget(johnson, ch);
-  if (PLR_FLAGGED(ch, PLR_DOING_FAVOUR)) {
+  if (favour) {
     PLR_FLAGS(ch).RemoveBit(PLR_DOING_FAVOUR);
   }
   return TRUE;
@@ -910,22 +917,38 @@ bool check_quest_kill(struct char_data *ch, struct char_data *victim)
 
 void end_quest(struct char_data *ch, bool succeeded)
 {
-  if (IS_NPC(ch) || !GET_QUEST(ch))
+  bool favour = PLR_FLAGGED(ch, PLR_DOING_FAVOUR);
+  if (IS_NPC(ch) || !GET_QUEST(ch)) {
     return;
-
-  extract_quest_targets(GET_IDNUM_EVEN_IF_PROJECTING(ch));
-  // We mark the quest as completed here because if you fail...
-  //well you failed. Better luck next time chummer.
-  for (int i = QUEST_TIMER - 1; i > 0; i--) {
-    GET_LQUEST(ch, i) = GET_LQUEST(ch, i - 1);
-
-    if (succeeded)
-      GET_CQUEST(ch, i) = GET_CQUEST(ch, i - 1);
   }
 
-  GET_LQUEST(ch, 0) = quest_table[GET_QUEST(ch)].vnum;
-  if (succeeded)
-    GET_CQUEST(ch, 0) = quest_table[GET_QUEST(ch)].vnum;
+  extract_quest_targets(GET_IDNUM_EVEN_IF_PROJECTING(ch));
+
+  // We mark the quest as completed here because if you fail...
+  //well you failed. Better luck next time chummer.
+  if (favour) {
+    for (int i = QUEST_TIMER - 1; i > 0; i--) {
+      GET_LFAVOUR(ch, i) = GET_LFAVOUR(ch, i - 1);
+
+      if (succeeded)
+        GET_CFAVOUR(ch, i) = GET_CFAVOUR(ch, i - 1);
+    }
+
+    GET_LFAVOUR(ch, 0) = quest_table[GET_QUEST(ch)].vnum;
+    if (succeeded)
+      GET_CFAVOUR(ch, 0) = quest_table[GET_QUEST(ch)].vnum;
+  } else {
+    for (int i = QUEST_TIMER - 1; i > 0; i--) {
+      GET_LQUEST(ch, i) = GET_LQUEST(ch, i - 1);
+
+      if (succeeded)
+        GET_CQUEST(ch, i) = GET_CQUEST(ch, i - 1);
+    }
+
+    GET_LQUEST(ch, 0) = quest_table[GET_QUEST(ch)].vnum;
+    if (succeeded)
+      GET_CQUEST(ch, 0) = quest_table[GET_QUEST(ch)].vnum;
+  }
 
   GET_QUEST(ch) = 0;
   GET_QUEST_STARTED(ch) = 0;
@@ -935,7 +958,11 @@ void end_quest(struct char_data *ch, bool succeeded)
   ch->player_specials->mob_complete = NULL;
   ch->player_specials->obj_complete = NULL;
 
-  GET_QUEST_DIRTY_BIT(ch) = TRUE;
+  if (favour) {
+    GET_FAVOUR_DIRTY_BIT(ch) = TRUE;
+  } else {
+    GET_QUEST_DIRTY_BIT(ch) = TRUE;
+  }
 }
 
 bool rep_too_high(struct char_data *ch, int num)
@@ -1314,9 +1341,16 @@ int new_quest(struct char_data *mob, struct char_data *ch, bool favour = FALSE)
 
       bool found = FALSE;
       for (int q = QUEST_TIMER - 1; q >= 0; q--) {
-        if (GET_LQUEST(ch, q) == quest_table[quest_idx].vnum) {
-          found = TRUE;
-          break;
+        if (favour) {
+          if (GET_LFAVOUR(ch, q) == quest_table[quest_idx].vnum) {
+            found = TRUE;
+            break;
+          }
+        } else {
+          if (GET_LQUEST(ch, q) == quest_table[quest_idx].vnum) {
+            found = TRUE;
+            break;
+          }
         }
       }
       if (found) {
@@ -1555,8 +1589,13 @@ SPECIAL(johnson)
         GET_LQUEST(ch, i) = 0;
         GET_CQUEST(ch, i) = 0;
       }
+      for (int i = QUEST_TIMER - 1; i >= 0; i--) {
+        GET_LFAVOUR(ch, i) = 0;
+        GET_CFAVOUR(ch, i) = 0;
+      }
       send_to_char("OK, your quest history has been cleared.\r\n", ch);
       GET_QUEST_DIRTY_BIT(ch) = TRUE;
+      GET_FAVOUR_DIRTY_BIT(ch) = TRUE;
       return FALSE;
     } else {
       //snprintf(buf, sizeof(buf), "INFO: No Johnson keywords found in %s's speech: '%s'.", GET_CHAR_NAME(ch), argument);
@@ -1633,6 +1672,7 @@ SPECIAL(johnson)
       return attempt_quit_job(ch, johnson);
     case CMD_JOB_DONE:
       // Precondition: I cannot be talking right now.
+      favour = PLR_FLAGGED(ch, PLR_DOING_FAVOUR);
       if (GET_SPARE1(johnson) == 0) {
         if (!memory(johnson, ch)) {
           do_say(johnson, "Hold on, I'm talking to someone else right now.", 0, 0);
@@ -1662,7 +1702,7 @@ SPECIAL(johnson)
           do_say(johnson, "You fragged it up, and you still want to get paid?", 0, 0);
           end_quest(ch, FALSE);
           forget(johnson, ch);
-          if (PLR_FLAGGED(ch, PLR_DOING_FAVOUR)) {
+          if (favour) {
             PLR_FLAGS(ch).RemoveBit(PLR_DOING_FAVOUR);
           }
           return TRUE;

@@ -3155,7 +3155,8 @@ enum {
 #define DIRTY_BIT_ECHOES      8
 #define DIRTY_BIT_QUESTS      9
 #define DIRTY_BIT_BULLETPANTS 10
-#define NUM_DIRTY_BITS        11
+#define DIRTY_BIT_FAVOURS     11
+#define NUM_DIRTY_BITS        12
 
 
 #define SMARTLINK_II_MODIFIER 3
