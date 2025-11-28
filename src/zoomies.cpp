@@ -185,7 +185,7 @@ ACMD(do_flyto) {
                             fuel_cost, GET_NUYEN(ch), GET_BANK(ch));
       }
     } else {
-      FAILURE_CASE_PRINTF(GET_NUYEN(ch) < fuel_cost, "It will cost %d nuyen for fuel, maintenance, and fees, but you only have %d on hand and no way to arrange a wire transer.", fuel_cost, GET_NUYEN(ch));
+      FAILURE_CASE_PRINTF(GET_NUYEN(ch) < fuel_cost, "It will cost %d nuyen for fuel, maintenance, and fees, but you only have %d on hand and no way to arrange a wire transfer.", fuel_cost, GET_NUYEN(ch));
     }
   } else {
     send_to_char(ch, "After paying %d nuyen for the requisite fuel, maintenance, and fees, you begin the takeoff process.\r\n", fuel_cost);
