@@ -1440,7 +1440,7 @@ struct program_data programs[] =
     {"Redecorate", 2 },
     {"Spoof", 3 },
     {"Triangulation", 2 },
-    {"Countierfeit", 10 },
+    {"Counterfeit", 10 },
     {"Guardian", 2 },
     {"Remote Control", 3 },
     {"Black Hammer", 20 },
