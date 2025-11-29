@@ -1730,7 +1730,7 @@ void _get_negotiation_data(
     {
       tn -= (GET_BIOWARE_RATING(pheromones) - 1);
       pheromone_dice *= 2;
-      snprintf(skill_rbuf, sizeof(skill_rbuf), "Mundane pheromone skill buff of %d dice and -%d TN for %s.", pheromone_dice, GET_BIOWARE_RATING(pheromones), GET_CHAR_NAME(ch));
+      snprintf(skill_rbuf, sizeof(skill_rbuf), "Mundane pheromone skill buff of %d dice and -%d TN for %s.", pheromone_dice, (GET_BIOWARE_RATING(pheromones) - 1), GET_CHAR_NAME(ch));
     }
     else
     {
