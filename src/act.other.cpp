@@ -2234,6 +2234,7 @@ ACMD(do_treat)
 
   FAILURE_CASE(IS_SENATOR(ch) && !access_level(ch, LVL_ADMIN) && !IS_NPC(vict) && !IS_SENATOR(vict), "Staff can't treat players this way. Use the RESTORE command if you have it.");
   FAILURE_CASE(CH_IN_COMBAT(vict), "You can't treat someone who's in combat!");
+  FAILURE_CASE(GET_PHYSICAL(vict) == GET_MAX_PHYSICAL(vict), "They don't need your help.");
 
   // There's a LAST_HEAL cap, unless the person is morted-- then you can attempt regardless.
   // Since mages and adepts have additional healing tools (heal spell, empathic), max-cap chars (aka mundanes) get more attempts.
