@@ -1777,7 +1777,8 @@ void create_parse(struct descriptor_data *d, const char *arg)
       case TOTEM_PRAIRIEDOG:
         i = GET_REAL_CHA(CH);
         if (i < 4) {
-          if (GET_ATT_POINTS(CH) < 4 - i) {
+          // troll ghouls are the only poor sods who can't get to 4 cha
+          if (GET_ATT_POINTS(CH) < 4 - i || GET_RACE(CH) == RACE_GHOUL_TROLL ) {
             SEND_TO_Q("\r\nYou don't have enough attribute points available to pick that totem.\r\nTotem: ", d);
             return;
           }
@@ -1788,7 +1789,7 @@ void create_parse(struct descriptor_data *d, const char *arg)
 		      case TOTEM_SUN:
         i = GET_REAL_CHA(CH);
         if (i < 4) {
-          if (GET_ATT_POINTS(CH) < 4 - i) {
+          if (GET_ATT_POINTS(CH) < 4 - i || racial_attribute_modifiers[GET_RACE(CH)][CHA] < 0 ) {
             SEND_TO_Q("\r\nYou don't have enough attribute points available to pick that totem.\r\nTotem: ", d);
             return;
           }
@@ -1799,7 +1800,7 @@ void create_parse(struct descriptor_data *d, const char *arg)
       case TOTEM_LOVER:
         i = GET_REAL_CHA(CH);
         if (i < 6) {
-          if (GET_ATT_POINTS(CH) < 6 - i) {
+          if (GET_ATT_POINTS(CH) < 6 - i || racial_attribute_modifiers[GET_RACE(CH)][CHA] < 0 ) {
             SEND_TO_Q("\r\nYou don't have enough attribute points available to pick that totem.\r\nTotem: ", d);
             return;
           }
@@ -1810,7 +1811,7 @@ void create_parse(struct descriptor_data *d, const char *arg)
       case TOTEM_SEDUCTRESS:
         i = GET_REAL_CHA(CH);
         if (i < 6) {
-          if (GET_ATT_POINTS(CH) < 6 - i) {
+          if (GET_ATT_POINTS(CH) < 6 - i || racial_attribute_modifiers[GET_RACE(CH)][CHA] < 0 ) {
             SEND_TO_Q("\r\nYou don't have enough attribute points available to pick that totem.\r\nTotem: ", d);
             return;
           }
@@ -1821,7 +1822,7 @@ void create_parse(struct descriptor_data *d, const char *arg)
       case TOTEM_SIREN:
         i = GET_REAL_CHA(CH);
         if (i < 6) {
-          if (GET_ATT_POINTS(CH) < 6 - i) {
+          if (GET_ATT_POINTS(CH) < 6 - i || racial_attribute_modifiers[GET_RACE(CH)][CHA] < 0 ) {
             SEND_TO_Q("\r\nYou don't have enough attribute points available to pick that totem.\r\nTotem: ", d);
             return;
           }
@@ -1862,7 +1863,7 @@ void create_parse(struct descriptor_data *d, const char *arg)
       case TOTEM_DRAGON:
         i = GET_REAL_INT(CH);
         if (i < 6) {
-          if (GET_ATT_POINTS(CH) < (6 - i)) {
+          if (GET_ATT_POINTS(CH) < (6 - i) || racial_attribute_modifiers[GET_RACE(CH)][INT] < 0 ) {
             SEND_TO_Q("\r\nYou don't have enough attribute points available to pick that totem.\r\nTotem: ", d);
             return;
           }
