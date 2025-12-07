@@ -1775,6 +1775,7 @@ void create_parse(struct descriptor_data *d, const char *arg)
     switch (GET_TOTEM(CH)) {
       case TOTEM_BULL:
       case TOTEM_PRAIRIEDOG:
+      case TOTEM_SUN:
         i = GET_REAL_CHA(CH);
         if (i < 4) {
           // troll ghouls are the only poor sods who can't get to 4 cha
@@ -1786,39 +1787,8 @@ void create_parse(struct descriptor_data *d, const char *arg)
           GET_ATT_POINTS(CH) -= 4 - i;
         }
         break;
-		      case TOTEM_SUN:
-        i = GET_REAL_CHA(CH);
-        if (i < 4) {
-          if (GET_ATT_POINTS(CH) < 4 - i || racial_attribute_modifiers[GET_RACE(CH)][CHA] < 0 ) {
-            SEND_TO_Q("\r\nYou don't have enough attribute points available to pick that totem.\r\nTotem: ", d);
-            return;
-          }
-          GET_REAL_CHA(CH) = 4;
-          GET_ATT_POINTS(CH) -= 4 - i;
-        }
-        break;
       case TOTEM_LOVER:
-        i = GET_REAL_CHA(CH);
-        if (i < 6) {
-          if (GET_ATT_POINTS(CH) < 6 - i || racial_attribute_modifiers[GET_RACE(CH)][CHA] < 0 ) {
-            SEND_TO_Q("\r\nYou don't have enough attribute points available to pick that totem.\r\nTotem: ", d);
-            return;
-          }
-          GET_REAL_CHA(CH) = 6;
-          GET_ATT_POINTS(CH) -= 6 - i;
-        }
-        break;
       case TOTEM_SEDUCTRESS:
-        i = GET_REAL_CHA(CH);
-        if (i < 6) {
-          if (GET_ATT_POINTS(CH) < 6 - i || racial_attribute_modifiers[GET_RACE(CH)][CHA] < 0 ) {
-            SEND_TO_Q("\r\nYou don't have enough attribute points available to pick that totem.\r\nTotem: ", d);
-            return;
-          }
-          GET_REAL_CHA(CH) = 6;
-          GET_ATT_POINTS(CH) -= 6 - i;
-        }
-        break;
       case TOTEM_SIREN:
         i = GET_REAL_CHA(CH);
         if (i < 6) {
