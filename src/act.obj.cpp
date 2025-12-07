@@ -574,7 +574,7 @@ ACMD(do_put)
 		obj_from_char(obj);
 		obj_to_obj(obj, cont);
 		send_to_char(ch, "You slip %s^n into your body compartment.\r\n", decapitalize_a_an(obj));
-		act("$n slips $p^n into $s body compartment.\r\n", TRUE, ch, 0, obj, TO_ROOM);
+		act("$n slips $p^n into $s body compartment.\r\n", TRUE, ch, obj, 0, TO_ROOM);
 		return;
 	}
 
@@ -597,7 +597,7 @@ ACMD(do_put)
 		obj_from_char(obj);
 		obj_to_obj(obj, cont);
 		send_to_char(ch, "You slip %s^n into your tooth compartment.\r\n", decapitalize_a_an(obj));
-		act("$n slips $p^n into a tooth compartment.\r\n", TRUE, ch, 0, obj, TO_ROOM);
+		act("$n slips $p^n into a tooth compartment.\r\n", TRUE, ch, obj, 0, TO_ROOM);
 		return;
 	}
 
