@@ -1218,7 +1218,9 @@ const char *tog_messages[][2] = {
                             {"You will now participate in combat again.\r\n",
                              "OK, you will no longer be able to initiate combat or fight back.\r\n"},
                             {"You will now see ambiance messages and environmental echoes about traffic.\r\n",
-                             "You will no longer see ambiance messages and environmental echoes about traffic.\r\n"}
+                             "You will no longer see ambiance messages and environmental echoes about traffic.\r\n"},
+                            {"You will no longer automatically ready your holstered/sheathed weapons.\r\n",
+                             "You will now automatically ready your holstered/sheathed weapons.\r\n"}
                           };
 
 ACMD(do_toggle)
@@ -1510,6 +1512,9 @@ ACMD(do_toggle)
     } else if (is_abbrev(argument, "traffic") || is_abbrev(argument, "notraffic") || is_abbrev(argument, "no traffic")) {
       result = PRF_TOG_CHK(ch, PRF_NOTRAFFIC);
       mode = 52;
+    } else if (is_abbrev(argument, "autoready") || is_abbrev(argument, "ready")) {
+      result = PRF_TOG_CHK(ch, PRF_AUTOREADY);
+      mode = 53;
     } else {
       send_to_char("That is not a valid toggle option.\r\n", ch);
       return;
