@@ -903,6 +903,8 @@ bool valid_totem(struct char_data *ch, int i)
     switch (i) {
       case TOTEM_OWL:
       case TOTEM_COYOTE:
+      case TOTEM_MOONMAIDEN:
+      case TOTEM_TRICKSTER:
         return FALSE;
     }
   return TRUE;
@@ -2375,4 +2377,5 @@ int get_ccr_race_point_cost(int race_int) {
       mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Race %d has no point value in chargen.", race_int);
       return 50;
   }
+
 }
