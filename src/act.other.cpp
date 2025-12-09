@@ -3239,6 +3239,17 @@ ACMD(do_photo)
                 continue;
             }
 
+            // Underwear is hidden by clothes.
+            if (j == WEAR_UNDERWEAR && (GET_EQ(found_ch, WEAR_UNDER) || GET_EQ(found_ch, WEAR_LEGS) || 
+                                        GET_EQ(found_ch, WEAR_BODY) || GET_EQ(found_ch, WEAR_ABOUT))) {
+              continue;
+            }
+
+            // Chest (upper body underwear) is also hidden by clothes.
+            if (j == WEAR_CHEST && (GET_EQ(found_ch, WEAR_UNDER) || GET_EQ(found_ch, WEAR_BODY) || GET_EQ(found_ch, WEAR_ABOUT))) {
+              continue;
+            }
+
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s%s\r\n", where[j], GET_OBJ_NAME(GET_EQ(found_ch, j)));
           }
         found = TRUE;
