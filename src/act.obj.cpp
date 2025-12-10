@@ -574,7 +574,7 @@ ACMD(do_put)
 		obj_from_char(obj);
 		obj_to_obj(obj, cont);
 		send_to_char(ch, "You slip %s^n into your body compartment.\r\n", decapitalize_a_an(obj));
-		act("$n slips $p^n into $s body compartment.\r\n", TRUE, ch, 0, obj, TO_ROOM);
+		act("$n slips $p^n into $s body compartment.\r\n", TRUE, ch, obj, 0, TO_ROOM);
 		return;
 	}
 
@@ -597,7 +597,7 @@ ACMD(do_put)
 		obj_from_char(obj);
 		obj_to_obj(obj, cont);
 		send_to_char(ch, "You slip %s^n into your tooth compartment.\r\n", decapitalize_a_an(obj));
-		act("$n slips $p^n into a tooth compartment.\r\n", TRUE, ch, 0, obj, TO_ROOM);
+		act("$n slips $p^n into a tooth compartment.\r\n", TRUE, ch, obj, 0, TO_ROOM);
 		return;
 	}
 
@@ -5508,9 +5508,10 @@ ACMD(do_holster)
 	else
 		obj_from_char(obj);
 	obj_to_obj(obj, cont);
-	send_to_char(ch, "You slip %s^n into %s^n and ready it for a quick draw.\r\n", GET_OBJ_NAME(obj), decapitalize_a_an(GET_OBJ_NAME(cont)));
+	send_to_char(ch, "You slip %s^n into %s^n%s.\r\n", GET_OBJ_NAME(obj), decapitalize_a_an(GET_OBJ_NAME(cont)),
+		         PRF_FLAGGED(ch, PRF_AUTOREADY) ? " and ready it for a quick draw" : "");
 	act("$n slips $p into $P.", FALSE, ch, obj, cont, TO_ROOM);
-	GET_HOLSTER_READY_STATUS(cont) = 1;
+	GET_HOLSTER_READY_STATUS(cont) = PRF_FLAGGED(ch, PRF_AUTOREADY) ? 1 : 0;
 
 	set_dropped_by_info(obj, ch);
 

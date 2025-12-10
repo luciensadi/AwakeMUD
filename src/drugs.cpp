@@ -841,7 +841,8 @@ bool _process_edge_and_tolerance_changes_for_applied_dose(struct char_data *ch, 
     }
 
     // Check to see if they become addicted.
-    if (GET_DRUG_ADDICT(ch, drug_id) == NOT_ADDICTED && (edge_delta > 0 || is_first_time_taking)) {
+    // Adrenaline junkies get a pass for ACTH addiction and skip ahead to tolerance.
+    if (drug_id != DRUG_ACTH && GET_DRUG_ADDICT(ch, drug_id) == NOT_ADDICTED && (edge_delta > 0 || is_first_time_taking)) {
       // It's their first dose, or they've taken more than Edge doses.
       if (!_combined_addiction_test(ch, drug_id, "application-time")) {
         // Character failed their addiction check and has become addicted.
