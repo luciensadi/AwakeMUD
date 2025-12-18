@@ -804,6 +804,10 @@ int get_armor_penalty_grade(struct char_data *ch);
 #define GET_EXTRA(ch)          ((ch)->points.extra)
 #define GET_EXTRA2(ch)        ((ch)->points.extra2)
 
+#define GET_GARNISHMENT_NUYEN(ch)   ((ch)->char_specials.saved.garnishment_nuyen)
+#define GET_GARNISHMENT_REP(ch)     ((ch)->char_specials.saved.garnishment_rep)
+#define GET_GARNISHMENT_NOTOR(ch)   ((ch)->char_specials.saved.garnishment_notor)
+
 #define GET_MOB_ALARM_MAP(npc)          ((npc)->mob_specials.alarm_map)
 void set_mob_alarm(struct char_data *npc, idnum_t vict_idnum, int seconds_to_alarm);
 void set_mob_alarm(struct char_data *npc, struct char_data *ch, int seconds_to_alarm);
@@ -1719,10 +1723,10 @@ char    *crypt(const char *key, const char *salt);
 int get_attr_max(struct char_data *ch, int attr);
 
 // Nuyen tracking functions.
-void gain_nuyen(struct char_data *ch, long amount, int category);
-void lose_nuyen(struct char_data *ch, long amount, int category);
-void gain_bank(struct char_data *ch, long amount, int category);
-void lose_bank(struct char_data *ch, long amount, int category);
+long gain_nuyen(struct char_data *ch, long amount, int category);
+long lose_nuyen(struct char_data *ch, long amount, int category);
+long gain_bank(struct char_data *ch, long amount, int category);
+long lose_bank(struct char_data *ch, long amount, int category);
 bool transfer_credstick_contents_to_bank(struct obj_data *credstick, struct char_data *ch);
 
 #define GET_WOUND_NAME(damage_level) (wound_name[MIN(DEADLY, MAX(0, damage_level))])

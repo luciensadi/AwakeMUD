@@ -103,11 +103,15 @@ extern void verify_every_pointer_we_can_think_of();
 
 #ifdef IS_BUILDPORT
 void validate_that_shops_still_exist() {
+#ifdef USE_PRIVATE_CE_WORLD
   if (real_shop(102709) < 0 || real_shop(102710) < 0 || real_shop(102712) < 0 || real_shop(102713) < 0 || real_shop(102741) < 0) {
     log_vfprintf("SHOP VANISHED! Killing game.");
     assert(1==0);
     exit(1);
   }
+#else
+  return;
+#endif
 }
 #endif
 
@@ -239,6 +243,7 @@ ACMD_DECLARE(do_forceget);
 ACMD_DECLARE(do_forceput);
 ACMD_DECLARE(do_forget);
 ACMD_DECLARE(do_fuckups);
+ACMD_DECLARE(do_garnish);
 ACMD_DECLARE(do_gecho);
 ACMD_DECLARE(do_gen_comm);
 ACMD_DECLARE(do_gen_door);
@@ -701,6 +706,7 @@ struct command_info cmd_info[] =
     { "fuckups"    , POS_DEAD    , do_fuckups  , LVL_ADMIN, 0, BLOCKS_IDLE_REWARD },
 
     { "get"        , POS_RESTING , do_get      , 0, 0, BLOCKS_IDLE_REWARD },
+    { "garnish"    , POS_DEAD    , do_garnish  , LVL_VICEPRES, 0, BLOCKS_IDLE_REWARD },
     { "gaecho"     , POS_DEAD    , do_gecho    , LVL_CONSPIRATOR, SCMD_AECHO, BLOCKS_IDLE_REWARD },
     { "gecho"      , POS_DEAD    , do_gecho    , LVL_CONSPIRATOR, 0, BLOCKS_IDLE_REWARD },
     { "give"       , POS_RESTING , do_give     , 0, 0, BLOCKS_IDLE_REWARD },

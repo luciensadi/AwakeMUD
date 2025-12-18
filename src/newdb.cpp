@@ -498,6 +498,9 @@ bool load_char(const char *name, char_data *ch, bool logon, int pc_load_origin)
   set_exdesc_max(ch, atoi(row[83]), FALSE);
   GET_OTAKU_PATH(ch) = atoi(row[84]);
   GET_GRADE(ch) = atoi(row[85]);
+  GET_GARNISHMENT_NUYEN(ch) = atol(row[86]);
+  GET_GARNISHMENT_REP(ch) = atol(row[87]);
+  GET_GARNISHMENT_NOTOR(ch) = atol(row[88]);
   mysql_free_result(res);
 
   // Update lifestyle information.
@@ -1411,7 +1414,7 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
                "PermBodLoss=%d, WimpLevel=%d, Loadroom=%ld, LastRoom=%ld, LastD=%ld, Hunger=%d, Thirst=%d, Drunk=%d, " \
                "ShotsFired='%d', ShotsTriggered='%d', Tradition=%d, pgroup='%ld', "\
                "Inveh=%ld, `rank`=%d, gender=%d, SysPoints=%d, socialbonus=%d, email='%s', highlight='%s',"
-               "multiplier=%d, lifestyle_string='%s', nodelete=%d WHERE idnum=%ld;",
+               "multiplier=%d, lifestyle_string='%s', nodelete=%d, garnishment_nuyen=%ld, garnishment_rep=%ld, garnishment_notor=%ld WHERE idnum=%ld;",
                AFF_FLAGS(player).ToString(),
                PLR_FLAGS(player).ToString(),
                PRF_FLAGS(player).ToString(),
@@ -1459,6 +1462,9 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
                GET_CHAR_MULTIPLIER(player),
                prepare_quotes(buf3, get_lifestyle_string(player), sizeof(buf3) / sizeof(char)),
                PLR_FLAGGED(player, PLR_NODELETE) ? 1 : 0,
+               GET_GARNISHMENT_NUYEN(player),
+               GET_GARNISHMENT_REP(player),
+               GET_GARNISHMENT_NOTOR(player),
                GET_IDNUM(player));
   mysql_wrapper(mysql, buf);
 

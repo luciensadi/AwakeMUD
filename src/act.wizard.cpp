@@ -1720,6 +1720,14 @@ void do_stat_character(struct char_data * ch, struct char_data * k)
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Multiplier: ^c%.2f^n\r\n", (float) GET_CHAR_MULTIPLIER(k) / 100);
     }
     if (access_level(ch, LVL_VICEPRES)) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Garnishments: nuyen %s%ld^n, rep %s%0.2f^n, notor %s%0.2f^n\r\n",
+               GET_GARNISHMENT_NUYEN(k) ? "^Y" : "^n",
+               GET_GARNISHMENT_NUYEN(k),
+               GET_GARNISHMENT_REP(k) ? "^Y" : "^n",
+               0.01 * GET_GARNISHMENT_REP(k),
+               GET_GARNISHMENT_NOTOR(k) ? "^Y" : "^n",
+               0.01 * GET_GARNISHMENT_NOTOR(k));
+      
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Email: ^y%s^n; ", GET_EMAIL(k));
       if (k->desc && k->desc->pProtocol) {
         if (k->desc->pProtocol->pVariables[eMSDP_CLIENT_ID] && k->desc->pProtocol->pVariables[eMSDP_CLIENT_ID]->pValueString) {
@@ -3171,6 +3179,8 @@ ACMD(do_payout) {
     return;
   }
 
+  long original_nuyen = GET_NUYEN(vict);
+
   if (vict->desc && vict->desc->original)
     gain_nuyen(vict->desc->original, k, NUYEN_INCOME_STAFF_PAYOUT);
   else
@@ -3180,9 +3190,11 @@ ACMD(do_payout) {
 
   send_to_char(ch, "You paid %d nuyen to %s for %s%s^n\r\n", k, GET_CHAR_NAME(vict), reason, ispunct(get_final_character_from_string(reason)) ? "" : ".");
 
-  snprintf(buf2, sizeof(buf2), "%s paid %d nuyen to %s for %s^g (%ld to %ld).",
-          GET_CHAR_NAME(ch), k,
-          GET_CHAR_NAME(vict), reason, GET_NUYEN(vict) - k, GET_NUYEN(vict));
+  snprintf(buf2, sizeof(buf2), "%s paid %d%s nuyen to %s for %s^g (%ld to %ld).",
+          GET_CHAR_NAME(ch),
+          k,
+          GET_GARNISHMENT_NUYEN(vict) ? "*" : "",
+          GET_CHAR_NAME(vict), reason, original_nuyen, GET_NUYEN(vict));
   mudlog(buf2, ch, LOG_WIZLOG, TRUE);
 }
 
@@ -3282,6 +3294,176 @@ ACMD(do_charge) {
           GET_CHAR_NAME(ch), k,
           GET_CHAR_NAME(vict), reason, GET_NUYEN(vict) + k, GET_NUYEN(vict));
   mudlog(buf2, ch, LOG_WIZLOG, TRUE);
+}
+
+const char *write_garnishment_message(struct char_data *actor, long amount, long original_amount, bool is_nuyen, bool is_rep, bool is_notor, const char *reason, char *msg_buf, size_t buf_sz) {
+  send_to_char(actor, "entering w_g_m(you, %ld, %ld, %d, %d, %d, '%s', msg_buf, %ld)\r\n", amount, original_amount, is_nuyen, is_rep, is_notor, reason, buf_sz);
+
+  snprintf(msg_buf, buf_sz, "^yOOC Notice:^n %s has ", GET_CHAR_NAME(actor));
+
+  if (original_amount + amount == 0) {
+    strlcat(msg_buf, "cleared ", buf_sz);
+  } else if (original_amount > 0) {
+    strlcat(msg_buf, amount > 0 ? "increased " : "decreased ", buf_sz);
+  } else {
+    strlcat(msg_buf, "set ", buf_sz);
+  }
+
+  snprintf(ENDOF(msg_buf), buf_sz - strlen(msg_buf), "your %s garnishment ", is_nuyen ? "nuyen" : (is_rep ? "reputation" : "notoriety"));
+
+  // Only add these extra bits if this didn't clear the amount.
+  if (original_amount + amount != 0) {
+    if (original_amount > 0) {
+      if (is_rep || is_notor) {
+        snprintf(ENDOF(msg_buf), buf_sz - strlen(msg_buf), "by %0.2f ", 0.01 * amount);
+      } else {
+        snprintf(ENDOF(msg_buf), buf_sz - strlen(msg_buf), "by %ld ", amount);
+      }
+    }
+
+    if (is_rep || is_notor) {
+      snprintf(ENDOF(msg_buf), buf_sz - strlen(msg_buf), "to %0.2f ", 0.01 * (original_amount + amount));
+    } else {
+      snprintf(ENDOF(msg_buf), buf_sz - strlen(msg_buf), "to %ld ", (original_amount + amount));
+    }
+  }
+
+  // Append reason and return it.
+  snprintf(ENDOF(msg_buf), buf_sz - strlen(msg_buf), "for %s%s^n\r\n", reason, ispunct(get_final_character_from_string(reason)) ? "" : ".");
+  snprintf(ENDOF(msg_buf), buf_sz - strlen(msg_buf), "This will deduct 25%% of what you earn until the garnishment is paid off.\r\n"); 
+  return msg_buf;
+}
+
+#define GARNISH_SYNTAX_STRING "Syntax: GARNISH <player> <amount> (nuyen|rep|notor) <Reason for the garnishment, x100 if karma>.\r\nExample: 'GARNISH LUCIEN 100 REP being a cheesebag' will garnish 1.00 rep."
+ACMD(do_garnish) {
+  MYSQL_RES *res;
+  MYSQL_ROW row;
+
+  struct char_data *vict;
+  char vict_name[MAX_INPUT_LENGTH];
+  char amt[MAX_INPUT_LENGTH];
+  char optype[MAX_INPUT_LENGTH];
+  char *remainder;
+  long k;
+
+  FAILURE_CASE(!(remainder = any_one_arg(argument, vict_name)) || !*remainder, GARNISH_SYNTAX_STRING);
+  FAILURE_CASE(!(remainder = any_one_arg(remainder, amt)) || !*remainder, GARNISH_SYNTAX_STRING);
+  FAILURE_CASE(!(remainder = any_one_arg(remainder, optype)) || !*remainder, GARNISH_SYNTAX_STRING);
+  skip_spaces(&remainder);
+
+  FAILURE_CASE((k = atol(amt)) == 0, "Must supply a non-zero amount: positive to increase garnishment, negative to decrease garnishment.");
+
+  bool is_nuyen = is_abbrev(optype, "nuyen");
+  bool is_rep = is_abbrev(optype, "rep");
+  bool is_notor = is_abbrev(optype, "notor");
+  FAILURE_CASE(!is_nuyen && !is_rep && !is_notor, "Must specify nuyen, rep, or notor.");
+
+  if (!(vict = get_char_vis(ch, vict_name))) {
+    idnum_t idnum = get_player_id(vict_name);
+    FAILURE_CASE_PRINTF(idnum <= 0, "Player '%s' does not exist.", vict_name);
+
+    const char *garnishment_sql_type = is_nuyen ? "garnishment_nuyen" : (is_rep ? "garnishment_rep" : "garnishment_notor");
+
+    // Now that we've confirmed the player exists, update them.
+    snprintf(buf, sizeof(buf), "UPDATE pfiles SET %s = MAX(%s + %ld, 0) WHERE idnum='%ld';",
+             garnishment_sql_type,
+             garnishment_sql_type,
+             k,
+             idnum);
+
+    if (mysql_wrapper(mysql, buf)) {
+      send_to_char("An unexpected error occurred on update (query failed).\r\n", ch);
+      return;
+    }
+
+    // Fetch their current garnishment value.
+    snprintf(buf, sizeof(buf), "SELECT %s FROM pfiles WHERE idnum='%ld';", garnishment_sql_type, idnum);
+    FAILURE_CASE(mysql_wrapper(mysql, buf), "An unexpected error occurred (query failed).");
+    FAILURE_CASE(!(res = mysql_use_result(mysql)), "An unexpected error occurred (use_result failed).");
+
+    row = mysql_fetch_row(res);
+    if (!row && mysql_field_count(mysql)) {
+      mysql_free_result(res);
+      send_to_char(ch, "Could not find a PC named '%s' even though they should have existed??\r\n", vict_name);
+      return;
+    }
+    long current_garnishment = atol(row[0]);
+    mysql_free_result(res);
+    long prior_garnishment = current_garnishment - k;
+    
+    // Mail the victim.
+    write_garnishment_message(ch, k, prior_garnishment, is_nuyen, is_rep, is_notor, remainder, buf, sizeof(buf));
+    store_mail(idnum, ch, buf);
+
+    // Notify the actor.
+    send_to_char(ch, "Mail sent to %s:\r\n> %s", vict_name, buf);
+
+    // Log it.
+    const char *plr_name = get_player_name(idnum);
+    snprintf(buf, sizeof(buf), "%s %screased %s(%ld)'s %s garnishment ",
+              GET_CHAR_NAME(ch),
+              k > 0 ? "in" : "de",
+              plr_name,
+              idnum,
+              is_nuyen ? "nuyen" : (is_rep ? "reputation" : "notoriety"));
+    delete [] plr_name;
+
+    if (is_rep || is_notor) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "by %0.2f to %0.2f ", 0.01 * k, 0.01 * current_garnishment);
+    } else {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "by %ld to %ld ", k, current_garnishment);
+    }
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "for %s.", remainder);
+    mudlog(buf, ch, LOG_WIZLOG, TRUE);
+    return;
+  }
+
+#ifndef IS_BUILDPORT
+  if (IS_SENATOR(vict)) {
+    send_to_char(ch, "Staff can't be garnished outside of the buildport.\r\n", ch);
+    return;
+  }
+#endif
+
+  if (vict->desc && vict->desc->original)
+    vict = vict->desc->original;
+
+  long *garnishment_var = &(is_nuyen ? GET_GARNISHMENT_NUYEN(vict) : (is_rep ? GET_GARNISHMENT_REP(vict) : GET_GARNISHMENT_NOTOR(vict)));
+  long current_garnishment = *garnishment_var;
+
+  // Execute the change.
+  *garnishment_var += k;
+
+  if (*garnishment_var < 0) {
+    if (k < 0) {
+      *garnishment_var -= k;
+      k = -(*garnishment_var);
+      *garnishment_var = 0;
+    } else {
+      *garnishment_var = k;
+    }
+  }
+
+  write_garnishment_message(ch, k, current_garnishment, is_nuyen, is_rep, is_notor, remainder, buf, sizeof(buf));
+  // Notify victim.
+  send_to_char(buf, vict);
+  // Notify the actor.
+  send_to_char(ch, "Message sent to %s:\r\n> %s", GET_CHAR_NAME(vict), buf);
+
+  // Log it.
+  snprintf(buf, sizeof(buf), "%s %screased %s(%ld)'s %s garnishment ",
+            GET_CHAR_NAME(ch),
+            k > 0 ? "in" : "de",
+            GET_CHAR_NAME(vict),
+            GET_IDNUM(vict),
+            is_nuyen ? "nuyen" : (is_rep ? "reputation" : "notoriety"));
+  if (is_rep || is_notor) {
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "by %0.2f to %0.2f ", 0.01 * k, 0.01 * current_garnishment);
+  } else {
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "by %ld to %ld ", k, current_garnishment);
+  }
+  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "for %s.", remainder);
+  mudlog(buf, ch, LOG_WIZLOG, TRUE);
 }
 
 void staff_induced_karma_alteration_for_online_char(struct char_data *ch, struct char_data *vict, long karma_times_100, const char *reason, bool add_karma) {
@@ -7301,6 +7483,11 @@ ACMD(do_hlist)
     
     if (!ch_can_bypass_edit_lock(ch, get_zone_from_vnum(matrix[nr].vnum)))
       continue;
+
+    if (matrix[nr].intrusion < 0 || matrix[nr].intrusion > 2) {
+      mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Matrix intrusion rating for %ld is out of range at %d. Temporarily clamping to 0.", matrix[nr].vnum, matrix[nr].intrusion);
+      matrix[nr].intrusion = 0;
+    }
 
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%5d. [%8ld] %s^n: %s-%d^n (%s^n)\r\n",
              ++found,

@@ -85,6 +85,9 @@ CREATE TABLE `pfiles` (
   `exdesc_max` smallint(5) unsigned default 0,
   `otaku_path` tinyint(2) default 0,
   `submersion_grade` smallint(3) default 0,
+  `garnishment_nuyen` mediumint(6) default '0',
+  `garnishment_rep` mediumint(6) default '0',
+  `garnishment_notor` mediumint(6) default '0',
   PRIMARY KEY (`idnum`),
   KEY (`name`)
 );

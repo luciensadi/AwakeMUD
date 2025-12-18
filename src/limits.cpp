@@ -314,6 +314,24 @@ void set_pretitle(struct char_data * ch, const char *title)
   GET_PRETITLE(ch) = get_new_kosherized_title(title, MAX_TITLE_LENGTH);
 }
 
+// Returns the amount after garnishment.
+long garnish_karma(struct char_data *ch, long amount, bool is_rep) {
+  // If they have a garnishment, they lose 20% of the gain. This doesn't hit bank withdrawal, wires, or player handoffs.
+  // Note to the devious: If you decide to bypass garnishment by use of other players, you'll be escalating your garnishment to a ban.
+  long *garnishment_var = &(is_rep ? GET_GARNISHMENT_REP(ch) : GET_GARNISHMENT_NOTOR(ch));
+  if (*garnishment_var > 0) {
+    long garnished_amount = MIN(*garnishment_var, amount * 0.25);
+    amount -= garnished_amount;
+    *garnishment_var -= garnished_amount;
+    if (*garnishment_var <= 0) {
+      *garnishment_var = 0;
+      send_to_char(ch, "^gOOC Notice:^n Your %s garnishment has been paid off.\r\n", is_rep ? "reputation" : "notoriety");
+      mudlog_vfprintf(ch, LOG_WIZLOG, "%s(%ld) has paid off their %s garnishment.", GET_CHAR_NAME(ch), GET_IDNUM(ch), is_rep ? "reputation" : "notoriety");
+    }
+  }
+  return amount;
+}
+
 // The centralized karma gain func. Includes code in support of multipliers.
 int gain_karma(struct char_data * ch, int gain, bool rep, bool limits, bool multiplier)
 {
@@ -370,6 +388,9 @@ int gain_karma(struct char_data * ch, int gain, bool rep, bool limits, bool mult
                gain, GET_CHAR_NAME(ch));
       mudlog(message_buf, ch, LOG_SYSLOG, TRUE);
     }
+
+    // Garnish it if needed.
+    gain = garnish_karma(ch, gain, rep);
 
     GET_KARMA(ch) += gain;
 
@@ -437,20 +458,43 @@ void _raw_gain_nuyen(struct char_data *ch, long amount, int category, bool bank,
   SendGMCPCharVitals(ch);
 }
 
-void gain_nuyen(struct char_data *ch, long amount, int category) {
+// Returns the amount after garnishment.
+long garnish_income(struct char_data *ch, long amount) {
+  // If they have a garnishment, they lose 20% of the gain. This doesn't hit bank withdrawal, wires, or player handoffs.
+  // Note to the devious: If you decide to bypass garnishment by use of other players, you'll be escalating your garnishment to a ban.
+  if (!IS_NPC(ch) && GET_GARNISHMENT_NUYEN(ch) > 0) {
+    long garnished_amount = MIN(GET_GARNISHMENT_NUYEN(ch), amount * 0.25);
+    amount -= garnished_amount;
+    GET_GARNISHMENT_NUYEN(ch) -= garnished_amount;
+    if (GET_GARNISHMENT_NUYEN(ch) <= 0) {
+      GET_GARNISHMENT_NUYEN(ch) = 0;
+      send_to_char(ch, "^gOOC Notice:^n Your nuyen garnishment has been paid off.\r\n");
+      mudlog_vfprintf(ch, LOG_WIZLOG, "%s has paid off their nuyen garnishment.", GET_CHAR_NAME(ch));
+    }
+  }
+  return amount;
+}
+
+long gain_nuyen(struct char_data *ch, long amount, int category) {
+  amount = garnish_income(ch, amount);
   _raw_gain_nuyen(ch, amount, category, FALSE, NULL);
+  return amount;
 }
 
-void lose_nuyen(struct char_data *ch, long amount, int category) {
+long lose_nuyen(struct char_data *ch, long amount, int category) {
   _raw_gain_nuyen(ch, -amount, category, FALSE, NULL);
+  return amount;
 }
 
-void gain_bank(struct char_data *ch, long amount, int category) {
+long gain_bank(struct char_data *ch, long amount, int category) {
+  amount = garnish_income(ch, amount);
   _raw_gain_nuyen(ch, amount, category, TRUE, NULL);
+  return amount;
 }
 
-void lose_bank(struct char_data *ch, long amount, int category) {
+long lose_bank(struct char_data *ch, long amount, int category) {
   _raw_gain_nuyen(ch, -amount, category, TRUE, NULL);
+  return amount;
 }
 
 // only the pcs should need to access this
