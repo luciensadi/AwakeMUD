@@ -290,7 +290,7 @@ ACMD(do_pockets) {
     }
 
     // Unfinished box.
-    if (GET_AMMOBOX_INTENDED_QUANTITY(ammobox) > 0 || GET_AMMOBOX_TIME_TO_COMPLETION(ammobox)) {
+    if (GET_AMMOBOX_INTENDED_QUANTITY(ammobox) > 0) {
       send_to_char(ch, "You'll need to finish building %s first.\r\n", GET_OBJ_NAME(ammobox));
       return;
     }

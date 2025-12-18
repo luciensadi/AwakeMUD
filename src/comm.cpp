@@ -3770,6 +3770,11 @@ void increase_congregation_bonus_pools() {
     else if (occupants >= 3)
       point_gain = 2;
 
+    // small bonus if you are a little drunk, but not if you're drinking alone
+    if (occupants >= 2 && GET_COND(i, COND_DRUNK) >= (int)(MAX_DRUNK / 2)) {
+      point_gain++;
+    }
+
     /*
     snprintf(buf, sizeof(buf), "Socialization: %s gets %d (valid PC occupants: %d of %d).",
              GET_CHAR_NAME(i),
