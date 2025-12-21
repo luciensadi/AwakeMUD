@@ -1272,7 +1272,7 @@ ACMD(do_toggle)
 
       // Compose and append our line.
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf),
-              "%30s: ^%c%-3s%s",
+              "%30s: ^%c%-3s%s^n",
               preference_bits_v2[i].name,
               preference_bits_v2[i].on_off ? 'g' : 'n',
               buf2,
