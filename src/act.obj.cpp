@@ -1501,11 +1501,11 @@ bool can_take_obj_from_room(struct char_data *ch, struct obj_data *obj)
 		{
 			if (GET_OBJ_TYPE(obj) == ITEM_DESTROYABLE)
 			{
-				send_to_char(ch, "You can't pick %s up%s", decapitalize_a_an(obj), IS_RIGGING(ch) ? "." : ", but you're pretty sure you could ##^WDESTROY^n it.");
+				send_to_char(ch, "You can't pick %s up%s\r\n", decapitalize_a_an(obj), IS_RIGGING(ch) ? "." : ", but you're pretty sure you could ##^WDESTROY^n it.");
 			}
 			else
 			{
-				send_to_char(ch, "You can't take %s.", decapitalize_a_an(obj));
+				send_to_char(ch, "You can't take %s.\r\n", decapitalize_a_an(obj));
 			}
 			return FALSE;
 		}
