@@ -36,8 +36,17 @@ std::vector<class holiday_entry> holiday_entries = {
      "[OOC]: It's our anniversary! Here's to another great year -- and here's a gift for you!",
      "a present fuzzing with digital static",
      "Shrouded in fragments of code, this present looks to be a decidedly out-of-character item. Why not ^WOPEN^n it and see what it contains?",
-     OBJ_ANNIVERSARY_2025_GIFT
-  }
+     OBJ_ANNIVERSARY_2025_GIFT},
+  {"Christmas '25", 1766682630, 1767225599, // Now to 12/31/25.
+     "Off in the distance, you hear the shattering of glass followed by a woman's high-pitched screams, and you spin around just in time to see a figure falling from a skyscraper in the distance. As you watch, mesmerized, a stray gust of wind deposits a present in your hands.\r\n",
+     "a festive present with 'Happy Holidays!' emblazoned on the tag",
+     "Done up in shiny wrapping paper and finished with a neat bow, this holiday present is sure to please. Why not ^WOPEN^n it now?",
+     OBJ_CHRISTMAS_2025_GIFT},
+  {"Anniversary '26", 1768435200, 1768521599, // Midnight to 2359.59 on Jan 15.
+     "[OOC]: It's our anniversary! Here's to another great year -- and here's a gift for you!",
+     "a present fuzzing with digital static",
+     "Shrouded in fragments of code, this present looks to be a decidedly out-of-character item. Why not ^WOPEN^n it and see what it contains?",
+     OBJ_ANNIVERSARY_2026_GIFT}
 };
 
 void award_holiday_gifts() {
