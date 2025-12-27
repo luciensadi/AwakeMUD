@@ -1823,13 +1823,23 @@ void create_parse(struct descriptor_data *d, const char *arg)
         }
         i = GET_REAL_QUI(CH);
         if (i < 4) {
-          GET_REAL_QUI(CH) = 4;
-          GET_ATT_POINTS(CH) -= 4 - i;
+          if (GET_RACE(CH) == RACE_GHOUL_TROLL) {
+            GET_REAL_QUI(CH) = 5;
+            GET_ATT_POINTS(CH) -= 5 - i;
+          } else {
+            GET_REAL_QUI(CH) = 4;
+            GET_ATT_POINTS(CH) -= 4 - i;
+          }
         }
         i = GET_REAL_INT(CH);
         if (i < 4) {
-          GET_REAL_INT(CH) = 4;
-          GET_ATT_POINTS(CH) -= 4 - i;
+          if (GET_RACE(CH) == RACE_GHOUL_TROLL) {
+            GET_REAL_INT(CH) = 3;
+            GET_ATT_POINTS(CH) -= 3 - i;
+          } else {
+            GET_REAL_INT(CH) = 4;
+            GET_ATT_POINTS(CH) -= 4 - i;
+          }
         }
         break;
       case TOTEM_DRAGON:
