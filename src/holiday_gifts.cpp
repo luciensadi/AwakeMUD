@@ -198,6 +198,7 @@ SPECIAL(holiday_gift) {
       while (GET_HOLIDAY_GIFT_DECKBUILD_TOKENS(obj)-- > 0) {
         struct obj_data *token = read_object(OBJ_STAFF_REBATE_FOR_CRAFTING, VIRTUAL, OBJ_LOAD_REASON_HOLIDAY_GIFT);
         GET_CRAFTING_TOKEN_ISSUED_BY(obj) = -1;
+        GET_CRAFTING_TOKEN_IDNUM(token) = GET_IDNUM(ch);
         obj_to_char(token, ch);
       }
       
@@ -223,6 +224,7 @@ SPECIAL(holiday_gift) {
       while (GET_HOLIDAY_GIFT_ONE_SHOT_HEALS(obj)-- > 0) {
         struct obj_data *injector = read_object(OBJ_ONE_SHOT_HEALING_INJECTOR, VIRTUAL, OBJ_LOAD_REASON_HOLIDAY_GIFT);
         GET_HEALING_INJECTOR_ISSUED_BY(injector) = -1;
+        GET_HEALING_INJECTOR_ISSUED_TO(injector) = GET_IDNUM(ch);
         obj_to_char(injector, ch);
       }
       
@@ -232,6 +234,12 @@ SPECIAL(holiday_gift) {
     // Award contained objects.
     while (obj->contains) {
       struct obj_data *temp = obj->contains;
+
+      // Soulbind if that's possible for this item type.
+      soulbind_obj_to_char(temp, ch, FALSE);
+      // And flag it as kept.
+      GET_OBJ_EXTRA(temp).SetBit(ITEM_EXTRA_KEPT);
+
       obj_from_obj(temp);
       obj_to_char(temp, ch);
 
