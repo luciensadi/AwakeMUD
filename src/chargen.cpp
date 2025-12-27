@@ -903,6 +903,8 @@ bool valid_totem(struct char_data *ch, int i)
     switch (i) {
       case TOTEM_OWL:
       case TOTEM_COYOTE:
+      case TOTEM_MOONMAIDEN:
+      case TOTEM_TRICKSTER:
         return FALSE;
     }
   return TRUE;
@@ -1775,20 +1777,11 @@ void create_parse(struct descriptor_data *d, const char *arg)
     switch (GET_TOTEM(CH)) {
       case TOTEM_BULL:
       case TOTEM_PRAIRIEDOG:
+      case TOTEM_SUN:
         i = GET_REAL_CHA(CH);
         if (i < 4) {
-          if (GET_ATT_POINTS(CH) < 4 - i) {
-            SEND_TO_Q("\r\nYou don't have enough attribute points available to pick that totem.\r\nTotem: ", d);
-            return;
-          }
-          GET_REAL_CHA(CH) = 4;
-          GET_ATT_POINTS(CH) -= 4 - i;
-        }
-        break;
-		      case TOTEM_SUN:
-        i = GET_REAL_CHA(CH);
-        if (i < 4) {
-          if (GET_ATT_POINTS(CH) < 4 - i) {
+          // troll ghouls are the only poor sods who can't get to 4 cha
+          if (GET_ATT_POINTS(CH) < 4 - i || GET_RACE(CH) == RACE_GHOUL_TROLL ) {
             SEND_TO_Q("\r\nYou don't have enough attribute points available to pick that totem.\r\nTotem: ", d);
             return;
           }
@@ -1797,31 +1790,11 @@ void create_parse(struct descriptor_data *d, const char *arg)
         }
         break;
       case TOTEM_LOVER:
-        i = GET_REAL_CHA(CH);
-        if (i < 6) {
-          if (GET_ATT_POINTS(CH) < 6 - i) {
-            SEND_TO_Q("\r\nYou don't have enough attribute points available to pick that totem.\r\nTotem: ", d);
-            return;
-          }
-          GET_REAL_CHA(CH) = 6;
-          GET_ATT_POINTS(CH) -= 6 - i;
-        }
-        break;
       case TOTEM_SEDUCTRESS:
-        i = GET_REAL_CHA(CH);
-        if (i < 6) {
-          if (GET_ATT_POINTS(CH) < 6 - i) {
-            SEND_TO_Q("\r\nYou don't have enough attribute points available to pick that totem.\r\nTotem: ", d);
-            return;
-          }
-          GET_REAL_CHA(CH) = 6;
-          GET_ATT_POINTS(CH) -= 6 - i;
-        }
-        break;
       case TOTEM_SIREN:
         i = GET_REAL_CHA(CH);
         if (i < 6) {
-          if (GET_ATT_POINTS(CH) < 6 - i) {
+          if (GET_ATT_POINTS(CH) < 6 - i || racial_attribute_modifiers[GET_RACE(CH)][CHA] < 0 ) {
             SEND_TO_Q("\r\nYou don't have enough attribute points available to pick that totem.\r\nTotem: ", d);
             return;
           }
@@ -1850,19 +1823,29 @@ void create_parse(struct descriptor_data *d, const char *arg)
         }
         i = GET_REAL_QUI(CH);
         if (i < 4) {
-          GET_REAL_QUI(CH) = 4;
-          GET_ATT_POINTS(CH) -= 4 - i;
+          if (GET_RACE(CH) == RACE_GHOUL_TROLL) {
+            GET_REAL_QUI(CH) = 5;
+            GET_ATT_POINTS(CH) -= 5 - i;
+          } else {
+            GET_REAL_QUI(CH) = 4;
+            GET_ATT_POINTS(CH) -= 4 - i;
+          }
         }
         i = GET_REAL_INT(CH);
         if (i < 4) {
-          GET_REAL_INT(CH) = 4;
-          GET_ATT_POINTS(CH) -= 4 - i;
+          if (GET_RACE(CH) == RACE_GHOUL_TROLL) {
+            GET_REAL_INT(CH) = 3;
+            GET_ATT_POINTS(CH) -= 3 - i;
+          } else {
+            GET_REAL_INT(CH) = 4;
+            GET_ATT_POINTS(CH) -= 4 - i;
+          }
         }
         break;
       case TOTEM_DRAGON:
         i = GET_REAL_INT(CH);
         if (i < 6) {
-          if (GET_ATT_POINTS(CH) < (6 - i)) {
+          if (GET_ATT_POINTS(CH) < (6 - i) || racial_attribute_modifiers[GET_RACE(CH)][INT] < 0 ) {
             SEND_TO_Q("\r\nYou don't have enough attribute points available to pick that totem.\r\nTotem: ", d);
             return;
           }
@@ -2404,4 +2387,5 @@ int get_ccr_race_point_cost(int race_int) {
       mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Race %d has no point value in chargen.", race_int);
       return 50;
   }
+
 }
