@@ -1218,7 +1218,9 @@ const char *tog_messages[][2] = {
                             {"You will now participate in combat again.\r\n",
                              "OK, you will no longer be able to initiate combat or fight back.\r\n"},
                             {"You will now see ambiance messages and environmental echoes about traffic.\r\n",
-                             "You will no longer see ambiance messages and environmental echoes about traffic.\r\n"}
+                             "You will no longer see ambiance messages and environmental echoes about traffic.\r\n"},
+                            {"You will no longer automatically ready your holstered/sheathed weapons.\r\n",
+                             "You will now automatically ready your holstered/sheathed weapons.\r\n"}
                           };
 
 ACMD(do_toggle)
@@ -1270,9 +1272,9 @@ ACMD(do_toggle)
 
       // Compose and append our line.
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf),
-              "%30s: ^%c%-3s%s",
+              "%30s: ^%c%-3s%s^n",
               preference_bits_v2[i].name,
-              preference_bits_v2[i].on_off ? 'g' : 'n',
+              PRF_FLAGGED(ch, i) ? 'g' : 'n',
               buf2,
               printed%2 == 1 || PRF_FLAGGED(ch, PRF_SCREENREADER) ? "\r\n" : "");
 
@@ -1510,6 +1512,9 @@ ACMD(do_toggle)
     } else if (is_abbrev(argument, "traffic") || is_abbrev(argument, "notraffic") || is_abbrev(argument, "no traffic")) {
       result = PRF_TOG_CHK(ch, PRF_NOTRAFFIC);
       mode = 52;
+    } else if (is_abbrev(argument, "autoready") || is_abbrev(argument, "ready")) {
+      result = PRF_TOG_CHK(ch, PRF_AUTOREADY);
+      mode = 53;
     } else {
       send_to_char("That is not a valid toggle option.\r\n", ch);
       return;
@@ -3232,6 +3237,17 @@ ACMD(do_photo)
                                (GET_EQ(found_ch, WEAR_ABOUT) ? GET_OBJ_VAL(GET_EQ(found_ch, WEAR_ABOUT), 7) : 0) +
                                (GET_EQ(found_ch, WEAR_LEGS) ? GET_OBJ_VAL(GET_EQ(found_ch, WEAR_LEGS), 7) : 0)) < 2)
                 continue;
+            }
+
+            // Underwear is hidden by clothes.
+            if (j == WEAR_UNDERWEAR && (GET_EQ(found_ch, WEAR_UNDER) || GET_EQ(found_ch, WEAR_LEGS) || 
+                                        GET_EQ(found_ch, WEAR_BODY) || GET_EQ(found_ch, WEAR_ABOUT))) {
+              continue;
+            }
+
+            // Chest (upper body underwear) is also hidden by clothes.
+            if (j == WEAR_CHEST && (GET_EQ(found_ch, WEAR_UNDER) || GET_EQ(found_ch, WEAR_BODY) || GET_EQ(found_ch, WEAR_ABOUT))) {
+              continue;
             }
 
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s%s\r\n", where[j], GET_OBJ_NAME(GET_EQ(found_ch, j)));
