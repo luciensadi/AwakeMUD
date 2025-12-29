@@ -800,7 +800,9 @@ enum {
 #define SPELL_INFRAVISION    67
 #define SPELL_LEVITATE    68
 #define SPELL_FLAME_AURA    69
-#define MAX_SPELLS    70
+#define SPELL_ANALYZEMAGIC  70
+#define SPELL_CATALOG       71
+#define MAX_SPELLS    72
 
 #define SPELL_DESIGN_FAILED_CODE -3
 
@@ -814,7 +816,8 @@ enum {
 #define META_REFLECTING    7
 #define META_SHIELDING    8
 #define META_ANCHORING    9
-#define META_MAX    10
+#define META_DIVINING     10
+#define META_MAX    11
 
 #define MASK_INIT    (1 << 1)
 #define MASK_DUAL    (1 << 2)

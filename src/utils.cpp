@@ -5069,6 +5069,8 @@ bool spell_is_nerp(int spell_num)
   case SPELL_SMOKECLOUD:
   case SPELL_THUNDERCLAP:
   case SPELL_SPLASH:
+  case SPELL_ANALYZEMAGIC:
+  case SPELL_CATALOG:
     return TRUE;
   }
 

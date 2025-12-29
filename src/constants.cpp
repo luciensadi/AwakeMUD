@@ -2411,7 +2411,7 @@ const char *short_attributes[] =
 
 struct spell_types spells[] =
   {
-    // name, category, vector, target, duration, drainpower, draindamage
+    // name, physical, vector, target, duration, drainpower, draindamage, nerps
     { "UNDEF", 0, 0, 0, 0, 0, 0, 0 },
     { "Death Touch", FALSE, COMBAT, TOUCH, ATT_WIL, INSTANT, 0, PACK_VARIABLE_DRAIN_DAMAGE(-1) }, // 1
     { "Manabolt", FALSE, COMBAT, SINGLE, ATT_WIL, INSTANT, 0, PACK_VARIABLE_DRAIN_DAMAGE(0) },
@@ -2481,7 +2481,9 @@ struct spell_types spells[] =
     { "Nightvision", TRUE, DETECTION, SINGLE, -1, SUSTAINED, 1, LIGHT },
     { "Infravision", TRUE, DETECTION, SINGLE, -1, SUSTAINED, 1, MODERATE },
     { "Levitate", TRUE, MANIPULATION, SINGLE, -1, SUSTAINED, 2, MODERATE },
-    { "Flame Aura", TRUE, MANIPULATION, SINGLE, -1, SUSTAINED, 2, MODERATE }
+    { "Flame Aura", TRUE, MANIPULATION, SINGLE, -1, SUSTAINED, 2, MODERATE },
+    { "Analyze Magic", FALSE, DETECTION, SINGLE, 0, SUSTAINED, 0, LIGHT },
+    { "Catalog", FALSE, DETECTION, SINGLE, -6, SUSTAINED, 1, MODERATE }
   };
 
 const char *totem_types[] =
@@ -2953,7 +2955,8 @@ const char *metamagic[] = {
   "Quickening",
   "Reflecting",
   "Shielding",
-  "Anchoring"
+  "Anchoring",
+  "Divining"
 };
 
 struct otaku_echo echoes[] = {
