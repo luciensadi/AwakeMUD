@@ -20,6 +20,8 @@ ACMD(do_spray)
   skip_spaces(&argument);
   FAILURE_CASE(!*argument, "What do you want to spray? (Syntax: SPRAY <message>)");
 
+  if (!ch->desc) return;
+
   // If they trigger automod with this, bail out.
   if (check_for_banned_content(argument, ch))
     return;
@@ -42,45 +44,38 @@ ACMD(do_spray)
                       "Sorry, there's a %d-graffiti-per-character limit. Please clean up another one of your creations first.",
                       MAX_GRAFFITI_SPRAYS_PER_CHARACTER);
 
+  // Tie it to the art quota so we don't have someone wandering around spamming tags.
+  FAILURE_CASE(ch->desc->regenerating_art_quota <= 0, "You've created art and/or tagged too much recently. Please wait a while before trying again.");
+
+  int length = get_string_length_after_color_code_removal(argument, ch);
+  FAILURE_CASE_PRINTF(length >= LINE_LENGTH, "Sprays are limited to %d characters in length.", LINE_LENGTH - 1);
+
+  // If it's too short, check to make sure there's at least one space in it.
+  if (length < 10) {
+    const char *ptr = argument;
+    for (; *ptr && !isspace(*ptr); ptr++) { /* deliberately left blank */ }
+    FAILURE_CASE(!*ptr, "Please write out something to spray, like 'spray A coiling dragon mural'.");
+  }
+
+  // Try to block ASCII sprays.
+  {
+    int alpha = 0, nonalpha = 0;
+    for (const char *ptr = argument; *ptr; ptr++) {
+      if (isalnum(*ptr)) {
+        alpha++;
+      } else if (*ptr != '^' && *ptr != '[' && *ptr != ']' && *ptr != ' ') {
+        nonalpha++;
+      }
+    }
+    FAILURE_CASE(nonalpha > 5 && (alpha / 4 < nonalpha), "ASCII art doesn't play well with screenreaders, please write things out!");
+  }
+
+  // Don't spam the same sprays.
+  FAILURE_CASE(!str_cmp(argument, ch->desc->last_sprayed), "For spam reduction reasons, you can't spray the same thing twice in a row. (This also means you should write something new instead of slightly tweaking it.)");
+  strlcpy(ch->desc->last_sprayed, argument, sizeof(ch->desc->last_sprayed));
+
   for (struct obj_data *obj = ch->carrying; obj; obj = obj->next_content) {
     if (GET_OBJ_SPEC(obj) && GET_OBJ_SPEC(obj) == spraypaint) {
-      int length = get_string_length_after_color_code_removal(argument, ch);
-
-      FAILURE_CASE(length >= LINE_LENGTH, "There isn't that much paint in there.");
-
-      // If it's too short, check to make sure there's at least one space in it.
-      if (length < 10) {
-        const char *ptr = argument;
-        for (; *ptr; ptr++) {
-          if (*ptr == ' ')
-            break;
-        }
-        FAILURE_CASE(!*ptr, "Please write out something to spray, like 'spray A coiling dragon mural'.");
-      }
-
-      // Try to block ASCII sprays.
-      {
-        int alpha = 0, nonalpha = 0;
-        for (const char *ptr = argument; *ptr; ptr++) {
-          if (isalnum(*ptr)) {
-            alpha++;
-          } else if (*ptr != '^' && *ptr != '[' && *ptr != ']' && *ptr != ' ') {
-            nonalpha++;
-          }
-        }
-        FAILURE_CASE(nonalpha > 5 && (alpha / 4 < nonalpha), "ASCII art doesn't play well with screenreaders, please write things out!");
-      }
-
-      // Don't spam the same sprays.
-      if (ch->desc) {
-        if (!str_cmp(argument, ch->desc->last_sprayed)) {
-          send_to_char("For spam reduction reasons, you can't spray the same thing twice in a row.\r\n", ch);
-          return;
-        } else {
-          strlcpy(ch->desc->last_sprayed, argument, sizeof(ch->desc->last_sprayed));
-        }
-      }
-
       struct obj_data *paint = read_object(OBJ_DYNAMIC_GRAFFITI, VIRTUAL, OBJ_LOAD_REASON_SPECPROC);
       snprintf(buf, sizeof(buf), "a piece of graffiti that says \"%s^n\"", argument);
       paint->restring = str_dup(buf);
@@ -180,6 +175,11 @@ ACMD(do_cleanup)
 
   if (COULD_BE_ON_QUEST(ch))
     check_quest_destroy(ch, target_obj);
+
+  // If it's your own spray and you've burned some art quota, give one back (covers spray-erase-edit-spray cycle)
+  if (ch->desc && GET_GRAFFITI_SPRAYED_BY(target_obj) == GET_IDNUM_EVEN_IF_PROJECTING(ch) && ch->desc->regenerating_art_quota < MAX_REGENERATING_ART_QUOTA) {
+    ch->desc->regenerating_art_quota++;
+  }
 
   extract_obj(target_obj);
 }
