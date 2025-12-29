@@ -1815,30 +1815,27 @@ void create_parse(struct descriptor_data *d, const char *arg)
         }
         break;
       case TOTEM_CHEETAH:
-        if (GET_REAL_QUI(CH) < 4 || GET_REAL_INT(CH) < 4) {
-          if (GET_ATT_POINTS(CH) < 8 - (GET_REAL_QUI(CH) + GET_REAL_INT(CH))) {
-            SEND_TO_Q("\r\nYou don't have enough attribute points available to pick that totem.\r\nTotem: ", d);
-            return;
+        {
+          // Since so many of the equations below depend on these values, we calculate them here and reuse them as needed.
+          int qui_target = GET_RACE(CH) == RACE_GHOUL_TROLL ? 5 : 4;
+          int int_target = GET_RACE(CH) == RACE_GHOUL_TROLL ? 3 : 4;
+          
+          if (GET_REAL_QUI(CH) < qui_target || GET_REAL_INT(CH) < int_target) {
+            if (GET_ATT_POINTS(CH) < (qui_target + int_target) - (GET_REAL_QUI(CH) + GET_REAL_INT(CH))) {
+              SEND_TO_Q("\r\nYou don't have enough attribute points available to pick that totem.\r\nTotem: ", d);
+              return;
+            }
           }
-        }
-        i = GET_REAL_QUI(CH);
-        if (i < 4) {
-          if (GET_RACE(CH) == RACE_GHOUL_TROLL) {
-            GET_REAL_QUI(CH) = 5;
-            GET_ATT_POINTS(CH) -= 5 - i;
-          } else {
-            GET_REAL_QUI(CH) = 4;
-            GET_ATT_POINTS(CH) -= 4 - i;
+          
+          i = GET_REAL_QUI(CH);
+          if (i < qui_target) {
+            GET_REAL_QUI(CH) = qui_target;
+            GET_ATT_POINTS(CH) -= qui_target - i;
           }
-        }
-        i = GET_REAL_INT(CH);
-        if (i < 4) {
-          if (GET_RACE(CH) == RACE_GHOUL_TROLL) {
-            GET_REAL_INT(CH) = 3;
-            GET_ATT_POINTS(CH) -= 3 - i;
-          } else {
-            GET_REAL_INT(CH) = 4;
-            GET_ATT_POINTS(CH) -= 4 - i;
+          i = GET_REAL_INT(CH);
+          if (i < int_target) {
+            GET_REAL_INT(CH) = int_target;
+            GET_ATT_POINTS(CH) -= int_target - i;
           }
         }
         break;
