@@ -243,6 +243,7 @@ bool ammo_test(struct char_data *ch, struct obj_data *obj)
 
   // Houserule: shop provides +2 dice so that there's some benefit over collecting kits
   if (GET_WORKSHOP_GRADE(workshop) == TYPE_WORKSHOP) {
+     act("Workshop: +2 dice to AmmoTest", FALSE, ch, NULL, NULL, TO_ROLLS);
     skill += 2;
   }
 

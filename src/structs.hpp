@@ -593,8 +593,13 @@ struct char_special_data_saved
   ubyte masking;
   int points;
 
+  long garnishment_nuyen;
+  long garnishment_rep;
+  long garnishment_notor;
+
   char_special_data_saved() :
-    powerpoints(0), left_handed(0), cur_lang(0), centeringskill(0), masking(0), points(0)
+    powerpoints(0), left_handed(0), cur_lang(0), centeringskill(0), masking(0), points(0),
+    garnishment_nuyen(0), garnishment_rep(0), garnishment_notor(0)
   {
     for (int i = 0; i < MAX_SKILLS + 1; i++) {
       ZERO_OUT_ARRAY(skills[i], 3);
@@ -1317,6 +1322,7 @@ struct part_data {
 struct program_data {
   char name[30];
   unsigned char multiplier;
+  bool nerps;
 };
 
 struct spirit_table {

@@ -2872,7 +2872,7 @@ void qedit_disp_menu(struct descriptor_data *d)
                QUEST->max_rep, CCNRM(CH, C_CMP));
   send_to_char(CH, "%s) Bonus nuyen: %s%d%s\r\n", GET_LEVEL(CH) >= LVL_ADMIN ? "4" : "-", CCCYN(CH, C_CMP),
                QUEST->nuyen, CCNRM(CH, C_CMP));
-  send_to_char(CH, "%s) Bonus karma: %s%0.2f%s\r\n", GET_LEVEL(CH) >= LVL_ADMIN ? "4" : "-", CCCYN(CH, C_CMP),
+  send_to_char(CH, "%s) Bonus karma: %s%0.2f%s\r\n", GET_LEVEL(CH) >= LVL_ADMIN ? "5" : "-", CCCYN(CH, C_CMP),
                ((float)QUEST->karma / 100), CCNRM(CH, C_CMP));
   send_to_char(CH, "6) Item objective menu\r\n");
   send_to_char(CH, "7) Mobile objective menu\r\n");

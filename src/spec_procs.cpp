@@ -70,6 +70,8 @@ extern bool deactivate_power(struct char_data *ch, int power);
 extern bool process_spotted_invis(struct char_data *ch, struct char_data *vict);
 extern void initialize_quest_for_ch(struct char_data *ch, int quest_rnum, struct char_data *johnson);
 
+extern bool can_hurt(struct char_data *ch, struct char_data *victim, int attacktype, bool include_func_protections);
+extern bool damage_without_message(struct char_data *ch, struct char_data *victim, int dam, int attacktype, bool is_physical);
 
 extern struct command_info cmd_info[];
 
@@ -8128,6 +8130,83 @@ SPECIAL(grenada_gatekeeper)
     }
   }
 
+  return FALSE;
+}
+
+SPECIAL(penance)
+{
+  if (!cmd)
+    return FALSE;
+
+  struct obj_data *obj = (struct obj_data *) me;
+  struct char_data *to = NULL;
+
+  // Check to make sure I'm being held by my user.
+  if (!ch || obj->worn_by != ch)
+    return FALSE;
+
+  // Point command.
+  if (CMD_IS("point")) {
+    skip_spaces(&argument);
+    if (!*argument) {
+      send_to_char(ch, "Syntax for using Penance: POINT <victim>\r\n");
+      return TRUE;
+    }
+
+    if (ch->in_veh)
+      to = get_char_veh(ch, argument, ch->in_veh);
+    else
+      to = get_char_room_vis(ch, argument);
+
+    if (!to) {
+      send_to_char(ch, "You don't see anyone named '%s' here.\r\n", argument);
+      return TRUE;
+    }
+
+    if (to == ch) {
+      send_to_char(ch, "It'd be such a waste to use Penance on yourself.\r\n");
+      return TRUE;
+    }
+
+    // Must be YOUR Penance. Message sent in function.
+    if (blocked_by_soulbinding(ch, obj, TRUE)) {
+      return TRUE;
+    }
+
+    // No PK.
+    if (to->desc || !IS_NPC(to)) {
+      act("Penance strains eagerly in your hand as you point it at $N, but a snare of ^Rred^n light traps it in your hand. Seems it can't be used on $M.", FALSE, ch, obj, to, TO_CHAR);
+      act("$n points $p at you, but a snare of ^Rred^n light flares around $s hand, preventing anything from happening.", FALSE, ch, obj, to, TO_VICT);
+      act("$n points $p at $N, but a snare of ^Rred^n light flares around $s hand, preventing anything from happening.", FALSE, ch, obj, to, TO_NOTVICT);
+      return TRUE;
+    }
+
+    // Must be able to damage this target.
+    if (!can_hurt(ch, to, TYPE_BIFURCATE, TRUE)) {
+      act("Penance strains eagerly in your hand as you point it at $N, but a snare of ^oorange^n light traps it in your hand. Seems it can't be used on $M.", FALSE, ch, obj, to, TO_CHAR);
+      act("$n points $p at you, but a snare of ^oorange^n light flares around $s hand, preventing anything from happening.", FALSE, ch, obj, to, TO_VICT);
+      act("$n points $p at $N, but a snare of ^oorange^n light flares around $s hand, preventing anything from happening.", FALSE, ch, obj, to, TO_NOTVICT);
+      return TRUE;
+    }
+
+    mudlog_vfprintf(ch, LOG_CHEATLOG, "%s using Penance on mob %s (%ld).", GET_CHAR_NAME(ch), GET_CHAR_NAME(to), GET_MOB_VNUM(to));
+
+    act("The moment you point Penance at $N, it vanishes from your hand, disappearing into $N with impossible speed.", FALSE, ch, obj, to, TO_CHAR);
+    act("$n points $p at you, and it vanishes from $s hand. You feel a wrenching sensation...", FALSE, ch, obj, to, TO_VICT);
+    act("$n points $p at $N, and it vanishes from $s hand, disappearing into $N with impossible speed.", FALSE, ch, obj, to, TO_NOTVICT);
+
+    // Set them at the lowest possible health...
+    GET_PHYSICAL(to) = 1;
+    // Then blow them away.
+    if (!damage_without_message(ch, to, 10, TYPE_BIFURCATE, TRUE)) {
+      damage_without_message(ch, to, 10, TYPE_BIFURCATE, TRUE);
+    }
+    // Assume TO is dead now.
+    to = NULL;
+
+    return TRUE;
+  }
+  
   return FALSE;
 }
 

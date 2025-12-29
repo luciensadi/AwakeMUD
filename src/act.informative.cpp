@@ -2498,7 +2498,7 @@ void look_in_direction(struct char_data * ch, int dir)
 }
 
 void _send_obj_contents_info_to_char(struct obj_data *obj, struct char_data *ch, int bits) {
-  send_to_char(GET_OBJ_NAME(obj), ch);
+  // send_to_char(GET_OBJ_NAME(obj), ch);
   switch (bits) {
     case FIND_OBJ_INV:
       send_to_char(" (carried): \r\n", ch);
@@ -7637,6 +7637,19 @@ ACMD(do_status)
 
   if (GET_LEVEL(ch) > LVL_MORTAL) {
     render_drug_info_for_targ(ch, targ);
+  }
+
+  if (!IS_NPC(targ) && (GET_GARNISHMENT_NUYEN(targ) > 0 || GET_GARNISHMENT_NOTOR(targ) > 0 || GET_GARNISHMENT_REP(targ) > 0)) {
+    send_to_char(ch, "You have the following garnishments, which will deduct 25%% from received amounts until paid off:\r\n");
+    if (GET_GARNISHMENT_NUYEN(targ)) {
+      send_to_char(ch, "  Nuyen (%ld remaining)\r\n", GET_GARNISHMENT_NUYEN(targ));
+    }
+    if (GET_GARNISHMENT_REP(targ)) {
+      send_to_char(ch, "  Reputation (%0.2f remaining)\r\n", 0.01 * GET_GARNISHMENT_REP(targ));
+    }
+    if (GET_GARNISHMENT_NOTOR(targ)) {
+      send_to_char(ch, "  Notoriety (%0.2f remaining)\r\n", 0.01 * GET_GARNISHMENT_NOTOR(targ));
+    }
   }
 }
 

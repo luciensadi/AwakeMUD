@@ -488,7 +488,8 @@ enum {
 #define PRF_NOFOLLOW                           69
 #define PRF_SUPPRESS_PROMPT_CHANGE             70
 #define PRF_PASSIVE_IN_COMBAT                  71
-#define PRF_MAX                                72
+#define PRF_AUTOREADY                          72
+#define PRF_MAX                                73
 
 /* log watch */
 
@@ -2730,6 +2731,8 @@ enum {
 #define OBJ_LARGE_PLASTIBOARD_BOX          29326
 #define OBJ_SNOWFLAKE_KEY                  3454
 #define OBJ_ANNIVERSARY_2025_GIFT          195
+#define OBJ_CHRISTMAS_2025_GIFT            194
+#define OBJ_ANNIVERSARY_2026_GIFT          193
 
 #define OBJ_TITLE_TO_AMERICAR              891
 #define OBJ_TITLE_TO_SCORPION              892

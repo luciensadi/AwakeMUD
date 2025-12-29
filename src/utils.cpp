@@ -1730,7 +1730,7 @@ void _get_negotiation_data(
     {
       tn -= (GET_BIOWARE_RATING(pheromones) - 1);
       pheromone_dice *= 2;
-      snprintf(skill_rbuf, sizeof(skill_rbuf), "Mundane pheromone skill buff of %d dice and -%d TN for %s.", pheromone_dice, GET_BIOWARE_RATING(pheromones), GET_CHAR_NAME(ch));
+      snprintf(skill_rbuf, sizeof(skill_rbuf), "Mundane pheromone skill buff of %d dice and -%d TN for %s.", pheromone_dice, (GET_BIOWARE_RATING(pheromones) - 1), GET_CHAR_NAME(ch));
     }
     else
     {
@@ -5365,10 +5365,23 @@ bool get_and_deduct_one_crafting_token_from_char(struct char_data *ch)
       if (GET_CRAFTING_TOKEN_IDNUM(ptr) > 0 && GET_CRAFTING_TOKEN_IDNUM(ptr) != GET_IDNUM(ch))
       {
         char *owner_name = get_player_name(GET_CRAFTING_TOKEN_IDNUM(ptr));
-        mudlog_vfprintf(ch, LOG_CHEATLOG, "Warning: %s is holding a crafting token that actually belongs to %s (%ld).",
+
+        mudlog_vfprintf(ch, LOG_CHEATLOG, "Warning: %s is holding a crafting token that actually belongs to %s (%ld). Forcing them to drop it.",
                         GET_CHAR_NAME(ch),
                         owner_name,
                         GET_CRAFTING_TOKEN_IDNUM(ptr));
+
+        send_to_char(ch, "%s zaps you, and you drop it.\r\n", GET_OBJ_NAME(ptr));
+        obj_from_char(ptr);
+        if (ch->in_veh) {
+          obj_to_veh(ptr, ch->in_veh);
+        } else if (ch->in_room) {
+          obj_to_room(ptr, ch->in_room);
+        } else {
+          mudlog_vfprintf(ch, LOG_WIZLOG, "Failed to drop token belonging to %s (%ld), sending it to room 0.", owner_name, GET_CRAFTING_TOKEN_IDNUM(ptr));
+          obj_to_room(ptr, &world[0]);
+        }
+
         delete[] owner_name;
         continue;
       }
@@ -8630,9 +8643,22 @@ idnum_t get_soulbound_idnum(struct obj_data *obj)
   if (obj_is_a_vehicle_title(obj))
     return GET_VEHICLE_TITLE_OWNER(obj);
 
-  // Special case: Visas. If you update this, update newshop's visa defense as well.
-  if (GET_OBJ_VNUM(obj) == OBJ_MULTNOMAH_VISA || GET_OBJ_VNUM(obj) == OBJ_CARIBBEAN_VISA)
-    return GET_VISA_OWNER(obj);
+  // Per-object vnum checks.
+  switch (GET_OBJ_VNUM(obj)) {
+    // Special case: Visas. If you update this, update newshop's visa defense as well.
+    case OBJ_MULTNOMAH_VISA:
+    case OBJ_CARIBBEAN_VISA:
+      return (GET_VISA_OWNER(obj));
+    // One-shot heals.
+    case OBJ_ONE_SHOT_HEALING_INJECTOR:
+      return (GET_HEALING_INJECTOR_ISSUED_TO(obj));
+    // Crafting / deckbuilding rebate tokens.
+    case OBJ_STAFF_REBATE_FOR_CRAFTING:
+      return (GET_CRAFTING_TOKEN_IDNUM(obj));
+    // Penance, the black arrowhead.
+    case OBJ_ANNIVERSARY_2026_GIFT:
+      return (GET_OBJ_VAL(obj, 0));
+  }
 
   return SB_CODE_OBJ_CANT_BE_SOULBOUND;
 }
@@ -8720,10 +8746,25 @@ bool soulbind_obj_to_char_by_idnum(struct obj_data *obj, idnum_t idnum, bool inc
     BIND_AND_RETURN_TRUE_IF_NOT_ALREADY_BOUND(GET_VEHICLE_TITLE_OWNER(obj));
   }
 
-  // Special case: Visas. If you update this, update newshop's visa defense as well.
-  if (GET_OBJ_VNUM(obj) == OBJ_MULTNOMAH_VISA || GET_OBJ_VNUM(obj) == OBJ_CARIBBEAN_VISA)
-  {
-    BIND_AND_RETURN_TRUE_IF_NOT_ALREADY_BOUND(GET_VISA_OWNER(obj));
+  // Per-object vnum checks.
+  switch (GET_OBJ_VNUM(obj)) {
+    // Special case: Visas. If you update this, update newshop's visa defense as well.
+    case OBJ_MULTNOMAH_VISA:
+    case OBJ_CARIBBEAN_VISA:
+      BIND_AND_RETURN_TRUE_IF_NOT_ALREADY_BOUND(GET_VISA_OWNER(obj));
+      break;
+    // One-shot heals.
+    case OBJ_ONE_SHOT_HEALING_INJECTOR:
+      BIND_AND_RETURN_TRUE_IF_NOT_ALREADY_BOUND(GET_HEALING_INJECTOR_ISSUED_TO(obj));
+      break;
+    // Crafting / deckbuilding rebate tokens.
+    case OBJ_STAFF_REBATE_FOR_CRAFTING:
+      BIND_AND_RETURN_TRUE_IF_NOT_ALREADY_BOUND(GET_CRAFTING_TOKEN_IDNUM(obj));
+      break;
+    // Penance, the black arrowhead.
+    case OBJ_ANNIVERSARY_2026_GIFT:
+      BIND_AND_RETURN_TRUE_IF_NOT_ALREADY_BOUND(GET_OBJ_VAL(obj, 0));
+      break;
   }
 
   return FALSE;
