@@ -707,6 +707,8 @@ int get_armor_penalty_grade(struct char_data *ch);
                                                                       (ch)->player_specials->quest_started)
 #define GET_LQUEST(ch, i)       ((ch)->player_specials->last_quest[i])
 #define GET_CQUEST(ch, i)       ((ch)->player_specials->completed_quest[i])
+#define GET_LFAVOUR(ch, i)       ((ch)->player_specials->last_favour[i])
+#define GET_CFAVOUR(ch, i)       ((ch)->player_specials->completed_favour[i])
 #define GET_PLAYER_WHERE_COMMANDS(ch) ((ch)->player_specials->wherelist_checks)
 #define POOFIN(ch)              ((ch)->player.poofin)
 #define POOFOUT(ch)             ((ch)->player.poofout)
@@ -777,6 +779,7 @@ int get_armor_penalty_grade(struct char_data *ch);
 #define GET_MEMORY_DIRTY_BIT(ch)        ((ch)->char_specials.dirty_bits[DIRTY_BIT_MEMORY])
 #define GET_ALIAS_DIRTY_BIT(ch)         ((ch)->char_specials.dirty_bits[DIRTY_BIT_ALIAS])
 #define GET_QUEST_DIRTY_BIT(ch)         ((ch)->char_specials.dirty_bits[DIRTY_BIT_QUESTS])
+#define GET_FAVOUR_DIRTY_BIT(ch)        ((ch)->char_specials.dirty_bits[DIRTY_BIT_FAVOURS])
 #define GET_BULLETPANTS_DIRTY_BIT(ch)   ((ch)->char_specials.dirty_bits[DIRTY_BIT_BULLETPANTS])
 
 #define GET_CONGREGATION_BONUS(ch) ((ch)->congregation_bonus_pool)
