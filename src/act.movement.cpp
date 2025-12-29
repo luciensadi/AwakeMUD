@@ -624,7 +624,8 @@ bool check_fall(struct char_data *ch, int modifier, const char *fall_message)
       base_target -= GET_OBJ_VAL(GET_EQ(ch, i), 0);
     }
   for (struct obj_data *cyber = ch->cyberware; cyber; cyber = cyber->next_content)
-    if (GET_CYBERWARE_TYPE(cyber) == CYB_BALANCETAIL || GET_CYBERWARE_TYPE(cyber) == CYB_BALANCEAUG) {
+    if (GET_CYBERWARE_TYPE(cyber) == CYB_BALANCETAIL || GET_CYBERWARE_TYPE(cyber) == CYB_BALANCEAUG || 
+       (GET_CYBERWARE_TYPE(cyber) == CYB_CLIMBINGCLAWS && !GET_CYBERWARE_IS_DISABLED(cyber))) {
       snprintf(ENDOF(roll_buf), sizeof(roll_buf) - strlen(roll_buf), " - %s lowers TN by 2.\r\n", GET_OBJ_NAME(cyber));
       base_target -= 2;
     }
