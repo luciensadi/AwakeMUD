@@ -310,6 +310,16 @@ ACMD(do_forms)
       return;
     }
 
+    if (IS_WORKING(ch)) {
+      send_to_char(TOOBUSY, ch);
+      return;
+    }
+
+    if (GET_COMPLEX_FORM_LEARNING_TICKS_LEFT(form) <= 0) {
+      send_to_char(ch, "There's nothing more you can do with your %s complex form.", form->restring);
+      return;
+    }
+
     if (!GET_COMPLEX_FORM_KARMA_PAID(form)) {
       long karma_cost = complex_form_karma_cost(ch, form);
       if (PLR_FLAGGED(ch, PLR_NEWBIE) && GET_COMPLEX_FORM_RATING(form) <= 6) {
@@ -330,14 +340,15 @@ ACMD(do_forms)
       send_to_char(ch, "You find a place to sit and focus.\r\n");
     }
 
-    if (IS_WORKING(ch)) {
-      send_to_char(TOOBUSY, ch);
-      return;
-    }
-
-    if (GET_COMPLEX_FORM_LEARNING_TICKS_LEFT(form) <= 0) {
-      send_to_char(ch, "There's nothing more you can do with your %s complex form.", form->restring);
-      return;
+    if (GET_COMPLEX_FORM_LEARNING_TICKS_LEFT(form) > 1) {
+      if (get_and_deduct_one_crafting_token_from_char(ch)) {
+        send_to_char("A crafting token fuzzes into digital static, greatly accelerating the learning time.\r\n", ch);
+        GET_COMPLEX_FORM_LEARNING_TICKS_LEFT(form) = 1;
+      }
+      else if (access_level(ch, LVL_ADMIN)) {
+        send_to_char(ch, "You use your admin powers to greatly accelerate the learning time of %s.\r\n", form->restring);
+        GET_COMPLEX_FORM_LEARNING_TICKS_LEFT(form) = 1;
+      }
     }
 
     send_to_char(ch, "You continue to work on %s.\r\n", form->restring);
