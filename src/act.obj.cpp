@@ -2381,90 +2381,75 @@ int perform_drop(struct char_data *ch, struct obj_data *obj, byte mode,
 		FALSE_CASE_PRINTF(mode != SCMD_DROP, "You can't %s vehicles.", sname);
 		FALSE_CASE(ch->in_veh, "You'll have to step out of your current vehicle to do that.");
 
-		// Load vehicles owned by the identified owner to reduce cases of stuck containers.
-		load_vehicles_for_idnum(GET_VEHCONTAINER_VEH_OWNER(obj));
+		struct veh_data *veh = resolve_vehicle_from_vehcontainer(obj);
 
-		// Find the veh storage room.
-		rnum_t vehicle_storage_rnum = real_room(RM_PORTABLE_VEHICLE_STORAGE);
-		if (vehicle_storage_rnum < 0)
-		{
-			send_to_char("Whoops-- looks like this system is offline!\r\n", ch);
-			mudlog("SYSERR: Got negative rnum when looking up RM_PORTABLE_VEHICLE_STORAGE!", ch, LOG_SYSLOG, TRUE);
-			return 0;
-		}
+    if (veh) {
+      // Found it! Validate preconditions.
+      
+      // It'd be great if we could allow drones and bikes to be dropped anywhere not flagged !BIKE, but this
+      // would cause issues with the current world-- the !bike flag is placed at entrances to zones, not
+      // spread throughout the whole thing. People would just carry their bikes in, drop them, and do drivebys.
+      bool can_be_dropped_here = FALSE;
+      if (ch->in_veh)
+      {
+        if (ch->in_veh->usedload + calculate_vehicle_entry_load(veh) > ch->in_veh->load)
+        {
+          send_to_char(ch, "%s won't fit in here.\r\n", CAP(GET_VEH_NAME_NOFORMAT(veh)));
+          return 0;
+        }
+        can_be_dropped_here = TRUE;
+      }
+      else if (ROOM_FLAGGED(in_room, ROOM_GARAGE) || ROOM_FLAGGED(in_room, ROOM_ALL_VEHICLE_ACCESS) || veh->damage >= VEH_DAM_THRESHOLD_DESTROYED)
+      {
+        can_be_dropped_here = TRUE;
+      }
+      else if (veh_can_traverse_land(veh) && ROOM_FLAGGED(in_room, ROOM_ROAD))
+      {
+        can_be_dropped_here = TRUE;
+      }
+      else if (veh_can_traverse_water(veh) && IS_WATER(in_room))
+      {
+        can_be_dropped_here = TRUE;
+      }
+      else if (veh_can_traverse_air(veh) && (ROOM_FLAGGED(in_room, ROOM_AIRCRAFT_CAN_DRIVE_HERE) || GET_ROOM_FLIGHT_CODE(in_room)))
+      {
+        can_be_dropped_here = TRUE;
+      }
 
-		// Search it for our vehicle.
-		for (struct veh_data *veh = world[vehicle_storage_rnum].vehicles; veh; veh = veh->next_veh)
-		{
-			if (GET_VEH_VNUM(veh) == GET_VEHCONTAINER_VEH_VNUM(obj) && veh->idnum == GET_VEHCONTAINER_VEH_IDNUM(obj) && veh->owner == GET_VEHCONTAINER_VEH_OWNER(obj))
-			{
-				// Found it! Validate preconditions.
+      if (!can_be_dropped_here)
+      {
+        // Exception: You can drop water vehicles on
+        send_to_char(ch, "%s can't be set down here.\r\n", CAP(GET_VEH_NAME_NOFORMAT(veh)));
+        return 0;
+      }
 
-				// It'd be great if we could allow drones and bikes to be dropped anywhere not flagged !BIKE, but this
-				// would cause issues with the current world-- the !bike flag is placed at entrances to zones, not
-				// spread throughout the whole thing. People would just carry their bikes in, drop them, and do drivebys.
-				bool can_be_dropped_here = FALSE;
-				if (ch->in_veh)
-				{
-					if (ch->in_veh->usedload + calculate_vehicle_entry_load(veh) > ch->in_veh->load)
-					{
-						send_to_char(ch, "%s won't fit in here.\r\n", CAP(GET_VEH_NAME_NOFORMAT(veh)));
-						return 0;
-					}
-					can_be_dropped_here = TRUE;
-				}
-				else if (ROOM_FLAGGED(in_room, ROOM_GARAGE) || ROOM_FLAGGED(in_room, ROOM_ALL_VEHICLE_ACCESS) || veh->damage >= VEH_DAM_THRESHOLD_DESTROYED)
-				{
-					can_be_dropped_here = TRUE;
-				}
-				else if (veh_can_traverse_land(veh) && ROOM_FLAGGED(in_room, ROOM_ROAD))
-				{
-					can_be_dropped_here = TRUE;
-				}
-				else if (veh_can_traverse_water(veh) && IS_WATER(in_room))
-				{
-					can_be_dropped_here = TRUE;
-				}
-				else if (veh_can_traverse_air(veh) && (ROOM_FLAGGED(in_room, ROOM_AIRCRAFT_CAN_DRIVE_HERE) || GET_ROOM_FLIGHT_CODE(in_room)))
-				{
-					can_be_dropped_here = TRUE;
-				}
+      // Proceed to drop.
+      veh_from_room(veh);
+      veh_to_room(veh, ch->in_room);
+      send_to_char(ch, "You set %s down with a sigh of relief.\r\n", GET_VEH_NAME(veh));
+      snprintf(buf, sizeof(buf), "$n sets %s down with a sigh of relief.", GET_VEH_NAME(veh));
+      act(buf, FALSE, ch, 0, 0, TO_ROOM);
 
-				if (!can_be_dropped_here)
-				{
-					// Exception: You can drop water vehicles on
-					send_to_char(ch, "%s can't be set down here.\r\n", CAP(GET_VEH_NAME_NOFORMAT(veh)));
-					return 0;
-				}
+      const char *owner = get_player_name(veh->owner);
+      snprintf(buf, sizeof(buf), "%s (%ld) dropped vehicle %s (%ld, idnum %ld) belonging to %s (%ld) in %s.",
+                GET_CHAR_NAME(ch),
+                GET_IDNUM(ch),
+                GET_VEH_NAME(veh),
+                GET_VEH_VNUM(veh),
+                veh->idnum,
+                owner,
+                veh->owner,
+                GET_ROOM_NAME(veh->in_room));
+      mudlog(buf, ch, LOG_CHEATLOG, TRUE);
+      DELETE_ARRAY_IF_EXTANT(owner);
 
-				// Proceed to drop.
-				veh_from_room(veh);
-				veh_to_room(veh, ch->in_room);
-				send_to_char(ch, "You set %s down with a sigh of relief.\r\n", GET_VEH_NAME(veh));
-				snprintf(buf, sizeof(buf), "$n sets %s down with a sigh of relief.", GET_VEH_NAME(veh));
-				act(buf, FALSE, ch, 0, 0, TO_ROOM);
+      // Clear the values to prevent bug logging, then remove the object from inventory.
+      GET_VEHCONTAINER_VEH_VNUM(obj) = GET_VEHCONTAINER_VEH_IDNUM(obj) = GET_VEHCONTAINER_VEH_OWNER(obj) = 0;
+      extract_obj(obj);
 
-				const char *owner = get_player_name(veh->owner);
-				snprintf(buf, sizeof(buf), "%s (%ld) dropped vehicle %s (%ld, idnum %ld) belonging to %s (%ld) in %s.",
-								 GET_CHAR_NAME(ch),
-								 GET_IDNUM(ch),
-								 GET_VEH_NAME(veh),
-								 GET_VEH_VNUM(veh),
-								 veh->idnum,
-								 owner,
-								 veh->owner,
-								 GET_ROOM_NAME(veh->in_room));
-				mudlog(buf, ch, LOG_CHEATLOG, TRUE);
-				DELETE_ARRAY_IF_EXTANT(owner);
-
-				// Clear the values to prevent bug logging, then remove the object from inventory.
-				GET_VEHCONTAINER_VEH_VNUM(obj) = GET_VEHCONTAINER_VEH_IDNUM(obj) = GET_VEHCONTAINER_VEH_OWNER(obj) = 0;
-				extract_obj(obj);
-
-				playerDB.SaveChar(ch);
-				save_single_vehicle(veh);
-				return 0;
-			}
+      playerDB.SaveChar(ch);
+      save_single_vehicle(veh);
+      return 0;
 		}
 
 		send_to_char(ch, "Error: we couldn't find a matching vehicle for %s! Please alert staff.\r\n", decapitalize_a_an(GET_OBJ_NAME(obj)));

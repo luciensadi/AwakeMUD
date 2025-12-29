@@ -1705,9 +1705,13 @@ void obj_to_char(struct obj_data * object, struct char_data * ch)
     apply_focus_effect(ch, object);
   }
 
-  // If it's a carried vehicle, set their flag to block movement through !BIKE rooms.
-  if (GET_OBJ_VNUM(object) == OBJ_VEHCONTAINER)
-    ch->is_carrying_vehicle = TRUE;
+  // If it's a carried vehicle, set their flag to block movement through !BIKE rooms, but only if it's not wrecked.
+  if (GET_OBJ_VNUM(object) == OBJ_VEHCONTAINER) {
+    struct veh_data *veh = resolve_vehicle_from_vehcontainer(object);
+    if (veh && veh->damage < VEH_DAM_THRESHOLD_DESTROYED) {
+      ch->is_carrying_vehicle = TRUE;
+    }
+  }
 }
 
 void obj_to_cyberware(struct obj_data * object, struct char_data * ch, bool recalc)

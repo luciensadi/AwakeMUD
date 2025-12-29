@@ -61,6 +61,7 @@
 #include "quest.hpp"
 #include "chipjacks.hpp"
 #include "newdb.hpp"
+#include "vehicles.hpp"
 
 extern class memoryClass *Mem;
 extern struct time_info_data time_info;
@@ -9712,4 +9713,28 @@ const char *cleanup_invalid_color_codes(const char *str) {
   }
 
   return cleanup_buf;
+}
+
+struct veh_data *resolve_vehicle_from_vehcontainer(struct obj_data *obj) {
+  // Load vehicles owned by the identified owner to reduce cases of stuck containers.
+  load_vehicles_for_idnum(GET_VEHCONTAINER_VEH_OWNER(obj));
+
+  // Find the veh storage room.
+  rnum_t vehicle_storage_rnum = real_room(RM_PORTABLE_VEHICLE_STORAGE);
+  if (vehicle_storage_rnum < 0)
+  {
+    mudlog("SYSERR: Got negative rnum when looking up RM_PORTABLE_VEHICLE_STORAGE!", NULL, LOG_SYSLOG, TRUE);
+    return NULL;
+  }
+
+  // Search it for our vehicle.
+  for (struct veh_data *veh = world[vehicle_storage_rnum].vehicles; veh; veh = veh->next_veh)
+  {
+    if (GET_VEH_VNUM(veh) == GET_VEHCONTAINER_VEH_VNUM(obj) && veh->idnum == GET_VEHCONTAINER_VEH_IDNUM(obj) && veh->owner == GET_VEHCONTAINER_VEH_OWNER(obj))
+    {
+      // Found it! Return the vehicle.
+      return veh;
+    }
+  }
+  return NULL;
 }

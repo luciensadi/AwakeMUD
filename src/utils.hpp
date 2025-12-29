@@ -196,6 +196,7 @@ char * format_for_logging__returns_new(const char *input);
 int    calculate_ware_essence_or_index_cost(struct char_data *ch, struct obj_data *ware);
 bool   check_if_sitting_and_force_sit_command_if_not(struct char_data *ch);
 const char *cleanup_invalid_color_codes(const char *str);
+struct veh_data *resolve_vehicle_from_vehcontainer(struct obj_data *obj);
 
 // GMCP / Discord update method. Does nothing if GMCP isn't turned on.
 void update_gmcp_discord_info(struct descriptor_data *desc);
