@@ -9087,15 +9087,15 @@ int audit_zone_objects_(struct char_data *ch, int zone_num, bool verbose) {
         }
 
         // Attachments
-        for (int idx = ACCESS_LOCATION_TOP; idx <= ACCESS_LOCATION_UNDER; idx++) {
-          vnum_t attach_vnum = GET_WEAPON_ATTACH_LOC(obj, idx);
-          const char *attach_loc = gun_accessory_locations[idx - ACCESS_LOCATION_TOP];
+        for (int access_location_idx = ACCESS_LOCATION_TOP; access_location_idx <= ACCESS_LOCATION_UNDER; access_location_idx++) {
+          vnum_t attach_vnum = GET_WEAPON_ATTACH_LOC(obj, access_location_idx);
+          const char *attach_loc = gun_accessory_locations[access_location_idx - ACCESS_LOCATION_TOP];
           bool should_be_able_to_take_attachment = FALSE;
 
           if (attach_vnum <= -1)
             continue;
 
-          switch (idx) {
+          switch (access_location_idx) {
             case ACCESS_LOCATION_TOP:
               should_be_able_to_take_attachment = kosher_weapon_values[GET_WEAPON_ATTACK_TYPE(obj)].can_attach_top;
               break;
@@ -9121,12 +9121,23 @@ int audit_zone_objects_(struct char_data *ch, int zone_num, bool verbose) {
               
               issues++;
             } else {
-              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - has %s-attached item '%s^n' (%ld).\r\n", 
+              struct obj_data *attachment = &obj_proto[attach_rnum];
+              // Convert between the 'location idx' (weapon object val number, 7-indexed) and the access location (0-indexed)
+              int actual_attach_location = access_location_idx - ACCESS_LOCATION_TOP;
+
+              if (GET_ACCESSORY_ATTACH_LOCATION(attachment) != actual_attach_location) {
+                snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - has %s-attached item '%s^n' (%ld) on the ^ywrong-location^n, accessory expects %s.\r\n", 
+                       attach_loc, 
+                       GET_OBJ_NAME(&obj_proto[attach_rnum]),
+                       attach_vnum,
+                       gun_accessory_locations[actual_attach_location]);
+                issues++;
+              } else {
+                snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - has %s-attached item '%s^n' (%ld).\r\n", 
                        attach_loc, 
                        GET_OBJ_NAME(&obj_proto[attach_rnum]),
                        attach_vnum);
-              
-              issues++;
+              }
             }
           }
         }
