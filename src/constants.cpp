@@ -1435,7 +1435,22 @@ struct program_data programs[] =
     {"Reality Filter", 10, FALSE },
     {"Response Increase", 1, FALSE },
     {"Shield", 4, FALSE },
-    {"Radio Link", 1, FALSE }
+    {"Radio Link", 1, FALSE },
+    {"Doorstop", 2, TRUE },
+    {"Mirrors", 3, TRUE },
+    {"Purge", 2, TRUE },
+    {"Redecorate", 2, TRUE },
+    {"Spoof", 3, TRUE },
+    {"Triangulation", 2, TRUE },
+    {"Counterfeit", 10, TRUE },
+    {"Guardian", 2, TRUE },
+    {"Remote Control", 3, TRUE },
+    {"Black Hammer", 20, TRUE },
+    {"Erosion", 3, TRUE },
+    {"Hog", 3, TRUE },
+    {"Killjoy", 10, TRUE },
+    {"Steamroller", 3, TRUE },
+    {"Restore", 3, TRUE }
   };
 
 int attack_multiplier[] = { 0, 2, 3, 4, 5 };

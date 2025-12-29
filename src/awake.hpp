@@ -1756,7 +1756,22 @@ enum {
 #define SOFT_RESPONSE           38
 #define SOFT_SHIELD             39
 #define SOFT_RADIO              40
-#define NUM_PROGRAMS            41
+#define SOFT_DOORSTOP           41
+#define SOFT_MIRRORS            42
+#define SOFT_PURGE              43
+#define SOFT_REDECORATE         44
+#define SOFT_SPOOF              45
+#define SOFT_TRIANGULATION      46
+#define SOFT_COUNTERFEIT        47
+#define SOFT_GUARDIAN           48
+#define SOFT_REMOTE_CONTROL     49
+#define SOFT_BLACK_HAMMER       50
+#define SOFT_EROSION            51
+#define SOFT_HOG                52
+#define SOFT_KILLJOY            53
+#define SOFT_STEAMROLLER        54
+#define SOFT_RESTORE            55
+#define NUM_PROGRAMS            56
 
 #define PART_ACTIVE    1
 #define PART_STORAGE    2
