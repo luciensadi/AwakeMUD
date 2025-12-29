@@ -63,23 +63,13 @@ void pedit_disp_program_menu(struct descriptor_data *d)
 
   strncpy(buf, "", sizeof(buf) - 1);
 
-  bool screenreader_mode = PRF_FLAGGED(d->character, PRF_SCREENREADER);
-  for (int counter = 1; counter < NUM_PROGRAMS; counter++)
-  {
-    if (screenreader_mode)
-      send_to_char(d->character, "%d) %s\r\n", counter, programs[counter].name);
-    else {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s%2d) %-22s%s",
-              counter % 3 == 1 ? "  " : "",
-              counter,
-              programs[counter].name,
-              counter % 3 == 0 ? "\r\n" : "");
-    }
+  for (int counter = 1; counter < NUM_PROGRAMS; counter++) {
+    send_to_char(d->character, "%d) %s%s\r\n", counter, programs[counter].name, programs[counter].nerps ? "  (not implemented)" : "");
   }
-  if (!screenreader_mode)
-    send_to_char(d->character, "%s\r\nSelect program type: ", buf);
+  send_to_char(d->character, "\r\nSelect program type: ");
   d->edit_mode = PEDIT_TYPE;
 }
+
 void pedit_parse(struct descriptor_data *d, const char *arg)
 {
   int number = atoi(arg);

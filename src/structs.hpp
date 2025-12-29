@@ -1322,6 +1322,7 @@ struct part_data {
 struct program_data {
   char name[30];
   unsigned char multiplier;
+  bool nerps;
 };
 
 struct spirit_table {
