@@ -153,6 +153,7 @@ struct dest_data seattle_taxi_destinations[] =
     { "paine", "snohomish", "Paine Field-Snohomish Airport", 39233, TAXI_DEST_TYPE_TRANSPORTATION, TRUE },
     { "villas", "lucianos", "Villa de Lucianos", 98501, TAXI_DEST_TYPE_ACCOMMODATIONS, TRUE },
     { "anchor", "insurance", "Anchor Insurance", 32635, TAXI_DEST_TYPE_OTHER, TRUE },
+    { "cedar", "river", "Cedar River Park", 30132, TAXI_DEST_TYPE_ACCOMMODATIONS, TRUE },
 #endif
     { "\n", "", "", 0, 0, 0 } // this MUST be last
   };
