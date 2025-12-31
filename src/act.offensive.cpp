@@ -366,7 +366,7 @@ bool perform_hit(struct char_data *ch, char *argument, const char *cmdname)
     return TRUE;
   }
   if (vict == ch) {
-    send_to_char("You hit yourself...OUCH!.\r\n", ch);
+    send_to_char("You hit yourself...OUCH!  (Maybe you need to use a PREFIX?)\r\n", ch);
     act("$n hits $mself, and says OUCH!", FALSE, ch, 0, vict, TO_ROOM);
   }
   else {

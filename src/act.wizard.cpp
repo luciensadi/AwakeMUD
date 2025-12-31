@@ -9130,7 +9130,7 @@ int audit_zone_objects_(struct char_data *ch, int zone_num, bool verbose) {
                        attach_loc, 
                        GET_OBJ_NAME(&obj_proto[attach_rnum]),
                        attach_vnum,
-                       gun_accessory_locations[actual_attach_location]);
+                       gun_accessory_locations[GET_ACCESSORY_ATTACH_LOCATION(attachment)]);
                 issues++;
               } else {
                 snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - has %s-attached item '%s^n' (%ld).\r\n", 
