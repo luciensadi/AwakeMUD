@@ -5428,6 +5428,7 @@ ACMD(do_stop) {
     if (SPEED_IDLE < veh->cspeed) {
       send_to_char("You bring the vehicle to a halt.\r\n", ch);
       send_to_veh("The vehicle slows to a stop.\r\n", veh, ch, FALSE);
+      veh->cspeed = SPEED_IDLE;
     } else {
       send_to_char("Your vehicle isn't moving.\r\n", ch);
     }

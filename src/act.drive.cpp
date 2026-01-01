@@ -1424,7 +1424,7 @@ ACMD(do_chase)
     if (tveh->followers)
       k->next = tveh->followers;
     tveh->followers = k;
-    if (veh->cspeed == SPEED_IDLE) {
+    if (veh->cspeed <= SPEED_IDLE) {
       send_to_char(ch, "You put your foot on the accelerator.\r\n");
       send_to_veh("You speed up.\r\n", veh, ch, FALSE);
       veh->cspeed = SPEED_CRUISING;
