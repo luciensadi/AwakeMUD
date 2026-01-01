@@ -9044,7 +9044,7 @@ int audit_zone_objects_(struct char_data *ch, int zone_num, bool verbose) {
       }
       
       if (GET_WEAPON_SKILL(obj) != kosher_weapon_values[GET_WEAPON_ATTACK_TYPE(obj)].skill) {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - weapon's skill (%s) may not match attack type %s's expected skill (%s)\r\n", 
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - weapon's skill (%s) may not match attack type %s's expected skill (%s).\r\n", 
                  skills[GET_WEAPON_SKILL(obj)].name,
                  GET_WEAPON_TYPE_NAME(GET_WEAPON_ATTACK_TYPE(obj)),
                  skills[kosher_weapon_values[GET_WEAPON_ATTACK_TYPE(obj)].skill].name);
@@ -9059,7 +9059,7 @@ int audit_zone_objects_(struct char_data *ch, int zone_num, bool verbose) {
 
         // Firemode check.
         #define FIREMODE_CHECK(val_mode, val_name)  if (WEAPON_CAN_USE_FIREMODE(obj, val_mode) && !kosher_weapon_values[GET_WEAPON_ATTACK_TYPE(obj)].val_name) { \
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - weapon can use ^ynon-kosher^n %s firemode\r\n", #val_mode); \
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - weapon can use ^ynon-kosher^n %s firemode.\r\n", #val_mode); \
            \
           issues++; \
         }
@@ -9068,6 +9068,12 @@ int audit_zone_objects_(struct char_data *ch, int zone_num, bool verbose) {
         FIREMODE_CHECK(MODE_SA, can_sa);
         FIREMODE_CHECK(MODE_BF, can_bf);
         FIREMODE_CHECK(MODE_FA, can_fa);
+
+        // Warn on NO firemodes.
+        if (GET_WEAPON_POSSIBLE_FIREMODES(obj) == 0) {
+          strlcat(buf, "  - has ^yno firemodes set^n.\r\n", sizeof(buf));
+          issues++;
+        }
 
         // Notify on ANY recoil comp, erroneous or not
         if (GET_WEAPON_INTEGRAL_RECOIL_COMP(obj)) {
