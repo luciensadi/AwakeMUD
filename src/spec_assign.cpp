@@ -33,6 +33,9 @@ struct train_data trainers[] = {
                        { 60500, TBOD | TQUI | TSTR | TCHA | TINT | TWIL, 1 },
                        { 17104, TBOD | TQUI | TSTR, 0 },
                        { 9413, TCHA | TINT | TWIL, 0 },
+#ifdef USE_PRIVATE_CE_WORLD
+                       {102834, TCHA | TINT | TWIL, 0 },
+#endif
                        { 0, 0, 0 } /* this MUST be last */
                      };
 
@@ -108,6 +111,11 @@ struct teach_data teachers[] = {
     "After hours of study and physical practice, you feel like you've learned\r\nsomething.\r\n", ADVANCED },
   { 100976, { SKILL_ATHLETICS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
     "After hours of study and physical practice, you feel like you've learned\r\nsomething.\r\n", ADVANCED },
+
+  { 102893, { SKILL_CONJURING, SKILL_AURA_READING, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    "After hours of study and magical practice, you feel like you've learned something.\r\n", AMATEUR },
+  { 102894, { SKILL_SORCERY, SKILL_SPELLDESIGN, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+  "After hours of study and magical practice, you feel like you've learned something.\r\n", AMATEUR },
 #endif
 
                        { 2508, { SKILL_BIOTECH, SKILL_MEDICINE, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "After hours of medical research and instruction, you begin "
