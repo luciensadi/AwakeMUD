@@ -291,6 +291,7 @@ ACMD_DECLARE(do_link);
 ACMD_DECLARE(do_look);
 ACMD_DECLARE(do_look_while_rigging);
 ACMD_DECLARE(do_logwatch);
+ACMD_DECLARE(do_logoff_simple);
 ACMD_DECLARE(do_manifest);
 ACMD_DECLARE(do_map);
 ACMD_DECLARE(do_masking);
@@ -783,6 +784,7 @@ struct command_info cmd_info[] =
     { "lock"       , POS_SITTING , do_gen_door , 0, SCMD_LOCK, BLOCKS_IDLE_REWARD },
     { "load"       , POS_RESTING , do_chipload , 0, 0, BLOCKS_IDLE_REWARD },
     { "logwatch"   , POS_DEAD    , do_logwatch , LVL_BUILDER, 0, BLOCKS_IDLE_REWARD },
+    { "logoff"     , POS_DEAD    , do_logoff_simple , 0, 0, BLOCKS_IDLE_REWARD },
 
     { "man"        , POS_SITTING , do_man      , 0, 0, BLOCKS_IDLE_REWARD },
     { "manifest"   , POS_RESTING , do_manifest , 0, 0, BLOCKS_IDLE_REWARD },
@@ -4146,3 +4148,7 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   return -1;
 }
 #undef MAP_TYPO
+
+ACMD(do_logoff_simple) {
+  send_to_char(ch, "That command isn't valid outside of the Matrix. Did you mean to QUIT the game?\r\n");
+}
