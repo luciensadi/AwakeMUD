@@ -340,9 +340,9 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
       strncpy(storage_string, start_of_block, quote_ptr - start_of_block);
       // send_to_char(actor, "Storage string: '%s' (quote_ptr = %c, start_of_block = %c)\r\n", storage_string, *quote_ptr, *start_of_block);
 
-      // Check the string for '@self'.
-      if (!(must_prepend_name = !str_str_isolated(storage_string, "@self"))) {
-        // send_to_char("Found @self outside of quotes.\r\n", actor);
+      // Check the string for '@self', '@me', '@myself'
+      if (!(must_prepend_name = (!str_str_isolated(storage_string, "@self") || !str_str_isolated(storage_string, "@me") || !str_str_isolated(storage_string, "@myself")))) {
+        // send_to_char("Found @self/@me/@myself outside of quotes.\r\n", actor);
         break;
       }
 
@@ -374,7 +374,7 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
     if (start_of_block && *start_of_block) {
       // send_to_char(actor, "Last attempt. Evaluating '%s'.\r\n", start_of_block);
       if (!(must_prepend_name = !(str_str_isolated(start_of_block, "@self") || str_str_isolated(start_of_block, "@me") || str_str_isolated(start_of_block, "@myself")))) {
-        // send_to_char("Found @self in final analysis.\r\n", actor);
+        // send_to_char("Found @self/me/myself in final analysis.\r\n", actor);
       }
 
       // Check the string for the capitalized character's name.
@@ -395,13 +395,6 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
     }
   } else {
     strlcpy(mutable_echo_string, echo_string, sizeof(mutable_echo_string));
-  }
-
-  const char *name_ptr;
-  if (require_char_name
-      && ((name_ptr = strstr(echo_string, GET_CHAR_NAME(actor))) == NULL || !isalpha(*(name_ptr + strlen(GET_CHAR_NAME(actor)))))
-      && str_str(echo_string, "@self") == NULL) {
-    // TODO: What's the point of this ifblock?
   }
 
   NEW_EMOTE_DEBUG(actor, "\r\nAfter first pass, mutable_echo_string is '%s'. Evaluating...\r\n", mutable_echo_string);
