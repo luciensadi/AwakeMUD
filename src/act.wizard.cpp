@@ -9529,8 +9529,8 @@ int audit_zone_quests_(struct char_data *ch, int zone_num, bool verbose) {
 #define REQUIRE_SHOPSTRING(variable_name, default_string) \
   if (!shop->variable_name || !*(shop->variable_name)) { \
     strlcat(buf, "  - '" #variable_name "' string ^ris missing^n\r\n", sizeof(buf)); issues++; \
-  } else if (!shop->variable_name || !*(shop->variable_name) || !str_cmp(shop->variable_name, default_string)) { \
-    if (!str_cmp(#variable_name, "shopname")) { \
+  } else if (!strcmp(shop->variable_name, default_string) || !strcmp(shop->variable_name, "(null)")) { \
+    if (!strcmp(#variable_name, "shopname")) { \
       strlcat(buf, "  - '" #variable_name "' string ^yhas not been set^n\r\n", sizeof(buf)); issues++; \
     } else { \
       strlcat(buf, "  - '" #variable_name "' string has not been customized\r\n", sizeof(buf)); issues++; \
