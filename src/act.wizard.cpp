@@ -9526,6 +9526,7 @@ int audit_zone_quests_(struct char_data *ch, int zone_num, bool verbose) {
   return issues;
 }
 
+#define REQUIRE_SHOPSTRING(variable_name) if (!shop->variable_name || !*(shop->variable_name)) { strlcat(buf, "  - '" #variable_name "' string is missing", sizeof(buf)); issues++; }
 int audit_zone_shops_(struct char_data *ch, int zone_num, bool verbose) {
   int issues = 0, real_shp;
   struct shop_data *shop;
@@ -9585,15 +9586,25 @@ int audit_zone_shops_(struct char_data *ch, int zone_num, bool verbose) {
         issues++;
       }
 #endif
-    }
 
-    for (struct shop_sell_data *sell = shop_table[real_shp].selling; sell; sell = sell->next) {
-      rnum_t obj_rnum = real_object(sell->vnum);
-      if (obj_rnum < 0) {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - item ^c%ld^n is listed as for sale, but ^ydoes not exist^n.\r\n", obj_rnum);
-      }
-      else if (sell->type == SELL_AVAIL && GET_OBJ_AVAILTN(&obj_proto[obj_rnum]) == 0) {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - avail-listed item ^c%s ^n(^c%ld^n)^n ^yhas no TN^n.\r\n", GET_OBJ_NAME(&obj_proto[obj_rnum]), GET_OBJ_VNUM(&obj_proto[obj_rnum]));
+      REQUIRE_SHOPSTRING(no_such_itemk);
+      REQUIRE_SHOPSTRING(no_such_itemp);
+      REQUIRE_SHOPSTRING(not_enough_nuyen);
+      REQUIRE_SHOPSTRING(doesnt_buy);
+      REQUIRE_SHOPSTRING(buy);
+      REQUIRE_SHOPSTRING(sell);
+      REQUIRE_SHOPSTRING(shopname);
+
+      for (struct shop_sell_data *sell = shop_table[real_shp].selling; sell; sell = sell->next) {
+        rnum_t obj_rnum = real_object(sell->vnum);
+        if (obj_rnum < 0) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - item ^c%ld^n is listed as for sale, but ^ydoes not exist^n.\r\n", obj_rnum);
+          issues++;
+        }
+        else if (sell->type == SELL_AVAIL && GET_OBJ_AVAILTN(&obj_proto[obj_rnum]) == 0) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - avail-listed item ^c%s ^n(^c%ld^n)^n ^yhas no TN^n.\r\n", GET_OBJ_NAME(&obj_proto[obj_rnum]), GET_OBJ_VNUM(&obj_proto[obj_rnum]));
+          issues++;
+        }
       }
     }
 
@@ -9602,10 +9613,9 @@ int audit_zone_shops_(struct char_data *ch, int zone_num, bool verbose) {
     }
   }
 
-  // TODO: Make sure they've got all their strings set.
-
   return issues;
 }
+#undef REQUIRE_SHOPSTRING
 
 int audit_zone_vehicles_(struct char_data *ch, int zone_num, bool verbose) {
   int issues = 0, real_veh;
