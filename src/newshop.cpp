@@ -43,6 +43,7 @@ void shop_uninstall(char *argument, struct char_data *ch, struct char_data *keep
 struct obj_data *shop_package_up_ware(struct obj_data *obj);
 int get_cyberware_install_cost(struct obj_data *ware);
 void sell_all_stowed_items(struct char_data *ch, rnum_t shop_nr, struct char_data *keeper);
+bool validate_shopstring_format(const char *str, struct descriptor_data *d);
 
 int cmd_say;
 int cmd_echo;
@@ -3230,38 +3231,44 @@ void shedit_parse(struct descriptor_data *d, const char *arg)
   case SHEDIT_NSIK:
     if (SHOP->no_such_itemk)
       delete [] SHOP->no_such_itemk;
-    SHOP->no_such_itemk = str_dup(arg);
+    SHOP->no_such_itemk = str_dup((*arg ? arg : SHOPSTRING_DEFAULT_no_such_itemk));
     shedit_disp_text_menu(d);
     break;
   case SHEDIT_NSIP:
     if (SHOP->no_such_itemp)
       delete [] SHOP->no_such_itemp;
-    SHOP->no_such_itemp = str_dup(arg);
+    SHOP->no_such_itemp = str_dup((*arg ? arg : SHOPSTRING_DEFAULT_no_such_itemp));
     shedit_disp_text_menu(d);
     break;
   case SHEDIT_NEN:
     if (SHOP->not_enough_nuyen)
       delete [] SHOP->not_enough_nuyen;
-    SHOP->not_enough_nuyen = str_dup(arg);
+    SHOP->not_enough_nuyen = str_dup((*arg ? arg : SHOPSTRING_DEFAULT_not_enough_nuyen));
     shedit_disp_text_menu(d);
     break;
   case SHEDIT_NOBUY:
     if (SHOP->doesnt_buy)
       delete [] SHOP->doesnt_buy;
-    SHOP->doesnt_buy = str_dup(arg);
+    SHOP->doesnt_buy = str_dup((*arg ? arg : SHOPSTRING_DEFAULT_doesnt_buy));
     shedit_disp_text_menu(d);
     break;
   case SHEDIT_BUYMSG:
-    if (SHOP->buy)
-      delete [] SHOP->buy;
-    SHOP->buy = str_dup(arg);
-    shedit_disp_text_menu(d);
+    // Precondition: If it contains %, may only contain %d exactly once (any number of %% allowed). Error message sent in function.
+    if (validate_shopstring_format(arg, d)) {
+      if (SHOP->buy)
+        delete [] SHOP->buy;
+      SHOP->buy = str_dup((*arg ? arg : SHOPSTRING_DEFAULT_buy));
+      shedit_disp_text_menu(d);
+    }
     break;
   case SHEDIT_SELLMSG:
-    if (SHOP->sell)
-      delete [] SHOP->sell;
-    SHOP->sell = str_dup(arg);
-    shedit_disp_text_menu(d);
+    // Precondition: If it contains %, may only contain %d exactly once (any number of %% allowed). Error message sent in function.
+    if (validate_shopstring_format(arg, d)) {
+      if (SHOP->sell)
+        delete [] SHOP->sell;
+      SHOP->sell = str_dup((*arg ? arg : SHOPSTRING_DEFAULT_sell));
+      shedit_disp_text_menu(d);
+    }
     break;
   case SHEDIT_SHOPNAME:
     if (SHOP->shopname)
@@ -3809,4 +3816,37 @@ int get_eti_test_results(struct char_data *ch, int eti_skill, int availtn, int a
 
 int get_cyberware_install_cost(struct obj_data *ware) {
   return MIN(CYBERWARE_INSTALLATION_COST_MAXIMUM, GET_OBJ_COST(ware) / CYBERWARE_INSTALLATION_COST_FACTOR);
+}
+
+bool validate_shopstring_format(const char *str, struct descriptor_data *d) {
+  if (!str || !*str) return true;
+
+  bool saw_pct = false;
+  bool saw_pct_d = false;
+
+  for (const char *ptr = str; *ptr; ptr++) {
+    if (saw_pct) {
+      if (*ptr == 'd') {
+        if (saw_pct_d) {
+          send_to_char("Shop strings must contain only one %d sequence.\r\n", d->character);
+          return false;
+        }
+        saw_pct_d = true;
+      }
+      else if (*ptr != '%') {
+        send_to_char("Shop strings may not contain any %-sequences other than %d (once) and %%.\r\n", d->character);
+        return false;
+      }
+      saw_pct = false;
+    } else if (*ptr == '%') {
+      saw_pct = true;
+    }
+  }
+
+  if (saw_pct) {
+      send_to_char("Shop strings may not end with a single % symbol. Use %% for a literal percent sign.\r\n", d->character);
+      return false;
+  }
+
+  return true;
 }

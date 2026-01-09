@@ -1,3 +1,6 @@
+#ifndef __NEWSHOP_HPP__
+#define __NEWSHOP_HPP__
+
 #include "bitfield.hpp"
 
 #define SELL_ALWAYS  0
@@ -17,6 +20,14 @@
 #define SHOP_FLAGS  6
 
 #define SHOP_LAST_IDNUM_LIST_SIZE 20
+
+#define SHOPSTRING_DEFAULT_no_such_itemk "Sorry, we don't have that."
+#define SHOPSTRING_DEFAULT_no_such_itemp "You don't seem to have that."
+#define SHOPSTRING_DEFAULT_not_enough_nuyen "You don't have enough nuyen!"
+#define SHOPSTRING_DEFAULT_doesnt_buy "We don't buy that."
+#define SHOPSTRING_DEFAULT_buy "That'll be %d nuyen."
+#define SHOPSTRING_DEFAULT_sell "Here's your %d nuyen."
+#define SHOPSTRING_DEFAULT_shopname "An Unnamed Shop"
 
 struct shop_data
 {
@@ -74,3 +85,5 @@ extern const char *shop_type[3];
 extern const char *selling_type[];
 
 int get_eti_test_results(struct char_data *ch, int eti_skill, int availtn, int availoff, int kinesics, int meta_penalty, int lifestyle, int pheromone_dice, int skill_dice);
+
+#endif // __NEWSHOP_HPP__

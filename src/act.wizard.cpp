@@ -9526,7 +9526,11 @@ int audit_zone_quests_(struct char_data *ch, int zone_num, bool verbose) {
   return issues;
 }
 
-#define REQUIRE_SHOPSTRING(variable_name) if (!shop->variable_name || !*(shop->variable_name)) { strlcat(buf, "  - '" #variable_name "' string is missing", sizeof(buf)); issues++; }
+#define REQUIRE_SHOPSTRING(variable_name, default_string) \
+  if (!shop->variable_name || !*(shop->variable_name) || !str_cmp(shop->variable_name, default_string)) { \
+    strlcat(buf, "  - '" #variable_name "' string is missing", sizeof(buf)); issues++;\
+  }
+
 int audit_zone_shops_(struct char_data *ch, int zone_num, bool verbose) {
   int issues = 0, real_shp;
   struct shop_data *shop;
@@ -9587,13 +9591,13 @@ int audit_zone_shops_(struct char_data *ch, int zone_num, bool verbose) {
       }
 #endif
 
-      REQUIRE_SHOPSTRING(no_such_itemk);
-      REQUIRE_SHOPSTRING(no_such_itemp);
-      REQUIRE_SHOPSTRING(not_enough_nuyen);
-      REQUIRE_SHOPSTRING(doesnt_buy);
-      REQUIRE_SHOPSTRING(buy);
-      REQUIRE_SHOPSTRING(sell);
-      REQUIRE_SHOPSTRING(shopname);
+      REQUIRE_SHOPSTRING(no_such_itemk, SHOPSTRING_DEFAULT_no_such_itemk);
+      REQUIRE_SHOPSTRING(no_such_itemp, SHOPSTRING_DEFAULT_no_such_itemp);
+      REQUIRE_SHOPSTRING(not_enough_nuyen, SHOPSTRING_DEFAULT_not_enough_nuyen);
+      REQUIRE_SHOPSTRING(doesnt_buy, SHOPSTRING_DEFAULT_doesnt_buy);
+      REQUIRE_SHOPSTRING(buy, SHOPSTRING_DEFAULT_buy);
+      REQUIRE_SHOPSTRING(sell, SHOPSTRING_DEFAULT_sell);
+      REQUIRE_SHOPSTRING(shopname, SHOPSTRING_DEFAULT_shopname);
 
       for (struct shop_sell_data *sell = shop_table[real_shp].selling; sell; sell = sell->next) {
         rnum_t obj_rnum = real_object(sell->vnum);
