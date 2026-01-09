@@ -35,7 +35,7 @@ extern int convert_look[];
 extern const char *KILLER_FLAG_MESSAGE;
 
 /* extern functions */
-void raw_kill(struct char_data * ch, idnum_t cause_of_death_idnum);
+void raw_kill(struct char_data * ch, idnum_t cause_of_death_idnum, bool should_splatter_and_scream);
 extern void range_combat(struct char_data *ch, char target[MAX_INPUT_LENGTH],
                            struct obj_data *weapon, int range, int dir);
 extern int find_weapon_range(struct char_data *ch, struct obj_data *weapon);
@@ -469,7 +469,7 @@ ACMD(do_kill)
         mudlog(buf2, vict, LOG_DEATHLOG, TRUE);
       }
 
-      raw_kill(vict, GET_IDNUM(ch));
+      raw_kill(vict, GET_IDNUM(ch), true);
     }
   }
 }

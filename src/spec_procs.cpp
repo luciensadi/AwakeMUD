@@ -44,7 +44,7 @@ extern struct spell_trainer spelltrainers[];
 /* extern functions */
 void add_follower(struct char_data * ch, struct char_data * leader);
 extern void docwagon(struct char_data *ch);
-extern void die(struct char_data * ch, idnum_t cause_of_death);
+extern void die(struct char_data * ch, idnum_t cause_of_death, bool should_splatter_and_scream);
 extern void affect_total(struct char_data * ch);
 extern struct obj_data *get_first_credstick(struct char_data *ch, const char *arg);
 extern struct char_data *give_find_vict(struct char_data * ch, char *arg);
@@ -3933,7 +3933,7 @@ SPECIAL(circulation_fan) {
               GET_ROOM_NAME(ch->in_room), GET_ROOM_VNUM(ch->in_room) );
       mudlog(buf, ch, LOG_DEATHLOG, TRUE);
 
-      die(ch, 0);
+      die(ch, 0, true);
 
       return true;
     } else if (!cmd) {
@@ -8147,6 +8147,11 @@ SPECIAL(penance)
 
   // Point command.
   if (CMD_IS("point")) {
+    // Must be YOUR Penance. Message sent in function.
+    if (blocked_by_soulbinding(ch, obj, TRUE)) {
+      return TRUE;
+    }
+
     skip_spaces(&argument);
     if (!*argument) {
       send_to_char(ch, "Syntax for using Penance: POINT <victim>\r\n");
@@ -8168,41 +8173,39 @@ SPECIAL(penance)
       return TRUE;
     }
 
-    // Must be YOUR Penance. Message sent in function.
-    if (blocked_by_soulbinding(ch, obj, TRUE)) {
-      return TRUE;
-    }
-
     // No PK.
     if (to->desc || !IS_NPC(to)) {
       act("Penance strains eagerly in your hand as you point it at $N, but a snare of ^Rred^n light traps it in your hand. Seems it can't be used on $M.", FALSE, ch, obj, to, TO_CHAR);
-      act("$n points $p at you, but a snare of ^Rred^n light flares around $s hand, preventing anything from happening.", FALSE, ch, obj, to, TO_VICT);
-      act("$n points $p at $N, but a snare of ^Rred^n light flares around $s hand, preventing anything from happening.", FALSE, ch, obj, to, TO_NOTVICT);
+      act("$n points $p at you, but a snare of ^Rred^n light flares around the arrowhead in $s hand, preventing anything from happening.", FALSE, ch, obj, to, TO_VICT);
+      act("$n points $p at $N, but a snare of ^Rred^n light flares around the arrowhead in $s hand, preventing anything from happening.", FALSE, ch, obj, to, TO_NOTVICT);
       return TRUE;
     }
 
     // Must be able to damage this target.
-    if (!can_hurt(ch, to, TYPE_BIFURCATE, TRUE)) {
+    if (!can_hurt(ch, to, TYPE_PENANCE, TRUE)) {
       act("Penance strains eagerly in your hand as you point it at $N, but a snare of ^oorange^n light traps it in your hand. Seems it can't be used on $M.", FALSE, ch, obj, to, TO_CHAR);
-      act("$n points $p at you, but a snare of ^oorange^n light flares around $s hand, preventing anything from happening.", FALSE, ch, obj, to, TO_VICT);
-      act("$n points $p at $N, but a snare of ^oorange^n light flares around $s hand, preventing anything from happening.", FALSE, ch, obj, to, TO_NOTVICT);
+      act("$n points $p at you, but a snare of ^oorange^n light flares around the arrowhead in $s hand, preventing anything from happening.", FALSE, ch, obj, to, TO_VICT);
+      act("$n points $p at $N, but a snare of ^oorange^n light flares around the arrowhead in $s hand, preventing anything from happening.", FALSE, ch, obj, to, TO_NOTVICT);
       return TRUE;
     }
 
-    mudlog_vfprintf(ch, LOG_CHEATLOG, "%s using Penance on mob %s (%ld).", GET_CHAR_NAME(ch), GET_CHAR_NAME(to), GET_MOB_VNUM(to));
+    // Log it.
+    mudlog_vfprintf(ch, LOG_CHEATLOG, "%s using holiday gift 'Penance' on mob %s (%ld).", GET_CHAR_NAME(ch), GET_CHAR_NAME(to), GET_MOB_VNUM(to));
 
-    act("The moment you point Penance at $N, it vanishes from your hand, disappearing into $N with impossible speed.", FALSE, ch, obj, to, TO_CHAR);
+    // Message it.
+    act("The moment you point Penance at $N, it vanishes from your hand, disappearing into $N with impossible speed. Soundlessly and without fanfare, $E collapses.", FALSE, ch, obj, to, TO_CHAR);
     act("$n points $p at you, and it vanishes from $s hand. You feel a wrenching sensation...", FALSE, ch, obj, to, TO_VICT);
-    act("$n points $p at $N, and it vanishes from $s hand, disappearing into $N with impossible speed.", FALSE, ch, obj, to, TO_NOTVICT);
+    act("$n points $p at $N, and it vanishes from $s hand, disappearing into $N with impossible speed. Soundlessly and without fanfare, $E collapses.", FALSE, ch, obj, to, TO_NOTVICT);
 
     // Set them at the lowest possible health...
     GET_PHYSICAL(to) = 1;
-    // Then blow them away.
-    if (!damage_without_message(ch, to, 10, TYPE_BIFURCATE, TRUE)) {
-      damage_without_message(ch, to, 10, TYPE_BIFURCATE, TRUE);
-    }
+    // Then blow them away, dealing up to 20 rounds of lethal damage.
+    for (int damage_rounds_limiter = 20; damage_rounds_limiter > 0 && !damage_without_message(ch, to, 10, TYPE_PENANCE, TRUE); damage_rounds_limiter--) {}
     // Assume TO is dead now.
     to = NULL;
+
+    // Extract Penance.
+    extract_obj(obj);
 
     return TRUE;
   }

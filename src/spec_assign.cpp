@@ -939,6 +939,7 @@ void assign_objects(void)
   SPECIAL(one_shot_self_heal);
   SPECIAL(holiday_gift);
   SPECIAL(slot_machine);
+  SPECIAL(penance);
 
   ASSIGNOBJ(OBJ_HOLIDAY_GIFT, holiday_gift);
   ASSIGNOBJ(OBJ_ONE_SHOT_HEALING_INJECTOR, one_shot_self_heal);
@@ -1047,6 +1048,9 @@ void assign_objects(void)
   // Slots
   ASSIGNOBJ(39920, slot_machine);
   ASSIGNOBJ(62361, slot_machine);
+
+  // Gifts
+  ASSIGNOBJ(193, penance);
 
   perform_secret_obj_assignments();
 #endif

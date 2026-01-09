@@ -22,7 +22,7 @@
 #include "newfight.hpp"
 #include "metrics.hpp"
 
-extern void die(struct char_data * ch, idnum_t cause_of_death);
+extern void die(struct char_data * ch, idnum_t cause_of_death, bool should_splatter_and_scream);
 extern bool astral_fight(struct char_data *ch, struct char_data *vict);
 extern void dominator_mode_switch(struct char_data *ch, struct obj_data *obj, int mode);
 extern int calculate_vision_penalty(struct char_data *ch, struct char_data *victim);
@@ -138,7 +138,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
         act("A ball of coherent light leaps from $n's Dominator, tearing into $N. With a scream, $E crumples, bubbles, and explodes in a shower of gore!", FALSE, att->ch, 0, def->ch, TO_NOTVICT);
         act("A ball of coherent light leaps from $n's Dominator, tearing into you! A horrible rending sensation tears through you as your vision fades.", FALSE, att->ch, 0, def->ch, TO_VICT);
         mudlog_vfprintf(att->ch, LOG_WIZLOG, "%s used a Dominator to kill %s.", GET_CHAR_NAME(att->ch), GET_CHAR_NAME(def->ch));
-        die(def->ch, GET_IDNUM(att->ch));
+        die(def->ch, GET_IDNUM(att->ch), true);
         return TRUE;
       case WEAP_CANNON:
         // Decomposer? Don't just kill your target-- if they're a player, disconnect them.
@@ -146,7 +146,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
         act("A roaring column of force explodes from $n's Dominator, erasing $N from existence!", FALSE, att->ch, 0, def->ch, TO_NOTVICT);
         act("A roaring column of force explodes from $n's Dominator, erasing you from existence!", FALSE, att->ch, 0, def->ch, TO_VICT);
         mudlog_vfprintf(att->ch, LOG_WIZLOG, "%s used a Dominator to erase %s.", GET_CHAR_NAME(att->ch), GET_CHAR_NAME(def->ch));
-        die(def->ch, GET_IDNUM(att->ch));
+        die(def->ch, GET_IDNUM(att->ch), false);
         if (def->ch->desc) {
           STATE(def->ch->desc) = CON_CLOSE;
           close_socket(def->ch->desc);

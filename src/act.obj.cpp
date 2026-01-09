@@ -50,7 +50,7 @@ extern void check_quest_destroy(struct char_data *ch, struct obj_data *obj);
 extern void dominator_mode_switch(struct char_data *ch, struct obj_data *obj, int mode);
 extern float get_bulletpants_weight(struct char_data *ch);
 extern int calculate_vehicle_weight(struct veh_data *veh);
-extern void die(struct char_data *ch, idnum_t cause_of_death_idnum);
+extern void die(struct char_data *ch, idnum_t cause_of_death_idnum, bool should_splatter_and_scream);
 extern bool obj_can_be_stowed(struct char_data *ch, struct obj_data *obj, bool send_messages);
 extern bool raw_stow_obj(struct char_data *ch, struct obj_data *obj, bool send_messages);
 
@@ -3498,7 +3498,7 @@ ACMD(do_eat)
 	{
 		send_to_char(ch, "^RA sudden, crushing sense of disapproval hammers into you from all sides! You barely have time to scream before imploding into a tasty ball that %s promptly monches up. Turnabout is fair play?\r\n", GET_OBJ_NAME(food));
 		act("$n raises $p to $s mouth, then suddenly gives a piercing scream before imploding under Lucien's disapproval!", FALSE, ch, food, 0, TO_ROOM);
-		die(ch, GET_IDNUM(ch));
+		die(ch, GET_IDNUM(ch), true);
 		return;
 	}
 

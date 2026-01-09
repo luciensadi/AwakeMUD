@@ -930,7 +930,7 @@ void death_cry(struct char_data * ch, idnum_t cause_of_death_idnum)
   }
 }
 
-void raw_kill(struct char_data * ch, idnum_t cause_of_death_idnum)
+void raw_kill(struct char_data * ch, idnum_t cause_of_death_idnum, bool should_splatter_and_scream)
 {
   struct obj_data *obj, *o;
   struct room_data *dest_room;
@@ -965,7 +965,11 @@ void raw_kill(struct char_data * ch, idnum_t cause_of_death_idnum)
   {
     struct room_data *in_room = get_ch_in_room(ch);
 
-    death_cry(ch, cause_of_death_idnum);
+    if (should_splatter_and_scream) {
+      death_cry(ch, cause_of_death_idnum);
+    } else {
+      act("\e[3m^LAh, a clean, silent death, with no mess or fuss...^n\e[0m", FALSE, ch, 0, 0, TO_ROOM);
+    }
 
     if (!(IS_SPIRIT(ch) || IS_ANY_ELEMENTAL(ch)))
       make_corpse(ch);
@@ -1079,7 +1083,7 @@ void death_penalty(struct char_data *ch)
   }
 }
 
-void die(struct char_data * ch, idnum_t cause_of_death_idnum)
+void die(struct char_data * ch, idnum_t cause_of_death_idnum, bool should_splatter_and_scream)
 {
   // If they're ready for docwagon retrieval, save them.
   if (PLR_FLAGGED(ch, PLR_DOCWAGON_READY)) {
@@ -1091,7 +1095,7 @@ void die(struct char_data * ch, idnum_t cause_of_death_idnum)
 
   struct room_data *temp_room = get_ch_in_room(ch);
 
-  if (!(MOB_FLAGGED(ch, MOB_INANIMATE) || IS_PROJECT(ch) || IS_SPIRIT(ch) || IS_ANY_ELEMENTAL(ch))) {
+  if (should_splatter_and_scream && !(MOB_FLAGGED(ch, MOB_INANIMATE) || IS_PROJECT(ch) || IS_SPIRIT(ch) || IS_ANY_ELEMENTAL(ch))) {
     increase_blood(temp_room);
     act("^rBlood splatters everywhere!^n", FALSE, ch, 0, 0, TO_ROOM);
     if (!GET_BACKGROUND_COUNT(temp_room) || GET_BACKGROUND_AURA(temp_room) == AURA_PLAYERCOMBAT) {
@@ -1114,7 +1118,7 @@ void die(struct char_data * ch, idnum_t cause_of_death_idnum)
 
   AFF_FLAGS(ch).RemoveBit(AFF_HEALED);
 
-  raw_kill(ch, cause_of_death_idnum);
+  raw_kill(ch, cause_of_death_idnum, should_splatter_and_scream);
 }
 
 ACMD(do_dw_retrieve)
@@ -1185,7 +1189,7 @@ ACMD(do_die)
   mudlog(buf, ch, LOG_DEATHLOG, TRUE);
 
   /* Now we just kill them, MuHahAhAhahhaAHhaAHaA!!...or something */
-  die(ch, 0);
+  die(ch, 0, true);
 
   return;
 }
@@ -3756,7 +3760,7 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
         }
       }
     }
-    die(victim, GET_IDNUM(ch));
+    die(victim, GET_IDNUM(ch), attacktype != TYPE_PENANCE);
     return TRUE;
   }
   return did_docwagon;

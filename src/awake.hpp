@@ -1257,6 +1257,7 @@ enum {
 #define TYPE_DRUGS            416
 #define TYPE_POISON           417
 #define TYPE_FOCUS_OVERUSE    418
+#define TYPE_PENANCE          419
 
 /* magic attack types */
 #define TYPE_MANABOLT_OR_STUNBOLT       500
