@@ -1457,28 +1457,53 @@ int make_prompt(struct descriptor_data * d)
               break;
             case 'A':
               if (GET_EQ(d->character, WEAR_WIELD)) {
-
-                if (WEAPON_IS_GUN(GET_EQ(d->character, WEAR_WIELD)))
-                  switch (GET_OBJ_VAL(GET_EQ(d->character, WEAR_WIELD), 11)) {
+                if (WEAPON_IS_GUN(GET_EQ(d->character, WEAR_WIELD))) {
+                  switch (GET_WEAPON_FIREMODE(GET_EQ(d->character, WEAR_WIELD))) {
                     case MODE_SS:
-                      snprintf(str, sizeof(str), "SS");
+                      strlcat(str, "SS", sizeof(str));
                       break;
                     case MODE_SA:
-                      snprintf(str, sizeof(str), "SA");
+                      strlcat(str, "SA", sizeof(str));
                       break;
                     case MODE_BF:
-                      snprintf(str, sizeof(str), "BF");
+                      strlcat(str, "BF", sizeof(str));
                       break;
                     case MODE_FA:
                       snprintf(str, sizeof(str), "FA(%d)", GET_OBJ_TIMER(GET_EQ(d->character, WEAR_WIELD)));
                       break;
                     default:
-                      snprintf(str, sizeof(str), "NA");
+                      strlcat(str, "NA", sizeof(str));
+                      break;
                   }
-                else strlcpy(str, "ML", sizeof(str));
+                }
+                else {
+                  strlcpy(str, "ML", sizeof(str));
+                }
+              } else {
+                // Check for a usable cyberweapon.
+                bool has_cyberweapon = FALSE;
+                for (struct obj_data *ware = d->character->cyberware; !has_cyberweapon && ware; ware = ware->next_content) {
+                  switch (GET_CYBERWARE_TYPE(ware)) {
+                    case CYB_CLIMBINGCLAWS:
+                    case CYB_FIN:
+                    case CYB_HANDBLADE:
+                    case CYB_HANDRAZOR:
+                    case CYB_HANDSPUR:
+                    case CYB_FOOTANCHOR:
+                    case CYB_FANGS:
+                    case CYB_HORNS:
+                      if (!GET_CYBERWARE_IS_DISABLED(ware))
+                        has_cyberweapon = TRUE;
+                      break;
+                  }
+                }
 
-              } else
-                strlcpy(str, "N/A", sizeof(str));
+                if (has_cyberweapon) {
+                  strlcpy(str, "CY", sizeof(str));
+                } else {
+                  strlcpy(str, "N/A", sizeof(str));
+                }
+              }
               break;
             case 'b':       // ballistic
               snprintf(str, sizeof(str), "%d", GET_BALLISTIC(d->character));
