@@ -1694,7 +1694,7 @@ void list_one_char(struct char_data * i, struct char_data * ch)
       strlcat(buf, " is sitting in the drivers seat.", sizeof(buf));
   } else if ((obj = get_mount_manned_by_ch(i))) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " is manning %s.", GET_OBJ_NAME(obj));
-  } else if (affected_by_spell(i, SPELL_LEVITATE)) {
+  } else if (IS_AFFECTED(i, AFF_LEVITATE)) {
     strlcat(buf, " is here, hovering above the ground.", sizeof(buf));
   } else {
     if (GET_DEFPOS(i))

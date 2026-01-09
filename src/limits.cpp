@@ -772,9 +772,9 @@ bool check_bioware(struct char_data *ch)
 }
 
 int calculate_swim_successes(struct char_data *ch) {
-  int swim_test_target, skill_dice, opposing_dice, successes, water_wings_bonus = 0, fin_bonus = 0;
+  int swim_test_target, skill_dice, opposing_dice, successes, water_wings_bonus = 0, levitate_bonus = 0, fin_bonus = 0;
 
-  if (IS_NPC(ch) || IS_SENATOR(ch) || IS_AFFECTED(ch, AFF_LEVITATE) || !ch->in_room)
+  if (IS_NPC(ch) || IS_SENATOR(ch) || !ch->in_room)
     return 20;
 
   for (int x = WEAR_LIGHT; x < NUM_WEARS; x++)
@@ -796,18 +796,26 @@ int calculate_swim_successes(struct char_data *ch) {
   else
     skill_dice = get_skill(ch, SKILL_ATHLETICS, swim_test_target);
 
+  snprintf(buf, sizeof(buf), "%s rolled %d", GET_CHAR_NAME(ch), skill_dice);
+
+  // Levitate always applies.
+  if ((levitate_bonus = affected_by_spell(ch, SPELL_LEVITATE))) {
+    skill_dice += levitate_bonus;
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " + %d (levitate)", levitate_bonus);
+  }
+
   // Fins only matter if you're conscious and able to use them.
-  if (GET_POS(ch) >= POS_RESTING)
+  if (fin_bonus && GET_POS(ch) >= POS_RESTING) {
     skill_dice += fin_bonus;
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " + %d (fins)", fin_bonus);
+  }
 
   opposing_dice = MAX(2, ch->in_room->rating);
 
   successes = success_test(skill_dice, swim_test_target);
   successes -= success_test(opposing_dice, skill_dice);
 
-  snprintf(buf, sizeof(buf), "%s rolled %d dice against TN %d (lowered from %d by WW %d), opposed by %d dice at TN %d: %d net success%s.\r\n",
-           GET_CHAR_NAME(ch),
-           skill_dice,
+  snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " dice against TN %d (lowered from %d by WW %d), opposed by %d dice at TN %d: %d net success%s.\r\n",
            swim_test_target,
            swim_test_target + water_wings_bonus,
            water_wings_bonus,

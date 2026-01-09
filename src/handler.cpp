@@ -1223,16 +1223,15 @@ void affect_total(struct char_data * ch)
 }
 
 /*
- * Return if a char is affected by a spell (SPELL_XXX), NULL indicates
- * not affected
+ * If ch is affected by specified spell, returns force, otherwise returns 0.
  */
-int affected_by_spell(struct char_data * ch, int type)
+int affected_by_spell(struct char_data * ch, int spell_idx)
 {
   if (!GET_SUSTAINED(ch))
     return 0;
 
   for (struct sustain_data *hjp = GET_SUSTAINED(ch); hjp; hjp = hjp->next) {
-    if ((hjp->spell == type) && (hjp->is_caster_record == FALSE))
+    if ((hjp->spell == spell_idx) && (hjp->is_caster_record == FALSE))
       return hjp->force;
   
     // Elementals shouldn't have anything cast on them.

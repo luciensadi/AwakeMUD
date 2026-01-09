@@ -5102,7 +5102,7 @@ SPECIAL(floor_has_glass_shards) {
     return FALSE;
 
   // If they're safe from shards, we don't care what they do.
-  if (ch->in_veh || IS_NPC(ch) || IS_ASTRAL(ch) || PRF_FLAGGED(ch, PRF_NOHASSLE) || GET_EQ(ch, WEAR_FEET) || AFF_FLAGGED(ch, AFF_SNEAK) || get_spell_affected_successes(ch, SPELL_LEVITATE) > 0)
+  if (ch->in_veh || IS_NPC(ch) || IS_ASTRAL(ch) || PRF_FLAGGED(ch, PRF_NOHASSLE) || GET_EQ(ch, WEAR_FEET) || AFF_FLAGGED(ch, AFF_SNEAK) || !IS_AFFECTED(ch, AFF_LEVITATE) > 0)
     return FALSE;
 
   // Don't tear up people who are rigging.
