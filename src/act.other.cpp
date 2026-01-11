@@ -1220,7 +1220,9 @@ const char *tog_messages[][2] = {
                             {"You will now see ambiance messages and environmental echoes about traffic.\r\n",
                              "You will no longer see ambiance messages and environmental echoes about traffic.\r\n"},
                             {"You will no longer automatically ready your holstered/sheathed weapons.\r\n",
-                             "You will now automatically ready your holstered/sheathed weapons.\r\n"}
+                             "You will now automatically ready your holstered/sheathed weapons.\r\n"},
+                            {"You will now see roundtime messages for your actions.\r\n",
+                             "You will no longer see roundtime messages for your actions.\r\n"}
                           };
 
 ACMD(do_toggle)
@@ -1515,6 +1517,9 @@ ACMD(do_toggle)
     } else if (is_abbrev(argument, "autoready") || is_abbrev(argument, "ready")) {
       result = PRF_TOG_CHK(ch, PRF_AUTOREADY);
       mode = 53;
+    } else if (is_abbrev(argument, "roundtime messages") || is_abbrev(argument, "no roundtime messages") || is_abbrev(argument, "round time messages") || is_abbrev(argument, "no round time messages")) {
+      result = PRF_TOG_CHK(ch, PRF_NOROUNDTIME);
+      mode = 54;
     } else {
       send_to_char("That is not a valid toggle option.\r\n", ch);
       return;
