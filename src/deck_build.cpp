@@ -1202,10 +1202,10 @@ void set_cyberdeck_part_pointer(struct obj_data *part, struct obj_data *deck) {
 
   // Check to see if it's in our in-progress part list. If it's not, add it.
   if (std::find(global_in_progress_deck_parts.begin(), global_in_progress_deck_parts.end(), part) == global_in_progress_deck_parts.end()) {
-    log_vfprintf("DEBUG_DECKPART: Adding %s to the global deck part list.", GET_OBJ_NAME(part));
+    // log_vfprintf("DEBUG_DECKPART: Adding %s to the global deck part list.", GET_OBJ_NAME(part));
     global_in_progress_deck_parts.emplace_back(part);
   } else {
-    log_vfprintf("DEBUG_DECKPART: %s was already in the global deck part list (so won't be added).", GET_OBJ_NAME(part));
+    // log_vfprintf("DEBUG_DECKPART: %s was already in the global deck part list (so won't be added).", GET_OBJ_NAME(part));
   }
 }
 
@@ -1227,22 +1227,22 @@ void clear_cyberdeck_part_pointer(struct obj_data *part) {
   // Check to see if it's in our in-progress part list. If it's not, add it.
   auto it = std::find(global_in_progress_deck_parts.begin(), global_in_progress_deck_parts.end(), part);
   if (it != global_in_progress_deck_parts.end()) {
-    log_vfprintf("DEBUG_DECKPART: Removing %s from global deck part list.", GET_OBJ_NAME(part));
+    // log_vfprintf("DEBUG_DECKPART: Removing %s from global deck part list.", GET_OBJ_NAME(part));
     global_in_progress_deck_parts.erase(it);
   } else {
-    log_vfprintf("DEBUG_DECKPART: %s wasn't in the global deck part list (so won't be removed).", GET_OBJ_NAME(part));
+    // log_vfprintf("DEBUG_DECKPART: %s wasn't in the global deck part list (so won't be removed).", GET_OBJ_NAME(part));
   }
 }
 
 void clear_all_cyberdeck_part_pointers_pointing_to_deck(struct obj_data *deck) {
   PERF_PROF_SCOPE(updatecounters_, __func__);
-  log_vfprintf("DEBUG_DECKPART: Clearing deck part pointers to %s.", GET_OBJ_NAME(deck));
+  // log_vfprintf("DEBUG_DECKPART: Clearing deck part pointers to %s.", GET_OBJ_NAME(deck));
 
   // Iterate over the in-progress deck parts.
   for (std::vector<struct obj_data *>::iterator it = global_in_progress_deck_parts.begin(); it != global_in_progress_deck_parts.end(); ) {
     // If it's pointing to our deck, clear its pointer and drop it from the list.
     if ((*it) && (*it)->cyberdeck_part_pointer == deck) {
-      log_vfprintf("DEBUG_DECKPART: Clearing %s's deck pointer to %s.", GET_OBJ_NAME(*it), GET_OBJ_NAME(deck));
+      // log_vfprintf("DEBUG_DECKPART: Clearing %s's deck pointer to %s.", GET_OBJ_NAME(*it), GET_OBJ_NAME(deck));
       (*it)->cyberdeck_part_pointer = NULL;
       (*it) = NULL;
       it = global_in_progress_deck_parts.erase(it);
