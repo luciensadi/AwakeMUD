@@ -1992,8 +1992,13 @@ float power_multiplier(int type, int material)
 
 void damage_door(struct char_data *ch, struct room_data *room, int dir, int power, int type)
 {
-  if (!room || dir < NORTH || dir > DOWN || !room->dir_option[dir] || !room->dir_option[dir]->keyword || !IS_SET(room->dir_option[dir]->exit_info, EX_CLOSED))
+  if (!room || dir < NORTH || dir > DOWN || !room->dir_option[dir] || !IS_SET(room->dir_option[dir]->exit_info, EX_CLOSED))
     return;
+
+  if (!room->dir_option[dir]->keyword) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "CONTENT ERROR: Unable to damage %s door from %ld due to missing keyword.", dirs[dir], GET_ROOM_VNUM(room));
+    return;
+  }
 
   int rating, half, rev, ok = 0;
   struct room_data *opposite = room->dir_option[dir]->to_room;
@@ -5690,7 +5695,7 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
     }
 
     if (!can_perform_aggressive_action(ch, vict, "range_combat", TRUE))
-        return;
+      return;
 
     SHOOTING_DIR(ch) = dir;
 
@@ -5733,10 +5738,11 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
             ranged_response(ch, vict);
           }
         }
-        return;
-      } else
+      } else {
         send_to_char("*Click*\r\n", ch);
+      }
       WAIT_STATE(ch, 2 * PULSE_VIOLENCE);
+      return;
     } else {
       if (!has_ammo(ch, weapon))
         return;
