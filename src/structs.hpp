@@ -223,6 +223,7 @@ struct room_direction_data
   byte barrier;                /* barrier rating                       */
   byte condition;      // current barrier rating
   vnum_t to_room_vnum;       /* the vnum of the room. Used for OLC   */
+  time_t last_player_interaction;
 
   const char *go_into_secondperson;
   const char *go_into_thirdperson;
@@ -234,8 +235,8 @@ struct room_direction_data
   room_direction_data() :
       general_description(NULL), keyword(NULL), exit_info(0), key(0), to_room(NULL),
       key_level(0), ward(0), idnum(0), hidden(0), material(0), barrier(0), condition(0),
-      to_room_vnum(NOWHERE), go_into_secondperson(NULL), go_into_thirdperson(NULL),
-      come_out_of_thirdperson(NULL)
+      to_room_vnum(NOWHERE), last_player_interaction(0), go_into_secondperson(NULL),
+      go_into_thirdperson(NULL), come_out_of_thirdperson(NULL)
   {
     #ifdef USE_DEBUG_CANARIES
       canary = CANARY_VALUE;
