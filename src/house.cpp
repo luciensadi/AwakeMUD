@@ -397,10 +397,12 @@ void Storage_save(const char *file_name, struct room_data *room) {
         continue;
       }
     } else {
-      log_vfprintf("Discarding house item %s (%ld) from %s because it is !RENT. [house_error_grep_string]",
-                   GET_OBJ_NAME(obj),
-                   GET_OBJ_VNUM(obj),
-                   file_name);
+      if (GET_OBJ_TYPE(obj) != ITEM_FOOD && GET_OBJ_TYPE(obj) != ITEM_DRINKCON) {
+        log_vfprintf("Discarding house item %s (%ld) from %s because it is !RENT. [house_error_grep_string]",
+                    GET_OBJ_NAME(obj),
+                    GET_OBJ_VNUM(obj),
+                    file_name);
+      }
     }
 
     if (obj->next_content) {
