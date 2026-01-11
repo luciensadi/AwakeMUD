@@ -1314,10 +1314,27 @@ void do_stat_room(struct char_data * ch)
         strlcpy(buf1, " ^cNONE^n", sizeof(buf1));
       else
         snprintf(buf1, sizeof(buf1), "^c%8ld^n", rm->dir_option[i]->to_room->number);
+
+      char last_opened_string[100] = {0};
+      if (rm->dir_option[i]->last_player_interaction) {
+        time_t last_opened = time(0) - rm->dir_option[i]->last_player_interaction;
+        if (last_opened > 9999) {
+          strlcpy(last_opened_string, "a bit", sizeof(last_opened_string));
+        } else {
+          snprintf(last_opened_string, sizeof(last_opened_string), "%4lds", last_opened);
+        }
+      } else {
+        strlcpy(last_opened_string, "never", sizeof(last_opened_string));
+      }
+
       sprintbit(rm->dir_option[i]->exit_info, exit_bits, buf2, sizeof(buf2));
-      snprintf(buf, sizeof(buf), "Exit ^c%-5s^n:  To: [^c%s^n], Key: [^c%8ld^n], Keyword: "
-              "^c%s^n, Type: ^c%s^n\r\n ", dirs[i], buf1, rm->dir_option[i]->key,
-              rm->dir_option[i]->keyword ? rm->dir_option[i]->keyword : "None", buf2);
+      snprintf(buf, sizeof(buf), "Exit ^c%-5s^n:  To: [^c%s^n], Key: [^c%8ld^n], Last: [^c%s^n], Keyword: ^c%s^n, Type: ^c%s^n\r\n ",
+              dirs[i],
+              buf1,
+              rm->dir_option[i]->key,
+              last_opened_string,
+              rm->dir_option[i]->keyword ? rm->dir_option[i]->keyword : "None",
+              buf2);
       send_to_char(buf, ch);
       if (rm->dir_option[i]->general_description)
         strlcpy(buf, rm->dir_option[i]->general_description, sizeof(buf));

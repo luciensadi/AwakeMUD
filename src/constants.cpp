@@ -746,6 +746,7 @@ struct preference_bit_struct preference_bits_v2[] = {
   { "No Prompt Change Message", FALSE, TRUE  },
   { "Passive Combat"       , FALSE, TRUE  },
   { "Auto Ready"           , FALSE, TRUE  },
+  { "No Roundtime"         , FALSE, TRUE  },
   { "\n"                   , 0    , 0     }
 };
 
@@ -825,6 +826,7 @@ const char *preference_bits[] =
     "!PROMPT_CHANGE_MSG",
     "PASSIVE_COMBAT",
     "AUTOREADY",
+    "!ROUNDTIME",
     MAX_FLAG_MARKER
   };
 
