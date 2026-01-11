@@ -36,6 +36,7 @@ extern int get_weapon_damage_type(struct obj_data* weapon);
 extern bool damage(struct char_data *ch, struct char_data *victim, int dam, int attacktype, bool is_physical);
 extern bool damage_without_message(struct char_data *ch, struct char_data *victim, int dam, int attacktype, bool is_physical);
 extern bool weapon_has_usable_bipod_or_tripod(struct char_data *ch, struct obj_data *gun, bool is_using_gyromount=FALSE);
+extern void damage_door(struct char_data *ch, struct room_data *room, int dir, int power, int type);
 
 void engage_close_combat_if_appropriate(struct combat_data *att, struct combat_data *def, int net_reach);
 
@@ -44,6 +45,7 @@ bool handle_flame_aura(struct combat_data *att, struct combat_data *def);
 bool does_weapon_have_bayonet(struct obj_data *weapon);
 bool perform_nerve_strike(struct combat_data *att, struct combat_data *def, char *rbuf, size_t rbuf_len);
 void remove_riot_shield_bonuses(struct combat_data *wearer, struct combat_data *other);
+bool _return_true_if_exit_can_be_shot_through_also_attempt_to_break_door_if_not(struct room_data *room, int dir, struct combat_data *att, bool *hit_door);
 
 #define SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER {act( rbuf, 1, att->ch, NULL, NULL, TO_ROLLS ); if (att->ch->in_room != def->ch->in_room && !PLR_FLAGGED(att->ch, PLR_REMOTE)) act( rbuf, 1, def->ch, NULL, NULL, TO_ROLLS );}
 
@@ -315,32 +317,50 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
 
     // Setup: Determine distance penalties.
     if (!att->veh && att->ch->in_room != def->ch->in_room) {
-      struct char_data *vict;
       bool vict_found = FALSE;
-      struct room_data *room = NULL, *nextroom = NULL;
 
-      int weapon_range;
       if (att->weapon && IS_RANGED(att->weapon)) {
-        weapon_range = MIN(find_sight(att->ch), find_weapon_range(att->ch, att->weapon));
+        int weapon_range = MIN(find_sight(att->ch), find_weapon_range(att->ch, att->weapon));
+        // Scan through all directions around the attacker.
         for (int dir = 0; dir < NUM_OF_DIRS && !vict_found; dir++) {
-          room = att->ch->in_room;
-          if (CAN_GO2(room, dir) && !IS_SET(EXIT2(room, dir)->exit_info, EX_CANT_SHOOT_THROUGH))
-            nextroom = EXIT2(room, dir)->to_room;
-          else
-            nextroom = NULL;
-          for (int distance = 1; nextroom && (distance <= weapon_range) && !vict_found; distance++) {
-            for (vict = nextroom->people; vict; vict = vict->next_in_room) {
+          struct room_data *room = att->ch->in_room;
+          struct room_data *nextroom = NULL;
+          bool hit_door = false;
+
+          if (!_return_true_if_exit_can_be_shot_through_also_attempt_to_break_door_if_not(room, dir, att, &hit_door)) {
+            // If we hit the door, bail out.
+            if (hit_door)
+              return false;
+
+            continue;
+          }
+
+          // Valid, set our nextroom.
+          nextroom = EXIT2(room, dir)->to_room;
+
+          for (int distance = 1; nextroom && distance <= weapon_range; distance++) {
+            for (struct char_data *vict = nextroom->people; vict; vict = vict->next_in_room) {
               if (vict == def->ch) {
                 att->ranged->modifiers[COMBAT_MOD_DISTANCE] += 2 * distance;
                 vict_found = TRUE;
                 break;
               }
             }
+
+            if (vict_found)
+              break;
+
+            // We can shoot no further, break out of this so we can cycle to the next direction.
+            if (!_return_true_if_exit_can_be_shot_through_also_attempt_to_break_door_if_not(nextroom, dir, att, &hit_door)) {
+              // If we hit the door, bail out.
+              if (hit_door)
+                return false;
+
+              break;
+            }
+
             room = nextroom;
-            if (CAN_GO2(room, dir) && !IS_SET(EXIT2(room, dir)->exit_info, EX_CANT_SHOOT_THROUGH))
-              nextroom = EXIT2(room, dir)->to_room;
-            else
-              nextroom = NULL;
+            nextroom = EXIT2(room, dir)->to_room;
           }
         }
       }
@@ -1598,3 +1618,27 @@ void remove_riot_shield_bonuses(struct combat_data *wearer, struct combat_data *
 }
 
 #undef SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER
+
+bool _return_true_if_exit_can_be_shot_through_also_attempt_to_break_door_if_not(struct room_data *room, int dir, struct combat_data *att, bool *hit_door) {
+  // Skip exits that don't exist or don't go to valid rooms.
+  if (!EXIT2(room, dir) || !EXIT2(room, dir)->to_room || EXIT2(room, dir)->to_room == &world[0])
+    return false;
+
+  // Don't try shooting through exits that are unshootable.
+  if (IS_SET(EXIT2(room, dir)->exit_info, EX_CANT_SHOOT_THROUGH))
+    return false;
+
+  // If the exit is closed:
+  if (IS_SET(EXIT2(room, dir)->exit_info, EX_CLOSED)) {
+    // NPCs will keep shooting for at least a few rounds, IFF the door was recently closed by a player.
+    if (!att->ch->desc && EXIT2(room, dir)->last_player_interaction + 60 >= time(0)) {
+      // Hit the door directly. Since this is an anti-cheese mechanism, we don't halve the weapon's power.
+      *hit_door = true;
+      damage_door(att->ch, room, dir, GET_WEAPON_POWER(att->weapon), DAMOBJ_PROJECTILE);
+    }
+    // Can't shoot through into the next room regardless.
+    return false;
+  }
+
+  return true;
+}
