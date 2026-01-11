@@ -1631,7 +1631,7 @@ bool _return_true_if_exit_can_be_shot_through_also_attempt_to_break_door_if_not(
   // If the exit is closed:
   if (IS_SET(EXIT2(room, dir)->exit_info, EX_CLOSED)) {
     // NPCs will keep shooting for at least a few rounds, IFF the door was recently closed by a player.
-    if (!att->ch->desc && EXIT2(room, dir)->last_player_interaction + 60 >= time(0)) {
+    if (!att->ch->desc && EXIT2(room, dir)->last_player_interaction + 10 >= time(0)) {
       // Hit the door directly. Since this is an anti-cheese mechanism, we don't halve the weapon's power.
       *hit_door = true;
       damage_door(att->ch, room, dir, GET_WEAPON_POWER(att->weapon), DAMOBJ_PROJECTILE);

@@ -2078,9 +2078,12 @@ void damage_door(struct char_data *ch, struct room_data *room, int dir, int powe
 
   if (ch && IS_SET(type, DAMOBJ_CRUSH) && GET_TRADITION(ch) == TRAD_ADEPT && GET_POWER(ch, ADEPT_SMASHING_BLOW))
     power += MAX(0, success_test(GET_SKILL(ch, SKILL_UNARMED_COMBAT), 4));
-  if (IS_GUN(type))
+  if (IS_GUN(type)) {
+    if (ch->in_room != room) {
+      act("$n fires into the distance!", FALSE, ch, 0, 0, TO_ROOM);
+    }
     snprintf(buf, sizeof(buf), "You hear gunshots and the sound of bullets impacting the %s.\r\n", fname(room->dir_option[dir]->keyword));
-  else
+  } else
     snprintf(buf, sizeof(buf), "Someone bashes on the %s from the other side.\r\n", fname(room->dir_option[dir]->keyword));
   send_to_room(buf, opposite);
 
