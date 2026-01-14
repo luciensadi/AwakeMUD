@@ -1743,7 +1743,7 @@ void weapon_scatter(struct char_data *ch, struct char_data *victim, struct obj_d
       }
 
       // If you're not already fighting someone else, that's a great reason to get into combat, don't you think?
-      if (!FIGHTING(vict))
+      if (!FIGHTING(vict) && GET_POS(vict) > POS_STUNNED)
         ranged_response(ch, vict);
       return;
     }
@@ -3550,6 +3550,7 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
       case TYPE_POISON:
       case TYPE_MANABOLT_OR_STUNBOLT:
       case TYPE_FOCUS_OVERUSE:
+      case TYPE_PENANCE:
         // These types do not risk equipment damage.
         break;
       default:
@@ -4288,7 +4289,7 @@ void combat_message_process_single_ranged_response(struct char_data *ch, struct 
       return;
 
     // Guards and helpers will actively try to fire on a player using a gun.
-    if (!IS_NPC(ch) && (!FIGHTING(ch) || IS_NPC(FIGHTING(ch)))) {
+    if (!IS_NPC(ch) && (!FIGHTING(ch) || IS_NPC(FIGHTING(ch))) && GET_POS(ch) > POS_STUNNED) {
       if (number(0, 6) >= 2) {
         set_mob_alarm(tch, ch, 30);
         struct room_data *was_in = tch->in_room;
@@ -4340,7 +4341,7 @@ void combat_message_process_single_ranged_response(struct char_data *ch, struct 
         // Line of sight established, fire.
         set_mob_alarm(tch, FIGHTING(ch), 30);
         struct room_data *was_in = tch->in_room;
-        if (ranged_response(FIGHTING(ch), tch) && tch->in_room == was_in) {
+        if (GET_POS(tch) > POS_STUNNED && ranged_response(FIGHTING(ch), tch) && tch->in_room == was_in) {
           act("$n aims $s weapon at a distant threat!",
               FALSE, tch, 0, FIGHTING(ch), TO_ROOM);
           send_mob_aggression_warnings(FIGHTING(ch), tch);
@@ -5375,7 +5376,7 @@ void explode_flashbang_grenade(struct char_data *ch, struct obj_data *weapon, st
     // They successfully resisted? Bail out.
     if (successes > 0) {
       // We have to do the ranged response here since we won't get a chance later.
-      if (IS_NPC(victim))
+      if (IS_NPC(victim) && GET_POS(victim) > POS_STUNNED)
         ranged_response(ch, victim);
       continue;
     }
@@ -5428,7 +5429,7 @@ void explode_flashbang_grenade(struct char_data *ch, struct obj_data *weapon, st
     }
 
     // Have the NPC fire back.
-    if (IS_NPC(victim))
+    if (IS_NPC(victim) && GET_POS(victim) > POS_STUNNED)
       ranged_response(ch, victim);
   }
 
@@ -5574,7 +5575,7 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
         if (!IS_NPC(vict))
           continue;
 
-        if (CAN_SEE(vict, ch)) {
+        if (CAN_SEE(vict, ch) && GET_POS(vict) > POS_STUNNED) {
           ranged_response(ch, vict);
         } else {
           set_mob_alert(vict, 30);
@@ -5736,7 +5737,7 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
           struct obj_data *ch_weap = (GET_EQ(ch, WEAR_WIELD) ? GET_EQ(ch, WEAR_WIELD) : GET_EQ(ch, WEAR_HOLD));
           struct obj_data *vict_weap = (GET_EQ(vict, WEAR_WIELD) ? GET_EQ(vict, WEAR_WIELD) : GET_EQ(vict, WEAR_HOLD));
 
-          if (!hit(ch, vict, ch_weap, vict_weap, NULL)) {
+          if (!hit(ch, vict, ch_weap, vict_weap, NULL) && GET_POS(vict) > POS_STUNNED) {
             // Only do ranged_response if the victim survived the hit.
             ranged_response(ch, vict);
           }

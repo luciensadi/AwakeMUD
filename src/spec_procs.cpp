@@ -8173,6 +8173,11 @@ SPECIAL(penance)
       return TRUE;
     }
 
+    if (ROOM_IS_PEACEFUL(get_ch_in_room(to))) {
+      send_to_char(ch, "It's just so peaceful here...\r\n");
+      return TRUE;
+    }
+
     // No PK.
     if (to->desc || !IS_NPC(to)) {
       act("Penance strains eagerly in your hand as you point it at $N, but a snare of ^Rred^n light traps it in your hand. Seems it can't be used on $M.", FALSE, ch, obj, to, TO_CHAR);

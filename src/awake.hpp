@@ -1259,6 +1259,7 @@ enum {
 #define TYPE_POISON           417
 #define TYPE_FOCUS_OVERUSE    418
 #define TYPE_PENANCE          419
+// Adding a new one? Put it in raw_damage()'s equipment damage check.
 
 /* magic attack types */
 #define TYPE_MANABOLT_OR_STUNBOLT       500
