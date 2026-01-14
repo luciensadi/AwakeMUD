@@ -87,7 +87,10 @@ void pedit_parse(struct descriptor_data *d, const char *arg)
     case '3':
       if (!GET_DESIGN_PROGRAM(d->edit_obj))
         send_to_char("Choose a program type first!\r\n", CH);
-      else {
+      else if (GET_DESIGN_PROGRAM(d->edit_obj) == SOFT_EVALUATE && !GET_SKILL(CH, SKILL_DATA_BROKERAGE)) {
+        send_to_char("You need to know Data Brokerage to create Evaluate programs.\r\n", CH);
+        GET_DESIGN_PROGRAM(d->edit_obj) = 0;
+      } else {
         send_to_char("Enter Rating: ", CH);
         d->edit_mode = PEDIT_RATING;
       }
@@ -187,7 +190,9 @@ void pedit_parse(struct descriptor_data *d, const char *arg)
   case PEDIT_TYPE:
     if (number < 1 || number >= NUM_PROGRAMS)
       send_to_char(CH, "Not a valid option!\r\nEnter your choice: ");
-    else {
+    else if (number == SOFT_EVALUATE && !GET_SKILL(CH, SKILL_DATA_BROKERAGE)) {
+      send_to_char("You need to know Data Brokerage to create Evaluate programs.\r\nEnter your choice: ", CH);
+    } else {
       GET_DESIGN_PROGRAM(d->edit_obj) = number;
       GET_DESIGN_RATING(d->edit_obj) = 1;
 
