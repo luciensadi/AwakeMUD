@@ -1607,6 +1607,16 @@ void list_one_char(struct char_data * i, struct char_data * ch)
   if (PLR_FLAGGED(i, PLR_PROJECT))
     strlcat(buf, " (projecting)", sizeof(buf));
 
+#define DEFPOS_OVERRIDDEN(ch) ( \
+  GET_QUI((ch)) <= 0 \
+  || GET_POS((ch)) == POS_FIGHTING \
+  || PLR_FLAGS((ch)).AreAnySet(PLR_MATRIX, PLR_REMOTE, ENDBIT) \
+  || AFF_FLAGS((ch)).AreAnySet(AFF_BONDING, AFF_CIRCLE, AFF_COMPLEX_FORM_PROGRAM, AFF_CONJURE, AFF_DESIGN, AFF_LODGE, \
+                               AFF_PACKING, AFF_PART_BUILD, AFF_PART_DESIGN, AFF_PILOT, AFF_PROGRAM, AFF_PRONE, AFF_SPELLDESIGN, \
+                               ENDBIT) \
+)
+
+  // If you add anything below this line, update the DEFPOS_OVERRIDDEN macro above.
   if (GET_QUI(i) <= 0) {
     strlcat(buf, " is here, seemingly paralyzed.", sizeof(buf));
   } else if (GET_POS(i) == POS_FIGHTING) {
@@ -1694,7 +1704,7 @@ void list_one_char(struct char_data * i, struct char_data * ch)
       strlcat(buf, " is sitting in the drivers seat.", sizeof(buf));
   } else if ((obj = get_mount_manned_by_ch(i))) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " is manning %s.", GET_OBJ_NAME(obj));
-  } else if (IS_AFFECTED(i, AFF_LEVITATE)) {
+  } else if (!GET_DEFPOS(i) && IS_AFFECTED(i, AFF_LEVITATE)) {
     strlcat(buf, " is here, hovering above the ground.", sizeof(buf));
   } else {
     if (GET_DEFPOS(i))
@@ -1703,6 +1713,7 @@ void list_one_char(struct char_data * i, struct char_data * ch)
       snprintf(buf2, sizeof(buf2), " %s^n.", positions[(int) GET_POS(i)]);
     strlcat(buf, buf2, sizeof(buf));
   }
+  // If you add anything above this line, update the DEFPOS_OVERRIDDEN macro above.
 
   strlcat(buf, "\r\n", sizeof(buf));
 
@@ -7301,28 +7312,34 @@ ACMD(do_position)
     } else {
       list_one_char(ch, ch);
     }
+
+    if (veh ? ((bool) GET_VEH_DEFPOS(veh)) : ((bool) (GET_DEFPOS(ch) && !DEFPOS_OVERRIDDEN(ch)))) {
+      send_to_char(ch, "^L(Use POSITION CLEAR to unset it)^n\r\n");
+    }
     return;
   }
 
   if (is_abbrev(argument, "clear")) {
     if (veh) {
-      DELETE_ARRAY_IF_EXTANT(GET_VEH_DEFPOS(veh));
+      if (!GET_VEH_DEFPOS(veh)) {
+        send_to_char(ch, "You don't have a vehicle position string set.\r\n");
+      } else {
+        DELETE_ARRAY_IF_EXTANT(GET_VEH_DEFPOS(veh));
+        send_to_char("Vehicle position cleared.\r\n", ch);
+      }
     } else {
-      DELETE_ARRAY_IF_EXTANT(GET_DEFPOS(ch));
+      if (!GET_DEFPOS(ch)) {
+        send_to_char(ch, "You don't have a custom position string set.\r\n");
+      } else {
+        DELETE_ARRAY_IF_EXTANT(GET_DEFPOS(ch));
+        send_to_char("Custom position cleared.\r\n", ch);
+      }
     }
-    send_to_char("Position cleared.\r\n", ch);
     return;
   }
 
-  if (GET_POS(ch) == POS_FIGHTING) {
-    send_to_char("You can't set your position while fighting.\r\n", ch);
-    return;
-  }
-
-  if (veh && veh->cspeed > SPEED_IDLE) {
-    send_to_char("You can only set a vehicle's position while it's idle.\r\n", ch);
-    return;
-  }
+  FAILURE_CASE(GET_POS(ch) == POS_FIGHTING, "You can't set your position while fighting.");
+  FAILURE_CASE(veh && veh->cspeed > SPEED_IDLE, "You can only set a vehicle's position while it's idle.");
 
   // Auto-punctuate it.
   if (!ispunct(get_final_character_from_string(get_string_after_color_code_removal(argument, ch)))) {
@@ -7334,6 +7351,10 @@ ACMD(do_position)
     GET_VEH_DEFPOS(veh) = str_dup(argument);
     send_to_char(ch, "Position set. Your vehicle will appear as '(your vehicle) %s.^n'\r\n", GET_VEH_DEFPOS(veh));
   } else {
+    if (DEFPOS_OVERRIDDEN(ch)) {
+      send_to_char(ch, "Your position is being overridden by a current activity; use POSITION to see what it is. You'll have to stop doing that for your custom position to be visible.\r\n");
+    }
+    
     DELETE_ARRAY_IF_EXTANT(GET_DEFPOS(ch));
     GET_DEFPOS(ch) = str_dup(argument);
     send_to_char(ch, "Position set. You will appear as '(your character) %s^n'\r\n", GET_DEFPOS(ch));
