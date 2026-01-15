@@ -884,6 +884,12 @@ void game_loop(int mother_desc)
       for (d = descriptor_list; d; d = next_d) {
         next_d = d->next;
 
+#ifdef IS_BUILDPORT
+        if (d->wait > 0 && d->character && GET_LEVEL(d->character) == LVL_PRESIDENT && PRF_FLAGGED(d->character, PRF_ROLLS)) {
+          send_to_char(d->character, "^L[wait: %d]\r\n", d->wait);
+        }
+#endif
+
         if ((--(d->wait) <= 0) && get_from_q(&d->input, comm, sizeof(comm), &aliased)) {
           if (d->character) {
             d->character->char_specials.last_timer = d->character->char_specials.timer;

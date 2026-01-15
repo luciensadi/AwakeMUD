@@ -843,20 +843,33 @@ bool _mob_is_alert(struct char_data *npc);
 #define GET_NUYEN_INCOME_THIS_PLAY_SESSION(ch, i)  (ch->desc->nuyen_income_this_play_session[i])
 /* descriptor-based utils ************************************************/
 
-#define WAIT_STATE(ch, cycle) ({                                                            \
-        if ((ch)->desc) {                                                                   \
-          if (GET_LEVEL(ch) <= 1) {                                                         \
-            (ch)->desc->wait = (cycle);                                                     \
-            if (!PRF_FLAGGED((ch), PRF_NOROUNDTIME)) {                                      \
-              send_to_char((ch), "^L(Entering round time of %d ticks)^n\r\n", cycle);       \
-            }                                                                               \
-          } else {                                                                          \
-            send_to_char((ch), "^L(Skipping wait state of %d ticks: Staff.)^n\r\n", cycle); \
-          }                                                                                 \
-        } else if (IS_NPC(ch)) {                                                            \
-          GET_MOB_WAIT(ch) = (cycle);                                                       \
-        }                                                                                   \
+#ifndef IS_BUILDPORT
+#define WAIT_STATE(ch, cycle) ({                                                                        \
+        if ((ch)->desc) {                                                                               \
+          if (GET_LEVEL(ch) > 1) {                                                                      \
+            send_to_char((ch), "^L(Skipping wait state of %d ticks: Staff on mainport.)^n\r\n", cycle); \
+          } else {                                                                                      \
+            (ch)->desc->wait = (cycle);                                                                 \
+            if (!PRF_FLAGGED((ch), PRF_NOROUNDTIME)) {                                                  \
+              send_to_char((ch), "^L(Entering round time of %d ticks)^n\r\n", cycle);                   \
+            }                                                                                           \
+          }                                                                                             \
+        } else if (IS_NPC(ch)) {                                                                        \
+          GET_MOB_WAIT(ch) = (cycle);                                                                   \
+        }                                                                                               \
       })
+#else
+#define WAIT_STATE(ch, cycle) ({                                                                        \
+        if ((ch)->desc) {                                                                               \
+          (ch)->desc->wait = (cycle);                                                                   \
+          if (!PRF_FLAGGED((ch), PRF_NOROUNDTIME)) {                                                    \
+            send_to_char((ch), "^L(Entering round time of %d ticks)^n\r\n", cycle);                     \
+          }                                                                                             \
+        } else if (IS_NPC(ch)) {                                                                        \
+          GET_MOB_WAIT(ch) = (cycle);                                                                   \
+        }                                                                                               \
+      })
+#endif
 
 #define CHECK_WAIT(ch)        (((ch)->desc) ? ((ch)->desc->wait >= 1) : 0)
 #define STATE(d)                    ((d)->connected)

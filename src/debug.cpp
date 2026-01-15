@@ -220,6 +220,15 @@ ACMD(do_debug) {
     return;
   }
 
+  if (!str_cmp(arg1, "waitstate")) {
+    int result = atoi(rest_of_argument);
+    FAILURE_CASE(result <= 0, "Must supply a valid integer.");
+    FAILURE_CASE(result > 200, "Max 200, more would suck.");
+    send_to_char(ch, "OK, forcibly setting your waitstate to %d. Enjoy...\r\n", result);
+    ch->desc->wait = result;
+    return;
+  }
+
   if (!str_cmp(arg1, "pointers")) {
     send_to_char(ch, "OK, validating every pointer we can think of.\r\n");
     verify_every_pointer_we_can_think_of();
