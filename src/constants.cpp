@@ -1241,7 +1241,7 @@ const char *wear_bits[] =
   /* ITEM_WEAR_ (wear bitvector) */
 const char *wear_bits_for_pc_exdescs[] =
 {
-  "<invalid/take>",
+  "<Always Visible>",
   "fingers",
   "neck",
   "<invalid/body>",

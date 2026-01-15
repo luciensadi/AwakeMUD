@@ -252,6 +252,10 @@ bool can_see_exdesc(struct char_data *viewer, struct char_data *vict, PCExDesc *
   if (viewer && IS_SENATOR(viewer) && !without_staff_override)
     return TRUE;
 
+  // WEAR_TAKE is an override for always visible.
+  if (exdesc->get_wear_slots()->IsSet(ITEM_WEAR_TAKE))
+    return TRUE;
+
   Bitfield comparison_field;
   comparison_field.SetAll(*(exdesc->get_wear_slots()));
   comparison_field.RemoveAll(GET_CHAR_COVERED_WEARLOCS(vict));
@@ -585,7 +589,11 @@ void _pc_exdesc_edit_olc_menu(struct descriptor_data *d) {
   send_to_char(CH, "3) Desc:%s%s^n\r\n", 
                    d->edit_exdesc->get_desc() ? "\r\n" : "    <not set>",
                    d->edit_exdesc->get_desc() ? d->edit_exdesc->get_desc() : "");
-  send_to_char(CH, "4) Visible if any of these are uncovered: ^c%s\r\n", exdesc_wearslot_string);
+  if (d->edit_exdesc->get_wear_slots()->IsSet(ITEM_WEAR_TAKE)) {
+    send_to_char(CH, "4) Always visible\r\n");
+  } else {
+    send_to_char(CH, "4) Visible if any of these are uncovered: ^c%s\r\n", exdesc_wearslot_string);
+  }
   send_to_char(CH, "\r\n");
   send_to_char(CH, "q) Save and quit\r\n");
   send_to_char(CH, "x) Exit without saving\r\n");
@@ -668,12 +676,17 @@ void _pc_exdesc_edit_wear_menu(struct descriptor_data *d) {
   send_to_char("Extra descriptions can be put on the following locations:\r\n", CH);
 
   for (auto itr : wear_flag_map_for_exdescs) {
-    send_to_char(CH, "%2d) ^c%-9s^n\r\n", counter++, itr.first.c_str());
+    send_to_char(CH, "%2d) ^c%-9s^n\r\n", counter++, itr.second == ITEM_WEAR_TAKE ? "Always visible" : itr.first.c_str());
   }
 
   char exdesc_wear_bits[1000];
   d->edit_exdesc->get_wear_slots()->PrintBits(exdesc_wear_bits, sizeof(exdesc_wear_bits), wear_bits, ITEM_WEAR_MAX);
-  send_to_char(CH, "This desc is visible on: ^c%s^n\r\nSelect a wear location to toggle, or enter 'q' to quit:", exdesc_wear_bits);
+
+  if (d->edit_exdesc->get_wear_slots()->IsSet(ITEM_WEAR_TAKE)) {
+    send_to_char(CH, "This desc is always visible. Please use common sense when flagging something this way.\r\nSelect a wear location to toggle, or enter 'q' to quit:");
+  } else {
+    send_to_char(CH, "This desc is visible if any of the following are revealed: ^c%s^n\r\nSelect a wear location to toggle, or enter 'q' to quit:", exdesc_wear_bits);
+  }
 
   d->edit_mode = PC_EXDESC_EDIT_OLC_WEAR_MENU;
 }

@@ -8021,9 +8021,9 @@ void initialize_and_alphabetize_mob_flags() {
 
 std::map<std::string, int> wear_flag_map_for_exdescs = {};
 void initialize_and_alphabetize_wear_flags_for_exdescs() {
-  for (int idx = 0; idx < ITEM_WEAR_MAX; idx++) {
+  int idx = 0;
+  for (; idx < ITEM_WEAR_MAX; idx++) {
     switch(idx) {
-      case ITEM_WEAR_TAKE:
       case ITEM_WEAR_BODY:
       case ITEM_WEAR_SHIELD:
       case ITEM_WEAR_ABOUT:
