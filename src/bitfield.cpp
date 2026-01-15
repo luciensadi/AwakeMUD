@@ -11,6 +11,9 @@
 #include "structs.hpp"
 #include "utils.hpp"
 
+// Explicitly inclusive of ENDBIT, that's a valid offset.
+#define OFFSET_IS_VALID(offset) (offset >= 0 && offset <= ENDBIT)
+
 // ______________________________
 //
 // static vars
@@ -99,6 +102,11 @@ bool Bitfield::AreAnySet(dword one, ...) const
   if (one == ENDBIT)
     return false;
 
+  if (!OFFSET_IS_VALID(one)) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Got invalid initial offset bit %d to Bitfield::AreAnySet().", one);
+    return false;
+  }
+
   if (IsSet(one))
     return true;
 
@@ -107,7 +115,11 @@ bool Bitfield::AreAnySet(dword one, ...) const
   while (true) {
     offset = va_arg(arg_list, dword);
 
-    if (offset == ENDBIT) {
+    if (!OFFSET_IS_VALID(offset)) {
+      mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Got invalid initial offset bit %d to Bitfield::AreAnySet().", offset);
+      va_end(arg_list);
+      return false;
+    } else if (offset == ENDBIT) {
       va_end(arg_list);
       return false;
     } else if (IsSet(offset)) {
@@ -194,6 +206,11 @@ void Bitfield::SetBits(dword one, ...)
   va_list arg_list;
   dword offset;
 
+  if (!OFFSET_IS_VALID(one)) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Got invalid initial offset bit %d to Bitfield::SetBits().", one);
+    return;
+  }
+
   if (one == ENDBIT)
     return;
 
@@ -204,10 +221,16 @@ void Bitfield::SetBits(dword one, ...)
   while (true) {
     offset = va_arg(arg_list, dword);
 
-    if (offset != ENDBIT)
-      SetBit(offset);
-    else
+    if (!OFFSET_IS_VALID(offset)) {
+      mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Got invalid offset bit %d to Bitfield::AreAnySet().", offset);
       break;
+    }
+    else if (offset == ENDBIT) {
+      break;
+    }
+    else {
+      SetBit(offset);
+    }
   }
 
   va_end(arg_list);
@@ -232,8 +255,14 @@ void Bitfield::RemoveBits(dword one, ...)
   va_list arg_list;
   dword offset;
 
-  if (one == ENDBIT)
+  if (one == ENDBIT) {
     return;
+  }
+
+  if (!OFFSET_IS_VALID(one)) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Got invalid initial offset bit %d to Bitfield::RemoveBits().", one);
+    return;
+  }
 
   RemoveBit(one);
 
@@ -242,10 +271,14 @@ void Bitfield::RemoveBits(dword one, ...)
   while (true) {
     offset = va_arg(arg_list, dword);
 
-    if (offset != ENDBIT)
-      RemoveBit(offset);
-    else
+    if (!OFFSET_IS_VALID(offset)) {
+      mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Got invalid offset bit %d to Bitfield::SetBits().", offset);
       break;
+    } else if (offset == ENDBIT) {
+      break;
+    } else {
+      RemoveBit(offset);
+    }
   }
 
   va_end(arg_list);
@@ -270,6 +303,11 @@ void Bitfield::ToggleBits(dword one, ...)
   va_list arg_list;
   dword offset;
 
+  if (!OFFSET_IS_VALID(one)) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Got invalid initial offset bit %d to Bitfield::ToggleBits().", one);
+    return;
+  }
+
   if (one == ENDBIT)
     return;
 
@@ -280,10 +318,14 @@ void Bitfield::ToggleBits(dword one, ...)
   while (true) {
     offset = va_arg(arg_list, dword);
 
-    if (offset != ENDBIT)
-      ToggleBit(offset);
-    else
+    if (!OFFSET_IS_VALID(offset)) {
+      mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Got invalid offset bit %d to Bitfield::ToggleBits().", offset);
       break;
+    } else if (offset == ENDBIT) {
+      break;
+    } else {
+      ToggleBit(offset);
+    }
   }
 
   va_end(arg_list);
