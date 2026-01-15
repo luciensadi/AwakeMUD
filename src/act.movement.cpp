@@ -1382,8 +1382,13 @@ void do_doorcmd(struct char_data *ch, struct obj_data *obj, int door, int scmd, 
       else
         send_to_char(ch, "You %s the %s to %s.\r\n", scmd == SCMD_OPEN ? "open" : "close", GET_DOOR_NAME(ch, door), thedirs[door]);
     }
-    // Update last open/close interaction time.
-    EXIT2(other_room, rev_dir[door])->last_player_interaction = EXIT2(ch->in_room, door)->last_player_interaction = time(0);
+    if (!obj) {
+      // Update last open/close interaction time.
+      if (other_room)
+        EXIT2(other_room, rev_dir[door])->last_player_interaction = time(0);
+      if (ch->in_room)
+        EXIT2(ch->in_room, door)->last_player_interaction = time(0);
+    }
     break;
   case SCMD_UNLOCK:
   case SCMD_LOCK:
