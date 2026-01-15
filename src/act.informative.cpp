@@ -1611,7 +1611,7 @@ void list_one_char(struct char_data * i, struct char_data * ch)
   GET_QUI((ch)) <= 0 \
   || GET_POS((ch)) == POS_FIGHTING \
   || PLR_FLAGS((ch)).AreAnySet(PLR_MATRIX, PLR_REMOTE, ENDBIT) \
-  || AFF_FLAGS((ch)).AreAnySet(AFF_BONDING, AFF_CIRCLE, AFF_COMPLEX_FORM_PROGRAM, AFF_CONJURE, AFF_DESIGN, AFF_LODGE, \
+  || AFF_FLAGS((ch)).AreAnySet(AFF_AMMOBUILD, AFF_BONDING, AFF_CIRCLE, AFF_COMPLEX_FORM_PROGRAM, AFF_CONJURE, AFF_DESIGN, AFF_LODGE, \
                                AFF_PACKING, AFF_PART_BUILD, AFF_PART_DESIGN, AFF_PILOT, AFF_PROGRAM, AFF_PRONE, AFF_SPELLDESIGN, \
                                ENDBIT) \
 )
@@ -1669,6 +1669,8 @@ void list_one_char(struct char_data * i, struct char_data * ch)
     strlcat(buf, " is here, working on a workshop.", sizeof(buf));
   else if (AFF_FLAGGED(i, AFF_BONDING))
     strlcat(buf, " is here, performing a bonding ritual.", sizeof(buf));
+  else if (AFF_FLAGGED(i, AFF_AMMOBUILD))
+    strlcat(buf, " is here, assembling ammunition.", sizeof(buf));
   else if (AFF_FLAGGED(i, AFF_PRONE)) {
     struct obj_data *wielded = GET_EQ(i, WEAR_WIELD);
     bool is_using_bipod_or_tripod = FALSE;
