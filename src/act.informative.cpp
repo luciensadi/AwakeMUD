@@ -7353,9 +7353,7 @@ ACMD(do_position)
     GET_VEH_DEFPOS(veh) = str_dup(argument);
     send_to_char(ch, "Position set. Your vehicle will appear as '(your vehicle) %s.^n'\r\n", GET_VEH_DEFPOS(veh));
   } else {
-    if (DEFPOS_OVERRIDDEN(ch)) {
-      send_to_char(ch, "Your position is being overridden by a current activity; use POSITION to see what it is. You'll have to stop doing that for your custom position to be visible.\r\n");
-    }
+    FAILURE_CASE(DEFPOS_OVERRIDDEN(ch), "Your position is being overridden by a current activity; use POSITION to see what it is. You'll have to stop doing that for your custom position to be visible.");
     
     DELETE_ARRAY_IF_EXTANT(GET_DEFPOS(ch));
     GET_DEFPOS(ch) = str_dup(argument);
