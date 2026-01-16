@@ -2837,13 +2837,10 @@ void extract_obj(struct obj_data * obj, bool dont_warn_on_kept_items)
       extract_obj(obj->contains, dont_warn_on_kept_items);
   }
 
-  if (!ObjList.Remove(obj))
-    log_vfprintf("ObjList.Remove returned FALSE!  (%ld)", GET_OBJ_VNUM(obj));
-
   if (GET_OBJ_RNUM(obj) >= 0)
     (obj_index[GET_OBJ_RNUM(obj)].number)--;
 
-  Mem->DeleteObject(obj);
+  Mem->DeleteObject(obj, "extract_obj");
 
 #ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
   verify_every_pointer_we_can_think_of();

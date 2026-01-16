@@ -91,6 +91,9 @@
 #define OTAKU_PATH_NORMIE     0
 #define OTAKU_PATH_CYBERADEPT 1
 #define OTAKU_PATH_TECHNOSHAM 2
+#define MAX_OTAKU_PATH        2
+
+
 
 /* magical traditions */
 
@@ -2355,6 +2358,7 @@ enum {
 // If you add another state, you need to touch comm.cpp's close_socket and make sure it's reflected there!
 // Also add it to constants's connected_types.
 // And gmcp.cpp's generate_discord_state().
+// Then, if you've added an editing state, you need to review free_editing_structs() and make sure it's reflected PROPERLY there. Pay close attention to things that give characters objects (program creation etc).
 
 /* arbitrary constants used by index_boot() (must be unique) */
 #define DB_BOOT_WLD     0

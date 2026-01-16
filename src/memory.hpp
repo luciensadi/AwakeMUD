@@ -224,7 +224,7 @@ public:
 
   // delete routines which push objects onto the stacks after deallocating
   // all strings and such in the object
-  void DeleteObject(struct obj_data *obj);
+  void DeleteObject(struct obj_data *obj, const char *source);
   void DeleteCh(struct char_data *ch);
   void DeleteRoom(struct room_data *room);
   void DeleteVehicle(struct veh_data *veh);

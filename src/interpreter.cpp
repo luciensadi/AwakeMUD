@@ -2811,36 +2811,7 @@ int perform_dupe_check(struct descriptor_data *d)
       clear_hitcher(d->character, TRUE);
     }
     // now delete all the editing struct
-    if (d->edit_obj)
-      Mem->DeleteObject(d->edit_obj);
-    d->edit_obj = NULL;
-
-    if (d->edit_room)
-      Mem->DeleteRoom(d->edit_room);
-    d->edit_room = NULL;
-
-    if (d->edit_mob)
-      Mem->DeleteCh(d->edit_mob);
-    d->edit_mob = NULL;
-
-    if (d->edit_shop) {
-      free_shop(d->edit_shop);
-      DELETE_AND_NULL(d->edit_shop);
-    }
-
-    if (d->edit_quest) {
-      free_quest(d->edit_quest);
-      DELETE_AND_NULL(d->edit_quest);
-    }
-
-    DELETE_IF_EXTANT(d->edit_zon);
-
-    DELETE_IF_EXTANT(d->edit_cmd);
-
-    if (d->edit_veh)
-      Mem->DeleteVehicle(d->edit_veh);
-    d->edit_veh = NULL;
-
+    free_editing_structs(d, STATE(d));
     break;
   case UNSWITCH:
     SEND_TO_Q("Reconnecting to unswitched char.", d);

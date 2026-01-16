@@ -2456,11 +2456,22 @@ int perform_subst(struct descriptor_data *t, char *orig, char *subst, size_t sub
 void free_editing_structs(descriptor_data *d, int state)
 {
   if (d->edit_obj) {
-    if (d->connected == CON_PART_CREATE || d->connected == CON_AMMO_CREATE || d->connected == CON_SPELL_CREATE
-        || (d->connected >= CON_PRO_CREATE && d->connected <= CON_DECK_CREATE))
+    // You need to add something to this top block IFF you use read_object() to create the editing prototype.
+    if (d->connected == CON_PART_CREATE
+        || d->connected == CON_AMMO_CREATE
+        || d->connected == CON_SPELL_CREATE
+        || d->connected == CON_PRO_CREATE
+        || d->connected == CON_DECK_CREATE
+        || d->connected == CON_ART_CREATE
+        || d->connected == CON_PET_CREATE
+        || d->connected == CON_CF_CREATE)
+    {
       extract_obj(d->edit_obj);
-    else
-      Mem->DeleteObject(d->edit_obj);
+    }
+    // Anything falling through to here MUST have been created with direct memory creation (e.g. Mem->GetObject(), hopefully not 'new') 
+    else {
+      Mem->DeleteObject(d->edit_obj, "comm.cpp's raw editing struct deletion");
+    }
     d->edit_obj = NULL;
   }
 

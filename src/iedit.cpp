@@ -1512,9 +1512,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
         case 'N':
           STATE(d) = CON_PLAYING;
           /* free up the editing object */
-          if (d->edit_obj)
-            Mem->DeleteObject(d->edit_obj);
-          d->edit_obj = NULL;
+          free_editing_structs(d, STATE(d));
           d->edit_number = 0;
           PLR_FLAGS(d->character).RemoveBit(PLR_EDITING);
           break;
@@ -1705,9 +1703,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
           STATE(d) = CON_PLAYING;
           /* free up the editing object. free_obj *is* safe since
            it checks against prototype table */
-          if (d->edit_obj)
-            Mem->DeleteObject(d->edit_obj);
-          d->edit_obj = NULL;
+          free_editing_structs(d, STATE(d));
           d->edit_number = 0;
           PLR_FLAGS(d->character).RemoveBit(PLR_EDITING);
           break;

@@ -6026,6 +6026,7 @@ ACMD(do_set)
                { "highestindex", LVL_ADMIN, BOTH, NUMBER },
                { "strikes", LVL_FIXER, PC, NUMBER },
                { "scrutiny", LVL_ADMIN, PC, BINARY }, // 90
+               { "otakupath", LVL_ADMIN, PC, NUMBER },
                { "\n", 0, BOTH, MISC }
              };
 
@@ -6333,12 +6334,12 @@ ACMD(do_set)
   case 28: // thirst
     if (!str_cmp(val_arg, "off")) {
       GET_COND(vict, (l - 26)) = (char) -1;
-      snprintf(buf, sizeof(buf), "%s's %s now off.", GET_NAME(vict), fields[l].cmd);
+      snprintf(buf, sizeof(buf), "%s's %s now off.", GET_CHAR_NAME(vict), fields[l].cmd);
     } else if (is_number(val_arg)) {
       value = atoi(val_arg);
       RANGE(0, 24);
       GET_COND(vict, (l - 26)) = (char) value;
-      snprintf(buf, sizeof(buf), "%s's %s set to %d.", GET_NAME(vict), fields[l].cmd, value);
+      snprintf(buf, sizeof(buf), "%s's %s set to %d.", GET_CHAR_NAME(vict), fields[l].cmd, value);
     } else {
       send_to_char("Must be 'off' or a value from 0 to 24.\r\n", ch);
 
@@ -6394,7 +6395,7 @@ ACMD(do_set)
       value = atoi(val_arg);
       if (real_room(value) != NOWHERE) {
         GET_LOADROOM(vict) = value;
-        snprintf(buf, sizeof(buf), "%s will enter at room #%ld.", GET_NAME(vict), GET_LOADROOM(vict));
+        snprintf(buf, sizeof(buf), "%s will enter at room #%ld.", GET_CHAR_NAME(vict), GET_LOADROOM(vict));
       } else
         snprintf(buf, sizeof(buf), "That room does not exist!");
     } else
@@ -6541,7 +6542,7 @@ ACMD(do_set)
     break;
   case 56: /* nosnoop flag */
     SET_OR_REMOVE(PLR_FLAGS(vict), PLR_NOSNOOP);
-    snprintf(buf, sizeof(buf),"%s changed %s's !SNOOP flag setting.",GET_CHAR_NAME(ch),GET_NAME(vict));
+    snprintf(buf, sizeof(buf),"%s changed %s's !SNOOP flag setting.",GET_CHAR_NAME(ch),GET_CHAR_NAME(vict));
     mudlog(buf, ch, LOG_WIZLOG, TRUE );
     break;
   case 57:
@@ -6644,36 +6645,36 @@ ACMD(do_set)
     break;
   case 74: /* rolls for morts */
     SET_OR_REMOVE(PRF_FLAGS(vict), PRF_ROLLS);
-    snprintf(buf, sizeof(buf),"%s changed %s's rolls flag setting.", GET_CHAR_NAME(ch), GET_NAME(vict));
+    snprintf(buf, sizeof(buf),"%s changed %s's rolls flag setting.", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict));
     mudlog(buf, ch, LOG_WIZLOG, TRUE );
     break;
   case 75: /* multiplier */
     RANGE(0, 10000);
     GET_CHAR_MULTIPLIER(vict) = value;
-    snprintf(buf, sizeof(buf),"%s changed %s's multiplier to %.2f.", GET_CHAR_NAME(ch), GET_NAME(vict), (float) GET_CHAR_MULTIPLIER(vict) / 100);
+    snprintf(buf, sizeof(buf),"%s changed %s's multiplier to %.2f.", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict), (float) GET_CHAR_MULTIPLIER(vict) / 100);
     mudlog(buf, ch, LOG_WIZLOG, TRUE );
     break;
   case 76: /* shotsfired */
     RANGE(0, 50000);
     SHOTS_FIRED(vict) = value;
-    snprintf(buf, sizeof(buf),"%s changed %s's shots_fired to %d.", GET_CHAR_NAME(ch), GET_NAME(vict), value);
+    snprintf(buf, sizeof(buf),"%s changed %s's shots_fired to %d.", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict), value);
     mudlog(buf, ch, LOG_WIZLOG, TRUE );
     break;
   case 77: /* shotstriggered */
     RANGE(-1, 100);
     SHOTS_TRIGGERED(vict) = value;
-    snprintf(buf, sizeof(buf),"%s changed %s's shots_triggered to %d.", GET_CHAR_NAME(ch), GET_NAME(vict), value);
+    snprintf(buf, sizeof(buf),"%s changed %s's shots_triggered to %d.", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict), value);
     mudlog(buf, ch, LOG_WIZLOG, TRUE );
     break;
   case 78: /* powerpoints */
     RANGE(-10000, 10000);
     GET_PP(vict) = value;
-    snprintf(buf, sizeof(buf),"%s changed %s's powerpoints to %d.", GET_CHAR_NAME(ch), GET_NAME(vict), value);
+    snprintf(buf, sizeof(buf),"%s changed %s's powerpoints to %d.", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict), value);
     mudlog(buf, ch, LOG_WIZLOG, TRUE );
     break;
   case 79: /* cyberdoc permission */
     SET_OR_REMOVE(PLR_FLAGS(vict), PLR_CYBERDOC);
-    snprintf(buf, sizeof(buf),"%s turned %s's cyberdoc flag %s.", GET_CHAR_NAME(ch), GET_NAME(vict), PLR_FLAGGED(vict, PLR_CYBERDOC) ? "ON" : "OFF");
+    snprintf(buf, sizeof(buf),"%s turned %s's cyberdoc flag %s.", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict), PLR_FLAGGED(vict, PLR_CYBERDOC) ? "ON" : "OFF");
     mudlog(buf, ch, LOG_WIZLOG, TRUE );
     break;
   case 80: /* hardcore */
@@ -6683,38 +6684,38 @@ ACMD(do_set)
       turn_hardcore_on_for_character(vict);
     }
 
-    snprintf(buf, sizeof(buf),"%s turned %s's hardcore and nodelete flags %s.", GET_CHAR_NAME(ch), GET_NAME(vict), PRF_FLAGGED(vict, PRF_HARDCORE) ? "ON" : "OFF");
+    snprintf(buf, sizeof(buf),"%s turned %s's hardcore and nodelete flags %s.", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict), PRF_FLAGGED(vict, PRF_HARDCORE) ? "ON" : "OFF");
     mudlog(buf, ch, LOG_WIZLOG, TRUE );
     break;
   case 81: /* esshole */
     RANGE(0, GET_RACIAL_STARTING_ESSENCE_FOR_RACE(GET_RACE(vict)));
-    snprintf(buf, sizeof(buf),"%s changed %s's esshole from %d to %d.", GET_CHAR_NAME(ch), GET_NAME(vict), GET_ESSHOLE(vict), value);
+    snprintf(buf, sizeof(buf),"%s changed %s's esshole from %d to %d.", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict), GET_ESSHOLE(vict), value);
     GET_ESSHOLE(vict) = value;
     mudlog(buf, ch, LOG_WIZLOG, TRUE );
     break;
   case 82: /* no syspoint auto awards */
     SET_OR_REMOVE(PLR_FLAGS(vict), PLR_NO_AUTO_SYSP_AWARDS);
-    snprintf(buf, sizeof(buf),"%s turned %s's no-auto-sysp-awards flag %s.", GET_CHAR_NAME(ch), GET_NAME(vict), PLR_FLAGGED(vict, PLR_NO_AUTO_SYSP_AWARDS) ? "ON" : "OFF");
+    snprintf(buf, sizeof(buf),"%s turned %s's no-auto-sysp-awards flag %s.", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict), PLR_FLAGGED(vict, PLR_NO_AUTO_SYSP_AWARDS) ? "ON" : "OFF");
     mudlog(buf, ch, LOG_WIZLOG, TRUE);
     break;
   case 83: /* no tells */
     SET_OR_REMOVE(PLR_FLAGS(vict), PLR_TELLS_MUTED);
-    snprintf(buf, sizeof(buf),"%s turned %s's no-tells flag %s.", GET_CHAR_NAME(ch), GET_NAME(vict), PLR_FLAGGED(vict, PLR_TELLS_MUTED) ? "ON" : "OFF");
+    snprintf(buf, sizeof(buf),"%s turned %s's no-tells flag %s.", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict), PLR_FLAGGED(vict, PLR_TELLS_MUTED) ? "ON" : "OFF");
     mudlog(buf, ch, LOG_WIZLOG, TRUE);
     break;
   case 84: /* no ooc */
     SET_OR_REMOVE(PLR_FLAGS(vict), PLR_NOOOC);
-    snprintf(buf, sizeof(buf),"%s turned %s's no-ooc flag %s.", GET_CHAR_NAME(ch), GET_NAME(vict), PLR_FLAGGED(vict, PLR_NOOOC) ? "ON" : "OFF");
+    snprintf(buf, sizeof(buf),"%s turned %s's no-ooc flag %s.", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict), PLR_FLAGGED(vict, PLR_NOOOC) ? "ON" : "OFF");
     mudlog(buf, ch, LOG_WIZLOG, TRUE);
     break;
   case 85: /* no radio */
     SET_OR_REMOVE(PLR_FLAGS(vict), PLR_RADIO_MUTED);
-    snprintf(buf, sizeof(buf),"%s turned %s's no-radio flag %s.", GET_CHAR_NAME(ch), GET_NAME(vict), PLR_FLAGGED(vict, PLR_RADIO_MUTED) ? "ON" : "OFF");
+    snprintf(buf, sizeof(buf),"%s turned %s's no-radio flag %s.", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict), PLR_FLAGGED(vict, PLR_RADIO_MUTED) ? "ON" : "OFF");
     mudlog(buf, ch, LOG_WIZLOG, TRUE);
     break;
   case 86: /* site hidden */
     SET_OR_REMOVE(PLR_FLAGS(vict), PLR_SITE_HIDDEN);
-    log_vfprintf("CHEATLOG: %s turned %s's site-hidden flag %s.", GET_CHAR_NAME(ch), GET_NAME(vict), PLR_FLAGGED(vict, PLR_SITE_HIDDEN) ? "ON" : "OFF");
+    log_vfprintf("CHEATLOG: %s turned %s's site-hidden flag %s.", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict), PLR_FLAGGED(vict, PLR_SITE_HIDDEN) ? "ON" : "OFF");
     break;
   case 87: /* lifestyle string */
     if (is_file) {
@@ -6728,7 +6729,7 @@ ACMD(do_set)
     break;
   case 88: /* highestindex */
     RANGE(0, 900);
-    snprintf(buf, sizeof(buf),"%s changed %s's highest bioware index from %d to %d.", GET_CHAR_NAME(ch), GET_NAME(vict), GET_HIGHEST_INDEX(vict), value);
+    snprintf(buf, sizeof(buf),"%s changed %s's highest bioware index from %d to %d.", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict), GET_HIGHEST_INDEX(vict), value);
     GET_HIGHEST_INDEX(vict) = value;
     mudlog(buf, ch, LOG_WIZLOG, TRUE );
   case 89: /* strikes */
@@ -6736,12 +6737,24 @@ ACMD(do_set)
       RANGE(0, 3);
       int old_val = GET_AUTOMOD_COUNTER(vict);
       GET_SETTABLE_AUTOMOD_COUNTER(vict) = value;
-      mudlog_vfprintf(ch, LOG_WIZLOG, "%s changed %s's auto-moderator strikes from %d to %d.", GET_CHAR_NAME(ch), GET_NAME(vict), old_val, value);
+      mudlog_vfprintf(ch, LOG_WIZLOG, "%s changed %s's auto-moderator strikes from %d to %d.", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict), old_val, value);
     }
     break;
   case 90: /* suspicious flag */
     SET_OR_REMOVE(PLR_FLAGS(vict), PLR_ADDITIONAL_SCRUTINY);
-    mudlog_vfprintf(ch, LOG_WIZLOG, "%s changed %s's staff-scrutiny flag setting to %s.", GET_CHAR_NAME(ch), GET_NAME(vict), PLR_FLAGGED(vict, PLR_ADDITIONAL_SCRUTINY) ? "TRUE" : "FALSE");
+    mudlog_vfprintf(ch, LOG_WIZLOG, "%s changed %s's staff-scrutiny flag setting to %s.", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict), PLR_FLAGGED(vict, PLR_ADDITIONAL_SCRUTINY) ? "TRUE" : "FALSE");
+    break;
+  case 91: /* otaku path */
+    {
+      RANGE(0, MAX_OTAKU_PATH);
+      int old_val = GET_OTAKU_PATH(vict);
+      GET_OTAKU_PATH(vict) = value;
+      mudlog_vfprintf(ch, LOG_WIZLOG, "%s changed %s's otaku path from %s to %s.",
+                      GET_CHAR_NAME(ch),
+                      GET_CHAR_NAME(vict),
+                      old_val == OTAKU_PATH_NORMIE ? "Normie" : (old_val == OTAKU_PATH_CYBERADEPT ? "Cyberadept Otaku" : "Technoshaman Otaku"),
+                      value == OTAKU_PATH_NORMIE ? "Normie" : (value == OTAKU_PATH_CYBERADEPT ? "Cyberadept Otaku" : "Technoshaman Otaku"));
+    }
     break;
   default:
     snprintf(buf, sizeof(buf), "Can't set that!");
