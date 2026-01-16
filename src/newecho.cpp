@@ -341,7 +341,7 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
       // send_to_char(actor, "Storage string: '%s' (quote_ptr = %c, start_of_block = %c)\r\n", storage_string, *quote_ptr, *start_of_block);
 
       // Check the string for '@self', '@me', '@myself'
-      if (!(must_prepend_name = (!str_str_isolated(storage_string, "@self") || !str_str_isolated(storage_string, "@me") || !str_str_isolated(storage_string, "@myself")))) {
+      if (!(must_prepend_name = !(str_str_isolated(storage_string, "@self") || str_str_isolated(storage_string, "@me") || str_str_isolated(storage_string, "@myself")))) {
         // send_to_char("Found @self/@me/@myself outside of quotes.\r\n", actor);
         break;
       }
