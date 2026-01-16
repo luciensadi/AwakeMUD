@@ -253,6 +253,22 @@ double calculate_relative_percentage_boost_from_adding_one_die(int dice, int tn)
 }
 
 bool drinks_are_unfucked = TRUE;
+
+
+class Check {
+public:
+  std::string type = "";
+  std::map<std::string, std::string> settings = {};
+  void *func_ptr = NULL;
+
+  Check(const std::string& type, const std::map<std::string, std::string>& settings);
+  Check() = default;
+  
+  // True if this specific test passed for the character, false otherwise. Assertion: Tests cannot kill character.
+  bool test(struct char_data *ch);
+};
+
+
 ACMD(do_debug) {
   static char arg1[MAX_INPUT_LENGTH];
   static char arg2[MAX_INPUT_LENGTH];
@@ -271,6 +287,14 @@ ACMD(do_debug) {
   // Extract the mode switch argument.
   rest_of_argument = any_one_arg(argument, arg1);
   skip_spaces(&rest_of_argument);
+
+  if (!str_cmp(arg1, "activities/check")) {
+    send_to_char(ch, "OK, running the check.\r\n", ch);
+    Check *check = new Check("_test_func", {{"a", "b"}});
+    send_to_char(ch, "You %s!", check->test(ch) ? "passed" : "failed");
+    delete check;
+    return;
+  }
 
   if (!str_cmp(arg1, "formatting")) {
     send_to_char(ch, "\e[3mitalics test\e[0m\r\n");
