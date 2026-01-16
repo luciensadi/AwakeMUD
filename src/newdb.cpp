@@ -2365,7 +2365,7 @@ time_t get_idledelete_days_left(time_t lastd, int tke, int race, int rank) {
 }
 
 bool pc_active_in_last_30_days(idnum_t owner_id) {
-  snprintf(buf, sizeof(buf), "SELECT idnum FROM pfiles WHERE lastd >= %ld AND name != '%s';", time(0) - (SECS_PER_REAL_DAY * 30), CHARACTER_DELETED_NAME_FOR_SQL);
+  snprintf(buf, sizeof(buf), "SELECT idnum FROM pfiles WHERE idnum = %ld AND lastd >= %ld AND name != '%s';", owner_id, time(0) - (SECS_PER_REAL_DAY * 30), CHARACTER_DELETED_NAME_FOR_SQL);
   mysql_wrapper(mysql, buf);
   MYSQL_RES *res;
 
