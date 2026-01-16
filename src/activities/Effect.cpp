@@ -6,14 +6,15 @@ Effect: A side effect that, when encountered, modifies the party in some way. Da
 - a parameters dict that contains further information (e.g. "lose_nuyen"'s parameters might be {"amount": 50})
 */
 
-#define EFFECT_FUNCTION(func_name) bool func_name(struct char_data *ch, const std::map<std::string, std::string>& settings)
+#define EFFECT_FUNCTION(func_name) bool _effect_function_func_name(struct char_data *ch, const std::map<std::string, std::string>& settings)
 
 // Effect function prototypes. Remember, effect functions return TRUE on death, FALSE otherwise!
-EFFECT_FUNCTION(_effect_test_func);
+EFFECT_FUNCTION(test_func);
 
 // Maps slugs to effect functions. Remember, effect functions return TRUE on death, FALSE otherwise!
+#define MAP_EFFECT_FUNCTION(slug, func_name) {slug, (void*)&_effect_function_func_name}
 std::map<std::string, void *> _effect_type_to_function = {
-  {"_test_func", (void*)&_effect_test_func}
+  MAP_EFFECT_FUNCTION("_test_func", test_func)
 };
 
 Effect::Effect(const std::string& supplied_type, const std::map<std::string, std::string>& supplied_settings) 
@@ -40,7 +41,7 @@ bool Effect::apply(struct char_data *ch) {
 }
 
 ///////////// Effect function definitions below. Remember, effect functions return TRUE on death, FALSE otherwise!
-EFFECT_FUNCTION(_effect_test_func) {
+EFFECT_FUNCTION(test_func) {
   mudlog_vfprintf(ch, LOG_SYSLOG, "Effect() called with _effect_test_func(ch, {}x%d), returning false.", settings.size());
   return false;
 };

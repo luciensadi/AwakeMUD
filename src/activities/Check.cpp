@@ -6,14 +6,15 @@ Check: A boolean test that has a pass/fail state. Data includes:
 - a settings dict that contains further information (e.g. "on_quest" might be {"vnum": 3})
 */
 
-#define CHECK_FUNCTION(func_name) bool func_name(struct char_data *ch, const std::map<std::string, std::string>& settings)
+#define CHECK_FUNCTION(func_name) bool _check_function_func_name(struct char_data *ch, const std::map<std::string, std::string>& settings)
 
 // Check function prototypes. Remember, check functions can NEVER result in character death!
-CHECK_FUNCTION(_check_test_func);
+CHECK_FUNCTION(test_func);
 
 // Maps slugs to check functions. Remember, check functions can NEVER result in character death!
+#define MAP_CHECK_FUNCTION(slug, func_name) {slug, (void*)&_check_function_func_name}
 std::map<std::string, void *> _check_type_to_function = {
-  {"_test_func", (void*)&_check_test_func}
+  MAP_CHECK_FUNCTION("_test_func", test_func)
 };
 
 Check::Check(const std::string& supplied_type, const std::map<std::string, std::string>& supplied_settings) 
@@ -40,7 +41,7 @@ bool Check::test(struct char_data *ch) {
 }
 
 ///////////// Check function definitions below. Remember, check functions can NEVER result in character death!
-CHECK_FUNCTION(_check_test_func) {
+CHECK_FUNCTION(test_func) {
   mudlog_vfprintf(ch, LOG_SYSLOG, "Check() called with _check_test_func(ch, {}x%d), returning true.", settings.size());
   return true;
 };
