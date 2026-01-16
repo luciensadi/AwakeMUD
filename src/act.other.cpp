@@ -63,7 +63,7 @@ SPECIAL(shop_keeper);
 SPECIAL(spraypaint);
 SPECIAL(johnson);
 SPECIAL(anticoagulant);
-extern char *how_good(int skill, int percent);
+extern char *how_good(int skill, int percent, bool chipped, int natural);
 extern void perform_tell(struct char_data *, struct char_data *, char *);
 extern void obj_magic(struct char_data * ch, struct obj_data * obj, char *argument);
 extern void end_quest(struct char_data *ch, bool succeeded);
@@ -1620,7 +1620,9 @@ void _send_alphabetized_skills_to_ch(struct char_data *ch, const char *arg, int 
       continue;
 
     if ((GET_SKILL(ch, i)) > 0) {
-      snprintf(buf2, sizeof(buf2), "%-40s %s\r\n", skills[i].name, how_good(i, GET_SKILL(ch, i)));
+      snprintf(buf2, sizeof(buf2), "%-40s %s\r\n", skills[i].name,
+               how_good(i, GET_SKILL(ch, i), GET_CHIPJACKED_SKILL(ch, i), GET_RAW_SKILL(ch, i))
+              );
       vec.push_back(std::string(buf2));
     }
   }
