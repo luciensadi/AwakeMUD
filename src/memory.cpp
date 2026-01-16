@@ -87,10 +87,6 @@ struct room_data *memoryClass::GetRoom()
 
 void memoryClass::DeleteObject(struct obj_data *obj, const char *source)
 {
-  // Ensure it's removed from the object list.
-  if (!ObjList.Remove(obj))
-    log_vfprintf("ObjList.Remove called by '%s' returned FALSE!  (%ld-%ld)", GET_OBJ_VNUM(obj), GET_OBJ_IDNUM(obj));
-
   // we want to do this so that when we pop em off, they are usable
   free_obj(obj);
   delete obj;
