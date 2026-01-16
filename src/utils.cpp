@@ -3272,7 +3272,7 @@ struct room_data *get_ch_in_room(struct char_data *ch)
     return get_veh_in_room(ch->in_veh);
   }
 
-  snprintf(errbuf, sizeof(errbuf), "SYSERR: get_ch_in_room called on char %s, but they're not in a room or vehicle!", GET_CHAR_NAME(ch));
+  snprintf(errbuf, sizeof(errbuf), "SYSERR: get_ch_in_room called on char %s (state %d), but they're not in a room or vehicle!", GET_CHAR_NAME(ch), ch->desc ? STATE(ch->desc) : -1);
   mudlog(errbuf, ch, LOG_SYSLOG, TRUE);
 
   return &world[0];
