@@ -1424,9 +1424,27 @@ void get_from_container(struct char_data *ch, struct obj_data *cont,
 
 bool can_take_obj_from_room(struct char_data *ch, struct obj_data *obj)
 {
+  if (!ch) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Got NULL parameter(s) to can_take_obj_from_room(%s, %s)", ch ? GET_CHAR_NAME(ch) : "NULL", GET_OBJ_NAME(obj) ? "obj" : "NULL");
+    return false;
+  }
+
   // Trace it back to its parent in case this is in a container etc.
   struct obj_data *superobj = obj;
   while (superobj->in_obj) superobj = superobj->in_obj;
+
+  // If it's arranged, you must be the apartment owner to take it.
+  if (superobj->in_room
+      && IS_OBJ_STAT(superobj, ITEM_EXTRA_ARRANGED)
+      && (!GET_APARTMENT(superobj->in_room) || !GET_APARTMENT(superobj->in_room)->has_owner_privs(ch)))
+  {
+    if (access_level(ch, LVL_ADMIN)) {
+      send_to_char(ch, "You bypass the arranged-object protection on %s.", GET_OBJ_NAME(superobj));
+    } else {
+      send_to_char(ch, "Only the apartment's owner can pick up arranged items.");
+      return false;
+    }
+  }
 
 	if (GET_OBJ_TYPE(obj) == ITEM_DECK_ACCESSORY)
 	{
