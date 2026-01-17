@@ -1288,18 +1288,32 @@ void points_menu(struct descriptor_data *d)
   } else {
     magic_table_ptr = magic_table;
   }
-  snprintf(buf, sizeof(buf), "  1) Attributes: ^c%15d^n (^c%3d^n Points)\r\n"
+
+  if (d->ccr.is_otaku) {
+    snprintf(buf, sizeof(buf), "  1) Attributes: ^c%15d^n (^c%3d^n Points)\r\n"
                "  2) Skills    : ^c%15d^n (^c%3d^n Points)\r\n"
                "  3) Resources : ^c%15d^n (^c%3d^n Points)\r\n"
                "  4) Magic     : ^c%15s^n (^c%3d^n Points)\r\n"
                "     Race      : ^c%15s^n (^c%3d^n Points)\r\n"
                "     Class     : ^c%15s^n (^c%3d^n Points)\r\n"
                "  Points Remaining: ^c%d^n\r\n"
-               "Choose an area to change points on(p to continue): ", d->ccr.pr[PO_ATTR]/2, d->ccr.pr[PO_ATTR],
+               "Choose an area to change points on, or enter 'p' to continue: ", d->ccr.pr[PO_ATTR]/2, d->ccr.pr[PO_ATTR],
                d->ccr.pr[PO_SKILL], d->ccr.pr[PO_SKILL], cg_nuyen(d, d->ccr.pr[PO_RESOURCES], TRUE),
                resource_table[1][d->ccr.pr[PO_RESOURCES]], magic_table_ptr[d->ccr.pr[PO_MAGIC]],
                magic_cost[d->ccr.pr[PO_MAGIC]], pc_race_types[(int)GET_RACE(d->character)], d->ccr.pr[PO_RACE], 
-               d->ccr.is_otaku ? "Otaku" : "None", d->ccr.is_otaku ? 30 : 0, d->ccr.points);
+               "Otaku", 30, d->ccr.points);
+  } else {
+    snprintf(buf, sizeof(buf), "  1) Attributes: ^c%15d^n (^c%3d^n Points)\r\n"
+               "  2) Skills    : ^c%15d^n (^c%3d^n Points)\r\n"
+               "  3) Resources : ^c%15d^n (^c%3d^n Points)\r\n"
+               "  4) Magic     : ^c%15s^n (^c%3d^n Points)\r\n"
+               "     Race      : ^c%15s^n (^c%3d^n Points)\r\n"
+               "  Points Remaining: ^c%d^n\r\n"
+               "Choose an area to change points on, or enter 'p' to continue: ", d->ccr.pr[PO_ATTR]/2, d->ccr.pr[PO_ATTR],
+               d->ccr.pr[PO_SKILL], d->ccr.pr[PO_SKILL], cg_nuyen(d, d->ccr.pr[PO_RESOURCES], TRUE),
+               resource_table[1][d->ccr.pr[PO_RESOURCES]], magic_table_ptr[d->ccr.pr[PO_MAGIC]],
+               magic_cost[d->ccr.pr[PO_MAGIC]], pc_race_types[(int)GET_RACE(d->character)], d->ccr.pr[PO_RACE], d->ccr.points);
+  }
   SEND_TO_Q(buf, d);
 }
 
