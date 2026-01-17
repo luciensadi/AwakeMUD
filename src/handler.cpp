@@ -99,7 +99,7 @@ char *fname_allchars(char *namelist)
   return (holder);
 }
 
-
+// Iterate over namelist by word, looking for a case-insensitive abbreviation match with str. If it exists, return 1, else 0.
 int isname(const char *str, const char *namelist)
 {
   if(namelist == NULL)
