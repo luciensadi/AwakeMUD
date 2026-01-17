@@ -145,6 +145,7 @@ ACMD_DECLARE(do_advance);
 ACMD_DECLARE(do_afk);
 ACMD_DECLARE(do_alias);
 ACMD_DECLARE(do_ammo);
+ACMD_DECLARE(do_arrange);
 ACMD_DECLARE(do_assist);
 ACMD_DECLARE(do_ask);
 ACMD_DECLARE(do_astral);
@@ -559,6 +560,7 @@ struct command_info cmd_info[] =
     { "affects"    , POS_MORTALLYW, do_status   , 0, 0, ALLOWS_IDLE_REWARD },
     { "afk"        , POS_DEAD    , do_afk      , 0, 0, ALLOWS_IDLE_REWARD },
     { "ammo"       , POS_LYING   , do_ammo     , 0, 0, ALLOWS_IDLE_REWARD },
+    { "arrange"    , POS_LYING   , do_arrange  , 0, 0, BLOCKS_IDLE_REWARD },
     { "assense"    , POS_LYING   , do_assense  , 0, 0, BLOCKS_IDLE_REWARD },
     { "at"         , POS_DEAD    , do_at       , LVL_ADMIN, 0, BLOCKS_IDLE_REWARD },
     { "attach"     , POS_RESTING , do_attach   , 0, 0, BLOCKS_IDLE_REWARD },

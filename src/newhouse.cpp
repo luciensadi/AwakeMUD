@@ -41,6 +41,7 @@ extern bool Storage_get_filename(vnum_t vnum, char *filename, int filename_size)
 extern void Storage_save(const char *file_name, struct room_data *room);
 extern bool player_is_dead_hardcore(long id);
 extern bool House_load_storage(struct room_data *world_room, const char *filename);
+extern bool at_least_one_word_in_keyword_list_exists_in_str(const char *keywords, const char *str);
 
 SPECIAL(landlord_spec);
 
@@ -2761,4 +2762,60 @@ SPECIAL(landlord_spec)
     return TRUE;
   }
   return FALSE;
+}
+
+// The ARRANGE command, which lets you set the graffiti of items in apartments.
+ACMD(do_arrange) {
+  struct obj_data *obj = NULL;
+  struct char_data *dummy_vict = NULL;
+  char target_obj_keyword[MAX_INPUT_LENGTH + 1];
+
+  FAILURE_CASE(!ch->in_room || !GET_APARTMENT(ch->in_room), "Sorry, you can only arrange things in apartments you own.");
+  FAILURE_CASE(!GET_APARTMENT(ch->in_room)->has_owner_privs(ch), "You must be the owner of the apartment to arrange things in it.");
+  FAILURE_CASE(IS_ASTRAL(ch), "You eye your insubstantial hands with annoyance... better get back to your meat suit first.");
+
+  // Costs 50 nuyen for materials.
+  FAILURE_CASE(GET_NUYEN(ch) < 50, "It'll cost you 50 nuyen in materials to do that, and you don't have enough cash on hand.");
+
+  // Parse out the targeted object, which must be on the floor in the room.
+  char *new_position = any_one_arg(argument, target_obj_keyword);
+
+  FAILURE_CASE(!*target_obj_keyword || !new_position || !*new_position, "Syntax: ARRANGE <object keyword> <new position>.\r\nExample: ARRANGE MOSSBERG A Mossberg shotgun leans by the door, ready to assist in home defense.");
+
+  // Cap the length of the graffiti. SQL has it as a varchar(256).
+  FAILURE_CASE(strlen(new_position) >= 256, "Sorry, that arrangement string is too long. For database reasons, you'll need to keep it under 256 characters.");
+
+  // Make sure it's valid for arranging (must exist, must not have its own graffiti)
+  FAILURE_CASE_PRINTF(!generic_find(target_obj_keyword, FIND_OBJ_ROOM, ch, &dummy_vict, &obj), "You don't see anything named '%s' here.", target_obj_keyword);
+  FAILURE_CASE(GET_OBJ_TYPE(obj) == ITEM_CREATIVE_EFFORT, "Sorry, code limitations prevent arranging art (it would permanently destroy the existing room desc).");
+  FAILURE_CASE(GET_OBJ_TYPE(obj) == ITEM_GRAFFITI, "You scratch your head as you try to figure out how to move graffiti around. Maybe if you cut it out of the wall...?");
+  FAILURE_CASE_PRINTF(GET_OBJ_TYPE(obj) == ITEM_PET, "You receive some serious side-eye from %s and think better of it.", decapitalize_a_an(GET_OBJ_NAME(obj)));
+
+  // Require that at least one keyword from the object is present in the new desc.
+  FAILURE_CASE_PRINTF(!at_least_one_word_in_keyword_list_exists_in_str(GET_OBJ_KEYWORDS(obj), new_position),
+                      "You must include at least one of %s's keywords in the new position."
+                      " When in doubt, go with the more descriptive one (pick 'mossberg' over 'gun', etc)\r\n Keywords: '%s'",
+                      decapitalize_a_an(GET_OBJ_NAME(obj)),
+                      GET_OBJ_KEYWORDS(obj));
+
+  // Capitalize and add terminal punctuation.
+  skip_spaces(&new_position);
+  char formatted_position[MAX_INPUT_LENGTH + 10];
+  snprintf(formatted_position, sizeof(formatted_position), "%s%s^n", CAP(new_position), ispunct(get_final_character_from_string(new_position)) ? "" : ".");
+
+  // Charge the cash.
+  lose_nuyen(ch, 50, NUYEN_OUTFLOW_DECORATING);
+
+  // Put that thang down, shift it and reverse it.
+  DELETE_AND_NULL(obj->graffiti);
+  obj->graffiti = str_dup(formatted_position);
+  GET_OBJ_EXTRA(obj).SetBit(ITEM_EXTRA_ARRANGED);
+
+  // Message it.
+  WAIT_STATE(ch, 30);
+  act("You spend 50 nuyen and a little time rearranging $p.", FALSE, ch, obj, 0, TO_CHAR);
+  act("$n spends a little time rearranging $p.", FALSE, ch, obj, 0, TO_ROOM);
+
+  // Log it for posterity.
+  mudlog_vfprintf(ch, LOG_WIZLOG, "%s arranged '%s' (%ld) as '%s'", GET_CHAR_NAME(ch), GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj), formatted_position);
 }

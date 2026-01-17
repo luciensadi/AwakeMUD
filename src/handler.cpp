@@ -2295,6 +2295,13 @@ void obj_from_room(struct obj_data * object)
 
     // Strip it out of the room's contents.
     REMOVE_FROM_LIST(object, object->in_room->contents, next_content);
+
+    // If it's arranged, un-arrange it.
+    if (IS_OBJ_STAT(object, ITEM_EXTRA_ARRANGED)) {
+      GET_OBJ_EXTRA(object).RemoveBit(ITEM_EXTRA_ARRANGED);
+      DELETE_AND_NULL_ARRAY(object->graffiti);
+      act("The careful arrangement of $p is disrupted!", FALSE, 0, object, 0, TO_ROOM);
+    }
   }
 
   // Ensure the workshop is packed up when it's removed from the room / vehicle.

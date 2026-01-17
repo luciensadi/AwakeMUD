@@ -884,7 +884,7 @@ void game_loop(int mother_desc)
       for (d = descriptor_list; d; d = next_d) {
         next_d = d->next;
 
-#ifdef IS_BUILDPORT
+#ifdef HURT_ME_WITH_THE_WAIT_SPAM_MESSAGES
         if (d->wait > 0 && d->character && GET_LEVEL(d->character) == LVL_PRESIDENT && PRF_FLAGGED(d->character, PRF_ROLLS)) {
           send_to_char(d->character, "^L[wait: %d]\r\n", d->wait);
         }

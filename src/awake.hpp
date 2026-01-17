@@ -1448,7 +1448,8 @@ enum {
 #define ITEM_EXTRA_CONCEALED_IN_EQ    34    // Doesn't show up when someone looks at you.
 #define ITEM_EXTRA_TRODE_NET          35
 #define ITEM_EXTRA_OTAKU_RESONANCE    36    // This is related to Otaku nonsense
-#define MAX_ITEM_EXTRA                37
+#define ITEM_EXTRA_ARRANGED           37
+#define MAX_ITEM_EXTRA                38
 
 /* Ammo types */
 #define AMMO_NORMAL     0

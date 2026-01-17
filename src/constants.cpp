@@ -1312,6 +1312,7 @@ const char *extra_bits[] =
     "CONCEALED_IN_EQ",
     "TRODE_NET",
     "OTAKU_RESONANCE",
+    "ARRANGED",
     MAX_FLAG_MARKER
   };
 
@@ -1354,6 +1355,7 @@ const char *pc_readable_extra_bits[] =
     "Concealed in Equipment",
     "Is Electrode Net",
     "Is Virtual Otaku Item",
+    "Is Arranged",
     MAX_FLAG_MARKER
   };
 

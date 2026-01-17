@@ -867,7 +867,7 @@ char *decapitalize_a_an(struct veh_data *veh)
   return decapitalize_a_an(GET_VEH_NAME(veh));
 }
 
-// duplicate a string -- uses new!
+// duplicate a string -- uses new! You must delete[] the results of this.
 char *str_dup(const char *source)
 {
   if (!source)
