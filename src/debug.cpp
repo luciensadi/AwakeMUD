@@ -220,6 +220,39 @@ ACMD(do_debug) {
     return;
   }
 
+  if (!str_cmp(arg1, "test_whole_word_finder")) {
+    bool whole_word_exists_in_str(const char* keyword, const char* str);
+
+    FAILURE_CASE(!whole_word_exists_in_str("Key", "a blue key is here"), "case sensitivity");
+    FAILURE_CASE(!whole_word_exists_in_str("dog", "a mangy dog is here"), "mid sentence word");
+    FAILURE_CASE(!whole_word_exists_in_str("keyword", "keyword starts"), "start of sentence");
+    FAILURE_CASE(!whole_word_exists_in_str("starts", "keyword starts"), "end of sentence");
+    FAILURE_CASE(!whole_word_exists_in_str("spacey", " spacey "), "spaces");
+    FAILURE_CASE(!whole_word_exists_in_str("dog", "dog, cat, and bird"), "Comma boundary");
+    FAILURE_CASE(!whole_word_exists_in_str("dog", "the(dog)is here"), "Parentheses boundary");
+    FAILURE_CASE(!whole_word_exists_in_str("dog", "the-dog-is here"), "Hyphen boundary");
+
+    FAILURE_CASE(whole_word_exists_in_str("can", "you can't do that"), "apostrophe");
+    FAILURE_CASE(whole_word_exists_in_str("thing", "some things are here"), "substring start");
+    FAILURE_CASE(whole_word_exists_in_str("thing", "some sthing are here"), "substring end");
+    FAILURE_CASE(whole_word_exists_in_str("thing", "some sthings are here"), "substring mid");
+    FAILURE_CASE(whole_word_exists_in_str("123", "12345"), "Numeric substring");
+
+    send_to_char(ch, "All tests for subfunction passed!\r\n");
+
+    bool at_least_one_word_in_keyword_list_exists_in_str(const char *keywords, const char *str);
+
+    FAILURE_CASE(!at_least_one_word_in_keyword_list_exists_in_str("dog green key", "a blue key is here"), "end of keyword list");
+    FAILURE_CASE(!at_least_one_word_in_keyword_list_exists_in_str("dog green key", "a blue dog is here"), "start of keyword list");
+    FAILURE_CASE(!at_least_one_word_in_keyword_list_exists_in_str("dog green key", "a green thing is here"), "middle of keyword list");
+    FAILURE_CASE(!at_least_one_word_in_keyword_list_exists_in_str("key", "a blue key is here"), "isolated keyword in list");
+
+    FAILURE_CASE(at_least_one_word_in_keyword_list_exists_in_str("dog green key", "no words here"), "no keywords in string");
+
+    send_to_char(ch, "All tests for superfunction passed!\r\n");
+    return;
+  }
+
   if (!str_cmp(arg1, "waitstate")) {
     int result = atoi(rest_of_argument);
     FAILURE_CASE(result <= 0, "Must supply a valid integer.");

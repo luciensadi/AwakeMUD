@@ -5666,7 +5666,7 @@ int get_string_length_after_color_code_removal(const char *str, struct char_data
 }
 
 // Returns a string stripped of color for keyword matching or possibly other uses as well.
-// We don't need to check for color code validity because we call get_string_legth_after_color_code_removal() when the strings are initially written.
+// We don't need to check for color code validity because we call get_string_length_after_color_code_removal() when the strings are initially written.
 char *get_string_after_color_code_removal(const char *str, struct char_data *ch)
 {
   if (!str)
@@ -9738,3 +9738,58 @@ struct veh_data *resolve_vehicle_from_vehcontainer(struct obj_data *obj) {
   }
   return NULL;
 }
+
+// Search for a case-insensitive instance of KEYWORD in STR, matching only whole words. Return true if found, false otherwise.
+bool whole_word_exists_in_str(const char* keyword, const char* str) {
+  if (!keyword || !str) return false;
+  if (*keyword == '\0') return true;
+
+  for (const char *p = str; *p;) {
+    const char *keyword_ptr = keyword;
+
+    // Advance until the first valid letter.
+    while (*p && !isalnum((unsigned char) *p)) {
+      p++;
+    }
+
+    // Test this word.
+    while ((*p && *keyword_ptr) && (tolower((unsigned char) *p) == tolower((unsigned char) *keyword_ptr))) {
+      p++;
+      keyword_ptr++;
+    }
+
+    // If we successfully reached the end of the keyword and *p is neither alnum nor an apostrophe followed by a letter, we know it's a match. Otherwise, keep rolling.
+    if (!*keyword_ptr && !isalnum((unsigned char) *p) && !(*p == '\'' && isalnum((unsigned char) *(p+1)))) {
+      return true;
+    }
+    
+    // Didn't find a match, so advance to the end of the word.
+    while (*p && (isalnum((unsigned char) *p) || *p == '\'')) {
+      p++;
+    }
+  }
+  return false;
+}
+
+#define _KEYWORD_DELIMITER " ,.!?;:"
+bool at_least_one_word_in_keyword_list_exists_in_str(const char *keywords, const char *str) {
+  if (!keywords || !str || *keywords == '\0') return false;
+
+  // 1. Create a stack-based copy of the keyword list so we can tokenize it destructively
+  char copy[MAX_KEYWORDS_LEN];
+  strlcpy(copy, get_string_after_color_code_removal(keywords, NULL), sizeof(copy));
+
+  const char *token = strtok(copy, _KEYWORD_DELIMITER);
+  const char *decolorized_str = get_string_after_color_code_removal(str, NULL);
+
+  while (token != NULL) {
+    // Since we aren't using the heap, we can return immediately
+    if (whole_word_exists_in_str(token, decolorized_str)) {
+      return true;
+    }
+    token = strtok(NULL, _KEYWORD_DELIMITER);
+  }
+
+  return false;
+}
+#undef _KEYWORD_DELIMITER
