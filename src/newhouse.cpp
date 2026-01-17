@@ -2579,6 +2579,9 @@ SPECIAL(landlord_spec)
 
   if (CMD_IS("list")) {
     complex->display_room_list_to_character(ch);
+    if (GET_MOB_VNUM(recep) == 103700 && !PLR_FLAGGED(ch, PLR_CYBERDOC)) {
+      send_to_char(ch, "^L(Note: Only cyberdoc-flagged PCs can rent here.)^n\r\n");
+    }
     return TRUE;
   }
 
@@ -2609,6 +2612,12 @@ SPECIAL(landlord_spec)
   }
 
   else if (CMD_IS("lease")) {
+    // Restrict the clinics to only leasing to cyberdoc-flagged PCs.
+    if (GET_MOB_VNUM(recep) == 103700 && !PLR_FLAGGED(ch, PLR_CYBERDOC)) {
+      mob_say(recep, "Sorry, if you're not a medical professional you can't lease here.");
+      return TRUE;
+    }
+
     if (!*arg) {
       mob_say(recep, "Which room would you like to lease?");
       complex->display_room_list_to_character(ch);
