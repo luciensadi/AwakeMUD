@@ -2765,17 +2765,30 @@ SPECIAL(landlord_spec)
 }
 
 // The ARRANGE command, which lets you set the graffiti of items in apartments.
+#define MAX_ARRANGED_ITEMS_PER_ROOM 6
+#define ARRANGE_ITEM_COST 50
 ACMD(do_arrange) {
   struct obj_data *obj = NULL;
   struct char_data *dummy_vict = NULL;
   char target_obj_keyword[MAX_INPUT_LENGTH + 1];
 
+  FAILURE_CASE(ch->in_veh, "Sorry, you can't arrange things in vehicles.");
   FAILURE_CASE(!ch->in_room || !GET_APARTMENT(ch->in_room), "Sorry, you can only arrange things in apartments you own.");
   FAILURE_CASE(!GET_APARTMENT(ch->in_room)->has_owner_privs(ch), "You must be the owner of the apartment to arrange things in it.");
   FAILURE_CASE(IS_ASTRAL(ch), "You eye your insubstantial hands with annoyance... better get back to your meat suit first.");
 
-  // Costs 50 nuyen for materials.
-  FAILURE_CASE(GET_NUYEN(ch) < 50, "It'll cost you 50 nuyen in materials to do that, and you don't have enough cash on hand.");
+  // Limit of 6 arranged objects per room.
+  {
+    int arranged_count = 0;
+    for (struct obj_data *tmp = ch->in_room->contents; tmp; tmp = tmp->next_content) {
+      FAILURE_CASE_PRINTF(IS_OBJ_STAT(tmp, ITEM_EXTRA_ARRANGED) && arranged_count++ > MAX_ARRANGED_ITEMS_PER_ROOM,
+                          "Sorry, you can only arrange %d items per room. You can pick up an object to un-arrange it.",
+                          MAX_ARRANGED_ITEMS_PER_ROOM);
+    }
+  }
+
+  // Costs nuyen for materials.
+  FAILURE_CASE_PRINTF(GET_NUYEN(ch) < ARRANGE_ITEM_COST, "It'll cost you %d nuyen in materials to do that, and you don't have enough cash on hand.", ARRANGE_ITEM_COST);
 
   // Parse out the targeted object, which must be on the floor in the room.
   char *new_position = any_one_arg(argument, target_obj_keyword);
@@ -2804,7 +2817,7 @@ ACMD(do_arrange) {
   snprintf(formatted_position, sizeof(formatted_position), "%s%s^n", CAP(new_position), ispunct(get_final_character_from_string(new_position)) ? "" : ".");
 
   // Charge the cash.
-  lose_nuyen(ch, 50, NUYEN_OUTFLOW_DECORATING);
+  lose_nuyen(ch, ARRANGE_ITEM_COST, NUYEN_OUTFLOW_DECORATING);
 
   // Put that thang down, shift it and reverse it.
   DELETE_AND_NULL(obj->graffiti);
@@ -2813,9 +2826,10 @@ ACMD(do_arrange) {
 
   // Message it.
   WAIT_STATE(ch, 30);
-  act("You spend 50 nuyen and a little time rearranging $p.", FALSE, ch, obj, 0, TO_CHAR);
+  snprintf(buf, sizeof(buf), "You spend %d nuyen and a little time rearranging $p.", ARRANGE_ITEM_COST);
+  act(buf, FALSE, ch, obj, 0, TO_CHAR);
   act("$n spends a little time rearranging $p.", FALSE, ch, obj, 0, TO_ROOM);
 
   // Log it for posterity.
-  mudlog_vfprintf(ch, LOG_WIZLOG, "%s arranged '%s' (%ld) as '%s'", GET_CHAR_NAME(ch), GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj), formatted_position);
+  mudlog_vfprintf(ch, LOG_WIZLOG, "%s spent %d to arrange '%s' (%ld) as '%s'", GET_CHAR_NAME(ch), ARRANGE_ITEM_COST, GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj), formatted_position);
 }
