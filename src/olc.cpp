@@ -456,7 +456,10 @@ ACMD(do_dig)
   int counter, dir, room, zone1 = 0, zone2 = 0;
   struct room_data *in_room = get_ch_in_room(ch);
 
-  any_one_arg(any_one_arg(argument, arg), buf);
+  char *remainder = any_one_arg(any_one_arg(argument, arg), buf);
+  if (remainder && *remainder) {
+    skip_spaces(&remainder);
+  }
 
   // Message sent in function.
   if (!is_olc_available(ch)) {
@@ -511,7 +514,7 @@ ACMD(do_dig)
       // Create the new room in their editing struct.
       ch->desc->edit_number = atoi_buf;
       ch->desc->edit_room = Mem->GetRoom();
-      ch->desc->edit_room->name = str_dup("An unfinished but connected room");
+      ch->desc->edit_room->name = str_dup(remainder && *remainder ? remainder : "An unfinished but connected room");
       ch->desc->edit_room->description = str_dup("You are in an unfinished room.\r\n");
       ch->desc->edit_room->address = str_dup("An undisclosed location");
       int i = 0;
