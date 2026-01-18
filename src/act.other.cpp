@@ -2290,9 +2290,19 @@ ACMD(do_treat)
   char rbuf[1000];
   snprintf(rbuf, sizeof(rbuf), "Treat TN: Base %d", target);
 
-  if (vict->in_room && ROOM_FLAGGED(vict->in_room, ROOM_STERILE)) {
-    target -= 2;
-    strlcat(rbuf, ", -2 for sterile room", sizeof(rbuf));
+  if (ROOM_FLAGGED(vict->in_room, ROOM_STERILE)) {
+    if (GET_APARTMENT(vict->in_room)) {
+      // To get the benefit, the apartment must be owned with a valid lease, and you must be the owner or a guest.
+      if (GET_APARTMENT(vict->in_room)->is_owner_or_guest_with_valid_lease(ch)) {
+        target -= 2;
+        strlcat(rbuf, ", -2 for sterile apartment", sizeof(rbuf));
+      } else {
+        strlcat(rbuf, ", room is sterile apartment but you're not an owner or guest", sizeof(rbuf));
+      }
+    } else {
+      target -= 2;
+      strlcat(rbuf, ", -2 for sterile room", sizeof(rbuf));
+    }
   }
 
   skill = get_skill(ch, SKILL_BIOTECH, target);

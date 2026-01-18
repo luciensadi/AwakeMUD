@@ -1412,6 +1412,16 @@ bool Apartment::has_owner_privs_by_idnum(idnum_t idnum) {
   return FALSE;
 }
 
+bool Apartment::is_owner_or_guest_with_valid_lease(struct char_data *ch) {
+  if (get_remaining_lease_value() < 0)
+    return false;
+
+  if (!has_owner_privs(ch) && !is_guest(GET_IDNUM(ch)))
+    return false;
+
+  return true;
+}
+
 void Apartment::list_guests_to_char(struct char_data *ch) {
   send_to_char(ch, "  Guests: ");
 

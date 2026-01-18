@@ -7507,8 +7507,18 @@ SPECIAL(medical_workshop) {
 
     // Room is sterile (PGHQ feature)? Another -2.
     if (ROOM_FLAGGED(workshop->in_room, ROOM_STERILE)) {
-      target -= 2;
-      strlcat(buf, ", room is sterile so -2", sizeof(buf));
+      if (GET_APARTMENT(workshop->in_room)) {
+        // To get the benefit, the apartment must be owned with a valid lease, and you must be the owner or a guest.
+        if (GET_APARTMENT(workshop->in_room)->is_owner_or_guest_with_valid_lease(ch)) {
+          target -= 2;
+          strlcat(buf, ", room is sterile apartment so -2", sizeof(buf));
+        } else {
+          strlcat(buf, ", room is sterile apartment but you're not an owner or guest", sizeof(buf));
+        }
+      } else {
+        target -= 2;
+        strlcat(buf, ", room is sterile so -2", sizeof(buf));
+      }
     }
   }
 

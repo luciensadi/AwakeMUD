@@ -139,8 +139,16 @@ void mental_gain(struct char_data * ch)
     if (char_is_in_social_room(ch))
       gain *= 2;
 
-    if (ch->in_room && ROOM_FLAGGED(ch->in_room, ROOM_STERILE) && (!GET_APARTMENT(ch->in_room) || GET_APARTMENT(ch->in_room)->has_owner_privs(ch) || GET_APARTMENT(ch->in_room)->is_guest(ch)))
-      gain *= 1.5;
+    if (ROOM_FLAGGED(ch->in_room, ROOM_STERILE)) {
+      if (GET_APARTMENT(ch->in_room)) {
+        // To get the benefit, the apartment must be owned with a valid lease, and you must be the owner or a guest.
+        if (GET_APARTMENT(ch->in_room)->is_owner_or_guest_with_valid_lease(ch)) {
+          gain *= 1.5;
+        }
+      } else {
+        gain *= 1.5;
+      }
+    }
 
     // Penalties happen last, to avoid the possibility of truncating to zero too early
     if (PLR_FLAGS(ch).IsSet(PLR_ENABLED_DRUGS)) {
@@ -248,8 +256,16 @@ void physical_gain(struct char_data * ch)
     if (char_is_in_social_room(ch))
       gain *= 2;
 
-    if (ch->in_room && ROOM_FLAGGED(ch->in_room, ROOM_STERILE))
-      gain *= 1.8;
+    if (ROOM_FLAGGED(ch->in_room, ROOM_STERILE)) {
+      if (GET_APARTMENT(ch->in_room)) {
+        // To get the benefit, the apartment must be owned with a valid lease, and you must be the owner or a guest.
+        if (GET_APARTMENT(ch->in_room)->is_owner_or_guest_with_valid_lease(ch)) {
+          gain *= 1.8;
+        }
+      } else {
+        gain *= 1.8;
+      }
+    }
 
     // Penalties happen last, to avoid the possibility of truncating to zero too early
     if (PLR_FLAGS(ch).IsSet(PLR_ENABLED_DRUGS)) {

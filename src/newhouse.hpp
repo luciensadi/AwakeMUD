@@ -233,6 +233,7 @@ class Apartment {
     long get_cost_of_contents(bool including_vehicles);
     long get_remaining_lease_value();
     void ensure_base_directory_exists();
+    bool is_owner_or_guest_with_valid_lease(struct char_data *ch);
 
     bool delete_guest(idnum_t idnum);
     void add_guest(idnum_t idnum);
