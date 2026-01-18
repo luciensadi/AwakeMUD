@@ -139,7 +139,7 @@ void mental_gain(struct char_data * ch)
     if (char_is_in_social_room(ch))
       gain *= 2;
 
-    if (ch->in_room && ROOM_FLAGGED(ch->in_room, ROOM_STERILE))
+    if (ch->in_room && ROOM_FLAGGED(ch->in_room, ROOM_STERILE) && (!GET_APARTMENT(ch->in_room) || GET_APARTMENT(ch->in_room)->has_owner_privs(ch) || GET_APARTMENT(ch->in_room)->is_guest(ch)))
       gain *= 1.5;
 
     // Penalties happen last, to avoid the possibility of truncating to zero too early
