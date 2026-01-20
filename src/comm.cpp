@@ -2933,6 +2933,20 @@ void send_to_char(const char *messg, struct char_data *ch)
     SEND_TO_Q(messg, ch->desc);
 }
 
+void send_to_icon(const char * const messg, struct matrix_icon * icon)
+{
+  if (!icon || !icon->decker || !icon->decker->ch || !icon->decker->ch->desc || !messg) {
+#ifdef DEBUG_SEND_TO_ICON
+    log_vfprintf("send_to_icon '%s' failing: no valid target or messg", messg);
+#endif
+    return;
+  }
+
+  SEND_TO_Q(messg, icon->decker->ch->desc);
+  if (icon->decker->hitcher && icon->decker->hitcher->desc)
+    SEND_TO_Q(messg, icon->decker->hitcher->desc);
+}
+
 void send_to_icon(struct matrix_icon * icon, const char * const messg, ...)
 {
   if (!icon || !icon->decker || !icon->decker->ch || !icon->decker->ch->desc || !messg) {

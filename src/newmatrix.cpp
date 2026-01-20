@@ -1564,7 +1564,7 @@ ACMD(do_matrix_score)
 
   strlcat(buf, "\r\n(Switches available: ^WSCORE HEALTH^n, ^WSTATS^n, ^WDECK^n, ^WMEMORY^n.)\r\n", sizeof(buf));
 
-  send_to_icon(PERSONA, buf);
+  send_to_icon(buf, PERSONA);
 }
 
 ACMD(do_locate)

@@ -2846,7 +2846,7 @@ void extract_obj(struct obj_data * obj, bool dont_warn_on_kept_items)
 
   // Ensure it's removed from the object list.
   if (!ObjList.Remove(obj))
-    log_vfprintf("ObjList.Remove called by '%s' returned FALSE!  (%ld-%ld)", GET_OBJ_VNUM(obj), GET_OBJ_IDNUM(obj));
+    log_vfprintf("ObjList.Remove returned FALSE!  (%ld-%ld)", GET_OBJ_VNUM(obj), GET_OBJ_IDNUM(obj));
 
   if (GET_OBJ_RNUM(obj) >= 0)
     (obj_index[GET_OBJ_RNUM(obj)].number)--;
