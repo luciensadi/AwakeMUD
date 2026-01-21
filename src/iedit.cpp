@@ -1388,19 +1388,19 @@ void iedit_disp_menu(struct descriptor_data * d)
       WEAPCLAMP(OBJ, GET_WEAPON_MAX_AMMO, max_ammo, "max ammo");
       if (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(OBJ), 1 << MODE_SS) && !kosher_weapon_values[GET_OBJ_VAL(OBJ, 3)].can_ss) {
         send_to_char(CH, "^RSingle-shot firemode not allowed for this weapon type.^n\r\n");
-        REMOVE_BIT(GET_WEAPON_POSSIBLE_FIREMODES(OBJ), MODE_SS);
+        REMOVE_BIT(GET_WEAPON_POSSIBLE_FIREMODES(OBJ), 1 << MODE_SS);
       }
       if (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(OBJ), 1 << MODE_SA) && !kosher_weapon_values[GET_OBJ_VAL(OBJ, 3)].can_sa) {
         send_to_char(CH, "^RSemi-auto firemode not allowed for this weapon type.^n\r\n");
-        REMOVE_BIT(GET_WEAPON_POSSIBLE_FIREMODES(OBJ), MODE_SA);
+        REMOVE_BIT(GET_WEAPON_POSSIBLE_FIREMODES(OBJ), 1 << MODE_SA);
       }
       if (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(OBJ), 1 << MODE_BF) && !kosher_weapon_values[GET_OBJ_VAL(OBJ, 3)].can_bf) {
         send_to_char(CH, "^RBurst firemode not allowed for this weapon type.^n\r\n");
-        REMOVE_BIT(GET_WEAPON_POSSIBLE_FIREMODES(OBJ), MODE_BF);
+        REMOVE_BIT(GET_WEAPON_POSSIBLE_FIREMODES(OBJ), 1 << MODE_BF);
       }
       if (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(OBJ), 1 << MODE_FA) && !kosher_weapon_values[GET_OBJ_VAL(OBJ, 3)].can_fa) {
         send_to_char(CH, "^RFull-auto firemode not allowed for this weapon type.^n\r\n");
-        REMOVE_BIT(GET_WEAPON_POSSIBLE_FIREMODES(OBJ), MODE_FA);
+        REMOVE_BIT(GET_WEAPON_POSSIBLE_FIREMODES(OBJ), 1 << MODE_FA);
       }
       WEAPCLAMP(OBJ, GET_WEAPON_INTEGRAL_RECOIL_COMP, recoil_comp, "recoil comp");
       if (GET_WEAPON_ATTACH_UNDER_VNUM(OBJ) > -1 && !kosher_weapon_values[GET_OBJ_VAL(OBJ, 3)].can_attach_bottom) {
