@@ -3761,8 +3761,9 @@ int vnum_object_weapons_integralcomp(char *searchname, struct char_data * ch)
   int nr, found = 0;
   buf[0] = '\0';
 
-  for(int power = 21; power >= 0; power-- ) {
-    for (int rc = 10; rc > -5; rc--) {
+
+  for (int rc = 10; rc > 0; rc--) {
+    for(int power = 21; power >= 0; power-- ) {
       for (nr = 0; nr <= top_of_objt; nr++) {
         if (GET_OBJ_TYPE(&obj_proto[nr]) != ITEM_WEAPON)
           continue;
