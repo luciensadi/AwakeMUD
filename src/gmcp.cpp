@@ -478,8 +478,10 @@ void ExecuteGMCPMessage(descriptor_t *apDescriptor, const char *module, const js
     SendGMCPDiscordStatus(apDescriptor);
   }
 #endif
+#ifdef IS_BUILDPORT
   else
     log_vfprintf("Received Unhandled GMCP Module Call [%s]: '%s' from %s.", module, payload.dump().c_str(), GET_CHAR_NAME(apDescriptor->character));
+#endif
 }
 
 void ParseGMCP( descriptor_t *apDescriptor, const char *apData )
