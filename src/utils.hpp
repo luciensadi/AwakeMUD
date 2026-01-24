@@ -424,9 +424,10 @@ bool    update_pos(struct char_data *victim, bool protect_spells_from_purge=0);
 
 #define GET_PROJECTION_ESSLOSS_TICK(ch)  ((ch)->points.projection_ticks)
 
-#define RACE_IS_GHOUL(race)  ((race) >= RACE_GHOUL_HUMAN && (race) <= RACE_GHOUL_TROLL)
-#define RACE_IS_DRAKE(race)  ((race) >= RACE_DRAKE_HUMAN && (race) <= RACE_DRAKE_TROLL)
-#define RACE_IS_DRAGON(race) ((race) >= RACE_WESTERN_DRAGON && (race) <= RACE_FEATHERED_SERPENT)
+#define RACE_IS_GHOUL(race)       ((race) >= RACE_GHOUL_HUMAN && (race) <= RACE_GHOUL_TROLL)
+#define RACE_IS_DRAKE(race)       ((race) >= RACE_DRAKE_HUMAN && (race) <= RACE_DRAKE_TROLL)
+#define RACE_IS_DRAGON(race)      ((race) >= RACE_WESTERN_DRAGON && (race) <= RACE_FEATHERED_SERPENT)
+#define RACE_IS_TROLL_SIZED(race) ((race) == RACE_TROLL || (race) == RACE_CYCLOPS || (race) == RACE_FOMORI || (race) == RACE_GIANT || (race) == RACE_MINOTAUR)
 
 #define IS_GHOUL(ch)  (RACE_IS_GHOUL(GET_RACE(ch)))
 #define IS_DRAKE(ch)  (RACE_IS_DRAKE(GET_RACE(ch)))
@@ -924,6 +925,7 @@ float get_proto_weight(struct obj_data *obj);
 #define GET_OBJ_CONTENTS(obj)  (GET_OBJ_TYPE((obj)) != ITEM_PART ? (obj)->contains : NULL)
 
 #define CAN_WEAR(obj, part) ((obj)->obj_flags.wear_flags.IsSet((part)))
+#define OBJ_REQUIRES_TWO_HANDS(obj) (IS_OBJ_STAT(obj, ITEM_EXTRA_TWOHANDS) != IS_OBJ_STAT(obj, ITEM_EXTRA_INVERT_TWOHANDED))
 
 #define IS_WEAPON(type) (((type) >= TYPE_HIT) && ((type) < TYPE_SUFFERING))
 

@@ -1067,7 +1067,7 @@ void look_at_char(struct char_data * i, struct char_data * ch, const char *used_
         
         // Special strings for wield / hold.
         if (j == WEAR_WIELD || j == WEAR_HOLD) {
-          if (IS_OBJ_STAT(eq, ITEM_EXTRA_TWOHANDS))
+          if (OBJ_REQUIRES_TWO_HANDS(eq))
             send_to_char(MOB_FLAGGED(i, MOB_INANIMATE) ? "<firmly mounted>     " : hands[2], ch);
           else if (j == WEAR_WIELD)
             send_to_char(MOB_FLAGGED(i, MOB_INANIMATE) ? "<mounted>            " : hands[(int)i->char_specials.saved.left_handed], ch);
@@ -1802,13 +1802,14 @@ void disp_long_exits(struct char_data *ch, bool autom)
   {
     if (EXIT(ch, door) && EXIT(ch, door)->to_room && EXIT(ch, door)->to_room != &world[0]) {
       if (GET_REAL_LEVEL(ch) >= LVL_BUILDER) {
-        snprintf(buf2, sizeof(buf2), "%-5s - [%5ld] %s%s%s%s%s\r\n", dirs[door],
+        snprintf(buf2, sizeof(buf2), "%-5s - [%5ld] %s%s%s%s%s%s\r\n", dirs[door],
                  EXIT(ch, door)->to_room->number,
                  replace_neutral_color_codes(GET_ROOM_NAME(EXIT(ch, door)->to_room), autom ? "^c" : "^n"),
                  IS_SET(EXIT(ch, door)->exit_info, EX_LOCKED) ? " (locked)" : ((IS_SET(EXIT(ch, door)->exit_info, EX_CLOSED)) ? " (closed)" : ""),
                  IS_SET(EXIT(ch, door)->exit_info, EX_HIDDEN) ? " (hidden)" : "",
                  (veh && !room_accessible_to_vehicle_piloted_by_ch(EXIT(veh, door)->to_room, veh, ch, FALSE)) ? " (impassible)" : "",
-                 IS_WATER(EXIT(ch, door)->to_room) ? " (flooded)" : ""
+                 IS_WATER(EXIT(ch, door)->to_room) ? " (flooded)" : "",
+                 ROOM_FLAGGED(EXIT(ch, door)->to_room, ROOM_FALL) ? " (treacherous)" : ""
                 );
         if (autom)
           strlcat(buf, "^c", sizeof(buf));
@@ -1834,8 +1835,12 @@ void disp_long_exits(struct char_data *ch, bool autom)
               snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "A closed %s", *(fname(EXIT(ch, door)->keyword)) ? fname(EXIT(ch, door)->keyword) : "door");
           } else {
             strlcat(buf2, replace_neutral_color_codes(GET_ROOM_NAME(EXIT(ch, door)->to_room), autom ? "^c" : "^n"), sizeof(buf2));
-            if (IS_WATER(EXIT(ch, door)->to_room))
+            if (IS_WATER(EXIT(ch, door)->to_room)) {
               strlcat(buf2, " (flooded)", sizeof(buf2));
+            }
+            if (ROOM_FLAGGED(EXIT(ch, door)->to_room, ROOM_FALL)) {
+              strlcat(buf2, " (treacherous)", sizeof(buf2));
+            }
           }
           strlcat(buf2, "\r\n", sizeof(buf2));
         }
@@ -3083,6 +3088,13 @@ void do_probe_object(struct char_data * ch, struct obj_data * j, bool is_in_shop
           }
         }
 
+        // Note any handedness swap penalties.
+        if (IS_OBJ_STAT(j, ITEM_EXTRA_INVERT_TWOHANDED)) {
+          if (!RACE_IS_TROLL_SIZED(GET_RACE(ch))) {
+            strlcat(buf, "\r\nYou'll take a ^c+2^n TN penalty when firing it unless you ^WADJUST^n your grip.", sizeof(buf));
+          }
+        }
+
         // Info about attachments, if any.
         int standing_recoil_comp = GET_WEAPON_INTEGRAL_RECOIL_COMP(j);
         int prone_recoil_comp = 0;
@@ -3290,13 +3302,13 @@ void do_probe_object(struct char_data * ch, struct obj_data * j, bool is_in_shop
       // Melee weapons.
       else {
         if (obj_index[GET_OBJ_RNUM(j)].wfunc == monowhip) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^cmonowhip^n that uses the ^c%s^n skill to attack with. Its damage code is ^c10%s%s^n.",
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^cmonowhip^n that uses the ^c%s^n skill. Its damage code is ^c10%s%s^n.",
                   skills[GET_OBJ_VAL(j, 4)].name,
                   wound_arr[GET_OBJ_VAL(j, 1)],
                   !IS_DAMTYPE_PHYSICAL(get_weapon_damage_type(j)) ? " (stun)" : "");
         }
         else if (GET_WEAPON_STR_BONUS(j) != 0) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^c%s^n that uses the ^c%s^n skill to attack with. Its damage code is ^c(STR%s%d)%s%s^n.",
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^c%s^n that uses the ^c%s^n skill. Its damage code is ^c(STR%s%d)%s%s^n.",
                    GET_WEAPON_TYPE_NAME(GET_WEAPON_ATTACK_TYPE(j)),
                    skills[GET_WEAPON_SKILL(j)].name,
                    GET_WEAPON_STR_BONUS(j) < 0 ? "" : "+",
@@ -3304,14 +3316,27 @@ void do_probe_object(struct char_data * ch, struct obj_data * j, bool is_in_shop
                    GET_WOUND_NAME(GET_WEAPON_DAMAGE_CODE(j)),
                    !IS_DAMTYPE_PHYSICAL(get_weapon_damage_type(j)) ? " (stun)" : "");
         } else {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^c%s^n that uses the ^c%s^n skill to attack with. Its damage code is ^c(STR)%s%s^n.",
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^c%s^n that uses the ^c%s^n skill. Its damage code is ^c(STR)%s%s^n.",
                    GET_WEAPON_TYPE_NAME(GET_WEAPON_ATTACK_TYPE(j)), 
                    skills[GET_WEAPON_SKILL(j)].name,
                    GET_WOUND_NAME(GET_WEAPON_DAMAGE_CODE(j)),
                    !IS_DAMTYPE_PHYSICAL(get_weapon_damage_type(j)) ? " (stun)" : "");
         }
+
+        // Note any handedness swap effects.
+        if (IS_OBJ_STAT(j, ITEM_EXTRA_INVERT_TWOHANDED)) {
+          if (IS_OBJ_STAT(j, ITEM_EXTRA_TWOHANDS)) {
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf),
+                     "\r\nYou'll take a ^c+%d^n TN and a -%d power penalty when using it unless you ^WADJUST^n your grip.",
+                     RACE_IS_TROLL_SIZED(GET_RACE(ch)) ? 1 : 2,
+                     RACE_IS_TROLL_SIZED(GET_RACE(ch)) ? 1 : 2);
+          } else {
+            strlcat(buf, "\r\nYou've ^WADJUST^ned your grip to wield it with two hands, granting +1 power.", sizeof(buf));
+          }
+        }
+
         if (GET_WEAPON_REACH(j)) {
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt grants ^c%d^n meters of reach when wielded.", GET_WEAPON_REACH(j));
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt grants ^c%d^n meter%s of reach when wielded.", GET_WEAPON_REACH(j), GET_WEAPON_REACH(j) == 1 ? "" : "s");
         }
         if (GET_WEAPON_FOCUS_RATING(j) > 0) {
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\nIt is a weapon focus of rating ^c%d^n. When bonded and wielded, its rating is added to your weapon skill.", GET_WEAPON_FOCUS_RATING(j));
@@ -5400,7 +5425,7 @@ ACMD(do_equipment)
 
       // Send wearslot info.
       if (i == WEAR_WIELD || i == WEAR_HOLD) {
-        if (IS_OBJ_STAT(obj, ITEM_EXTRA_TWOHANDS))
+        if (OBJ_REQUIRES_TWO_HANDS(obj))
           send_to_char(hands[2], ch);
         else if (GET_OBJ_TYPE(obj) == ITEM_WEAPON) { // wielding something?
           if (i == WEAR_WIELD)
@@ -8130,6 +8155,7 @@ void display_room_name(struct char_data *ch, struct room_data *in_room, bool in_
                   spirit_name_with_hearth[SECT(in_room)]);
       // Append things that don't show up in bits.
       APPEND_ROOM_FLAG(IS_WATER(in_room), " ^B(Flooded)^n");
+      APPEND_ROOM_FLAG(ROOM_FLAGGED(in_room, ROOM_FALL), " ^y(Treacherous)^n");
       APPEND_ROOM_FLAG((in_room->matrix && real_host(in_room->matrix) >= 1), " (Jackpoint)");
       if (in_room->flight_code && (ROOM_FLAGGED(in_room, ROOM_HELIPAD) || ROOM_FLAGGED(in_room, ROOM_RUNWAY))) {
         snprintf(ENDOF(room_title_buf), sizeof(room_title_buf) - strlen(room_title_buf), " (%s: %3s)", 
@@ -8166,6 +8192,7 @@ void display_room_name(struct char_data *ch, struct room_data *in_room, bool in_
       APPEND_ROOM_FLAG(ROOM_FLAGGED(in_room, ROOM_ARENA), " ^y(Arena)^n");
       APPEND_ROOM_FLAG(ROOM_FLAGGED(in_room, ROOM_PEACEFUL), " (Peaceful)");
       APPEND_ROOM_FLAG(IS_WATER(in_room), " ^B(Flooded)^n");
+      APPEND_ROOM_FLAG(ROOM_FLAGGED(in_room, ROOM_FALL), " ^y(Treacherous)^n");
       APPEND_ROOM_FLAG((in_room->matrix && real_host(in_room->matrix) >= 1), " (Jackpoint)");
       APPEND_ROOM_FLAG(ROOM_FLAGGED(in_room, ROOM_ENCOURAGE_CONGREGATION), " ^W(Socialization Bonus)^n");
 

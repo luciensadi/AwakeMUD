@@ -139,6 +139,7 @@ ACMD_DECLARE(do_olcon);
 ACMD_DECLARE(do_abilityset);
 ACMD_DECLARE(do_accept);
 ACMD_DECLARE(do_account);
+ACMD_DECLARE(do_adjust);
 ACMD_DECLARE(do_action);
 ACMD_DECLARE(do_activate);
 ACMD_DECLARE(do_advance);
@@ -557,7 +558,8 @@ struct command_info cmd_info[] =
 #else
     { "addpoint"   , POS_DEAD    , do_initiate , 0, SCMD_POWERPOINT, BLOCKS_IDLE_REWARD },
 #endif
-    { "affects"    , POS_MORTALLYW, do_status   , 0, 0, ALLOWS_IDLE_REWARD },
+    { "adjust"     , POS_LYING   , do_adjust   , 0, 0, BLOCKS_IDLE_REWARD },
+    { "affects"    , POS_MORTALLYW, do_status  , 0, 0, ALLOWS_IDLE_REWARD },
     { "afk"        , POS_DEAD    , do_afk      , 0, 0, ALLOWS_IDLE_REWARD },
     { "ammo"       , POS_LYING   , do_ammo     , 0, 0, ALLOWS_IDLE_REWARD },
     { "arrange"    , POS_LYING   , do_arrange  , 0, 0, BLOCKS_IDLE_REWARD },

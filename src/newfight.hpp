@@ -164,6 +164,17 @@ struct ranged_combat_data {
         modifiers[COMBAT_MOD_DUAL_WIELDING] = 2;
       else
         modifiers[COMBAT_MOD_SMARTLINK] -= check_smartlink(ch, weapon);
+
+      // Setup: Apply handedness changes here. For firearms, we only care about wielding a 2h weapon with 1 hand.
+      if (IS_OBJ_STAT(weapon, ITEM_EXTRA_INVERT_TWOHANDED)
+          && IS_OBJ_STAT(weapon, ITEM_EXTRA_TWOHANDS)
+          && !RACE_IS_TROLL_SIZED(GET_RACE(ch)))
+      {
+        // CC 99
+        modifiers[COMBAT_MOD_HANDEDNESS_CHANGE] = 2;
+      }
+
+      // TODO: Cannon Companion p99 racial modifiers for weapons held
     }
   }
 };
@@ -235,6 +246,26 @@ struct melee_combat_data {
 
         // Monowhips.
         is_monowhip = obj_index[GET_OBJ_RNUM(weapon)].wfunc == monowhip;
+      }
+
+      // Setup: Apply handedness changes here, but only if it's not a monowhip.
+      if (!is_monowhip) {
+        if (IS_OBJ_STAT(weapon, ITEM_EXTRA_INVERT_TWOHANDED)) {
+          // 2h to 1h is a penalty (reduced for trolls)
+          if (IS_OBJ_STAT(weapon, ITEM_EXTRA_TWOHANDS)) {
+            modifiers[COMBAT_MOD_HANDEDNESS_CHANGE] = (RACE_IS_TROLL_SIZED(GET_RACE(ch)) ? 1 : 2);
+            power_before_armor -= (RACE_IS_TROLL_SIZED(GET_RACE(ch)) ? 1 : 2);
+          }
+          // 1h to 2h is a +1 power. 
+          else {
+            power_before_armor += 1;
+          }
+        } else {
+          // We also give the +1 power for 1h -> 2h if you're wielding a 1h weapon with your other hand free.
+          if (!GET_EQ(ch, WEAR_HOLD)) {
+            power_before_armor += 1;
+          }
+        }
       }
     } else if (cyber->num_cyberweapons > 0) {
       skill = SKILL_CYBER_IMPLANTS;

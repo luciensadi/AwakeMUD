@@ -9061,6 +9061,51 @@ int audit_zone_objects_(struct char_data *ch, int zone_num, bool verbose) {
         issues++; \
       }
 
+      // Handedness check based on skill.
+      switch (GET_WEAPON_SKILL(obj)) {
+        // Expected to be 2h.
+        case SKILL_POLE_ARMS        :
+        case SKILL_RIFLES           :
+        case SKILL_SHOTGUNS         :
+        case SKILL_ASSAULT_RIFLES   :
+        case SKILL_GRENADE_LAUNCHERS:
+        case SKILL_GUNNERY          :
+        case SKILL_MACHINE_GUNS     :
+        case SKILL_MISSILE_LAUNCHERS:
+        case SKILL_ASSAULT_CANNON   :
+          if (!IS_OBJ_STAT(obj, ITEM_EXTRA_TWOHANDS)) {
+            strlcat(buf, "  - weapon is one-handed despite having a usually-two-handed weapon's skill\r\n", sizeof(buf));
+            issues++;
+          }
+          break;
+        case SKILL_WHIPS_FLAILS     :
+        case SKILL_TASERS           :
+        case SKILL_SMG              :
+        case SKILL_PISTOLS          :
+        case SKILL_CLUBS            :
+          if (IS_OBJ_STAT(obj, ITEM_EXTRA_TWOHANDS)) {
+            strlcat(buf, "  - weapon is two-handed despite having a usually-one-handed weapon's skill\r\n", sizeof(buf));
+            issues++;
+          }
+          break;
+        default:
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - weapon uses odd skill (%s)\r\n", skills[GET_WEAPON_SKILL(obj)].name);
+          issues++;
+          break;
+      }
+
+      // Handedness based on reach.
+      if (!WEAPON_IS_GUN(obj)) {
+        if (GET_WEAPON_REACH(obj) >= 2 && !IS_OBJ_STAT(obj, ITEM_EXTRA_TWOHANDS)) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - weapon is one-handed despite having high reach (%d)\r\n", GET_WEAPON_REACH(obj));
+          issues++;
+        }
+        else if (GET_WEAPON_REACH(obj) <= 0 && IS_OBJ_STAT(obj, ITEM_EXTRA_TWOHANDS)) {
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - weapon is two-handed despite having low reach (%d)\r\n", GET_WEAPON_REACH(obj));
+          issues++;
+        }
+      }
+
       // Check for shared value overruns.
       WARN_ON_NON_KOSHER_VAL(GET_WEAPON_POWER, >, power);
 

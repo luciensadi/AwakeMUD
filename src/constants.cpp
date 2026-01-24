@@ -1313,6 +1313,7 @@ const char *extra_bits[] =
     "TRODE_NET",
     "OTAKU_RESONANCE",
     "ARRANGED",
+    "INVERT_2H",
     MAX_FLAG_MARKER
   };
 
@@ -1356,6 +1357,7 @@ const char *pc_readable_extra_bits[] =
     "Is Electrode Net",
     "Is Virtual Otaku Item",
     "Is Arranged",
+    "2h/1h Inverted",
     MAX_FLAG_MARKER
   };
 
@@ -3077,6 +3079,7 @@ const char *combat_modifiers[] =
   "Vehicle Handling",
   "Non-Weapon",
   "Riot Shield",
+  "Handedness Change",
   "ERROR"
 };
 

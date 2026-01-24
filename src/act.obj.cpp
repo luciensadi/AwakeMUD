@@ -3891,7 +3891,7 @@ int can_wield_both(struct char_data *ch, struct obj_data *one, struct obj_data *
 		return FALSE;
 	else if (!WEAPON_IS_GUN(one) && !WEAPON_IS_GUN(two))
 		return FALSE;
-	else if (IS_OBJ_STAT(one, ITEM_EXTRA_TWOHANDS) || IS_OBJ_STAT(two, ITEM_EXTRA_TWOHANDS))
+	else if (OBJ_REQUIRES_TWO_HANDS(one) || OBJ_REQUIRES_TWO_HANDS(two))
 		return FALSE;
 
 	return TRUE;
@@ -4041,7 +4041,7 @@ void perform_wear(struct char_data *ch, struct obj_data *obj, int where, bool pr
 				where++;
 	}
 
-	if ((where == WEAR_WIELD || where == WEAR_HOLD) && IS_OBJ_STAT(obj, ITEM_EXTRA_TWOHANDS) &&
+	if ((where == WEAR_WIELD || where == WEAR_HOLD) && OBJ_REQUIRES_TWO_HANDS(obj) &&
 			(GET_EQ(ch, WEAR_SHIELD) || GET_EQ(ch, WEAR_HOLD) || GET_EQ(ch, WEAR_WIELD)))
 	{
 		if (print_messages)
@@ -4097,14 +4097,14 @@ void perform_wear(struct char_data *ch, struct obj_data *obj, int where, bool pr
 		return;
 	}
 
-	if (GET_EQ(ch, WEAR_WIELD) && IS_OBJ_STAT(GET_EQ(ch, WEAR_WIELD), ITEM_EXTRA_TWOHANDS) &&
+	if (GET_EQ(ch, WEAR_WIELD) && OBJ_REQUIRES_TWO_HANDS(GET_EQ(ch, WEAR_WIELD)) &&
 			(where == WEAR_HOLD || where == WEAR_SHIELD))
 	{
 		if (print_messages)
 			act("$p requires two free hands.", FALSE, ch, GET_EQ(ch, WEAR_WIELD), 0, TO_CHAR);
 		return;
 	}
-	else if (GET_EQ(ch, WEAR_HOLD) && IS_OBJ_STAT(GET_EQ(ch, WEAR_HOLD), ITEM_EXTRA_TWOHANDS) &&
+	else if (GET_EQ(ch, WEAR_HOLD) && OBJ_REQUIRES_TWO_HANDS(GET_EQ(ch, WEAR_HOLD)) &&
 					 (where == WEAR_WIELD || where == WEAR_SHIELD))
 	{
 		if (print_messages)
@@ -5146,21 +5146,21 @@ int draw_from_readied_holster(struct char_data *ch, struct obj_data *holster)
 	}
 
 	// We're wielding a 2H item.
-	if (GET_EQ(ch, WEAR_WIELD) && IS_OBJ_STAT(GET_EQ(ch, WEAR_WIELD), ITEM_EXTRA_TWOHANDS))
+	if (GET_EQ(ch, WEAR_WIELD) && OBJ_REQUIRES_TWO_HANDS(GET_EQ(ch, WEAR_WIELD)))
 	{
 		act("Draw check: Skipping $p, wielding a 2H item already.", FALSE, ch, contents, 0, TO_ROLLS);
 		return 0;
 	}
 
 	// We're holding a 2H item.
-	if (GET_EQ(ch, WEAR_HOLD) && IS_OBJ_STAT(GET_EQ(ch, WEAR_HOLD), ITEM_EXTRA_TWOHANDS))
+	if (GET_EQ(ch, WEAR_HOLD) && OBJ_REQUIRES_TWO_HANDS(GET_EQ(ch, WEAR_HOLD)))
 	{
 		act("Draw check: Skipping $p, holding a 2H item already.", FALSE, ch, contents, 0, TO_ROLLS);
 		return 0;
 	}
 
 	// We're holding something and drawing a 2H item.
-	if ((GET_EQ(ch, WEAR_WIELD) || GET_EQ(ch, WEAR_HOLD) || GET_EQ(ch, WEAR_SHIELD)) && IS_OBJ_STAT(contents, ITEM_EXTRA_TWOHANDS))
+	if ((GET_EQ(ch, WEAR_WIELD) || GET_EQ(ch, WEAR_HOLD) || GET_EQ(ch, WEAR_SHIELD)) && OBJ_REQUIRES_TWO_HANDS(contents))
 	{
 		act("Draw check: Skipping $p, have something in hand and drawing 2H item.", FALSE, ch, contents, 0, TO_ROLLS);
 		return 0;
@@ -5619,11 +5619,9 @@ ACMD(do_ready)
 
 ACMD(do_draw)
 {
-	if (GET_EQ(ch, WEAR_WIELD) && (IS_OBJ_STAT(GET_EQ(ch, WEAR_WIELD), ITEM_EXTRA_TWOHANDS) || GET_EQ(ch, WEAR_HOLD)))
-	{
-		send_to_char(ch, "Your hands are full.\r\n");
-		return;
-	}
+  FAILURE_CASE_PRINTF(GET_EQ(ch, WEAR_WIELD) && OBJ_REQUIRES_TWO_HANDS(GET_EQ(ch, WEAR_WIELD)), "%s requires both hands.", decapitalize_a_an(GET_OBJ_NAME(GET_EQ(ch, WEAR_WIELD))));
+  FAILURE_CASE_PRINTF(GET_EQ(ch, WEAR_HOLD) && OBJ_REQUIRES_TWO_HANDS(GET_EQ(ch, WEAR_HOLD)), "%s requires both hands.", decapitalize_a_an(GET_OBJ_NAME(GET_EQ(ch, WEAR_HOLD))));
+  FAILURE_CASE(GET_EQ(ch, WEAR_WIELD) && GET_EQ(ch, WEAR_HOLD), "Your hands are full.");
 
 	skip_spaces(&argument);
 	if (*argument)

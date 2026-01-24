@@ -3618,7 +3618,7 @@ int vnum_object_weapons(char *searchname, struct char_data * ch)
                   wound_arr[GET_OBJ_VAL(&obj_proto[nr], 1)],
                   GET_OBJ_VAL(&obj_proto[nr], 2),
                   obj_proto[nr].text.name,
-                  weapon_types[GET_OBJ_VAL(&obj_proto[nr], 3)],
+                  weapon_types[(GET_WEAPON_ATTACK_TYPE(&obj_proto[nr]) < 0 || GET_WEAPON_ATTACK_TYPE(&obj_proto[nr]) > MAX_WEAP) ? 0 : GET_WEAPON_ATTACK_TYPE(&obj_proto[nr])],
                   GET_OBJ_VAL(&obj_proto[nr], 5),
                   WEAPON_CAN_USE_FIREMODE(&obj_proto[nr], MODE_SS) ? " SS" : "",
                   WEAPON_CAN_USE_FIREMODE(&obj_proto[nr], MODE_SA) ? " SA" : "",
@@ -3692,7 +3692,7 @@ int vnum_object_weapons_fa_pro(char *searchname, struct char_data * ch)
               wound_arr[GET_WEAPON_DAMAGE_CODE(&obj_proto[nr])],
               GET_WEAPON_INTEGRAL_RECOIL_COMP(&obj_proto[nr]),
               obj_proto[nr].text.name,
-              weapon_types[GET_WEAPON_ATTACK_TYPE(&obj_proto[nr])],
+              weapon_types[(GET_WEAPON_ATTACK_TYPE(&obj_proto[nr]) < 0 || GET_WEAPON_ATTACK_TYPE(&obj_proto[nr]) > MAX_WEAP) ? 0 : GET_WEAPON_ATTACK_TYPE(&obj_proto[nr])],
               GET_WEAPON_MAX_AMMO(&obj_proto[nr]),
               WEAPON_CAN_USE_FIREMODE(&obj_proto[nr], MODE_SS) ? " SS" : "",
               WEAPON_CAN_USE_FIREMODE(&obj_proto[nr], MODE_SA) ? " SA" : "",
@@ -3740,7 +3740,53 @@ int vnum_object_weapons_singleshot(char *searchname, struct char_data * ch)
               wound_arr[GET_WEAPON_DAMAGE_CODE(&obj_proto[nr])],
               GET_WEAPON_INTEGRAL_RECOIL_COMP(&obj_proto[nr]),
               obj_proto[nr].text.name,
-              weapon_types[GET_WEAPON_ATTACK_TYPE(&obj_proto[nr])],
+              weapon_types[(GET_WEAPON_ATTACK_TYPE(&obj_proto[nr]) < 0 || GET_WEAPON_ATTACK_TYPE(&obj_proto[nr]) > MAX_WEAP) ? 0 : GET_WEAPON_ATTACK_TYPE(&obj_proto[nr])],
+              GET_WEAPON_MAX_AMMO(&obj_proto[nr]),
+              WEAPON_CAN_USE_FIREMODE(&obj_proto[nr], MODE_SS) ? " SS" : "",
+              WEAPON_CAN_USE_FIREMODE(&obj_proto[nr], MODE_SA) ? " SA" : "",
+              WEAPON_CAN_USE_FIREMODE(&obj_proto[nr], MODE_BF) ? " BF" : "",
+              WEAPON_CAN_USE_FIREMODE(&obj_proto[nr], MODE_FA) ? " FA" : "",
+              CAN_WEAR(&obj_proto[nr], ITEM_WEAR_WIELD) ? ", ^yWieldable^n" : "",
+              obj_proto[nr].source_info ? "  ^g(canon)^n" : "");
+    }
+  }
+  page_string(ch->desc, buf, 1);
+  return (found);
+}
+
+int vnum_object_weapons_integralcomp(char *searchname, struct char_data * ch)
+{
+  char buf[MAX_STRING_LENGTH*8];
+  extern const char *wound_arr[];
+  int nr, found = 0;
+  buf[0] = '\0';
+
+  for(int power = 21; power >= 0; power-- ) {
+    for (nr = 0; nr <= top_of_objt; nr++) {
+      if (GET_OBJ_TYPE(&obj_proto[nr]) != ITEM_WEAPON)
+        continue;
+      if (!WEAPON_IS_GUN(&obj_proto[nr]))
+        continue;
+      if (GET_WEAPON_INTEGRAL_RECOIL_COMP(&obj_proto[nr]) == 0)
+        continue;
+      if (GET_WEAPON_POWER(&obj_proto[nr]) < power && power != 0)
+        continue;
+      if (GET_WEAPON_POWER(&obj_proto[nr]) > power && power != 21)
+        continue;
+      if (IS_OBJ_STAT(&obj_proto[nr], ITEM_EXTRA_STAFF_ONLY))
+        continue;
+      if (!vnum_from_editing_restricted_zone(OBJ_VNUM_RNUM(nr)))
+        continue;
+
+      ++found;
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "[%6ld :%3d] ^c%2d%s ^yIRC:%d^n %s (^W%s^n, ^c%d^n round, modes:^c%s%s%s%s^n%s)%s\r\n",
+              OBJ_VNUM_RNUM(nr),
+              ObjList.CountObj(nr),
+              GET_WEAPON_POWER(&obj_proto[nr]),
+              wound_arr[GET_WEAPON_DAMAGE_CODE(&obj_proto[nr])],
+              GET_WEAPON_INTEGRAL_RECOIL_COMP(&obj_proto[nr]),
+              obj_proto[nr].text.name,
+              weapon_types[(GET_WEAPON_ATTACK_TYPE(&obj_proto[nr]) < 0 || GET_WEAPON_ATTACK_TYPE(&obj_proto[nr]) > MAX_WEAP) ? 0 : GET_WEAPON_ATTACK_TYPE(&obj_proto[nr])],
               GET_WEAPON_MAX_AMMO(&obj_proto[nr]),
               WEAPON_CAN_USE_FIREMODE(&obj_proto[nr], MODE_SS) ? " SS" : "",
               WEAPON_CAN_USE_FIREMODE(&obj_proto[nr], MODE_SA) ? " SA" : "",
@@ -4172,7 +4218,7 @@ int vnum_object_weaponfocus(char *searchname, struct char_data * ch)
                   GET_WEAPON_STR_BONUS(&obj_proto[nr]),
                   wound_arr[GET_WEAPON_DAMAGE_CODE(&obj_proto[nr])],
                   obj_proto[nr].text.name,
-                  weapon_types[GET_WEAPON_ATTACK_TYPE(&obj_proto[nr])],
+                  weapon_types[(GET_WEAPON_ATTACK_TYPE(&obj_proto[nr]) < 0 || GET_WEAPON_ATTACK_TYPE(&obj_proto[nr]) > MAX_WEAP) ? 0 : GET_WEAPON_ATTACK_TYPE(&obj_proto[nr])],
                   GET_WEAPON_REACH(&obj_proto[nr]),
                   GET_WEAPON_FOCUS_RATING(&obj_proto[nr]),
                   obj_proto[nr].source_info ? "  ^g(canon)^n" : "");
@@ -4183,6 +4229,65 @@ int vnum_object_weaponfocus(char *searchname, struct char_data * ch)
   page_string(ch->desc, buf, 1);
   return (found);
 }
+
+int vnum_object_weapons_reachweapon(char *searchname, struct char_data * ch)
+{
+  char buf[MAX_STRING_LENGTH*8];
+  extern const char *wound_arr[];
+  int nr, found = 0;
+  int severity, strength;
+  buf[0] = '\0';
+
+  for (int rating = max_weapon_focus_rating; rating >= 0; rating--) {
+    for( severity = DEADLY; severity >= LIGHT; severity -- ) {
+      for( strength = WEAPON_MAXIMUM_STRENGTH_BONUS; strength >= 0; strength-- ) {
+        for (nr = 0; nr <= top_of_objt; nr++) {
+          if (GET_OBJ_TYPE(&obj_proto[nr]) != ITEM_WEAPON)
+            continue;
+          if (WEAPON_IS_GUN(&obj_proto[nr]))
+            continue;
+          if (GET_WEAPON_REACH(&obj_proto[nr]) != rating)
+            continue;
+          if (GET_WEAPON_DAMAGE_CODE(&obj_proto[nr]) < severity && severity != 1)
+            continue;
+          if (GET_WEAPON_STR_BONUS(&obj_proto[nr]) < strength && strength != 0)
+            continue;
+          if (GET_WEAPON_DAMAGE_CODE(&obj_proto[nr]) > severity && severity != DEADLY)
+            continue;
+          if (GET_WEAPON_STR_BONUS(&obj_proto[nr]) > strength && strength != 5)
+            continue;
+          if (IS_OBJ_STAT(&obj_proto[nr], ITEM_EXTRA_STAFF_ONLY))
+            continue;
+          if (!vnum_from_editing_restricted_zone(OBJ_VNUM_RNUM(nr)))
+            continue;
+
+          ++found;
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "[%5ld -%2d] (STR^c%+d^n)^c%s^n, %s%d^n reach, %s%dh^n: %s",
+                  OBJ_VNUM_RNUM(nr),
+                  ObjList.CountObj(nr),
+                  GET_WEAPON_STR_BONUS(&obj_proto[nr]),
+                  wound_arr[GET_WEAPON_DAMAGE_CODE(&obj_proto[nr])],
+                  GET_WEAPON_REACH(&obj_proto[nr]) > 2 ? "^y" : "^c",
+                  GET_WEAPON_REACH(&obj_proto[nr]),
+                  GET_WEAPON_REACH(&obj_proto[nr]) > 1 && !IS_OBJ_STAT(&obj_proto[nr], ITEM_EXTRA_TWOHANDS) ? "^y" : "^c",
+                  IS_OBJ_STAT(&obj_proto[nr], ITEM_EXTRA_TWOHANDS) ? 2 : 1,
+                  obj_proto[nr].text.name);
+          if (GET_WEAPON_FOCUS_RATING(&obj_proto[nr]) > 0) {
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " (focus rating ^c%d^n)", GET_WEAPON_FOCUS_RATING(&obj_proto[nr]));
+          }
+          if (obj_proto[nr].source_info) {
+            strlcat(buf, "  ^g(canon)^n", sizeof(buf));
+          }
+          strlcat(buf, "\r\n", sizeof(buf));
+        }
+      }
+    }
+  }
+  page_string(ch->desc, buf, 1);
+  return (found);
+}
+
+
 
 
 int vnum_object_extra_bit(char *searchname, struct char_data * ch)
@@ -4236,6 +4341,10 @@ int vnum_object(char *searchname, struct char_data * ch)
     return vnum_object_weapons_singleshot(searchname,ch);
   if (!strcmp(searchname,"weaponsbytype"))
     return vnum_object_weapons_by_type(searchname,ch);
+  if (!strcmp(searchname, "reachweapon"))
+    return vnum_object_weapons_reachweapon(searchname, ch);
+  if (!strcmp(searchname, "integralcomp"))
+    return vnum_object_weapons_integralcomp(searchname, ch);
   if (!strcmp(searchname,"armorslist"))
     return vnum_object_armors(searchname,ch);
   if (!strcmp(searchname,"magazineslist"))

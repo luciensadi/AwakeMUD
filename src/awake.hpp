@@ -1449,7 +1449,9 @@ enum {
 #define ITEM_EXTRA_TRODE_NET          35
 #define ITEM_EXTRA_OTAKU_RESONANCE    36    // This is related to Otaku nonsense
 #define ITEM_EXTRA_ARRANGED           37
-#define MAX_ITEM_EXTRA                38
+#define ITEM_EXTRA_INVERT_TWOHANDED   38
+#define MAX_ITEM_EXTRA                39
+// Adding something here? Put it in both 'pc_readable_extra_bits' and 'extra_bits' in constants.cpp
 
 /* Ammo types */
 #define AMMO_NORMAL     0
@@ -2510,7 +2512,6 @@ enum {
 #define MAX_SHORTDESC_LEN         200
 
 // New combat modifiers used in the rework of hit().
-// Adding an additional one? Make sure you list it in the dodge check switch case if appropriate.
 #define COMBAT_MOD_RECOIL                0
 #define COMBAT_MOD_MOVEMENT              1
 #define COMBAT_MOD_DUAL_WIELDING         2
@@ -2528,8 +2529,11 @@ enum {
 #define COMBAT_MOD_VEHICLE_HANDLING      14
 #define COMBAT_MOD_WIELDING_A_NON_WEAPON 15
 #define COMBAT_MOD_RIOT_SHIELD           16
-#define NUM_COMBAT_MODIFIERS             17
+#define COMBAT_MOD_HANDEDNESS_CHANGE     17
+#define NUM_COMBAT_MODIFIERS             18
 // End new combat modifiers.
+// Adding an additional one? Make sure you list it in the dodge check switch case if appropriate. ("case combat_mod...")
+// Also add it to combat_modifiers.
 
 #define JURISDICTION_SEATTLE   0
 #define JURISDICTION_PORTLAND  1
