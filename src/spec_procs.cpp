@@ -1987,10 +1987,20 @@ SPECIAL(car_dealer)
     }
 
     if (GET_NUYEN(ch) < veh->cost) {
-      send_to_char("You aren't carrying enough nuyen for that, and this shop doesn't take credsticks.\r\n", ch);
-      return TRUE;
+      if (!has_valid_pocket_secretary(ch)) {
+        send_to_char("You don't have enough nuyen for that, and no pocket secretary to arrange a bank transfer.\r\n", ch);
+        return TRUE;
+      }
+      if ((GET_BANK(ch) < veh->cost)) {
+        send_to_char("You aren't carrying enough nuyen for that, and you don't have enough available funds in your accounts either.\r\n", ch);
+        return TRUE;
+      } else {
+        send_to_char("You arrange for a bank transfer in order to purchase the vehicle.\r\n", ch);
+        lose_bank(ch, veh->cost, NUYEN_OUTFLOW_VEHICLE_PURCHASES);
+      }
+    } else {
+      lose_nuyen(ch, veh->cost, NUYEN_OUTFLOW_VEHICLE_PURCHASES);
     }
-    lose_nuyen(ch, veh->cost, NUYEN_OUTFLOW_VEHICLE_PURCHASES);
     newveh = read_vehicle(veh->veh_number, REAL);
     veh_to_room(newveh, ch->in_room);
     set_veh_owner(newveh, GET_IDNUM(ch));
