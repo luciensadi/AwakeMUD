@@ -248,8 +248,8 @@ struct melee_combat_data {
         is_monowhip = obj_index[GET_OBJ_RNUM(weapon)].wfunc == monowhip;
       }
 
-      // Setup: Apply handedness changes here, but only if it's not a monowhip.
-      if (!is_monowhip) {
+      // Setup: Apply handedness changes here, but only if it's not a monowhip and has at least 1 reach.
+      if (!is_monowhip && GET_WEAPON_REACH(weapon) >= 1) {
         if (IS_OBJ_STAT(weapon, ITEM_EXTRA_INVERT_TWOHANDED)) {
           // 2h to 1h is a penalty (reduced for trolls)
           if (IS_OBJ_STAT(weapon, ITEM_EXTRA_TWOHANDS)) {
