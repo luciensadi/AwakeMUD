@@ -3763,40 +3763,44 @@ int vnum_object_weapons_integralcomp(char *searchname, struct char_data * ch)
 
 
   for (int rc = 10; rc > 0; rc--) {
-    for(int power = 21; power >= 0; power-- ) {
-      for (nr = 0; nr <= top_of_objt; nr++) {
-        if (GET_OBJ_TYPE(&obj_proto[nr]) != ITEM_WEAPON)
-          continue;
-        if (!WEAPON_IS_GUN(&obj_proto[nr]))
-          continue;
-        if (rc == 10 ? GET_WEAPON_INTEGRAL_RECOIL_COMP(&obj_proto[nr]) < rc : GET_WEAPON_INTEGRAL_RECOIL_COMP(&obj_proto[nr]) != rc )
-          continue;
-        if (GET_WEAPON_POWER(&obj_proto[nr]) < power && power != 0)
-          continue;
-        if (GET_WEAPON_POWER(&obj_proto[nr]) > power && power != 21)
-          continue;
-        if (!WEAPON_CAN_USE_FIREMODE(&obj_proto[nr], MODE_BF) && !WEAPON_CAN_USE_FIREMODE(&obj_proto[nr], MODE_FA))
-          continue;
-        if (IS_OBJ_STAT(&obj_proto[nr], ITEM_EXTRA_STAFF_ONLY))
-          continue;
-        if (!vnum_from_editing_restricted_zone(OBJ_VNUM_RNUM(nr)))
-          continue;
+    for (int power = 21; power >= 0; power-- ) {
+      for (int wound = DEADLY; wound >= LIGHT; wound--) {
+        for (nr = 0; nr <= top_of_objt; nr++) {
+          if (GET_OBJ_TYPE(&obj_proto[nr]) != ITEM_WEAPON)
+            continue;
+          if (!WEAPON_IS_GUN(&obj_proto[nr]))
+            continue;
+          if (GET_WEAPON_DAMAGE_CODE(&obj_proto[nr]) != wound)
+            continue;
+          if (rc == 10 ? GET_WEAPON_INTEGRAL_RECOIL_COMP(&obj_proto[nr]) < rc : GET_WEAPON_INTEGRAL_RECOIL_COMP(&obj_proto[nr]) != rc )
+            continue;
+          if (GET_WEAPON_POWER(&obj_proto[nr]) < power && power != 0)
+            continue;
+          if (GET_WEAPON_POWER(&obj_proto[nr]) > power && power != 21)
+            continue;
+          if (!WEAPON_CAN_USE_FIREMODE(&obj_proto[nr], MODE_BF) && !WEAPON_CAN_USE_FIREMODE(&obj_proto[nr], MODE_FA))
+            continue;
+          if (IS_OBJ_STAT(&obj_proto[nr], ITEM_EXTRA_STAFF_ONLY))
+            continue;
+          if (!vnum_from_editing_restricted_zone(OBJ_VNUM_RNUM(nr)))
+            continue;
 
-        ++found;
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "[%6ld :%3d] ^c%2d%s ^yIRC:%d^n %s (^c%d^n round, modes:^c%s%s%s%s^n%s)%s\r\n",
-                OBJ_VNUM_RNUM(nr),
-                ObjList.CountObj(nr),
-                GET_WEAPON_POWER(&obj_proto[nr]),
-                wound_arr[GET_WEAPON_DAMAGE_CODE(&obj_proto[nr])],
-                GET_WEAPON_INTEGRAL_RECOIL_COMP(&obj_proto[nr]),
-                obj_proto[nr].text.name,
-                GET_WEAPON_MAX_AMMO(&obj_proto[nr]),
-                WEAPON_CAN_USE_FIREMODE(&obj_proto[nr], MODE_SS) ? " SS" : "",
-                WEAPON_CAN_USE_FIREMODE(&obj_proto[nr], MODE_SA) ? " SA" : "",
-                WEAPON_CAN_USE_FIREMODE(&obj_proto[nr], MODE_BF) ? " BF" : "",
-                WEAPON_CAN_USE_FIREMODE(&obj_proto[nr], MODE_FA) ? " FA" : "",
-                CAN_WEAR(&obj_proto[nr], ITEM_WEAR_WIELD) ? ", ^yWieldable^n" : "",
-                obj_proto[nr].source_info ? "  ^g(canon)^n" : "");
+          ++found;
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "[%6ld :%3d] ^c%2d%s ^yIRC:%d^n %s (^c%d^n round, modes:^c%s%s%s%s^n%s)%s\r\n",
+                  OBJ_VNUM_RNUM(nr),
+                  ObjList.CountObj(nr),
+                  GET_WEAPON_POWER(&obj_proto[nr]),
+                  wound_arr[GET_WEAPON_DAMAGE_CODE(&obj_proto[nr])],
+                  GET_WEAPON_INTEGRAL_RECOIL_COMP(&obj_proto[nr]),
+                  obj_proto[nr].text.name,
+                  GET_WEAPON_MAX_AMMO(&obj_proto[nr]),
+                  WEAPON_CAN_USE_FIREMODE(&obj_proto[nr], MODE_SS) ? " SS" : "",
+                  WEAPON_CAN_USE_FIREMODE(&obj_proto[nr], MODE_SA) ? " SA" : "",
+                  WEAPON_CAN_USE_FIREMODE(&obj_proto[nr], MODE_BF) ? " BF" : "",
+                  WEAPON_CAN_USE_FIREMODE(&obj_proto[nr], MODE_FA) ? " FA" : "",
+                  CAN_WEAR(&obj_proto[nr], ITEM_WEAR_WIELD) ? ", ^yWieldable^n" : "",
+                  obj_proto[nr].source_info ? "  ^g(canon)^n" : "");
+        }
       }
     }
   }
