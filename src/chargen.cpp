@@ -2352,7 +2352,7 @@ void refund_chargen_prestige_syspoints_if_needed(struct char_data *ch) {
 
   mudlog_vfprintf(ch, LOG_CHEATLOG, "Refunded %d prestige-purchase syspoints to %s due to %s deleting in character generation (%d -> %d)",
                   refund_amount, GET_CHAR_NAME(payer), GET_CHAR_NAME(ch), old_sysp, GET_SYSTEM_POINTS(payer));
-  snprintf(buf, sizeof(buf), "Refunded %d prestige-purchase syspoints to %s due to you deleting during character generation.", refund_amount, GET_CHAR_NAME(payer));
+  snprintf(buf, sizeof(buf), "Refunded %d prestige-purchase syspoints to %s due to you deleting during character generation.\r\n", refund_amount, GET_CHAR_NAME(payer));
   SEND_TO_Q(buf, ch->desc);
 
   find_or_load_ch_cleanup(payer);
