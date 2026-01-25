@@ -3775,20 +3775,21 @@ int vnum_object_weapons_integralcomp(char *searchname, struct char_data * ch)
           continue;
         if (GET_WEAPON_POWER(&obj_proto[nr]) > power && power != 21)
           continue;
+        if (!WEAPON_CAN_USE_FIREMODE(&obj_proto[nr], MODE_BF) && !WEAPON_CAN_USE_FIREMODE(&obj_proto[nr], MODE_FA))
+          continue;
         if (IS_OBJ_STAT(&obj_proto[nr], ITEM_EXTRA_STAFF_ONLY))
           continue;
         if (!vnum_from_editing_restricted_zone(OBJ_VNUM_RNUM(nr)))
           continue;
 
         ++found;
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "[%6ld :%3d] ^c%2d%s ^yIRC:%d^n %s (^W%s^n, ^c%d^n round, modes:^c%s%s%s%s^n%s)%s\r\n",
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "[%6ld :%3d] ^c%2d%s ^yIRC:%d^n %s (^c%d^n round, modes:^c%s%s%s%s^n%s)%s\r\n",
                 OBJ_VNUM_RNUM(nr),
                 ObjList.CountObj(nr),
                 GET_WEAPON_POWER(&obj_proto[nr]),
                 wound_arr[GET_WEAPON_DAMAGE_CODE(&obj_proto[nr])],
                 GET_WEAPON_INTEGRAL_RECOIL_COMP(&obj_proto[nr]),
                 obj_proto[nr].text.name,
-                weapon_types[(GET_WEAPON_ATTACK_TYPE(&obj_proto[nr]) < 0 || GET_WEAPON_ATTACK_TYPE(&obj_proto[nr]) > MAX_WEAP) ? 0 : GET_WEAPON_ATTACK_TYPE(&obj_proto[nr])],
                 GET_WEAPON_MAX_AMMO(&obj_proto[nr]),
                 WEAPON_CAN_USE_FIREMODE(&obj_proto[nr], MODE_SS) ? " SS" : "",
                 WEAPON_CAN_USE_FIREMODE(&obj_proto[nr], MODE_SA) ? " SA" : "",
@@ -4249,6 +4250,8 @@ int vnum_object_weapons_reachweapon(char *searchname, struct char_data * ch)
             continue;
           if (WEAPON_IS_GUN(&obj_proto[nr]))
             continue;
+          if (!CAN_WEAR(&obj_proto[nr], WEAR_WIELD))
+            continue;
           if (GET_WEAPON_REACH(&obj_proto[nr]) != rating)
             continue;
           if (GET_WEAPON_DAMAGE_CODE(&obj_proto[nr]) < severity && severity != 1)
@@ -4276,7 +4279,9 @@ int vnum_object_weapons_reachweapon(char *searchname, struct char_data * ch)
                   IS_OBJ_STAT(&obj_proto[nr], ITEM_EXTRA_TWOHANDS) ? 2 : 1,
                   obj_proto[nr].text.name);
           if (GET_WEAPON_FOCUS_RATING(&obj_proto[nr]) > 0) {
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " (focus rating ^c%d^n)", GET_WEAPON_FOCUS_RATING(&obj_proto[nr]));
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " (focus rating %s%d^n)",
+                     GET_WEAPON_FOCUS_RATING(&obj_proto[nr]) > 2 ? "^r" : (GET_WEAPON_FOCUS_RATING(&obj_proto[nr]) > 1 ? "^y" : "^c"),
+                     GET_WEAPON_FOCUS_RATING(&obj_proto[nr]));
           }
           if (obj_proto[nr].source_info) {
             strlcat(buf, "  ^g(canon)^n", sizeof(buf));
