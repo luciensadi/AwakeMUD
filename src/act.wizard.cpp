@@ -4778,6 +4778,7 @@ ACMD(do_show)
                { "affflag",         LVL_BUILDER },
                { "mobflag",         LVL_BUILDER },
                { "finishedzones",   LVL_BUILDER },
+               { "uppies",          LVL_ADMIN },
                { "\n", 0 }
              };
 
@@ -5835,6 +5836,36 @@ ACMD(do_show)
     }
     page_string(ch->desc, buf, 1);
     return;
+  case 41:
+    strlcpy(buf, "Rooms with TNs set\r\n------------\r\n", sizeof(buf));
+    for (i = 0, k = 0; i <= top_of_world; i++) {
+      if (!world[i].rating)
+        continue;
+      
+      // Skip staff rooms.
+      if (world[i].number <= 100 || (world[i].number >= 10000 && world[i].number <= 10099))
+        continue;
+      
+      if (IS_WATER(&world[i]) || world[i].room_flags.AreAnySet(ROOM_FALL, ROOM_RADIATION, ENDBIT)) {
+        // Skip standard elevator shafts.
+        if (world[i].room_flags.IsSet(ROOM_ELEVATOR_SHAFT) && world[i].rating == 6)
+          continue;
+
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%3d: [%8ld] %s (rating %s%d^n%s%s%s^n)\r\n",
+                  ++k,
+                  world[i].number,
+                  world[i].name,
+                  world[i].rating > 18 ? "^r" : (world[i].rating > 10 ? "^y" : "^C"),
+                  world[i].rating,
+                  world[i].room_flags.IsSet(ROOM_FALL) ? ", ^cfall^n" : "",
+                  world[i].room_flags.IsSet(ROOM_RADIATION) ? ", ^cradiation^n" : "",
+                  IS_WATER(&world[i]) ? ", ^cflooded^n" : ""
+                );
+        last = i;
+      }
+    }
+    page_string(ch->desc, buf, 1);
+    break;
   default:
     send_to_char("Sorry, I don't understand that.\r\n", ch);
     break;
