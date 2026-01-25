@@ -427,7 +427,7 @@ bool    update_pos(struct char_data *victim, bool protect_spells_from_purge=0);
 #define RACE_IS_GHOUL(race)       ((race) >= RACE_GHOUL_HUMAN && (race) <= RACE_GHOUL_TROLL)
 #define RACE_IS_DRAKE(race)       ((race) >= RACE_DRAKE_HUMAN && (race) <= RACE_DRAKE_TROLL)
 #define RACE_IS_DRAGON(race)      ((race) >= RACE_WESTERN_DRAGON && (race) <= RACE_FEATHERED_SERPENT)
-#define RACE_IS_TROLL_SIZED(race) ((race) == RACE_TROLL || (race) == RACE_CYCLOPS || (race) == RACE_FOMORI || (race) == RACE_GIANT || (race) == RACE_MINOTAUR)
+#define RACE_IS_TROLL_SIZED(race) ((race) == RACE_TROLL || (race) == RACE_CYCLOPS || (race) == RACE_FOMORI || (race) == RACE_GIANT || (race) == RACE_MINOTAUR || (race) == RACE_GHOUL_TROLL || (race) == RACE_DRAKE_TROLL)
 
 #define IS_GHOUL(ch)  (RACE_IS_GHOUL(GET_RACE(ch)))
 #define IS_DRAKE(ch)  (RACE_IS_DRAKE(GET_RACE(ch)))
