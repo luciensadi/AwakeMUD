@@ -130,6 +130,8 @@ SPECIAL(fixer);
 SPECIAL(shop_keeper);
 SPECIAL(johnson);
 
+idnum_t global_copyover_enqueued_by_idnum = 0;
+
 /* Copyover Code, ported to Awake by Harlequin *
  * (c) 1996-97 Erwin S. Andreasen <erwin@andreasen.org> */
 
@@ -166,23 +168,14 @@ ACMD(do_crash_mud) {
 #endif
 }
 
-ACMD(do_copyover)
-{
-  FILE *fp;
-  struct descriptor_data *d, *d_next;
-  struct char_data *och;
+void execute_copyover() {
+  FILE *fp = fopen (COPYOVER_FILE, "w");
 
-  /* Old messages, preserved for posterity.
-  // "I like copyovers, yes I do!  Eating player corpses in a copyover stew!\r\n",
-  // "A Haiku while you wait: Copyover time.  Your quests and corpses are fucked.  Ha ha ha ha ha.\r\n",
-  // "Yes. We did this copyover solely to fuck YOUR character over.\r\n",
-  // "Ahh drek, Maestra's broke the mud again!  Go bug Che and he might fix it.\r\n",
-  // "Deleting player corpses, please wait...\r\n",
-  // "Please wait while your character is deleted.\r\n",
-  // "You are mortally wounded and will die soon if not aided.\r\n",
-  // "Connection closed by foreign host.\r\n",
-  // "Jerry Garcia told me to type copyover.  He is wise, isn't he?\r\n",
-  */
+  if (!fp) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Failed to write to copyover file; copyover aborted! You're a little bit fucked.");
+    return;
+  }
+
   const char *messages[] =
     {
       "This copyover has been brought to you by NERPS.  It's more than a lubricant, it's a lifestyle!\r\n", // 0
@@ -222,133 +215,20 @@ ACMD(do_copyover)
       "Suddenly, your arm flops bonelessly to your side-- rather literally, I'm afraid. Damn you, Lockhart!\r\n",
       "Without warning, a raging torrent of red light crashes down on the city! This is it! The end times! The--\r\n" // 35
     };
-  int mesnum = number(0, 35);
-
-  fp = fopen (COPYOVER_FILE, "w");
-
-  if (!fp) {
-    send_to_char ("Copyover file not writeable, aborted.\r\n",ch);
-    return;
-  }
-
-  // Check for PCs on quests and people not in PLAYING state.
-  strncpy(buf, "Characters currently on quests: ", sizeof(buf));
-  int num_questors = 0;
-  int fucky_states = 0;
-  int cab_inhabitants = 0;
-  for (d = descriptor_list; d; d = d->next) {
-    // Count PCs in weird states.
-    if (STATE(d) != CON_PLAYING) {
-      fucky_states++;
-      continue;
-    }
-
-    if (!(och = d->character))
-      continue;
-
-    if (och == ch)
-      continue;
-
-    if (GET_QUEST(och)) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^c%s%s^n (idle: %d)",
-               num_questors > 0 ? ", " : "",
-               GET_CHAR_NAME(och),
-               och->char_specials.timer);
-      num_questors += 1;
-    }
-    // Count PCs in cabs.
-    if (och->in_room && room_is_a_taxicab(GET_ROOM_VNUM(och->in_room)))
-      cab_inhabitants++;
-  }
-
-  if (!ch->desc) {
-    mudlog("SYSERR: Somehow, we ended up in COPYOVER with no ch->desc!", ch, LOG_SYSLOG, TRUE);
-    return;
-  }
-
-  skip_spaces(&argument);
-  // COPYOVER FORCE.
-  if (!str_cmp(argument, "force")){
-    snprintf(buf, sizeof(buf), "Forcibly copying over. This will disconnect %d player%s, refund %d cab fare%s, drop %d quest%s, and lose any repairman items.\r\n",
-             fucky_states,    fucky_states    != 1 ? "s" : "",
-             cab_inhabitants, cab_inhabitants != 1 ? "s" : "",
-             num_questors,    num_questors    != 1 ? "s" : "");
-    if (write_to_descriptor(ch->desc->descriptor, buf) < 0) {
-      // Rofl, the copyover initiatior disconnected? Um.
-      close_socket(ch->desc);
-    }
-  } 
-  // Non-forcible copyover command (CHECK or CONFIRM).
-  else {
-    bool will_not_copyover = FALSE;
-
-    // Check for questors.
-    if (num_questors > 0) {
-      send_to_char(ch, "There %s %d character%s doing autoruns right now.\r\n%s^n.\r\n",
-                   num_questors != 1 ? "are" : "is",
-                   num_questors,
-                   num_questors != 1 ? "s" : "",
-                   buf);
-      will_not_copyover = TRUE;
-    }
-
-    // Check for PCs in non-playing states.
-    if (fucky_states > 0) {
-      send_to_char(ch, "%d player%s not in the playing state. Check USERS for details.\r\n",
-                   fucky_states, fucky_states != 1 ? "s are" : " is");
-      will_not_copyover = TRUE;
-    }
-
-    // Check for cab-riders.
-    if (cab_inhabitants) {
-      send_to_char(ch, "There %s %d %s.\r\n",
-                   cab_inhabitants != 1 ? "are" : "is",
-                   cab_inhabitants,
-                   cab_inhabitants != 1 ? "people taking taxis" : "person taking a cab");
-      will_not_copyover = TRUE;
-    }
-
-    // Check for repairman items.
-    /*
-    for (struct char_data *i = character_list; i; i = i->next_in_character_list) {
-      if (IS_NPC(i) && MOB_HAS_SPEC(i, fixer) && i->carrying) {
-        send_to_char("The repairman has unclaimed items.\r\n", ch);
-        will_not_copyover = TRUE;
-        break;
-      }
-    }
+    int mesnum = number(0, 35);
+    /* Old messages, preserved for posterity.
+      // "I like copyovers, yes I do!  Eating player corpses in a copyover stew!\r\n",
+      // "A Haiku while you wait: Copyover time.  Your quests and corpses are fucked.  Ha ha ha ha ha.\r\n",
+      // "Yes. We did this copyover solely to fuck YOUR character over.\r\n",
+      // "Ahh drek, Maestra's broke the mud again!  Go bug Che and he might fix it.\r\n",
+      // "Deleting player corpses, please wait...\r\n",
+      // "Please wait while your character is deleted.\r\n",
+      // "You are mortally wounded and will die soon if not aided.\r\n",
+      // "Connection closed by foreign host.\r\n",
+      // "Jerry Garcia told me to type copyover.  He is wise, isn't he?\r\n",
     */
-
-    // There is no command in this if-statement that allows us to bypass a failed check state.
-    if (will_not_copyover) {
-      send_to_char("Copyover aborted. Use 'copyover force' to override this.\r\n", ch);
-      return;
-    } 
-    // If there were no errors, note this.
-    else {
-      send_to_char("Copyover is possible, no error conditions noted.\r\n", ch);
-    }
-
-    // COPYOVER CHECK bails out at this point.
-    if (!str_cmp(argument, "check")) {
-      return;
-    }
-
-#ifdef USE_PRIVATE_CE_WORLD
-#ifndef IS_BUILDPORT
-    // Guard against accidental copyovers on main port.
-    if (str_cmp(argument, "confirm") != 0) {
-      send_to_char("This is the PLAYER PORT, so you need to type ^WCOPYOVER CONFIRM^n to execute.\r\n", ch);
-      return;
-    }
-#endif // IS_BUILDPORT
-#endif // USE_PRIVATE_CE_WORLD
-  }
-
-  snprintf(buf, sizeof(buf), "Copyover initiated by %s", GET_CHAR_NAME(ch));
-  mudlog(buf, ch, LOG_WIZLOG, TRUE);
-
-  rnum_t airborne_rnum = real_room(RM_AIRBORNE);
+    
+    rnum_t airborne_rnum = real_room(RM_AIRBORNE);
   rnum_t boneyard_rnum = real_room(65505);
 
   if (boneyard_rnum < 0 || airborne_rnum < 0) {
@@ -421,8 +301,8 @@ ACMD(do_copyover)
 
   log("COPYOVERLOG: Disconnecting players.");
   /* For each playing descriptor, save its state */
-  for (d = descriptor_list; d ; d = d_next) {
-    och = d->character;
+  for (struct descriptor_data *d = descriptor_list, *d_next; d ; d = d_next) {
+    struct char_data *och = d->character;
     d_next = d->next; // delete from list, save stuff
 
     // drops those logging on
@@ -484,9 +364,149 @@ ACMD(do_copyover)
   /* Failed - sucessful exec will not return */
 
   perror ("do_copyover: execl");
-  send_to_char ("Copyover FAILED!\r\n",ch);
+  mudlog_vfprintf(NULL, LOG_SYSLOG, "Ah shit son, the copyover failed. Terminating the game so it can cleanly come back.");
 
   exit (1); /* too much trouble to try to recover! */
+}
+
+ACMD(do_copyover)
+{
+  struct descriptor_data *d;
+  struct char_data *och;
+
+  // Check for PCs on quests and people not in PLAYING state.
+  strncpy(buf, "Characters currently on quests: ", sizeof(buf));
+  int num_questors = 0;
+  int fucky_states = 0;
+  int cab_inhabitants = 0;
+  for (d = descriptor_list; d; d = d->next) {
+    // Count PCs in weird states.
+    if (STATE(d) != CON_PLAYING) {
+      fucky_states++;
+      continue;
+    }
+
+    if (!(och = d->character))
+      continue;
+
+    if (och == ch)
+      continue;
+
+    if (GET_QUEST(och)) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^c%s%s^n (idle: %d)",
+               num_questors > 0 ? ", " : "",
+               GET_CHAR_NAME(och),
+               och->char_specials.timer);
+      num_questors += 1;
+    }
+    // Count PCs in cabs.
+    if (och->in_room && room_is_a_taxicab(GET_ROOM_VNUM(och->in_room)))
+      cab_inhabitants++;
+  }
+
+  if (!ch->desc) {
+    mudlog("SYSERR: Somehow, we ended up in COPYOVER with no ch->desc!", ch, LOG_SYSLOG, TRUE);
+    return;
+  }
+
+  skip_spaces(&argument);
+  // COPYOVER FORCE.
+  if (!str_cmp(argument, "force")){
+    snprintf(buf, sizeof(buf), "Forcibly copying over. This will disconnect %d player%s, refund %d cab fare%s, drop %d quest%s, and lose any repairman items.\r\n",
+             fucky_states,    fucky_states    != 1 ? "s" : "",
+             cab_inhabitants, cab_inhabitants != 1 ? "s" : "",
+             num_questors,    num_questors    != 1 ? "s" : "");
+    if (write_to_descriptor(ch->desc->descriptor, buf) < 0) {
+      // Rofl, the copyover initiatior disconnected? Um.
+      close_socket(ch->desc);
+    }
+  }
+#ifdef IS_BUILDPORT
+  else if (!str_cmp(argument, "start") || !str_cmp(argument, "begin")) {
+    FAILURE_CASE(global_copyover_enqueued_by_idnum, "A copyover has already been enqueued. You can cancel it with COPYOVER STOP.");
+    send_to_char(ch, "OK, enqueued a forced copyover for when everyone is out of menus.");
+    global_copyover_enqueued_by_idnum = GET_IDNUM_EVEN_IF_PROJECTING(ch);
+    return;
+  }
+  else if (!str_cmp(argument, "stop") || !str_cmp(argument, "cancel")) {
+    FAILURE_CASE(!global_copyover_enqueued_by_idnum, "No copyover is currently queued.");
+
+    const char *char_name = get_player_name(global_copyover_enqueued_by_idnum);
+    send_to_char(ch, "OK, canceled the forced copyover queued by %s (%ld).", char_name, global_copyover_enqueued_by_idnum);
+    global_copyover_enqueued_by_idnum = 0;
+    delete [] char_name;
+    return;
+  }
+#endif
+  // Non-forcible copyover command (CHECK or CONFIRM).
+  else {
+    bool will_not_copyover = FALSE;
+
+    // Check for questors.
+    if (num_questors > 0) {
+      send_to_char(ch, "There %s %d character%s doing autoruns right now.\r\n%s^n.\r\n",
+                   num_questors != 1 ? "are" : "is",
+                   num_questors,
+                   num_questors != 1 ? "s" : "",
+                   buf);
+      will_not_copyover = TRUE;
+    }
+
+    // Check for PCs in non-playing states.
+    if (fucky_states > 0) {
+      send_to_char(ch, "%d player%s not in the playing state. Check USERS for details.\r\n",
+                   fucky_states, fucky_states != 1 ? "s are" : " is");
+      will_not_copyover = TRUE;
+    }
+
+    // Check for cab-riders.
+    if (cab_inhabitants) {
+      send_to_char(ch, "There %s %d %s.\r\n",
+                   cab_inhabitants != 1 ? "are" : "is",
+                   cab_inhabitants,
+                   cab_inhabitants != 1 ? "people taking taxis" : "person taking a cab");
+      will_not_copyover = TRUE;
+    }
+
+    // Check for repairman items.
+    /*
+    for (struct char_data *i = character_list; i; i = i->next_in_character_list) {
+      if (IS_NPC(i) && MOB_HAS_SPEC(i, fixer) && i->carrying) {
+        send_to_char("The repairman has unclaimed items.\r\n", ch);
+        will_not_copyover = TRUE;
+        break;
+      }
+    }
+    */
+
+    // There is no command in this if-statement that allows us to bypass a failed check state.
+    if (will_not_copyover) {
+      send_to_char("Copyover aborted. Use 'copyover force' to override this.\r\n", ch);
+      return;
+    } 
+    // If there were no errors, note this.
+    else {
+      send_to_char("Copyover is possible, no error conditions noted.\r\n", ch);
+    }
+
+    // COPYOVER CHECK bails out at this point.
+    if (!str_cmp(argument, "check")) {
+      return;
+    }
+
+#ifdef USE_PRIVATE_CE_WORLD
+#ifndef IS_BUILDPORT
+    // Guard against accidental copyovers on main port.
+    if (str_cmp(argument, "confirm") != 0) {
+      send_to_char("This is the PLAYER PORT, so you need to type ^WCOPYOVER CONFIRM^n to execute.\r\n", ch);
+      return;
+    }
+#endif // IS_BUILDPORT
+#endif // USE_PRIVATE_CE_WORLD
+  }
+
+  mudlog_vfprintf(ch, LOG_WIZLOG, "Copyover initiated by %s", GET_CHAR_NAME(ch));
+  execute_copyover();
 }
 
 /* End This Part of the Copyover System */
@@ -4779,6 +4799,7 @@ ACMD(do_show)
                { "mobflag",         LVL_BUILDER },
                { "finishedzones",   LVL_BUILDER },
                { "uppies",          LVL_ADMIN },
+               { "housingstats",    LVL_ADMIN },
                { "\n", 0 }
              };
 
@@ -5836,7 +5857,7 @@ ACMD(do_show)
     }
     page_string(ch->desc, buf, 1);
     return;
-  case 41:
+  case 41: // fall rooms etc
     strlcpy(buf, "Rooms with TNs set\r\n------------\r\n", sizeof(buf));
     for (i = 0, k = 0; i <= top_of_world; i++) {
       if (!world[i].rating)
@@ -5866,6 +5887,53 @@ ACMD(do_show)
     }
     page_string(ch->desc, buf, 1);
     break;
+/*
+  case 42: // housing stats
+    // Display total rooms by cost, lifestyle, and usage/availability.
+    {
+      std::map<int, std::vector< Apartment* >> cost_to_apartment = {};
+
+      for (auto &cit : global_apartment_complexes) {
+        for (auto &ait : cit->get_apartments()) {
+          auto ptr = cost_to_apartment.find(ait->get_rent_cost());
+          if (ptr == cost_to_apartment.end()) {
+            cost_to_apartment[ait->get_rent_cost()] = {};
+          }
+          cost_to_apartment[ait->get_rent_cost()].push_back(ait);
+        }
+      }
+
+      std::sort(cost_to_apartment.begin(), cost_to_apartment.end());
+
+      strlcpy(buf, "Apartments rented by cost:", sizeof(buf));
+      for (auto &cta : cost_to_apartment) {
+        bool printed_something = false;
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n[%7d Y]: ", cta.first);
+        for (int lifestyle = LIFESTYLE_LUXURY; lifestyle >= LIFESTYLE_STREETS; lifestyle--) {
+          int lifestyle_total = 0;
+          int lifestyle_occupied = 0;
+          for (auto apt : cta.second) {
+            if (apt->get_lifestyle() == lifestyle)
+              lifestyle_total++;
+            if (apt->get_remaining_lease_value() > 0)
+              lifestyle_occupied++;
+          }
+          if (lifestyle_total) {
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf),
+                     "%s%d/%d %s", printed_something ? ", " : "",
+                     lifestyle_occupied,
+                     lifestyle_total,
+                     lifestyles[lifestyle]
+                    );
+            printed_something = true;
+          }
+        }
+      }
+
+      page_string(ch->desc, buf, 1);
+    }
+    break;
+*/
   default:
     send_to_char("Sorry, I don't understand that.\r\n", ch);
     break;
@@ -6680,10 +6748,14 @@ ACMD(do_set)
     mudlog(buf, ch, LOG_WIZLOG, TRUE );
     break;
   case 75: /* multiplier */
-    RANGE(0, 10000);
+    RANGE(1, 10000);
     GET_CHAR_MULTIPLIER(vict) = value;
-    snprintf(buf, sizeof(buf),"%s changed %s's multiplier to %.2f.", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict), (float) GET_CHAR_MULTIPLIER(vict) / 100);
-    mudlog(buf, ch, LOG_WIZLOG, TRUE );
+    mudlog_vfprintf(ch, LOG_WIZLOG, "%s changed %s's multiplier to %.2f.", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict), (float) GET_CHAR_MULTIPLIER(vict) / 100);
+    // Specifically save this value for them (it's extremely sensitive and we never want it clobbered by accident)
+    {
+      snprintf(buf, sizeof(buf), "UPDATE pfiles SET multiplier=%d WHERE idnum=%ld;", GET_CHAR_MULTIPLIER(vict), GET_IDNUM(vict));
+      mysql_wrapper(mysql, buf);
+    }
     break;
   case 76: /* shotsfired */
     RANGE(0, 50000);
