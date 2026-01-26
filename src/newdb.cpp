@@ -494,6 +494,10 @@ bool load_char(const char *name, char_data *ch, bool logon, int pc_load_origin)
   SETTABLE_CHAR_COLOR_HIGHLIGHT(ch) = str_dup(cleanup_invalid_color_codes(row[79]));
   SETTABLE_EMAIL(ch) = str_dup(cleanup_invalid_color_codes(row[80]));
   GET_CHAR_MULTIPLIER(ch) = atoi(row[81]);
+  if (GET_CHAR_MULTIPLIER(ch) <= 0) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Got a character (%s / %ld) with 0 multiplier! Assuming it's a bug and resetting to standard.", GET_CHAR_NAME(ch), GET_IDNUM(ch));
+    GET_CHAR_MULTIPLIER(ch) = 100;
+  }
   const char *lifestyle_string = str_dup(cleanup_invalid_color_codes(row[82]));
   set_exdesc_max(ch, atoi(row[83]), FALSE);
   GET_OTAKU_PATH(ch) = atoi(row[84]);
@@ -1315,6 +1319,7 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
     if (!row && mysql_field_count(mysql)) {
       mysql_free_result(res);
       init_char_sql(player, "save_char");
+      GET_CHAR_MULTIPLIER(player) = 100;
     } else {
       mysql_free_result(res);
     }
@@ -1405,6 +1410,12 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
   bool is_temp_load = PLR_FLAGGED(player, PLR_IS_TEMPORARILY_LOADED);
   PLR_FLAGS(player).RemoveBit(PLR_IS_TEMPORARILY_LOADED);
 
+  /* Defense: Somehow, some PCs are getting their mults zeroed out. Spot it here and fix it. */
+  if (GET_CHAR_MULTIPLIER(player) <= 0) {
+    mudlog_vfprintf(player, LOG_WIZLOG, "SYSERR: %s ended up with a very low mult (%d <= 0). Resetting to normal.", GET_CHAR_NAME(player), GET_CHAR_MULTIPLIER(player));
+    GET_CHAR_MULTIPLIER(player) = 100;
+  }
+
   /* Compose the initial giant update. */
   snprintf(buf, sizeof(buf), "UPDATE pfiles SET AffFlags='%s', PlrFlags='%s', PrfFlags='%s', Bod=%d, "\
                "Qui=%d, Str=%d, Cha=%d, Intel=%d, Wil=%d, EssenceTotal=%d, EssenceHole=%d, "\
@@ -1414,7 +1425,7 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
                "PermBodLoss=%d, WimpLevel=%d, Loadroom=%ld, LastRoom=%ld, LastD=%ld, Hunger=%d, Thirst=%d, Drunk=%d, " \
                "ShotsFired='%d', ShotsTriggered='%d', Tradition=%d, pgroup='%ld', "\
                "Inveh=%ld, `rank`=%d, gender=%d, SysPoints=%d, socialbonus=%d, email='%s', highlight='%s',"
-               "multiplier=%d, lifestyle_string='%s', nodelete=%d, garnishment_nuyen=%ld, garnishment_rep=%ld, garnishment_notor=%ld WHERE idnum=%ld;",
+               "lifestyle_string='%s', nodelete=%d, garnishment_nuyen=%ld, garnishment_rep=%ld, garnishment_notor=%ld WHERE idnum=%ld;",
                AFF_FLAGS(player).ToString(),
                PLR_FLAGS(player).ToString(),
                PRF_FLAGS(player).ToString(),
@@ -1441,7 +1452,9 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
                MAX(0, GET_PHYSICAL(player)),
                GET_PHYSICAL_LOSS(player),
                MAX(0, GET_MENTAL(player)),
-               GET_MENTAL_LOSS(player), 0, GET_WIMP_LEV(player),
+               GET_MENTAL_LOSS(player),
+               0,
+               GET_WIMP_LEV(player),
                GET_LOADROOM(player),
                GET_LAST_IN(player),
                time(0),
@@ -1459,7 +1472,6 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
                MIN(GET_CONGREGATION_BONUS(player), MAX_CONGREGATION_BONUS),
                prepare_quotes(buf1, GET_EMAIL(player), sizeof(buf1) / sizeof(char)),
                prepare_quotes(buf2, GET_CHAR_COLOR_HIGHLIGHT(player), sizeof(buf2) / sizeof(char)),
-               GET_CHAR_MULTIPLIER(player),
                prepare_quotes(buf3, get_lifestyle_string(player), sizeof(buf3) / sizeof(char)),
                PLR_FLAGGED(player, PLR_NODELETE) ? 1 : 0,
                GET_GARNISHMENT_NUYEN(player),

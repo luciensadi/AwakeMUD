@@ -476,7 +476,7 @@ struct char_player_data
   char_player_data() :
       char_name(NULL), background(NULL), title(NULL), pretitle(NULL), whotitle(NULL),
       prompt(NULL), matrixprompt(NULL), poofin(NULL), poofout(NULL), email(NULL),
-      multiplier(0), salvation_ticks(5), pronouns(PRONOUNS_NEUTRAL), level(0), last_room(NOWHERE),
+      multiplier(100), salvation_ticks(5), pronouns(PRONOUNS_NEUTRAL), level(0), last_room(NOWHERE),
       weight(0), height(0), race(0), otaku_path(OTAKU_PATH_NORMIE), tradition(TRAD_MUNDANE), aspect(0), host(NULL)
   {
     memset(passwd, 0, sizeof(passwd));
