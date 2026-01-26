@@ -77,7 +77,6 @@
 #include "player_exdescs.hpp"
 #include "gmcp.hpp"
 
-
 const unsigned perfmon::kPulsePerSecond = PASSES_PER_SEC;
 
 /* externs */
@@ -90,6 +89,9 @@ extern bool _OVERRIDE_ALLOW_PLAYERS_TO_USE_ROLLS_;
 
 extern struct time_info_data time_info; /* In db.c */
 extern char help[];
+
+// act.wizard.cpp
+extern idnum_t global_copyover_enqueued_by_idnum;
 
 #ifdef USE_PRIVATE_CE_WORLD
 extern void do_secret_ticks(int pulse);
@@ -199,6 +201,8 @@ extern void save_all_apartments_and_storage_rooms();
 
 extern int modify_target_rbuf_magical(struct char_data *ch, char *rbuf, int rbuf_len);
 extern void tick_down_room_tempdesc_expiries();
+
+extern void execute_copyover();
 
 #ifdef USE_DEBUG_CANARIES
 void check_memory_canaries();
@@ -870,6 +874,23 @@ void game_loop(int mother_desc)
         if (FD_ISSET(d->descriptor, &input_set))
           if (process_input(d) < 0)
             close_socket(d);
+      }
+    }
+
+    // If we have an enqueued copyover, run it forcefully if qualifications are met.
+    if (global_copyover_enqueued_by_idnum) {
+      bool can_proceed = true;
+      for (d = descriptor_list; d; d = next_d) {
+        if (d->character && STATE(d) != CON_PLAYING) {
+          can_proceed = false;
+          break;
+        }
+      }
+      if (can_proceed) {
+        const char *char_name = get_player_name(global_copyover_enqueued_by_idnum);
+        mudlog_vfprintf(NULL, LOG_SYSLOG, "Everyone is out of build, kicking off the copyover enqueued by %s (%ld).", char_name, global_copyover_enqueued_by_idnum);
+        delete [] char_name;
+        execute_copyover();
       }
     }
 
