@@ -433,10 +433,10 @@ bool    update_pos(struct char_data *victim, bool protect_spells_from_purge=0);
 #define IS_DRAKE(ch)  (RACE_IS_DRAKE(GET_RACE(ch)))
 #define IS_DRAGON(ch) (RACE_IS_DRAGON(GET_RACE(ch)))
 
-#define IS_PRESTIGE_RACE(race) (RACE_IS_DRAGON(race) || RACE_IS_DRAKE(race) || RACE_IS_GHOUL(race) || race == RACE_DRYAD)
-#define IS_PRESTIGE_CH(ch) (IS_PRESTIGE_RACE(GET_RACE(ch)))
-
 #define IS_OTAKU(ch) (GET_OTAKU_PATH(ch) > 0)
+
+#define IS_PRESTIGE_RACE(race) (RACE_IS_DRAGON(race) || RACE_IS_DRAKE(race) || RACE_IS_GHOUL(race) || race == RACE_DRYAD)
+#define IS_PRESTIGE_CH(ch) (IS_PRESTIGE_RACE(GET_RACE(ch))) || IS_OTAKU(ch)
 
 #define GET_RACIAL_STARTING_ESSENCE_FOR_RACE(race)  (RACE_IS_GHOUL(race) ? 500 : (RACE_IS_DRAGON(race) ? 700 : 600))
 
