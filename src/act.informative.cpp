@@ -7729,14 +7729,14 @@ ACMD(do_mort_show)
   }
 }
 
-extern time_t get_idledelete_days_left(time_t lastd, int tke, int race, int rank);
+extern time_t get_idledelete_days_left(time_t lastd, int tke, int race, int rank, int otaku_path);
 ACMD(do_karma){
   send_to_char(ch, "You have ^c%d^n reputation and ^c%d^n notoriety. You've earned a lifetime total of ^c%d^n karma", GET_REP(ch), GET_NOT(ch), GET_TKE(ch));
 
   if (PLR_FLAGGED(ch, PLR_NODELETE)) {
     send_to_char(", and will never be idle-deleted.\r\n", ch);
   } else {
-    time_t grace_days = get_idledelete_days_left(time(0), GET_TKE(ch), GET_RACE(ch), GET_LEVEL(ch));
+    time_t grace_days = get_idledelete_days_left(time(0), GET_TKE(ch), GET_RACE(ch), GET_LEVEL(ch), GET_OTAKU_PATH(ch));
     send_to_char(ch, ", giving you a total of ^c%ld^n days of idle-delete grace time (%s base of %d, plus 1 per %d TKE).\r\n",
                  grace_days,
                  IS_PRESTIGE_CH(ch) ? "prestige" : "standard",
