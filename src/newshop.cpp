@@ -1325,7 +1325,7 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
     act(buf, FALSE, ch, 0, keeper, TO_CHAR);
 
     // Placed order successfully. Order time is multiplied by 10% per availoffset tick, then multiplied again by quantity.
-    float totaltime = (GET_OBJ_AVAILDAY(obj) * (GET_AVAIL_OFFSET(ch) ? 0.1 * GET_AVAIL_OFFSET(ch) : 1) * buynum) / success;
+    float totaltime = (GET_OBJ_AVAILDAY(obj) * (GET_AVAIL_OFFSET(ch) ? 1 + (0.1 * GET_AVAIL_OFFSET(ch)) : 1) * buynum) / success;
 
     if (access_level(ch, LVL_VICEPRES)) {
       send_to_char(ch, "You use your staff powers to greatly accelerate the ordering process (was %.2f days).\r\n", totaltime);
