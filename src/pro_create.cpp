@@ -472,8 +472,8 @@ ACMD(do_program)
         GET_DESIGN_PROGRAMMING_TICKS_LEFT(prog) = 60 * (GET_DESIGN_SIZE(prog) / success);
         GET_DESIGN_ORIGINAL_TICKS_LEFT(prog) = GET_DESIGN_PROGRAMMING_TICKS_LEFT(prog);
       } else {
-        GET_DESIGN_PROGRAMMING_TICKS_LEFT(prog) = number(1, 6) + number(1, 6);
-        GET_DESIGN_ORIGINAL_TICKS_LEFT(prog) = (GET_DESIGN_SIZE(prog) * 60) / number(1, 3);
+        GET_DESIGN_PROGRAMMING_TICKS_LEFT(prog) = (GET_DESIGN_SIZE(prog) * 60) / (number(1, 6) + number(1, 6));
+        GET_DESIGN_ORIGINAL_TICKS_LEFT(prog) = (GET_DESIGN_SIZE(prog) * 60);
         GET_DESIGN_PROGRAMMING_FAILED(prog) = 1;
       }
     }
