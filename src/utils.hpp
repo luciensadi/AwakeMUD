@@ -247,7 +247,7 @@ vnum_t vnum_from_gridguide_coordinates(long x, long y, struct char_data *ch, str
 struct veh_data *get_veh_controlled_by_char(struct char_data *ch);
 
 // Skill-related.
-char *how_good(int skill, int rank);
+char *how_good(int skill, int rank, bool chipped, int natural);
 const char *skill_rank_name(int rank, bool knowledge);
 void set_character_skill(struct char_data *ch, int skill_num, int new_value, bool send_message, bool save_immediately=TRUE);
 
