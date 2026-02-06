@@ -5561,10 +5561,54 @@ SPECIAL(chargen_south_from_trainer) {
   if (!ch || !cmd || IS_NPC(ch))
     return FALSE;
 
-  if ((CMD_IS("s") || CMD_IS("south")) && GET_ATT_POINTS(ch) > 0) {
-    send_to_char(ch, "You still have %d attribute point%s to spend! You must finish ^WTRAIN^ning your attributes before you proceed.\r\n",
-                 GET_ATT_POINTS(ch), GET_ATT_POINTS(ch) > 1 ? "s" : "");
-    return TRUE;
+  if ((CMD_IS("s") || CMD_IS("south"))) {
+    if (GET_ATT_POINTS(ch) > 0) {
+      send_to_char(ch, "You still have %d attribute point%s to spend! You must finish ^WTRAIN^ning your attributes before you proceed.\r\n",
+                   GET_ATT_POINTS(ch), GET_ATT_POINTS(ch) > 1 ? "s" : "");
+      return TRUE;
+    }
+
+    if (GET_TRADITION(ch) == TRAD_SHAMANIC) {
+      switch (GET_TOTEM(ch)) {
+        case TOTEM_BULL:
+        case TOTEM_PRAIRIEDOG:
+        case TOTEM_SUN:
+          if (GET_REAL_CHA(ch) < 4) {
+            send_to_char(ch, "Your totem requries you to have a minimum charisma of 4! You must finish ^WTRAIN^ning your attributes before you proceed.\r\n");
+            return TRUE;
+          }
+          return FALSE;
+        case TOTEM_LOVER:
+        case TOTEM_SEDUCTRESS:
+        case TOTEM_SIREN:
+          if (GET_REAL_CHA(ch) < 6) {
+            send_to_char(ch, "Your totem requries you to have a minimum charisma of 6! You must finish ^WTRAIN^ning your attributes before you proceed.\r\n");
+            return TRUE;
+          }
+          return FALSE;
+        case TOTEM_DRAGON:
+          if (GET_REAL_INT(ch) < 6) {
+            send_to_char(ch, "Your totem requries you to have a minimum intelligence of 6! You must finish ^WTRAIN^ning your attributes before you proceed.\r\n");
+            return TRUE;
+          }
+          return FALSE;
+        case TOTEM_CHEETAH:
+          if (GET_REAL_REA(ch) < 4) {
+            send_to_char(ch, "Your totem requries you to have a minimum reaction of 4! You must finish ^WTRAIN^ning your attributes before you proceed.\r\n");
+            return TRUE;
+          }
+          return FALSE;
+        case TOTEM_OAK:
+          if (GET_REAL_BOD(ch) < 4 || GET_REAL_STR(ch) < 4) {
+            send_to_char(ch, "Your totem requries you to have a minimum body and strength of 4! You must finish ^WTRAIN^ning your attributes before you proceed.\r\n");
+            return TRUE;
+          }
+          return FALSE;
+        default:
+          return FALSE;       
+      }
+    }
+    return FALSE;
   }
 
   if (CMD_IS("untrain")) {
