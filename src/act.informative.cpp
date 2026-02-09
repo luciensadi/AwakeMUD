@@ -616,7 +616,7 @@ void brief_list_veh_to_char(struct veh_data * list, struct char_data * ch)
           case VEH_TRUCK:
             trucks++;
           case VEH_DRONE:
-            drones++
+            drones++;
           default:
             break;
         }
