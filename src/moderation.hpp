@@ -5,8 +5,9 @@
 
 #define AUTOMOD_FREEZE_THRESHOLD  2
 
-#define MODERATION_MODE_NORMAL       0
-#define MODERATION_MODE_DESCRIPTIONS 1
+#define MODERATION_MODE_NORMAL                 0
+#define MODERATION_MODE_THING_DESCRIPTIONS     1
+#define MODERATION_MODE_CHARACTER_DESCRIPTIONS 2
 
 #define GET_AUTOMOD_COUNTER(ch)  (((ch) && (ch)->player_specials) ? (ch)->player_specials->saved.automod_counter : 0)
 #define GET_SETTABLE_AUTOMOD_COUNTER(ch) ((ch)->player_specials->saved.automod_counter)

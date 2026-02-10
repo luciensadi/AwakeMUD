@@ -7883,7 +7883,7 @@ bool restring_with_args(struct char_data *ch, char *argument, bool using_sysp) {
   FALSE_CASE(obj_is_a_vehicle_title(obj), "Vehicle titles are consumable, so they can't be restrung.");
 
   // Ensure we don't contain any forbidden phrases. Error messages are shown in-function.
-  if (check_for_banned_content(buf, ch, MODERATION_MODE_DESCRIPTIONS)) {
+  if (check_for_banned_content(buf, ch, MODERATION_MODE_THING_DESCRIPTIONS)) {
     return FALSE;
   }
 

@@ -104,7 +104,7 @@ ACMD(do_decorate) {
                         "You must specify a title of %d characters or fewer.", MAX_ROOM_DECORATION_NAME_LEN);
     
     // No offensive room names.
-    if (check_for_banned_content(argument, ch, MODERATION_MODE_DESCRIPTIONS))
+    if (check_for_banned_content(argument, ch, MODERATION_MODE_THING_DESCRIPTIONS))
       return;
 
     GET_APARTMENT_SUBROOM(ch->in_room)->set_decorated_name(argument);

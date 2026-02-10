@@ -23,6 +23,25 @@ std::vector<class automod_entry> additional_restring_entries = {
   {"rising\\ssun", "The Rising Sun is the imperialist Japanese flag, which in Shadowrun is associated with high degrees of racism. Playing characters with Imperialist Japanese allegiances often leads to reactive roleplay of counter-Japanese sentiment, which runs afoul of our policy against portraying IRL racisms. As such, we don't allow the use of the Rising Sun symbol in restrings. If you meant to discuss the actual sun as it rose, we apologize for this and recommend you use 'sunrise' etc instead.", NULL}
 };
 
+std::vector<class automod_entry> additional_character_description_entries = {
+  // 'Teen' entries (in the form of 'late teen' etc) used to be acceptable when the rule was 18+, but we now disallow them.
+  {"teen[agers]*", "Unfortunately, we require that all characters are at least 20 years old and present as such. Please don't use any form of 'teen' in your description.", NULL},
+  {"(eigh|nine)teen", "Unfortunately, we require that all characters are at least 20 years old and present as such. Please don't use any form of 'teen' in your description.", NULL},
+  {"1[89][ -]*years?[ -]*old", "Unfortunately, we require that all characters are at least 20 years old and present as such. Read POLICY 3 for more details.", NULL},
+  // 'Child' is sketchy, but could be something like 'childlike joy'.
+  {"child.*", "Unfortunately, we require that all characters are at least 20 years old and present as such. Please don't use any form of 'child' in your description. If you were writing something like 'childlike joy' or the like, we apologize for this and recommend you use 'innocent joy' instead. For 'child sized' e.g. with a gnome, 'diminutive' etc are great alternatives.", NULL},
+  // Education-related terms are open to interpretation, but we interpret them as the younger end they could be read as.
+  {"(freshman|sophomore)", "Unfortunately, we require that all characters are at least 20 years old and present as such, and college freshmen are 18-19. Your character can be a college junior or senior if you'd like.", NULL},
+  {"undergrad.*", "Unfortunately, we require that all characters are at least 20 years old and present as such, and the typical undergrad age range is 18-22, with the 18-19 component disallowed. Your character can be a college junior or senior if you'd like, but 'undergrad' and its variants aren't allowed.", NULL},
+  // Below this line is trouble, with the exception of 'high school' which charitably at least includes 18.
+  {"1[0-7][ -]*years?[ -]*old", "We require that all characters are at least 20 years old and present as such. Read POLICY 3 for more details.", NULL},
+  {"[0-9][ -]*years?[ -]*old", "We require that all characters are at least 20 years old and present as such. Read POLICY 3 for more details.", NULL},
+  {"(thir|four|fif|six|seven)teen", "We require that all characters are at least 20 years old and present as such. Read POLICY 3 for more details.", NULL},
+  {".*pubescent", "We require that all characters are at least 20 years old and present as such. Read POLICY 3 for more details.", NULL},
+  {"adolescen.*", "We require that all characters are at least 20 years old and present as such. Read POLICY 3 for more details.", NULL},
+  {"(high|middle|primary|elementary)[ -]*school", "We require that all characters are at least 20 years old and present as such. Read POLICY 3 for more details.", NULL}
+};
+
 void automod_entry::compile() {
   int compilation_code;
   char pattern[1000];
@@ -47,6 +66,9 @@ void prepare_compiled_regexes() {
     entry.compile();
   }
   for (auto &entry : additional_restring_entries) {
+    entry.compile();
+  }
+  for (auto &entry : additional_character_description_entries) {
     entry.compile();
   }
 }
@@ -151,7 +173,10 @@ bool check_for_banned_content(const char *raw_msg, struct char_data *speaker, in
   if (_compare_string_to_regex_vector(msg, speaker, &automod_entries))
     return TRUE;
 
-  if (moderation_mode == MODERATION_MODE_DESCRIPTIONS && _compare_string_to_regex_vector(msg, speaker, &additional_restring_entries))
+  if (moderation_mode == MODERATION_MODE_THING_DESCRIPTIONS && _compare_string_to_regex_vector(msg, speaker, &additional_restring_entries))
+    return TRUE;
+
+  if (moderation_mode == MODERATION_MODE_CHARACTER_DESCRIPTIONS && _compare_string_to_regex_vector(msg, speaker, &additional_character_description_entries))
     return TRUE;
 
   // No banned content detected.

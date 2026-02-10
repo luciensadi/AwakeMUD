@@ -508,7 +508,7 @@ void create_pet_parse(struct descriptor_data *d, const char *arg) {
         }
 
         // Messages sent in function.
-        if (check_for_banned_content(arg, CH, MODERATION_MODE_DESCRIPTIONS))
+        if (check_for_banned_content(arg, CH, MODERATION_MODE_THING_DESCRIPTIONS))
           return;
 
         if (d->edit_mode == PET_EDIT_NAME) {
