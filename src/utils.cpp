@@ -104,6 +104,9 @@ ACMD_DECLARE(do_say);
 
 bool npc_can_see_in_any_situation(struct char_data *npc);
 
+// don't @ me
+int global_dummy_val;
+
 /* creates a random number in interval [from;to] */
 int number(int from, int to)
 {
@@ -9793,3 +9796,113 @@ bool at_least_one_word_in_keyword_list_exists_in_str(const char *keywords, const
   return false;
 }
 #undef _KEYWORD_DELIMITER
+
+// Spends syspoints. Returns TRUE on success, FALSE otherwise. Sends an error message to char on failure.
+bool spend_syspoints(struct char_data *ch, int amount, bool use_restricted, const char *for_what, int &spent_restricted) {
+  // Always zero spent_restricted just in case they forgot to.
+  spent_restricted = 0;
+
+  if (!ch) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Got NULL character to spend_syspoints(ch, %d, %s, '%s')", amount, use_restricted ? "T" : "F", for_what);
+    return false;
+  }
+
+  if (amount <= 0) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Got invalid value %d to spend_syspoints(ch, %d, %s, '%s')", amount, use_restricted ? "T" : "F", for_what);
+    return false;
+  }
+
+  if (!use_restricted) {
+    FALSE_CASE_PRINTF(GET_UNRESTRICTED_SYSTEM_POINTS(ch) < amount,
+      "You don't have enough unrestricted syspoints for that (need %d, have %d).",
+      amount,
+      GET_UNRESTRICTED_SYSTEM_POINTS(ch)
+    );
+
+    mudlog_vfprintf(ch, LOG_GRIDLOG, "%s (%ld) spent %d syspoints (0 restricted, %d unrestricted) on %s.",
+                    GET_CHAR_NAME(ch),
+                    GET_IDNUM(ch),
+                    amount,
+                    amount,
+                    for_what
+                  );
+
+    GET_UNRESTRICTED_SYSTEM_POINTS(ch) -= amount;
+
+    // Save it.
+    playerDB.SaveChar(ch);
+
+    return true;
+  }
+
+  else {
+    FALSE_CASE_PRINTF(GET_TOTAL_SYSTEM_POINTS(ch) < amount,
+      "You don't have enough syspoints for that (need %d, have %d).",
+      amount,
+      GET_TOTAL_SYSTEM_POINTS(ch)
+    );
+
+    // Check for coverage from restricted points.
+    if (GET_RESTRICTED_SYSTEM_POINTS(ch) > 0) {
+      // Total coverage.
+      if (GET_RESTRICTED_SYSTEM_POINTS(ch) >= amount) {
+        spent_restricted = amount;
+      }
+      // Partial coverage.
+      else {
+        spent_restricted = GET_RESTRICTED_SYSTEM_POINTS(ch);
+      }
+      // Deduct the points.
+      GET_RESTRICTED_SYSTEM_POINTS(ch) -= spent_restricted;
+      amount -= spent_restricted;
+    }
+
+    // Cover the rest (or the full amount if no restricted points were spent)
+    GET_UNRESTRICTED_SYSTEM_POINTS(ch) -= amount;
+
+    // Log it. Recall that spent_restricted was set to 0 at top of func, so it'll be 0 here unless they spent some.
+    mudlog_vfprintf(ch, LOG_GRIDLOG, "%s (%ld) spent %d syspoints (%d restricted, %d unrestricted) on %s.",
+                    GET_CHAR_NAME(ch),
+                    GET_IDNUM(ch),
+                    amount,
+                    spent_restricted,
+                    amount,
+                    for_what);
+
+    // Save it.
+    playerDB.SaveChar(ch);
+
+    return true;
+  }
+}
+
+// Spends syspoints. Returns TRUE on success, FALSE otherwise. Sends an error message to char on failure.
+bool gain_syspoints(struct char_data *ch, int amount, bool is_restricted, const char *for_what) {
+  if (!ch) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Got NULL character to gain_syspoints(ch, %d, %s, '%s')", amount, is_restricted ? "T" : "F", for_what);
+    return false;
+  }
+
+  if (amount <= 0) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Got invalid value %d to gain_syspoints(ch, %d, %s, '%s')", amount, is_restricted ? "T" : "F", for_what);
+    return false;
+  }
+
+  mudlog_vfprintf(ch, LOG_GRIDLOG, "%s (%ld) gained %d %srestricted syspoints for %s.",
+                  GET_CHAR_NAME(ch),
+                  GET_IDNUM(ch),
+                  amount,
+                  is_restricted ? "" : "UN-",
+                  for_what);
+
+  if (is_restricted) {
+    GET_RESTRICTED_SYSTEM_POINTS(ch) += amount;
+  } else {
+    GET_UNRESTRICTED_SYSTEM_POINTS(ch) += amount;
+  }
+
+  // Save it.
+  playerDB.SaveChar(ch);
+
+  return true;
+}

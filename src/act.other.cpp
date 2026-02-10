@@ -1099,11 +1099,11 @@ ACMD(do_gen_write)
       // - BUGS: These often stem from misunderstandings and aren't actually bugs.
       // - PRAISE: Immediate payout would make us question if we were legitimately being given props, or if it was just to get the payout.
       send_to_char("Thanks! You've earned +1 system points for your contribution.\r\n", ch);
-      if (GET_SYSTEM_POINTS(ch) < 10) {
+      if (GET_TOTAL_SYSTEM_POINTS(ch) < 10) {
         send_to_char("(See ^WHELP SYSPOINTS^n to see what you can do with them.)\r\n", ch);
       }
 
-      GET_SYSTEM_POINTS(ch)++;
+      gain_syspoints(ch, 1, false, "typo submission");
     } else {
       send_to_char("Thanks! Staff will review this contribution and award system points on the next review cycle.\r\n", ch);
     }
@@ -4875,9 +4875,11 @@ ACMD(do_syspoints) {
   // Morts can only view their own system points.
   if (!access_level(ch, LVL_CONSPIRATOR)) {
     if (!*argument) {
-      send_to_char(ch, "You have ^c%d^n system point%s. See ^WHELP SYSPOINTS^n for how to use them.\r\n",
-                    GET_SYSTEM_POINTS(ch),
-                    GET_SYSTEM_POINTS(ch) == 1 ? "" : "s"
+      send_to_char(ch, "You have ^c%d^n system point%s, of which ^c%d^n %s bound. See ^WHELP SYSPOINTS^n for how to use them.\r\n",
+                    GET_TOTAL_SYSTEM_POINTS(ch),
+                    GET_TOTAL_SYSTEM_POINTS(ch) == 1 ? "" : "s",
+                    GET_RESTRICTED_SYSTEM_POINTS(ch),
+                    GET_RESTRICTED_SYSTEM_POINTS(ch) == 1 ? "is" : "are"
                   );
       send_to_char(ch, " - You %s^n purchased ^WNODELETE^n.\r\n", PLR_FLAGGED(ch, PLR_NODELETE) ? "^ghave" : "^yhave not yet");
       send_to_char(ch, " - You %s^n purchased the ability to see ^WROLLS^n output.\r\n", PLR_FLAGGED(ch, PLR_PAID_FOR_ROLLS) ? "^ghave" : "^yhave not yet");
@@ -4918,7 +4920,7 @@ ACMD(do_syspoints) {
       int amount = atoi(amt);
       FAILURE_CASE(amount < 0, "You realize that that would be an exploit if it worked, right?");
       FAILURE_CASE_PRINTF(amount == 0, "You must specify a positive amount to transfer ('%s' is not greater than 0).", amt);
-      FAILURE_CASE_PRINTF(GET_SYSTEM_POINTS(ch) < amount, "You only have %d syspoints available.", GET_SYSTEM_POINTS(ch));
+      FAILURE_CASE_PRINTF(GET_UNRESTRICTED_SYSTEM_POINTS(ch) < amount, "You only have %d unbound syspoints available.", GET_UNRESTRICTED_SYSTEM_POINTS(ch));
 
       idnum_t idnum;
       int current_amount;
@@ -4951,18 +4953,17 @@ ACMD(do_syspoints) {
           return;
         }
         idnum = GET_IDNUM(vict);
-        current_amount = GET_SYSTEM_POINTS(vict);
+        current_amount = GET_UNRESTRICTED_SYSTEM_POINTS(vict);
         found_char = vict;
       }
 
       // Decrement our syspoints.
-      GET_SYSTEM_POINTS(ch) -= amount;
+      spend_syspoints(ch, amount, false, "transfer", global_dummy_val);
 
       // Save the result on the target.
       if (found_char) {
         // Increment.
-        GET_SYSTEM_POINTS(found_char) += amount;
-        playerDB.SaveChar(found_char);
+        gain_syspoints(found_char, amount, false, "transfer recipient");
       } else {
         // Increment.
         snprintf(buf, sizeof(buf), "UPDATE pfiles SET SysPoints = SysPoints + %d WHERE idnum='%ld';", amount, idnum);
@@ -4970,7 +4971,7 @@ ACMD(do_syspoints) {
           send_to_char("An unexpected error occurred on update (query failed).\r\n", ch);
 
           // Unwind the change to the actor.
-          GET_SYSTEM_POINTS(ch) += amount;
+          gain_syspoints(ch, amount, false, "transfer unwind from error");
           return;
         }
       }
@@ -5013,94 +5014,40 @@ ACMD(do_syspoints) {
 
     // Turn on the nodelete flag.
     if (is_abbrev(arg, "nodelete")) {
-      if (PRF_FLAGGED(ch, PRF_HARDCORE)) {
-        send_to_char("Hardcore characters are nodelete by default.\r\n", ch);
-        return;
-      }
+      FAILURE_CASE(PRF_FLAGGED(ch, PRF_HARDCORE), "Hardcore characters are nodelete by default.");
+      FAILURE_CASE(PLR_FLAGGED(ch, PLR_NODELETE), "You're already set to never idle-delete. Thanks for your contributions!");
+      FAILURE_CASE_PRINTF(GET_TOTAL_SYSTEM_POINTS(ch) < SYSP_NODELETE_COST, "That costs %d syspoints, and you only have %d.", SYSP_NODELETE_COST, GET_TOTAL_SYSTEM_POINTS(ch));
+      FAILURE_CASE_PRINTF(!is_abbrev(buf, "confirm"), "You can spend %d syspoints to purchase a character that never idle-deletes. Type ^WSYSPOINTS NODELETE CONFIRM^n to do so.", SYSP_NODELETE_COST);
 
-      // Already set.
-      if (PLR_FLAGGED(ch, PLR_NODELETE)) {
-        send_to_char("You're already set to never idle-delete. Thanks for your contributions!\r\n", ch);
-        return;
-      }
-
-      // Can they afford it?
-      if (GET_SYSTEM_POINTS(ch) >= SYSP_NODELETE_COST) {
-        // Have they entered the confirmation command?
-        if (is_abbrev(buf, "confirm")) {
-          GET_SYSTEM_POINTS(ch) -= SYSP_NODELETE_COST;
-          send_to_char(ch, "Congratulations, your character will never idle-delete! %d syspoints have been deducted from your total.\r\n", SYSP_NODELETE_COST);
-          PLR_FLAGS(ch).SetBit(PLR_NODELETE);
-          mudlog("Purchased nodelete with syspoints.", ch, LOG_SYSLOG, TRUE);
-          playerDB.SaveChar(ch);
-          return;
-        }
-
-        // They can afford it, but didn't use the confirm form.
-        send_to_char(ch, "You can spend %d syspoints to purchase a character that never idle-deletes. Type ^WSYSPOINTS NODELETE CONFIRM^n to do so.\r\n", SYSP_NODELETE_COST);
-        return;
-      }
-
-      // Too broke.
-      send_to_char(ch, "That costs %d syspoints, and you only have %d.\r\n", SYSP_NODELETE_COST, GET_SYSTEM_POINTS(ch));
+      PLR_FLAGS(ch).SetBit(PLR_NODELETE);
+      spend_syspoints(ch, SYSP_NODELETE_COST, true, "purchasing nodelete", global_dummy_val);
+      send_to_char(ch, "Congratulations, your character will never idle-delete! %d syspoints have been deducted from your total.\r\n", SYSP_NODELETE_COST);
+      mudlog_vfprintf(ch, LOG_SYSLOG, "Purchased nodelete for %d syspoints.", SYSP_NODELETE_COST);
       return;
     }
 
+    // Turn on ability to see debug rolls.
     if (is_abbrev(arg, "rolls")) {
-      // Already set.
-      if (PLR_FLAGGED(ch, PLR_PAID_FOR_ROLLS)) {
-        send_to_char("You've already purchased the ability to see rolls! You can enable/disable it with ^WTOGGLE ROLLS^n.\r\n", ch);
-        return;
-      }
+      FAILURE_CASE(PLR_FLAGGED(ch, PLR_PAID_FOR_ROLLS), "You've already purchased the ability to see rolls! You can enable/disable it with ^WTOGGLE ROLLS^n.");
+      FAILURE_CASE_PRINTF(GET_TOTAL_SYSTEM_POINTS(ch) < SYSP_ROLLS_COST, "That costs %d syspoints, and you only have %d.", SYSP_ROLLS_COST, GET_TOTAL_SYSTEM_POINTS(ch));
+      FAILURE_CASE_PRINTF(!is_abbrev(buf, "confirm"), "You can spend %d syspoints to purchase the ability to see mechanical and debug information. Type ^WSYSPOINTS ROLLS CONFIRM^n to do so.", SYSP_ROLLS_COST);
 
-      // Can they afford it?
-      if (GET_SYSTEM_POINTS(ch) >= SYSP_ROLLS_COST) {
-        // Have they entered the confirmation command?
-        if (is_abbrev(buf, "confirm")) {
-          GET_SYSTEM_POINTS(ch) -= SYSP_ROLLS_COST;
-          send_to_char(ch, "Congratulations, you can now see rolls with ^WTOGGLE ROLLS^n! %d syspoints have been deducted from your total.\r\n", SYSP_ROLLS_COST);
-          PLR_FLAGS(ch).SetBit(PLR_PAID_FOR_ROLLS);
-          mudlog("Purchased rolls with syspoints.", ch, LOG_SYSLOG, TRUE);
-          playerDB.SaveChar(ch);
-          return;
-        }
-
-        // They can afford it, but didn't use the confirm form.
-        send_to_char(ch, "You can spend %d syspoints to purchase the ability to see mechanical and debug information. Type ^WSYSPOINTS ROLLS CONFIRM^n to do so.\r\n", SYSP_ROLLS_COST);
-        return;
-      }
-
-      // Too broke.
-      send_to_char(ch, "That costs %d syspoints, and you only have %d.\r\n", SYSP_ROLLS_COST, GET_SYSTEM_POINTS(ch));
+      PLR_FLAGS(ch).SetBit(PLR_PAID_FOR_ROLLS);
+      spend_syspoints(ch, SYSP_ROLLS_COST, true, "purchasing rolls", global_dummy_val);
+      send_to_char(ch, "Congratulations, you can now see rolls with ^WTOGGLE ROLLS^n! %d syspoints have been deducted from your total.\r\n", SYSP_ROLLS_COST);
+      mudlog_vfprintf(ch, LOG_SYSLOG, "Purchased rolls for %d syspoints.", SYSP_ROLLS_COST);
       return;
     }
 
     if (is_abbrev(arg, "vnums")) {
-      // Already set.
-      if (PLR_FLAGGED(ch, PLR_PAID_FOR_VNUMS)) {
-        send_to_char("You've already purchased the ability to see room vnums! You can add them to your prompt with the ^W@v^n symbol.\r\n", ch);
-        return;
-      }
+      FAILURE_CASE(PLR_FLAGGED(ch, PLR_PAID_FOR_VNUMS), "You've already purchased the ability to see room vnums! You can add them to your prompt with the ^W@v^n symbol.");
+      FAILURE_CASE_PRINTF(GET_TOTAL_SYSTEM_POINTS(ch) < SYSP_VNUMS_COST, "That costs %d syspoints, and you only have %d.", SYSP_VNUMS_COST, GET_TOTAL_SYSTEM_POINTS(ch));
+      FAILURE_CASE_PRINTF(!is_abbrev(buf, "confirm"), "You can spend %d syspoints to purchase the ability to see room vnums. Type ^WSYSPOINTS VNUMS CONFIRM^n to do so.\r\n", SYSP_VNUMS_COST);
 
-      // Can they afford it?
-      if (GET_SYSTEM_POINTS(ch) >= SYSP_VNUMS_COST) {
-        // Have they entered the confirmation command?
-        if (is_abbrev(buf, "confirm")) {
-          GET_SYSTEM_POINTS(ch) -= SYSP_VNUMS_COST;
-          send_to_char(ch, "Congratulations, you can now see room vnums in your prompt! Just add the ^W@v^n symbol to it to begin. %d syspoints have been deducted from your total.\r\n", SYSP_VNUMS_COST);
-          PLR_FLAGS(ch).SetBit(PLR_PAID_FOR_VNUMS);
-          mudlog("Purchased vnums with syspoints.", ch, LOG_SYSLOG, TRUE);
-          playerDB.SaveChar(ch);
-          return;
-        }
-
-        // They can afford it, but didn't use the confirm form.
-        send_to_char(ch, "You can spend %d syspoints to purchase the ability to see room vnums. Type ^WSYSPOINTS VNUMS CONFIRM^n to do so.\r\n", SYSP_VNUMS_COST);
-        return;
-      }
-
-      // Too broke.
-      send_to_char(ch, "That costs %d syspoints, and you only have %d.\r\n", SYSP_VNUMS_COST, GET_SYSTEM_POINTS(ch));
+      PLR_FLAGS(ch).SetBit(PLR_PAID_FOR_VNUMS);
+      spend_syspoints(ch, SYSP_VNUMS_COST, true, "purchasing vnums", global_dummy_val);
+      send_to_char(ch, "Congratulations, you can now see room vnums in your prompt! Just add the ^W@v^n symbol to it to begin. %d syspoints have been deducted from your total.\r\n", SYSP_VNUMS_COST);
+      mudlog_vfprintf(ch, LOG_SYSLOG, "Purchased vnums for %d syspoints.", SYSP_VNUMS_COST);
       return;
     }
 
@@ -5109,17 +5056,16 @@ ACMD(do_syspoints) {
       FAILURE_CASE_PRINTF(GET_NUYEN(ch) < SYSP_NUYEN_PURCHASE_COST, "That costs %d nuyen, and you only have %d on hand.", SYSP_NUYEN_PURCHASE_COST, GET_NUYEN(ch));
 
       // Have they entered the confirmation command?
-      FAILURE_CASE_PRINTF(!is_abbrev(buf, "confirm"), "You can spend %d nuyen to purchase a syspoint. To do so, type SYSPOINT PURCHASE CONFIRM.", SYSP_NUYEN_PURCHASE_COST);
+      FAILURE_CASE_PRINTF(!is_abbrev(buf, "confirm"), "You can spend %d nuyen to purchase a bound syspoint. To do so, type SYSPOINT PURCHASE CONFIRM.", SYSP_NUYEN_PURCHASE_COST);
 
       // Do it.
       lose_nuyen(ch, SYSP_NUYEN_PURCHASE_COST, NUYEN_OUTFLOW_SYSPOINT_PURCHASE);
-      GET_SYSTEM_POINTS(ch)++;
-      mudlog_vfprintf(ch, LOG_GRIDLOG, "%s traded %d nuyen for one syspoint (now has %d)", GET_CHAR_NAME(ch), SYSP_NUYEN_PURCHASE_COST, GET_SYSTEM_POINTS(ch));
-      playerDB.SaveChar(ch);
+      gain_syspoints(ch, 1, true, "syspoints purchase");
+      mudlog_vfprintf(ch, LOG_GRIDLOG, "%s traded %d nuyen for one syspoint (now has %d)", GET_CHAR_NAME(ch), SYSP_NUYEN_PURCHASE_COST, GET_TOTAL_SYSTEM_POINTS(ch));
 
-      send_to_char(ch, "You trade %d nuyen for a syspoint, bringing your syspoint total to %d.\r\n",
+      send_to_char(ch, "You trade %d nuyen for a bound syspoint, bringing your syspoint total to %d.\r\n",
                    SYSP_NUYEN_PURCHASE_COST,
-                   GET_SYSTEM_POINTS(ch));
+                   GET_TOTAL_SYSTEM_POINTS(ch));
 
       return;
     }
@@ -5136,11 +5082,10 @@ ACMD(do_syspoints) {
       FAILURE_CASE_PRINTF(!to, "You don't see any Johnsons named '%s' here.\r\n", buf);
       FAILURE_CASE_PRINTF(!IS_NPC(to) || !(mob_index[GET_MOB_RNUM(to)].func == johnson || mob_index[GET_MOB_RNUM(to)].sfunc == johnson), "%s is not a Johnson.", GET_NAME(to));
 
-      if (GET_SYSTEM_POINTS(ch) >= ANALYZE_COST) {
+      if (spend_syspoints(ch, ANALYZE_COST, true, "syspoints analyze", global_dummy_val)) {
         send_to_char(ch, "You spend %d syspoint%s.\r\n", ANALYZE_COST, ANALYZE_COST == 1 ? "" : "s");
-        GET_SYSTEM_POINTS(ch) -= ANALYZE_COST;
       } else {
-        send_to_char(ch, "You can't afford that: SYSPOINTS ANALYZE costs %d syspoint%s.\r\n", ANALYZE_COST, ANALYZE_COST == 1 ? "" : "s");
+        // Message was sent in function.
         return;
       }
 
@@ -5165,31 +5110,14 @@ ACMD(do_syspoints) {
     }
 
     if (is_abbrev(arg, "whotitle")) {
-      // Already set.
-      if (PLR_FLAGGED(ch, PLR_PAID_FOR_WHOTITLE)) {
-        send_to_char("You've already purchased the ability to set your whotitle! You can set it with ^WWHOTITLE <new title>^n.\r\n", ch);
-        return;
-      }
+      FAILURE_CASE(PLR_FLAGGED(ch, PLR_PAID_FOR_WHOTITLE), "You've already purchased the ability to set your whotitle! You can set it with ^WWHOTITLE <new title>^n");
+      FAILURE_CASE_PRINTF(GET_TOTAL_SYSTEM_POINTS(ch) < SYSP_WHOTITLE_COST, "That costs %d syspoints, and you only have %d.", SYSP_WHOTITLE_COST, GET_TOTAL_SYSTEM_POINTS(ch));
+      FAILURE_CASE_PRINTF(!is_abbrev(buf, "confirm"), "You can spend %d syspoints to purchase the ability to change the part of the wholist where your race shows up. Type ^WSYSPOINTS WHOTITLE CONFIRM^n to do so.", SYSP_WHOTITLE_COST);
 
-      // Can they afford it?
-      if (GET_SYSTEM_POINTS(ch) >= SYSP_WHOTITLE_COST) {
-        // Have they entered the confirmation command?
-        if (is_abbrev(buf, "confirm")) {
-          GET_SYSTEM_POINTS(ch) -= SYSP_WHOTITLE_COST;
-          send_to_char(ch, "Congratulations, you can now set your whotitle with the ^WWHOTITLE <new title>^n command! %d syspoints have been deducted from your total.\r\n", SYSP_WHOTITLE_COST);
-          PLR_FLAGS(ch).SetBit(PLR_PAID_FOR_WHOTITLE);
-          mudlog("Purchased whotitle with syspoints.", ch, LOG_SYSLOG, TRUE);
-          playerDB.SaveChar(ch);
-          return;
-        }
-
-        // They can afford it, but didn't use the confirm form.
-        send_to_char(ch, "You can spend %d syspoints to purchase the ability to change the part of the wholist where your race shows up. Type ^WSYSPOINTS WHOTITLE CONFIRM^n to do so.\r\n", SYSP_WHOTITLE_COST);
-        return;
-      }
-
-      // Too broke.
-      send_to_char(ch, "That costs %d syspoints, and you only have %d.\r\n", SYSP_WHOTITLE_COST, GET_SYSTEM_POINTS(ch));
+      PLR_FLAGS(ch).SetBit(PLR_PAID_FOR_WHOTITLE);
+      spend_syspoints(ch, SYSP_WHOTITLE_COST, true, "purchasing whotitle", global_dummy_val);
+      send_to_char(ch, "Congratulations, you can now set your whotitle with the ^WWHOTITLE <new title>^n command! %d syspoints have been deducted from your total.\r\n", SYSP_WHOTITLE_COST);
+      mudlog_vfprintf(ch, LOG_SYSLOG, "Purchased whotitle for %d syspoints.", SYSP_WHOTITLE_COST);
       return;
     }
 
@@ -5207,11 +5135,15 @@ ACMD(do_syspoints) {
 
   if (is_abbrev(arg, "show")) {
     // No target? Show your own.
-    FAILURE_CASE_PRINTF(!*buf, "You have %d system point%s.\r\n", GET_SYSTEM_POINTS(ch), GET_SYSTEM_POINTS(ch) == 1 ? "" : "s");
+    FAILURE_CASE_PRINTF(!*buf, "You have ^c%d^n system point%s, of which ^c%d^n %s bound. See ^WHELP SYSPOINTS^n for how to use them.\r\n",
+                        GET_TOTAL_SYSTEM_POINTS(ch),
+                        GET_TOTAL_SYSTEM_POINTS(ch) == 1 ? "" : "s",
+                        GET_RESTRICTED_SYSTEM_POINTS(ch),
+                        GET_RESTRICTED_SYSTEM_POINTS(ch) == 1 ? "is" : "are");
 
     // Otherwise, if the target was specified, look them up.
     if (!(vict = get_player_vis(ch, buf, FALSE))) {
-      snprintf(buf3, sizeof(buf3), "SELECT Name, SysPoints FROM pfiles WHERE name='%s';", prepare_quotes(buf2, buf, sizeof(buf2) / sizeof(buf2[0])));
+      snprintf(buf3, sizeof(buf3), "SELECT Name, SysPoints, RestrictedSysPoints FROM pfiles WHERE name='%s';", prepare_quotes(buf2, buf, sizeof(buf2) / sizeof(buf2[0])));
       if (mysql_wrapper(mysql, buf3)) {
         send_to_char("An unexpected error occurred (query failed).\r\n", ch);
         return;
@@ -5226,7 +5158,7 @@ ACMD(do_syspoints) {
         send_to_char(ch, "Could not find a PC named %s.\r\n", buf);
         return;
       }
-      send_to_char(ch, "%s has %s system point(s).\r\n", row[0], row[1]);
+      send_to_char(ch, "%s has %s system point(s), of which %s is/are bound.\r\n", row[0], row[1], row[2]);
       mysql_free_result(res);
     } else {
       // Target cannot be NPC. We don't expect to ever hit this case using get_player_vis though.
@@ -5235,7 +5167,12 @@ ACMD(do_syspoints) {
         return;
       }
 
-      send_to_char(ch, "%s has %d system point%s.\r\n", GET_CHAR_NAME(vict), GET_SYSTEM_POINTS(vict), GET_SYSTEM_POINTS(vict) == 1 ? "" : "s");
+      send_to_char(ch, "%s has ^c%d^n system point%s, of which ^c%d^n %s bound. See ^WHELP SYSPOINTS^n for how to use them.\r\n",
+                   GET_CHAR_NAME(vict),
+                   GET_TOTAL_SYSTEM_POINTS(vict),
+                   GET_TOTAL_SYSTEM_POINTS(vict) == 1 ? "" : "s",
+                   GET_RESTRICTED_SYSTEM_POINTS(vict),
+                   GET_RESTRICTED_SYSTEM_POINTS(vict) == 1 ? "is" : "are");
     }
     return;
   }
@@ -5335,8 +5272,12 @@ ACMD(do_syspoints) {
     if (vict->desc && vict->desc->original)
       vict = vict->desc->original;
 
-    // Penalizing? It was inverted earlier, so no worries.
-    GET_SYSTEM_POINTS(vict) += k;
+    if (award_mode) {
+      gain_syspoints(vict, k, true, "staff fiat");
+    } else {
+      // Penalizing? It was inverted earlier.
+      spend_syspoints(vict, -k, true, "staff fiat", global_dummy_val);
+    }
 
     // Notify the actor and the victim, then log it.
     send_to_char(vict, "You have been %s %d system point%s for %s%s^n\r\n",
@@ -5363,8 +5304,8 @@ ACMD(do_syspoints) {
             (award_mode ? "to" : "from"),
             GET_CHAR_NAME(vict),
             reason,
-            GET_SYSTEM_POINTS(vict) - k,
-            GET_SYSTEM_POINTS(vict));
+            GET_TOTAL_SYSTEM_POINTS(vict) - k,
+            GET_TOTAL_SYSTEM_POINTS(vict));
     mudlog(buf, ch, LOG_WIZLOG, TRUE);
 
     // Finally, save.

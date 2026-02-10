@@ -1817,15 +1817,21 @@ void do_stat_character(struct char_data * ch, struct char_data * k)
   strlcat(buf, buf2, sizeof(buf));
 
   if (IS_SENATOR(k))
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", Status: %s\r\n^WSysP^n: [^y%3d^n]\r\n",
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", Status: %s\r\n^WSysP^n: [^c%d^n (^y%du^n/^y%dr^n)]\r\n",
              status_ratings[(int)GET_LEVEL(k)],
-             GET_SYSTEM_POINTS(k));
+             GET_TOTAL_SYSTEM_POINTS(k),
+             GET_UNRESTRICTED_SYSTEM_POINTS(k),
+             GET_RESTRICTED_SYSTEM_POINTS(k)
+            );
   else
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", Status: Mortal \r\nRep: [^y%3ld^n] Not: [^y%3ld^n] TKE: [^y%3ld^n] ^WSysP^n: [^y%3d^n]\r\n",
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", Status: Mortal \r\nRep: [^y%3ld^n] Not: [^y%3ld^n] TKE: [^y%3ld^n] ^WSysP^n: [^c%d^n (^y%du^n/^y%dr^n)]\r\n",
              GET_REP(k),
              GET_NOT(k),
              GET_TKE(k),
-             GET_SYSTEM_POINTS(k));
+             GET_TOTAL_SYSTEM_POINTS(k),
+             GET_UNRESTRICTED_SYSTEM_POINTS(k),
+             GET_RESTRICTED_SYSTEM_POINTS(k)
+            );
 
   strlcpy(buf1, (const char *) asctime(localtime(&(k->player.time.birth))), sizeof(buf1));
   strlcpy(buf2, (const char *) asctime(localtime(&(k->player.time.lastdisc))), sizeof(buf2));
@@ -6690,7 +6696,7 @@ ACMD(do_set)
     break;
   case 71:
     RANGE(-10000, 10000);
-    GET_SYSTEM_POINTS(vict) = value;
+    GET_UNRESTRICTED_SYSTEM_POINTS(vict) = value;
     break;
   case 72:
     RANGE(0, MAX_CONGREGATION_BONUS);
@@ -7922,14 +7928,14 @@ bool restring_with_args(struct char_data *ch, char *argument, bool using_sysp) {
   }
 
   if (using_sysp) {
-    if (GET_SYSTEM_POINTS(ch) < SYSP_RESTRING_COST) {
+    if (GET_TOTAL_SYSTEM_POINTS(ch) < SYSP_RESTRING_COST) {
       send_to_char(ch, "It costs %d system point%s to restring something, and you only have %d.\r\n",
                    SYSP_RESTRING_COST,
                    SYSP_RESTRING_COST == 1 ? "" : "s",
-                   GET_SYSTEM_POINTS(ch));
+                   GET_TOTAL_SYSTEM_POINTS(ch));
       return FALSE;
     }
-    GET_SYSTEM_POINTS(ch) -= SYSP_RESTRING_COST;
+    spend_syspoints(ch, SYSP_RESTRING_COST, true, "syspoint restringing", global_dummy_val);
   } else if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED)) {
     // In chargen, you can restring already-restrung items for free.
     if (!obj->restring) {

@@ -263,9 +263,9 @@ char *prepare_quotes(char *dest, const char *str, size_t size_of_dest, bool incl
     if (*str == '\'' || *str == '`' || *str == '"' || *str == '\\') {
       *temp++ = '\\';
     }
-    // Special case handling: % has special meaning in LIKE statements.
+    // Special case handling: % has special meaning in LIKE statements, as do many other characters due to regex. We escape anything that's not alnum, space, or dash.
     if (is_like) {
-      if (*str == '%' || *str == '?' || *str == '.' || *str == '*' || *str == '+' || *str == '(' || *str == ')' || *str == '[' || *str == ']') {
+      if (!isalnum(*str) && !(*str == ' ' || *str == '-')) {
         *temp++ = '\\';
         *temp++ = '\\';
       }
@@ -488,7 +488,7 @@ bool load_char(const char *name, char_data *ch, bool logon, int pc_load_origin)
   GET_COST_BREAKUP(ch) = atoi(row[73]);
   GET_AVAIL_OFFSET(ch) = atoi(row[74]);
   ch->player_specials->saved.last_veh = atol(row[75]);
-  GET_SYSTEM_POINTS(ch) = atoi(row[76]);
+  GET_UNRESTRICTED_SYSTEM_POINTS(ch) = atoi(row[76]);
   GET_CONGREGATION_BONUS(ch) = atoi(row[77]);
   // note that pgroup is 78
   SETTABLE_CHAR_COLOR_HIGHLIGHT(ch) = str_dup(cleanup_invalid_color_codes(row[79]));
@@ -505,6 +505,7 @@ bool load_char(const char *name, char_data *ch, bool logon, int pc_load_origin)
   GET_GARNISHMENT_NUYEN(ch) = atol(row[86]);
   GET_GARNISHMENT_REP(ch) = atol(row[87]);
   GET_GARNISHMENT_NOTOR(ch) = atol(row[88]);
+  GET_RESTRICTED_SYSTEM_POINTS(ch) = atol(row[89]);
   mysql_free_result(res);
 
   // Update lifestyle information.
@@ -585,6 +586,7 @@ bool load_char(const char *name, char_data *ch, bool logon, int pc_load_origin)
       GET_ARCHETYPAL_TYPE(ch) = atoi(row[6]);
       GET_PRESTIGE_ALT_ID(ch) = atol(row[7]);
       GET_CHANNEL_POINTS(ch) = atoi(row[8]);
+      ch->player_specials->saved.restricted_sysp_spent_on_prestige = atoi(row[9]);
     }
     mysql_free_result(res);
   }
@@ -1241,13 +1243,13 @@ bool load_char(const char *name, char_data *ch, bool logon, int pc_load_origin)
         // Issue the refund.
         GET_KARMA(ch) += skill_karma_price * 100;
         GET_NUYEN_RAW(ch) += skill_nuyen_price;
-        GET_SYSTEM_POINTS(ch) += 5;
+        GET_RESTRICTED_SYSTEM_POINTS(ch) += 5;
         mudlog_vfprintf(ch, LOG_SYSLOG, "Refunded %s %d karma, %d nuyen; added 5 syspoints (%d -> %d).",
                         GET_CHAR_NAME(ch),
                         skill_karma_price,
                         skill_nuyen_price,
-                        GET_SYSTEM_POINTS(ch) - 5,
-                        GET_SYSTEM_POINTS(ch));
+                        GET_RESTRICTED_SYSTEM_POINTS(ch) - 5,
+                        GET_RESTRICTED_SYSTEM_POINTS(ch));
 
         snprintf(buf, sizeof(buf), "Due to balance changes, your skill in %s has been automatically set to the new cap of ^c%d^n. You have been refunded ^c%d^n karma and ^c%d^n nuyen to compensate for your training costs, and have received ^c5^n syspoints as a bonus.^n\r\n",
                  skills[skill_idx].name,
@@ -1424,7 +1426,7 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
                "Dead=%d, Physical=%d, PhysicalLoss=%d, Mental=%d, MentalLoss=%d, "\
                "PermBodLoss=%d, WimpLevel=%d, Loadroom=%ld, LastRoom=%ld, LastD=%ld, Hunger=%d, Thirst=%d, Drunk=%d, " \
                "ShotsFired='%d', ShotsTriggered='%d', Tradition=%d, pgroup='%ld', "\
-               "Inveh=%ld, `rank`=%d, gender=%d, SysPoints=%d, socialbonus=%d, email='%s', highlight='%s',"
+               "Inveh=%ld, `rank`=%d, gender=%d, SysPoints=%d, RestrictedSysPoints=%d, socialbonus=%d, email='%s', highlight='%s',"
                "lifestyle_string='%s', nodelete=%d, garnishment_nuyen=%ld, garnishment_rep=%ld, garnishment_notor=%ld WHERE idnum=%ld;",
                AFF_FLAGS(player).ToString(),
                PLR_FLAGS(player).ToString(),
@@ -1468,7 +1470,8 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
                inveh,
                GET_LEVEL(player),
                GET_PRONOUNS(player),
-               GET_SYSTEM_POINTS(player),
+               GET_UNRESTRICTED_SYSTEM_POINTS(player),
+               GET_RESTRICTED_SYSTEM_POINTS(player),
                MIN(GET_CONGREGATION_BONUS(player), MAX_CONGREGATION_BONUS),
                prepare_quotes(buf1, GET_EMAIL(player), sizeof(buf1) / sizeof(char)),
                prepare_quotes(buf2, GET_CHAR_COLOR_HIGHLIGHT(player), sizeof(buf2) / sizeof(char)),

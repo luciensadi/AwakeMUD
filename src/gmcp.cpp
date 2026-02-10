@@ -250,7 +250,8 @@ void SendGMCPCharInfo( struct char_data * ch )
   j["noto"] = GET_NOT(ch);
   j["metatype"] = pc_race_types_for_wholist[(int) GET_RACE(ch)];
   j["pronouns"] = genders[(int) ch->player.pronouns];
-  j["syspoints"] = GET_SYSTEM_POINTS(ch);
+  j["syspoints"] = GET_TOTAL_SYSTEM_POINTS(ch);
+  j["bound_syspoints"] = GET_RESTRICTED_SYSTEM_POINTS(ch);
 
   // Dump the json to a string and send it.
   std::string payload = j.dump();

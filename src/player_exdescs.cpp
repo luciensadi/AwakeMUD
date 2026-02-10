@@ -193,9 +193,9 @@ ACMD(do_exdesc) {
 // Called from do_syspoints() when the PC enters SYSPOINTS EXDESCS. Set is_confirmed if invoking from customize physical.
 void syspoints_purchase_exdescs(struct char_data *ch, char *buf, bool is_confirmed) {
   // Can they afford it?
-  FAILURE_CASE_PRINTF(GET_SYSTEM_POINTS(ch) < SYSP_EXDESC_MAX_PURCHASE_COST,
+  FAILURE_CASE_PRINTF(GET_TOTAL_SYSTEM_POINTS(ch) < SYSP_EXDESC_MAX_PURCHASE_COST,
                       "You can spend %d system points to increase your extra description maximum by %d. You don't have enough yet (only %d on hand)",
-                      SYSP_EXDESC_MAX_PURCHASE_COST, SYSP_EXDESC_MAX_PURCHASE_GETS_YOU_X_SLOTS, GET_SYSTEM_POINTS(ch));
+                      SYSP_EXDESC_MAX_PURCHASE_COST, SYSP_EXDESC_MAX_PURCHASE_GETS_YOU_X_SLOTS, GET_TOTAL_SYSTEM_POINTS(ch));
 
   // Have they entered the confirmation command?
   FAILURE_CASE_PRINTF(!is_confirmed && !is_abbrev(buf, "confirm"),
@@ -206,21 +206,12 @@ void syspoints_purchase_exdescs(struct char_data *ch, char *buf, bool is_confirm
   int existing_max = GET_CHAR_MAX_EXDESCS(ch);
   set_exdesc_max(ch, existing_max + SYSP_EXDESC_MAX_PURCHASE_GETS_YOU_X_SLOTS, TRUE);
 
-  GET_SYSTEM_POINTS(ch) -= SYSP_EXDESC_MAX_PURCHASE_COST;
-
-  mudlog_vfprintf(ch, LOG_GRIDLOG, "%s spent %d syspoints to increase exdesc max (%d -> %d), now has %d sysp",
-                  GET_CHAR_NAME(ch),
-                  SYSP_EXDESC_MAX_PURCHASE_COST,
-                  existing_max,
-                  GET_CHAR_MAX_EXDESCS(ch),
-                  GET_SYSTEM_POINTS(ch));
-  
-  playerDB.SaveChar(ch);
+  spend_syspoints(ch, SYSP_EXDESC_MAX_PURCHASE_COST, true, "exdesc purchase", global_dummy_val);
 
   send_to_char(ch, "OK, your exdesc maximum has increased from %d to %d. You have %d syspoints remaining.",
                existing_max,
                GET_CHAR_MAX_EXDESCS(ch),
-               GET_SYSTEM_POINTS(ch));
+               GET_TOTAL_SYSTEM_POINTS(ch));
 }
 
 // Given a character and an amount, set their exdesc maximum to that amount. save_to_db is only false when loading from DB.

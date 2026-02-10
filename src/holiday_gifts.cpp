@@ -174,7 +174,7 @@ SPECIAL(holiday_gift) {
     // Award syspoints.
     if (GET_HOLIDAY_GIFT_SYSPOINT_VALUE(obj) > 0) {
       send_to_char(ch, " %d syspoint%s", GET_HOLIDAY_GIFT_SYSPOINT_VALUE(obj), GET_HOLIDAY_GIFT_SYSPOINT_VALUE(obj) == 1 ? "" : "s");
-      GET_SYSTEM_POINTS(ch) += GET_HOLIDAY_GIFT_SYSPOINT_VALUE(obj);
+      gain_syspoints(ch, GET_HOLIDAY_GIFT_SYSPOINT_VALUE(obj), true, "holiday reward");
       GET_HOLIDAY_GIFT_SYSPOINT_VALUE(obj) = 0;
       sent_count++;
     }

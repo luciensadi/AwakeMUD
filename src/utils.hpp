@@ -671,7 +671,14 @@ int get_armor_penalty_grade(struct char_data *ch);
 #define GET_WIMP_LEV(ch)        ((ch)->player_specials->saved.wimp_level)
 #define GET_FREEZE_LEV(ch)      ((ch)->player_specials->saved.freeze_level)
 #define GET_BAD_PWS(ch)         ((ch)->player_specials->saved.bad_pws)
-#define GET_SYSTEM_POINTS(ch)   ((ch && ch->desc && ch->desc->original) ? ch->desc->original->player_specials->saved.system_points : ch->player_specials->saved.system_points)
+
+#define GET_UNRESTRICTED_SYSTEM_POINTS(ch)   ((ch && ch->desc && ch->desc->original) ? ch->desc->original->player_specials->saved.system_points : ch->player_specials->saved.system_points)
+#define GET_RESTRICTED_SYSTEM_POINTS(ch)      ((ch && ch->desc && ch->desc->original) ? ch->desc->original->player_specials->saved.restricted_system_points : ch->player_specials->saved.restricted_system_points)
+#define GET_TOTAL_SYSTEM_POINTS(ch)           (GET_UNRESTRICTED_SYSTEM_POINTS(ch) + GET_RESTRICTED_SYSTEM_POINTS(ch))
+bool spend_syspoints(struct char_data *ch, int amount, bool use_restricted, const char *for_what, int &spent_restricted);
+bool gain_syspoints(struct char_data *ch, int amount, bool is_restricted, const char *for_what);
+extern int global_dummy_val; // Trash value to use on spent_restricted etc when you don't care about the return. Yes, it's bad practice. No, I don't care right now-- YOU refactor it. >.>
+
 #define GET_WATCH(ch)           ((ch)->player_specials->watching)
 #define GET_ASTRAL(ch)          ((ch)->aff_abils.astral_pool)
 #define GET_DODGE(ch)           ((ch)->aff_abils.defense_pool)

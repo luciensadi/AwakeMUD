@@ -709,8 +709,10 @@ struct player_special_data_saved
 
   // Alt info.
   idnum_t prestige_alt_id;
+  int restricted_sysp_spent_on_prestige;
 
   int system_points;
+  int restricted_system_points;
 
   int best_lifestyle;
   const char *lifestyle_string;
@@ -721,8 +723,8 @@ struct player_special_data_saved
     wimp_level(0), freeze_level(0), invis_level(0), incog_level(0), load_room(NOWHERE),
     last_in(0), last_veh(NOTHING), bad_pws(0), automod_counter(0), totem(0), totemspirit(0),
     att_points(0), skill_points(0), channel_points(0), force_points(0), restring_points(0), zonenum(0),
-    archetype(0), archetypal(FALSE), prestige_alt_id(0), system_points(0), 
-    best_lifestyle(LIFESTYLE_SQUATTER), lifestyle_string(NULL)
+    archetype(0), archetypal(FALSE), prestige_alt_id(0), restricted_sysp_spent_on_prestige(0),
+    system_points(0), restricted_system_points(0), best_lifestyle(LIFESTYLE_SQUATTER), lifestyle_string(NULL)
   {
     ZERO_OUT_ARRAY(conditions, 3);
   }
@@ -1077,10 +1079,12 @@ struct ccreate_t
   sh_int prestige_race;
   idnum_t prestige_bagholder;
   int prestige_cost;
+  int prestige_spent_restricted;
   bool is_otaku;
 
   ccreate_t() :
-    mode(0), force_points(0), temp(0), points(0), prestige_race(0), prestige_bagholder(0), prestige_cost(0), is_otaku(false)
+    mode(0), force_points(0), temp(0), points(0), prestige_race(0), prestige_bagholder(0), prestige_cost(0),
+    prestige_spent_restricted(0), is_otaku(false)
   {
     for (int idx=0; idx < NUM_CCR_PR_POINTS; idx++) {
       pr[idx] = 0;

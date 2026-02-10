@@ -1082,9 +1082,9 @@ void init_char_sql(struct char_data *ch, const char *call_origin)
                "A nondescript person.\r\n", "A nondescript entity.\r\n", "A nondescript entity.\r\n", time(0));
   mysql_wrapper(mysql, buf);
   if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED)) {
-    snprintf(buf, sizeof(buf), "INSERT INTO pfiles_chargendata (`idnum`, `AttPoints`, `SkillPoints`, `ForcePoints`, `archetypal`, `archetype`, `prestige_alt`, `channel_points`) VALUES"\
-               "('%ld', '%d', '%d', '%d', '%d', '%d', '%ld', '%d');", 
-               GET_IDNUM(ch), GET_ATT_POINTS(ch), GET_SKILL_POINTS(ch), GET_FORCE_POINTS(ch), GET_ARCHETYPAL_MODE(ch) ? 1 : 0, GET_ARCHETYPAL_TYPE(ch), GET_PRESTIGE_ALT_ID(ch), GET_CHANNEL_POINTS(ch));
+    snprintf(buf, sizeof(buf), "INSERT INTO pfiles_chargendata (`idnum`, `AttPoints`, `SkillPoints`, `ForcePoints`, `archetypal`, `archetype`, `prestige_alt`, `channel_points`, `restricted_sysp_spent`) VALUES"\
+               "('%ld', '%d', '%d', '%d', '%d', '%d', '%ld', '%d', '%d');", 
+               GET_IDNUM(ch), GET_ATT_POINTS(ch), GET_SKILL_POINTS(ch), GET_FORCE_POINTS(ch), GET_ARCHETYPAL_MODE(ch) ? 1 : 0, GET_ARCHETYPAL_TYPE(ch), GET_PRESTIGE_ALT_ID(ch), GET_CHANNEL_POINTS(ch), ch->player_specials->saved.restricted_sysp_spent_on_prestige);
     mysql_wrapper(mysql, buf);
   }
   if (GET_TRADITION(ch) != TRAD_MUNDANE) {
@@ -1673,13 +1673,13 @@ void create_parse(struct descriptor_data *d, const char *arg)
       bool online = FALSE;
 
       // Ensure they have enough
-      if (GET_SYSTEM_POINTS(victim) < d->ccr.prestige_cost) {
+      if (GET_TOTAL_SYSTEM_POINTS(victim) < d->ccr.prestige_cost) {
         snprintf(buf, sizeof(buf), "%s doesn't have enough system points. You need %d, but %s (%s) only has %d.\r\n", 
                  GET_CHAR_NAME(victim),
                  d->ccr.prestige_cost,
                  GET_CHAR_NAME(victim),
                  online ? "online" : "offline",
-                 GET_SYSTEM_POINTS(victim));
+                 GET_TOTAL_SYSTEM_POINTS(victim));
         SEND_TO_Q(buf, d);
 
         find_or_load_ch_cleanup(victim);
@@ -1690,7 +1690,7 @@ void create_parse(struct descriptor_data *d, const char *arg)
       }
     
       // Deduct, notify, log, and save
-      GET_SYSTEM_POINTS(victim) -= d->ccr.prestige_cost;
+      spend_syspoints(victim, d->ccr.prestige_cost, true, "prestiging", d->ccr.prestige_spent_restricted);
       
       if (victim->desc)
         send_to_char(victim, "^RYou've just spent %d system points on a prestige race/class. If this is not correct, change your password and notify staff immediately.^n\r\n", d->ccr.prestige_cost);
@@ -2346,12 +2346,28 @@ void refund_chargen_prestige_syspoints_if_needed(struct char_data *ch) {
   }
   
   // Refund the character.
-  int old_sysp = GET_SYSTEM_POINTS(payer);
-  GET_SYSTEM_POINTS(payer) += refund_amount;
+  int old_unrestricted = GET_UNRESTRICTED_SYSTEM_POINTS(payer);
+  int old_restricted = GET_RESTRICTED_SYSTEM_POINTS(payer);
+
+  int restricted_spent = PLR_FLAGGED(ch, PLR_IN_CHARGEN) ? ch->desc->ccr.prestige_spent_restricted : ch->player_specials->saved.restricted_sysp_spent_on_prestige;
+  if (restricted_spent > 0) {
+    gain_syspoints(payer, restricted_spent, true, "prestige refund (restricted)");
+  }
+  if (refund_amount - restricted_spent > 0) {
+    gain_syspoints(payer, refund_amount - restricted_spent, false, "prestige refund(unrestricted)");
+  }
+
   playerDB.SaveChar(payer, GET_LOADROOM(payer));
 
-  mudlog_vfprintf(ch, LOG_CHEATLOG, "Refunded %d prestige-purchase syspoints to %s due to %s deleting in character generation (%d -> %d)",
-                  refund_amount, GET_CHAR_NAME(payer), GET_CHAR_NAME(ch), old_sysp, GET_SYSTEM_POINTS(payer));
+  mudlog_vfprintf(ch, LOG_CHEATLOG, "Refunded %d (%dr) prestige-purchase syspoints to %s due to %s deleting in character generation (%du/%dr -> %du/%dr)",
+                  refund_amount,
+                  restricted_spent,
+                  GET_CHAR_NAME(payer),
+                  GET_CHAR_NAME(ch),
+                  old_unrestricted,
+                  old_restricted,
+                  GET_UNRESTRICTED_SYSTEM_POINTS(payer),
+                  GET_RESTRICTED_SYSTEM_POINTS(payer));
   snprintf(buf, sizeof(buf), "Refunded %d prestige-purchase syspoints to %s due to you deleting during character generation.", refund_amount, GET_CHAR_NAME(payer));
   SEND_TO_Q(buf, ch->desc);
 

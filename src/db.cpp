@@ -629,6 +629,7 @@ void boot_world(void)
   require_that_field_exists_in_table("is_protected", "pfiles_mail", "SQL/Migrations/digitize_mail.sql");
   require_that_sql_table_exists("pfiles_stowed", "SQL/Migrations/hammerspace.sql");
   require_that_field_exists_in_table("garnishment_nuyen", "pfiles", "SQL/Migrations/add_garnishments.sql");
+  require_that_field_exists_in_table("RestrictedSysPoints", "pfiles", "SQL/Migrations/add_bound_sysp.sql");
 
   {
     const char *object_tables[4] = {

@@ -460,6 +460,8 @@ void create_pet_parse(struct descriptor_data *d, const char *arg) {
               return;
             }
 
+            spend_syspoints(CH, CUSTOM_PET_SYSPOINT_COST, true, "custom pet", global_dummy_val);
+
             GET_OBJ_EXTRA(PET).SetBit(ITEM_EXTRA_KEPT);
             obj_to_char(PET, CH);
             mudlog_vfprintf(CH, LOG_GRIDLOG, "%s created a custom pet named '%s'.", GET_CHAR_NAME(CH), GET_OBJ_NAME(PET));
@@ -472,11 +474,10 @@ void create_pet_parse(struct descriptor_data *d, const char *arg) {
         case 'x':
         case 'X':
           {
-            GET_SYSTEM_POINTS(CH) += CUSTOM_PET_SYSPOINT_COST;
             extract_obj(PET);
             PET = NULL;
             STATE(d) = CON_PLAYING;
-            send_to_char(CH, "OK, discarded changes and refunded you %d syspoints.\r\n", CUSTOM_PET_SYSPOINT_COST);
+            send_to_char(CH, "OK, discarded changes.\r\n");
           }
           break;
         default:
@@ -577,9 +578,8 @@ void create_pet_parse(struct descriptor_data *d, const char *arg) {
 
 void create_pet(struct char_data *ch) {
   FAILURE_CASE(PLR_FLAGGED(ch, PLR_BLACKLIST), "You can't do that while blacklisted.");
-  FAILURE_CASE_PRINTF(GET_SYSTEM_POINTS(ch) < CUSTOM_PET_SYSPOINT_COST, "It will cost you %d syspoints to create a custom pet.", CUSTOM_PET_SYSPOINT_COST);
-  GET_SYSTEM_POINTS(ch) -= CUSTOM_PET_SYSPOINT_COST;
-  send_to_char(ch, "\r\nYou spend %d syspoints, which will be refunded if you 'X' out.\r\n\r\n", CUSTOM_PET_SYSPOINT_COST);
+  FAILURE_CASE_PRINTF(GET_TOTAL_SYSTEM_POINTS(ch) < CUSTOM_PET_SYSPOINT_COST, "It will cost you %d syspoints to create a custom pet.", CUSTOM_PET_SYSPOINT_COST);
+  send_to_char(ch, "\r\n^yThis will cost you %d syspoints, which will be spent when you confirm with 'q'.^n\r\n\r\n", CUSTOM_PET_SYSPOINT_COST);
   // If someone disconnects during editing, they'll lose the points and will need to ask staff for a refund.
 
   send_to_char(ch, "You are entering pet creation, which allows you to create custom pets that live in your apartment.\r\n"
