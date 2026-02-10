@@ -258,12 +258,12 @@ struct melee_combat_data {
           }
           // 1h to 2h is a +1 power. 
           else {
-            power_before_armor += 1;
+            power += 1;
           }
         } else {
           // We also give the +1 power for 1h -> 2h if you're wielding a 1h weapon with your other hand free.
           if (!GET_EQ(ch, WEAR_HOLD)) {
-            power_before_armor += 1;
+            power += 1;
           }
         }
       }
