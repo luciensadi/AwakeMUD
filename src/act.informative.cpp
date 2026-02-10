@@ -5628,15 +5628,16 @@ ACMD(do_index)
 
   // Build the index and send it to the character.
   send_to_char("The following help topics are available:\r\n", ch);
-  res = mysql_store_result(mysql);
-  while ((row = mysql_fetch_row(res))) {
-    send_to_char(ch, " %s\r\n", row[0]);
+  if ((res = mysql_store_result(mysql))) {
+    while ((row = mysql_fetch_row(res))) {
+      send_to_char(ch, " %s\r\n", row[0]);
+    }
+
+    send_to_char("You can see more about these with HELP <topic>.\r\n", ch);
+
+    // Clean up.
+    mysql_free_result(res);
   }
-
-  send_to_char("You can see more about these with HELP <topic>.\r\n", ch);
-
-  // Clean up.
-  mysql_free_result(res);
 }
 
 void display_help(char *help, int help_len, const char *arg, struct char_data *ch) {
@@ -5667,7 +5668,10 @@ void display_help(char *help, int help_len, const char *arg, struct char_data *c
     mudlog(buf3, ch, LOG_SYSLOG, TRUE);
     return;
   } else {
-    res = mysql_store_result(mysql);
+    if (!(res = mysql_store_result(mysql))) {
+      snprintf(help, help_len, "Sorry, no such help file exists.");
+      return;
+    }
     if ((row = mysql_fetch_row(res))) {
       // Found it-- send it back and have done with it.
       snprintf(help, help_len, "^W%s^n\r\n\r\n%s\r\n", row[0], row[1]);
@@ -5691,7 +5695,10 @@ void display_help(char *help, int help_len, const char *arg, struct char_data *c
     snprintf(help, help_len, "No such help file exists (error case).\r\n");
     return;
   }
-  res = mysql_store_result(mysql);
+  if (!(res = mysql_store_result(mysql))) {
+    snprintf(help, help_len, "Sorry, no such helpfile exists.\r\n");
+    return;
+  }
   int x = mysql_num_rows(res);
 
   // If we have no rows, fail.
@@ -5720,7 +5727,10 @@ void display_help(char *help, int help_len, const char *arg, struct char_data *c
       mudlog(buf3, ch, LOG_HELPLOG, TRUE);
       return;
     }
-    res = mysql_store_result(mysql);
+    if (!(res = mysql_store_result(mysql))) {
+      snprintf(buf3, sizeof(buf3), "Sorry, no such helpfile exists.");
+      return;
+    }
     row = mysql_fetch_row(res);
     if (mysql_num_rows(res) == 1) {
       // We found a single candidate row-- send that back.
