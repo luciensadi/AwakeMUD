@@ -37,7 +37,7 @@ extern struct skill_data skills[];
 
 extern void respond(struct char_data *ch, struct char_data *mob, char *str);
 extern bool can_send_act_to_target(struct char_data *ch, bool hide_invisible, struct obj_data * obj, void *vict_obj, struct char_data *to, int type);
-extern char *how_good(int skill, int percent);
+extern char *how_good(int skill, int percent, bool chipped, int natural);
 extern const char *get_voice_perceived_by(struct char_data *speaker, struct char_data *listener, bool invis_staff_should_be_identified);
 int find_skill_num(char *name);
 void ring_phone(struct phone_data *k);
@@ -1670,7 +1670,9 @@ ACMD(do_language)
         continue;
 
       if ((GET_SKILL(ch, i)) > 0) {
-        snprintf(buf, sizeof(buf), "%-20s %-17s", skills[i].name, how_good(i, GET_SKILL(ch, i)));
+        snprintf(buf, sizeof(buf), "%-20s %-17s", skills[i].name,
+                 how_good(i, GET_SKILL(ch, i), GET_CHIPJACKED_SKILL(ch, i), GET_RAW_SKILL(ch, i))
+                );
         if (GET_LANGUAGE(ch) == i)
           strlcat(buf, " ^Y(Speaking)^n", sizeof(buf));
         strlcat(buf, "\r\n", sizeof(buf));

@@ -1987,10 +1987,20 @@ SPECIAL(car_dealer)
     }
 
     if (GET_NUYEN(ch) < veh->cost) {
-      send_to_char("You aren't carrying enough nuyen for that, and this shop doesn't take credsticks.\r\n", ch);
-      return TRUE;
+      if (!has_valid_pocket_secretary(ch)) {
+        send_to_char("You don't have enough nuyen for that, and no pocket secretary to arrange a bank transfer.\r\n", ch);
+        return TRUE;
+      }
+      if ((GET_BANK(ch) < veh->cost)) {
+        send_to_char("You aren't carrying enough nuyen for that, and you don't have enough available funds in your accounts either.\r\n", ch);
+        return TRUE;
+      } else {
+        send_to_char("You arrange for a bank transfer in order to purchase the vehicle.\r\n", ch);
+        lose_bank(ch, veh->cost, NUYEN_OUTFLOW_VEHICLE_PURCHASES);
+      }
+    } else {
+      lose_nuyen(ch, veh->cost, NUYEN_OUTFLOW_VEHICLE_PURCHASES);
     }
-    lose_nuyen(ch, veh->cost, NUYEN_OUTFLOW_VEHICLE_PURCHASES);
     newveh = read_vehicle(veh->veh_number, REAL);
     veh_to_room(newveh, ch->in_room);
     set_veh_owner(newveh, GET_IDNUM(ch));
@@ -5551,10 +5561,54 @@ SPECIAL(chargen_south_from_trainer) {
   if (!ch || !cmd || IS_NPC(ch))
     return FALSE;
 
-  if ((CMD_IS("s") || CMD_IS("south")) && GET_ATT_POINTS(ch) > 0) {
-    send_to_char(ch, "You still have %d attribute point%s to spend! You must finish ^WTRAIN^ning your attributes before you proceed.\r\n",
-                 GET_ATT_POINTS(ch), GET_ATT_POINTS(ch) > 1 ? "s" : "");
-    return TRUE;
+  if ((CMD_IS("s") || CMD_IS("south"))) {
+    if (GET_ATT_POINTS(ch) > 0) {
+      send_to_char(ch, "You still have %d attribute point%s to spend! You must finish ^WTRAIN^ning your attributes before you proceed.\r\n",
+                   GET_ATT_POINTS(ch), GET_ATT_POINTS(ch) > 1 ? "s" : "");
+      return TRUE;
+    }
+
+    if (GET_TRADITION(ch) == TRAD_SHAMANIC) {
+      switch (GET_TOTEM(ch)) {
+        case TOTEM_BULL:
+        case TOTEM_PRAIRIEDOG:
+        case TOTEM_SUN:
+          if (GET_REAL_CHA(ch) < 4) {
+            send_to_char(ch, "Your totem requries you to have a minimum charisma of 4! You must finish ^WTRAIN^ning your attributes before you proceed.\r\n");
+            return TRUE;
+          }
+          return FALSE;
+        case TOTEM_LOVER:
+        case TOTEM_SEDUCTRESS:
+        case TOTEM_SIREN:
+          if (GET_REAL_CHA(ch) < 6) {
+            send_to_char(ch, "Your totem requries you to have a minimum charisma of 6! You must finish ^WTRAIN^ning your attributes before you proceed.\r\n");
+            return TRUE;
+          }
+          return FALSE;
+        case TOTEM_DRAGON:
+          if (GET_REAL_INT(ch) < 6) {
+            send_to_char(ch, "Your totem requries you to have a minimum intelligence of 6! You must finish ^WTRAIN^ning your attributes before you proceed.\r\n");
+            return TRUE;
+          }
+          return FALSE;
+        case TOTEM_CHEETAH:
+          if (GET_REAL_REA(ch) < 4) {
+            send_to_char(ch, "Your totem requries you to have a minimum reaction of 4! You must finish ^WTRAIN^ning your attributes before you proceed.\r\n");
+            return TRUE;
+          }
+          return FALSE;
+        case TOTEM_OAK:
+          if (GET_REAL_BOD(ch) < 4 || GET_REAL_STR(ch) < 4) {
+            send_to_char(ch, "Your totem requries you to have a minimum body and strength of 4! You must finish ^WTRAIN^ning your attributes before you proceed.\r\n");
+            return TRUE;
+          }
+          return FALSE;
+        default:
+          return FALSE;       
+      }
+    }
+    return FALSE;
   }
 
   if (CMD_IS("untrain")) {

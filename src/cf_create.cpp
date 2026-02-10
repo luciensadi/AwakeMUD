@@ -136,8 +136,8 @@ void cfedit_parse(struct descriptor_data *d, const char *arg)
         program_size *= programs[GET_COMPLEX_FORM_PROGRAM(FORM)].multiplier;
       }
       if (success <= 0) {
-        GET_COMPLEX_FORM_LEARNING_TICKS_LEFT(d->edit_obj) = number(1, 6) + number(1, 6);
-        GET_COMPLEX_FORM_ORIGINAL_TICKS_LEFT(d->edit_obj) = (GET_COMPLEX_FORM_SIZE(d->edit_obj) * 60) / number(1, 3);
+        GET_COMPLEX_FORM_LEARNING_TICKS_LEFT(d->edit_obj) = (GET_COMPLEX_FORM_SIZE(d->edit_obj) * 60) / (number(1, 6) + number(1, 6));
+        GET_COMPLEX_FORM_ORIGINAL_TICKS_LEFT(d->edit_obj) = (GET_COMPLEX_FORM_SIZE(d->edit_obj) * 60);
         GET_COMPLEX_FORM_LEARNING_FAILED(d->edit_obj) = 1;
       } else {        
         GET_COMPLEX_FORM_SIZE(d->edit_obj) = program_size;

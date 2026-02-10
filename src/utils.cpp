@@ -4389,10 +4389,18 @@ const char *skill_rank_name(int rank, bool knowledge)
 #undef RANK_MESSAGE
 }
 
-char *how_good(int skill, int rank)
+char *how_good(int skill, int rank, bool chipped, int natural)
 {
+  static char practiced[256];
+  if (chipped && natural != 0) {
+    snprintf(practiced, sizeof(practiced), " (Practiced at rank ^c%2d^n)", natural);
+  }
   static char buf[256];
-  snprintf(buf, sizeof(buf), " (rank ^c%2d^n: %s)", rank, skill_rank_name(rank, skills[skill].is_knowledge_skill == SKILL_TYPE_KNOWLEDGE));
+  snprintf(buf, sizeof(buf), " (rank ^c%2d^n: %s%s)%s", rank,
+           skill_rank_name(rank, skills[skill].is_knowledge_skill == SKILL_TYPE_KNOWLEDGE),
+           chipped ? ", ^yChipped^n" : "",
+           chipped && natural != 0 ? practiced : ""
+          );
   return buf;
 }
 

@@ -1487,19 +1487,19 @@ int make_prompt(struct descriptor_data * d)
                 if (WEAPON_IS_GUN(GET_EQ(d->character, WEAR_WIELD))) {
                   switch (GET_WEAPON_FIREMODE(GET_EQ(d->character, WEAR_WIELD))) {
                     case MODE_SS:
-                      strlcat(str, "SS", sizeof(str));
+                      strlcpy(str, "SS", sizeof(str));
                       break;
                     case MODE_SA:
-                      strlcat(str, "SA", sizeof(str));
+                      strlcpy(str, "SA", sizeof(str));
                       break;
                     case MODE_BF:
-                      strlcat(str, "BF", sizeof(str));
+                      strlcpy(str, "BF", sizeof(str));
                       break;
                     case MODE_FA:
                       snprintf(str, sizeof(str), "FA(%d)", GET_OBJ_TIMER(GET_EQ(d->character, WEAR_WIELD)));
                       break;
                     default:
-                      strlcat(str, "NA", sizeof(str));
+                      strlcpy(str, "NA", sizeof(str));
                       break;
                   }
                 }

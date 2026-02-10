@@ -1651,7 +1651,11 @@ void raw_cast_health_spell(struct char_data *ch, struct char_data *vict, int spe
         WAIT_STATE(ch, (int) (SPELL_WAIT_STATE_TIME));
 
         if (GET_PHYSICAL(vict) == GET_MAX_PHYSICAL(vict)) {
-          act("The spell fizzles-- $N is already at full health.", FALSE, ch, 0, vict, TO_CHAR);
+          if (vict == ch) {
+            act("The spell fizzles-- $N are already at full health.", FALSE, ch, 0, vict, TO_CHAR);
+          } else {
+            act("The spell fizzles-- $N is already at full health.", FALSE, ch, 0, vict, TO_CHAR);
+          }
         } else {
           if (ritual_successes >= 0) {
             success = ritual_successes;

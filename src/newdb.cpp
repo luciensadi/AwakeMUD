@@ -2360,13 +2360,13 @@ void DeleteChar(long idx)
   globally_remove_vict_id_from_logged_in_ignore_lists(idx);
 }
 
-time_t get_idledelete_days_left(time_t lastd, int tke, int race, int rank) {
+time_t get_idledelete_days_left(time_t lastd, int tke, int race, int rank, int otaku_path) {
   // Set the base idle deletion days.
   time_t base_value;
 
   if (rank > LVL_MORTAL) {
     base_value = IDLE_DELETE_BASE_DAYS_FOR_STAFF;
-  } else if (IS_PRESTIGE_RACE(race)) {
+  } else if (IS_PRESTIGE_RACE(race) || otaku_path > 0) {
     base_value = IDLE_DELETE_BASE_DAYS_FOR_PRESTIGE;
   } else {
     base_value = IDLE_DELETE_BASE_DAYS_FOR_PCS;
@@ -2406,7 +2406,7 @@ void idle_delete()
     log("IDLEDELETE- Could not open extra socket, aborting");
     return;
   }
-  snprintf(buf, sizeof(buf), "SELECT `idnum`, `lastd`, `tke`, `race`, `rank` FROM pfiles WHERE lastd <= %ld AND nodelete=0 AND name != '%s' ORDER BY lastd ASC;", time(0) - (SECS_PER_REAL_DAY * 50), CHARACTER_DELETED_NAME_FOR_SQL);
+  snprintf(buf, sizeof(buf), "SELECT `idnum`, `lastd`, `tke`, `race`, `rank`, `otaku_path` FROM pfiles WHERE lastd <= %ld AND nodelete=0 AND name != '%s' ORDER BY lastd ASC;", time(0) - (SECS_PER_REAL_DAY * 50), CHARACTER_DELETED_NAME_FOR_SQL);
   mysql_wrapper(mysqlextra, buf);
   MYSQL_RES *res;
   MYSQL_ROW row;
@@ -2417,7 +2417,8 @@ void idle_delete()
       time_t lastd = atoi(row[1]);
       int race = atoi(row[3]);
       int rank = atoi(row[4]);
-      if (get_idledelete_days_left(lastd, tke, race, rank) < 0) {
+      int otaku_path = atoi(row[5]);
+      if (get_idledelete_days_left(lastd, tke, race, rank, otaku_path) < 0) {
 #ifndef IDLEDELETE_DRYRUN
         // TODO: Pull their PLR bitstring and validate that their nodelete bit is set to off.
         DeleteChar(atol(row[0]));
