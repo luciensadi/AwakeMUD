@@ -88,12 +88,12 @@ void initialize_policy_tree() {
   {
     PolicyNode *section_root = new PolicyNode(
       "No Underage Characters",
-      "All CHARACTERS must be aged 18 or older, and must present as such."
+      "All CHARACTERS must be aged 20 or older, and must present as such."
     );
     root_policy_document.push_back(section_root);
 
-    section_root->add_child("Because we don't forbid adult roleplay here, we require that all characters are 18+, and that they present as such.");
-    section_root->add_child("It is a violation of this policy to have a character who IS, APPEARS, or IDENTIFIES AS underage.");
+    section_root->add_child("Because we don't forbid adult roleplay here, we require that all characters are 20+, and that they present as such.");
+    section_root->add_child("It is a violation of this policy to have a character who IS, APPEARS, or IDENTIFIES AS underage. Such characters will be banned.");
     section_root->add_child("Additionally, anyone who engages in adult scenes with a character in violation of this policy will also be banned.");
   }
 
