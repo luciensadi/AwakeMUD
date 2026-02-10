@@ -973,6 +973,10 @@ ACMD(do_build) {
         break;
     case PART_RAS_OVERRIDE:
         target += GET_PART_TARGET_MPCP(obj);
+        duration_in_hours = GET_PART_TARGET_MPCP(obj);
+        break;
+    case PART_REALITY_FILTER:
+        target += GET_PART_TARGET_MPCP(obj);
         duration_in_hours = GET_PART_TARGET_MPCP(obj) * 1 WORKING_DAYS;
         break;
     case PART_RESPONSE:
