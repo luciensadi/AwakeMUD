@@ -156,8 +156,13 @@ void end_quest(struct char_data *ch, bool succeeded);
 
 void initialize_quest_for_ch(struct char_data *ch, int quest_rnum, struct char_data *johnson) {
   // Assign them the quest.
-  GET_QUEST(ch) = quest_rnum;
-  GET_QUEST_STARTED(ch) = time(0);
+  if (PLR_FLAGGED(ch, PLR_DOING_FAVOUR)) {
+    GET_QUEST(ch) = quest_rnum;
+    GET_QUEST_STARTED(ch) = time(0);
+  } else {
+    GET_QUEST(ch) = quest_rnum;
+    GET_QUEST_STARTED(ch) = time(0);
+  }
 
   // Create their memory structures.
   ch->player_specials->obj_complete = new sh_int[quest_table[GET_QUEST(ch)].num_objs];
@@ -179,6 +184,8 @@ void initialize_quest_for_ch(struct char_data *ch, int quest_rnum, struct char_d
 }
 
 bool attempt_quit_job(struct char_data *ch, struct char_data *johnson) {
+  bool favour = PLR_FLAGGED(ch, PLR_DOING_FAVOUR);
+
   // Precondition: I cannot be talking right now.
   if (GET_SPARE1(johnson) == 0) {
     if (!memory(johnson, ch)) {
@@ -221,6 +228,9 @@ bool attempt_quit_job(struct char_data *ch, struct char_data *johnson) {
 
   end_quest(ch, FALSE);
   forget(johnson, ch);
+  if (favour) {
+    PLR_FLAGS(ch).RemoveBit(PLR_DOING_FAVOUR);
+  }
   return TRUE;
 }
 
@@ -907,22 +917,38 @@ bool check_quest_kill(struct char_data *ch, struct char_data *victim)
 
 void end_quest(struct char_data *ch, bool succeeded)
 {
-  if (IS_NPC(ch) || !GET_QUEST(ch))
+  bool favour = PLR_FLAGGED(ch, PLR_DOING_FAVOUR);
+  if (IS_NPC(ch) || !GET_QUEST(ch)) {
     return;
-
-  extract_quest_targets(GET_IDNUM_EVEN_IF_PROJECTING(ch));
-  // We mark the quest as completed here because if you fail...
-  //well you failed. Better luck next time chummer.
-  for (int i = QUEST_TIMER - 1; i > 0; i--) {
-    GET_LQUEST(ch, i) = GET_LQUEST(ch, i - 1);
-
-    if (succeeded)
-      GET_CQUEST(ch, i) = GET_CQUEST(ch, i - 1);
   }
 
-  GET_LQUEST(ch, 0) = quest_table[GET_QUEST(ch)].vnum;
-  if (succeeded)
-    GET_CQUEST(ch, 0) = quest_table[GET_QUEST(ch)].vnum;
+  extract_quest_targets(GET_IDNUM_EVEN_IF_PROJECTING(ch));
+
+  // We mark the quest as completed here because if you fail...
+  //well you failed. Better luck next time chummer.
+  if (favour) {
+    for (int i = QUEST_TIMER - 1; i > 0; i--) {
+      GET_LFAVOUR(ch, i) = GET_LFAVOUR(ch, i - 1);
+
+      if (succeeded)
+        GET_CFAVOUR(ch, i) = GET_CFAVOUR(ch, i - 1);
+    }
+
+    GET_LFAVOUR(ch, 0) = quest_table[GET_QUEST(ch)].vnum;
+    if (succeeded)
+      GET_CFAVOUR(ch, 0) = quest_table[GET_QUEST(ch)].vnum;
+  } else {
+    for (int i = QUEST_TIMER - 1; i > 0; i--) {
+      GET_LQUEST(ch, i) = GET_LQUEST(ch, i - 1);
+
+      if (succeeded)
+        GET_CQUEST(ch, i) = GET_CQUEST(ch, i - 1);
+    }
+
+    GET_LQUEST(ch, 0) = quest_table[GET_QUEST(ch)].vnum;
+    if (succeeded)
+      GET_CQUEST(ch, 0) = quest_table[GET_QUEST(ch)].vnum;
+  }
 
   GET_QUEST(ch) = 0;
   GET_QUEST_STARTED(ch) = 0;
@@ -932,7 +958,11 @@ void end_quest(struct char_data *ch, bool succeeded)
   ch->player_specials->mob_complete = NULL;
   ch->player_specials->obj_complete = NULL;
 
-  GET_QUEST_DIRTY_BIT(ch) = TRUE;
+  if (favour) {
+    GET_FAVOUR_DIRTY_BIT(ch) = TRUE;
+  } else {
+    GET_QUEST_DIRTY_BIT(ch) = TRUE;
+  }
 }
 
 bool rep_too_high(struct char_data *ch, int num)
@@ -952,6 +982,17 @@ bool rep_too_low(struct char_data *ch, int num)
     return TRUE;
 
   if (GET_REP(ch) < quest_table[num].min_rep)
+    return TRUE;
+
+  return FALSE;
+}
+
+bool rep_cap_too_high(struct char_data *ch, int num)
+{
+  if (num < 0 || num > top_of_questt)
+    return TRUE;
+
+  if (quest_table[num].max_rep >= 10000 || GET_REP(ch) < quest_table[num].max_rep)
     return TRUE;
 
   return FALSE;
@@ -1046,7 +1087,7 @@ void award_follower_payout(struct char_data *follower, int karma, int nuyen, str
                   GET_IDNUM(questor));
 }
 
-void reward(struct char_data *ch, struct char_data *johnson)
+void reward(struct char_data *ch, struct char_data *johnson, bool favour = FALSE)
 {
   if (vnum_from_non_approved_zone(quest_table[GET_QUEST(ch)].vnum)) {
 #ifdef IS_BUILDPORT
@@ -1194,6 +1235,11 @@ void reward(struct char_data *ch, struct char_data *johnson)
     }
   }
 
+  if (favour) {
+    karma = karma * FAVOURS_KARMA_MULTIPLIER;
+    nuyen = nuyen * FAVOURS_KARMA_MULTIPLIER;
+  }
+
   gain_nuyen(ch, nuyen, NUYEN_INCOME_AUTORUNS);
   int gained = gain_karma(ch, karma, TRUE, FALSE, TRUE);
   act("$n gives some nuyen to $N.", TRUE, johnson, 0, ch, TO_NOTVICT);
@@ -1201,13 +1247,23 @@ void reward(struct char_data *ch, struct char_data *johnson)
   snprintf(buf, sizeof(buf), "$n gives you %d nuyen.", nuyen);
   act(buf, FALSE, johnson, 0, ch, TO_VICT);
   send_to_char(ch, "You gain %.2f karma.\r\n", ((float) gained / 100));
+  if (favour) {
+    send_to_char(ch, "^L[OOC: Karma and nuyen rewards for this run were suppressed as it was a favor.]^n\r\n");
+  }
 
-  mudlog_vfprintf(ch, LOG_GRIDLOG, "%s gains %0.2fk and %dn from job %ld. Elapsed time v2 %0.2f seconds.",
-                  GET_CHAR_NAME(ch),
-                  (float) gained * 0.01,
-                  nuyen,
-                  GET_QUEST(ch),
-                  difftime(time(0), GET_QUEST_STARTED(ch)));
+  if (favour) {
+    mudlog_vfprintf(ch, LOG_GRIDLOG, "%s completed job %ld as a favor. Elapsed time v2 %0.2f seconds.",
+                    GET_CHAR_NAME(ch),
+                    GET_QUEST(ch),
+                    difftime(time(0), GET_QUEST_STARTED(ch)));
+  } else {
+    mudlog_vfprintf(ch, LOG_GRIDLOG, "%s gains %0.2fk and %dn from job %ld. Elapsed time v2 %0.2f seconds.",
+                    GET_CHAR_NAME(ch),
+                    (float) gained * 0.01,
+                    nuyen,
+                    GET_QUEST(ch),
+                    difftime(time(0), GET_QUEST_STARTED(ch)));
+  }
   end_quest(ch, TRUE);
 }
 
@@ -1221,7 +1277,7 @@ bool compareRep(const quest_entry &a, const quest_entry &b)
 //done, and outgrown, sorts it by reputation and returns the lowest
 //rep one first. It returns 0 if no more quests are available or -1 if
 //the johnson is broken.
-int new_quest(struct char_data *mob, struct char_data *ch)
+int new_quest(struct char_data *mob, struct char_data *ch, bool favour = FALSE)
 {
   int num = 0;
   bool allow_disconnected = vnum_from_non_approved_zone(GET_MOB_VNUM(mob));
@@ -1267,9 +1323,16 @@ int new_quest(struct char_data *mob, struct char_data *ch)
 #endif
       }
 
-      if (rep_too_high(ch, quest_idx)) {
+      if (rep_too_high(ch, quest_idx) && !favour) {
         if (access_level(ch, LVL_BUILDER)) {
           send_to_char(ch, "[Skipping quest %ld: You exceed rep cap of %d.]\r\n", quest_table[quest_idx].vnum, quest_table[quest_idx].max_rep);
+        }
+        continue;
+      }
+
+      if (favour && rep_cap_too_high(ch, quest_idx)) {
+        if (access_level(ch, LVL_BUILDER)) {
+          send_to_char(ch, "[Skipping quest %ld as a favor: You are under the rep cap of %d.]\r\n", quest_table[quest_idx].vnum, quest_table[quest_idx].max_rep);
         }
         continue;
       }
@@ -1296,9 +1359,16 @@ int new_quest(struct char_data *mob, struct char_data *ch)
 
       bool found = FALSE;
       for (int q = QUEST_TIMER - 1; q >= 0; q--) {
-        if (GET_LQUEST(ch, q) == quest_table[quest_idx].vnum) {
-          found = TRUE;
-          break;
+        if (favour) {
+          if (GET_LFAVOUR(ch, q) == quest_table[quest_idx].vnum) {
+            found = TRUE;
+            break;
+          }
+        } else {
+          if (GET_LQUEST(ch, q) == quest_table[quest_idx].vnum) {
+            found = TRUE;
+            break;
+          }
         }
       }
       if (found) {
@@ -1460,7 +1530,7 @@ void handle_info(struct char_data *johnson, int num, struct char_data *target)
 SPECIAL(johnson)
 {
   struct char_data *johnson = (struct char_data *) me, *temp = NULL;
-  int i, obj_complete = 0, mob_complete = 0, new_q, cached_new_q = -2, comm = CMD_JOB_NONE;
+  int i, obj_complete = 0, mob_complete = 0, new_q, cached_new_q = -2, cached_new_f = -2, comm = CMD_JOB_NONE;
 
   if (!IS_NPC(johnson))
     return FALSE;
@@ -1488,6 +1558,7 @@ SPECIAL(johnson)
 
   skip_spaces(&argument);
 
+  bool favour = FALSE;
   bool need_to_speak = FALSE;
   bool need_to_act = FALSE;
   bool is_sayto = CMD_IS("sayto") || CMD_IS("\"") || CMD_IS("ask") || CMD_IS("whisper");
@@ -1524,6 +1595,8 @@ SPECIAL(johnson)
              str_str(argument, "run") || str_str(argument, "shadowrun") ||
              str_str(argument, "job") || str_str(argument, "help"))
       comm = CMD_JOB_START;
+    else if (str_str(argument, "favor") || str_str(argument, "favour"))
+      comm = CMD_JOB_FAVOUR;
     else if (str_str(argument, "yes") || str_str(argument, "accept") || str_str(argument, "yeah")
             || str_str(argument, "sure") || str_str(argument, "okay"))
       comm = CMD_JOB_YES;
@@ -1534,8 +1607,13 @@ SPECIAL(johnson)
         GET_LQUEST(ch, i) = 0;
         GET_CQUEST(ch, i) = 0;
       }
+      for (int i = QUEST_TIMER - 1; i >= 0; i--) {
+        GET_LFAVOUR(ch, i) = 0;
+        GET_CFAVOUR(ch, i) = 0;
+      }
       send_to_char("OK, your quest history has been cleared.\r\n", ch);
       GET_QUEST_DIRTY_BIT(ch) = TRUE;
+      GET_FAVOUR_DIRTY_BIT(ch) = TRUE;
       return FALSE;
     } else {
       //snprintf(buf, sizeof(buf), "INFO: No Johnson keywords found in %s's speech: '%s'.", GET_CHAR_NAME(ch), argument);
@@ -1554,6 +1632,13 @@ SPECIAL(johnson)
     if (!GET_QUEST(ch)) {
       do_say(ch, "I'm looking for a job.", 0, 0);
       comm = CMD_JOB_START;
+    } else {
+      return FALSE;
+    }
+  } else if (CMD_IS("favor") || CMD_IS("favors") || CMD_IS("favour") || CMD_IS("favours")) {
+    if (!GET_QUEST(ch)) {
+      do_say(ch, "Are you calling in any favors?", 0, 0);
+      comm = CMD_JOB_FAVOUR;
     } else {
       return FALSE;
     }
@@ -1605,6 +1690,7 @@ SPECIAL(johnson)
       return attempt_quit_job(ch, johnson);
     case CMD_JOB_DONE:
       // Precondition: I cannot be talking right now.
+      favour = PLR_FLAGGED(ch, PLR_DOING_FAVOUR);
       if (GET_SPARE1(johnson) == 0) {
         if (!memory(johnson, ch)) {
           do_say(johnson, "Hold on, I'm talking to someone else right now.", 0, 0);
@@ -1634,6 +1720,9 @@ SPECIAL(johnson)
           do_say(johnson, "You fragged it up, and you still want to get paid?", 0, 0);
           end_quest(ch, FALSE);
           forget(johnson, ch);
+          if (favour) {
+            PLR_FLAGS(ch).RemoveBit(PLR_DOING_FAVOUR);
+          }
           return TRUE;
         }
       }
@@ -1671,7 +1760,10 @@ SPECIAL(johnson)
           mudlog(buf, ch, LOG_SYSLOG, TRUE);
           do_say(johnson, "Well done.", 0, 0);
         }
-        reward(ch, johnson);
+        reward(ch, johnson, quest_table[GET_QUEST(ch)].max_rep < GET_REP(ch));
+        if (PLR_FLAGGED(ch, PLR_DOING_FAVOUR)) {
+          PLR_FLAGS(ch).RemoveBit(PLR_DOING_FAVOUR);
+        }
         forget(johnson, ch);
 
         if (GET_QUEST(ch) == QST_MAGE_INTRO && GET_TRADITION(ch) != TRAD_MUNDANE)
@@ -1680,25 +1772,39 @@ SPECIAL(johnson)
         do_say(johnson, "You haven't completed any of your objectives yet.", 0, 0);
 
       return TRUE;
-    case CMD_JOB_START: {
+    case CMD_JOB_START:
+    case CMD_JOB_FAVOUR: {
+      // set the favour bool and flag, if we said job and the favour flag is still dangling for any reason, drop it
+      favour = (comm == CMD_JOB_FAVOUR);
+      if (favour) {
+        PLR_FLAGS(ch).SetBit(PLR_DOING_FAVOUR);
+      } else
+        if (PLR_FLAGGED(ch, PLR_DOING_FAVOUR)) {
+          PLR_FLAGS(ch).RemoveBit(PLR_DOING_FAVOUR);
+        }
 
       // Reject high-rep characters.
       unsigned int johnson_max_rep = get_johnson_overall_max_rep(johnson);
-      if (johnson_max_rep < 10000 && johnson_max_rep < GET_REP(ch)) {
+      if (johnson_max_rep < 10000 && johnson_max_rep < GET_REP(ch) && !favour) {
         do_say(johnson, "My jobs aren't high-profile enough for someone with your rep!", 0, 0);
         send_to_char(ch, "[OOC: This Johnson caps out at %d reputation, so you won't get any further work from them.]\r\n", johnson_max_rep);
 
         GET_SPARE1(johnson) = -1;
-        if (memory(johnson, ch))
+        //We need to ensure that trying to start a job when you are already doing a favour won't get you blanked
+        if (memory(johnson, ch) && !PLR_FLAGGED(ch, PLR_DOING_FAVOUR)) {
             forget(johnson, ch);
+          }
         return TRUE;
       }
 
-      new_q = new_quest(johnson, ch);
+      new_q = new_quest(johnson, ch, favour);
       //Clever hack to safely save us a call to new_quest() that compiler will be ok with.
       //If we have a cached quest use that and reset the cache integer back to -2 when
       //it is consumed.
-      cached_new_q = new_q;
+      if (!favour)
+        cached_new_q = new_q;
+      else
+        cached_new_f = new_q;
 
       //Handle out of quests and broken johnsons.
       //Calls to new_quest() return 0 when there's no quest left available and
@@ -1733,8 +1839,12 @@ SPECIAL(johnson)
       if (PLR_FLAGGED(ch, PLR_KILLER) || PLR_FLAGGED(ch, PLR_BLACKLIST)) {
         do_say(johnson, "Word on the street is you can't be trusted.", 0, 0);
         GET_SPARE1(johnson) = -1;
-        if (memory(johnson, ch))
+        if (memory(johnson, ch)) {
+          if (favour) {
+            PLR_FLAGS(ch).RemoveBit(PLR_DOING_FAVOUR);
+          }
           forget(johnson, ch);
+        }
       }
 
       // Reject low-rep characters.
@@ -1784,8 +1894,9 @@ SPECIAL(johnson)
         }
 
         GET_SPARE1(johnson) = -1;
-        if (memory(johnson, ch))
+        if (memory(johnson, ch)) {
           forget(johnson, ch);
+        }
         return TRUE;
       }
 
@@ -1804,7 +1915,11 @@ SPECIAL(johnson)
       else {
         snprintf(buf, sizeof(buf), "WARNING: Null intro string in quest %ld!", quest_table[new_q].vnum);
         mudlog(buf, ch, LOG_SYSLOG, TRUE);
-        do_say(johnson, "I've got a job for you.", 0, 0);
+        if (favour) {
+          do_say(johnson, "I'm calling in a favour.", 0, 0);
+        } else {
+          do_say(johnson, "I've got a job for you.", 0, 0);
+        }
       }
       do_say(johnson, "Are you interested?", 0, 0);
       if (!memory(johnson, ch))
@@ -1829,11 +1944,14 @@ SPECIAL(johnson)
       //Clever hack to safely save us a call to new_quest() that compiler will be ok with.
       //If we have a cached quest use that and reset the cache integer back to -2 when
       //it is consumed.
-      if (cached_new_q != -2) {
+      if (cached_new_q != -2 && !PLR_FLAGGED(ch, PLR_DOING_FAVOUR)) {
         new_q = cached_new_q;
         cached_new_q = -2;
+      } else if (cached_new_f != -2 && PLR_FLAGGED(ch, PLR_DOING_FAVOUR)) {
+        new_q = cached_new_f;
+        cached_new_f = -2;
       } else {
-        new_q = new_quest(johnson, ch);
+        new_q = new_quest(johnson, ch, PLR_FLAGGED(ch, PLR_DOING_FAVOUR));
       }
 
       //Handle out of quests and broken johnsons.
@@ -1899,11 +2017,14 @@ SPECIAL(johnson)
       //Clever hack to safely save us a call to new_quest() that compiler will be ok with.
       //If we have a cached quest use that and reset the cache integer back to -2 when
       //it is consumed.
-      if (cached_new_q != -2) {
+      if (cached_new_q != -2 && !PLR_FLAGGED(ch, PLR_DOING_FAVOUR)) {
         new_q = cached_new_q;
         cached_new_q = -2;
+      } else if (cached_new_f != -2 && PLR_FLAGGED(ch, PLR_DOING_FAVOUR)) {
+        new_q = cached_new_f;
+        cached_new_f = -2;
       } else {
-        new_q = new_quest(johnson, ch);
+        new_q = new_quest(johnson, ch, PLR_FLAGGED(ch, PLR_DOING_FAVOUR));
       }
 
       //Handle out of quests and broken johnsons.
@@ -1924,6 +2045,9 @@ SPECIAL(johnson)
       GET_SPARE1(johnson) = -1;
       GET_QUEST(ch) = 0;
       GET_QUEST_STARTED(ch) = 0;
+      if (PLR_FLAGGED(ch, PLR_DOING_FAVOUR)) {
+        PLR_FLAGS(ch).RemoveBit(PLR_DOING_FAVOUR);
+      }
       forget(johnson, ch);
       if (quest_table[new_q].decline_emote && *quest_table[new_q].decline_emote) {
         // Don't @ me about this, it's the only way to reliably display a newline in this context.
@@ -3994,6 +4118,26 @@ unsigned int get_johnson_overall_min_rep(struct char_data *johnson) {
   }
 
   return min_rep;
+}
+
+unsigned int get_johnson_lowest_max_rep(struct char_data *johnson) {
+  unsigned int max_rep = UINT_MAX;
+
+  bool johnson_is_from_disconnected_zone = vnum_from_non_approved_zone(GET_MOB_VNUM(johnson));
+#ifdef IS_BUILDPORT
+  johnson_is_from_disconnected_zone = TRUE;
+#endif
+
+  for (int i = 0; i <= top_of_questt; i++) {
+    if (quest_table[i].johnson == GET_MOB_VNUM(johnson)
+        && (johnson_is_from_disconnected_zone
+            || !vnum_from_non_approved_zone(quest_table[i].vnum)))
+    {
+      max_rep = MIN(max_rep, quest_table[i].max_rep);
+    }
+  }
+
+  return max_rep;
 }
 
 // TODO: Have quests able to disable this printout (mystery quests etc)

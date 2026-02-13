@@ -65,6 +65,7 @@ void auto_repair_obj(struct obj_data *obj, idnum_t owner);
 void save_adept_powers_to_db(struct char_data *player);
 void save_spells_to_db(struct char_data *player);
 void save_quests_to_db(struct char_data *player);
+void save_favours_to_db(struct char_data * player);
 void save_inventory_to_db(struct char_data *player);
 void save_worn_equipment_to_db(struct char_data *player);
 void save_metamagic_to_db(struct char_data *player);
@@ -1541,6 +1542,9 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
   /* Save data for quests the player has run. */
   SAVE_IF_DIRTY_BIT_SET(GET_QUEST_DIRTY_BIT, save_quests_to_db);
 
+  /* Save data for favours the player has run. */
+  SAVE_IF_DIRTY_BIT_SET(GET_FAVOUR_DIRTY_BIT, save_favours_to_db);
+
   /* Wipe out their memory, then re-write it. */
   SAVE_IF_DIRTY_BIT_SET(GET_MEMORY_DIRTY_BIT, save_pc_memory_to_db);
 
@@ -2831,6 +2835,37 @@ void save_quests_to_db(struct char_data *player) {
     mysql_wrapper(mysql, buf);
   }
 }
+
+void save_favours_to_db(struct char_data *player) {
+  PERF_PROF_SCOPE(pr_, __func__);
+  int i, q;
+
+  snprintf(buf, sizeof(buf), "DELETE FROM pfiles_favours WHERE idnum=%ld", GET_IDNUM(player));
+  mysql_wrapper(mysql, buf);
+  strlcpy(buf, "INSERT INTO pfiles_favours (idnum, number, questnum, completed) VALUES (", sizeof(buf));
+  for (i = 0, q = 0; i <= QUEST_TIMER - 1; i++) {
+    if (GET_LFAVOUR(player ,i)) {
+      bool found = FALSE;
+      // Check to see if it's in the CQUEST list. If it is, store it as completed.
+      for (int c_idx = 0; c_idx <= QUEST_TIMER - 1; c_idx++) {
+        if (GET_LFAVOUR(player, i) == GET_CFAVOUR(player, c_idx)) {
+          found = TRUE;
+          break;
+        }
+      }
+
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s%ld, %d, %ld, %s", 
+               q ? "), (" : "",
+               GET_IDNUM(player), i, GET_LFAVOUR(player, i), found ? "TRUE" : "FALSE");
+      q = 1;
+    }
+  }
+  if (q) {
+    strcat(buf, ");");
+    mysql_wrapper(mysql, buf);
+  }
+}
+
 
 void save_elementals_to_db(struct char_data *player) {
   PERF_PROF_SCOPE(pr_, __func__);
