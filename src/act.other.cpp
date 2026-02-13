@@ -4631,6 +4631,7 @@ ACMD(do_cpool)
   }
 
   send_to_char(ch, "Pools set as: Ranged Dodge: %d, Damage Soak: %d, Offense: %d\r\n", GET_DODGE(ch), GET_BODY_POOL(ch), GET_OFFENSE(ch));
+  SendGMCPCharPools(ch);
 
 #ifdef APPLY_DELAY_ON_POOL_CHANGE_IN_COMBAT
   // If they're in combat, add a delay to lessen the pool-shoot-pool cheese strat.
