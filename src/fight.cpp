@@ -853,7 +853,7 @@ void make_corpse(struct char_data * ch)
       }
 
       if (GET_APARTMENT_SUBROOM(ch->in_room)) {
-        GET_APARTMENT_SUBROOM(ch->in_room)->save_storage();
+        GET_APARTMENT_SUBROOM(ch->in_room)->save_storage(true);
         return;
       }
 

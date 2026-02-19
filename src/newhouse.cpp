@@ -257,7 +257,7 @@ void save_all_apartments_and_storage_rooms() {
       // Otherwise, save all the rooms (save_storage logic will skip any that haven't been altered)
       for (auto &room : apartment->get_rooms()) {
         // log_vfprintf("Saving storage contents for %s's %ld.", apartment->get_full_name(), room->get_vnum());
-        room->save_storage();
+        room->save_storage(false);
       }
     }
   }
@@ -1814,18 +1814,18 @@ void Apartment::load_guests_from_old_house_file(const char *filename) {
 
 /********** ApartmentRoom ************/
 
-ApartmentRoom::ApartmentRoom(Apartment *apartment, bf::path filename) :
-  base_path(filename), apartment(apartment)
+ApartmentRoom::ApartmentRoom(Apartment *apartment, bf::path directory) :
+  base_path(directory), apartment(apartment)
 {
   // Read from room info file.
   json base_info;
-  _json_parse_from_file(filename / ROOM_INFO_FILE_NAME, base_info);
+  _json_parse_from_file(directory / ROOM_INFO_FILE_NAME, base_info);
 
   vnum = base_info["vnum"].get<vnum_t>();
 
   rnum_t rnum = real_room(vnum);
   if (vnum < 0 || rnum < 0) {
-    log_vfprintf("SYSERR: Invalid vnum %ld specified in %s.", vnum, filename.c_str());
+    log_vfprintf("SYSERR: Invalid vnum %ld specified in %s.", vnum, directory.c_str());
     exit(1);
   }
 
@@ -1840,7 +1840,7 @@ ApartmentRoom::ApartmentRoom(Apartment *apartment, bf::path filename) :
   // Set apartment pointer, etc.
   room->apartment_room = this;
   room->apartment = apartment;
-  storage_path = filename / "storage";
+  storage_path = directory / "storage";
 
   if (apartment->get_paid_until() >= time(0) && apartment->has_owner() && apartment->owner_is_valid()) {
     // Load decorated name.
@@ -1856,7 +1856,7 @@ ApartmentRoom::ApartmentRoom(Apartment *apartment, bf::path filename) :
     ifs.close();
     decoration = *(content.c_str()) ? str_dup(content.c_str()) : NULL;
 
-    log_vfprintf(" ----- Applying changes from %s to world...", filename.filename().c_str());
+    log_vfprintf(" ----- Applying changes from %s to world...", directory.filename().c_str());
 
     // Load storage.
     load_storage();
@@ -2029,6 +2029,8 @@ void ApartmentRoom::purge_contents() {
   if (rnum < 0) {
     mudlog_vfprintf(NULL, LOG_SYSLOG, "Refusing to purge contents for apartment room %ld: Invalid vnum", vnum);
     return;
+  } else {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "Purging contents for apartment room %ld.", vnum);
   }
 
   struct room_data *room = &world[rnum];
@@ -2093,7 +2095,7 @@ void ApartmentRoom::purge_contents() {
 
   // Save it. Set the dirty bit to ensure it's done.
   room->dirty_bit = TRUE;
-  save_storage();
+  save_storage(true);
 }
 
 /* Overwrite the room's desc with the default. */
@@ -2220,23 +2222,25 @@ void ApartmentRoom::kick_out_vehicles() {
 }
 
 /* Write storage data to <apartment name>/storage. This is basically the existing houses/<vnum> file. */
-void ApartmentRoom::save_storage() {
+void ApartmentRoom::save_storage(bool forced) {
   struct room_data *room = &world[real_room(vnum)];
 
-  // If the dirty bit is not set, we don't save the contents-- it means nobody is or was here since last save.
-  // YES, this does induce bugs, like evaluate programs not decaying if nobody is around to see it happen--
-  // but fuck it, if someone exploits it we'll just ban them. Easy enough.
-  if (!room->dirty_bit && !room->people) {
-    // log_vfprintf("Refusing to save room %s (%ld): Not dirty, no people.", GET_ROOM_NAME(room), GET_ROOM_VNUM(room));
-    return;
-  }
+  if (!forced) {
+    // If the dirty bit is not set, we don't save the contents-- it means nobody is or was here since last save.
+    // YES, this does induce bugs, like evaluate programs not decaying if nobody is around to see it happen--
+    // but fuck it, if someone exploits it we'll just ban them. Easy enough.
+    if (!room->dirty_bit && !room->people) {
+      // log_vfprintf("Refusing to save room %s (%ld): Not dirty, no people.", GET_ROOM_NAME(room), GET_ROOM_VNUM(room));
+      return;
+    }
 
-  // Warn if we've been given a room with an invalid lease.
-  if (apartment->get_paid_until() - time(0) < 0) {
+    // Warn if we've been given a room with an invalid lease.
+    if (apartment->get_paid_until() - time(0) < 0) {
 #ifndef IS_BUILDPORT
-    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Received save_storage() call for apartment with invalid lease (%s / %ld)!", GET_ROOM_NAME(room), GET_ROOM_VNUM(room));
+      mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Received save_storage() call for apartment with invalid lease (%s / %ld)!", GET_ROOM_NAME(room), GET_ROOM_VNUM(room));
 #endif
-    return;
+      return;
+    }
   }
 
   const char *save_location = storage_path.c_str();

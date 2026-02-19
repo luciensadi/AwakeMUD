@@ -282,7 +282,7 @@ class ApartmentRoom {
     void set_decoration(const char *new_desc);
 
     // Save functions.
-    void save_storage();
+    void save_storage(bool forced);
     void save_info();
     void save_decoration();
 
