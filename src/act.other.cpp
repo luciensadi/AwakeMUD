@@ -72,6 +72,7 @@ extern char *short_object(int virt, int where);
 extern bool read_extratext(struct char_data * ch);
 extern int return_general(int skill_num);
 extern int belongs_to(struct char_data *ch, struct obj_data *obj);
+extern void zero_out_magazine_counts(struct obj_data *obj, int max_ammo_remaining);
 extern char *make_desc(struct char_data *ch, struct char_data *i, char *buf, int act, bool dont_capitalize_a_an, size_t buf_size);
 extern bool does_weapon_have_bayonet(struct obj_data *weapon);
 extern void turn_hardcore_on_for_character(struct char_data *ch);
@@ -305,6 +306,10 @@ ACMD(do_steal)
             }
 
             obj_from_char(obj);
+            // Match NPC death behavior: cap magazine ammo to 1 round
+            if (IS_NPC(vict)) {
+              zero_out_magazine_counts(obj, 1);
+            }
             obj_to_char(obj, ch);
             send_to_char(ch, "You filch %s from %s!\r\n", GET_OBJ_NAME(obj), GET_NAME(vict));
             if (GET_LEVEL(ch) < LVL_BUILDER)

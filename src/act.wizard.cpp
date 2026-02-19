@@ -6732,7 +6732,7 @@ ACMD(do_set)
           // Save the new race to disk.
           snprintf(buf, sizeof(buf), "UPDATE pfiles SET race=%d, Whotitle='%s' WHERE idnum = %ld;", 
                    GET_RACE(vict),
-                   GET_WHOTITLE(vict),
+                   prepare_quotes(buf2, GET_WHOTITLE(vict), sizeof(buf2)),
                    GET_IDNUM(vict));
           mysql_wrapper(mysql, buf);
           break;
