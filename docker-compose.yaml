@@ -3,6 +3,7 @@ version: "3.8"
 services:
   db:
     image: mysql:5.7
+    platform: linux/amd64
     environment:
       MYSQL_ROOT_PASSWORD: awake_root_password
       MYSQL_DATABASE: AwakeMUD
