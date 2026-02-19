@@ -1,0 +1,51 @@
+version: "3.8"
+
+services:
+  db:
+    image: mysql:5.7
+    platform: linux/amd64
+    environment:
+      MYSQL_ROOT_PASSWORD: awake_root_password
+      MYSQL_DATABASE: AwakeMUD
+      MYSQL_USER: AwakeMUD
+      MYSQL_PASSWORD: awake_dev_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./SQL:/docker-entrypoint-initdb.d/sql-source:ro
+      - ./docker/db/init-db.sh:/docker-entrypoint-initdb.d/00-init-db.sh:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-pawake_root_password"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+    restart: unless-stopped
+
+  mud:
+    build:
+      context: .
+      dockerfile: docker/mud/Dockerfile
+    ports:
+      - "4000:4000"
+      - "2345:2345"  # lldb-server remote debugging
+    volumes:
+      - ./src:/app/src
+      - ./lib:/app/lib
+      - ./3rdparty:/app/3rdparty
+      - ccache:/root/.cache/ccache
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+    # For lldb-server remote debugging uncomment the following:
+#    environment:
+#      DEBUGGER: "1"
+#    security_opt:
+#      - seccomp:unconfined
+#    cap_add:
+#      - SYS_PTRACE
+
+volumes:
+  mysql_data:
+  ccache:
