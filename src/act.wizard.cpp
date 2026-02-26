@@ -7877,6 +7877,7 @@ bool restring_with_args(struct char_data *ch, char *argument, bool using_sysp) {
   FALSE_CASE(GET_OBJ_TYPE(obj) == ITEM_GUN_ACCESSORY && GET_ACCESSORY_TYPE(obj) != ACCESS_SMARTGOGGLE, "Sorry, gun attachments can't be restrung.");
   FALSE_CASE(GET_OBJ_TYPE(obj) == ITEM_MOD || GET_OBJ_TYPE(obj) == ITEM_GUN_AMMO, "Sorry, vehicle mods and ammo containers can't be restrung.");
   FALSE_CASE(GET_OBJ_TYPE(obj) == ITEM_CLIMBING && GET_OBJ_VAL(obj, 1) == CLIMBING_TYPE_WATER_WINGS, "No amount of cosmetic changes could hide the garishness of water wings.");
+  FALSE_CASE(GET_OBJ_VNUM(obj) == OBJ_NEOPHYTE_SUBSIDY_CARD, "Sorry, Neophyte Guild subsidy cards can't be restrung.");
   FALSE_CASE_PRINTF(GET_OBJ_TYPE(obj) == ITEM_PET, "%s gives you an offended look and refuses to cooperate.", CAP(GET_OBJ_NAME(obj)));
   FALSE_CASE(GET_OBJ_VNUM(obj) == OBJ_EYEBALL_KEY, "You're pretty sure that trying to alter the eyeball would ruin it.");
   FALSE_CASE(GET_OBJ_TYPE(obj) == ITEM_VEHCONTAINER, "Sorry, vehicle containers can't be restrung.");
@@ -9520,6 +9521,12 @@ int audit_zone_quests_(struct char_data *ch, int zone_num, bool verbose) {
               || quest->obj[obj_idx].l_data >= quest->num_mobs
               || real_mobile(quest->mob[quest->obj[obj_idx].l_data].vnum) <= -1) {
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - obj objective #%d: ^yinvalid load mobile M%ld^n.\r\n", obj_idx, quest->obj[obj_idx].l_data);
+            issues++;
+          }
+          break;
+        case QOL_JOHNSON:
+          if (quest->obj[obj_idx].objective == QOO_DSTRY_ONE && (quest->obj[obj_idx].karma > 0 || quest->obj[obj_idx].nuyen > 0)) {
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - obj objective #%d: ^ykarma or nuyen payout for instant destroy objective^n (Johnson gives, immediately junk, turn in for 0s elapsed payout).\r\n", obj_idx);
             issues++;
           }
           break;
