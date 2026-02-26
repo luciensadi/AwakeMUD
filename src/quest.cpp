@@ -1206,7 +1206,7 @@ void reward(struct char_data *ch, struct char_data *johnson)
                   GET_CHAR_NAME(ch),
                   (float) gained * 0.01,
                   nuyen,
-                  GET_QUEST(ch),
+                  quest_table[GET_QUEST(ch)].vnum,
                   difftime(time(0), GET_QUEST_STARTED(ch)));
   end_quest(ch, TRUE);
 }
@@ -1350,6 +1350,23 @@ int new_quest(struct char_data *mob, struct char_data *ch)
       send_to_char("^L(OOC: You've either not completed the prerequisite jobs or have done a disqualifying job recently. Do some more jobs in the area, then come back and try again!)^n\r\n", ch);
   }
   return 0;
+}
+
+bool that_was_just_too_fast(struct char_data *ch) {
+  double time_delta_since_start = difftime(time(0), GET_QUEST_STARTED(ch));
+
+  if (time_delta_since_start < QUEST_MINIMUM_TIME_IN_SECONDS) {
+    send_to_char(ch, "[OOC: It's great that you got that done so quickly, but jobs are expected to take longer than that. As a note, using aliases or triggers to automatically do jobs is a violation of Policy 6.1, even if the aliases you're using are defined in-game.]^n");
+    mudlog_vfprintf(ch, LOG_CHEATLOG, "Temporarily refusing quest turnin for %s (%ld)'s quest %ld due to it being completed too fast (%0.2fs < %ds).",
+      GET_CHAR_NAME(ch),
+      GET_IDNUM(ch),
+      quest_table[GET_QUEST(ch)].vnum,
+      time_delta_since_start,
+      QUEST_MINIMUM_TIME_IN_SECONDS);
+    return true;
+  }
+
+  return false;
 }
 
 void display_single_emote_for_quest(struct char_data *johnson, emote_t emote_to_display, struct char_data *target) {
@@ -1654,6 +1671,11 @@ SPECIAL(johnson)
       if (obj_complete || mob_complete) {
         if (!would_be_rewarded_for_turnin(ch)) {
           do_say(johnson, "You're not done yet!", 0, 0);
+          return TRUE;
+        }
+
+        if (!that_was_just_too_fast(ch)) {
+          do_say(johnson, "What, so soon? I need some time to verify this...", 0, 0);
           return TRUE;
         }
 
