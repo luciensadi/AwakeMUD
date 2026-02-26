@@ -117,6 +117,8 @@ int     find_all_dots(char *arg, size_t arg_size);
 
 int     generic_find(char *arg, int bitvector, struct char_data *ch,
                      struct char_data **tar_ch, struct obj_data **tar_obj);
+int     const_generic_find(const char *one_word_name_with_spaces_already_skipped, int bitvector, struct char_data * ch,
+                           struct char_data ** tar_ch, struct obj_data ** tar_obj);
 
 #define FIND_CHAR_ROOM     (1 << 0)
 #define FIND_CHAR_WORLD    (1 << 1)

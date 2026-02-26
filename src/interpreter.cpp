@@ -15,6 +15,7 @@
 #include <string.h>
 #include <ctype.h>
 #include <time.h>
+#include <optional>
 
 #include "structs.hpp"
 #include "awake.hpp"
@@ -2433,12 +2434,96 @@ void replace_word(const char *input, char *output, size_t output_size, const cha
   *output = '\0';
 }
 
+/* Parses arguments, returning a vector of const char* for individual words.
+
+- Double quotes captures the whole string as an input, or sets error code and returns null if unclosed quotes.
+- Single quotes are treated as standard characters to allow things like `get "lucien's gun"`
+
+Can be given a list of fill words to split on, allowing calls like `argparse("get gun from box", ["from"])` to return ["gun", "box"].
+Is relatively smart about fill words: accepts abbreviations of them UNLESS there is no word after it (allows things like "get pick fro")
+
+Requires a zero-terminated input string.
+
+*/
+std::optional<std::vector<const char *>> argparse(const char *input, char *scratchpad, size_t scratchpad_size, std::initializer_list<const char *> fill_words, struct char_data *ch) {
+  if (strlen(input) >= scratchpad_size) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: argparse() called with input length larger than scratchpad size (%ld >= %ld)", strlen(input), scratchpad_size);
+    send_to_char(ch, "A system error occurred during argument parsing. Please do not re-attempt. Staff have been notified of the bug.\r\n");
+    return std::nullopt;
+  }
+
+  std::vector<const char *> tokens = {};
+  strlcpy(scratchpad, input, scratchpad_size);
+  
+  // Fill our list with all words in the input, separated by quotes or spaces.
+  {
+    bool quote_mode = false;
+
+    // One pass from start to end. `ptr` goes character by character.
+    for (char *ptr = scratchpad, *started_from = ptr; ; ptr++) {
+      char c = *ptr;
+
+      if (!*ptr) {
+        if (quote_mode) {
+          send_to_char(ch, "Unbalanced quotes, please either remove your quote or terminate it.\r\n");
+          return std::nullopt;
+        } else if (started_from < ptr) {
+          tokens.push_back(started_from);
+          break;
+        }
+      }
+
+      if (c == '"') {
+        if (quote_mode) {
+          // Zero-terminate the string, then push it into our token list.
+          *ptr = '\0';
+          tokens.push_back(started_from);
+        } else {}
+        // A quote is the start or end of a quoted phrase, so regardless our started_from will begin with the next character.
+        started_from = ptr + 1;
+        quote_mode = !quote_mode;
+        continue;
+      }
+
+      // If we're not in quote mode, we want to zero out spaces.
+      if (c == ' ' && !quote_mode) {
+        *ptr = '\0';
+        if (started_from < ptr) {
+          tokens.push_back(started_from);
+        }
+        started_from = ptr + 1;
+        continue;
+      }
+    }
+  }
+
+  if (fill_words.size()) {
+    auto it = std::remove_if(tokens.begin(), tokens.end(), [&](const char *token) {
+      if (token == tokens.back()) {
+        return false;
+      }
+
+      for (const char *fill_word : fill_words) {
+        if (is_abbrev(token, fill_word)) {
+          return true;
+        }
+      }
+      return false;
+    });
+
+    tokens.erase(it, tokens.end());
+  }
+
+  return tokens;
+}
+
 /*
  * copy the first non-fill-word, space-delimited argument of 'argument'
  * to 'first_arg'; return a pointer to the remainder of the string.
  */
 char *one_argument(char *argument, char *first_arg, bool preserve_case)
 {
+  char *skipped_argument = argument;
   char *begin = first_arg;
 
   do {

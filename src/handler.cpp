@@ -3597,19 +3597,22 @@ int find_ability_num(char *name)
 /* **tar_obj Will be NULL if no object was found, otherwise points        */
 /*                                                                        */
 /* The routine returns a pointer to the next word in *arg (just like the  */
-/* one_argument routine).                                                 */
+/* one_argument routine).     */
 
-int generic_find(char *arg, int bitvector, struct char_data * ch,
+int generic_find(char *arg, int bitvector, struct char_data * ch, struct char_data ** tar_ch, struct obj_data ** tar_obj) {
+  char name[MAX_INPUT_LENGTH + 1];
+  one_argument(arg, name);
+  const_generic_find(name, bitvector, ch, tar_ch, tar_obj);
+}
+
+int const_generic_find(const char *name, int bitvector, struct char_data * ch,
                  struct char_data ** tar_ch, struct obj_data ** tar_obj)
 {
   int i;
-  char name[MAX_INPUT_LENGTH + 1];
 
   *tar_ch = NULL;
   *tar_obj = NULL;
   struct veh_data *rigged_veh = (ch)->char_specials.rigging;
-
-  one_argument(arg, name);
 
   if (!*name)
     return (0);

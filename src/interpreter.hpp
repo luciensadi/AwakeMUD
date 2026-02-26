@@ -11,6 +11,10 @@
 #ifndef _interpreter_h_
 #define _interpreter_h_
 
+#include <vector>
+#include <initializer_list>
+#include <optional>
+
 #include "types.hpp"
 #include "perfmon.hpp"
 /*
@@ -55,6 +59,7 @@ int     find_mcommand(const char *command);
 void    skip_spaces(char **string);
 char    *delete_doubledollar(char *string);
 void    replace_word(const char *input, char *output, size_t output_size, const char *replace_from, const char *replace_to);
+std::optional<std::vector<const char *>> argparse(const char *input, char *scratchpad, size_t scratchpad_size, std::initializer_list<const char *> fill_words, struct char_data *ch);
 
 struct command_info
 {

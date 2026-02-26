@@ -184,6 +184,21 @@ char _discord_details[200] = {0};
 char _discord_smallimage[100] = {0};
 char _discord_smallimagetext[200] = {0};
 
+void derpify(const char *phrase, std::initializer_list<const char *> fill_words, struct char_data *ch) {
+  std::optional<std::vector<const char *>> argparse(const char *input, char *scratchpad, size_t scratchpad_size, std::initializer_list<const char *> fill_words, struct char_data *ch);
+
+  send_to_char(ch, "'%s' yields {", phrase);
+  std::optional<std::vector<const char *>> result = argparse(phrase, buf, sizeof(buf), fill_words, ch);
+  if (result) {
+    for (auto x : *result) {
+      send_to_char(ch, "'%s', ", x);
+    }
+    send_to_char(ch, "}\r\n");
+  } else {
+    send_to_char(ch, "nullopt}\r\n");
+  }
+}
+
 bool drinks_are_unfucked = TRUE;
 ACMD(do_debug) {
   static char arg1[MAX_INPUT_LENGTH];
@@ -272,6 +287,15 @@ ACMD(do_debug) {
     send_to_char(ch, "OK, offloading all zones that don't have PCs in them...\r\n");
     attempt_to_offload_unused_zones();
     send_to_char(ch, "Done.\r\n");
+    return;
+  }
+
+  if (!str_cmp(arg1, "test_argparse")) {
+    derpify(" test input phrase", {}, ch);
+    derpify("\"muh boi\" in green", {}, ch);
+    derpify(" the \"argblatch\" from the box", {"from", "the"}, ch);
+    derpify(" 'testing with single quotes' did it work", {}, ch);
+    derpify(" lucien's box", {}, ch);
     return;
   }
 
