@@ -369,7 +369,8 @@ enum {
 #define PLR_ADDITIONAL_SCRUTINY              56
 #define PLR_RECEIVED_GHOUL_INDEX_DELTA       57  /* Player has had their ghoul index cost reset */
 #define PLR_PAID_FOR_WHOTITLE                58
-#define PLR_MAX                              59
+#define PLR_DOING_FAVOUR                     59
+#define PLR_MAX                              60
 // Adding something here? Add it to constants.cpp's player_bits too.
 
 
@@ -3187,7 +3188,8 @@ enum {
 #define DIRTY_BIT_ECHOES      8
 #define DIRTY_BIT_QUESTS      9
 #define DIRTY_BIT_BULLETPANTS 10
-#define NUM_DIRTY_BITS        11
+#define DIRTY_BIT_FAVOURS     11
+#define NUM_DIRTY_BITS        12
 
 
 #define SMARTLINK_II_MODIFIER 3

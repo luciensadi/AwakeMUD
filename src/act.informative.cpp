@@ -73,6 +73,7 @@ extern int find_sight(struct char_data *ch);
 extern int belongs_to(struct char_data *ch, struct obj_data *obj);
 extern int calculate_vehicle_entry_load(struct veh_data *veh);
 extern unsigned int get_johnson_overall_max_rep(struct char_data *johnson);
+extern unsigned int get_johnson_lowest_max_rep(struct char_data *johnson);
 extern const char *get_crap_count_string(int crap_count, const char *default_color = "^n", bool screenreader = FALSE);
 extern void display_gamba_ledger_leaderboard(struct char_data *ch);
 const char *convert_and_write_string_to_file(const char *str, const char *path);
@@ -583,6 +584,46 @@ void list_veh_to_char(struct veh_data * list, struct char_data * ch)
   for (i = list; i; i = i->next_veh) {
     if (ch->in_veh != i && ch->char_specials.rigging != i)
       show_veh_to_char(i, ch);
+
+    if (i == i->next_veh) {
+      char errbuf[1000];
+      snprintf(errbuf, sizeof(errbuf), "SYSERR: Infinite loop in list_veh_to_char for %s (%ld) at %s (%ld). Breaking the list.",
+               GET_VEH_NAME(i),
+               i->veh_number,
+               GET_ROOM_NAME(get_veh_in_room(i)),
+               GET_ROOM_VNUM(get_veh_in_room(i)));
+      i->next_veh = NULL;
+      mudlog(errbuf, ch, LOG_SYSLOG, TRUE);
+      break;
+    }
+  }
+}
+
+void brief_list_veh_to_char(struct veh_data * list, struct char_data * ch)
+{
+  int bikes, cars, trucks, drones;
+  struct veh_data *i;
+  for (i = list; i; i = i->next_veh) {
+    if (ch->in_veh != i && ch->char_specials.rigging != i) {
+      if (i->owner && GET_IDNUM(ch) == i->owner) {
+        show_veh_to_char(i, ch);
+      } else {
+        switch (i->type) {
+          case VEH_BIKE:
+            bikes++;
+          case VEH_CAR:
+            cars++;
+          case VEH_TRUCK:
+            trucks++;
+          case VEH_DRONE:
+            drones++;
+          default:
+            break;
+        }
+      }
+    }
+
+    send_to_char(ch, "There are also %d bikes, %d cars, %d trucks and %d drones here.", bikes, cars, trucks, drones);
 
     if (i == i->next_veh) {
       char errbuf[1000];
@@ -1432,11 +1473,17 @@ void list_one_char(struct char_data * i, struct char_data * ch)
         }
         if (MOB_HAS_SPEC(i, johnson)) {
           unsigned int max_rep = get_johnson_overall_max_rep(i);
+          unsigned int lowest_rep = get_johnson_lowest_max_rep(i);
           if (max_rep >= GET_REP(ch) || max_rep >= 10000) {
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s might have a job for you.%s^n\r\n",
                      HSSH(i),
                      already_printed ? " also" : "",
                      SHOULD_SEE_TIPS(ch) ? " See ^YHELP JOB^y for instructions." : "");
+          } else if (GET_TKE(ch) >= NEWBIE_KARMA_THRESHOLD && lowest_rep < GET_REP(ch)) {
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s might need to call in a favor.^n\r\n",
+                     HSSH(i),
+                     already_printed ? " also" : "",
+                     SHOULD_SEE_TIPS(ch) ? " See ^YHELP FAVOR^y for instructions." : "");
           } else {
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "^y...%s%s only has work for less-experienced 'runners.^n\r\n",
                      HSSH(i),
@@ -2111,7 +2158,7 @@ void look_in_veh(struct char_data * ch)
       list_obj_to_char(veh->in_room->contents, ch, SHOW_MODE_ON_GROUND, FALSE, TRUE);
       list_char_to_char(veh->in_room->people, ch);
       CCHAR = "^y";
-      list_veh_to_char(veh->in_room->vehicles, ch);
+      brief_list_veh_to_char(veh->in_room->vehicles, ch);
       if (PLR_FLAGGED(ch, PLR_REMOTE))
         ch->in_room = was_in;
       else
@@ -2454,7 +2501,7 @@ void look_at_room(struct char_data * ch, int ignore_brief, int is_quicklook)
   list_obj_to_char(ch->in_room->contents, ch, SHOW_MODE_ON_GROUND, FALSE, TRUE);
   list_char_to_char(ch->in_room->people, ch);
   CCHAR = "^y";
-  list_veh_to_char(ch->in_room->vehicles, ch);
+  brief_list_veh_to_char(ch->in_room->vehicles, ch);
 }
 
 void peek_into_adjacent(struct char_data * ch, int dir)

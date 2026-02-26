@@ -620,6 +620,7 @@ const char *player_bits[] =
     "STAFF_SCRUTINY",
     "GHOUL_IDX_DONE",
     "PAID_FOR_WHOTITLE",
+    "DOING_FAVOUR",
     "\n"
   };
 
