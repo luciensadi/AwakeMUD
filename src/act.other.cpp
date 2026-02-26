@@ -5404,6 +5404,13 @@ ACMD(do_stop) {
     return;
   }
 
+  if (ch->in_veh && ch->in_veh->dest) {
+    ch->in_veh->dest = 0;
+    ch->in_veh->cspeed = SPEED_OFF;
+    send_to_veh("The autonav disengages and you slow to a halt.\r\n", ch->in_veh, 0, TRUE);
+    return;
+  }
+
   send_to_char("You're not doing anything that the stop command recognizes. Feel free to use the ^WIDEA^n command to suggest another stoppable thing!\r\n", ch);
 }
 
