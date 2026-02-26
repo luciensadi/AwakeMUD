@@ -1145,7 +1145,6 @@ static void start_game(descriptor_data *d, const char *origin)
     }
   }
 
-  init_char_sql(d->character, "start_game()");
   GET_CHAR_MULTIPLIER(d->character) = 100;
   if(PLR_FLAGGED(d->character,PLR_NOT_YET_AUTHED)) {
     snprintf(buf, sizeof(buf), "%s new character.",
