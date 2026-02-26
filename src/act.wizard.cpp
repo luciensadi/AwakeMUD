@@ -8823,11 +8823,10 @@ int audit_zone_mobs_(struct char_data *ch, int zone_num, bool verbose) {
     // Flag mobs with bad strings.
     if (!mob->player.physical_text.name || !*mob->player.physical_text.name || !strcmp(mob->player.physical_text.name, STRING_MOB_NAME_UNFINISHED)) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^ymissing name^n.\r\n");
-      
       issues++;
     } else {
-      if (is_invalid_ending_punct((candidate = get_final_character_from_string(get_string_after_color_code_removal(mob->player.physical_text.name, ch))))) {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^yname ending in punctuation (%c)^n.\r\n", candidate);
+      if (is_invalid_ending_punct((candidate = get_final_character_from_string(get_string_after_color_code_removal(mob->player.physical_text.name, ch)))) || isspace(candidate)) {
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^yname ending in punctuation or space ('%c')^n.\r\n", candidate);
         issues++;
       }
     }
@@ -9927,7 +9926,12 @@ int audit_zone_ics_(struct char_data *ch, int zone_num, bool verbose) {
     snprintf(buf, sizeof(buf), "^c[%8d]^n (%s^n)\r\n", ic->idnum, ic->name);
 
     if (ic->name && *(ic->name) != toupper(*(ic->name))) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^yroom desc not capitalized (%c)^n.\r\n", *(ic->name));
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^yname not capitalized (%c)^n.\r\n", *(ic->name));
+      issues++;
+    }
+
+    if (is_invalid_ending_punct((candidate = get_final_character_from_string(get_string_after_color_code_removal(ic->name, ch)))) || isspace(candidate)) {
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^yname ends in space or punctuation ('%c')^n.\r\n", candidate);
       issues++;
     }
 
@@ -9935,22 +9939,6 @@ int audit_zone_ics_(struct char_data *ch, int zone_num, bool verbose) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^yroom desc not ending in punctuation (%c)^n.\r\n", candidate);
       issues++;
     }
-
-    /*
-    // Flag invalid sell multipliers
-    if (shop->profit_buy < 1.0) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " has too-low buy profit %0.2f < 1.0^n", shop->profit_buy);
-      
-      issues++;
-    }
-
-    // Flag invalid strings
-    if (shop->profit_sell > 0.1) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s too-high sell profit %0.2f > 0.1^n", printed ? ";" : " has", shop->profit_sell);
-      
-      issues++;
-    }
-    */
 
     if (old_issues != issues) {
       send_to_char(ch, "%s\r\n", buf);
