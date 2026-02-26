@@ -20,6 +20,7 @@
 #include "bullet_pants.hpp"
 #include "security.hpp"
 #include "metrics.hpp"
+#include "player_exdescs.hpp"
 
 #define CH d->character
 
@@ -1084,6 +1085,7 @@ void init_char_sql(struct char_data *ch, const char *call_origin)
                "A nondescript person.\r\n", "A nondescript entity.\r\n", "A nondescript entity.\r\n", time(0));
   mysql_wrapper(mysql, buf);
   if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED)) {
+    set_exdesc_max(ch, 2, TRUE);
     snprintf(buf, sizeof(buf), "INSERT INTO pfiles_chargendata (`idnum`, `AttPoints`, `SkillPoints`, `ForcePoints`, `archetypal`, `archetype`, `prestige_alt`, `channel_points`, `restricted_sysp_spent`) VALUES"\
                "('%ld', '%d', '%d', '%d', '%d', '%d', '%ld', '%d', '%d');", 
                GET_IDNUM(ch), GET_ATT_POINTS(ch), GET_SKILL_POINTS(ch), GET_FORCE_POINTS(ch), GET_ARCHETYPAL_MODE(ch) ? 1 : 0, GET_ARCHETYPAL_TYPE(ch), GET_PRESTIGE_ALT_ID(ch), GET_CHANNEL_POINTS(ch), ch->player_specials->saved.restricted_sysp_spent_on_prestige);
