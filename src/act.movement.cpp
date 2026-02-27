@@ -1532,19 +1532,20 @@ ACMD(do_gen_door)
     }
   }
 
-  // If it's a cardinal direction, check for a door.
-  /* for (int dir_idx = NORTH; dir_idx <= DOWN; dir_idx++) {
-    if (!str_cmp(type, exit_dirs[dir_idx]) || !str_cmp(type, fulldirs[dir_idx])) {
-      asdf hidden destroyed
-      door = dir_idx;
+  // If it's a cardinal direction, make a note to NOT attempt to match an object or vehicle
+  bool cardinal = false; 
+  for (int dir_idx = NORTH; dir_idx <= DOWN; dir_idx++) {
+    if (!str_cmp(type, exitdirs[dir_idx]) || !str_cmp(type, fulldirs[dir_idx])) {
+      cardinal = true;
       break;
     }
-  } */
+  }
 
   // Check for an object or vehicle nearby that matches the keyword.
-  if (!generic_find(type, FIND_OBJ_EQUIP | FIND_OBJ_INV | FIND_OBJ_ROOM, ch, &victim, &obj)
+  // Checking for a cardinal direction first stops objects intercepting doors
+  if (cardinal || (!generic_find(type, FIND_OBJ_EQUIP | FIND_OBJ_INV | FIND_OBJ_ROOM, ch, &victim, &obj)
       && !veh
-      && !(veh = get_veh_list(type, ch->in_veh ? ch->in_veh->carriedvehs : ch->in_room->vehicles, ch))) {
+      && !(veh = get_veh_list(type, ch->in_veh ? ch->in_veh->carriedvehs : ch->in_room->vehicles, ch)))) {
     if ((door = find_door(ch, type, dir, cmd_door[subcmd])) == -1) {
       // Already gave an error message in find_door, bail out.
       return;
