@@ -139,7 +139,7 @@ extern int mother_desc, port;
 
 /* Prototypes. */
 void restore_character(struct char_data *vict, bool reset_staff_stats);
-bool is_invalid_ending_punct(char candidate);
+bool is_invalid_ending_punct(const char candidate);
 bool vnum_is_from_zone(vnum_t vnum, int zone_num);
 int _error_on_invalid_real_mob(rnum_t rnum, int zone_num, char *buf, size_t buf_len);
 int _error_on_invalid_real_room(rnum_t rnum, int zone_num, char *buf, size_t buf_len);
@@ -8404,10 +8404,51 @@ ACMD(do_rewrite_world) {
   send_to_char("Done. Alarm handler has been restored.\r\n", ch);
 }
 
+
+// Returns number of issues detected.
+int _validate_name(const char *name, const char *default_name, bool must_be_capitalized, char *writeout_buf, size_t writeout_buf_len) {
+  // Check for missing name.
+  if (!name || !*name || (default_name && !strcmp(name, default_name))) {
+    strlcat(writeout_buf, "  - ^yname is missing or defaulted^n.\r\n", writeout_buf_len);
+    return 1;
+  }
+
+  int issues = 0;
+
+  // Check for capitalization.
+  if (must_be_capitalized && *name != toupper(*name)) {
+    snprintf(ENDOF(writeout_buf), writeout_buf_len - strlen(writeout_buf), "  - ^yname not capitalized ('%c')^n.\r\n", *name);
+    issues++;
+  }
+
+  // Check for invalid ending punctuation, terminal space, etc.
+  const char candidate = get_final_character_from_string(get_string_after_color_code_removal(name, NULL));
+  if (is_invalid_ending_punct(candidate) || isspace(candidate)) {
+    snprintf(ENDOF(writeout_buf), writeout_buf_len - strlen(writeout_buf), "  - ^yname ends in space or punctuation ('%c')^n.\r\n", candidate);
+    issues++;
+  }
+
+  // Check for doubled-up spaces.
+  bool just_saw_space = false;
+  for (const char *c = name; *c; c++) {
+    if (isspace(*c)) {
+      if (just_saw_space) {
+        strlcat(writeout_buf, "  - ^yname contains double space^n.\r\n", writeout_buf_len);
+        issues++;
+        break;
+      }
+      just_saw_space = true;
+    } else {
+      just_saw_space = false;
+    }
+  }
+
+  return issues;
+}
+
 int audit_zone_rooms_(struct char_data *ch, int zone_num, bool verbose) {
   int real_rm, issues = 0;
   struct room_data *room;
-  char candidate;
 
   if (verbose)
     send_to_char(ch, "\r\n^WAuditing rooms for zone %d...^n\r\n", zone_table[zone_num].number);
@@ -8428,11 +8469,10 @@ int audit_zone_rooms_(struct char_data *ch, int zone_num, bool verbose) {
              room->name);
 
     // Check its strings.
+    _validate_name(GET_ROOM_NAME(room), STRING_ROOM_TITLE_UNFINISHED_BUT_CONNECTED, false, buf, sizeof(buf));
+
     if (!strcmp(GET_ROOM_NAME(room), STRING_ROOM_TITLE_UNFINISHED)) {
       strlcat(buf, "  - ^YDefault room title used.^n This room will NOT be saved in the world files.\r\n", sizeof(buf));
-      issues++;
-    } else if (is_invalid_ending_punct((candidate = get_final_character_from_string(get_string_after_color_code_removal(GET_ROOM_NAME(room), ch))))) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^yname ending in punctuation (%c)^n.\r\n", candidate);
       issues++;
     }
 
@@ -9925,18 +9965,20 @@ int audit_zone_ics_(struct char_data *ch, int zone_num, bool verbose) {
 
     snprintf(buf, sizeof(buf), "^c[%8d]^n (%s^n)\r\n", ic->idnum, ic->name);
 
-    if (ic->name && *(ic->name) != toupper(*(ic->name))) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^yname not capitalized (%c)^n.\r\n", *(ic->name));
-      issues++;
-    }
-
-    if (is_invalid_ending_punct((candidate = get_final_character_from_string(get_string_after_color_code_removal(ic->name, ch)))) || isspace(candidate)) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^yname ends in space or punctuation ('%c')^n.\r\n", candidate);
-      issues++;
-    }
+    issues += _validate_name(ic->name, STRING_IC_NAME_UNFINISHED, true, buf, sizeof(buf));
 
     if (!ispunct((candidate = get_final_character_from_string(get_string_after_color_code_removal(ic->look_desc, ch))))) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^yroom desc not ending in punctuation (%c)^n.\r\n", candidate);
+      issues++;
+    }
+
+    if (!strcmp(ic->look_desc, STRING_IC_RDESC_UNFINISHED)) {
+      strlcat(buf, "  - ^ydefault roomdesc used^n.\r\n", sizeof(buf));
+      issues++;
+    }
+
+    if (!strcmp(ic->long_desc, STRING_IC_LDESC_UNFINISHED)) {
+      strlcat(buf, "  - ^ydefault lookdesc used^n.\r\n", sizeof(buf));
       issues++;
     }
 
@@ -10554,7 +10596,7 @@ ACMD(do_forceget) {
   obj_to_char(obj, ch);
 }
 
-bool is_invalid_ending_punct(char candidate) {
+bool is_invalid_ending_punct(const char candidate) {
   // Non-puncts are all valid.
   if (!ispunct(candidate))
     return FALSE;
