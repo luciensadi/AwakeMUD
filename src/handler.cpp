@@ -3602,7 +3602,7 @@ int find_ability_num(char *name)
 int generic_find(char *arg, int bitvector, struct char_data * ch, struct char_data ** tar_ch, struct obj_data ** tar_obj) {
   char name[MAX_INPUT_LENGTH + 1];
   one_argument(arg, name);
-  const_generic_find(name, bitvector, ch, tar_ch, tar_obj);
+  return const_generic_find(name, bitvector, ch, tar_ch, tar_obj);
 }
 
 int const_generic_find(const char *name, int bitvector, struct char_data * ch,

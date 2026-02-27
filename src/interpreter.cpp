@@ -2523,7 +2523,6 @@ std::optional<std::vector<const char *>> argparse(const char *input, char *scrat
  */
 char *one_argument(char *argument, char *first_arg, bool preserve_case)
 {
-  char *skipped_argument = argument;
   char *begin = first_arg;
 
   do {
