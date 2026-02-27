@@ -659,10 +659,10 @@ void process_flying_vehicles() {
       veh->flight_duration--;
 
       // It's super effective!
-      if (result >= 4) {
+      if (result >= 6 || (result >= 4 && veh->type == VEH_FIXEDWING)) {
         send_to_char(controller, "You're a leaf on the wind. Skill and luck speed you towards your destination.\r\n");
         veh->flight_duration--;
-      }
+      } 
 
       // If the flight duration has ended, land it.
       if (veh->flight_duration <= 0) {
