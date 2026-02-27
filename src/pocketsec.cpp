@@ -261,7 +261,7 @@ void pocketsec_mailmenu(struct descriptor_data *d)
                   idx++,
                   *(row[1]) == '0' ? "(unread) ^R" : "",
                   row[0],
-                  *(row[2]) == '1' ? " (kept)" : ""
+                  *(row[2]) == '1' ? " (delete-protected)" : ""
                 );
   }
   mysql_free_result(res);
@@ -277,7 +277,7 @@ void pocketsec_mailmenu(struct descriptor_data *d)
     }
   }
 
-  send_to_char("\r\n[^cR^n]^cead Mail^n     [^cD^n]^celete Mail^n     [^cS^n]^cend Mail^n     [^cK^n]^ceep Mail^n     [^cB^n]^cack^n\r\n", CH);
+  send_to_char("\r\n[^cR^n]^cead Mail^n     [^cD^n]^celete Mail^n     [^cS^n]^cend Mail^n     [^cP^n]^crevent Deletion^n     [^cB^n]^cack^n\r\n", CH);
   d->edit_mode = SEC_MAILMENU;
 }
 
@@ -658,7 +658,8 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
           d->edit_mode = SEC_SENDMAIL;
           break;
         case 'k':
-          send_to_char("Keep which message?\r\n", CH);
+        case 'p':
+          send_to_char("Prevent deletion of which message?\r\n", CH);
           d->edit_mode = SEC_KEEPMAIL;
           break;
         case 'b':
