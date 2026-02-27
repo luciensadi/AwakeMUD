@@ -46,13 +46,20 @@ MYFLAGS = -DNOCRYPT -Dlinux -I /usr/local/include/ -Wall -Wextra -Wno-unused-par
 #LIBS = -L/usr/local/lib $(COMMON_FLAGS) -lsodium -lcrypt
 #MYFLAGS = -DDEBUG -DSELFADVANCE -DIDLEDELETE_DRYRUN -DWIN32 -I /usr/local/include/ -Wall -Wextra -Wno-unused-parameter -DSUPPRESS_MOB_SKILL_ERRORS -std=c++11
 
-CPPFLAGS = $(MYFLAGS) $(PROFILE)
+CPPFLAGS = $(MYFLAGS) $(PROFILE) -include pch.hpp
 
 sourcefiles = $(wildcard *.cpp)
 objfiles = $(sourcefiles:.cpp=.o)
 dependfiles = $(wildcard *.d)
 
 ../bin/awake.new : $(objfiles)
+
+pch.hpp.gch: pch.hpp
+	$(CXX) $(MYFLAGS) $(PROFILE) -x c++-header -MMD -o $@ $<
+
+-include pch.hpp.d
+
+$(objfiles): pch.hpp.gch
 
 utils:
 	$(MAKE) ../bin/autowiz
@@ -121,7 +128,7 @@ convwld:
 	$(CXX) $(CPPFLAGS) -o ../bin/convwld util/convwld.cpp constants.cpp bitfield.cpp assert.cpp
 
 clean:
-	rm -f *.o ../test/*.o *.d ../bin/awake.new
+	rm -f *.o ../test/*.o *.d ../bin/awake.new pch.hpp.gch pch.hpp.d
 
 %.d: %.cpp
 	set -e; $(CC) -MM $(CPPFLAGS) $< \
@@ -161,4 +168,6 @@ unittest: ../bin/unittest
 	$(CXX) -c $(CPPFLAGS) -I../3rdparty/catch2 -o $@ $<
 
 
+ifneq ($(MAKECMDGOALS),clean)
 include $(sourcefiles:.cpp=.d)
+endif

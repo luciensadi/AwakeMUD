@@ -12,6 +12,17 @@ A fork of Che's now-retired Awakened Worlds MUD codebase. Issues and pull reques
 - Significantly increased performance
 - A slew of bugfixes to everything from combat code to sound propagation
 
+## Quickstart (Docker)
+
+Requires [Docker](https://docs.docker.com/get-docker/) with Docker Compose.
+
+- `docker compose up db` — MySQL 5.7 on `localhost:3306`. Useful for native builds (see [Installation](#installation-ubuntu-commands-in-parentheses)); point `src/mysql_config.cpp` at `127.0.0.1` / user `AwakeMUD` / password `awake_dev_password` / database `AwakeMUD`.
+- `docker compose up` — Full stack: builds the MUD and starts it on port 4000. Source is volume-mounted for incremental rebuilds; a ccache volume persists the compiler cache.
+- `docker compose restart mud` — Rebuild and restart after editing source files.
+- `docker compose down -v` — Destroy all volumes (MySQL data, ccache) and re-initialize.
+
+To enable remote debugging with `lldb-server`, uncomment the debug block in `docker-compose.yaml` (`DEBUGGER=1`, `SYS_PTRACE`, port 2345) and connect with `lldb -o 'gdb-remote localhost:2345'`.
+
 ## OS Support
 Actively tested on:
 - Mac OS 13

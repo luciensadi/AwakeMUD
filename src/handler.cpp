@@ -1220,6 +1220,8 @@ void affect_total(struct char_data * ch)
         GET_REACH(ch)++;
     }
   }
+
+  SendGMCPCharPools(ch);
 }
 
 /*

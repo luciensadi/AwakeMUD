@@ -26,6 +26,7 @@
 #include "limits.hpp"
 #include "config.hpp"
 #include "transport.hpp"
+#include "gmcp.hpp"
 #include "newmatrix.hpp"
 #include "pocketsec.hpp"
 #include "vehicles.hpp"
@@ -3671,6 +3672,7 @@ SPECIAL(bank)
     GET_BANK_RAW(ch) += amount;
     send_to_char(ch, "You split %d nuyen across your various numbered accounts for safekeeping.\r\n", amount);
     act("$n accesses the ATM.", TRUE, ch, 0, FALSE, TO_ROOM);
+    SendGMCPCharVitals(ch);
     return 1;
   }
 
@@ -3687,6 +3689,7 @@ SPECIAL(bank)
     GET_BANK_RAW(ch) -= amount;
     send_to_char(ch, "You do a few sneaky transfers between your accounts, then run a withdrawal. The ATM ejects %d nuyen.\r\n", amount);
     act("$n accesses the ATM.", TRUE, ch, 0, FALSE, TO_ROOM);
+    SendGMCPCharVitals(ch);
     return 1;
   }
 

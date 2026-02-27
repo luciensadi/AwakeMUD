@@ -20,6 +20,7 @@
 #include "newhouse.hpp"
 #include "quest.hpp"
 #include "ritualcast.hpp"
+#include "gmcp.hpp"
 
 #define POWER(name) void (name)(struct char_data *ch, struct char_data *spirit, struct spirit_data *spiritdata, char *arg)
 #define FAILED_CAST "You fail to bind the mana to your will.\r\n"
@@ -6735,7 +6736,8 @@ void set_casting_pools(struct char_data *ch, int casting, int drain, int spell_d
     if (GET_REFLECT(ch))
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " Reflect-%d", GET_REFLECT(ch));
     strlcat(buf, "\r\n", sizeof(buf));
-    send_to_char(buf, ch); 
+    send_to_char(buf, ch);
+    SendGMCPCharPools(ch);
   }
 
 #ifdef APPLY_DELAY_ON_POOL_CHANGE_IN_COMBAT
