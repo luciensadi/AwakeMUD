@@ -11,6 +11,7 @@
 #include "structs.hpp"
 #include "comm.hpp"
 #include "constants.hpp"
+#include "db.hpp"
 
 bool _vision_prereqs_are_valid(struct char_data *ch, int type, const char *function_name);
 bool _vision_bit_is_valid(int bit, const char *function_name);
@@ -180,6 +181,33 @@ int get_vision_penalty(struct char_data *ch, struct room_data *temp_room, char *
                     rbuf_size);
     return 20;
   }
+
+#ifdef DIES_IRAE
+  // Astral sight uses a completely different set of rules (MitS p82). Light levels in general don't matter, only opacity of the environment.
+  if (SEES_ASTRAL(ch)) {
+    int astral_penalty = 0;
+
+    if (temp_room->vision[1] == LIGHT_LIGHTSMOKE
+        || (weather_info.sky == SKY_RAINING && !ROOM_FLAGGED(temp_room, ROOM_INDOORS)))
+    {
+      buf_mod(rbuf, rbuf_size, "LSmoke/LRain[Astral]", 1);
+      astral_penalty += 1;
+    }
+    else if (temp_room->vision[1] == LIGHT_HEAVYSMOKE
+        || (weather_info.sky == SKY_LIGHTNING && !ROOM_FLAGGED(temp_room, ROOM_INDOORS)))
+    {
+      buf_mod(rbuf, rbuf_size, "HSmoke/HRain[Astral]", 2);
+      astral_penalty += 2;
+    }
+
+    if (GET_BACKGROUND_COUNT(temp_room) > 0) {
+      buf_mod(rbuf, rbuf_size, "BackgroundCount[Astral]", GET_BACKGROUND_COUNT(temp_room));
+      astral_penalty += GET_BACKGROUND_COUNT(temp_room);
+    }
+
+    return MIN(8, astral_penalty);
+  }
+#endif
 
   int tn_with_thermo = 0;
   int tn_with_ll = 0;

@@ -553,8 +553,14 @@ int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, size_t rbuf_len, in
       WRITEOUT_MSG("Perceiving", 2);
     }
   }
+#ifdef DIES_IRAE
+  // Actually, MitS p82 says you can in certain circumstances, so we allow visibility to take effect as well.
+  // Check to see if you've exceeded the vision pen max coming in here. This only happens for totalinvis and staff opponents.
+  if (current_visibility_penalty >= MAX_VISIBILITY_PENALTY)
+#else
   // Otherwise, check to see if you've exceeded the vision pen max coming in here. This only happens for totalinvis and staff opponents.
   else if (current_visibility_penalty >= MAX_VISIBILITY_PENALTY)
+#endif
   {
     int new_visibility_penalty = MAX_VISIBILITY_PENALTY - current_visibility_penalty;
     buf_mod(rbuf, rbuf_len, "PreconditionVisPenaltyMax8", new_visibility_penalty);
