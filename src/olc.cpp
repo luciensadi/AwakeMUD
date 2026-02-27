@@ -514,9 +514,9 @@ ACMD(do_dig)
       // Create the new room in their editing struct.
       ch->desc->edit_number = atoi_buf;
       ch->desc->edit_room = Mem->GetRoom();
-      ch->desc->edit_room->name = str_dup(remainder && *remainder ? remainder : "An unfinished but connected room");
-      ch->desc->edit_room->description = str_dup("You are in an unfinished room.\r\n");
-      ch->desc->edit_room->address = str_dup("An undisclosed location");
+      ch->desc->edit_room->name = str_dup(remainder && *remainder ? remainder : STRING_ROOM_TITLE_UNFINISHED_BUT_CONNECTED);
+      ch->desc->edit_room->description = str_dup(STRING_ROOM_DESC_UNFINISHED);
+      ch->desc->edit_room->address = str_dup(STRING_ROOM_JACKPOINT_NO_ADDR);
       int i = 0;
       while ((ch->desc->edit_number > zone_table[i].top) && (i < top_of_zone_table))
         ++i;
@@ -2338,11 +2338,11 @@ ACMD(do_icedit)
 
     return;
   } else {
-    send_to_char ("That IC does not exist, create it?\r\n", ch);
+    send_to_char("That IC does not exist, create it?\r\n", ch);
     d->edit_icon = Mem->GetIcon();
-    d->edit_icon->name = str_dup("An unfinished IC");
-    d->edit_icon->look_desc = str_dup("An unfinished IC guards the node.");
-    d->edit_icon->long_desc = str_dup("It looks like an unfinished IC.\r\n");
+    d->edit_icon->name = str_dup(STRING_IC_NAME_UNFINISHED);
+    d->edit_icon->look_desc = str_dup(STRING_IC_RDESC_UNFINISHED);
+    d->edit_icon->long_desc = str_dup(STRING_IC_LDESC_UNFINISHED);
     d->edit_mode = ICEDIT_CONFIRM_EDIT;
     return;
   }

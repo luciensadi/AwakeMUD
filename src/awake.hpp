@@ -3089,6 +3089,7 @@ enum {
 
 // Don't change these.
 #define STRING_ROOM_TITLE_UNFINISHED "An unfinished room"
+#define STRING_ROOM_TITLE_UNFINISHED_BUT_CONNECTED "An unfinished but connected room"
 #define STRING_ROOM_DESC_UNFINISHED "You are in an unfinished room.\r\n"
 #define STRING_ROOM_JACKPOINT_NO_ADDR "An undisclosed location"
 
@@ -3101,6 +3102,10 @@ enum {
 #define STRING_MOB_KEYWORDS_UNFINISHED "mob unfinished"
 #define STRING_MOB_RDESC_UNFINISHED "An unfinished mob stands here."
 #define STRING_MOB_LDESC_UNFINISHED "It looks barely coherent as it waits to be created.\r\n"
+
+#define STRING_IC_NAME_UNFINISHED "An unfinished IC"
+#define STRING_IC_RDESC_UNFINISHED "An unfinished IC guards the node."
+#define STRING_IC_LDESC_UNFINISHED "It looks like an unfinished IC.\r\n"
 
 #define HOST_COLOR_BLUE   0
 #define HOST_COLOR_GREEN  1
