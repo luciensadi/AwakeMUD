@@ -150,6 +150,7 @@ struct shop_data *shop_table = NULL;   // array of shops
 rnum_t top_of_shopt = 0;            // ref to top element of shop_table
 int top_of_shop_array = 0;
 int shop_chunk_size = 1000;
+std::vector<vnum_t> shop_mysteriously_vanishing_tracker = {};
 
 int top_of_matrix_array = 0;
 int top_of_ic_array = 0;
@@ -2671,6 +2672,9 @@ void parse_shop(File &fl, long virtual_nr)
 
   shop_data *shop = shop_table+rnum;
   shop->vnum = virtual_nr;
+  // Track it so we can see if it vanishes outside of sdelete.
+  shop_mysteriously_vanishing_tracker.push_back(virtual_nr);
+
   VTable data;
   data.Parse(&fl);
 
@@ -6230,7 +6234,7 @@ rnum_t real_mobile(vnum_t virt)
   if (virt < 0)
     return -1;
 
-  int bot, top, mid;
+  rnum_t bot, top, mid;
 
   bot = 0;
   top = top_of_mobt;
@@ -6255,7 +6259,7 @@ rnum_t real_quest(vnum_t virt)
   if (virt < 0)
     return -1;
 
-  int bot, top, mid;
+  rnum_t bot, top, mid;
 
   bot = 0;
   top = top_of_questt;
@@ -6279,7 +6283,7 @@ rnum_t real_shop(vnum_t virt)
   if (virt < 0)
     return -1;
 
-  int bot, top, mid;
+  rnum_t bot, top, mid;
 
   bot = 0;
   top = top_of_shopt;
@@ -6303,7 +6307,7 @@ rnum_t real_zone(vnum_t virt)
   if (virt < 0)
     return -1;
 
-  int bot, top, mid;
+  rnum_t bot, top, mid;
 
   bot = 0;
   top = top_of_zone_table;
@@ -6328,7 +6332,7 @@ rnum_t real_vehicle(vnum_t virt)
   if (virt < 0)
     return -1;
 
-  int bot, top, mid;
+  rnum_t bot, top, mid;
   bot = 0;
   top = top_of_veht;
   for (;;) {
@@ -6350,7 +6354,7 @@ rnum_t real_host(vnum_t virt)
   if (virt < 0)
     return -1;
 
-  int bot, top, mid;
+  rnum_t bot, top, mid;
   bot = 0;
   top = top_of_matrix;
   for (;;) {
@@ -6372,7 +6376,7 @@ rnum_t real_ic(vnum_t virt)
   if (virt < 0)
     return -1;
 
-  int bot, top, mid;
+  rnum_t bot, top, mid;
   bot = 0;
   top = top_of_ic;
   for (;;) {
@@ -6424,7 +6428,7 @@ char *short_object(int virt, int what)
     return error;
   }
 
-  int bot, top, mid;
+  rnum_t bot, top, mid;
 
   bot = 0;
   top = top_of_objt;

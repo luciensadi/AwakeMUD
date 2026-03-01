@@ -103,10 +103,18 @@ extern void verify_every_pointer_we_can_think_of();
 #endif
 
 #ifdef IS_BUILDPORT
+extern std::vector<vnum_t> shop_mysteriously_vanishing_tracker;
 void validate_that_shops_still_exist() {
 #ifdef USE_PRIVATE_CE_WORLD
-  if (real_shop(102709) < 0 || real_shop(102710) < 0 || real_shop(102712) < 0 || real_shop(102713) < 0 || real_shop(102741) < 0) {
-    log_vfprintf("SHOP VANISHED! Killing game.");
+  // Validate that all shops we expect to exist still do.
+  bool will_terminate = false;
+  for (auto vnum : shop_mysteriously_vanishing_tracker) {
+    if (real_shop(vnum) < 0) {
+      mudlog_vfprintf(d->character, LOG_SYSLOG, "SYSERR: A shop vanished just now! Expected vnum %ld has gone missing. Will conclude checking and then terminate the game.", vnum);
+      will_terminate = true;
+    }
+  }
+  if (will_terminate) {
     assert(1==0);
     exit(1);
   }

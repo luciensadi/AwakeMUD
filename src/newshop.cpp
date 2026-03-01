@@ -48,6 +48,8 @@ bool validate_shopstring_format(const char *str, struct descriptor_data *d);
 int cmd_say;
 int cmd_echo;
 
+extern std::vector<vnum_t> shop_mysteriously_vanishing_tracker;
+
 const char *shop_flags[] =
   {
     "Nothing",
@@ -2947,17 +2949,16 @@ void shedit_parse(struct descriptor_data *d, const char *arg)
     switch(*arg) {
     case 'y':
     case 'Y':
+/*
 #ifdef ONLY_LOG_BUILD_ACTIONS_ON_CONNECTED_ZONES
       if (!vnum_from_non_approved_zone(d->edit_number)) {
 #else
       {
 #endif
-        snprintf(buf, sizeof(buf),"%s wrote new shop #%ld",
-                GET_CHAR_NAME(d->character), d->edit_number);
-        mudlog(buf, d->character, LOG_WIZLOG, TRUE);
-      }
+*/
       shop_nr = real_shop(d->edit_number);
       if (shop_nr > 0) {
+        mudlog_vfprintf(d->character, LOG_WIZLOG, "%s wrote existing shop #%ld (r%ld)", GET_CHAR_NAME(d->character), d->edit_number, shop_nr);
         rnum_t okn, nkn;
         if (shop_table[shop_nr].keeper != SHOP->keeper && shop_table[shop_nr].keeper != 1151) {
           okn = real_mobile(shop_table[shop_nr].keeper);
@@ -2979,8 +2980,11 @@ void shedit_parse(struct descriptor_data *d, const char *arg)
       } else {
         vnum_t counter, counter2;
         bool found = FALSE;
+        // Add it to our list so we know if it goes away.
+        shop_mysteriously_vanishing_tracker.push_back(d->edit_number);
         for (counter = 0; counter <= top_of_shopt; counter++) {
           if (shop_table[counter].vnum > d->edit_number) {
+            mudlog_vfprintf(d->character, LOG_WIZLOG, "%s wrote new shop #%ld, inserting at r%ld and causing upshift from r%ld -> r%ld (TOA r%ld)", GET_CHAR_NAME(d->character), counter, d->edit_number, counter, top_of_shopt + 1, top_of_shop_array);
             for (counter2 = top_of_shopt + 1; counter2 > counter; counter2--)
               shop_table[counter2] = shop_table[counter2 - 1];
 
@@ -2992,6 +2996,7 @@ void shedit_parse(struct descriptor_data *d, const char *arg)
           }
         }
         if (!found) {
+          mudlog_vfprintf(d->character, LOG_WIZLOG, "%s wrote new shop #%ld, appending at r%ld (TOA r%ld)", GET_CHAR_NAME(d->character), d->edit_number, top_of_shopt + 1, top_of_shop_array);
           SHOP->vnum = d->edit_number;
           shop_table[++top_of_shopt] = *SHOP;
           shop_nr = top_of_shopt;
