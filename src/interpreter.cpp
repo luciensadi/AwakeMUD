@@ -2845,9 +2845,7 @@ int perform_dupe_check(struct descriptor_data *d)
       continue;
     }
 
-    /* we've found a duplicate - blow him away, dumping his eq in limbo. */
-    char_from_room(ch);
-    char_to_room(ch, &world[1]);
+    /* we've found a duplicate - blow him away. */
     extract_char(ch);
   }
 
@@ -2892,9 +2890,7 @@ int perform_dupe_check(struct descriptor_data *d)
     SEND_TO_Q("You take over your own body, already in use!\r\n", d);
     act("$n shakes $s head to clear it.",
         TRUE, d->character, 0, 0, TO_ROOM);
-    snprintf(buf, sizeof(buf), "%s has re-logged in ... disconnecting old socket.",
-            GET_CHAR_NAME(d->character));
-    mudlog(buf, d->character, LOG_CONNLOG, TRUE);
+    mudlog_vfprintf(LOG_CONNLOG,  "%s has re-logged in ... disconnecting old socket.", GET_CHAR_NAME(d->character));
     log_vfprintf("[CONNLOG: %s reconnecting from %s with fingerprint %s and JSON '''%s''']", GET_CHAR_NAME(d->character), d->host, get_descriptor_fingerprint(d), d->pProtocol ? d->pProtocol->new_environ_info.dump().c_str() : "{}");
     if (d->character->persona)
     {

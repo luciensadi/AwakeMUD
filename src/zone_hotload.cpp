@@ -214,7 +214,7 @@ void _offload_zone(struct zone_data *zone)
   // be hotloaded on entry.
   zone->offloaded_at = time(0);
 
-  mudlog_vfprintf(NULL, LOG_ZONELOG, "Offloaded zone %d (%s) at epoch %ld.", zone->number, zone->name, zone->offloaded_at);
+  mudlog_vfprintf(NULL, LOG_SYSLOG, "Offloaded zone %d (%s) at epoch %ld.", zone->number, zone->name, zone->offloaded_at);
 }
 
 /* Call this from the main loop on a timer. It iterates over the list of zones
@@ -264,11 +264,10 @@ void attempt_to_offload_unused_zones()
 
   if (offloaded_count > 0)
   {
-    mudlog_vfprintf(NULL, LOG_ZONELOG, "Offload complete. %d zone%s offloaded.", offloaded_count, offloaded_count == 1 ? "" : "s");
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "Offload complete. %d zone%s offloaded.", offloaded_count, offloaded_count == 1 ? "" : "s");
   }
 #else
-  log("Skipping zone offload check-- USE_ZONE_HOTLOADING is not "
-      "defined.");
+  log("Skipping zone offload check-- USE_ZONE_HOTLOADING is not defined.");
 #endif
 }
 
@@ -309,7 +308,7 @@ void hotload_zone(rnum_t zone_idx)
   if (zone->offloaded_at <= 0)
     return;
 
-  mudlog_vfprintf(NULL, LOG_ZONELOG,
+  mudlog_vfprintf(NULL, LOG_SYSLOG,
                   "Hotloading zone %ld, which was offloaded %0.2f minutes ago.",
                   zone->number, ((double)(time(0) - zone->offloaded_at)) / 60);
 
@@ -378,7 +377,7 @@ void hotload_zone(rnum_t zone_idx)
     }
   }
 
-  mudlog_vfprintf(NULL, LOG_ZONELOG, "Hotloading of zone %ld is complete.",
+  mudlog_vfprintf(NULL, LOG_SYSLOG, "Hotloading of zone %ld is complete.",
                   zone->number);
 #else
   // Do nothing, we don't hotload zones when this flag is disabled.
