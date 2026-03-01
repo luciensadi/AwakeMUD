@@ -110,7 +110,7 @@ void validate_that_shops_still_exist() {
   bool will_terminate = false;
   for (auto vnum : shop_mysteriously_vanishing_tracker) {
     if (real_shop(vnum) < 0) {
-      mudlog_vfprintf(d->character, LOG_SYSLOG, "SYSERR: A shop vanished just now! Expected vnum %ld has gone missing. Will conclude checking and then terminate the game.", vnum);
+      mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: A shop vanished just now! Expected vnum %ld has gone missing. Will conclude checking and then terminate the game.", vnum);
       will_terminate = true;
     }
   }
@@ -2890,7 +2890,7 @@ int perform_dupe_check(struct descriptor_data *d)
     SEND_TO_Q("You take over your own body, already in use!\r\n", d);
     act("$n shakes $s head to clear it.",
         TRUE, d->character, 0, 0, TO_ROOM);
-    mudlog_vfprintf(LOG_CONNLOG,  "%s has re-logged in ... disconnecting old socket.", GET_CHAR_NAME(d->character));
+    mudlog_vfprintf(d->character, LOG_CONNLOG,  "%s has re-logged in ... disconnecting old socket.", GET_CHAR_NAME(d->character));
     log_vfprintf("[CONNLOG: %s reconnecting from %s with fingerprint %s and JSON '''%s''']", GET_CHAR_NAME(d->character), d->host, get_descriptor_fingerprint(d), d->pProtocol ? d->pProtocol->new_environ_info.dump().c_str() : "{}");
     if (d->character->persona)
     {
