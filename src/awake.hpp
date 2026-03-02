@@ -2227,6 +2227,7 @@ enum {
 #define SCMD_EMOTE      1
 #define SCMD_VEMOTE     2
 #define SCMD_AECHO      3
+#define SCMD_KEMOTE     4
 
 /* do_gen_door */
 #define SCMD_OPEN       0
