@@ -925,14 +925,19 @@ ACMD(do_new_echo) {
   ch->char_specials.last_social_action = 0;
 
   // Iterate over the viewers in the room or vehicle.
-  for (struct char_data *viewer = in_room ? in_room->people : in_veh->people;
-       viewer;
-       viewer = in_room ? viewer->next_in_room : viewer->next_in_veh)
-  {
-    if (subcmd != SCMD_KEMOTE) {
+  if (subcmd != SCMD_KEMOTE) {
+    for (struct char_data *viewer = in_room ? in_room->people : in_veh->people;
+         viewer;
+         viewer = in_room ? viewer->next_in_room : viewer->next_in_veh)
+    {
       send_echo_to_char(ch, viewer, (const char *) emote_buf, must_echo_with_name, subcmd, FALSE);
-    } else {
-      // Kinesics emotes are only sent to adepts with active kinesics
+    }
+  } else {
+    // Kinesics emotes are only sent to adepts with kinesics activated
+    for (struct char_data *viewer = in_room ? in_room->people : in_veh->people;
+         viewer;
+         viewer = in_room ? viewer->next_in_room : viewer->next_in_veh)
+    {
       if (GET_TRADITION(viewer) == TRAD_ADEPT && GET_POWER(viewer, ADEPT_KINESICS) > 0) {
         send_echo_to_char(ch, viewer, (const char *) emote_buf, TRUE, subcmd, FALSE);
       }
