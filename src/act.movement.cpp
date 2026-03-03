@@ -2017,10 +2017,15 @@ ACMD(do_drag)
       act("$N is too heavy for you to drag!", FALSE, ch, 0, vict, TO_CHAR);
       return;
     }
-
+     
     if (veh) {
-      enter_veh(ch, veh, "rear", FALSE);
-      enter_veh(vict, veh, "rear", TRUE);
+      if (veh->owner != GET_IDNUM(ch) && veh->locked) {
+        send_to_char(ch, "%s's anti-theft measures beep loudly.\r\n", capitalize(GET_VEH_NAME_NOFORMAT(veh)));
+        return;
+      } else {
+        enter_veh(ch, veh, "rear", FALSE);
+        enter_veh(vict, veh, "rear", TRUE);
+      }
     } else {
       perform_move(ch, dir, LEADER, vict);
       char_from_room(vict);
