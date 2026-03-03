@@ -7705,8 +7705,6 @@ ACMD(do_slist)
     return;
   }
 
-  int first, last, nr, found = 0;
-
   two_arguments(argument, buf, buf2);
 
   if (!*buf || !*buf2) {
@@ -7714,23 +7712,16 @@ ACMD(do_slist)
     return;
   }
 
-  first = atoi(buf);
-  last = atoi(buf2);
+  vnum_t first = atol(buf);
+  vnum_t last = atol(buf2);
 
-  if ((first < 0) || (last < 0)) {
-    send_to_char("Values must be over 0.\r\n", ch);
-    return;
-  }
+  FAILURE_CASE((first < 0) || (last < 0), "Values must be over 0.");
+  FAILURE_CASE(first >= last, "Second value must be greater than first.");
 
-  if (first >= last) {
-    send_to_char("Second value must be greater than first.\r\n", ch);
-    return;
-  }
+  snprintf(buf, sizeof(buf), "Shops, %ld to %ld:\r\n", first, last);
 
-  snprintf(buf, sizeof(buf), "Shops, %d to %d:\r\n", first, last);
-
-  int real_mob;
-  for (nr = MAX(0, real_shop(first)); nr <= top_of_shopt && (shop_table[nr].vnum <= last); nr++) {
+  int found = 0;
+  for (rnum_t nr = MAX(0, real_shop(first)), real_mob; nr <= top_of_shopt && (shop_table[nr].vnum <= last); nr++) {
     if (shop_table[nr].vnum < first || shop_table[nr].vnum > last) {
       // send_to_char(ch, "Skipping shop %ld: Not in range %d ≤ X ≤ %d.\r\n", shop_table[nr].vnum, first, last);
       continue;
@@ -7742,7 +7733,8 @@ ACMD(do_slist)
       continue;
     }
 
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%5d. [%8ld] %s %s (%ld)\r\n", ++found,
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%5d. [%8ld] %s %s (%ld)\r\n",
+            ++found,
             shop_table[nr].vnum,
             vnum_from_non_approved_zone(shop_table[nr].keeper) ? " " : (PRF_FLAGGED(ch, PRF_SCREENREADER) ? "(approved)" : "*"),
             (real_mob = real_mobile(shop_table[nr].keeper)) < 0 ? "None" : GET_NAME(&mob_proto[real_mob]),

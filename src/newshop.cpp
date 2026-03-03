@@ -2984,9 +2984,18 @@ void shedit_parse(struct descriptor_data *d, const char *arg)
         shop_mysteriously_vanishing_tracker.push_back(d->edit_number);
         for (counter = 0; counter <= top_of_shopt; counter++) {
           if (shop_table[counter].vnum > d->edit_number) {
-            mudlog_vfprintf(d->character, LOG_WIZLOG, "%s wrote new shop #%ld, inserting at r%ld and causing upshift from r%ld -> r%ld (TOA r%ld)", GET_CHAR_NAME(d->character), counter, d->edit_number, counter, top_of_shopt + 1, top_of_shop_array);
+            mudlog_vfprintf(d->character, LOG_WIZLOG, "%s wrote new shop #%ld, inserting at r%ld and causing upshift from r%ld -> r%ld (TOA r%d)",
+                            GET_CHAR_NAME(d->character),
+                            d->edit_number,
+                            counter,
+                            counter,
+                            top_of_shopt + 1,
+                            top_of_shop_array);
             for (counter2 = top_of_shopt + 1; counter2 > counter; counter2--)
               shop_table[counter2] = shop_table[counter2 - 1];
+
+            // We inserted and upshifted, so we need to increment top_of_shopt.
+            top_of_shopt += 1;
 
             SHOP->vnum = d->edit_number;
             shop_table[counter] = *(d->edit_shop);
@@ -2996,7 +3005,11 @@ void shedit_parse(struct descriptor_data *d, const char *arg)
           }
         }
         if (!found) {
-          mudlog_vfprintf(d->character, LOG_WIZLOG, "%s wrote new shop #%ld, appending at r%ld (TOA r%ld)", GET_CHAR_NAME(d->character), d->edit_number, top_of_shopt + 1, top_of_shop_array);
+          mudlog_vfprintf(d->character, LOG_WIZLOG, "%s wrote new shop #%ld, appending at r%ld (TOA r%d)",
+                          GET_CHAR_NAME(d->character),
+                          d->edit_number,
+                          top_of_shopt + 1,
+                          top_of_shop_array);
           SHOP->vnum = d->edit_number;
           shop_table[++top_of_shopt] = *SHOP;
           shop_nr = top_of_shopt;

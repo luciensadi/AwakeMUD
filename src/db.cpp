@@ -149,7 +149,7 @@ int quest_chunk_size = 1000;
 struct shop_data *shop_table = NULL;   // array of shops
 rnum_t top_of_shopt = 0;            // ref to top element of shop_table
 int top_of_shop_array = 0;
-int shop_chunk_size = 1000;
+int shop_chunk_size = 2000;
 std::vector<vnum_t> shop_mysteriously_vanishing_tracker = {};
 
 int top_of_matrix_array = 0;
