@@ -2335,7 +2335,7 @@ void raw_cast_manipulation_spell(struct char_data *ch, struct char_data *vict, i
         } else {
           bool is_nbc_immune = is_ch_immune_to_nbc(vict);
 
-          success -= success_test(GET_BOD(vict) + GET_BODY_POOL(vict) + GET_POWER(ch, ADEPT_TEMPERATURE_TOLERANCE), force - (GET_IMPACT(vict) / 2));
+          success -= success_test(GET_BOD(vict) + GET_BODY_POOL(vict) + GET_POWER(vict, ADEPT_TEMPERATURE_TOLERANCE), force - (GET_IMPACT(vict) / 2));
           int dam = convert_damage(stage(success, basedamage));
 
           if (is_nbc_immune)
@@ -2423,7 +2423,7 @@ void raw_cast_manipulation_spell(struct char_data *ch, struct char_data *vict, i
           send_to_char("You easily dodge the acid!\r\n", vict);
         } else {
           bool is_nbc_immune = is_ch_immune_to_nbc(vict);
-          
+
           success -= success_test(GET_BOD(vict) + GET_BODY_POOL(vict), force - (GET_IMPACT(vict) / 2));
           int dam = convert_damage(stage(success, basedamage));
 
@@ -2502,7 +2502,7 @@ void raw_cast_manipulation_spell(struct char_data *ch, struct char_data *vict, i
           act("$n easily dodges it, and it vanishes to nothing.", FALSE, vict, 0, 0, TO_ROOM);
           send_to_char("You easily dodge it!\r\n", vict);
         } else {
-          success -= success_test(GET_BOD(vict) + GET_BODY_POOL(vict) + GET_POWER(ch, ADEPT_TEMPERATURE_TOLERANCE), force - (GET_IMPACT(vict) / 2));
+          success -= success_test(GET_BOD(vict) + GET_BODY_POOL(vict), force - (GET_IMPACT(vict) / 2));
           int dam = convert_damage(stage(success, basedamage));
           if (!AWAKE(vict)) {
             act("$n's body goes into convulsions as the lightning flows through it.", FALSE, vict, 0, 0, TO_ROOM);
@@ -2585,7 +2585,7 @@ void raw_cast_manipulation_spell(struct char_data *ch, struct char_data *vict, i
           act("$n easily dodges it, and the beam flickers and vanishes.", FALSE, vict, 0, 0, TO_ROOM);
           send_to_char("You easily dodge it!\r\n", vict);
         } else {
-          success -= success_test(GET_BOD(vict) + GET_BODY_POOL(vict) + GET_POWER(ch, ADEPT_TEMPERATURE_TOLERANCE), force - (GET_IMPACT(vict) / 2));
+          success -= success_test(GET_BOD(vict) + GET_BODY_POOL(vict) + GET_POWER(vict, ADEPT_TEMPERATURE_TOLERANCE), force - (GET_IMPACT(vict) / 2));
           int dam = convert_damage(stage(success, basedamage));
           if (!AWAKE(vict)) {
             act("$n's body recoils in pain as the laser beam finds its mark.", FALSE, vict, 0, 0, TO_ROOM);
@@ -2654,7 +2654,7 @@ void raw_cast_manipulation_spell(struct char_data *ch, struct char_data *vict, i
           send_to_char("You easily dodge it!\r\n", vict);
           act("$n dodges out of the way of a cloud of steam.", FALSE, vict, 0, ch, TO_NOTVICT);
         } else {
-          success -= success_test(GET_BOD(vict) + GET_BODY_POOL(vict) + GET_POWER(ch, ADEPT_TEMPERATURE_TOLERANCE), force - (GET_IMPACT(vict) / 2));
+          success -= success_test(GET_BOD(vict) + GET_BODY_POOL(vict) + GET_POWER(vict, ADEPT_TEMPERATURE_TOLERANCE), force - (GET_IMPACT(vict) / 2));
           int dam = convert_damage(stage(success, basedamage));
           if (!AWAKE(vict)) {
             act("$n's body reels from the blast of steam.", FALSE, vict, 0, 0, TO_ROOM);
