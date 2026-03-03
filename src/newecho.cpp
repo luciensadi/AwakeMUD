@@ -717,6 +717,13 @@ ACMD(do_new_echo) {
     in_veh = veh->in_veh;
   }
 
+  // Check for adepts using thier kinesics powers
+  if (subcmd == SCMD_KEMOTE) {
+    FAILURE_CASE(!(GET_TRADITION(ch) == TRAD_ADEPT), "You cannot use kinesics emotes unless you are an adept.\r\n");
+    FAILURE_CASE(GET_POWER(ch, ADEPT_KINESICS) == 0, "You cannot use kinesics emotes without activating kinesics.\r\n");
+    FAILURE_CASE(ch->desc && strchr(argument, '"') != NULL, "You cannot use speech in a kinesics emote.\r\n");
+  }
+
   // Reject hitchers. They have no body and would break things.
   FAILURE_CASE(PLR_FLAGGED(ch, PLR_MATRIX) && !ch->persona, "You can't do that while hitching.\r\n");
 
@@ -918,11 +925,23 @@ ACMD(do_new_echo) {
   ch->char_specials.last_social_action = 0;
 
   // Iterate over the viewers in the room or vehicle.
-  for (struct char_data *viewer = in_room ? in_room->people : in_veh->people;
-       viewer;
-       viewer = in_room ? viewer->next_in_room : viewer->next_in_veh)
-  {
-    send_echo_to_char(ch, viewer, (const char *) emote_buf, must_echo_with_name, subcmd, FALSE);
+  if (subcmd != SCMD_KEMOTE) {
+    for (struct char_data *viewer = in_room ? in_room->people : in_veh->people;
+         viewer;
+         viewer = in_room ? viewer->next_in_room : viewer->next_in_veh)
+    {
+      send_echo_to_char(ch, viewer, (const char *) emote_buf, must_echo_with_name, subcmd, FALSE);
+    }
+  } else {
+    // Kinesics emotes are only sent to adepts with kinesics activated
+    for (struct char_data *viewer = in_room ? in_room->people : in_veh->people;
+         viewer;
+         viewer = in_room ? viewer->next_in_room : viewer->next_in_veh)
+    {
+      if (GET_TRADITION(viewer) == TRAD_ADEPT && GET_POWER(viewer, ADEPT_KINESICS) > 0) {
+        send_echo_to_char(ch, viewer, (const char *) emote_buf, TRUE, subcmd, FALSE);
+      }
+    }
   }
 
   // Send it to anyone who's rigging a vehicle here.
