@@ -63,6 +63,7 @@ extern void do_single_mobile_activity(struct char_data *ch);
 
 bool zone_has_pc_occupied_vehicles(struct zone_data *zone)
 {
+#ifdef USE_ZONE_HOTLOADING
   rnum_t room_rnum;
 
   for (vnum_t room_vnum = zone->number * 100; room_vnum <= zone->top;
@@ -86,10 +87,14 @@ bool zone_has_pc_occupied_vehicles(struct zone_data *zone)
   }
 
   return false;
+#else
+  return true;
+#endif
 }
 
 void _attempt_extract_zone_obj(struct obj_data *obj)
 {
+#ifdef USE_ZONE_HOTLOADING
   // No extracting quest targets.
   if (GET_OBJ_QUEST_CHAR_ID(obj))
     return;
@@ -107,10 +112,12 @@ void _attempt_extract_zone_obj(struct obj_data *obj)
     return;
 
   extract_obj(obj);
+#endif
 }
 
 void _attempt_extract_zone_character(struct char_data *ch)
 {
+#ifdef USE_ZONE_HOTLOADING
   // No extracting questies.
   if (GET_MOB_QUEST_CHAR_ID(ch))
     return;
@@ -144,11 +151,13 @@ void _attempt_extract_zone_character(struct char_data *ch)
   }
 
   extract_char(ch);
+#endif
 }
 
 /* Offload zone, removing all non-quest and non-player-owned things in it. */
 void _offload_zone(struct zone_data *zone)
 {
+#ifdef USE_ZONE_HOTLOADING
   if (!zone)
   {
     mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Attempted to offload NULL zone!");
@@ -215,6 +224,7 @@ void _offload_zone(struct zone_data *zone)
   zone->offloaded_at = time(0);
 
   mudlog_vfprintf(NULL, LOG_SYSLOG, "Offloaded zone %d (%s) at epoch %ld.", zone->number, zone->name, zone->offloaded_at);
+#endif
 }
 
 /* Call this from the main loop on a timer. It iterates over the list of zones
@@ -278,6 +288,7 @@ void attempt_to_offload_unused_zones()
 
 void _process_hotloaded_mob(struct char_data *ch, vnum_t zone_number)
 {
+#ifdef USE_ZONE_HOTLOADING
   if (ch->desc)
   {
     mudlog_vfprintf(
@@ -295,6 +306,7 @@ void _process_hotloaded_mob(struct char_data *ch, vnum_t zone_number)
     GET_MENTAL(ch) = 1000;
     GET_PHYSICAL(ch) = 1000;
   }
+#endif
 }
 
 /* Checks to make sure the zone is already offloaded, then hotloads it, bringing
@@ -386,6 +398,7 @@ void hotload_zone(rnum_t zone_idx)
 
 int calculate_players_in_vehicle(struct veh_data *veh)
 {
+#ifdef USE_ZONE_HOTLOADING
   int single_veh_players_present =
       (veh->rigger && PLR_FLAGGED(veh->rigger, PLR_REMOTE)) ? 1 : 0;
 
@@ -396,10 +409,14 @@ int calculate_players_in_vehicle(struct veh_data *veh)
   }
 
   return single_veh_players_present;
+#else
+  return 1;
+#endif
 }
 
 void recalculate_whole_game_players_in_zone()
 {
+#ifdef USE_ZONE_HOTLOADING
   rnum_t room_rnum;
 
   // Iterate over all zones
@@ -478,11 +495,14 @@ void recalculate_whole_game_players_in_zone()
       zone->players_in_zone = on_foot_players_present + veh_players_present;
     }
   }
+#endif
 }
 
 void modify_players_in_zone(rnum_t in_zone, int amount, const char *origin)
 {
+#ifdef USE_ZONE_HOTLOADING
   zone_table[in_zone].players_in_zone += amount;
+#endif
 
 #ifdef DEBUG_PLAYERS_IN_ZONE
   mudlog_vfprintf(NULL, LOG_ZONELOG, "PIZ %s%d for '%s^n' from %s, now %d",
@@ -493,6 +513,7 @@ void modify_players_in_zone(rnum_t in_zone, int amount, const char *origin)
                   zone_table[in_zone].players_in_zone);
 #endif
 
+#ifdef USE_ZONE_HOTLOADING
   if (zone_table[in_zone].players_in_zone < 0 ||
       zone_table[in_zone].players_in_zone > 100)
   {
@@ -507,12 +528,15 @@ void modify_players_in_zone(rnum_t in_zone, int amount, const char *origin)
 
   // Ensure it's loaded.
   hotload_zone(in_zone);
+#endif
 }
 
 void modify_players_in_veh(struct veh_data *veh, int amount,
                            const char *origin)
 {
+#ifdef USE_ZONE_HOTLOADING
   veh->players_in_veh += amount;
+#endif
 
 #ifdef DEBUG_PLAYERS_IN_ZONE
   mudlog_vfprintf(NULL, LOG_ZONELOG, "PIV %s%d for veh %ld from %s, now %d",
@@ -523,6 +547,7 @@ void modify_players_in_veh(struct veh_data *veh, int amount,
                   veh->players_in_veh);
 #endif
 
+#ifdef USE_ZONE_HOTLOADING
   if (veh->players_in_veh < 0 || veh->players_in_veh > 100)
   {
     mudlog_vfprintf(NULL, LOG_SYSLOG,
@@ -533,4 +558,5 @@ void modify_players_in_veh(struct veh_data *veh, int amount,
     // Recalculate the whole game's PIZ counts as a stopgap.
     recalculate_whole_game_players_in_zone();
   }
+#endif
 }

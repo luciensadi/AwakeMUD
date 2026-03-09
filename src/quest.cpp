@@ -2116,33 +2116,45 @@ void list_detailed_quest(struct char_data *ch, long rnum)
   page_string(ch->desc, buf, 1);
 }
 
+// Insert a new quest into the quest table.
 void boot_one_quest(struct quest_data *quest)
 {
-  int count, quest_nr = -1, i;
+  rnum_t quest_nr = -1;
 
-  if ((top_of_questt + 2) >= top_of_quest_array)
+  if ((top_of_questt + 2) >= top_of_quest_array) {
     // if it cannot resize, return...the edit_quest is freed later
-    if (!resize_qst_array())
-    {
+    if (!resize_qst_array()) {
       olc_state = 0;
       return;
     }
+  }
 
-  for (count = 0; count <= top_of_questt; count++)
-    if (quest_table[count].vnum > quest->vnum)
-    {
+  for (rnum_t count = 0; count <= top_of_questt; count++) {
+    if (quest_table[count].vnum > quest->vnum) {
       quest_nr = count;
       break;
     }
+  }
 
-  if (quest_nr == -1)
+  if (quest_nr == -1) {
+    // Append to table (no shift)
     quest_nr = top_of_questt + 1;
-  else
-    for (count = top_of_questt + 1; count > quest_nr; count--)
-    {
+  }
+  else {
+    // Insert into table.
+    for (rnum_t count = top_of_questt + 1; count > quest_nr; count--) {
       // copy quest_table[count-1] to quest_table[count]
       quest_table[count] = quest_table[count-1];
     }
+
+    // Insertion means we also must change everyone's GET_QUEST() to match the new rnum for anyone on a quest after the insertion point.
+    for (struct descriptor_data *d = descriptor_list; d; d = d->next) {
+      // Automatically handles d->original in the GET_QUEST macro.
+      if (d->character && GET_QUEST(d->character) >= quest_nr) {
+        GET_QUEST(d->character)++;
+      }
+    }
+  }
 
   top_of_questt++;
 
@@ -2162,7 +2174,7 @@ void boot_one_quest(struct quest_data *quest)
   if (quest_table[quest_nr].num_objs > 0)
   {
     quest_table[quest_nr].obj = new struct quest_om_data[quest_table[quest_nr].num_objs];
-    for (i = 0; i < quest_table[quest_nr].num_objs; i++)
+    for (int i = 0; i < quest_table[quest_nr].num_objs; i++)
       quest_table[quest_nr].obj[i] = quest->obj[i];
   } else
     quest_table[quest_nr].obj = NULL;
@@ -2171,7 +2183,7 @@ void boot_one_quest(struct quest_data *quest)
   if (quest_table[quest_nr].num_mobs > 0)
   {
     quest_table[quest_nr].mob = new struct quest_om_data[quest_table[quest_nr].num_mobs];
-    for (i = 0; i < quest_table[quest_nr].num_mobs; i++)
+    for (int i = 0; i < quest_table[quest_nr].num_mobs; i++)
       quest_table[quest_nr].mob[i] = quest->mob[i];
   } else
     quest_table[quest_nr].mob = NULL;
@@ -2194,12 +2206,11 @@ void boot_one_quest(struct quest_data *quest)
   quest_table[quest_nr].location = str_dup(quest->location);
 #endif
 
-  if ((i = real_mobile(quest_table[quest_nr].johnson)) > 0 &&
-      mob_index[i].func != johnson)
-  {
-    mob_index[i].sfunc = mob_index[i].func;
-    mob_index[i].func = johnson;
-    mob_proto[i].real_abils.attributes[QUI] = MAX(1, mob_proto[i].real_abils.attributes[QUI]);
+  rnum_t johnson_rnum = real_mobile(quest_table[quest_nr].johnson);
+  if (johnson_rnum > 0 && mob_index[johnson_rnum].func != johnson) {
+    mob_index[johnson_rnum].sfunc = mob_index[johnson_rnum].func;
+    mob_index[johnson_rnum].func = johnson;
+    mob_proto[johnson_rnum].real_abils.attributes[QUI] = MAX(1, mob_proto[johnson_rnum].real_abils.attributes[QUI]);
 
     // Ensure that all instances of this johnson don't have a spare1 value set
     for (struct char_data *tmp = character_list; tmp; tmp = tmp->next_in_character_list) {
@@ -3017,30 +3028,36 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
     switch(*arg) {
     case 'y':
     case 'Y':
-#ifdef ONLY_LOG_BUILD_ACTIONS_ON_CONNECTED_ZONES
-      if (!vnum_from_non_approved_zone(d->edit_number)) {
-#else
       {
+#ifdef ONLY_LOG_BUILD_ACTIONS_ON_CONNECTED_ZONES
+        if (!vnum_from_non_approved_zone(d->edit_number)) {
+#else
+        {
 #endif
-        snprintf(buf, sizeof(buf),"%s wrote new quest #%ld",
-                GET_CHAR_NAME(d->character), d->edit_number);
-        mudlog(buf, d->character, LOG_WIZLOG, TRUE);
-      }
+          snprintf(buf, sizeof(buf),"%s wrote new quest #%ld",
+                  GET_CHAR_NAME(d->character), d->edit_number);
+          mudlog(buf, d->character, LOG_WIZLOG, TRUE);
+        }
 
-      if (real_quest(d->edit_number) == -1)
-        boot_one_quest(QUEST);
-      else
-        reboot_quest(real_quest(d->edit_number), QUEST);
-      if (!write_quests_to_disk(d->character->player_specials->saved.zonenum))
-        send_to_char("There was an error in writing the zone's quests.\r\n", d->character);
-      free_quest(d->edit_quest);
-      delete d->edit_quest;
-      d->edit_quest = NULL;
-      d->edit_number = 0;
-      d->edit_number2 = 0;
-      STATE(d) = CON_PLAYING;
-      PLR_FLAGS(d->character).RemoveBit(PLR_EDITING);
-      send_to_char("Done.\r\n", d->character);
+        rnum_t quest_rnum = real_quest(d->edit_number);
+
+        if (quest_rnum == -1)
+          boot_one_quest(QUEST);
+        else
+          reboot_quest(quest_rnum, QUEST);
+
+        if (!write_quests_to_disk(d->character->player_specials->saved.zonenum))
+          send_to_char("There was an error in writing the zone's quests.\r\n", d->character);
+
+        free_quest(d->edit_quest);
+        delete d->edit_quest;
+        d->edit_quest = NULL;
+        d->edit_number = 0;
+        d->edit_number2 = 0;
+        STATE(d) = CON_PLAYING;
+        PLR_FLAGS(d->character).RemoveBit(PLR_EDITING);
+        send_to_char("Done.\r\n", d->character);
+      }
       break;
     case 'n':
     case 'N':
@@ -4151,23 +4168,29 @@ void display_quest_goals_to_ch(struct char_data *ch) {
 
 ACMD(do_recap)
 {
-  if (!GET_QUEST(ch))
-    send_to_char(ch, "You're not currently on a run.\r\n");
-  else {
+  FAILURE_CASE(!GET_QUEST(ch), "You're not currently on a run.");
+
+  rnum_t johnson_rnum = real_mobile(quest_table[GET_QUEST(ch)].johnson);
+
+  if (johnson_rnum < 0) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Got unknown Johnson vnum %ld from quest %ld during RECAP.", quest_table[GET_QUEST(ch)].johnson, quest_table[GET_QUEST(ch)].vnum);
+    send_to_char(ch, "Sorry, your quest is broken (could not find Johnson in the lookup table). Try again later.");
+    return;
+  }
+  
 #ifdef USE_QUEST_LOCATION_CODE
-    if (quest_table[GET_QUEST(ch)].location)
-      snprintf(buf, sizeof(buf), "At %s, %s told you: \r\n%s", quest_table[GET_QUEST(ch)].location, GET_NAME(mob_proto+real_mobile(quest_table[GET_QUEST(ch)].johnson)),
-              quest_table[GET_QUEST(ch)].info);
-    else
+  if (quest_table[GET_QUEST(ch)].location) {
+    send_to_char(ch, "At %s, %s told you: \r\n%s", quest_table[GET_QUEST(ch)].location, GET_NAME(&mob_proto[johnson_rnum]), quest_table[GET_QUEST(ch)].info);
+  } else {
+    send_to_char(ch, "%s told you: \r\n%s", GET_NAME(&mob_proto[johnson_rnum]), quest_table[GET_QUEST(ch)].info);
+  }
+#else
+  send_to_char(ch, "%s told you: \r\n%s", GET_NAME(&mob_proto[johnson_rnum]), quest_table[GET_QUEST(ch)].info);
 #endif
-      snprintf(buf, sizeof(buf), "%s told you: \r\n%s", GET_NAME(mob_proto+real_mobile(quest_table[GET_QUEST(ch)].johnson)),
-              quest_table[GET_QUEST(ch)].info);
-    send_to_char(buf, ch);
 
 #ifdef IS_BUILDPORT
-    display_quest_goals_to_ch(ch);
+  display_quest_goals_to_ch(ch);
 #endif
-  }
 }
 
 struct char_data * fetch_quest_mob_target_mob_proto(struct quest_data *qst, int mob_idx) {
