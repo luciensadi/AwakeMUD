@@ -3151,7 +3151,7 @@ int recog(struct char_data *ch, struct char_data *i, const char *name)
 
 }
 
-#define IS_INVIS_ON_CAMERA(vict) (AFF_FLAGGED(vict, AFF_IMP_INVIS) || AFF_FLAGGED(vict, AFF_SPELLIMPINVIS) || GET_INVIS_LEV(vict) > 1 || affected_by_spell(vict, SPELL_IMP_INVIS))
+#define IS_INVIS_ON_CAMERA(vict) (AFF_FLAGGED(vict, AFF_IMP_INVIS) || AFF_FLAGGED(vict, AFF_SPELLIMPINVIS) || GET_INVIS_LEV(vict) > 1 || affected_by_spell(vict, SPELL_IMP_INVIS) || (MOB_FLAGGED(vict, MOB_ASTRAL) && !AFF_FLAGGED(vict, AFF_MANIFEST)))
 ACMD(do_photo)
 {
   struct obj_data *camera = NULL, *photo, *mem = NULL, *temp;
