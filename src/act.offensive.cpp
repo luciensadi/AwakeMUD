@@ -171,8 +171,13 @@ bool perform_hit(struct char_data *ch, char *argument, const char *cmdname)
     return TRUE;
   }
 
-  vict = get_char_room_vis(ch, arg);
-  veh = get_veh_list(arg, ch->in_room->vehicles, ch);
+  // Scope hint: "exit." prefix forces door resolution, skipping character and vehicle searches.
+  bool force_exit_search = strip_exit_scope_prefix(arg);
+
+  if (!force_exit_search) {
+    vict = get_char_room_vis(ch, arg);
+    veh = get_veh_list(arg, ch->in_room->vehicles, ch);
+  }
 
   if (!vict && !veh) {
     if ((dir = messageless_find_door(ch, arg, buf2, cmdname)) < 0)
@@ -762,7 +767,14 @@ ACMD(do_kick)
     return;
   }
 
+  // Scope hint: "exit." prefix forces door resolution, skipping character search.
+  bool force_exit_search = strip_exit_scope_prefix(arg);
+
   if ((dir = messageless_find_door(ch, arg, buf2, "do_kick")) < 0) {
+    if (force_exit_search) {
+      send_to_char("There doesn't seem to be an exit by that name here.\r\n", ch);
+      return;
+    }
     if (!(vict = get_char_room_vis(ch, arg)))
       send_to_char("They aren't here.\r\n", ch);
     else if (vict == ch) {

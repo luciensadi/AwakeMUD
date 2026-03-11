@@ -3611,12 +3611,32 @@ int const_generic_find(const char *name, int bitvector, struct char_data * ch,
                  struct char_data ** tar_ch, struct obj_data ** tar_obj)
 {
   int i;
+  char scoped_name[MAX_INPUT_LENGTH];
 
   *tar_ch = NULL;
   *tar_obj = NULL;
   struct veh_data *rigged_veh = (ch)->char_specials.rigging;
 
   if (!*name)
+    return (0);
+
+  // Scope hint prefixes: restrict which scopes generic_find searches.
+  // "room.X" searches only room contents, "inv.X" only inventory, "worn.X" only equipment.
+  if (!strncmp(name, "room.", 5)) {
+    strlcpy(scoped_name, name + 5, sizeof(scoped_name));
+    name = scoped_name;
+    bitvector &= (FIND_OBJ_ROOM | FIND_OBJ_VEH_ROOM);
+  } else if (!strncmp(name, "inv.", 4)) {
+    strlcpy(scoped_name, name + 4, sizeof(scoped_name));
+    name = scoped_name;
+    bitvector &= FIND_OBJ_INV;
+  } else if (!strncmp(name, "worn.", 5)) {
+    strlcpy(scoped_name, name + 5, sizeof(scoped_name));
+    name = scoped_name;
+    bitvector &= FIND_OBJ_EQUIP;
+  }
+
+  if (!*name || !bitvector)
     return (0);
 
   /* Technically, this is intended to find characters outside of vehicles... but this is broken.
@@ -3726,6 +3746,16 @@ int const_generic_find(const char *name, int bitvector, struct char_data * ch,
     }
   }
   return (0);
+}
+
+/* Strips "exit." scope prefix from arg if present. Returns TRUE if stripped. */
+bool strip_exit_scope_prefix(char *arg)
+{
+  if (!strncmp(arg, "exit.", 5)) {
+    memmove(arg, arg + 5, strlen(arg + 5) + 1);
+    return true;
+  }
+  return false;
 }
 
 /* a function to scan for "all" or "all.x" */

@@ -1512,8 +1512,11 @@ ACMD(do_gen_door)
   two_arguments(argument, type, dir);
   RIG_VEH(ch, veh);
 
+  // Scope hint: "exit." prefix forces door/exit resolution, skipping object and vehicle searches.
+  bool force_exit_search = strip_exit_scope_prefix(type);
+
   // 'unlock 1' etc for subscribed vehs
-  if (*type && is_number(type)) {
+  if (!force_exit_search && *type && is_number(type)) {
     num = atoi(type);
     bool has_deck = FALSE;
     for (obj = ch->carrying; obj; obj = obj->next_content)
@@ -1533,7 +1536,7 @@ ACMD(do_gen_door)
   }
 
   // If it's a cardinal direction, make a note to NOT attempt to match an object or vehicle
-  bool cardinal = false; 
+  bool cardinal = false;
   for (int dir_idx = NORTH; dir_idx <= DOWN; dir_idx++) {
     if (!str_cmp(type, exitdirs[dir_idx]) || !str_cmp(type, fulldirs[dir_idx])) {
       cardinal = true;
@@ -1542,8 +1545,8 @@ ACMD(do_gen_door)
   }
 
   // Check for an object or vehicle nearby that matches the keyword.
-  // Checking for a cardinal direction first stops objects intercepting doors
-  if (cardinal || (!generic_find(type, FIND_OBJ_EQUIP | FIND_OBJ_INV | FIND_OBJ_ROOM, ch, &victim, &obj)
+  // Cardinal directions and "exit." scope hint both skip object/vehicle searches and go straight to find_door.
+  if (force_exit_search || cardinal || (!generic_find(type, FIND_OBJ_EQUIP | FIND_OBJ_INV | FIND_OBJ_ROOM, ch, &victim, &obj)
       && !veh
       && !(veh = get_veh_list(type, ch->in_veh ? ch->in_veh->carriedvehs : ch->in_room->vehicles, ch)))) {
     if ((door = find_door(ch, type, dir, cmd_door[subcmd])) == -1) {

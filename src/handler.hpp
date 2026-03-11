@@ -112,6 +112,8 @@ int     find_all_dots(char *arg, size_t arg_size);
 #define FIND_ALL        1
 #define FIND_ALLDOT     2
 
+bool    strip_exit_scope_prefix(char *arg);
+
 
 /* Generic Find */
 
