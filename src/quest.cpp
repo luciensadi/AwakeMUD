@@ -1674,7 +1674,7 @@ SPECIAL(johnson)
           return TRUE;
         }
 
-        if (!that_was_just_too_fast(ch)) {
+        if (that_was_just_too_fast(ch)) {
           do_say(johnson, "What, so soon? I need some time to verify this...", 0, 0);
           return TRUE;
         }
