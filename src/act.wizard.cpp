@@ -7919,8 +7919,10 @@ bool restring_with_args(struct char_data *ch, char *argument, bool using_sysp) {
       }
     }
   }
-
-  if (using_sysp) {
+  
+  if (get_and_deduct_one_crafting_token_from_char(ch)) {
+    send_to_char(ch, "A crafting token fuzzes into digital static as it merges into %s, transforming it.\r\n", obj->text.name);
+  } else if (using_sysp) {
     if (GET_TOTAL_SYSTEM_POINTS(ch) < SYSP_RESTRING_COST) {
       send_to_char(ch, "It costs %d system point%s to restring something, and you only have %d.\r\n",
                    SYSP_RESTRING_COST,
