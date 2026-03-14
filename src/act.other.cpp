@@ -4741,31 +4741,106 @@ ACMD(do_watch)
 ACMD(do_trade)
 {
   skip_spaces(&argument);
-  if (PLR_FLAGGED(ch, PLR_NEWBIE) || PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED))
-    send_to_char("You are not ready to use this command.\r\n", ch);
-  else if (is_abbrev(argument, "karma")) {
-    if (GET_KARMA(ch) < 100)
-      send_to_char("You don't have enough karma to trade.\r\n", ch);
-    else {
-      int amount = dice(2, 6) * 100;
-      gain_nuyen(ch, amount, NUYEN_INCOME_TRADE_COMMAND);
-      GET_KARMA(ch) -= 100;
-      send_to_char(ch, "You trade in 1 Karma for %d nuyen.\r\n", amount);
-    }
+
+  FAILURE_CASE(PLR_FLAGGED(ch, PLR_NEWBIE) || PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED),
+               "You are not ready to use this command.");
+
 #ifdef ALLOW_TRADING_NUYEN_FOR_KARMA
-  } else if (is_abbrev(argument, "nuyen")) {
-    if (GET_NUYEN(ch) < 1800)
-      send_to_char("You need to have at least 1,800 nuyen to trade for karma.\r\n", ch);
-    else {
-      int amount = dice(3, 6) * 100;
-      lose_nuyen(ch, amount, NUYEN_OUTFLOW_TRADE_COMMAND);
-      GET_KARMA(ch) += 100;
-      send_to_char(ch, "You spend %d nuyen to buy 1 point of karma.\r\n", amount);
-    }
-  } else send_to_char("What do you wish to trade?\r\n", ch);
+  #define TRADE_SYNTAX "Syntax: TRADE [amount] KARMA [CONFIRM] or TRADE [amount] NUYEN [CONFIRM]"
 #else
-  } else send_to_char("You can only trade karma into nuyen. Sytax: TRADE KARMA\r\n", ch);
+  #define TRADE_SYNTAX "You can only trade karma into nuyen. Syntax: TRADE [amount] KARMA [CONFIRM]"
 #endif
+
+  // parse syntax: "[amount] <karma|nuyen> [confirm]"
+  char first_arg[MAX_INPUT_LENGTH], keyword_arg[MAX_INPUT_LENGTH], confirm_arg[MAX_INPUT_LENGTH];
+  char *rest = any_one_arg(argument, first_arg);
+
+  int trade_amount = 1;
+  bool has_confirm = FALSE;
+  bool trading_karma = FALSE;
+  bool trading_nuyen = FALSE;
+
+  // Determine if the first arg is a number or the keyword itself.
+  if (*first_arg && isdigit(*first_arg)) {
+    long parsed = strtol(first_arg, NULL, 10);
+    FAILURE_CASE(parsed <= 0, "You must trade at least 1.");
+    FAILURE_CASE(parsed > INT_MAX, "That's way too much to trade at once.");
+    trade_amount = (int) parsed;
+
+    skip_spaces(&rest);
+    rest = any_one_arg(rest, keyword_arg);
+  } else {
+    // First arg is the keyword (e.g. "trade karma", "trade nuyen").
+    strlcpy(keyword_arg, first_arg, sizeof(keyword_arg));
+  }
+
+  // Identify what we're trading.
+  if (*keyword_arg && is_abbrev(keyword_arg, "karma")) {
+    trading_karma = TRUE;
+#ifdef ALLOW_TRADING_NUYEN_FOR_KARMA
+  } else if (*keyword_arg && is_abbrev(keyword_arg, "nuyen")) {
+    trading_nuyen = TRUE;
+#endif
+  } else {
+    FAILURE_CASE(TRUE, TRADE_SYNTAX);
+  }
+
+  // Parse optional "confirm".
+  skip_spaces(&rest);
+  any_one_arg(rest, confirm_arg);
+  if (*confirm_arg && str_cmp(confirm_arg, "confirm") == 0)
+    has_confirm = TRUE;
+
+  if (trading_karma) {
+    // Karma -> Nuyen: 2d6 * 100 per point (range 200-1200 each).
+    int max_trade = GET_KARMA(ch) / 100;
+
+    FAILURE_CASE(max_trade <= 0, "You don't have enough karma to trade.");
+    FAILURE_CASE_PRINTF(trade_amount > max_trade,
+                        "You can trade at most %d karma point%s right now.",
+                        max_trade, max_trade == 1 ? "" : "s");
+
+    if (trade_amount > 1 && !has_confirm) {
+      long min_nuyen = (long) trade_amount * 2 * 100;
+      long max_nuyen = (long) trade_amount * 12 * 100;
+      send_to_char(ch, "Trading %d karma will yield between %ld and %ld nuyen.\r\n"
+                       "To confirm, type: ^WTRADE %d KARMA CONFIRM^n\r\n",
+                   trade_amount, min_nuyen, max_nuyen, trade_amount);
+      return;
+    }
+
+    long total_nuyen = (long) dice(2 * trade_amount, 6) * 100;
+    GET_KARMA(ch) -= trade_amount * 100;
+    gain_nuyen(ch, total_nuyen, NUYEN_INCOME_TRADE_COMMAND);
+    send_to_char(ch, "You trade in %d karma for %ld nuyen.\r\n", trade_amount, total_nuyen);
+  } else if (trading_nuyen) {
+    // Nuyen -> Karma: 3d6 * 100 per point (cost 300-1800 each).
+    long max_nuyen_cost = (long) trade_amount * 1800;
+
+    FAILURE_CASE_PRINTF(GET_NUYEN(ch) < max_nuyen_cost,
+                        "You need to have at least %ld nuyen to trade for %d karma.",
+                        max_nuyen_cost, trade_amount);
+
+    if (trade_amount > 1 && !has_confirm) {
+      long min_cost = (long) trade_amount * 3 * 100;
+      long max_cost = (long) trade_amount * 18 * 100;
+      send_to_char(ch, "Trading nuyen for %d karma will cost between %ld and %ld nuyen.\r\n"
+                       "To confirm, type: ^WTRADE %d NUYEN CONFIRM^n\r\n",
+                   trade_amount, min_cost, max_cost, trade_amount);
+      return;
+    }
+
+    long total_cost = (long) dice(3 * trade_amount, 6) * 100;
+    lose_nuyen(ch, total_cost, NUYEN_OUTFLOW_TRADE_COMMAND);
+    GET_KARMA(ch) += trade_amount * 100;
+    send_to_char(ch, "You spend %ld nuyen to buy %d point%s of karma.\r\n",
+                 total_cost, trade_amount, trade_amount == 1 ? "" : "s");
+  } else {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Unhandled trade keyword '%s' in do_trade.", keyword_arg);
+    send_to_char(TRADE_SYNTAX "\r\n", ch);
+  }
+
+#undef TRADE_SYNTAX
 }
 
 ACMD(do_tridlog)
