@@ -480,11 +480,19 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     // Calculate the attacker's total skill (this modifies TN). In a code block for var scoping.
     {
       int prior_tn = att->ranged->tn;
-      att->ranged->dice = get_skill(att->ch, att->ranged->skill, att->ranged->tn);
+      int skill_dice = get_skill(att->ch, att->ranged->skill, att->ranged->tn, rbuf, sizeof(rbuf));
+      att->ranged->dice = skill_dice + att->ranged->cpool_offense_dice;
+      // Print info.
+      snprintf(rbuf, sizeof(rbuf), "Attacker has %d skill + %d pool%s: will roll %d dice.",
+               skill_dice,
+               att->ranged->cpool_offense_dice,
+               GET_CHIPJACKED_SKILL(att->ch, att->ranged->skill) ? " (zeroed due to using activesoft)" : "",
+               att->ranged->dice);
+
       if (att->ranged->tn != prior_tn) {
-        snprintf(rbuf, sizeof(rbuf), "^jRanged attack roll TN modified in get_skill() to ^c%d^j.^n", att->ranged->tn);
-      } else {
-        strlcpy(rbuf, "^jRanged attack roll TN not modified in get_skill().^n", sizeof(rbuf));
+        snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "\r\n^jTN modified in get_skill() from %d to ^c%d^j.^n",
+                 prior_tn,
+                 att->ranged->tn);
       }
       SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
     }
@@ -496,18 +504,13 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
       SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
     }
 
-    snprintf(rbuf, sizeof(rbuf), "^jAfter get_skill(), attacker's ranged attack roll TN is ^c%d^n.", att->ranged->tn);
+    att->ranged->successes = success_test(att->ranged->dice, att->ranged->tn);
+    snprintf(rbuf, sizeof(rbuf), "^JAttack: Rolling %d dice VS TN %d yielded ^c%d^J success%s.^n",
+             att->ranged->dice,
+             att->ranged->tn,
+             att->ranged->successes,
+             att->ranged->successes == 1 ? "" : "s");
     SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
-
-    {
-      int bonus_from_offense_pool = MIN(GET_SKILL(att->ch, att->ranged->skill), GET_OFFENSE(att->ch));
-      snprintf(rbuf, sizeof(rbuf), "^JAttack: Rolling %d + %d dice VS TN %d... ", att->ranged->dice, bonus_from_offense_pool, att->ranged->tn);
-      att->ranged->dice += bonus_from_offense_pool;
-
-      att->ranged->successes = success_test(att->ranged->dice, att->ranged->tn);
-      snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "^c%d^J success%s.^n", att->ranged->successes, att->ranged->successes == 1 ? "" : "s");
-      SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
-    }
 
     // If you can't dodge, you're presumably not using your dice on your dodge pool, so shift those this round.
     if (def->dodge_pool > 0) {
@@ -550,8 +553,8 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
         def->ranged->tn = MAX(def->ranged->tn, 2);
 
         // No, you CANNOT collapse these two lines into MAX(0, s_t()), because it calls s_t() twice.
-        def->ranged->successes = success_test(def->ranged->dice, def->ranged->tn);
-        def->ranged->successes = MAX(0, def->ranged->successes);
+        int test_result = success_test(def->ranged->dice, def->ranged->tn);
+        def->ranged->successes = MAX(0, test_result);
         att->ranged->successes -= def->ranged->successes;
 
         snprintf(rbuf, sizeof(rbuf), "^eDodge: Dice %d (%d pool + %d sidestep), TN %d, Successes ^c%d^e.  This means attacker's net successes = ^c%d^e.^n",
@@ -707,9 +710,6 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
   }
   // Melee combat. If you're here, we don't care about your ranged combat setup-- it's face-beating time. All calculations here are done for both attacker and defender (in case of defender counterstriking)
   else {
-    // TODO: Review the rolls act code and figure out how to split things up between meatspace and decking rolls. A new TO_MATRIX_ROLLS maybe?
-    int dont_compile = "msg";
-
     // Ensure that neither combatant has the closing flag set (if we've gotten here, the closing test was already cleared in perform-violence())
     AFF_FLAGS(att->ch).RemoveBit(AFF_APPROACH);
     AFF_FLAGS(def->ch).RemoveBit(AFF_APPROACH);
@@ -746,33 +746,6 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     } else {
     */
 
-    // Set up dice for attacker and defender.
-    for (auto &c : {AttDef{att, def}, AttDef{def, att}}) {
-      int prior_tn = c.fighter->melee->tn;
-      int skill_dice = c.fighter->melee->skill_bonus + get_skill(c.fighter->ch, c.fighter->melee->skill, c.fighter->melee->tn);
-      int cpool_dice = MIN(skill_dice, GET_OFFENSE(c.fighter->ch));
-
-      if (GET_CHIPJACKED_SKILL(c.fighter->ch, c.fighter->melee->skill)) {
-        cpool_dice = 0;
-      }
-
-      c.fighter->melee->dice = skill_dice + cpool_dice;
-      snprintf(rbuf, sizeof(rbuf), "%s has %d skill (incl %d weap focus), %d pool%s: rolls %d dice.",
-               c.fighter == att ? "Attacker" : "Defender",
-               skill_dice,
-               c.fighter->melee->skill_bonus,
-               cpool_dice,
-               GET_CHIPJACKED_SKILL(c.fighter->ch, c.fighter->melee->skill) ? " (zeroed due to using activesoft)" : "",
-               c.fighter->melee->dice);
-      if (c.fighter->melee->tn != prior_tn) {
-        snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "\r\n%s TN modified in get_skill() from %d to %d.",
-                 c.fighter == att ? "Attacker" : "Defender",
-                 prior_tn,
-                 att->melee->tn);
-      }
-      SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
-    }
-
     // Adepts get bonus dice when counterattacking.
     if (GET_POWER(def->ch, ADEPT_COUNTERSTRIKE) > 0) {
       def->melee->dice += GET_POWER(def->ch, ADEPT_COUNTERSTRIKE);
@@ -780,17 +753,40 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
       SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
     }
 
-    // Bugfix: If you're unable to fight, you don't get to counterattack.
-    if (def->is_insensate || def->is_paralyzed) {
-      // Shift your offense dice to your body pool.
-      def->body_pool += GET_OFFENSE(def->ch);
-      def->melee->dice = 0;
-      strlcpy(rbuf, "^yDefender insensate/paralyzed, dice capped to zero. Any offense dice shifted to body pool for this round.^n", sizeof(rbuf));
-      SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
+    // Set up dice for attacker and defender. This was mostly handled previously, so we just check for inability to fight then print.
+    for (auto &c : {AttDef{att, def}, AttDef{def, att}}) {
+      // If you're unable to fight, you don't get to counterattack.
+      if (c.fighter->is_insensate || c.fighter->is_paralyzed) {
+        // Shift your offense dice to your body pool.
+        c.fighter->body_pool += GET_OFFENSE(c.fighter->ch);
+        c.fighter->melee->dice = 0;
+        snprintf(rbuf, sizeof(rbuf), "^y%s insensate/paralyzed, dice capped to zero. Any offense dice shifted to body pool for this round.^n",
+                 c.fighter == att ? "Attacker (BUG, REPORT TO STAFF)" : "Defender");
+        SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
+      } else {
+        // Dice for melee are your skill, your weapon focus bonus, plus your cpool offense dice.
+        int prior_tn = c.fighter->melee->tn;
+        int skill_dice = get_skill(c.fighter->ch, c.fighter->melee->skill, c.fighter->melee->tn);
+        c.fighter->melee->dice = skill_dice
+                                 + c.fighter->melee->skill_bonus
+                                 + c.fighter->melee->cpool_offense_dice;
+        // Print info.
+        snprintf(rbuf, sizeof(rbuf), "%s has %d skill + %d weap focus + %d pool%s: will roll %d dice.",
+                 c.fighter == att ? "Attacker" : "Defender",
+                 skill_dice,
+                 c.fighter->melee->skill_bonus,
+                 c.fighter->melee->cpool_offense_dice,
+                 GET_CHIPJACKED_SKILL(c.fighter->ch, c.fighter->melee->skill) ? " (zeroed due to using activesoft)" : "",
+                 c.fighter->melee->dice);
+        if (c.fighter->melee->tn != prior_tn) {
+          snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "\r\n%s TN modified in get_skill() will roll %d to %d.",
+                   c.fighter == att ? "Attacker" : "Defender",
+                   prior_tn,
+                   att->melee->tn);
+        }
+        SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER; 
+      }
     }
-
-    snprintf(rbuf, sizeof(rbuf), "^g%s's dice: ^W%d^g, %s's dice: ^W%d^g.^n", GET_CHAR_NAME(att->ch), att->melee->dice, GET_CHAR_NAME(def->ch), def->melee->dice);
-    SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
 
     // Calculate the net reach.
     int net_reach = (GET_REACH(att->ch) + att->melee->reach_modifier) - (GET_REACH(def->ch) + def->melee->reach_modifier);
@@ -893,7 +889,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
         net_successes = MAX(0, net_successes);
       }
     } else {
-      strlcpy(rbuf, "Surprised, paralyzed, insensate etc-- defender gets no clash roll.", sizeof(rbuf));
+      strlcpy(rbuf, "Surprised, paralyzed, insensate etc-- defender gets no clash roll (default to 0 successes).", sizeof(rbuf));
       SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
       int test_result = success_test(att->melee->dice, att->melee->tn); // don't put this in MAX, it calls it twice then tests vs first and actually uses second.
       att->melee->successes = MAX(1, test_result);
@@ -1081,8 +1077,8 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
   int bod_success = 0;
   int bod_dice = def->body_pool;
 
-  // Unconscious? No pool dice for you.
-  if (def->is_paralyzed_or_insensate)
+  // Unconscious? No pool dice for you. (houserule)
+  if (def->is_paralyzed || def->is_insensate)
     bod_dice = 0;
 
   // Add your attribute.
@@ -1507,7 +1503,21 @@ bool perform_nerve_strike(struct combat_data *att, struct combat_data *def, char
     impact_armor = MAX(0, def->standard_impact_rating - GET_POWER(att->ch, ADEPT_PENETRATINGSTRIKE));
   }
 
-  // Calculate and display pre-success-test information.
+  // Calculate the attacker's total skill and print it.
+  {
+    int prior_tn = att->melee->tn;
+    att->melee->skill_dice = get_skill(att->ch, SKILL_UNARMED_COMBAT, att->melee->tn);
+    att->melee->dice = att->melee->skill_dice
+                       + att->melee->cpool_offense_dice;
+    // Print info.
+    snprintf(rbuf, sizeof(rbuf), "Nerve strike: Attacker has %d skill + %d pool%s: will roll %d dice.",
+            att->melee->skill_dice,
+            att->melee->cpool_offense_dice,
+            GET_CHIPJACKED_SKILL(att->ch, SKILL_UNARMED_COMBAT) ? " (zeroed due to using activesoft)" : "",
+            att->melee->dice);
+    SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
+  }
+
   snprintf(rbuf, rbuf_len, "%s VS %s: Nerve Strike target is 4 + impact %d + modifiers: ",
            GET_CHAR_NAME(att->ch),
            GET_CHAR_NAME(def->ch),
@@ -1518,7 +1528,7 @@ bool perform_nerve_strike(struct combat_data *att, struct combat_data *def, char
     snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "-%d armor (penetrating strike), ", def->standard_impact_rating - impact_armor);
   }
 
-  att->melee->tn += impact_armor + modify_target_rbuf_raw(att->ch, rbuf, rbuf_len, att->melee->modifiers[COMBAT_MOD_VISIBILITY], FALSE);
+  att->melee->tn += impact_armor + modify_target_rbuf_raw(att->ch, ENDOF(rbuf), rbuf_len + strlen(rbuf), att->melee->modifiers[COMBAT_MOD_VISIBILITY], FALSE);
 
   for (int mod_index = 0; mod_index < NUM_COMBAT_MODIFIERS; mod_index++) {
     buf_mod(rbuf, rbuf_len, combat_modifiers[mod_index], att->melee->modifiers[mod_index]);
@@ -1527,20 +1537,6 @@ bool perform_nerve_strike(struct combat_data *att, struct combat_data *def, char
 
   snprintf(ENDOF(rbuf), rbuf_len - strlen(rbuf), ". Total TN is %d.", att->melee->tn);
   SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
-
-  // Calculate the attacker's total skill and execute a success test.
-  {
-    int prior_tn = att->melee->tn;
-    att->melee->dice = get_skill(att->ch, SKILL_UNARMED_COMBAT, att->melee->tn);
-    if (att->melee->tn != prior_tn) {
-      snprintf(rbuf, rbuf_len, "TN modified in get_skill() to %d.", att->melee->tn);
-      SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
-    }
-  }
-
-  int bonus = MIN(GET_SKILL(att->ch, SKILL_UNARMED_COMBAT), GET_OFFENSE(att->ch));
-  snprintf(rbuf, rbuf_len, "Attacker is rolling %d + %d dice", att->melee->dice, bonus);
-  att->melee->dice += bonus;
 
   att->melee->successes = success_test(att->melee->dice, att->melee->tn);
   int temp_qui_loss = MAX(0, (int) (att->melee->successes / 2));
