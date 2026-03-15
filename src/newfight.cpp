@@ -420,10 +420,10 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     if (!att->ranged->using_mounted_gun) {
       int maximum_recoil_comp_from_gyros = att->ranged->modifiers[COMBAT_MOD_MOVEMENT] + att->ranged->modifiers[COMBAT_MOD_RECOIL];
       if (att->ranged->gyro) {
-        att->ranged->modifiers[COMBAT_MOD_GYRO] -= MIN(maximum_recoil_comp_from_gyros, GET_OBJ_VAL(att->ranged->gyro, 0));
+        att->ranged->modifiers[COMBAT_MOD_GYRO] -= MIN(maximum_recoil_comp_from_gyros, GET_GYRO_RECOIL_COMP(att->ranged->gyro));
       } else if (att->cyber->cyberarm_gyromount) {
         if (!GUN_IS_CYBER_GYRO_MOUNTABLE(att->weapon)) {
-          send_to_char(att->ch, "Your cyberarm gyro locks up-- %s is too heavy for it to compensate recoil for!\r\n", decapitalize_a_an(GET_OBJ_NAME(att->weapon)));
+          send_to_char(att->ch, "Your cyberarm gyro is locked up-- %s is too heavy for it to compensate recoil for!\r\n", decapitalize_a_an(GET_OBJ_NAME(att->weapon)));
           snprintf(rbuf, sizeof(rbuf), "^Y%s's cyberarm gyro not activating-- weapon too heavy.^n", GET_CHAR_NAME( att->ch ));
           SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
         } else {
@@ -432,29 +432,16 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
       }
     }
 
-    // Deduct ammo. THIS MUST BE THE LAST PRECONDITION CHECK.
-    if (!MOB_FLAGGED(att->ch, MOB_EMPLACED)) {
+    // Deduct ammo. THIS MUST BE AFTER ALL PRECONDITIONS so we don't deduct ammo from someone who's not firing.
+    if (!MOB_FLAGGED(att->ch, MOB_EMPLACED) || (weap_ammo && !IS_NPC(att->ch))) {
       // Subtract the full ammo count. NPCs are the exception: Their manned weapons have unlimited ammo.
-      if (att->ranged->burst_count) {
-        if (weap_ammo) {
-          if (!IS_NPC(att->ch)) {
-            update_ammobox_ammo_quantity(weap_ammo, -(att->ranged->burst_count), "newfight burst deduction");
-            AMMOTRACK(att->ch, GET_AMMOBOX_WEAPON(weap_ammo), GET_AMMOBOX_TYPE(weap_ammo), AMMOTRACK_COMBAT, -(att->ranged->burst_count));
-          }
-        } else if (att->ranged->magazine) {
-          GET_MAGAZINE_AMMO_COUNT(att->ranged->magazine) -= (att->ranged->burst_count);
-          AMMOTRACK(att->ch, GET_MAGAZINE_BONDED_ATTACKTYPE(att->ranged->magazine), GET_MAGAZINE_AMMO_TYPE(att->ranged->magazine), AMMOTRACK_COMBAT, -(att->ranged->burst_count));
-        }
-      }
-      // Just deduct one round from their total.
-      else {
-        if (weap_ammo) {
-          GET_AMMOBOX_QUANTITY(weap_ammo)--;
-          AMMOTRACK(att->ch, GET_AMMOBOX_WEAPON(weap_ammo), GET_AMMOBOX_TYPE(weap_ammo), AMMOTRACK_COMBAT, -1);
-        } else if (att->ranged->magazine) {
-          GET_MAGAZINE_AMMO_COUNT(att->ranged->magazine)--;
-          AMMOTRACK(att->ch, GET_MAGAZINE_BONDED_ATTACKTYPE(att->ranged->magazine), GET_MAGAZINE_AMMO_TYPE(att->ranged->magazine), AMMOTRACK_COMBAT, -1);
-        }
+      int quantity_to_deduct = (att->ranged->burst_count ? att->ranged->burst_count : 1);
+      if (weap_ammo) {
+        update_ammobox_ammo_quantity(weap_ammo, -quantity_to_deduct, "newfight ammobox deduction");
+        AMMOTRACK(att->ch, GET_AMMOBOX_WEAPON(weap_ammo), GET_AMMOBOX_TYPE(weap_ammo), AMMOTRACK_COMBAT, -quantity_to_deduct);
+      } else if (att->ranged->magazine) {
+        GET_MAGAZINE_AMMO_COUNT(att->ranged->magazine) -= quantity_to_deduct;
+        AMMOTRACK(att->ch, GET_MAGAZINE_BONDED_ATTACKTYPE(att->ranged->magazine), GET_MAGAZINE_AMMO_TYPE(att->ranged->magazine), AMMOTRACK_COMBAT, -quantity_to_deduct);
       }
     }
 
@@ -491,20 +478,17 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
              GET_CHAR_NAME( att->ch ),
              att->ranged->burst_count,
              MOB_FLAGGED(att->ch, MOB_EMPLACED) ? 10 : att->ranged->recoil_comp);
-
-    {
-      att->ranged->tn += modify_target_rbuf_raw(att->ch, rbuf, sizeof(rbuf), att->ranged->modifiers[COMBAT_MOD_VISIBILITY], FALSE);
-      for (int mod_index = 0; mod_index < NUM_COMBAT_MODIFIERS; mod_index++) {
-        // Ranged-specific modifiers.
-        buf_mod(rbuf, sizeof(rbuf), combat_modifiers[mod_index], att->ranged->modifiers[mod_index]);
-        att->ranged->tn += att->ranged->modifiers[mod_index];
-      }
-      snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "\r\n^jTotal ranged attack roll TN after modifiers: %d.^n", att->ranged->tn);
-      SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
+    att->ranged->tn += modify_target_rbuf_raw(att->ch, rbuf, sizeof(rbuf), att->ranged->modifiers[COMBAT_MOD_VISIBILITY], FALSE);
+    for (int mod_index = 0; mod_index < NUM_COMBAT_MODIFIERS; mod_index++) {
+      // Ranged-specific modifiers.
+      buf_mod(rbuf, sizeof(rbuf), combat_modifiers[mod_index], att->ranged->modifiers[mod_index]);
+      att->ranged->tn += att->ranged->modifiers[mod_index];
     }
+    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "\r\n^jTotal ranged attack roll TN after modifiers: %d.^n", att->ranged->tn);
+    SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
 
 
-    // Calculate the attacker's total skill (this modifies TN)
+    // Calculate the attacker's total skill (this modifies TN). In a code block for var scoping.
     {
       int prior_tn = att->ranged->tn;
       att->ranged->dice = get_skill(att->ch, att->ranged->skill, att->ranged->tn);
@@ -526,17 +510,19 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     snprintf(rbuf, sizeof(rbuf), "^jAfter get_skill(), attacker's ranged attack roll TN is ^c%d^n.", att->ranged->tn);
     SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
 
-    int bonus_from_offense_pool = MIN(GET_SKILL(att->ch, att->ranged->skill), GET_OFFENSE(att->ch));
-    snprintf(rbuf, sizeof(rbuf), "^JAttack: Rolling %d + %d dice VS TN %d... ", att->ranged->dice, bonus_from_offense_pool, att->ranged->tn);
-    att->ranged->dice += bonus_from_offense_pool;
+    {
+      int bonus_from_offense_pool = MIN(GET_SKILL(att->ch, att->ranged->skill), GET_OFFENSE(att->ch));
+      snprintf(rbuf, sizeof(rbuf), "^JAttack: Rolling %d + %d dice VS TN %d... ", att->ranged->dice, bonus_from_offense_pool, att->ranged->tn);
+      att->ranged->dice += bonus_from_offense_pool;
 
-    att->ranged->successes = success_test(att->ranged->dice, att->ranged->tn);
-    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "^c%d^J successes.^n", att->ranged->successes);
-    SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
+      att->ranged->successes = success_test(att->ranged->dice, att->ranged->tn);
+      snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "^c%d^J success%s.^n", att->ranged->successes, att->ranged->successes == 1 ? "" : "s");
+      SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
+    }
 
     // If you can't dodge, you're presumably not using your dice on your dodge pool, so shift those this round.
     if (def->dodge_pool > 0) {
-      if (def->is_paralyzed_or_insensate || AFF_FLAGGED(def->ch, AFF_PRONE) || def->is_surprised) {
+      if (def->is_paralyzed || def->is_insensate || AFF_FLAGGED(def->ch, AFF_PRONE) || def->is_surprised) {
         def->body_pool += def->dodge_pool;
         def->dodge_pool = 0;
         act("Temporarily shifting $n's dodge pool to body pool: Can't dodge.", TRUE, def->ch, 0, 0, TO_ROLLS);
@@ -544,7 +530,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
         // Surprised, oversized, unconscious, or prone? No dodge test for you.
         att->ranged->successes = MAX(att->ranged->successes, 0);
         snprintf(rbuf, sizeof(rbuf), "^eOpponent unable to dodge, attacker's successes will remain at ^c%d^e.^n", att->ranged->successes);
-        if (AFF_FLAGGED(def->ch, AFF_PRONE) && !IS_JACKED_IN(def->ch))
+        if (AFF_FLAGGED(def->ch, AFF_PRONE) && !def->is_insensate)
           send_to_char(def->ch, "^yYou're unable to dodge while prone!^n\r\n");
       } else {
         // You can move, perform the dodge test.
