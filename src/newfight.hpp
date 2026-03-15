@@ -203,13 +203,14 @@ struct melee_combat_data {
   struct obj_data *riot_shield;
 
   bool is_distance_strike;
+  int penetrating_strike;
 
   int modifiers[NUM_COMBAT_MODIFIERS];
 
   melee_combat_data(struct char_data *ch, struct obj_data *weapon, bool ranged_combat_mode, struct cyberware_data *cyber) :
     skill(0), skill_bonus(0), cpool_offense_dice(0), power(0), power_before_armor(0), dam_type(0), damage_level(0),
     is_physical(FALSE), tn(4), dice(0), successes(0), reach_modifier(0), is_monowhip(FALSE),
-    is_distance_strike(FALSE), riot_shield(NULL)
+    is_distance_strike(FALSE), penetrating_strike(0), riot_shield(NULL)
   {
     assert(ch != NULL);
 
@@ -377,6 +378,7 @@ struct melee_combat_data {
       }
 
       is_distance_strike = GET_POWER(ch, ADEPT_DISTANCE_STRIKE) > 0;
+      penetrating_strike = (cyber->num_cyberweapons <= 0 && !is_distance_strike) ? GET_POWER(ch, ADEPT_PENETRATINGSTRIKE) : 0;
     }
 
     is_physical = is_physical || IS_DAMTYPE_PHYSICAL(dam_type);

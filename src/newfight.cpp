@@ -986,12 +986,10 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     // Cyber and unarmed combat.
     else {
       // Most of our melee combat fields were set during setup, so we're only here for the effects of armor.
-      if (att->cyber->num_cyberweapons <= 0
-          && GET_POWER(att->ch, ADEPT_PENETRATINGSTRIKE)
-          && !att->melee->is_distance_strike)
-      {
-        strlcpy(rbuf, "Using penetrating strike.", sizeof(rbuf));
-        att->melee->power = att->melee->power_before_armor - MAX(0, def->standard_impact_rating - GET_POWER(att->ch, ADEPT_PENETRATINGSTRIKE));
+      if (att->melee->penetrating_strike) {
+        int penetrating_strike_delta = MIN(att->melee->penetrating_strike, def->standard_impact_rating);
+        snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "-%d armor (penetrating strike), ", penetrating_strike_delta);
+        att->melee->power = att->melee->power_before_armor - def->standard_impact_rating - penetrating_strike_delta;
       } else {
         strlcpy(rbuf, "Using unarmed / cyberweapon.", sizeof(rbuf));
         att->melee->power = att->melee->power_before_armor - def->standard_impact_rating;
@@ -1497,12 +1495,6 @@ bool perform_nerve_strike(struct combat_data *att, struct combat_data *def, char
     return TRUE;
   }
 
-  int impact_armor = def->standard_impact_rating;
-  // Apply Penetrating Strike to the nerve strike.
-  if (GET_POWER(att->ch, ADEPT_PENETRATINGSTRIKE) && !att->melee->is_distance_strike) {
-    impact_armor = MAX(0, def->standard_impact_rating - GET_POWER(att->ch, ADEPT_PENETRATINGSTRIKE));
-  }
-
   // Calculate the attacker's total skill and print it.
   {
     int prior_tn = att->melee->tn;
@@ -1518,17 +1510,20 @@ bool perform_nerve_strike(struct combat_data *att, struct combat_data *def, char
     SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
   }
 
-  snprintf(rbuf, rbuf_len, "%s VS %s: Nerve Strike target is 4 + impact %d + modifiers: ",
+  snprintf(rbuf, rbuf_len, "%s VS %s: Nerve Strike target is 4 + %d impact armor + modifiers: ",
            GET_CHAR_NAME(att->ch),
            GET_CHAR_NAME(def->ch),
            def->standard_impact_rating
           );
+  att->melee->tn += def->standard_impact_rating;
 
-  if (impact_armor != def->standard_impact_rating) {
-    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "-%d armor (penetrating strike), ", def->standard_impact_rating - impact_armor);
+  if (att->melee->penetrating_strike) {
+    int penetrating_strike_delta = MIN(att->melee->penetrating_strike, def->standard_impact_rating);
+    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "-%d armor (penetrating strike), ", penetrating_strike_delta);
+    att->melee->tn -= penetrating_strike_delta;
   }
 
-  att->melee->tn += impact_armor + modify_target_rbuf_raw(att->ch, ENDOF(rbuf), rbuf_len + strlen(rbuf), att->melee->modifiers[COMBAT_MOD_VISIBILITY], FALSE);
+  att->melee->tn += modify_target_rbuf_raw(att->ch, rbuf, rbuf_len, att->melee->modifiers[COMBAT_MOD_VISIBILITY], FALSE);
 
   for (int mod_index = 0; mod_index < NUM_COMBAT_MODIFIERS; mod_index++) {
     buf_mod(rbuf, rbuf_len, combat_modifiers[mod_index], att->melee->modifiers[mod_index]);
