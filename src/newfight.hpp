@@ -444,8 +444,8 @@ struct combat_data
     // Figure out if they're unable to move at all (paralyzed, asleep/stunned/morted, projecting, jacked in, etc)
     is_paralyzed = GET_QUI(ch) <= 0;
     is_insensate = (GET_POS(ch) <= POS_SLEEPING  // We don't use AWAKE() here since that evaluates to true when qui <= 0.
-                    || PLR_FLAGS(ch).AreAnySet(PLR_MATRIX, PLR_PROJECT, ENDBIT)  // We don't use IS_JACKED_IN here since that would be true for all our riggers.
-                   );
+                    || PLR_FLAGS(ch).AreAnySet(PLR_MATRIX, PLR_PROJECT, ENDBIT));  /* We don't use IS_JACKED_IN here since that would be true for all our riggers.
+                                                                                      Rigger insensate is instead set for the defender in the actual combat code. */
 
     // Check if they're using a gyromount.
     using_gyro = (ranged->gyro || cyber->cyberarm_gyromount);

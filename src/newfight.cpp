@@ -74,10 +74,6 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
   struct combat_data attacker_data(attacker, weap);
   struct combat_data defender_data(victim, vict_weap);
 
-  // Since we use this code for riggers attacking others, rigging only counts against the victim.
-  if (IS_RIGGING(victim))
-    defender_data.is_paralyzed_or_insensate = TRUE;
-
   // Allows for switching roles, which can happen during melee counterattacks.
   struct combat_data *att = &attacker_data;
   struct combat_data *def = &defender_data;
@@ -91,22 +87,31 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
   if (def->is_surprised)
     AFF_FLAGS(def->ch).RemoveBit(AFF_SURPRISE);
 
+  // Setup: If you're somehow attacking the meatspace form of someone whose mind is elsewhere (remote riggers, deckers, projectors, etc), they are treated as insensate.
+  if (IS_JACKED_IN(victim))
+    defender_data.is_insensate = TRUE;
 
-  // Precondition: Prevent astral state mismatch (non-manifested projection or dematerialized spirit etc fighting a meatspace body or v/v)
-  for (auto &c : {AttDef{att, def}, AttDef{def, att}}) {
-    if (IS_ASTRAL(c.victim->ch)) {
-      if (SEES_ASTRAL(c.fighter->ch)) {
-        return astral_fight(c.fighter->ch, c.victim->ch);
+  // Precondition: If you're asleep or paralyzed, you don't get to fight, and also your opponent sets combat to their desired range.
+  for (auto &c : {AttDef{att, def, "fight"}, AttDef{def, att, "react"}}) {
+    if (c.fighter->is_paralyzed || c.fighter->is_insensate) {
+      // Fighter having AFF_APPROACH set is always disadvantageous for them.
+      AFF_FLAGS(c.fighter->ch).SetBit(AFF_APPROACH);
+
+      // If the victim wants ranged combat, set their approach flag (distant). Otherwise, remove it (close).
+      if (c.victim->ranged_combat_mode) {
+        AFF_FLAGS(c.victim->ch).SetBit(AFF_APPROACH);
       } else {
-        mudlog_vfprintf(c.fighter->ch, LOG_SYSLOG, "SYSERR: Entered hit() with %sastral (%s) attacking %sastral (%s).",
-                        IS_ASTRAL(c.fighter->ch) ? "" : "non-",
-                        GET_CHAR_NAME(c.fighter->ch),
-                        IS_ASTRAL(c.victim->ch) ? "" : "non-",
-                        GET_CHAR_NAME(c.victim->ch));
-        act("Unable to hit $N- astral state mismatch with $n.", FALSE, c.fighter->ch, 0, c.victim->ch, TO_ROLLS);
-        stop_fighting(att->ch); // <- not a mistake, we always want to stop att here since it's their combat loop.
+        AFF_FLAGS(c.victim->ch).RemoveBit(AFF_APPROACH);
       }
-      return FALSE;
+
+      // Only message if you're not insensate.
+      if (!c.fighter->is_insensate) {
+        send_to_char(c.fighter->ch, "You can't %s-- you're paralyzed!\r\n", c.msg);
+      }
+
+      // Only bail out if we're evaluating the attacker.
+      if (c.fighter == att)
+        return FALSE;
     }
   }
 
@@ -116,6 +121,21 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     stop_fighting(att->ch);
     act("$n unable to fight $N: Melee user vs someone not in same room", TRUE, att->ch, 0, def->ch, TO_ROLLS);
     return FALSE;
+  }
+
+  // Precondition: Prevent astral state mismatch (non-manifested projection or dematerialized spirit etc fighting a meatspace body or v/v)
+  if ((IS_ASTRAL(att->ch) && !SEES_ASTRAL(def->ch)) || (IS_ASTRAL(def->ch) && !SEES_ASTRAL(att->ch))) {
+    // Astral beings can't fight non-astral characters and v/v.
+    act("$n is unable to hit $N- astral state mismatch.", FALSE, att->ch, 0, def->ch, TO_ROLLS);
+    mudlog_vfprintf(att->ch, LOG_SYSLOG, "SYSERR: Entered hit() with %sastral (%s) attacking %sastral (%s).",
+                    IS_ASTRAL(att->ch) ? "" : "non-",
+                    GET_CHAR_NAME(att->ch),
+                    IS_ASTRAL(def->ch) ? "" : "non-",
+                    GET_CHAR_NAME(def->ch));
+    stop_fighting(att->ch);
+    return false;
+  } else if (IS_ASTRAL(att->ch) || IS_ASTRAL(def->ch)) {
+    return astral_fight(att->ch, def->ch);
   }
 
   // Short-circuit: If you're wielding an activated Dominator, you don't care about all these pesky rules.
@@ -173,30 +193,6 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     }
   }
 
-  // Precondition: If you're asleep or paralyzed, you don't get to fight, and also your opponent sets combat to their desired range.
-  for (auto &c : {AttDef{att, def, "fight"}, AttDef{def, att, "react"}}) {
-    if (c.fighter->is_paralyzed || c.fighter->is_insensate) {
-      // Fighter having AFF_APPROACH set is always disadvantageous for them.
-      AFF_FLAGS(c.fighter->ch).SetBit(AFF_APPROACH);
-
-      // If the victim wants ranged combat, set their approach flag (distant). Otherwise, remove it (close).
-      if (c.victim->ranged_combat_mode) {
-        AFF_FLAGS(c.victim->ch).SetBit(AFF_APPROACH);
-      } else {
-        AFF_FLAGS(c.victim->ch).RemoveBit(AFF_APPROACH);
-      }
-
-      // Only message if you're not insensate.
-      if (!c.fighter->is_insensate) {
-        send_to_char(c.fighter->ch, "You can't %s-- you're paralyzed!\r\n", c.msg);
-      }
-
-      // Only bail out if we're evaluating the attacker.
-      if (c.fighter == att)
-        return FALSE;
-    }
-  }
-
   // Precondition: If you're out of ammo, you don't get to fight.
   // We specifically don't do melee combat instead since the gun-users tend to get wrecked when switched to that unexpectedly.
   if (att->weapon && !has_ammo_no_deduct(att->ch, att->weapon)) {
@@ -226,11 +222,6 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
   if (multi_weapon_modifier) {
     att->ranged->modifiers[COMBAT_MOD_DUAL_WIELDING] = 2;
     att->ranged->modifiers[COMBAT_MOD_SMARTLINK] = 0;
-  }
-
-  // Setup: If you're somehow attacking the meatspace form of someone whose mind is elsewhere (remote riggers, deckers, projectors, etc), they are treated as insensate.
-  if (IS_JACKED_IN(def->ch)) {
-    def->is_insensate = true;
   }
 
   if (att->veh && !att->weapon) {
@@ -716,7 +707,10 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
   }
   // Melee combat. If you're here, we don't care about your ranged combat setup-- it's face-beating time. All calculations here are done for both attacker and defender (in case of defender counterstriking)
   else {
-    // Ensure that neither combatant has the closing flag set.
+    // TODO: Review the rolls act code and figure out how to split things up between meatspace and decking rolls. A new TO_MATRIX_ROLLS maybe?
+    int dont_compile = "msg";
+
+    // Ensure that neither combatant has the closing flag set (if we've gotten here, the closing test was already cleared in perform-violence())
     AFF_FLAGS(att->ch).RemoveBit(AFF_APPROACH);
     AFF_FLAGS(def->ch).RemoveBit(AFF_APPROACH);
 
@@ -728,7 +722,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     }
 
     // Treat unconscious/paralyzed/etc as being a position mod of -6 (reflects ease of coup de grace)
-    if (def->is_paralyzed_or_insensate)
+    if (def->is_paralyzed || def->is_insensate)
       att->melee->modifiers[COMBAT_MOD_POSITION] -= 6;
     else if (AFF_FLAGGED(def->ch, AFF_PRONE))
       att->melee->modifiers[COMBAT_MOD_POSITION] -= 2;
@@ -752,52 +746,32 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     } else {
     */
 
-    {
-      int prior_tn = att->melee->tn;
-      int skill_dice = att->melee->skill_bonus + get_skill(att->ch, att->melee->skill, att->melee->tn);
-      int cpool_dice = MIN(skill_dice, GET_OFFENSE(att->ch));
+    // Set up dice for attacker and defender.
+    for (auto &c : {AttDef{att, def}, AttDef{def, att}}) {
+      int prior_tn = c.fighter->melee->tn;
+      int skill_dice = c.fighter->melee->skill_bonus + get_skill(c.fighter->ch, c.fighter->melee->skill, c.fighter->melee->tn);
+      int cpool_dice = MIN(skill_dice, GET_OFFENSE(c.fighter->ch));
 
-      if (GET_CHIPJACKED_SKILL(att->ch, att->melee->skill)) {
+      if (GET_CHIPJACKED_SKILL(c.fighter->ch, c.fighter->melee->skill)) {
         cpool_dice = 0;
       }
 
-      att->melee->dice = skill_dice + cpool_dice;
-      snprintf(rbuf, sizeof(rbuf), "Attacker has %d skill (incl %d weap focus), %d pool%s: rolls %d dice.",
+      c.fighter->melee->dice = skill_dice + cpool_dice;
+      snprintf(rbuf, sizeof(rbuf), "%s has %d skill (incl %d weap focus), %d pool%s: rolls %d dice.",
+               c.fighter == att ? "Attacker" : "Defender",
                skill_dice,
-               att->melee->skill_bonus,
+               c.fighter->melee->skill_bonus,
                cpool_dice,
-               GET_CHIPJACKED_SKILL(att->ch, att->melee->skill) ? " (zeroed due to using activesoft)" : "",
-               att->melee->dice);
-      if (att->melee->tn != prior_tn) {
-        snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "\r\nAttacker TN modified in get_skill() from %d to %d.", prior_tn, att->melee->tn);
+               GET_CHIPJACKED_SKILL(c.fighter->ch, c.fighter->melee->skill) ? " (zeroed due to using activesoft)" : "",
+               c.fighter->melee->dice);
+      if (c.fighter->melee->tn != prior_tn) {
+        snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "\r\n%s TN modified in get_skill() from %d to %d.",
+                 c.fighter == att ? "Attacker" : "Defender",
+                 prior_tn,
+                 att->melee->tn);
       }
+      SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
     }
-    SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
-
-    {
-      int prior_tn = def->melee->tn;
-      int skill_dice = def->melee->skill_bonus + get_skill(def->ch, def->melee->skill, def->melee->tn);
-      int cpool_dice = MIN(skill_dice, GET_OFFENSE(def->ch));
-
-      if (GET_CHIPJACKED_SKILL(def->ch, def->melee->skill)) {
-        cpool_dice = 0;
-      }
-
-      def->melee->dice = skill_dice + cpool_dice;
-      snprintf(rbuf, sizeof(rbuf), "Defender has %d skill (incl %d weap focus), %d pool%s: rolls %d dice.",
-               skill_dice,
-               def->melee->skill_bonus,
-               cpool_dice,
-               GET_CHIPJACKED_SKILL(def->ch, def->melee->skill) ? " (zeroed due to using activesoft)" : "",
-               def->melee->dice);
-      if (def->melee->tn != prior_tn) {
-        snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "\r\nDefender TN modified in get_skill() from %d to %d.", prior_tn, def->melee->tn);
-      }
-    }
-    SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
-
-
-    // }
 
     // Adepts get bonus dice when counterattacking.
     if (GET_POWER(def->ch, ADEPT_COUNTERSTRIKE) > 0) {
@@ -806,10 +780,12 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
       SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
     }
 
-    // Bugfix: If you're unconscious or mortally wounded, you don't get to counterattack.
-    if (GET_PHYSICAL(def->ch) <= 0 || GET_MENTAL(def->ch) <= 0 || IS_JACKED_IN(def->ch)) {
+    // Bugfix: If you're unable to fight, you don't get to counterattack.
+    if (def->is_insensate || def->is_paralyzed) {
+      // Shift your offense dice to your body pool.
+      def->body_pool += GET_OFFENSE(def->ch);
       def->melee->dice = 0;
-      strlcpy(rbuf, "^yDefender incapped, dice capped to zero.^n", sizeof(rbuf));
+      strlcpy(rbuf, "^yDefender insensate/paralyzed, dice capped to zero. Any offense dice shifted to body pool for this round.^n", sizeof(rbuf));
       SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
     }
 
@@ -819,25 +795,25 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     // Calculate the net reach.
     int net_reach = (GET_REACH(att->ch) + att->melee->reach_modifier) - (GET_REACH(def->ch) + def->melee->reach_modifier);
 
-    // Skilled NPCs get to switch to close combat mode at this time (those cheating bastards.)
-    engage_close_combat_if_appropriate(att, def, net_reach);
-    engage_close_combat_if_appropriate(def, att, -net_reach);
-
+    // MitS 149: Ignore reach modifiers. This should happen _before_ NPCs decide their close combat status.
     if (GET_POWER(att->ch, ADEPT_DISTANCE_STRIKE)) {
-      // MitS 149: Ignore reach modifiers.
       net_reach = 0;
     }
 
-    bool is_close_combat = AFF_FLAGGED(att->ch, AFF_CLOSECOMBAT) || AFF_FLAGGED(def->ch, AFF_CLOSECOMBAT);
-    if (is_close_combat) {
-      // CC p99: Ignore reach modifiers, decrease user's power by one.
-      net_reach = 0;
+    // Skilled NPCs get to switch their close combat mode at this time (those cheating bastards.)
+    engage_close_combat_if_appropriate(att, def, net_reach);
+    engage_close_combat_if_appropriate(def, att, -net_reach);
 
-      if (AFF_FLAGGED(att->ch, AFF_CLOSECOMBAT)) {
-        att->melee->power -= 1;
-        act("Decreased melee power by 1 and negated net reach due to attacker's close combat toggle.", TRUE, att->ch, NULL, NULL, TO_ROLLS);
-      } else {
-        act("Negated net reach due to defender's close combat toggle.", TRUE, att->ch, NULL, NULL, TO_ROLLS);
+    // Apply close-combat power penalties to attacker and defender as appropriate (CC p99)
+    for (auto &c : {AttDef{att, def}, AttDef{def, att}}) {
+      if (AFF_FLAGGED(c.fighter->ch, AFF_CLOSECOMBAT)) {
+        c.fighter->melee->power -= 1;
+        if (net_reach != 0) {
+          net_reach = 0;
+          act("Decreased $n's melee power by 1 and negated net reach due to $s close combat toggle.", TRUE, c.fighter->ch, NULL, NULL, TO_ROLLS);
+        } else {
+          act("Decreased $n's melee power by 1 due to $s close combat toggle.", TRUE, c.fighter->ch, NULL, NULL, TO_ROLLS);
+        }
       }
     }
 
@@ -848,7 +824,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
       def->melee->modifiers[COMBAT_MOD_REACH] -= -net_reach;
 
 #ifdef USE_RIOT_SHIELD_CODE
-    // Add in riot shield TNs.
+    // Add in riot shield TNs. Did not review this in the 15-03-2026 pass since it's disabled atm.
     if (att->melee->riot_shield || def->melee->riot_shield) {
       int shield_count = (att->melee->riot_shield ? 1 : 0) + (def->melee->riot_shield ? 1 : 0);
       int shield_tn_penalty = shield_count * 2;
@@ -878,64 +854,55 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
 
     // -------------------------------------------------------------------------------------------------------
     // Calculate and display pre-success-test information.
-    snprintf(rbuf, sizeof(rbuf), "^cCalculating melee combat modifiers. %s's TN modifiers: ", GET_CHAR_NAME(att->ch) );
-    // This feels a little shitty, but we know that if we're in melee mode, the TN has not been touched yet, and if we're not then it's already been calculated.
-    att->melee->tn += modify_target_rbuf_raw(att->ch, rbuf, sizeof(rbuf), att->melee->modifiers[COMBAT_MOD_VISIBILITY], FALSE);
-    for (int mod_index = 0; mod_index < NUM_COMBAT_MODIFIERS; mod_index++) {
-      buf_mod(rbuf, sizeof(rbuf), combat_modifiers[mod_index], att->melee->modifiers[mod_index]);
-      att->melee->tn += att->melee->modifiers[mod_index];
-    }
+    strlcpy(rbuf, "^cCalculating melee combat modifiers.", sizeof(rbuf));
     SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
 
-    snprintf(rbuf, sizeof(rbuf), "^c%s%s's TN modifiers: ", GET_CHAR_NAME( def->ch ),
-            (GET_PHYSICAL(def->ch) <= 0 || GET_MENTAL(def->ch) <= 0) ? " (incap)" : "" );
-    def->melee->tn += modify_target_rbuf_raw(def->ch, rbuf, sizeof(rbuf), def->melee->modifiers[COMBAT_MOD_VISIBILITY], FALSE);
-    for (int mod_index = 0; mod_index < NUM_COMBAT_MODIFIERS; mod_index++) {
-      buf_mod(rbuf, sizeof(rbuf), combat_modifiers[mod_index], def->melee->modifiers[mod_index]);
-      def->melee->tn += def->melee->modifiers[mod_index];
-    }
-    SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
+    for (auto &c : {AttDef{att, def}, AttDef{def, att}}) {
+      snprintf(rbuf, sizeof(rbuf), "^c%s%s's TN modifiers: ", GET_CHAR_NAME(c.fighter->ch),
+               c.fighter->is_insensate || c.fighter->is_paralyzed ? " (incap)" : "");
+      // TN should be 4 + any defaulting penalty already, so we just modify_target it to get the rest of the penalties applied.
+      c.fighter->melee->tn += modify_target_rbuf_raw(c.fighter->ch, rbuf, sizeof(rbuf), c.fighter->melee->modifiers[COMBAT_MOD_VISIBILITY], FALSE);
+      for (int mod_index = 0; mod_index < NUM_COMBAT_MODIFIERS; mod_index++) {
+        buf_mod(rbuf, sizeof(rbuf), combat_modifiers[mod_index], c.fighter->melee->modifiers[mod_index]);
+        c.fighter->melee->tn += c.fighter->melee->modifiers[mod_index];
+      }
 
-    // Minimum TN is 2.
-    att->melee->tn = MAX(att->melee->tn, 2);
-    def->melee->tn = MAX(def->melee->tn, 2);
+      if (c.fighter->melee->tn < 2) {
+        strlcat(rbuf, " (hit minimum 2 TN)", sizeof(rbuf));
+        c.fighter->melee->tn = 2;
+      }
 
-    // Canary check-- this value is set to zero during initialization and should not have been touched yet.
-    if (def->melee->successes != 0) {
-      mudlog("FIGHT MEMORY ERROR: def->melee->successes was not zero!", def->ch, LOG_SYSLOG, TRUE);
-    }
-    if (att->melee->successes != 0) {
-      mudlog("FIGHT MEMORY ERROR: att->melee->successes was not zero!", def->ch, LOG_SYSLOG, TRUE);
+      // Canary check-- this value is set to zero during initialization and should not have been touched yet.
+      if (c.fighter->melee->successes != 0) {
+        mudlog_vfprintf(c.fighter->ch, LOG_SYSLOG, "FIGHT MEMORY ERROR: %s->melee->successes was not zero!", c.fighter == att ? "att" : "def");
+      }
+      
+      SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
     }
 
     // Calculate the clash, unless there's some surprise involved (hitting someone unconscious is technically surprising for them)
-    if (!def->is_paralyzed_or_insensate && !def->is_surprised) {
+    if (!(def->is_paralyzed || def->is_insensate || def->is_surprised)) {
       att->melee->successes = success_test(att->melee->dice, att->melee->tn);
       def->melee->successes = success_test(def->melee->dice, def->melee->tn);
+      net_successes = att->melee->successes - def->melee->successes;
+
+      if (def->weapon && GET_OBJ_TYPE(def->weapon) != ITEM_WEAPON) {
+        // Defender's wielding a non-weapon? Whoops, net successes will never be less than 0.
+        strlcpy(rbuf, "Defender wielding non-weapon-- cannot win clash. Net will go no lower than 0.", sizeof(rbuf));
+        SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
+        net_successes = MAX(0, net_successes);
+      }
     } else {
-      strlcpy(rbuf, "Surprised-- defender gets no roll.", sizeof(rbuf));
+      strlcpy(rbuf, "Surprised, paralyzed, insensate etc-- defender gets no clash roll.", sizeof(rbuf));
       SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
-      // No, you CANNOT collapse these two lines into MAX(1, success_test()), because it calls s_t() twice.
-      att->melee->successes = success_test(att->melee->dice, att->melee->tn);
-      att->melee->successes = MAX(1, att->melee->successes);
+      int test_result = success_test(att->melee->dice, att->melee->tn); // don't put this in MAX, it calls it twice then tests vs first and actually uses second.
+      att->melee->successes = MAX(1, test_result);
       def->melee->successes = 0;
+      net_successes = att->melee->successes;
     }
-    net_successes = att->melee->successes - def->melee->successes;
 
     // Store our successes for the monowhip test, since there's a chance it'll be flipped in counterattack.
     successes_for_use_in_monowhip_test_check = att->melee->successes;
-
-    if (def->weapon && GET_OBJ_TYPE(def->weapon) != ITEM_WEAPON) {
-      // Defender's wielding a non-weapon? Whoops, net successes will never be less than 0.
-      strlcpy(rbuf, "Defender wielding non-weapon-- cannot win clash. Net will go no lower than 0.", sizeof(rbuf));
-      SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
-      net_successes = MAX(0, net_successes);
-    }
-    if (GET_POS(def->ch) <= POS_STUNNED) {
-      strlcpy(rbuf, "Defender stunned/morted-- cannot win clash. Net will go no lower than 0.", sizeof(rbuf));
-      SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
-      net_successes = MAX(0, net_successes);
-    }
 
     // Compose and send various messages.
     snprintf(rbuf, sizeof(rbuf), "^g%s got ^W%d^g success%s from ^W%d^g dice at TN ^W%d^g.^n\r\n",
@@ -1322,28 +1289,48 @@ bool does_weapon_have_bayonet(struct obj_data *weapon) {
 }
 
 void engage_close_combat_if_appropriate(struct combat_data *att, struct combat_data *def, int net_reach) {
-  if (IS_NPC(att->ch) && net_reach != 0 && AFF_FLAGGED(att->ch, AFF_SMART_ENOUGH_TO_TOGGLE_CLOSECOMBAT)) {
+  if (net_reach != 0 && AFF_FLAGGED(att->ch, AFF_SMART_ENOUGH_TO_TOGGLE_CLOSECOMBAT) && IS_NPC(att->ch)) {
     // If the net reach does not favor the NPC, switch on close combat.
     if (net_reach < 0 && !AFF_FLAGGED(att->ch, AFF_CLOSECOMBAT)) {
       AFF_FLAGS(att->ch).SetBit(AFF_CLOSECOMBAT);
-      if (att->weapon) {
-        act("$n shifts $s grip on $p, trying to get inside $N's guard!", TRUE, att->ch, att->weapon, def->ch, TO_NOTVICT);
-        act("$n shifts $s grip on $p, trying to get inside your guard!", TRUE, att->ch, att->weapon, def->ch, TO_VICT);
+      if (MOB_FLAGGED(att->ch, MOB_INANIMATE)) {
+        if (att->weapon) {
+          act("$n realigns $p, trying to get inside $N's guard!", TRUE, att->ch, att->weapon, def->ch, TO_NOTVICT);
+          act("$n realigns $p, trying to get inside your guard!", TRUE, att->ch, att->weapon, def->ch, TO_VICT);
+        } else {
+          act("$n maneuvers in close, trying to get inside $N's guard!", TRUE, att->ch, NULL, def->ch, TO_NOTVICT);
+          act("$n maneuvers in close, trying to get inside your guard!", TRUE, att->ch, NULL, def->ch, TO_VICT);
+        }
       } else {
-        act("$n ducks in close, trying to get inside $N's guard!", TRUE, att->ch, NULL, def->ch, TO_NOTVICT);
-        act("$n ducks in close, trying to get inside your guard!", TRUE, att->ch, NULL, def->ch, TO_VICT);
+        if (att->weapon) {
+          act("$n shifts $s grip on $p, trying to get inside $N's guard!", TRUE, att->ch, att->weapon, def->ch, TO_NOTVICT);
+          act("$n shifts $s grip on $p, trying to get inside your guard!", TRUE, att->ch, att->weapon, def->ch, TO_VICT);
+        } else {
+          act("$n ducks in close, trying to get inside $N's guard!", TRUE, att->ch, NULL, def->ch, TO_NOTVICT);
+          act("$n ducks in close, trying to get inside your guard!", TRUE, att->ch, NULL, def->ch, TO_VICT);
+        }
       }
     }
 
     // Otherwise, switch it off.
     else if (net_reach > 0 && AFF_FLAGGED(att->ch, AFF_CLOSECOMBAT)) {
       AFF_FLAGS(att->ch).RemoveBit(AFF_CLOSECOMBAT);
-      if (att->weapon) {
-        act("$n shifts $s grip on $p, trying to keep $N outside $s guard!", TRUE, att->ch, att->weapon, def->ch, TO_NOTVICT);
-        act("$n shifts $s grip on $p, trying to keep you outside $s guard!", TRUE, att->ch, att->weapon, def->ch, TO_VICT);
+      if (MOB_FLAGGED(att->ch, MOB_INANIMATE)) {
+        if (att->weapon) {
+          act("$n realigns $p, trying to keep $N outside $s guard!", TRUE, att->ch, att->weapon, def->ch, TO_NOTVICT);
+          act("$n realigns $p, trying to keep you outside $s guard!", TRUE, att->ch, att->weapon, def->ch, TO_VICT);
+        } else {
+          act("$n maneuvers away, trying to keep $N outside $s guard!", TRUE, att->ch, NULL, def->ch, TO_NOTVICT);
+          act("$n maneuvers away, trying to keep you outside $s guard!", TRUE, att->ch, NULL, def->ch, TO_VICT);
+        }
       } else {
-        act("$n backs up, trying to keep $N outside $s guard!", TRUE, att->ch, NULL, def->ch, TO_NOTVICT);
-        act("$n backs up, trying to keep you outside $s guard!", TRUE, att->ch, NULL, def->ch, TO_VICT);
+        if (att->weapon) {
+          act("$n shifts $s grip on $p, trying to keep $N outside $s guard!", TRUE, att->ch, att->weapon, def->ch, TO_NOTVICT);
+          act("$n shifts $s grip on $p, trying to keep you outside $s guard!", TRUE, att->ch, att->weapon, def->ch, TO_VICT);
+        } else {
+          act("$n backs up, trying to keep $N outside $s guard!", TRUE, att->ch, NULL, def->ch, TO_NOTVICT);
+          act("$n backs up, trying to keep you outside $s guard!", TRUE, att->ch, NULL, def->ch, TO_VICT);
+        }
       }
     }
   }
@@ -1521,12 +1508,15 @@ bool perform_nerve_strike(struct combat_data *att, struct combat_data *def, char
   }
 
   // Calculate and display pre-success-test information.
-  snprintf(rbuf, rbuf_len, "%s VS %s: Nerve Strike target is 4 + impact %d (PS: -%d) + modifiers: ",
+  snprintf(rbuf, rbuf_len, "%s VS %s: Nerve Strike target is 4 + impact %d + modifiers: ",
            GET_CHAR_NAME(att->ch),
            GET_CHAR_NAME(def->ch),
-           def->standard_impact_rating,
-           GET_POWER(att->ch, ADEPT_PENETRATINGSTRIKE)
-         );
+           def->standard_impact_rating
+          );
+
+  if (impact_armor != def->standard_impact_rating) {
+    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "-%d armor (penetrating strike), ", def->standard_impact_rating - impact_armor);
+  }
 
   att->melee->tn += impact_armor + modify_target_rbuf_raw(att->ch, rbuf, rbuf_len, att->melee->modifiers[COMBAT_MOD_VISIBILITY], FALSE);
 
@@ -1553,23 +1543,22 @@ bool perform_nerve_strike(struct combat_data *att, struct combat_data *def, char
   att->melee->dice += bonus;
 
   att->melee->successes = success_test(att->melee->dice, att->melee->tn);
-  int temp_qui_loss = (int) (att->melee->successes / 2);
+  int temp_qui_loss = MAX(0, (int) (att->melee->successes / 2));
   snprintf(ENDOF(rbuf), rbuf_len - strlen(rbuf), ", and got %d successes, which translates to %d qui loss.",
            att->melee->successes,
            temp_qui_loss);
   SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
 
-  if (att->melee->successes > 1) {
+  if (temp_qui_loss > 0) {
     GET_TEMP_QUI_LOSS(def->ch) += temp_qui_loss * TEMP_QUI_LOSS_DIVISOR;
     affect_total(def->ch);
 
     if (access_level(att->ch, LVL_ADMIN) && PRF_FLAGGED(att->ch, PRF_ROLLS)) {
-      send_to_char(att->ch, "[Remaining qui: %d (TQL %d).]\r\n",
-               GET_QUI(def->ch),
-               GET_TEMP_QUI_LOSS(def->ch));
+      snprintf(rbuf, sizeof(rbuf), "[Remaining qui: %d (TQL %d).]\r\n", GET_QUI(def->ch), GET_TEMP_QUI_LOSS(def->ch));
+      act(rbuf, FALSE, att->ch, 0, def->ch, TO_STAFF_ROLLS);
     }
 
-    char msg_buf[500];
+    char msg_buf[500] = {0};
     if (GET_QUI(def->ch) <= 0) {
       snprintf(msg_buf, sizeof(msg_buf), "You hit $N's pressure points successfully, %s %s paralyzed!", HSSH(def->ch), HSSH_SHOULD_PLURAL(def->ch) ? "is" : "are");
       act(msg_buf, FALSE, att->ch, 0, def->ch, TO_CHAR);
