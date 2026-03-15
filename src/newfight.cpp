@@ -927,7 +927,8 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     // If your enemy got more successes than you, guess what? You're the one who gets their face caved in.
     if (net_successes < 0) {
       if (att->melee->is_distance_strike) {
-        // MitS 149: You cannot be counterstriked while using distance strike.
+        // MitS 149: You cannot be counterstriked while using distance strike. Send a message and bail.
+        combat_message(att->ch, def->ch, att->weapon, 0, 0, att->melee->modifiers[COMBAT_MOD_VISIBILITY]);
         return FALSE;
       }
       // This messaging gets a little annoying.
@@ -988,15 +989,15 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
       // Most of our melee combat fields were set during setup, so we're only here for the effects of armor.
       if (att->melee->penetrating_strike) {
         int penetrating_strike_delta = MIN(att->melee->penetrating_strike, def->standard_impact_rating);
-        snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "-%d armor (penetrating strike), ", penetrating_strike_delta);
-        att->melee->power = att->melee->power_before_armor - def->standard_impact_rating - penetrating_strike_delta;
+        snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "Using penetrating strike (-%d armor).", penetrating_strike_delta);
+        att->melee->power = att->melee->power_before_armor - (def->standard_impact_rating - penetrating_strike_delta);
       } else {
         strlcpy(rbuf, "Using unarmed / cyberweapon.", sizeof(rbuf));
         att->melee->power = att->melee->power_before_armor - def->standard_impact_rating;
       }
     }
 
-    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), " After armor: ^c%d%s^n.",
+    snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), " After armor: ^c%d %s^n.",
              att->melee->power,
              GET_SHORT_WOUND_NAME(att->melee->damage_level));
 
@@ -1008,6 +1009,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
       if (att->weapon) {
         has_magic_weapon = GET_WEAPON_FOCUS_RATING(att->weapon) > 0 && (IS_NPNPC(att->ch) || is_weapon_focus_usable_by(att->weapon, att->ch));
       } else {
+        // SR3 p170: Killing Hands explicitly beats Immunity to Normal Weapons.
         has_magic_weapon = GET_POWER(att->ch, ADEPT_KILLING_HANDS);
       }
 
@@ -1075,7 +1077,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
   int bod_success = 0;
   int bod_dice = def->body_pool;
 
-  // Unconscious? No pool dice for you. (houserule)
+  // Unconscious? No pool dice for you. (houserule to reduce the time people spend beating on unconscious/morted mobs)
   if (def->is_paralyzed || def->is_insensate)
     bod_dice = 0;
 
@@ -1211,7 +1213,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
       }
       //Handle suprise attack/alertness here -- defender didn't die.
       if (IS_NPC(def->ch)) {
-        set_mob_alert(def->ch, 20);
+        set_mob_alert(def->ch, 30);
       }
     }
   }
