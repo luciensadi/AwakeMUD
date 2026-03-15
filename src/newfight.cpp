@@ -613,12 +613,11 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
 
     // Calculate effects of armor on the power of the attack.
-    if (att->ranged->magazine) {
-      if (GET_WEAPON_ATTACK_TYPE(att->weapon) == WEAP_TASER) {
+    if (weap_ammo || att->ranged->magazine) {
         // SR3 p124.
         att->ranged->power = att->ranged->power_before_armor - (int)(def->standard_impact_rating / 2);
       } else {
-        switch (GET_MAGAZINE_AMMO_TYPE(att->ranged->magazine)) {
+        switch (weap_ammo ? GET_AMMOBOX_TYPE(weap_ammo) : GET_MAGAZINE_AMMO_TYPE(att->ranged->magazine)) {
           case AMMO_AV:
           case AMMO_APDS:
             if (IS_SPIRIT(def->ch) || IS_ANY_ELEMENTAL(def->ch)) {
