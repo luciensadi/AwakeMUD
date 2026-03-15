@@ -309,8 +309,6 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
       }
     }
 
-    // TODO: Review the rolls act code and figure out how to split things up between meatspace and decking rolls. A new TO_MATRIX_ROLLS maybe?
-
     // Setup: Compute modifiers to the TN based on the def->ch's current state.
     if (def->is_paralyzed || def->is_insensate)
       att->ranged->modifiers[COMBAT_MOD_POSITION] -= 6;
