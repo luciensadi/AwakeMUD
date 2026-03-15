@@ -59,6 +59,13 @@ SPECIAL(weapon_dominator);
 
 bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *victim, struct obj_data *weap, struct obj_data *vict_weap, struct obj_data *weap_ammo, bool multi_weapon_modifier)
 {
+  // We use this struct to reduce code duplication by iterating with braced-init ranged loops instead of copy-pasting and swapping vars around.
+  struct AttDef {
+    combat_data *fighter;
+    combat_data *victim;
+    const char *msg;
+  };
+
   int net_successes, successes_for_use_in_monowhip_test_check;
   assert(attacker != NULL);
   assert(victim != NULL);
@@ -75,8 +82,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
   struct combat_data *att = &attacker_data;
   struct combat_data *def = &defender_data;
 
-  char rbuf[MAX_STRING_LENGTH];
-  memset(rbuf, 0, sizeof(rbuf));
+  char rbuf[MAX_STRING_LENGTH] = {0};
 
   snprintf(rbuf, sizeof(rbuf), ">> ^cCombat eval: %s vs %s.", GET_CHAR_NAME(attacker), GET_CHAR_NAME(victim));
   SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER;
@@ -85,28 +91,23 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
   if (def->is_surprised)
     AFF_FLAGS(def->ch).RemoveBit(AFF_SURPRISE);
 
-  // Precondition: If your foe is astral (ex: a non-manifested projection, a dematerialized spirit), you don't belong here.
-  if (IS_ASTRAL(def->ch)) {
-    if (SEES_ASTRAL(att->ch)) {
-      return astral_fight(att->ch, def->ch);
-    } else {
-      mudlog("SYSERR: Entered hit() with an non-astrally-reachable character attacking an astral character.", att->ch, LOG_SYSLOG, TRUE);
-      act("Unable to hit $N- $E's astral and $n can't touch that.", FALSE, att->ch, 0, def->ch, TO_ROLLS);
-      stop_fighting(att->ch);
-    }
-    return FALSE;
-  }
 
-  // Precondition: Same for if you're an astral being and your target isn't.
-  if (IS_ASTRAL(att->ch)) {
-    if (SEES_ASTRAL(def->ch)) {
-      astral_fight(att->ch, def->ch);
-    } else {
-      mudlog("SYSERR: Entered hit() with an astral character attacking a non-astrally-reachable character.", att->ch, LOG_SYSLOG, TRUE);
-      act("Unable to hit $N- $E's unreachable from the astral plane and $n can't touch that.", FALSE, att->ch, 0, def->ch, TO_ROLLS);
-      stop_fighting(att->ch);
+  // Precondition: Prevent astral state mismatch (non-manifested projection or dematerialized spirit etc fighting a meatspace body or v/v)
+  for (auto &c : {AttDef{att, def, ""}, AttDef{def, att, ""}}) {
+    if (IS_ASTRAL(c.victim->ch)) {
+      if (SEES_ASTRAL(c.fighter->ch)) {
+        return astral_fight(c.fighter->ch, c.victim->ch);
+      } else {
+        mudlog_vfprintf(c.fighter->ch, LOG_SYSLOG, "SYSERR: Entered hit() with %sastral (%s) attacking %sastral (%s).",
+                        IS_ASTRAL(c.fighter->ch) ? "" : "non-",
+                        GET_CHAR_NAME(c.fighter->ch),
+                        IS_ASTRAL(c.victim->ch) ? "" : "non-",
+                        GET_CHAR_NAME(c.victim->ch));
+        act("Unable to hit $N- astral state mismatch with $n.", FALSE, c.fighter->ch, 0, c.victim->ch, TO_ROLLS);
+        stop_fighting(att->ch); // <- not a mistake, we always want to stop att here since it's their combat loop.
+      }
+      return FALSE;
     }
-    return FALSE;
   }
 
   // Precondition: If you're in melee combat and your foe isn't present, stop fighting.
@@ -161,21 +162,15 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     return FALSE;
   }
 
-  // (ATT) Precondition: If you're wielding a non-weapon, take a penalty.
-  if (att->weapon && (GET_OBJ_TYPE(att->weapon) != ITEM_WEAPON || GET_WEAPON_ATTACK_TYPE(att->weapon) == WEAP_GRENADE)) {
-    send_to_char(att->ch, "You struggle to figure out how to attack while holding %s!\r\n", decapitalize_a_an(GET_OBJ_NAME(att->weapon)));
-    att->weapon = NULL;
-    att->ranged_combat_mode = FALSE;
-    // Your fists / claws / etc are less effective when you're holding something.
-    att->melee->modifiers[COMBAT_MOD_WIELDING_A_NON_WEAPON] = 2;
-  }
-  // (DEF) Precondition: If you're wielding a non-weapon, take a penalty.
-  if (def->weapon && (GET_OBJ_TYPE(def->weapon) != ITEM_WEAPON || GET_WEAPON_ATTACK_TYPE(def->weapon) == WEAP_GRENADE)) {
-    send_to_char(def->ch, "You struggle to figure out how to defend yourself while holding %s!\r\n", decapitalize_a_an(GET_OBJ_NAME(def->weapon)));
-    def->weapon = NULL;
-    def->ranged_combat_mode = FALSE;
-    // Your fists / claws / etc are less effective when you're holding something.
-    def->melee->modifiers[COMBAT_MOD_WIELDING_A_NON_WEAPON] = 2;
+  for (auto &c : {AttDef{att, def, "attack"}, AttDef{def, att, "defend yourself"}}) {
+    // (ATT) Precondition: If you're wielding a non-weapon, take a penalty.
+    if (c.fighter->weapon && (GET_OBJ_TYPE(c.fighter->weapon) != ITEM_WEAPON || GET_WEAPON_ATTACK_TYPE(c.fighter->weapon) == WEAP_GRENADE)) {
+      send_to_char(c.fighter->ch, "You struggle to figure out how to %s while holding %s!\r\n", c.msg, decapitalize_a_an(GET_OBJ_NAME(c.fighter->weapon)));
+      c.fighter->weapon = NULL;
+      c.fighter->ranged_combat_mode = FALSE;
+      // Your fists / claws / etc are less effective when you're holding something.
+      c.fighter->melee->modifiers[COMBAT_MOD_WIELDING_A_NON_WEAPON] = 2;
+    }
   }
 
   // Precondition: If you're asleep or paralyzed, you don't get to fight.
@@ -429,18 +424,16 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
 
     // Deduct ammo. THIS MUST BE THE LAST PRECONDITION CHECK.
     if (!MOB_FLAGGED(att->ch, MOB_EMPLACED)) {
+      // Subtract the full ammo count. NPCs are the exception: Their manned weapons have unlimited ammo.
       if (att->ranged->burst_count) {
-        if (weap_ammo || att->ranged->magazine) {
-          // Subtract the full ammo count. NPCs are the exception: Their manned weapons have unlimited ammo.
-          if (weap_ammo) {
-            if (!IS_NPC(att->ch)) {
-              update_ammobox_ammo_quantity(weap_ammo, -(att->ranged->burst_count), "newfight burst deduction");
-              AMMOTRACK(att->ch, GET_AMMOBOX_WEAPON(weap_ammo), GET_AMMOBOX_TYPE(weap_ammo), AMMOTRACK_COMBAT, -(att->ranged->burst_count));
-            }
-          } else {
-            GET_MAGAZINE_AMMO_COUNT(att->ranged->magazine) -= (att->ranged->burst_count);
-            AMMOTRACK(att->ch, GET_MAGAZINE_BONDED_ATTACKTYPE(att->ranged->magazine), GET_MAGAZINE_AMMO_TYPE(att->ranged->magazine), AMMOTRACK_COMBAT, -(att->ranged->burst_count));
+        if (weap_ammo) {
+          if (!IS_NPC(att->ch)) {
+            update_ammobox_ammo_quantity(weap_ammo, -(att->ranged->burst_count), "newfight burst deduction");
+            AMMOTRACK(att->ch, GET_AMMOBOX_WEAPON(weap_ammo), GET_AMMOBOX_TYPE(weap_ammo), AMMOTRACK_COMBAT, -(att->ranged->burst_count));
           }
+        } else if (att->ranged->magazine) {
+          GET_MAGAZINE_AMMO_COUNT(att->ranged->magazine) -= (att->ranged->burst_count);
+          AMMOTRACK(att->ch, GET_MAGAZINE_BONDED_ATTACKTYPE(att->ranged->magazine), GET_MAGAZINE_AMMO_TYPE(att->ranged->magazine), AMMOTRACK_COMBAT, -(att->ranged->burst_count));
         }
       }
       // Just deduct one round from their total.
