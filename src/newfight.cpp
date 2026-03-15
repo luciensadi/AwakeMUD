@@ -605,7 +605,8 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
         // SR3 p124.
         att->ranged->power = att->ranged->power_before_armor - (int)(def->standard_impact_rating / 2);
       } else {
-        switch (weap_ammo ? GET_AMMOBOX_TYPE(weap_ammo) : GET_MAGAZINE_AMMO_TYPE(att->ranged->magazine)) {
+        int ammo_type = weap_ammo ? GET_AMMOBOX_TYPE(weap_ammo) : GET_MAGAZINE_AMMO_TYPE(att->ranged->magazine);
+        switch (ammo_type) {
           case AMMO_AV:
           case AMMO_APDS:
             if (IS_SPIRIT(def->ch) || IS_ANY_ELEMENTAL(def->ch)) {
@@ -645,8 +646,15 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
             att->ranged->is_gel = TRUE; // Affects knockdown tests
             att->ranged->is_physical = FALSE;
             break;
-          default:
+          default: // this is probably terrible coding style, but I'm having default fall through to ammo_normal since that's the assumption.
+            mudlog_vfprintf(att->ch, LOG_SYSLOG, "SYSERR: Encountered unknown ammo type %d (mag: %s, weap: %s) in h_w_m_t ammo switch",
+                            ammo_type,
+                            GET_OBJ_NAME((weap_ammo ? weap_ammo : att->ranged->magazine)),
+                            GET_OBJ_NAME(att->weapon));
+            // fall through
+          case AMMO_NORMAL:
             att->ranged->power = att->ranged->power_before_armor - def->standard_ballistic_rating;
+            break;
         }
       }
     }
@@ -659,12 +667,19 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     if (GET_SKILL(att->ch, att->ranged->skill) >= 8 && SHOTS_FIRED(att->ch) < 10000)
       SHOTS_FIRED(att->ch)++;
 
-    // Check for hardened armor per CC p51.
+    // Check for hardened armor per CC p51. Raw weapon power is correct here, we've already reduced hardened rating by ammo type above.
     if (def->hardened_armor_ballistic_rating) {
       if (def->hardened_armor_ballistic_rating >= GET_WEAPON_POWER(att->weapon)) {
-        act("Your rounds ricochet off of $S hardened armor!", FALSE, att->ch, 0, def->ch, TO_CHAR);
-        act("$n's rounds ricochet off of your hardened armor!", FALSE, att->ch, 0, def->ch, TO_VICT);
-        act("$n's rounds ricochet off of $N's hardened armor!", FALSE, att->ch, 0, def->ch, TO_NOTVICT);
+        if (att->ranged->burst_count > 1) {
+          act("Your rounds ricochet off of $S hardened armor!", FALSE, att->ch, 0, def->ch, TO_CHAR);
+          act("$n's rounds ricochet off of your hardened armor!", FALSE, att->ch, 0, def->ch, TO_VICT);
+          act("$n's rounds ricochet off of $N's hardened armor!", FALSE, att->ch, 0, def->ch, TO_NOTVICT);
+        } else {
+          act("Your round ricochets off of $S hardened armor!", FALSE, att->ch, 0, def->ch, TO_CHAR);
+          act("$n's round ricochets off of your hardened armor!", FALSE, att->ch, 0, def->ch, TO_VICT);
+          act("$n's round ricochets off of $N's hardened armor!", FALSE, att->ch, 0, def->ch, TO_NOTVICT);
+        }
+
         send_to_char(att->ch, "^o(OOC: %s has hardened armor! You need at least ^O%d^o weapon power to damage %s with your current ammo type, and you only have %d.)^n\r\n",
                       decapitalize_a_an(GET_CHAR_NAME(def->ch)),
                       def->hardened_armor_ballistic_rating + 1,
