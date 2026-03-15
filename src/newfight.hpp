@@ -396,7 +396,8 @@ struct combat_data
   int standard_impact_rating;
   int hardened_armor_ballistic_rating;
   int hardened_armor_impact_rating;
-  bool is_paralyzed_or_insensate;
+  bool is_paralyzed;
+  bool is_insensate;
   bool is_surprised;
 
   // Pool data for the things that can be temporarily overwritten mid-fight.
@@ -440,8 +441,11 @@ struct combat_data
     hardened_armor_ballistic_rating = get_hardened_ballistic_armor_rating(ch);
     hardened_armor_impact_rating = get_hardened_impact_armor_rating(ch);
 
-    // Figure out if they're unable to move at all (paralyzed, asleep, jacked in, etc)
-    is_paralyzed_or_insensate = !AWAKE(ch) || GET_QUI(ch) <= 0;
+    // Figure out if they're unable to move at all (paralyzed, asleep/stunned/morted, projecting, jacked in, etc)
+    is_paralyzed = GET_QUI(ch) <= 0;
+    is_insensate = (GET_POS(ch) <= POS_SLEEPING  // We don't use AWAKE() here since that evaluates to true when qui <= 0.
+                    || PLR_FLAGS(ch).AreAnySet(PLR_MATRIX, PLR_PROJECT, ENDBIT)  // We don't use IS_JACKED_IN here since that would be true for all our riggers.
+                   );
 
     // Check if they're using a gyromount.
     using_gyro = (ranged->gyro || cyber->cyberarm_gyromount);

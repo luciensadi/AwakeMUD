@@ -63,7 +63,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
   struct AttDef {
     combat_data *fighter;
     combat_data *victim;
-    const char *msg;
+    const char *msg = nullptr;
   };
 
   int net_successes, successes_for_use_in_monowhip_test_check;
@@ -93,7 +93,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
 
 
   // Precondition: Prevent astral state mismatch (non-manifested projection or dematerialized spirit etc fighting a meatspace body or v/v)
-  for (auto &c : {AttDef{att, def, ""}, AttDef{def, att, ""}}) {
+  for (auto &c : {AttDef{att, def}, AttDef{def, att}}) {
     if (IS_ASTRAL(c.victim->ch)) {
       if (SEES_ASTRAL(c.fighter->ch)) {
         return astral_fight(c.fighter->ch, c.victim->ch);
@@ -173,26 +173,32 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     }
   }
 
-  // Precondition: If you're asleep or paralyzed, you don't get to fight.
-  if (att->is_paralyzed_or_insensate) {
-    act("$n unable to fight $N: Paralyzed or insensate.", TRUE, att->ch, 0, def->ch, TO_ROLLS);
-    return FALSE;
-  }
-
   // Precondition: If you're asleep or paralyzed, you don't get to fight, and also your opponent sets combat to their desired range.
-  if (def->is_paralyzed_or_insensate) {
-    if (att->ranged_combat_mode) {
-      AFF_FLAGS(def->ch).SetBit(AFF_APPROACH);
-    } else {
-      AFF_FLAGS(def->ch).RemoveBit(AFF_APPROACH);
-    }
+  for (auto &c : {AttDef{att, def, "fight"}, AttDef{def, att, "react"}}) {
+    if (c.fighter->is_paralyzed || c.fighter->is_insensate) {
+      // Fighter having AFF_APPROACH set is always disadvantageous for them.
+      AFF_FLAGS(c.fighter->ch).SetBit(AFF_APPROACH);
 
-    if (AWAKE(def->ch)) {
-      send_to_char("You can't react-- you're paralyzed!\r\n", def->ch);
+      // If the victim wants ranged combat, set their approach flag (distant). Otherwise, remove it (close).
+      if (c.victim->ranged_combat_mode) {
+        AFF_FLAGS(c.victim->ch).SetBit(AFF_APPROACH);
+      } else {
+        AFF_FLAGS(c.victim->ch).RemoveBit(AFF_APPROACH);
+      }
+
+      // Only message if you're not insensate.
+      if (!c.fighter->is_insensate) {
+        send_to_char(c.fighter->ch, "You can't %s-- you're paralyzed!\r\n", c.msg);
+      }
+
+      // Only bail out if we're evaluating the attacker.
+      if (c.fighter == att)
+        return FALSE;
     }
   }
 
   // Precondition: If you're out of ammo, you don't get to fight.
+  // We specifically don't do melee combat instead since the gun-users tend to get wrecked when switched to that unexpectedly.
   if (att->weapon && !has_ammo_no_deduct(att->ch, att->weapon)) {
     act("$n unable to fight $N: No ammo", TRUE, att->ch, 0, def->ch, TO_ROLLS);
     return FALSE;
@@ -207,12 +213,11 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
   }
 
   // Setup: Calculate sight penalties.
-  int attacker_vision_penalty = calculate_vision_penalty(att->ch, def->ch);
-  int defender_vision_penalty = calculate_vision_penalty(def->ch, att->ch);
-  att->melee->modifiers[COMBAT_MOD_VISIBILITY] += attacker_vision_penalty;
-  att->ranged->modifiers[COMBAT_MOD_VISIBILITY] += attacker_vision_penalty;
-  def->melee->modifiers[COMBAT_MOD_VISIBILITY] += defender_vision_penalty;
-  def->ranged->modifiers[COMBAT_MOD_VISIBILITY] += defender_vision_penalty;
+  for (auto &c : {AttDef{att, def}, AttDef{def, att}}) {
+    int vision_penalty = calculate_vision_penalty(c.fighter->ch, c.victim->ch);
+    c.fighter->melee->modifiers[COMBAT_MOD_VISIBILITY] += vision_penalty;
+    c.fighter->ranged->modifiers[COMBAT_MOD_VISIBILITY] += vision_penalty;
+  }
 
   // Setup: If the character is rigging a vehicle or is in a vehicle, set veh to that vehicle.
   RIG_VEH(att->ch, att->veh);
@@ -221,6 +226,11 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
   if (multi_weapon_modifier) {
     att->ranged->modifiers[COMBAT_MOD_DUAL_WIELDING] = 2;
     att->ranged->modifiers[COMBAT_MOD_SMARTLINK] = 0;
+  }
+
+  // Setup: If you're somehow attacking the meatspace form of someone whose mind is elsewhere (remote riggers, deckers, projectors, etc), they are treated as insensate.
+  if (IS_JACKED_IN(def->ch)) {
+    def->is_insensate = true;
   }
 
   if (att->veh && !att->weapon) {
@@ -245,7 +255,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     }
 
     // Setup: Limit the burst of the weapon to the available ammo. Ammo is deducted later.
-    // Emplaced mobs (turrets, etc) have unlimited ammo and no recoil.
+    // Emplaced mobs (turrets, etc) have unlimited ammo and no recoil, so they're skipped over with the outermost if-check.
     if (!MOB_FLAGGED(att->ch, MOB_EMPLACED)) {
       if (att->ranged->burst_count) {
         if (weap_ammo || att->ranged->magazine) {
@@ -299,8 +309,10 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
       }
     }
 
+    // TODO: Review the rolls act code and figure out how to split things up between meatspace and decking rolls. A new TO_MATRIX_ROLLS maybe?
+
     // Setup: Compute modifiers to the TN based on the def->ch's current state.
-    if (def->is_paralyzed_or_insensate)
+    if (def->is_paralyzed || def->is_insensate)
       att->ranged->modifiers[COMBAT_MOD_POSITION] -= 6;
     else if (AFF_FLAGGED(def->ch, AFF_PRONE)) {
       // Prone next to you is a bigger / easier target, prone far away is a smaller / harder one.
@@ -374,8 +386,8 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
         if (!IS_NPC(att->ch)) {
           att->ranged->modifiers[COMBAT_MOD_DISTANCE] += SAME_ROOM_SNIPER_RIFLE_PENALTY;
 
-          // Specific 1-round single-shot snipers get an extra +1.
-          if (GET_OBJ_VNUM(att->weapon) == 33600 && GET_WEAPON_FIREMODE(att->weapon) == MODE_SS && GET_WEAPON_MAX_AMMO(att->weapon) == 1) {
+          // Specific rifles get an extra penalty for being extremely large, even for sniper rifles.
+          if (GET_OBJ_VNUM(att->weapon) == 33600) {
             att->ranged->modifiers[COMBAT_MOD_DISTANCE] += 1;
           }
         }
@@ -384,10 +396,8 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
       else {
         att->ranged->modifiers[COMBAT_MOD_DISTANCE] -= 2;
 
-        // Specific 1-round single-shot snipers get an extra -1, but only if proned with a bipod or tripod.
+        // Specific rifles get an extra bonus, but only if proned with a bipod or tripod.
         if (GET_OBJ_VNUM(att->weapon) == 33600
-            && GET_WEAPON_FIREMODE(att->weapon) == MODE_SS
-            && GET_WEAPON_MAX_AMMO(att->weapon) == 1
             && AFF_FLAGGED(att->ch, AFF_PRONE)
             && weapon_has_usable_bipod_or_tripod(att->ch, att->weapon, att->using_gyro))
         {
@@ -399,10 +409,10 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     // Setup: If your attacker is closing the distance (running), take a penalty per Core p112.
     // We can't avoid setting AFF_APPROACH in set_fighting for surprised targets since it also
     // indicates not-in-melee-range, so make an exception since they're probably not moving yet.
-    if (!def->is_paralyzed_or_insensate && !def->is_surprised) {
+    if (!(def->is_paralyzed || def->is_insensate || def->is_surprised)) {
       if (AFF_FLAGGED(def->ch, AFF_APPROACH))
         att->ranged->modifiers[COMBAT_MOD_DEFENDER_MOVING] += 2;
-      else if (!def->ranged_combat_mode && def->ch->in_room == att->ch->in_room && !IS_JACKED_IN(def->ch))
+      else if (!def->ranged_combat_mode && def->ch->in_room == att->ch->in_room)
         att->ranged->modifiers[COMBAT_MOD_IN_MELEE_COMBAT] += 2; // technically supposed to be +2 per attacker, but ehhhh.
     }
 
