@@ -792,7 +792,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     int net_reach = (GET_REACH(att->ch) + att->melee->reach_modifier) - (GET_REACH(def->ch) + def->melee->reach_modifier);
 
     // MitS 149: Ignore reach modifiers. This should happen _before_ NPCs decide their close combat status.
-    if (GET_POWER(att->ch, ADEPT_DISTANCE_STRIKE)) {
+    if (att->melee->is_distance_strike) {
       net_reach = 0;
     }
 
@@ -926,7 +926,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
 
     // If your enemy got more successes than you, guess what? You're the one who gets their face caved in.
     if (net_successes < 0) {
-      if (GET_POWER(att->ch, ADEPT_DISTANCE_STRIKE)) {
+      if (att->melee->is_distance_strike) {
         // MitS 149: You cannot be counterstriked while using distance strike.
         return FALSE;
       }
@@ -988,7 +988,7 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
       // Most of our melee combat fields were set during setup, so we're only here for the effects of armor.
       if (att->cyber->num_cyberweapons <= 0
           && GET_POWER(att->ch, ADEPT_PENETRATINGSTRIKE)
-          && !GET_POWER(att->ch, ADEPT_DISTANCE_STRIKE))
+          && !att->melee->is_distance_strike)
       {
         strlcpy(rbuf, "Using penetrating strike.", sizeof(rbuf));
         att->melee->power = att->melee->power_before_armor - MAX(0, def->standard_impact_rating - GET_POWER(att->ch, ADEPT_PENETRATINGSTRIKE));
@@ -1342,7 +1342,7 @@ bool handle_flame_aura(struct combat_data *att, struct combat_data *def) {
     return FALSE;
 
   // no-op: adept distance strike
-  if (GET_POWER(att->ch, ADEPT_DISTANCE_STRIKE))
+  if (att->melee->is_distance_strike)
     return FALSE;
 
   int force = -1;
@@ -1499,19 +1499,19 @@ bool perform_nerve_strike(struct combat_data *att, struct combat_data *def, char
 
   int impact_armor = def->standard_impact_rating;
   // Apply Penetrating Strike to the nerve strike.
-  if (GET_POWER(att->ch, ADEPT_PENETRATINGSTRIKE) && !GET_POWER(att->ch, ADEPT_DISTANCE_STRIKE)) {
+  if (GET_POWER(att->ch, ADEPT_PENETRATINGSTRIKE) && !att->melee->is_distance_strike) {
     impact_armor = MAX(0, def->standard_impact_rating - GET_POWER(att->ch, ADEPT_PENETRATINGSTRIKE));
   }
 
   // Calculate the attacker's total skill and print it.
   {
     int prior_tn = att->melee->tn;
-    att->melee->skill_dice = get_skill(att->ch, SKILL_UNARMED_COMBAT, att->melee->tn);
-    att->melee->dice = att->melee->skill_dice
+    int skill_dice = get_skill(att->ch, SKILL_UNARMED_COMBAT, att->melee->tn);
+    att->melee->dice = skill_dice
                        + att->melee->cpool_offense_dice;
     // Print info.
     snprintf(rbuf, sizeof(rbuf), "Nerve strike: Attacker has %d skill + %d pool%s: will roll %d dice.",
-            att->melee->skill_dice,
+            skill_dice,
             att->melee->cpool_offense_dice,
             GET_CHIPJACKED_SKILL(att->ch, SKILL_UNARMED_COMBAT) ? " (zeroed due to using activesoft)" : "",
             att->melee->dice);
