@@ -115,6 +115,9 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
     }
   }
 
+  // Below this line, we know that the attacker is neither paralyzed nor insensate-- no need to filter message visibility based on that.
+  // The _defender_ might still be, so keep an eye out for any send_to_char that override that.
+
   // Precondition: If you're in melee combat and your foe isn't present, stop fighting.
   if (!att->ranged_combat_mode && att->ch->in_room != def->ch->in_room) {
     send_to_char(att->ch, "You relax with the knowledge that your opponent is no longer present.\r\n");
@@ -779,10 +782,10 @@ bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *v
                  GET_CHIPJACKED_SKILL(c.fighter->ch, c.fighter->melee->skill) ? " (zeroed due to using activesoft)" : "",
                  c.fighter->melee->dice);
         if (c.fighter->melee->tn != prior_tn) {
-          snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "\r\n%s TN modified in get_skill() will roll %d to %d.",
+          snprintf(ENDOF(rbuf), sizeof(rbuf) - strlen(rbuf), "\r\n%s TN modified in get_skill() will roll from %d to %d.",
                    c.fighter == att ? "Attacker" : "Defender",
                    prior_tn,
-                   att->melee->tn);
+                   c.fighter->melee->tn);
         }
         SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER; 
       }
