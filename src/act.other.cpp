@@ -4762,10 +4762,9 @@ ACMD(do_trade)
 
   // Determine if the first arg is a number or the keyword itself.
   if (*first_arg && isdigit(*first_arg)) {
-    long parsed = strtol(first_arg, NULL, 10);
-    FAILURE_CASE(parsed <= 0, "You must trade at least 1.");
-    FAILURE_CASE(parsed > INT_MAX, "That's way too much to trade at once.");
-    trade_amount = (int) parsed;
+    trade_amount = atoi(first_arg);
+    FAILURE_CASE(trade_amount <= 0, "You must trade at least 1.");
+    FAILURE_CASE(trade_amount > 500, "That's way too much to trade at once.");
 
     skip_spaces(&rest);
     rest = any_one_arg(rest, keyword_arg);
@@ -4823,10 +4822,9 @@ ACMD(do_trade)
 
     if (trade_amount > 1 && !has_confirm) {
       long min_cost = (long) trade_amount * 3 * 100;
-      long max_cost = (long) trade_amount * 18 * 100;
       send_to_char(ch, "Trading nuyen for %d karma will cost between %ld and %ld nuyen.\r\n"
                        "To confirm, type: ^WTRADE %d NUYEN CONFIRM^n\r\n",
-                   trade_amount, min_cost, max_cost, trade_amount);
+                   trade_amount, min_cost, max_nuyen_cost, trade_amount);
       return;
     }
 
