@@ -133,10 +133,11 @@ void houseedit_list_complexes(struct char_data *ch, char *arg) {
     for (int idx = 0; idx < NUM_LIFESTYLES; idx++) {
       if (lifestyles_tot[idx]) {
         sent_something = TRUE;
-        send_to_char(ch, " %s[^c%d^n/^c%d^n]", 
+        send_to_char(ch, " %s[^c%d^n/^c%d^n]%s", 
                      lifestyles[idx].name,
                      lifestyles_tot[idx] - lifestyles_occ[idx],
-                     lifestyles_tot[idx]);
+                     lifestyles_tot[idx],
+                     complex->is_office() ? " (Office)" : "");
       }
     }
 
@@ -160,7 +161,7 @@ void houseedit_edit_existing_complex(struct char_data *ch, char *arg) {
 
   // Allowed to edit: Put them into that mode.
   ch->desc->edit_complex = new ApartmentComplex();
-  ch->desc->edit_complex->clone_from(complex);
+  ch->desc->edit_complex->clone_from(complex, "houseedit_edit_existing_complex");
   ch->desc->edit_complex_original = complex;
   houseedit_display_complex_edit_menu(ch->desc);
 }
@@ -179,9 +180,10 @@ void houseedit_display_complex_edit_menu(struct descriptor_data *d) {
 
   // Display info.
   send_to_char("^WApartment Complex Editing^n\r\n", CH);
-  send_to_char(CH, "1) Name:     ^c%s^n\r\n", COMPLEX->get_name());
-  send_to_char(CH, "2) Landlord: ^c%s^n (^c%ld^n)\r\n", landlord_name, COMPLEX->get_landlord_vnum());
-  send_to_char(CH, "3) Editors:  ^c%s^n\r\n", COMPLEX->list_editors());
+  send_to_char(CH, "1) Name:      ^c%s^n\r\n", COMPLEX->get_name());
+  send_to_char(CH, "2) Landlord:  ^c%s^n (^c%ld^n)\r\n", landlord_name, COMPLEX->get_landlord_vnum());
+  send_to_char(CH, "3) Editors:   ^c%s^n\r\n", COMPLEX->list_editors());
+  send_to_char(CH, "4) Is Office: ^c%s^n\r\n", COMPLEX->is_office() ? "Yes" : "No");
   send_to_char("\r\n", CH);
   send_to_char("q) Quit and Save\r\n", CH);
   send_to_char("x) Quit Without Saving\r\n", CH);
@@ -209,6 +211,12 @@ void houseedit_complex_parse(struct descriptor_data *d, const char *arg) {
       else if (*arg == '3') { // Editors
         send_to_char(CH, "The current editor set is %s. Enter a name to add/remove, or 0 to quit: ", COMPLEX->list_editors());
         d->edit_mode = HOUSEEDIT_COMPLEX_EDITORS;
+      }
+      else if (*arg == '4') { // Is Office
+        COMPLEX->set_office_status(!COMPLEX->is_office());
+        send_to_char(CH, "^GToggled.^n\r\n");
+        houseedit_display_complex_edit_menu(d);
+        return;
       }
       else if (*arg == 'q' || *arg == 'x') {
         if (*arg == 'q') {
@@ -241,7 +249,7 @@ void houseedit_complex_parse(struct descriptor_data *d, const char *arg) {
                             COMPLEX->list_editors());
 
             // Landlord spec is cleared/set here.
-            d->edit_complex_original->clone_from(COMPLEX);
+            d->edit_complex_original->clone_from(COMPLEX, "houseedit_complex_parse(Q)");
 
             // Write to disk.
             d->edit_complex_original->save();

@@ -286,9 +286,11 @@ void save_all_apartments_and_storage_rooms() {
 }
 
 /*********** ApartmentComplex ************/
-ApartmentComplex::ApartmentComplex() : display_name(str_dup("Unnamed Complex")) {}
+ApartmentComplex::ApartmentComplex() : display_name(str_dup("Unnamed Complex")) { flags.Clear(); }
 
 ApartmentComplex::ApartmentComplex(vnum_t landlord) {
+  flags.Clear();
+
   landlord_vnum = landlord;
 
   rnum_t landlord_rnum = real_mobile(landlord);
@@ -310,6 +312,8 @@ ApartmentComplex::ApartmentComplex(vnum_t landlord) {
 ApartmentComplex::ApartmentComplex(bf::path filename) :
   base_directory(filename)
 {
+  flags.Clear();
+
   // Load info from <filename>/info
   {
     json base_info;
@@ -318,6 +322,10 @@ ApartmentComplex::ApartmentComplex(bf::path filename) :
     display_name = str_dup(base_info["display_name"].get<std::string>().c_str());
     landlord_vnum = (vnum_t) base_info["landlord_vnum"].get<vnum_t>();
     editors = base_info["editors"].get<std::vector<idnum_t>>();
+
+    // Parse out the flags, defaulting to no flags if the field is not set.
+    std::string temp_flags = base_info.value("flags", std::string("0"));
+    flags.FromString(temp_flags.c_str());
 
     if (real_mobile(landlord_vnum) < 0) {
       log_vfprintf("SYSERR: Landlord vnum %ld does not match up with a real NPC. Terminating.\r\n", landlord_vnum);
@@ -378,6 +386,7 @@ void ApartmentComplex::save() {
   base_info["display_name"] = std::string(display_name);
   base_info["landlord_vnum"] = landlord_vnum;
   base_info["editors"] = editors;
+  base_info["flags"] = flags.ToString();
 
   // Write it out.
   write_json_file(base_directory / COMPLEX_INFO_FILE_NAME, &base_info);
@@ -557,7 +566,9 @@ bool ApartmentComplex::ch_already_rents_here(struct char_data *ch) {
   return FALSE;
 }
 
-void ApartmentComplex::clone_from(ApartmentComplex *source) {
+void ApartmentComplex::clone_from(ApartmentComplex *source, const char *invoker) {
+  assert(source != this);
+  
   delete [] display_name;
   display_name = str_dup(source->display_name);
 
@@ -584,6 +595,8 @@ void ApartmentComplex::clone_from(ApartmentComplex *source) {
     }
   }
 
+  flags.FromString(source->flags.ToString());
+
   landlord_vnum = source->landlord_vnum;
 
   base_directory = source->base_directory;
@@ -594,15 +607,29 @@ void ApartmentComplex::clone_from(ApartmentComplex *source) {
     editors.push_back(idnum);
   }
 
-  // Create an empty temp vector and swap its contents with apartments, deallocating them.
-  std::vector<Apartment *>().swap(apartments);
+  // Delete the existing set of apartments.
+  std::vector<Apartment *> to_be_deleted;
+  to_be_deleted.swap(this->apartments);
+  for (Apartment* apt : to_be_deleted) {
+    delete apt;
+  }
+
+  // Make sure the apartments list is really clear.
+  apartments.clear();
+
+  // Write in the new apartments.
+  char invoker_trace[1000];
+  snprintf(invoker_trace, sizeof(invoker_trace), "%s's post-clear clone_from()", invoker);
   for (auto &apartment : source->apartments) {
     Apartment *new_apt = new Apartment();
-    new_apt->clone_from(apartment);
-    new_apt->complex = this;
-    apartments.push_back(new_apt);
+    new_apt->clone_from(apartment, invoker_trace);
+    new_apt->set_complex(this);
+    // Don't add it to the apartments list manually, that's done in set_complex.
   }
   sort(apartments.begin(), apartments.end(), apartment_sort_func);
+
+  // Sanity check:
+  assert(apartments.size() == source->apartments.size());
 }
 
 bool ApartmentComplex::set_landlord_vnum(vnum_t vnum, bool perform_landlord_overlap_test) {
@@ -673,7 +700,7 @@ void ApartmentComplex::add_apartment(Apartment *apartment) {
   sort(apartments.begin(), apartments.end(), apartment_sort_func);
 }
 
-void ApartmentComplex::delete_apartment(Apartment *apartment) {
+void ApartmentComplex::remove_apartment(Apartment *apartment) {
   // It is an error to call this on an editing struct.
   if (apartment->is_editing_struct) {
     mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Attempted to remove apartment %s from complex %s, but it is an editing struct instead of an actual apartment!",
@@ -684,13 +711,13 @@ void ApartmentComplex::delete_apartment(Apartment *apartment) {
 
   auto it = find(apartments.begin(), apartments.end(), apartment);
   if (it == apartments.end()) {
-    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Attempted to delete apartment %s from complex %s, but it wasn't part of it!",
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Attempted to remove apartment %s from complex %s, but it wasn't part of it!",
                     apartment->get_name(),
                     get_name());
     return;
   }
 
-  // The apartment destructor removes us from our apartments list, so no need to do more here.
+  // Note that this does not delete the apartment itself, just the list's pointer to it.
   apartments.erase(it);
 }
 
@@ -755,6 +782,8 @@ Apartment::Apartment(ApartmentComplex *complex, bf::path base_directory) :
 
     atrium = base_info["atrium"].get<vnum_t>();
     key_vnum = base_info["key"].get<vnum_t>();
+
+    
   }
 
   // Load lease info from <name>/lease.
@@ -875,7 +904,10 @@ long Apartment::get_remaining_lease_value() {
 #define REPLACE_STR(item) {delete [] item; item = str_dup(source->item);}
 #define REPLACE(item) {item = source->item;}
 // Note that we discard and overwrite the room vector here.
-void Apartment::clone_from(Apartment *source) {
+void Apartment::clone_from(Apartment *source, const char *invoker) {
+  assert(source != this);
+  
+  log_vfprintf("apartment %s's clone_from() invoked by %s", source->shortname, invoker);
   REPLACE_STR(shortname);
   REPLACE_STR(name);
   REPLACE_STR(full_name);
@@ -887,8 +919,16 @@ void Apartment::clone_from(Apartment *source) {
   REPLACE(atrium);
   REPLACE(key_vnum);
 
-  // Create an empty temp vector and swap its contents with our current rooms vector, deallocating previous rooms.
-  std::vector<ApartmentRoom *>().swap(rooms);
+  // Delete the existing set of rooms (if any)
+  std::vector<ApartmentRoom *> to_be_deleted;
+  to_be_deleted.swap(this->rooms);
+  for (ApartmentRoom* room : to_be_deleted) {
+    delete room;
+  }
+
+  // Make sure the rooms list is really clear.
+  rooms.clear();
+
   // Copy over the apartment's rooms.
   for (auto &room : source->rooms) {
     ApartmentRoom *new_room = new ApartmentRoom(room);
@@ -907,8 +947,8 @@ void Apartment::clone_from(Apartment *source) {
     guests.push_back(idnum);
   }
 
-  // set_base_directory() is called as part of set_complex()
-  set_complex(source->get_complex());
+  // Sanity check:
+  assert(rooms.size() == source->rooms.size());
 }
 
 bool Apartment::can_houseedit_apartment(struct char_data *ch) {
@@ -1145,7 +1185,11 @@ bool Apartment::can_enter(struct char_data *ch) {
 
   // The lease must be paid up for guest / owner status to work. Fine if it's not leased though.
   if ((owned_by_pgroup || owned_by_player) && get_paid_until() < time(0))
-    return FALSE;
+    return access_level(ch, LVL_BUILDER);
+
+  // Offices can be entered by anyone.
+  if (complex->is_office())
+    return TRUE;
 
   // Check for owner status or pgroup perms.
   if (owned_by_pgroup) {
@@ -1190,10 +1234,13 @@ bool Apartment::can_enter_by_idnum(idnum_t idnum) {
   if (idnum <= 0)
     return FALSE;
 
-  // If nobody owns it at all, only staff can enter.
-  if ((!owned_by_player && !owned_by_pgroup) || paid_until < time(0)) {
+  // The lease must be paid up for guest / owner status to work. Fine if it's not leased though.
+  if ((owned_by_pgroup || owned_by_player) && get_paid_until() < time(0))
     return get_player_rank(idnum) >= LVL_BUILDER;
-  }
+
+  // Offices can be entered by anyone.
+  if (complex->is_office())
+    return TRUE;
 
   // Check for owner status or pgroup perms.
   if (owned_by_player > 0) {
@@ -1231,6 +1278,12 @@ int Apartment::get_days_in_arrears() {
 bool Apartment::create_or_extend_lease(struct char_data *ch) {
   struct obj_data *neophyte_card = NULL;
   int cost = nuyen_per_month;
+
+  // Special case: Offices max out at 30 days of lease time to encourage turnover.
+  if (complex->is_office() && paid_until > time(0) + (SECS_PER_REAL_DAY * 30)) {
+    send_to_char(ch, "To encourage active use, public spaces like this can only be paid when they're at 29 days of remaining lease or lower.\r\n");
+    return false;
+  }
 
   // Special case: The apartment has already been leased and has expired.
   // You must pay the cost in arrears for the room, PLUS the new month.
@@ -1551,7 +1604,7 @@ void Apartment::set_complex(ApartmentComplex *new_complex) {
 
   // Remove us from our existing complex, provided we have one.
   if (complex) {
-    complex->delete_apartment(this);
+    complex->remove_apartment(this);
   }
 
   // Perform the actual update.
@@ -1576,6 +1629,13 @@ void Apartment::clamp_rent(struct char_data *ch) {
   int lifestyle = get_lifestyle();
   long minimum = lifestyles[lifestyle].monthly_cost_min;
   long maximum = lifestyle < NUM_LIFESTYLES - 1 ? lifestyles[lifestyle + 1].monthly_cost_min : UINT_MAX;
+
+  // No upper bound on office rents, but the lower bound is 5k.
+  if (complex->is_office()) {
+    minimum = 5000;
+    maximum = UINT_MAX;
+  }
+
   if (nuyen_per_month < minimum || nuyen_per_month > maximum) {
     if (ch)
       send_to_char(ch, "Your selected lifestyle's rent band is %ld - %ld nuyen. Clamped your apartment's rent to match.\r\n", minimum, maximum);
@@ -1602,6 +1662,11 @@ bool Apartment::set_lifestyle(int new_lifestyle, struct char_data *ch) {
   if (new_lifestyle < -1 || new_lifestyle >= NUM_LIFESTYLES) {
     mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Received invalid lifestyle %d to apartment.set_lifestyle!", new_lifestyle);
     return FALSE;
+  }
+
+  // Override offices, they don't obviate you leasing an actual apartment.
+  if (complex->is_office()) {
+    new_lifestyle = LIFESTYLE_SQUATTER;
   }
 
   lifestyle = new_lifestyle;

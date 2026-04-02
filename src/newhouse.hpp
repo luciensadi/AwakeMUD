@@ -41,6 +41,8 @@ extern SPECIAL(landlord_spec);
 
 #define MIN_LEVEL_TO_IGNORE_HOUSEEDIT_EDITOR_STATUS  LVL_ADMIN
 
+#define CPLX_IS_OFFICE 0
+
 /* An ApartmentComplex is composed of N Apartments, and has tracking data for landlord info. */
 class ApartmentComplex {
   private:
@@ -68,6 +70,9 @@ class ApartmentComplex {
     std::vector<const char *> garage_strings_neutral = {};
     std::vector<const char *> garage_strings_gendered = {};
 
+    // Flags to control complex behavior.
+    Bitfield flags;
+
   public:
     // Given a filename to read from, instantiate an apartment complex.
     ApartmentComplex(bf::path filename);
@@ -82,6 +87,7 @@ class ApartmentComplex {
     std::vector<idnum_t> get_editors() { return editors; }
     bf::path get_base_directory() { return base_directory; }
     int get_lifestyle() { return lifestyle; }
+    bool is_office() { return flags.IsSet(CPLX_IS_OFFICE); }
 
     // Mutators.
     bool set_landlord_vnum(vnum_t vnum, bool perform_landlord_overlap_test);
@@ -91,10 +97,11 @@ class ApartmentComplex {
     void remove_editor(idnum_t idnum);
     void set_base_directory(bf::path path) { base_directory = path; }
     void add_apartment(Apartment *apartment);
-    void delete_apartment(Apartment *apartment);
+    void remove_apartment(Apartment *apartment);
+    void set_office_status(bool status) { if (status) { flags.SetBit(CPLX_IS_OFFICE); } else { flags.RemoveBit(CPLX_IS_OFFICE); } }
 
     // Clone our data from the provided complex.
-    void clone_from(ApartmentComplex *);
+    void clone_from(ApartmentComplex *, const char *invoker);
 
     // Save function.
     void save();
@@ -208,7 +215,7 @@ class Apartment {
     bool issue_key(struct char_data *ch);
 
     // Clone our data from the provided apartment.
-    void clone_from(Apartment *);
+    void clone_from(Apartment *, const char *invoker);
 
     // Utility / misc
     bool can_enter(struct char_data *ch);

@@ -156,7 +156,7 @@ void houseedit_edit_apartment(struct char_data *ch, const char *func_remainder) 
   // Allowed to edit: Put them into that mode.
   ch->desc->edit_apartment = new Apartment();
   ch->desc->edit_apartment->is_editing_struct = TRUE;
-  ch->desc->edit_apartment->clone_from(apartment);
+  ch->desc->edit_apartment->clone_from(apartment, "houseedit_edit_apartment");
   ch->desc->edit_apartment_original = apartment;
   houseedit_display_apartment_edit_menu(ch->desc);
 }
@@ -293,7 +293,7 @@ void houseedit_apartment_parse(struct descriptor_data *d, const char *arg) {
                 time_t paid_secs = d->edit_apartment_original->get_paid_until() - time(0);
 
                 // Copy over our changes.
-                d->edit_apartment_original->clone_from(APT);
+                d->edit_apartment_original->clone_from(APT, "houseedit_apartment_parse(Q)");
 
                 if (APT->get_rent_cost() != old_rent && paid_secs > 0) {
                   int old_rent_per_day = old_rent / 30;

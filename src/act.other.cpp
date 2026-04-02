@@ -125,8 +125,8 @@ ACMD(do_quit)
     if (GET_QUEST(ch))
       end_quest(ch, FALSE);
 
-    if (CH_CAN_ENTER_APARTMENT(save_room, ch)) {
-      // Only guests and owners can load back into an apartment.
+    if (save_room && save_room->apartment && save_room->apartment->can_enter(ch) && !save_room->apartment->get_complex()->is_office()) {
+      // Only guests and owners can load back into an apartment; nobody can load back into an office.
       GET_LOADROOM(ch) = save_room->number;
     } else {
       // Your room was invalid for reloading in (not an apartment, etc).
