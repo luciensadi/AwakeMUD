@@ -87,11 +87,11 @@ struct cyberware_data {
 
 struct ranged_combat_data {
   int skill;
+  int cpool_offense_dice;
   int power;
   int power_before_armor;
   int dam_type;
   int damage_level;
-  int unaugmented_damage_level;
   bool is_physical;
   int tn;
   int dice;
@@ -109,7 +109,7 @@ struct ranged_combat_data {
   struct obj_data *gyro;
 
   ranged_combat_data(struct char_data *ch, struct obj_data *weapon, bool ranged_combat_mode) :
-    skill(0), power(0), power_before_armor(0), dam_type(0), damage_level(0), unaugmented_damage_level(0),
+    skill(0), cpool_offense_dice(0), power(0), power_before_armor(0), dam_type(0), damage_level(0),
     is_physical(FALSE), tn(4), dice(0), successes(0), is_gel(FALSE), burst_count(0), recoil_comp(0),
     using_mounted_gun(FALSE), magazine(NULL), gyro(NULL)
   {
@@ -163,7 +163,7 @@ struct ranged_combat_data {
       if (GET_EQ(ch, WEAR_WIELD) && GET_EQ(ch, WEAR_HOLD))
         modifiers[COMBAT_MOD_DUAL_WIELDING] = 2;
       else
-        modifiers[COMBAT_MOD_SMARTLINK] -= check_smartlink(ch, weapon);
+        modifiers[COMBAT_MOD_SMARTLINK] -= check_smartlink(ch, weapon, false);
 
       // Setup: Apply handedness changes here. For firearms, we only care about wielding a 2h weapon with 1 hand.
       if (IS_OBJ_STAT(weapon, ITEM_EXTRA_INVERT_TWOHANDED)
@@ -176,12 +176,20 @@ struct ranged_combat_data {
 
       // TODO: Cannon Companion p99 racial modifiers for weapons held
     }
+
+    // Calculate the max offensive dice they can have in cpool.
+    if (GET_CHIPJACKED_SKILL(ch, skill)) {
+      cpool_offense_dice = 0;
+    } else {
+      cpool_offense_dice = MIN(GET_SKILL(ch, skill), GET_OFFENSE(ch));
+    }
   }
 };
 
 struct melee_combat_data {
   int skill;
   int skill_bonus;
+  int cpool_offense_dice;
   int power;
   int power_before_armor;
   int dam_type;
@@ -194,11 +202,15 @@ struct melee_combat_data {
   bool is_monowhip;
   struct obj_data *riot_shield;
 
+  bool is_distance_strike;
+  int penetrating_strike;
+
   int modifiers[NUM_COMBAT_MODIFIERS];
 
   melee_combat_data(struct char_data *ch, struct obj_data *weapon, bool ranged_combat_mode, struct cyberware_data *cyber) :
-    skill(0), skill_bonus(0), power(0), power_before_armor(0), dam_type(0), damage_level(0), is_physical(FALSE), tn(4), 
-    dice(0), successes(0), reach_modifier(0), is_monowhip(FALSE), riot_shield(NULL)
+    skill(0), skill_bonus(0), cpool_offense_dice(0), power(0), power_before_armor(0), dam_type(0), damage_level(0),
+    is_physical(FALSE), tn(4), dice(0), successes(0), reach_modifier(0), is_monowhip(FALSE),
+    is_distance_strike(FALSE), penetrating_strike(0), riot_shield(NULL)
   {
     assert(ch != NULL);
 
@@ -364,6 +376,9 @@ struct melee_combat_data {
         damage_level = GET_POWER(ch, ADEPT_KILLING_HANDS);
         is_physical = TRUE;
       }
+
+      is_distance_strike = GET_POWER(ch, ADEPT_DISTANCE_STRIKE) > 0;
+      penetrating_strike = (cyber->num_cyberweapons <= 0 && !is_distance_strike) ? GET_POWER(ch, ADEPT_PENETRATINGSTRIKE) : 0;
     }
 
     is_physical = is_physical || IS_DAMTYPE_PHYSICAL(dam_type);
@@ -372,6 +387,13 @@ struct melee_combat_data {
     riot_shield = GET_EQ(ch, WEAR_SHIELD);
     if (!riot_shield || GET_OBJ_TYPE(riot_shield) != ITEM_WORN) {
       riot_shield = NULL;
+    }
+
+    // Calculate the max offensive dice they can have in cpool. Add weapon focus skill bonus to the cap.
+    if (GET_CHIPJACKED_SKILL(ch, skill)) {
+      cpool_offense_dice = 0;
+    } else {
+      cpool_offense_dice = MIN(GET_SKILL(ch, skill) + skill_bonus, GET_OFFENSE(ch));
     }
   }
 };
@@ -396,7 +418,8 @@ struct combat_data
   int standard_impact_rating;
   int hardened_armor_ballistic_rating;
   int hardened_armor_impact_rating;
-  bool is_paralyzed_or_insensate;
+  bool is_paralyzed;
+  bool is_insensate;
   bool is_surprised;
 
   // Pool data for the things that can be temporarily overwritten mid-fight.
@@ -424,11 +447,18 @@ struct combat_data
 
     weapon = weap;
 
+    // If we're using a weapon, set ranged_combat_mode to true.
     ranged_combat_mode = (weap
                           && GET_OBJ_TYPE(weap) == ITEM_WEAPON
                           && WEAPON_IS_GUN(weapon));
 
     cyber = new struct cyberware_data(ch);
+
+    // If we're using Distance Strike with no cyberweapons etc, override ranged to true.
+    if (cyber->num_cyberweapons <= 0 && GET_POWER(ch, ADEPT_DISTANCE_STRIKE)) {
+      ranged_combat_mode = true;
+    }
+
     ranged = new struct ranged_combat_data(ch, weapon, ranged_combat_mode);
     melee = new struct melee_combat_data(ch, weapon, ranged_combat_mode, cyber);
 
@@ -440,8 +470,11 @@ struct combat_data
     hardened_armor_ballistic_rating = get_hardened_ballistic_armor_rating(ch);
     hardened_armor_impact_rating = get_hardened_impact_armor_rating(ch);
 
-    // Figure out if they're unable to move at all (paralyzed, asleep, jacked in, etc)
-    is_paralyzed_or_insensate = !AWAKE(ch) || GET_QUI(ch) <= 0;
+    // Figure out if they're unable to move at all (paralyzed, asleep/stunned/morted, projecting, jacked in, etc)
+    is_paralyzed = GET_QUI(ch) <= 0;
+    is_insensate = (GET_POS(ch) <= POS_SLEEPING  // We don't use AWAKE() here since that evaluates to true when qui <= 0.
+                    || PLR_FLAGS(ch).AreAnySet(PLR_MATRIX, PLR_PROJECT, ENDBIT));  /* We don't use IS_JACKED_IN here since that would be true for all our riggers.
+                                                                                      Rigger insensate is instead set for the defender in the actual combat code. */
 
     // Check if they're using a gyromount.
     using_gyro = (ranged->gyro || cyber->cyberarm_gyromount);

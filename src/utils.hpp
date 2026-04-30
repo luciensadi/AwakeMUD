@@ -834,8 +834,12 @@ bool _mob_is_alert(struct char_data *npc);
 #define CAN_CARRY_W(ch)       ((GET_STR(ch) * 10) + 30)
 #define CAN_CARRY_N(ch)       (8 + GET_QUI(ch) + (GET_REAL_LEVEL(ch)>=LVL_BUILDER?50:0))
 #define AWAKE(ch)             (GET_POS(ch) > POS_SLEEPING && GET_QUI(ch) > 0 && !PLR_FLAGGED(ch, PLR_PROJECT))
+#define TASER_STUNNED_ROUNDS(ch) ((ch)->points.taser_stun_rounds)
+
+// These two are related, in that IS_JACKED_IN uses a decomposed version of IS_RIGGING.
 #define IS_RIGGING(ch)        (AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE))
-#define IS_JACKED_IN(ch)      (IS_RIGGING(ch) || PLR_FLAGGED(ch, PLR_MATRIX) || PLR_FLAGGED(ch, PLR_REMOTE))
+#define IS_JACKED_IN(ch)      (!IS_NPC(ch) && (AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGS((ch)).AreAnySet(PLR_MATRIX, PLR_REMOTE, ENDBIT)))
+
 #define CAN_SEE_IN_DARK(ch)   (SEES_ASTRAL(ch) || CURRENT_VISION(ch) == THERMOGRAPHIC || PRF_FLAGGED((ch), PRF_HOLYLIGHT))
 #define GET_BUILDING(ch)  ((ch)->char_specials.programming)
 #define IS_WORKING(ch)        ((AFF_FLAGS(ch).AreAnySet(BR_TASK_AFF_FLAGS, AFF_PILOT, AFF_RIG, AFF_BONDING, AFF_CONJURE, AFF_PACKING, ENDBIT)))
