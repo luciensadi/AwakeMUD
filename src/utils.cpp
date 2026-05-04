@@ -9947,3 +9947,49 @@ bool ch_is_blocked_by_apartment_restrictions(struct char_data *ch, bool send_mes
   
   return true;
 }
+
+// Returns the skill idx, or -1 for no match.
+int skill_name_to_idx(const char *skill_name) {
+  for (int idx = 0; idx < MAX_SKILLS; idx++)
+    if ((idx == SKILL_UNARMED_COMBAT && !str_cmp("unarmed combat", skill_name)) || !str_cmp(skills[idx].name, skill_name))
+      return idx;
+  return -1;
+}
+
+// Returns the spell idx, or -1 for no match.
+int spell_name_to_idx(const char *spell_name) {
+  // Special cases: Test for the increase spells
+  if (is_abbrev("increase reaction", spell_name) || is_abbrev("Increase Reaction", spell_name))
+    return SPELL_INCREA;
+  if (is_abbrev("increase reflexes +1", spell_name) || is_abbrev("Increase Reflexes +1", spell_name))
+    return SPELL_INCREF1;
+  if (is_abbrev("increase reflexes +2", spell_name) || is_abbrev("Increase Reflexes +2", spell_name))
+    return SPELL_INCREF2;
+  if (is_abbrev("increase reflexes +3", spell_name) || is_abbrev("Increase Reflexes +3", spell_name))
+    return SPELL_INCREF3;
+  if (is_abbrev("increase cybered", spell_name) || is_abbrev("Increase Cybered", spell_name))
+    return SPELL_INCCYATTR;
+  if (is_abbrev("increase ", spell_name) || is_abbrev("Increase ", spell_name))
+    return SPELL_INCATTR;
+  
+  // Special cases: Test for the decrease spells
+  if (is_abbrev("decrease cybered", spell_name) || is_abbrev("Decrease Cybered", spell_name))
+    return SPELL_DECCYATTR;
+  if (is_abbrev("decrease ", spell_name) || is_abbrev("Decrease ", spell_name))
+    return SPELL_DECATTR;
+
+  for (int idx = 0; idx < MAX_SPELLS; idx++) {
+    if (!str_cmp(spells[idx].name, spell_name))
+      return idx;
+  }
+
+  return -1;
+}
+
+// Returns the power idx, or -1 for no match.
+int power_name_to_idx(const char *power_name) {
+  for (int idx = ADEPT_MIN_POWER; idx < ADEPT_NUMPOWER; idx++)
+    if (!str_cmp(adept_powers[idx], power_name))
+      return idx;
+  return -1;
+}
