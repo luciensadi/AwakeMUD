@@ -1,5 +1,7 @@
 #include "classes.hpp"
 #include "../handler.hpp"
+#include "../db.hpp"
+#include "../nlohmann/json.hpp"
 
 /*
 Check: A boolean test that has a pass/fail state. Data includes:
@@ -31,79 +33,36 @@ std::map<std::string, void *> _check_type_to_function = {
   MAP_CHECK_FUNCTION("could_cast_spell", could_cast_spell),
 };
 
-Check::Check(const std::string& supplied_type, const std::map<std::string, std::string>& supplied_settings) 
-  : type(supplied_type), settings(supplied_settings) {
-
-  // Using our Type, select the function to run.
-  auto it = _check_type_to_function.find(type);
-  if (it == _check_type_to_function.end()) {
-    mudlog_vfprintf(nullptr, LOG_SYSLOG, "SYSERR: Got unknown Check type '%s'.", type.c_str());
-    func_ptr = nullptr;
-  } else {
-    func_ptr = it->second;
-  }
+// Serialization function.
+void to_json(json& j, const Check& e) {
+  j = json{
+    {"func", e.func_name}, 
+    {"settings", e.settings}
+  };
+}
+// Deserialization function.
+void from_json(const json& j, Check& e) {
+    // .at() is safer than [] because it throws an error if the key is missing
+    j.at("func").get_to(e.func_name);
+    j.at("settings").get_to(e.settings);
+}
+// And the wrapper to get a string out of that. Not sure I actually need this.
+std::string Check::serialize() {
+  json basic_info;
+  to_json(basic_info, *this);
+  return basic_info.dump();
 }
 
-// Deserialize a new Check from the nlohmann JSON object.
-Check::Check(const std::string serialized) {
-  auto parsed_json = json::parse(serialized);
+Check::Check(const std::string& supplied_type, const std::map<std::string, std::string>& supplied_settings)
+  : ActivityFunction(supplied_type, supplied_settings, _check_type_to_function) {}
 
-  if (parsed_json.contains("func")) {
-    auto func_name = parsed_json["func"].get<std::string>();
-    for (auto func_pair : _check_type_to_function) {
-      if (func_name == func_pair.first) {
-        func_ptr = func_pair.second;
-        break;
-      }
-    }
-    if (!func_ptr) {
-      mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Invalid func name '%s' loaded from serialization. Using always-false fallback.", func_name.c_str());
-      func_ptr = (void*)&_check_function_always_false;
-    }
-  }
-
-  if (parsed_json.contains("settings")) {
-    this->settings = parsed_json["settings"].get<std::map<std::string, std::string>>();
-  }
-}
+// Deserialize a new Check from a JSON string.
+Check::Check(const std::string serialized)
+  : ActivityFunction(serialized, _check_type_to_function, (void*)&_check_function_always_false) {}
 
 // Runs the associated func_ptr and returns its value.
 bool Check::test(struct char_data *ch) {
-  if (!func_ptr) {
-    mudlog_vfprintf(nullptr, LOG_SYSLOG, "SYSERR: Refusing to invoke Check() with null function pointer.");
-    return false;
-  }
-
-  return ((bool (*)(struct char_data *, const std::map<std::string, std::string>&))func_ptr)(ch, settings);
-}
-
-// Serializes this Check into a nlohmann JSON object and returns it as a std::string.
-std::string Check::serialize() {
-  json check_info;
-  
-  for (auto func_pair : _check_type_to_function) {
-    if (func_ptr == func_pair.second) {
-      check_info["func"] = func_pair.first;
-      break;
-    }
-  }
-
-  check_info["settings"] = settings;
-  return check_info.dump();
-}
-
-void run_check_debug_tests(struct char_data *ch) {
-  Check *check = new Check("_test_func", {{"a", "b"}});
-  send_to_char(ch, "You %s!", check->test(ch) ? "passed" : "failed");
-  
-  auto serialized = check->serialize();
-  send_to_char(ch, "Serialized, the check is '%s'\r\n", serialized.c_str());
-  Check *deserialized = new Check(serialized);
-  auto reserialized = deserialized->serialize();
-  send_to_char(ch, "Reserialization: %s\r\n", !strcmp(serialized.c_str(), reserialized.c_str()) ? "match!" : "mismatch");
-
-  delete deserialized;
-  delete check;
+  return invoke(ch);
 }
 
 ///////////// Check function definitions below. Remember, check functions can NEVER result in character death!
@@ -200,4 +159,38 @@ CHECK_FUNCTION(has_power_active) {
   return affected_by_power(ch, power_idx) >= power_rank;
 }
 
+///////////// Items, equipment, etc
+
+// TODO: You know they're gonna want to check for multiple items ('all of these uniform items'), any item of type (ITEM_WEAPON), etc... expand this
+CHECK_FUNCTION(has_item) {
+  GET_SETTING(item_vnum);
+  vnum_t vnum = atol(item_vnum);
+
+  for (struct obj_data *obj = ch->carrying; obj; obj = obj->next_content) if (GET_OBJ_VNUM(obj) == vnum) return true;
+
+  for (int wear_idx = 0; wear_idx < NUM_WEARS; wear_idx++) {
+    if (GET_EQ(ch, wear_idx) && GET_OBJ_VNUM(GET_EQ(ch, wear_idx)) == vnum) return true;
+  }
+
+  return false;
+}
+
 #undef CHECK_FUNCTION
+
+
+
+//// shitty little debug test function, tucked out of the way down here
+void run_check_debug_tests(struct char_data *ch) {
+  Check *check = new Check("_test_func", {{"a", "b"}});
+  send_to_char(ch, "You %s!\r\n", check->test(ch) ? "passed" : "failed");
+  
+  auto serialized = check->serialize();
+  send_to_char(ch, "Serialized, the check is '%s'\r\n", serialized.c_str());
+  Check *deserialized = new Check(serialized);
+  auto reserialized = deserialized->serialize();
+  send_to_char(ch, "Reserialization: %s\r\n", !strcmp(serialized.c_str(), reserialized.c_str()) ? "match!" : "mismatch");
+  send_to_char(ch, "You %s the reserialized check.\r\n", deserialized->test(ch) ? "passed" : "failed");
+
+  delete deserialized;
+  delete check;
+}

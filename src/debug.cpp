@@ -273,10 +273,45 @@ ACMD(do_debug) {
   rest_of_argument = any_one_arg(argument, arg1);
   skip_spaces(&rest_of_argument);
 
-  if (!str_cmp(arg1, "activities/check")) {
+  if (!str_cmp(arg1, "activities")) {
     extern void run_check_debug_tests(struct char_data *ch);
-    send_to_char(ch, "OK, running the check.\r\n", ch);
-    run_check_debug_tests(ch);
+    extern void run_effect_debug_tests(struct char_data *ch);
+    extern void run_outcome_debug_tests(struct char_data *ch);
+    extern void run_option_debug_tests(struct char_data *ch);
+
+    if (!str_cmp(rest_of_argument, "all")) {
+      send_to_char(ch, "OK, running in sequence.\r\n", ch);
+      log("checks");
+      run_check_debug_tests(ch);
+      log("effects");
+      run_effect_debug_tests(ch);
+      log("outcomes");
+      run_outcome_debug_tests(ch);
+      log("options");
+      run_option_debug_tests(ch);
+    }
+
+    else if (!str_cmp(rest_of_argument, "check")) {
+      send_to_char(ch, "OK, running the check.\r\n", ch);
+      run_check_debug_tests(ch);
+    }
+
+    else if (!str_cmp(rest_of_argument, "effect")) {
+      send_to_char(ch, "OK, running the effect.\r\n", ch);
+      run_effect_debug_tests(ch);
+    }
+
+    else if (!str_cmp(rest_of_argument, "outcome")) {
+      send_to_char(ch, "OK, running the outcome.\r\n", ch);
+      run_outcome_debug_tests(ch);
+    }
+
+    else if (!str_cmp(rest_of_argument, "option")) {
+      send_to_char(ch, "OK, running the option.\r\n", ch);
+      run_option_debug_tests(ch);
+    }
+    
+    send_to_char(ch, "Success!\r\n");
     return;
   }
 
