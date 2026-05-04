@@ -1042,6 +1042,12 @@ void assign_objects(void)
   ASSIGNOBJ(98002, bank); // CAS ATM
   ASSIGNOBJ(100690, bank); // CAS ATM
   ASSIGNOBJ(103201, vending_machine); // Cedar River
+  ASSIGNOBJ(101361, desktop);
+  ASSIGNOBJ(101364, desktop);
+  ASSIGNOBJ(101365, desktop);
+  ASSIGNOBJ(101366, desktop);
+  ASSIGNOBJ(101367, desktop);
+  ASSIGNOBJ(102217, desktop);
 
   // Pluto's assigns
   ASSIGNOBJ(96521, pocket_sec);
