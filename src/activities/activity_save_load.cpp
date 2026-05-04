@@ -1,5 +1,5 @@
-#include "interpreter.hpp"
-#include "activities/classes.hpp"
+#include "../interpreter.hpp"
+#include "classes.hpp"
 
 // Given a filename, loads it as an activity. Returns a pointer to it, in case you care about that.
 Activity *load_single_activity(const std::string& slug);

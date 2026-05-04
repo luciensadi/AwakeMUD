@@ -1,4 +1,4 @@
-#include "activities/classes.hpp"
+#include "classes.hpp"
 
 /*
 Activity: A digraph containing one or more Situations as well as metadata about the activity itself. Data includes:

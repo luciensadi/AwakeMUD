@@ -9,6 +9,7 @@
 #include <time.h>
 
 #include "../structs.hpp"
+#include "../nlohmann/json.hpp"
 
 // A boolean test that has a pass/fail state.
 class Check {
@@ -19,10 +20,13 @@ public:
   std::map<std::string, std::string> settings = {}; // A map of settings/parameters, like {"vnum": "3"}
 
   Check(const std::string& type, const std::map<std::string, std::string>& settings);
+  Check(const std::string serialized);
   Check() = default;
   
   // True if this specific test passed for the character, false otherwise. Assertion: Tests cannot kill character.
   bool test(struct char_data *ch);
+
+  std::string serialize();
 };
 
 // A side effect that, when encountered, modifies the party in some way.
@@ -91,7 +95,7 @@ public:
   Option() = default;
 
   // Applying an outcome can result in death, so for now we return TRUE if that happens, FALSE otherwise. Later we'll just throw an exception.
-  bool evaluate(struct char_data *ch);
+  bool evaluate(struct char_data *ch) {};
 };
 
 // A node in the activity digraph containing one or more Options as well as metadata about the situation itself.
@@ -112,7 +116,7 @@ public:
     : slug(slug), text(text), preconditions(preconditions), options(options), effects(effects) {}
   Situation() = default;
 
-  bool meets_preconditions(struct char_data *ch);
+  bool meets_preconditions(struct char_data *ch) {};
 };
 
 // A digraph containing one or more Situations as well as metadata about the activity itself.
@@ -140,12 +144,12 @@ public:
   Activity() = default;
 
   // Copy constructor
-  Activity(const Activity& other);
+  Activity(const Activity& other) {};
 
   // Load from JSON
-  Activity(nlohmann::json json);
+  Activity(nlohmann::json json) {};
 
-  ~Activity();
+  ~Activity() {};
 
   // Method to get a situation by its slug
   Situation* getSituation(const std::string& situationSlug) {

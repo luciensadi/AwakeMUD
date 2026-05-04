@@ -1,5 +1,5 @@
-#include "interpreter.hpp"
-#include "activities/classes.hpp"
+#include "../interpreter.hpp"
+#include "classes.hpp"
 
 void activities_list(struct char_data *ch, char *arg1, char *arg2);
 void activities_show(struct char_data *ch, char *arg1, char *arg2);

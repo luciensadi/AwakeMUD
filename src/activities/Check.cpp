@@ -1,5 +1,5 @@
 #include "classes.hpp"
-#include "handler.hpp"
+#include "../handler.hpp"
 
 /*
 Check: A boolean test that has a pass/fail state. Data includes:
@@ -7,13 +7,20 @@ Check: A boolean test that has a pass/fail state. Data includes:
 - a settings dict that contains further information (e.g. "on_quest" might be {"vnum": 3})
 */
 
-#define CHECK_FUNCTION(func_name) bool _check_function_func_name(struct char_data *ch, const std::map<std::string, std::string>& settings)
+#define CHECK_FUNCTION(func_name) bool _check_function_##func_name(struct char_data *ch, const std::map<std::string, std::string>& settings)
 
 // Check function prototypes. Remember, check functions can NEVER result in character death!
 CHECK_FUNCTION(test_func);
+CHECK_FUNCTION(always_false);
+
+CHECK_FUNCTION(has_skill);
+CHECK_FUNCTION(roll_skill);
+CHECK_FUNCTION(has_spell_active);
+CHECK_FUNCTION(could_cast_spell);
+CHECK_FUNCTION(has_power_active);
 
 // Maps slugs to check functions. Remember, check functions can NEVER result in character death!
-#define MAP_CHECK_FUNCTION(slug, func_name) {slug, (void*)&_check_function_func_name}
+#define MAP_CHECK_FUNCTION(slug, func_name) {slug, (void*)&_check_function_##func_name}
 std::map<std::string, void *> _check_type_to_function = {
   MAP_CHECK_FUNCTION("_test_func", test_func),
 
@@ -37,6 +44,29 @@ Check::Check(const std::string& supplied_type, const std::map<std::string, std::
   }
 }
 
+// Deserialize a new Check from the nlohmann JSON object.
+Check::Check(const std::string serialized) {
+  auto parsed_json = json::parse(serialized);
+
+  if (parsed_json.contains("func")) {
+    auto func_name = parsed_json["func"].get<std::string>();
+    for (auto func_pair : _check_type_to_function) {
+      if (func_name == func_pair.first) {
+        func_ptr = func_pair.second;
+        break;
+      }
+    }
+    if (!func_ptr) {
+      mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Invalid func name '%s' loaded from serialization. Using always-false fallback.", func_name.c_str());
+      func_ptr = (void*)&_check_function_always_false;
+    }
+  }
+
+  if (parsed_json.contains("settings")) {
+    this->settings = parsed_json["settings"].get<std::map<std::string, std::string>>();
+  }
+}
+
 // Runs the associated func_ptr and returns its value.
 bool Check::test(struct char_data *ch) {
   if (!func_ptr) {
@@ -45,6 +75,35 @@ bool Check::test(struct char_data *ch) {
   }
 
   return ((bool (*)(struct char_data *, const std::map<std::string, std::string>&))func_ptr)(ch, settings);
+}
+
+// Serializes this Check into a nlohmann JSON object and returns it as a std::string.
+std::string Check::serialize() {
+  json check_info;
+  
+  for (auto func_pair : _check_type_to_function) {
+    if (func_ptr == func_pair.second) {
+      check_info["func"] = func_pair.first;
+      break;
+    }
+  }
+
+  check_info["settings"] = settings;
+  return check_info.dump();
+}
+
+void run_check_debug_tests(struct char_data *ch) {
+  Check *check = new Check("_test_func", {{"a", "b"}});
+  send_to_char(ch, "You %s!", check->test(ch) ? "passed" : "failed");
+  
+  auto serialized = check->serialize();
+  send_to_char(ch, "Serialized, the check is '%s'\r\n", serialized.c_str());
+  Check *deserialized = new Check(serialized);
+  auto reserialized = deserialized->serialize();
+  send_to_char(ch, "Reserialization: %s\r\n", !strcmp(serialized.c_str(), reserialized.c_str()) ? "match!" : "mismatch");
+
+  delete deserialized;
+  delete check;
 }
 
 ///////////// Check function definitions below. Remember, check functions can NEVER result in character death!
@@ -70,6 +129,8 @@ bool Check::test(struct char_data *ch) {
 #define GET_SETTING_DEFAULT(setting_name, default_val)                                                                \
     auto it_##setting_name = settings.find(#setting_name);                                                            \
     const char *setting_name = it_##setting_name != settings.end() ? it_##setting_name->second.c_str() : default_val;
+
+CHECK_FUNCTION(always_false) { return false; }
 
 CHECK_FUNCTION(test_func) {
   mudlog_vfprintf(ch, LOG_SYSLOG, "Check() called with _check_test_func(ch, {}x%d), returning true.", settings.size());
@@ -121,7 +182,7 @@ CHECK_FUNCTION(could_cast_spell) {
   
   for (struct spell_data *spell = GET_SPELLS(ch); spell; spell = spell->next)
     if (spell->type == spell_idx)
-      return spell->force >= spell->force;
+      return spell->force >= spell_force;
   
   return false;
 }
@@ -132,7 +193,11 @@ CHECK_FUNCTION(has_power_active) {
   GET_SETTING(power_name);
   int power_idx = power_name_to_idx(power_name);
   CHECK_FAILURE_CASE(power_idx < 0, "Bad power name: %s", power_name);
-  return affected_by_power(ch, power_idx) > 0;
+
+  GET_SETTING_DEFAULT(rank, "1");
+  int power_rank = atoi(rank);
+
+  return affected_by_power(ch, power_idx) >= power_rank;
 }
 
 #undef CHECK_FUNCTION
