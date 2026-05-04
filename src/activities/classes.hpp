@@ -39,41 +39,6 @@
 
 */
 
-
-/*
-BEFORE YOU GO ANY FURTHER:
-
-Figure out the flow of messaging - where does it come from, especially the final result message set?
-
-"Assisted by X and Y, Lucien kicks the door down."
-Only the evaluation of the RunningActivity really knows who did what, so we need to pass the info all the way up the chain about:
-- what a character did, and if they passed
-- what the message to that character would be
-
-Then it needs to select the outcome it's actually using from the pass list, and ONLY THEN do we apply the effects of the outcome.
-
-Probably need to rearchitect so that an Option.evaluate(ch) _returns the Outcome_ rather than trying to evaluate anything.
-This allows RunningActivity (or whatever is coordinating it) to loop through each character to select the Outcomes they've earned, then select from those, and then print the message and evaluate it.
-*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // Base class shared by Check and Effect.
 // Holds the function pointer, func_name, settings, and provides serialization.
 // Derived classes supply their own function registry via the protected constructors.
@@ -102,8 +67,9 @@ public:
   std::map<std::string, std::string> settings = {}; // A map of settings/parameters.
 
   ActivityFunction() = default;
+  void resolve_ptr(const std::map<std::string, void*>& func_map);
 
-  virtual std::string serialize() = 0;
+  virtual std::string serialize(const int indent = -1, const char indent_char = ' ') = 0;
 };
 
 // A boolean test that has a pass/fail state.
@@ -114,7 +80,7 @@ public:
   Check(const std::string serialized);
   Check() = default;
   
-  std::string serialize() override;
+  std::string serialize(const int indent = -1, const char indent_char = ' ') override;
 
   // True if this specific test passed for the character, false otherwise.
   bool test(struct char_data *ch);
@@ -127,7 +93,7 @@ public:
   Effect(const std::string serialized);
   Effect() = default;
   
-  std::string serialize() override;
+  std::string serialize(const int indent = -1, const char indent_char = ' ') override;
 
   // Applying an effect can result in death. Returns true when this happens.
   bool apply(struct char_data *ch);
@@ -143,7 +109,7 @@ public:
   std::vector<Effect> effects = {};
   // An optional list of effects that apply to all characters in the party when this outcome is selected.
 
-  std::vector<std::string> situations = {};
+  std::vector<std::string> situations = {};  // (these slugs may become invalidated during OLC, so handle that gracefully)
   // A list of situations this outcome can branch to, or empty if the end of the activity.
 
   Outcome(const std::string message, const std::vector<Effect> effects, const std::vector<std::string> situations, bool is_pass_outcome) :
@@ -152,29 +118,32 @@ public:
   Outcome() = default;
 
   // Apply all effects to the selected character. Return true if they die (i.e. they have been extracted.)
-  bool apply(struct char_data *ch);
+  bool apply(struct char_data *ch) { for (auto& effect : effects) { if (effect.apply(ch)) { return true; } }    return false; }
 
   // Fetch a random situation slug from the available set, or returns "no situation slug available" if not yet set.
   std::string get_next_situation_slug();
 
-  std::string serialize();
+  std::string serialize(const int indent = -1, const char indent_char = ' ');
 };
 
 // A pair of Outcomes that are selected between based on the result of zero or more tests (default success).
 class Option {
 public:
-  std::string slug; // identifies the option (for editing etc)
+  std::string slug; // identifies the option (for editing etc); not protected because it's not used in a map like other slugs are.
   std::string menu_text; // the text that shows in the selection menu to describe the option to the player
 
-  std::vector<Check> preconditions; // checks that must pass for the player to be able to select this option
-  std::vector<Check> tests; // checks that must pass for the player to receive the Pass outcome, otherwise get the Fail outcome
+  std::vector<Check> preconditions = {}; // checks that must pass for the player to be able to select this option
+  std::vector<Check> tests = {}; // checks that must pass for the player to receive the Pass outcome, otherwise get the Fail outcome
 
   Outcome pass; // an outcome describing the 'good' version of this (passed check). Printed string comes from here.
   Outcome fail; // an outcome describing the 'bad' version of this (failed check). Printed string comes from here.
 
   // Testing constructor.
   Option(const std::string slug, const std::string menu_text, std::vector<Check> preconditions, std::vector<Check> tests, Outcome pass, Outcome fail) : 
-         slug(slug), menu_text(menu_text), preconditions(preconditions), tests(tests), pass(pass), fail(fail) {};
+         slug(slug), menu_text(menu_text), preconditions(preconditions), tests(tests), pass(pass), fail(fail) {
+          pass.is_pass_outcome = true;
+          fail.is_pass_outcome = false;
+         };
 
   Option(const std::string serialized_json);
 
@@ -186,28 +155,36 @@ public:
   // Returns the Fail outcome if you fail any tests, the Pass outcome otherwise.
   Outcome *test(struct char_data *ch) { for (auto check : tests) { if (!check.test(ch)) return &fail; } return &pass; }
 
-  std::string serialize();
+  std::string serialize(const int indent = -1, const char indent_char = ' ');
 };
 
 // A node in the activity digraph containing one or more Options as well as metadata about the situation itself.
 class Situation {
 public:
-  std::string slug; // identifies the situation
+  // identifies the situation; used as a key in Activities etc, so if you want to change the slug, create a clone with the new slug.
+  std::string slug;
 
   std::string text; // displayed when the players enter the situation
 
-  std::vector<Check> preconditions; // checks that must pass for the players to be able to enter the situation
+  std::vector<Check> preconditions = {}; // checks that must pass for the players to be able to enter the situation
 
-  std::vector<Option> options; // the list of options they can choose from, provided they pass the option's preconditions
+  std::vector<Option> options = {}; // the list of options they can choose from, provided they pass the option's preconditions
   // only one option is rendered as the result, everyone else's options are discarded
 
-  std::vector<Effect> effects; // the list of effects that apply immediately to the PCs on situation start
+  std::vector<Effect> effects = {}; // the list of effects that apply immediately to the PCs on situation start
 
   Situation(const std::string& slug, const std::string& text, const std::vector<Check>& preconditions, const std::vector<Option>& options, const std::vector<Effect>& effects)
     : slug(slug), text(text), preconditions(preconditions), options(options), effects(effects) {}
+  Situation(const std::string serialized_json);
   Situation() = default;
 
-  bool meets_preconditions(struct char_data *ch) { return false; /* todo */};
+  bool meets_preconditions(struct char_data *ch) { for (auto check : preconditions) { if (!check.test(ch)) return false; } return true; };
+
+  bool apply(struct char_data *ch) { for (auto& effect : effects) { if (effect.apply(ch)) { return true; } }    return false; }
+
+  std::vector<Option *> get_options_for_ch(struct char_data *ch);
+
+  std::string serialize(const int indent = -1, const char indent_char = ' ');
 };
 
 // A digraph containing one or more Situations as well as metadata about the activity itself.
@@ -262,10 +239,10 @@ public:
   // A map of all the PCs in the event and what their most recent selections were.
   std::unordered_map<idnum_t, std::string> participants = {};
 
-  // Which activity is running?
-  std::string running_vector_slug = "";
+  // Which activity is running? (this slug may become invalidated during OLC, so handle that gracefully)
+  std::string running_activity_slug = "";
 
-  // What Situation are you on?
+  // What Situation are you on? (this slug may become invalidated during OLC, so handle that gracefully)
   std::string current_situation_slug = "";
 
   // todo: any additional state tracking etc, like long-term effects, progress along a journey, etc

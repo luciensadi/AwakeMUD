@@ -45,12 +45,13 @@ void from_json(const json& j, Effect& e) {
     // .at() is safer than [] because it throws an error if the key is missing
     j.at("func").get_to(e.func_name);
     j.at("settings").get_to(e.settings);
+    e.resolve_ptr(_effect_type_to_function);
 }
 // And the wrapper to get a string out of the serialization function. Not sure I actually need this.
-std::string Effect::serialize() {
+std::string Effect::serialize(const int indent, const char indent_char) {
   json basic_info;
   to_json(basic_info, *this);
-  return basic_info.dump();
+  return basic_info.dump(indent, indent_char);
 }
 
 ///////////// Effect function definitions below. Remember, effect functions return TRUE on death, FALSE otherwise!
@@ -95,10 +96,10 @@ void run_effect_debug_tests(struct char_data *ch) {
   if (effect->apply(ch)) { mudlog_vfprintf(NULL, LOG_SYSLOG, "Applying debug test caused character death, RIP"); return; }
   send_to_char(ch, "Effect applied.\r\n");
   
-  auto serialized = effect->serialize();
+  auto serialized = effect->serialize(2);
   send_to_char(ch, "Serialized, the effect is '%s'\r\n", serialized.c_str());
   Effect *deserialized = new Effect(serialized);
-  auto reserialized = deserialized->serialize();
+  auto reserialized = deserialized->serialize(2);
   send_to_char(ch, "Reserialization: %s\r\n", !strcmp(serialized.c_str(), reserialized.c_str()) ? "match!" : "mismatch");
 
   if (effect->apply(ch)) { mudlog_vfprintf(NULL, LOG_SYSLOG, "Applying reserialized debug test caused character death, RIP"); return; }

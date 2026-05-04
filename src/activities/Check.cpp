@@ -25,6 +25,7 @@ CHECK_FUNCTION(has_power_active);
 #define MAP_CHECK_FUNCTION(slug, func_name) {slug, (void*)&_check_function_##func_name}
 std::map<std::string, void *> _check_type_to_function = {
   MAP_CHECK_FUNCTION("_test_func", test_func),
+  MAP_CHECK_FUNCTION("always_false", always_false),
 
   MAP_CHECK_FUNCTION("has_skill", has_skill),
   MAP_CHECK_FUNCTION("roll_skill", roll_skill),
@@ -45,12 +46,13 @@ void from_json(const json& j, Check& e) {
     // .at() is safer than [] because it throws an error if the key is missing
     j.at("func").get_to(e.func_name);
     j.at("settings").get_to(e.settings);
+    e.resolve_ptr(_check_type_to_function);
 }
-// And the wrapper to get a string out of that. Not sure I actually need this.
-std::string Check::serialize() {
+// And the wrapper to get a string out of that.
+std::string Check::serialize(const int indent, const char indent_char) {
   json basic_info;
   to_json(basic_info, *this);
-  return basic_info.dump();
+  return basic_info.dump(indent, indent_char);
 }
 
 Check::Check(const std::string& supplied_type, const std::map<std::string, std::string>& supplied_settings)
@@ -184,10 +186,10 @@ void run_check_debug_tests(struct char_data *ch) {
   Check *check = new Check("_test_func", {{"a", "b"}});
   send_to_char(ch, "You %s!\r\n", check->test(ch) ? "passed" : "failed");
   
-  auto serialized = check->serialize();
+  auto serialized = check->serialize(2);
   send_to_char(ch, "Serialized, the check is '%s'\r\n", serialized.c_str());
   Check *deserialized = new Check(serialized);
-  auto reserialized = deserialized->serialize();
+  auto reserialized = deserialized->serialize(2);
   send_to_char(ch, "Reserialization: %s\r\n", !strcmp(serialized.c_str(), reserialized.c_str()) ? "match!" : "mismatch");
   send_to_char(ch, "You %s the reserialized check.\r\n", deserialized->test(ch) ? "passed" : "failed");
 

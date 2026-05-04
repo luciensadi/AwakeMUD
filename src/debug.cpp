@@ -278,17 +278,20 @@ ACMD(do_debug) {
     extern void run_effect_debug_tests(struct char_data *ch);
     extern void run_outcome_debug_tests(struct char_data *ch);
     extern void run_option_debug_tests(struct char_data *ch);
+    extern void run_situation_debug_tests(struct char_data *ch);
 
     if (!str_cmp(rest_of_argument, "all")) {
       send_to_char(ch, "OK, running in sequence.\r\n", ch);
-      log("checks");
+      mudlog_vfprintf(ch, LOG_SYSLOG, "checks");
       run_check_debug_tests(ch);
-      log("effects");
+      mudlog_vfprintf(ch, LOG_SYSLOG, "effects");
       run_effect_debug_tests(ch);
-      log("outcomes");
+      mudlog_vfprintf(ch, LOG_SYSLOG, "outcomes");
       run_outcome_debug_tests(ch);
-      log("options");
+      mudlog_vfprintf(ch, LOG_SYSLOG, "options");
       run_option_debug_tests(ch);
+      mudlog_vfprintf(ch, LOG_SYSLOG, "situation");
+      run_situation_debug_tests(ch);
     }
 
     else if (!str_cmp(rest_of_argument, "check")) {
@@ -309,6 +312,11 @@ ACMD(do_debug) {
     else if (!str_cmp(rest_of_argument, "option")) {
       send_to_char(ch, "OK, running the option.\r\n", ch);
       run_option_debug_tests(ch);
+    }
+
+    else if (!str_cmp(rest_of_argument, "situation")) {
+      send_to_char(ch, "OK, running the situation.\r\n", ch);
+      run_situation_debug_tests(ch);
     }
     
     send_to_char(ch, "Success!\r\n");
