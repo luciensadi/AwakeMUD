@@ -180,9 +180,10 @@ public:
 
   bool apply(struct char_data *ch) { for (auto& effect : effects) { if (effect.apply(ch)) { return true; } }    return false; }
 
+  // TODO: This potentially has random-value tests, so the output is non-deterministic. You need to cache it when called for a character.
   std::vector<Option *> get_options_for_ch(struct char_data *ch);
 
-std::string serialize(const int indent = -1, const char indent_char = ' ') const;};
+  std::string serialize(const int indent = -1, const char indent_char = ' ') const;};
 
 // A digraph containing one or more Situations as well as metadata about the activity itself.
 class Activity {
@@ -195,9 +196,8 @@ public:
   time_t createdAt = time(0);
   time_t updatedAt = time(0);
 
-  // Preconditions for the activity to be available
-  // (e.g., character level, faction standing, items possessed)
-  // This could be a more complex object or a list of conditions
+  // Preconditions for the activity to be available (e.g., character level, faction standing, items possessed)
+  // TODO: Forbid setting non-deterministic preconditions (e.g. random)
   std::vector<Check> preconditions = {};
 
   // All possible situations in this activity, keyed by situation slug
