@@ -4,15 +4,6 @@
 extern void to_json(json& j, const Effect& e);
 extern void from_json(const json& j, Effect& e);
 
-// Fetch a random situation slug from the available set, or returns "no situation slug available" if not yet set.
-std::string Outcome::get_next_situation_slug() {
-  if (situations.size() <= 0) {
-    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: %s called for outcome with no situations defined!", __func__);
-    return "no situation slug available";
-  }
-  return situations[rand() % situations.size()];
-}
-
 // Serialization function.
 void to_json(json& j, const Outcome& e) {
   j = json{
@@ -29,7 +20,7 @@ void from_json(const json& j, Outcome& e) {
     j.at("situations").get_to(e.situations);
 }
 // And the wrapper to get a string out of the serialization function. Not sure I actually need this.
-std::string Outcome::serialize(const int indent, const char indent_char) {
+std::string Outcome::serialize(const int indent, const char indent_char) const {
   json basic_info;
   to_json(basic_info, *this);
   return basic_info.dump(indent, indent_char);

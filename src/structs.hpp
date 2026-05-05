@@ -39,6 +39,14 @@ class Apartment;
 class ApartmentRoom;
 class PCExDesc;
 
+// Editing info for the activity system.
+class Activity;
+class Check;
+class Effect;
+class Outcome;
+class Option;
+class Situation;
+
 /***********************************************************************
  * Structures                                                          *
  **********************************************************************/
@@ -1171,6 +1179,13 @@ struct descriptor_data
   Faction *edit_faction;
   PCExDesc *edit_exdesc;
   Playergroup *edit_pgroup; /* playergroups */
+
+  Activity *edit_activity;
+  Check *edit_check;
+  Effect *edit_effect;
+  Outcome *edit_outcome;
+  Option *edit_option;
+  Situation *edit_situation;
   // If you add more of these edit_whatevers, touch comm.cpp's free_editing_structs and add them!
 
   int canary;
@@ -1191,6 +1206,7 @@ struct descriptor_data
       edit_helpfile(NULL), edit_complex(NULL), edit_complex_original(NULL),
       edit_apartment(NULL), edit_apartment_original(NULL), edit_apartment_room(NULL),
       edit_apartment_room_original(NULL), edit_faction(NULL), edit_exdesc(NULL), edit_pgroup(NULL),
+      edit_activity(NULL), edit_check(NULL), edit_effect(NULL), edit_outcome(NULL), edit_option(NULL), edit_situation(NULL),
       canary(CANARY_VALUE), pProtocol(NULL)
   {
     // Zero out the communication history for all channels.

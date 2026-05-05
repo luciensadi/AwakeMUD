@@ -10,6 +10,8 @@
 
 #include "../structs.hpp"
 
+#define BASE_ACTIVITY_PATH bf::system_complete("lib") / "activities"
+
 /*
   Design:
   The code tracks a vector of RunningActivities, which are the owning instances for the groups of players in the travel system.
@@ -120,10 +122,7 @@ public:
   // Apply all effects to the selected character. Return true if they die (i.e. they have been extracted.)
   bool apply(struct char_data *ch) { for (auto& effect : effects) { if (effect.apply(ch)) { return true; } }    return false; }
 
-  // Fetch a random situation slug from the available set, or returns "no situation slug available" if not yet set.
-  std::string get_next_situation_slug();
-
-  std::string serialize(const int indent = -1, const char indent_char = ' ');
+  std::string serialize(const int indent = -1, const char indent_char = ' ') const;
 };
 
 // A pair of Outcomes that are selected between based on the result of zero or more tests (default success).
@@ -155,8 +154,7 @@ public:
   // Returns the Fail outcome if you fail any tests, the Pass outcome otherwise.
   Outcome *test(struct char_data *ch) { for (auto check : tests) { if (!check.test(ch)) return &fail; } return &pass; }
 
-  std::string serialize(const int indent = -1, const char indent_char = ' ');
-};
+std::string serialize(const int indent = -1, const char indent_char = ' ') const;};
 
 // A node in the activity digraph containing one or more Options as well as metadata about the situation itself.
 class Situation {
@@ -184,15 +182,15 @@ public:
 
   std::vector<Option *> get_options_for_ch(struct char_data *ch);
 
-  std::string serialize(const int indent = -1, const char indent_char = ' ');
-};
+std::string serialize(const int indent = -1, const char indent_char = ' ') const;};
 
 // A digraph containing one or more Situations as well as metadata about the activity itself.
 class Activity {
+  Situation* _get_situation_from_list_of_slugs(const std::vector<std::string> &slugs, struct char_data *ch, bool allow_fallback_to_invalid);
 public:
   // Metadata
   std::string slug = "";
-  std::string displayName = "";
+  std::string display_name = "";
   idnum_t author = 0;
   time_t createdAt = time(0);
   time_t updatedAt = time(0);
@@ -206,27 +204,49 @@ public:
   std::map<std::string, Situation> situations = {};
 
   // List of potential starting situation slugs
-  std::vector<std::string> startingSituations = {};
+  std::vector<std::string> starting_situations = {};
+
+  // Prefs/flags set on the activity, like viewership restriction etc.
+  std::map<std::string, std::string> flags = {};
 
   // Default constructor
   Activity() = default;
 
-  // Copy constructor
-  Activity(const Activity& other) {};
+  // yeah I know, don't @ me about this, it's only ever used for manual testing
+  Activity(std::string slug, std::string display_name, idnum_t author, time_t createdAt, time_t updatedAt, std::vector<Check> preconditions, std::map<std::string, Situation> situations,
+           std::vector<std::string> starting_situations, std::map<std::string, std::string> flags)
+           :  slug(slug), display_name(display_name), author(author), createdAt(createdAt), updatedAt(updatedAt), preconditions(preconditions), situations(situations),
+              starting_situations(starting_situations), flags(flags) {}
+
+  // Copy constructor for OLC - create a full clone of the thing in the descriptor struct, then in-place replace it if changes are accepted (destroy old one).
+  Activity(const Activity& other);
 
   // Deserialize from JSON string.
-  Activity(std::string serialized_json) {};
+  Activity(std::string serialized_json);
 
-  ~Activity() {};
+  // Load from a file.
+  Activity(bf::path path_to_file);
+
+  std::string serialize(const int indent = -1, const char indent_char = ' ') const;
+
+  bool meets_preconditions(struct char_data *ch) { for (auto check : preconditions) { if (!check.test(ch)) return false; } return true; };
+
+  // Gets a starting situation that ch passes preconditions for, or nullptr if no such situation exists.
+  Situation* get_starting_situation(struct char_data *ch);
+
+  // Gets the next valid situation from an outcome's list for the given character.
+  Situation* get_next_situation_from_outcome(const Outcome *outcome, struct char_data *ch);
 
   // Method to get a situation by its slug
-  Situation* getSituation(const std::string& situationSlug) {
+  Situation* lookup_situation(const std::string& situationSlug) {
     auto it = situations.find(situationSlug);
     if (it != situations.end()) {
       return &(it->second);
     }
     return nullptr; // Situation not found
   }
+
+  void save_to_disk();
 };
 
 /* Finally, we have a RunningActivity, which tracks a player or group of players' progress through an activity.
@@ -248,7 +268,5 @@ public:
   // todo: any additional state tracking etc, like long-term effects, progress along a journey, etc
 };
 
-
-extern std::map<std::string, Activity> activities;
 
 #endif // _ACTIVITIES_CLASSES_HPP_

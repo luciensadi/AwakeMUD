@@ -44,7 +44,7 @@ void from_json(const json& j, Option& e) {
   e.fail.is_pass_outcome = false;
 }
 // And the wrapper to get a string out of the serialization function. Not sure I actually need this.
-std::string Option::serialize(const int indent, const char indent_char) {
+std::string Option::serialize(const int indent, const char indent_char) const {
   json basic_info;
   to_json(basic_info, *this);
   return basic_info.dump(indent, indent_char);

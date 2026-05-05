@@ -279,6 +279,7 @@ ACMD(do_debug) {
     extern void run_outcome_debug_tests(struct char_data *ch);
     extern void run_option_debug_tests(struct char_data *ch);
     extern void run_situation_debug_tests(struct char_data *ch);
+    extern void run_activity_debug_tests(struct char_data *ch);
 
     if (!str_cmp(rest_of_argument, "all")) {
       send_to_char(ch, "OK, running in sequence.\r\n", ch);
@@ -292,6 +293,8 @@ ACMD(do_debug) {
       run_option_debug_tests(ch);
       mudlog_vfprintf(ch, LOG_SYSLOG, "situation");
       run_situation_debug_tests(ch);
+      mudlog_vfprintf(ch, LOG_SYSLOG, "activity");
+      run_activity_debug_tests(ch);
     }
 
     else if (!str_cmp(rest_of_argument, "check")) {
@@ -317,6 +320,11 @@ ACMD(do_debug) {
     else if (!str_cmp(rest_of_argument, "situation")) {
       send_to_char(ch, "OK, running the situation.\r\n", ch);
       run_situation_debug_tests(ch);
+    }
+
+    else if (!str_cmp(rest_of_argument, "activity")) {
+      send_to_char(ch, "OK, running the activity.\r\n", ch);
+      run_activity_debug_tests(ch);
     }
     
     send_to_char(ch, "Success!\r\n");

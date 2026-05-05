@@ -40,7 +40,7 @@ void from_json(const json& j, Situation& e) {
     j.at("effects").get_to(e.effects);
 }
 // And the wrapper to get a string out of the serialization function. Not sure I actually need this.
-std::string Situation::serialize(const int indent, const char indent_char) {
+std::string Situation::serialize(const int indent, const char indent_char) const {
   json basic_info;
   to_json(basic_info, *this);
   return basic_info.dump(indent, indent_char);

@@ -23,8 +23,8 @@ ACMD(do_activity) {
   skip_spaces(&argument);
   half_chop(argument, arg1, arg2, sizeof(arg2));
 
-  ACTIVITY_CMD(arg1, "list", activities_list, LVL_MORTAL);
-  ACTIVITY_CMD(arg1, "show", activities_show, LVL_MORTAL);
+  ACTIVITY_CMD(arg1, "list", activities_list, LVL_BUILDER);
+  ACTIVITY_CMD(arg1, "show", activities_show, LVL_BUILDER);
   ACTIVITY_CMD(arg1, "create", activities_create, LVL_BUILDER);
   ACTIVITY_CMD(arg1, "edit", activities_edit, LVL_BUILDER);
   ACTIVITY_CMD(arg1, "delete", activities_delete, LVL_BUILDER);

@@ -76,6 +76,7 @@
 #include "factions.hpp"
 #include "player_exdescs.hpp"
 #include "gmcp.hpp"
+#include "activities/classes.hpp"
 
 const unsigned perfmon::kPulsePerSecond = PASSES_PER_SEC;
 
@@ -2495,6 +2496,13 @@ void free_editing_structs(descriptor_data *d, int state)
     }
     d->edit_obj = NULL;
   }
+
+  if (d->edit_activity) { delete d->edit_activity; d->edit_activity = NULL; }
+  if (d->edit_check) { delete d->edit_check; d->edit_check = NULL; }
+  if (d->edit_effect) { delete d->edit_effect; d->edit_effect = NULL; }
+  if (d->edit_outcome) { delete d->edit_outcome; d->edit_outcome = NULL; }
+  if (d->edit_option) { delete d->edit_option; d->edit_option = NULL; }
+  if (d->edit_situation) { delete d->edit_situation; d->edit_situation = NULL; }
 
   if (d->edit_room) {
     Mem->DeleteRoom(d->edit_room);
