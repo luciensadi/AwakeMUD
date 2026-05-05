@@ -14,8 +14,14 @@ name: "CodeQL"
 on:
   push:
     branches: [ "master", "base" ]
+    paths-ignore:
+      - '**/*.md'
+      - '**/*.txt'
   pull_request:
     branches: [ "master", "base" ]
+    paths-ignore:
+      - '**/*.md'
+      - '**/*.txt'
   schedule:
     - cron: '19 4 * * 5'
 
@@ -44,38 +50,28 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
 
-    # 1. Cache the apt archives. 
-    # This will use the current branch's cache, or fall back to master's cache automatically.
-    - name: Cache APT packages
-      if: matrix.build-mode == 'manual'
-      uses: actions/cache@v4
+    - if: matrix.build-mode == 'manual'
+      name: Load apt packages with caching
+      uses: awalsh128/cache-apt-pkgs-action@v1.6.0
       with:
-        path: /var/cache/apt/archives
-        # Hash the workflow file so the cache bursts if you add new dependencies to this file
-        key: ${{ runner.os }}-apt-${{ hashFiles('.github/workflows/codeql.yml') }}
-        restore-keys: |
-          ${{ runner.os }}-apt-
+        packages: libboost-filesystem-dev libcurl4-openssl-dev libnsl-dev
+        version: 1.0
 
     # Initializes the CodeQL tools for scanning.
     - name: Initialize CodeQL
-      uses: github/codeql-action/init@v3
+      uses: github/codeql-action/init@v4
       with:
         languages: ${{ matrix.language }}
         build-mode: ${{ matrix.build-mode }}
+        dependency-caching: true
 
     - if: matrix.build-mode == 'manual'
       name: Build Code
       run: |
-        # 2. Prevent GitHub's Ubuntu runner from auto-deleting downloaded apt packages
-        sudo rm -f /etc/apt/apt.conf.d/docker-clean
-        
-        sudo apt-get update
-        sudo apt-get install -y libboost-filesystem-dev libcurl4-openssl-dev libnsl-dev
-        
         cd src
-        echo 'const char *mysql_host =     "host"; \
+        echo 'const char *mysql_host =     "host";   \
           const char *mysql_password = "pass";       \
           const char *mysql_user =     "user";       \
           const char *mysql_db =       "db";       ' \
@@ -85,6 +81,6 @@ jobs:
         make -j$(nproc)
 
     - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v3
+      uses: github/codeql-action/analyze@v4
       with:
         category: "/language:${{matrix.language}}"
