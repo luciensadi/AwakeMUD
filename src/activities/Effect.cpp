@@ -81,7 +81,7 @@ std::string Effect::serialize(const int indent, const char indent_char) {
 EFFECT_FUNCTION(always_false) { return false; }
 
 EFFECT_FUNCTION(test_func) {
-  mudlog_vfprintf(ch, LOG_SYSLOG, "Effect() called with _effect_test_func(ch, {}x%d), returning false.", settings.size());
+  mudlog_vfprintf(ch, LOG_SYSLOG, "Effect() called with _effect_test_func(ch, {}x%zu), returning false.", settings.size());
   return false;
 };
 

@@ -94,7 +94,7 @@ bool Check::test(struct char_data *ch) {
 CHECK_FUNCTION(always_false) { return false; }
 
 CHECK_FUNCTION(test_func) {
-  mudlog_vfprintf(ch, LOG_SYSLOG, "Check() called with _check_test_func(ch, {}x%d), returning true.", settings.size());
+  mudlog_vfprintf(ch, LOG_SYSLOG, "Check() called with _check_test_func(ch, {}x%zu), returning true.", settings.size());
   return true;
 };
 
