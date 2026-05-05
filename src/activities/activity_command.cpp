@@ -1,49 +1,72 @@
 #include "../interpreter.hpp"
 #include "classes.hpp"
 
-void activities_list(struct char_data *ch, char *arg1, char *arg2);
-void activities_show(struct char_data *ch, char *arg1, char *arg2);
-void activities_create(struct char_data *ch, char *arg1, char *arg2);
-void activities_edit(struct char_data *ch, char *arg1, char *arg2);
-void activities_delete(struct char_data *ch, char *arg1, char *arg2);
-void activities_run(struct char_data *ch, char *arg1, char *arg2);
-void activities_debug_start(struct char_data *ch, char *arg1, char *arg2);
+void do_activities_list(struct char_data *ch, char *arguments);
+void do_activities_show(struct char_data *ch, char *arguments);
+void do_activities_create(struct char_data *ch, char *arguments);
+void do_activities_edit(struct char_data *ch, char *arguments);
+void do_activities_delete(struct char_data *ch, char *arguments);
+void do_activities_run(struct char_data *ch, char *arguments);
+void do_activities_debug(struct char_data *ch, char *arguments);
 
-#define ACTIVITY_CMD(char_array, alias, func, privilege) \
-if (!is_abbrev(alias, char_array)) { \
-  FAILURE_CASE(privilege > 0 && !access_level(ch, privilege), "Sorry, you can't do that at your level."); \
-  func(ch, arg1, arg2); \
-  return; \
-}
+void display_activities_help(struct char_data *ch);
 
-/* */
+// The list of commands they can run under the ACTIVITY verb. Protip: Keep this alphabetized.
+struct activity_cmd_struct {
+  const char *cmd;
+  int level_required;
+  void (*command_pointer) (struct char_data *ch, char *argument);
+  const char *help_string;
+} activity_commands[] = {
+  { "create"  , LVL_BUILDER   , do_activities_create , "Create an activity with the given shortname, which may not contain spaces." },
+  { "debug"   , LVL_PRESIDENT , do_activities_debug  , "Donate money to the group. It is wired from your account to the group's." },
+  { "delete"  , LVL_PRESIDENT , do_activities_delete , "Delete an activity. Do this with caution!" },
+  { "edit"    , LVL_BUILDER   , do_activities_edit   , "Edit an existing activity." },
+  { "list"    , LVL_BUILDER   , do_activities_list   , "Lists the activities that you know about." },
+  { "run"     , LVL_BUILDER   , do_activities_run    , "Demote someone who is below your level." },
+  { "show"    , LVL_BUILDER   , do_activities_show   , "Shows the details on a given activity." },
+  { "\n"      , 0             , 0                    , "" } // This must be last.
+};
+
 ACMD(do_activity) {
-  char arg1[MAX_INPUT_LENGTH], arg2[MAX_INPUT_LENGTH];
+  FAILURE_CASE(!ch->desc, "nope");
+  FAILURE_CASE(IS_ASTRAL(ch), "Astral characters would time out during activities. Return to your body first.");
 
-  skip_spaces(&argument);
-  half_chop(argument, arg1, arg2, sizeof(arg2));
+  char command[MAX_STRING_LENGTH];
+  char parameters[MAX_STRING_LENGTH];
 
-  ACTIVITY_CMD(arg1, "list", activities_list, LVL_BUILDER);
-  ACTIVITY_CMD(arg1, "show", activities_show, LVL_BUILDER);
-  ACTIVITY_CMD(arg1, "create", activities_create, LVL_BUILDER);
-  ACTIVITY_CMD(arg1, "edit", activities_edit, LVL_BUILDER);
-  ACTIVITY_CMD(arg1, "delete", activities_delete, LVL_BUILDER);
-  ACTIVITY_CMD(arg1, "run", activities_run, LVL_BUILDER);
-  ACTIVITY_CMD(arg1, "debug-start", activities_debug_start, LVL_PRESIDENT);
-}
-#undef ACTIVITY_CMD
+  half_chop(argument, command, parameters, sizeof(parameters));
 
-// Brute-force run an activity.
-void activities_debug_start(struct char_data *ch, char *arg1, char *arg2) {
-  send_to_char(ch, "OK, putting you into an activity, debug-style.\r\n");
+  // In the absence of a command, show help and exit.
+  if (!*command) {
+    display_activities_help(ch);
+    return;
+  }
 
-  Activity *activity = new Activity();
+  // Find the index of the command the player wants.
+  int cmd_index = 0;
+  for (cmd_index = 0; *(activity_commands[cmd_index].cmd) != '\n'; cmd_index++)
+    if (!strncmp(command, activity_commands[cmd_index].cmd, strlen(command)))
+      break;
+
+  // Precondition: If the command was invalid or not accessible to them, show help and exit.
+  if (*(activity_commands[cmd_index].cmd) == '\n' || !access_level(ch, activity_commands[cmd_index].level_required)) {
+    display_activities_help(ch);
+    return;
+  }
+
+  // Execute the subcommand.
+  ((*activity_commands[cmd_index].command_pointer) (ch, parameters));
 }
 
 // Stubs to make it compile
-void activities_list(struct char_data *ch, char *arg1, char *arg2) {}
-void activities_show(struct char_data *ch, char *arg1, char *arg2) {}
-void activities_create(struct char_data *ch, char *arg1, char *arg2) {}
-void activities_edit(struct char_data *ch, char *arg1, char *arg2) {}
-void activities_delete(struct char_data *ch, char *arg1, char *arg2) {}
-void activities_run(struct char_data *ch, char *arg1, char *arg2) {}
+void display_activities_help(struct char_data *ch) {}
+void do_activities_list(struct char_data *ch, char *arguments) {}
+void do_activities_show(struct char_data *ch, char *arguments) {}
+void do_activities_create(struct char_data *ch, char *arguments) {}
+void do_activities_delete(struct char_data *ch, char *arguments) {}
+void do_activities_run(struct char_data *ch, char *arguments) {}
+void do_activities_debug(struct char_data *ch, char *arguments) {}
+void do_activities_edit(struct char_data *ch, char *arguments) {
+
+}

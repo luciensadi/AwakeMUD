@@ -46,6 +46,7 @@ class Effect;
 class Outcome;
 class Option;
 class Situation;
+class RunningActivity;
 
 /***********************************************************************
  * Structures                                                          *
@@ -1148,6 +1149,8 @@ struct descriptor_data
   long nuyen_income_this_play_session[NUM_OF_TRACKED_NUYEN_INCOME_SOURCES];
 
   listClass<const char *> message_history[NUM_COMMUNICATION_CHANNELS];
+
+  RunningActivity *running_activity;
 
   // all this from here down is stuff for on-line creation
   int edit_mode;                /* editing sub mode */

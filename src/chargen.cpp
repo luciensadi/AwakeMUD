@@ -156,18 +156,12 @@ void ccr_race_menu(struct descriptor_data *d) {
             "\r\n  [H] Satyr       (10 points / slot C)"
             "\r\n  [I] Night-One   (15 points / slot B)"
             "\r\n"
-#ifdef ALLOW_PRESTIGE_RACES
             "\r\n Special (has prerequisites):"
             "\r\n  [*] Prestige Race (costs %d - %d system points)"
             "\r\n"
             "\r\n  ?# (for help on a particular race), ex: ?A"
             "\r\n"
             "\r\nRace: ", MIN_PRESTIGE_RACE_COST, MAX_PRESTIGE_RACE_COST);
-#else
-            "\r\n  ?# (for help on a particular race), ex: ?A"
-            "\r\n"
-            "\r\nRace: ");
-#endif
   SEND_TO_Q(buf, d);
   d->ccr.mode = CCR_RACE;
 }
@@ -726,13 +720,9 @@ int parse_race(struct descriptor_data *d, const char *arg)
     return RACE_SATYR;
   case 'i':
     return RACE_NIGHTONE;
-
-#ifdef ALLOW_PRESTIGE_RACES
   case '*':
     display_prestige_race_menu(d);
     return RETURN_HELP;
-#endif
-
   case '?':
     switch (LOWER(*(arg+1))) {
     case '1':
