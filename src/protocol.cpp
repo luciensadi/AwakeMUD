@@ -1857,7 +1857,8 @@ static void Negotiate( descriptor_t *apDescriptor )
     ConfirmNegotiation(apDescriptor, eNEGOTIATED_MCCP, TRUE, TRUE);
     ConfirmNegotiation(apDescriptor, eNEGOTIATED_GMCP, TRUE, TRUE);
     
-    Write(apDescriptor, (char[]) { (char)IAC, (char)DO, TELOPT_NEW_ENVIRON, '\0' });
+    const char RequestNewEnviron[] = { (char)IAC, (char)DO, TELOPT_NEW_ENVIRON, '\0' };
+    Write(apDescriptor, RequestNewEnviron);
   }
 }
 
@@ -2106,7 +2107,8 @@ static void PerformHandshake( descriptor_t *apDescriptor, char aCmd, char aProto
         PROTO_DEBUG_MSG("Received IAC WILL NEW-ENVIRON from client, requesting all available info.");
         // IAC SB NEW-ENVIRON SEND VAR "IPADDRESS" IAC SE
         // Write(apDescriptor, (char[]) { (char)IAC, (char)SB, TELOPT_NEW_ENVIRON, NEW_ENV_SEND, NEW_ENV_USERVAR, 'I', 'P', 'A', 'D', 'D', 'R', 'E', 'S', 'S', (char)IAC, (char)SE, 0 });
-        Write(apDescriptor, (char[]) { (char)IAC, (char)SB, TELOPT_NEW_ENVIRON, NEW_ENV_SEND, (char)IAC, (char)SE, 0 });
+        const char SendNewEnviron[] = { (char)IAC, (char)SB, TELOPT_NEW_ENVIRON, NEW_ENV_SEND, (char)IAC, (char)SE, 0 };
+        Write(apDescriptor, SendNewEnviron);
       }
       else if ( aCmd == (char)WONT )
       {

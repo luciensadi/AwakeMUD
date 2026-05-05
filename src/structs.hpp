@@ -1036,7 +1036,7 @@ struct char_data
       cyberware(NULL), bioware(NULL), next_in_room(NULL), next_in_character_list(NULL), next_fighting(NULL), next_in_zone(NULL),
       next_in_veh(NULL), next_watching(NULL), followers(NULL), master(NULL), spells(NULL), ignore_data(NULL), pgroup(NULL),
       pgroup_invitations(NULL), congregation_bonus_pool(0), last_loop_rand(0), pc_invis_resistance_test_results(NULL),
-      mob_invis_resistance_test_results(NULL), alias_dirty_bit(FALSE), mob_loaded_in_room(NULL), precast_spells(NULL),
+      mob_invis_resistance_test_results(NULL), alias_dirty_bit(FALSE), mob_loaded_in_room(0), precast_spells(NULL),
       is_carrying_vehicle(FALSE)
   {
     ZERO_OUT_ARRAY(equipment, NUM_WEARS);
@@ -1212,10 +1212,6 @@ struct descriptor_data
       edit_activity(NULL), edit_check(NULL), edit_effect(NULL), edit_outcome(NULL), edit_option(NULL), edit_situation(NULL),
       canary(CANARY_VALUE), pProtocol(NULL)
   {
-    // Zero out the communication history for all channels.
-    for (int channel = 0; channel < NUM_COMMUNICATION_CHANNELS; channel++)
-      message_history[channel] = listClass<const char *>();
-
     // Zero out our metrics.
     for (int i = 0; i < NUM_OF_TRACKED_NUYEN_INCOME_SOURCES; i++) {
       nuyen_income_this_play_session[i] = 0;
