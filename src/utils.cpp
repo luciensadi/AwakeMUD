@@ -9831,12 +9831,12 @@ bool spend_syspoints(struct char_data *ch, int amount, bool use_restricted, cons
   spent_restricted = 0;
 
   if (!ch) {
-    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Got NULL character to spend_syspoints(ch, %d, %s, '%s')", amount, use_restricted ? "T" : "F", for_what);
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Got NULL character to spend_syspoints(ch, %d, %s, '%s')", amount, amount, use_restricted ? "T" : "F", for_what);
     return false;
   }
 
   if (amount <= 0) {
-    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Got invalid value %d to spend_syspoints(ch, %d, %s, '%s')", amount, use_restricted ? "T" : "F", for_what);
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Got invalid value %d to spend_syspoints(ch, %d, %s, '%s')", amount, amount, use_restricted ? "T" : "F", for_what);
     return false;
   }
 
