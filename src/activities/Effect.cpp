@@ -16,8 +16,8 @@ EFFECT_FUNCTION(always_false);
 EFFECT_FUNCTION(test_func);
 
 // Maps slugs to effect functions. Remember, effect functions return TRUE on death, FALSE otherwise!
-#define MAP_EFFECT_FUNCTION(slug, func_name) {slug, (void*)&_effect_function_##func_name}
-std::map<std::string, void *> _effect_type_to_function = {
+#define MAP_EFFECT_FUNCTION(slug, func_name) {slug, (ActivityFuncPtr)&_effect_function_##func_name}
+std::map<std::string, ActivityFuncPtr> _effect_type_to_function = {
   MAP_EFFECT_FUNCTION("_test_func", test_func)
 };
 
@@ -26,7 +26,7 @@ Effect::Effect(const std::string& supplied_type, const std::map<std::string, std
 
 // Deserialize a new Effect from a JSON string.
 Effect::Effect(const std::string serialized)
-  : ActivityFunction(serialized, _effect_type_to_function, (void*)&_effect_function_always_false) {}
+  : ActivityFunction(serialized, _effect_type_to_function, (ActivityFuncPtr)&_effect_function_always_false) {}
 
 // Runs the associated func_ptr and returns its value. Returns true if the character dies.
 bool Effect::apply(struct char_data *ch) {
@@ -52,6 +52,11 @@ std::string Effect::serialize(const int indent, const char indent_char) {
   json basic_info;
   to_json(basic_info, *this);
   return basic_info.dump(indent, indent_char);
+}
+
+const char *Effect::stringify() const {
+  // todo
+  return nullptr;
 }
 
 ///////////// Effect function definitions below. Remember, effect functions return TRUE on death, FALSE otherwise!

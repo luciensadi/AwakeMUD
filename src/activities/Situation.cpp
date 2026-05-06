@@ -58,6 +58,11 @@ std::vector<Option *> Situation::get_options_for_ch(struct char_data *ch) {
   return available_options;
 }
 
+const char *Situation::stringify() const {
+  // todo
+  return nullptr;
+}
+
 
 //// shitty little debug test function, tucked out of the way down here
 void run_situation_debug_tests(struct char_data *ch) {

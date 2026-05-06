@@ -29,6 +29,11 @@ Outcome::Outcome(const std::string serialized_json, bool is_pass_outcome) : is_p
   from_json(json::parse(serialized_json), *this);
 }
 
+const char *Outcome::stringify() const {
+  // todo
+  return nullptr;
+}
+
 
 
 //// shitty little debug test function, tucked out of the way down here

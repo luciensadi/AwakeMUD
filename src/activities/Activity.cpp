@@ -37,6 +37,7 @@ void to_json(json& j, const Activity& e) {
   j = json{
     {"slug", e.slug}, 
     {"display_name", e.display_name},
+    {"summary", e.summary},
     {"author", e.author},
     {"createdAt", e.createdAt},
     {"updatedAt", e.updatedAt},
@@ -51,6 +52,7 @@ void from_json(const json& j, Activity& e) {
   // .at() is safer than [] because it throws an error if the key is missing
   j.at("slug").get_to(e.slug);
   j.at("display_name").get_to(e.display_name);
+  j.at("summary").get_to(e.summary);
   j.at("author").get_to(e.author);
   j.at("createdAt").get_to(e.createdAt);
   j.at("updatedAt").get_to(e.updatedAt);
@@ -67,11 +69,6 @@ std::string Activity::serialize(const int indent, const char indent_char) const 
 }
 Activity::Activity(const std::string serialized_json) {
   from_json(json::parse(serialized_json), *this);
-}
-// Copy constructor is more of the same.
-Activity::Activity(const Activity& other) {
-  // Basically just serialize and then deserialize. Quick and dirty copy construction.
-  from_json(json::parse(other.serialize()), *this);
 }
 
 Activity::Activity(bf::path path_to_file) {

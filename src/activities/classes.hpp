@@ -12,6 +12,8 @@
 
 #define BASE_ACTIVITY_PATH bf::system_complete("lib") / "activities"
 
+#define STRING_GETTER(varname)  const char *get_##varname() { return varname.c_str(); }
+
 /*
   Design:
   The code tracks a vector of RunningActivities, which are the owning instances for the groups of players in the travel system.
@@ -41,25 +43,32 @@
 
 */
 
+typedef bool (*ActivityFuncPtr)(struct char_data*, const std::map<std::string, std::string>&);
+
 // Base class shared by Check and Effect.
 // Holds the function pointer, func_name, settings, and provides serialization.
 // Derived classes supply their own function registry via the protected constructors.
 class ActivityFunction {
 protected:
-  void *func_ptr = nullptr;
+  ActivityFuncPtr func_ptr = nullptr;
 
   // Regular construction: looks up type in func_map and stores the pointer.
   ActivityFunction(const std::string& type,
                    const std::map<std::string, std::string>& settings,
-                   const std::map<std::string, void*>& func_map);
+                   const std::map<std::string, ActivityFuncPtr>& func_map);
 
   // Deserializing construction: parses JSON, looks up func_name in func_map.
   // Falls back to fallback_func_ptr (and logs a SYSERR) if the name is not found.
   ActivityFunction(const std::string& serialized,
-                   const std::map<std::string, void*>& func_map,
-                   void* fallback_func_ptr);
+                   const std::map<std::string, ActivityFuncPtr>& func_map,
+                   ActivityFuncPtr fallback_func_ptr);
 
+  // Virtual destructor for inheritance, default copy/move operations for everything else
   virtual ~ActivityFunction() = default;
+  ActivityFunction(const ActivityFunction&) = default;
+  ActivityFunction& operator=(const ActivityFunction&) = default;
+  ActivityFunction(ActivityFunction&&) = default;
+  ActivityFunction& operator=(ActivityFunction&&) = default;
 
   // Dispatches to func_ptr. Returns false (with a SYSERR log) if func_ptr is null.
   bool invoke(struct char_data *ch);
@@ -69,7 +78,7 @@ public:
   std::map<std::string, std::string> settings = {}; // A map of settings/parameters.
 
   ActivityFunction() = default;
-  void resolve_ptr(const std::map<std::string, void*>& func_map);
+  void resolve_ptr(const std::map<std::string, ActivityFuncPtr>& func_map);
 
   virtual std::string serialize(const int indent = -1, const char indent_char = ' ') = 0;
 };
@@ -83,6 +92,9 @@ public:
   Check() = default;
   
   std::string serialize(const int indent = -1, const char indent_char = ' ') override;
+  
+  // Display the Check for easy reading. Only used in edit/debug contexts.
+  const char *stringify() const;
 
   // True if this specific test passed for the character, false otherwise.
   bool test(struct char_data *ch);
@@ -96,6 +108,9 @@ public:
   Effect() = default;
   
   std::string serialize(const int indent = -1, const char indent_char = ' ') override;
+
+  // Display the Effect for easy reading. Only used in edit/debug contexts.
+  const char *stringify() const;
 
   // Applying an effect can result in death. Returns true when this happens.
   bool apply(struct char_data *ch);
@@ -116,8 +131,14 @@ public:
 
   Outcome(const std::string message, const std::vector<Effect> effects, const std::vector<std::string> situations, bool is_pass_outcome) :
           message(message), is_pass_outcome(is_pass_outcome), effects(effects), situations(situations) {}
-  Outcome(const std::string serialized_json, bool is_pass_outcome);
+  explicit Outcome(const std::string serialized_json, bool is_pass_outcome);
   Outcome() = default;
+
+  // Getters, which kindly return C strings to prevent having to go .c_str() all the time.
+  STRING_GETTER(message)
+
+  // Display the Outcome for easy reading. Only used in edit/debug contexts.
+  const char *stringify() const;
 
   // Apply all effects to the selected character. Return true if they die (i.e. they have been extracted.)
   bool apply(struct char_data *ch) { for (auto& effect : effects) { if (effect.apply(ch)) { return true; } }    return false; }
@@ -144,9 +165,16 @@ public:
           fail.is_pass_outcome = false;
          };
 
-  Option(const std::string serialized_json);
+  explicit Option(const std::string serialized_json);
 
   Option() = default;
+
+  // Getters, which kindly return C strings to prevent having to go .c_str() all the time.
+  STRING_GETTER(slug)
+  STRING_GETTER(menu_text)
+
+  // Display the Option for easy reading. Only used in edit/debug contexts.
+  const char *stringify() const;
 
   // Returns TRUE if you successfully pass all the preconditions to even see this option, FALSE otherwise.
   bool is_available_to_ch(struct char_data *ch) { for (auto check : preconditions) { if (!check.test(ch)) return false; } return true; }
@@ -154,7 +182,8 @@ public:
   // Returns the Fail outcome if you fail any tests, the Pass outcome otherwise.
   Outcome *test(struct char_data *ch) { for (auto check : tests) { if (!check.test(ch)) return &fail; } return &pass; }
 
-std::string serialize(const int indent = -1, const char indent_char = ' ') const;};
+  std::string serialize(const int indent = -1, const char indent_char = ' ') const;
+};
 
 // A node in the activity digraph containing one or more Options as well as metadata about the situation itself.
 class Situation {
@@ -173,8 +202,15 @@ public:
 
   Situation(const std::string& slug, const std::string& text, const std::vector<Check>& preconditions, const std::vector<Option>& options, const std::vector<Effect>& effects)
     : slug(slug), text(text), preconditions(preconditions), options(options), effects(effects) {}
-  Situation(const std::string serialized_json);
+  explicit Situation(const std::string serialized_json);
   Situation() = default;
+
+  // Getters, which kindly return C strings to prevent having to go .c_str() all the time.
+  STRING_GETTER(slug)
+  STRING_GETTER(text)
+
+  // Display the Situation for easy reading. Only used in edit/debug contexts.
+  const char *stringify() const;
 
   bool meets_preconditions(struct char_data *ch) { for (auto check : preconditions) { if (!check.test(ch)) return false; } return true; };
 
@@ -183,7 +219,8 @@ public:
   // TODO: This potentially has random-value tests, so the output is non-deterministic. You need to cache it when called for a character.
   std::vector<Option *> get_options_for_ch(struct char_data *ch);
 
-  std::string serialize(const int indent = -1, const char indent_char = ' ') const;};
+  std::string serialize(const int indent = -1, const char indent_char = ' ') const;
+};
 
 // A digraph containing one or more Situations as well as metadata about the activity itself.
 class Activity {
@@ -192,9 +229,13 @@ public:
   // Metadata
   std::string slug = "";
   std::string display_name = "";
+  std::string summary = "";
   idnum_t author = 0;
   time_t createdAt = time(0);
   time_t updatedAt = time(0);
+
+  // Editing metadata (non-persisted)
+  std::string old_slug = "";
 
   // Preconditions for the activity to be available (e.g., character level, faction standing, items possessed)
   // TODO: Forbid setting non-deterministic preconditions (e.g. random)
@@ -218,14 +259,16 @@ public:
            :  slug(slug), display_name(display_name), author(author), createdAt(createdAt), updatedAt(updatedAt), preconditions(preconditions), situations(situations),
               starting_situations(starting_situations), flags(flags) {}
 
-  // Copy constructor for OLC - create a full clone of the thing in the descriptor struct, then in-place replace it if changes are accepted (destroy old one).
-  Activity(const Activity& other);
-
   // Deserialize from JSON string.
-  Activity(std::string serialized_json);
+  explicit Activity(std::string serialized_json);
 
   // Load from a file.
   Activity(bf::path path_to_file);
+
+  // Getters, which kindly return C strings to prevent having to go .c_str() all the time.
+  STRING_GETTER(slug)
+  STRING_GETTER(display_name)
+  STRING_GETTER(summary)
 
   std::string serialize(const int indent = -1, const char indent_char = ' ') const;
 
@@ -237,7 +280,7 @@ public:
   // Gets the next valid situation from an outcome's list for the given character.
   Situation* get_next_situation_from_outcome(const Outcome *outcome, struct char_data *ch);
 
-  // Method to get a situation by its slug
+  // Method to get a situation by its slug. NEVER store this result past immediate usage- if the map is moved (e.g. OLC), your pointer breaks!
   Situation* lookup_situation(const std::string& situationSlug) {
     auto it = situations.find(situationSlug);
     if (it != situations.end()) {
@@ -268,5 +311,8 @@ public:
   // todo: any additional state tracking etc, like long-term effects, progress along a journey, etc
 };
 
+extern std::map<std::string, Activity> global_activities;
+
+#undef STRING_GETTER
 
 #endif // _ACTIVITIES_CLASSES_HPP_

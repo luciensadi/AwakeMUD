@@ -20,10 +20,13 @@ CHECK_FUNCTION(roll_skill);
 CHECK_FUNCTION(has_spell_active);
 CHECK_FUNCTION(could_cast_spell);
 CHECK_FUNCTION(has_power_active);
+CHECK_FUNCTION(has_item);
+CHECK_FUNCTION(random);
 
 // Maps slugs to check functions. Remember, check functions can NEVER result in character death!
-#define MAP_CHECK_FUNCTION(slug, func_name) {slug, (void*)&_check_function_##func_name}
-std::map<std::string, void *> _check_type_to_function = {
+// Adding a new non-deterministic func? Make sure to add the slug to the non_deterministic_check_functions vector below.
+#define MAP_CHECK_FUNCTION(slug, func_name) {slug, (ActivityFuncPtr)&_check_function_##func_name}
+std::map<std::string, ActivityFuncPtr> _check_type_to_function = {
   MAP_CHECK_FUNCTION("_test_func", test_func),
   MAP_CHECK_FUNCTION("always_false", always_false),
 
@@ -32,6 +35,16 @@ std::map<std::string, void *> _check_type_to_function = {
 
   MAP_CHECK_FUNCTION("has_spell_active", has_spell_active),
   MAP_CHECK_FUNCTION("could_cast_spell", could_cast_spell),
+
+  MAP_CHECK_FUNCTION("has_power_active", has_power_active),
+
+  MAP_CHECK_FUNCTION("has_item", has_item),
+
+  MAP_CHECK_FUNCTION("random", random),
+};
+// We need to track deterministic vs non-determinstic because Activities cannot have ND checks in their preconditions (it feels like a bug to the user)
+std::vector<std::string> non_deterministic_check_functions = {
+  "roll_skill", "random",
 };
 
 // Serialization function.
@@ -60,11 +73,16 @@ Check::Check(const std::string& supplied_type, const std::map<std::string, std::
 
 // Deserialize a new Check from a JSON string.
 Check::Check(const std::string serialized)
-  : ActivityFunction(serialized, _check_type_to_function, (void*)&_check_function_always_false) {}
+  : ActivityFunction(serialized, _check_type_to_function, (ActivityFuncPtr)&_check_function_always_false) {}
 
 // Runs the associated func_ptr and returns its value.
 bool Check::test(struct char_data *ch) {
   return invoke(ch);
+}
+
+const char *Check::stringify() const {
+  // todo
+  return nullptr;
 }
 
 ///////////// Check function definitions below. Remember, check functions can NEVER result in character death!
@@ -175,6 +193,17 @@ CHECK_FUNCTION(has_item) {
   }
 
   return false;
+}
+
+///////////// Others / misc
+CHECK_FUNCTION(random) {
+  GET_SETTING(max_value);
+  int max_val = atoi(max_value);
+
+  GET_SETTING(this_or_lower);
+  int threshold = atoi(this_or_lower);
+
+  return (random() % max_val) < threshold;
 }
 
 #undef CHECK_FUNCTION

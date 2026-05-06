@@ -9,7 +9,7 @@ serialization/deserialization, and dispatch.
 
 using json = nlohmann::json;
 
-void ActivityFunction::resolve_ptr(const std::map<std::string, void*>& func_map) {
+void ActivityFunction::resolve_ptr(const std::map<std::string, ActivityFuncPtr>& func_map) {
   auto it = func_map.find(func_name);
   if (it != func_map.end()) {
     func_ptr = it->second;
@@ -23,7 +23,7 @@ void ActivityFunction::resolve_ptr(const std::map<std::string, void*>& func_map)
 // Regular constructor: store func_name and settings, look up func_ptr in the supplied map.
 ActivityFunction::ActivityFunction(const std::string& type,
                                    const std::map<std::string, std::string>& supplied_settings,
-                                   const std::map<std::string, void*>& func_map)
+                                   const std::map<std::string, ActivityFuncPtr>& func_map)
   : func_name(type), settings(supplied_settings) {
   resolve_ptr(func_map);
 }
@@ -31,8 +31,8 @@ ActivityFunction::ActivityFunction(const std::string& type,
 // Deserializing constructor: parse JSON, set func_name and settings, look up func_ptr.
 // Falls back to fallback_func_ptr if the func name is not found in the map.
 ActivityFunction::ActivityFunction(const std::string& serialized,
-                                   const std::map<std::string, void*>& func_map,
-                                   void* fallback_func_ptr) {
+                                   const std::map<std::string, ActivityFuncPtr>& func_map,
+                                   ActivityFuncPtr fallback_func_ptr) {
   auto parsed_json = json::parse(serialized);
 
   if (parsed_json.contains("func")) {
@@ -59,5 +59,5 @@ bool ActivityFunction::invoke(struct char_data *ch) {
     mudlog_vfprintf(nullptr, LOG_SYSLOG, "SYSERR: Refusing to invoke ActivityFunction '%s' with null function pointer.", func_name.c_str());
     return false;
   }
-  return ((bool (*)(struct char_data *, const std::map<std::string, std::string>&))func_ptr)(ch, settings);
+  return func_ptr(ch, settings);
 }

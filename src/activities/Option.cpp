@@ -54,6 +54,11 @@ Option::Option(const std::string serialized_json) {
   from_json(json::parse(serialized_json), *this);
 }
 
+const char *Option::stringify() const {
+  // todo
+  return nullptr;
+}
+
 //// shitty little debug test function, tucked out of the way down here
 void run_option_debug_tests(struct char_data *ch) {
   std::vector<Check> preconditions = {Check("_test_func", {{"a", "b"}})};

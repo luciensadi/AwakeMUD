@@ -59,14 +59,46 @@ ACMD(do_activity) {
   ((*activity_commands[cmd_index].command_pointer) (ch, parameters));
 }
 
-// Stubs to make it compile
-void display_activities_help(struct char_data *ch) {}
-void do_activities_list(struct char_data *ch, char *arguments) {}
-void do_activities_show(struct char_data *ch, char *arguments) {}
-void do_activities_create(struct char_data *ch, char *arguments) {}
-void do_activities_delete(struct char_data *ch, char *arguments) {}
-void do_activities_run(struct char_data *ch, char *arguments) {}
-void do_activities_debug(struct char_data *ch, char *arguments) {}
+void display_activities_help(struct char_data *ch) {
+  send_to_char("Usage: activity <command> <parameters>\r\n", ch);
+  send_to_char("Commands:\r\n", ch);
+
+  for (int cmd_index = 0; *(activity_commands[cmd_index].cmd) != '\n'; cmd_index++) {
+    if (access_level(ch, activity_commands[cmd_index].level_required)) {
+      send_to_char(ch, "  %-10s - %s\r\n", activity_commands[cmd_index].cmd, activity_commands[cmd_index].help_string);
+    }
+  }
+}
+
+void do_activities_create(struct char_data *ch, char *arguments) {
+  
+}
+
+void do_activities_debug(struct char_data *ch, char *arguments) {
+
+}
+
+void do_activities_delete(struct char_data *ch, char *arguments) {
+
+}
+
 void do_activities_edit(struct char_data *ch, char *arguments) {
+
+}
+
+void do_activities_list(struct char_data *ch, char *arguments) {
+  FAILURE_CASE(global_activities.empty(), "There are no activities to list.");
+  for (auto activity : global_activities) {
+    if (access_level(ch, LVL_BUILDER) || activity.second.meets_preconditions(ch)) {
+      send_to_char(ch, "%30s -- %s\r\n", activity.second.slug.c_str(), activity.second.display_name.c_str());
+    }
+  }
+}
+
+void do_activities_run(struct char_data *ch, char *arguments) {
+
+}
+
+void do_activities_show(struct char_data *ch, char *arguments) {
 
 }
