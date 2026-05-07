@@ -111,9 +111,9 @@ SPECIAL(call_elevator)
   // Push button.
   if (cmd_is_push) {
     skip_spaces(&argument);
-    if (!*argument || !(!strcasecmp("elevator", argument) ||
-                        !strcasecmp("button", argument)   ||
-                        !strcasecmp("call", argument)))
+    if (!*argument || !(!str_cmp("elevator", argument) ||
+                        !str_cmp("button", argument)   ||
+                        !str_cmp("call", argument)))
     {
       // Don't consume the command.
       return FALSE;
