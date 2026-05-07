@@ -31,7 +31,10 @@ namespace {
     {"_test_func", {
       &_effect_function_test_func,
       "Debug-only effect that does nothing (and logs the call). Never kills.",
-      {},
+      {
+        {"message",  "A string to echo in the log output.",       ActivityParamType::STRING,  PARAM_REQUIRED},
+        {"count",    "How many times to log it (for testing).",   ActivityParamType::INTEGER, PARAM_OPTIONAL, "1"},
+      },
       DETERMINISTIC,
     }},
     {"always_false", {
@@ -126,7 +129,11 @@ const char *Effect::stringify() const {
 EFFECT_FUNCTION(always_false) { return false; }
 
 EFFECT_FUNCTION(test_func) {
-  mudlog_vfprintf(ch, LOG_SYSLOG, "Effect() called with _effect_test_func(ch, {}x%zu), returning false.", settings.size());
+  GET_SETTING(message);
+  GET_SETTING_DEFAULT(count, "1");
+  int count_val = atoi(count);
+  for (int i = 0; i < count_val; i++)
+    mudlog_vfprintf(ch, LOG_SYSLOG, "Effect _test_func: message='%s' (%d/%d), returning false.", message, i + 1, count_val);
   return false;
 };
 
@@ -137,7 +144,8 @@ EFFECT_FUNCTION(test_func) {
 
 //// shitty little debug test function, tucked out of the way down here
 void run_effect_debug_tests(struct char_data *ch) {
-  Effect *effect = new Effect("_test_func", {{"a", "b"}});
+  // Valid params + one unknown ("not_a_param") to verify the typo-guard fires exactly once.
+  Effect *effect = new Effect("_test_func", {{"message", "hello from effect test"}, {"count", "2"}, {"not_a_param", "oops"}});
   if (effect->apply(ch)) { mudlog_vfprintf(NULL, LOG_SYSLOG, "Applying debug test caused character death, RIP"); return; }
   send_to_char(ch, "Effect applied.\r\n");
   

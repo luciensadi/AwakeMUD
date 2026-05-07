@@ -40,7 +40,10 @@ namespace {
     {"_test_func", {
       &_check_function_test_func,
       "Debug-only check that always returns true (and logs the call).",
-      {},
+      {
+        {"message",  "A string to echo in the log output.",       ActivityParamType::STRING,  PARAM_REQUIRED},
+        {"count",    "How many times to log it (for testing).",   ActivityParamType::INTEGER, PARAM_OPTIONAL, "1"},
+      },
       DETERMINISTIC,
     }},
     {"always_false", {
@@ -199,7 +202,11 @@ const char *Check::stringify() const {
 CHECK_FUNCTION(always_false) { return false; }
 
 CHECK_FUNCTION(test_func) {
-  mudlog_vfprintf(ch, LOG_SYSLOG, "Check() called with _check_test_func(ch, {}x%zu), returning true.", settings.size());
+  GET_SETTING(message);
+  GET_SETTING_DEFAULT(count, "1");
+  int count_val = atoi(count);
+  for (int i = 0; i < count_val; i++)
+    mudlog_vfprintf(ch, LOG_SYSLOG, "Check _test_func: message='%s' (%d/%d), returning true.", message, i + 1, count_val);
   return true;
 };
 
@@ -299,7 +306,8 @@ CHECK_FUNCTION(random) {
 
 //// shitty little debug test function, tucked out of the way down here
 void run_check_debug_tests(struct char_data *ch) {
-  Check *check = new Check("_test_func", {{"a", "b"}});
+  // Valid params + one unknown ("not_a_param") to verify the typo-guard fires exactly once.
+  Check *check = new Check("_test_func", {{"message", "hello from check test"}, {"count", "2"}, {"not_a_param", "oops"}});
   send_to_char(ch, "You %s!\r\n", check->test(ch) ? "passed" : "failed");
   
   auto serialized = check->serialize(2);
