@@ -9,7 +9,7 @@ CXX ?= clang++
 
 # These flags are set for all builds.
 BASE_CPPFLAGS = -I/usr/local/include/ -std=c++20 -D_GNU_SOURCE -DLOG_COMMANDS -DIDLEDELETE_DRYRUN
-BASE_CXXFLAGS = -Wall -Wextra -Wno-unused-parameter -Wno-vla -Wno-char-subscripts -Wno-format-overflow -Wno-deprecated-copy -ggdb
+BASE_CXXFLAGS = -Wall -Wextra -Wno-unused-parameter -Wno-vla -Wno-char-subscripts -Wno-format-overflow -Wno-format-truncation -Wno-deprecated-copy -ggdb
 BASE_LDFLAGS  = -L/usr/local/lib
 BASE_LDLIBS   = -lmysqlclient -lz -lm -lboost_filesystem
 
