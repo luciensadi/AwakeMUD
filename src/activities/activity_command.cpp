@@ -78,6 +78,7 @@ void do_activities_create(struct char_data *ch, char *arguments) {
   ch->desc->edit_activity = new Activity();
 
   PLR_FLAGS(ch).SetBit(PLR_EDITING);
+  STATE(ch->desc) = CON_ACTIVITY_EDIT;
   activity_activity_main_menu(ch->desc);
 }
 
@@ -108,6 +109,7 @@ void do_activities_edit(struct char_data *ch, char *arguments) {
   ch->desc->edit_activity = new Activity(itr->second);
 
   PLR_FLAGS(ch).SetBit(PLR_EDITING);
+  STATE(ch->desc) = CON_ACTIVITY_EDIT;
   activity_activity_main_menu(ch->desc);
 }
 

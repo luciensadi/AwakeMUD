@@ -38,6 +38,7 @@
 #include "factions.hpp"
 #include "player_exdescs.hpp"
 #include "pets.hpp"
+#include "activities/activity_olc.hpp"
 
 #define DO_FORMAT_INDENT   1
 #define DONT_FORMAT_INDENT 0
@@ -274,6 +275,20 @@ void string_add(struct descriptor_data *d, char *str)
 #define REPLACE_STRING(target) (REPLACE_STRING_FORMAT_SPECIFIED(target, DONT_FORMAT_INDENT))
 #define REPLACE_STRING_WITH_INDENTED_FORMATTING(target) (REPLACE_STRING_FORMAT_SPECIFIED(target, DO_FORMAT_INDENT))
 
+
+// REPLACE_STD_STRING converts d->str to a std::string and sets the target value to that.
+#define REPLACE_STD_STRING_FORMAT_SPECIFIED(target, format_bit) ({ \
+  if ((d->str) && !detected_abort) {                               \
+    format_string(d, (format_bit));                                \
+    (target) = std::string(*d->str);                               \
+    DELETE_D_STR_IF_EXTANT(d);                                     \
+  }                                                                \
+})
+
+#define REPLACE_STD_STRING(target) (REPLACE_STD_STRING_FORMAT_SPECIFIED(target, DONT_FORMAT_INDENT))
+#define REPLACE_STD_STRING_WITH_INDENTED_FORMATTING(target) (REPLACE_STD_STRING_FORMAT_SPECIFIED(target, DO_FORMAT_INDENT))
+
+
     if (d->character && d->str) {
       bool is_editing_character_desc (STATE(d) == CON_PCUSTOMIZE || STATE(d) == CON_ACUSTOMIZE || STATE(d) == CON_FCUSTOMIZE || STATE(d) ==CON_PC_EXDESC_EDIT);
       if (check_for_banned_content(*(d->str), d->character, is_editing_character_desc ? MODERATION_MODE_CHARACTER_DESCRIPTIONS : MODERATION_MODE_THING_DESCRIPTIONS)) {
@@ -358,6 +373,13 @@ void string_add(struct descriptor_data *d, char *str)
     } else if (STATE(d) == CON_HELPEDIT) {
       REPLACE_STRING(d->edit_helpfile->body);
       helpedit_disp_menu(d);
+    } else if (STATE(d) == CON_ACTIVITY_EDIT) {
+      switch (d->edit_mode) {
+        case ACTIVITY_EDIT_activity_edit_summary:
+          REPLACE_STD_STRING(d->edit_activity->summary);
+          activity_activity_main_menu(d);
+          break;
+      }
     } else if (STATE(d) == CON_FACTION_EDIT) {
       if ((d->str) && !detected_abort) {
         format_string(d, DO_FORMAT_INDENT);

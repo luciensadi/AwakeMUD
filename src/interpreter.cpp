@@ -149,9 +149,10 @@ ACMD_DECLARE(do_olcon);
 ACMD_DECLARE(do_abilityset);
 ACMD_DECLARE(do_accept);
 ACMD_DECLARE(do_account);
-ACMD_DECLARE(do_adjust);
 ACMD_DECLARE(do_action);
 ACMD_DECLARE(do_activate);
+ACMD_DECLARE(do_activity);
+ACMD_DECLARE(do_adjust);
 ACMD_DECLARE(do_advance);
 ACMD_DECLARE(do_afk);
 ACMD_DECLARE(do_alias);
@@ -551,6 +552,7 @@ struct command_info cmd_info[] =
     { "abilities"  , POS_MORTALLYW, do_skills   , 0, SCMD_ABILITIES, ALLOWS_IDLE_REWARD },
     { "abilityset" , POS_SLEEPING, do_abilityset , LVL_DEVELOPER, 0, ALLOWS_IDLE_REWARD },
     { "activate"   , POS_LYING   , do_activate , 0, 0, BLOCKS_IDLE_REWARD },
+    { "activity"   , POS_LYING   , do_activity , LVL_BUILDER, 0, BLOCKS_IDLE_REWARD },
     { "aecho"      , POS_SLEEPING, do_new_echo , LVL_ARCHITECT, SCMD_AECHO, BLOCKS_IDLE_REWARD },
     { "accept"     , POS_LYING   , do_accept   , 0, 0, BLOCKS_IDLE_REWARD },
 #ifdef IS_BUILDPORT

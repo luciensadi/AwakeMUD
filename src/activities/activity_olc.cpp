@@ -28,6 +28,12 @@
 #define CASE_TO_MENU(switchcase, name_component) case switchcase: activity_##name_component##_menu(d); break
 #define CASE_TO_EDITMODE(switchcase, message, the_mode) case switchcase: send_to_char(message, CH); d->edit_mode = the_mode; break
 
+#define SETUP_D_STR \
+  DELETE_D_STR_IF_EXTANT(d); \
+  INITIALIZE_NEW_D_STR(d); \
+  d->max_str = MAX_MESSAGE_LENGTH; \
+  d->mail_to = 0;
+
 #define REPLACE_STRING_IF_NOT_ABORT(switchcase, var_name, menu_component)  \
   case ACTIVITY_EDIT_##switchcase: {                                       \
     if (!str_cmp(arg, "abort") || !*arg) {                                 \
@@ -39,14 +45,7 @@
   } break;
 
 // todo: move to OLC header
-// #define ACTIVITY_EDIT_activity_main 0
-#define ACTIVITY_EDIT_activity_edit_slug 1
-#define ACTIVITY_EDIT_activity_edit_display_name 2
-#define ACTIVITY_EDIT_activity_edit_summary 3
-#define ACTIVITY_EDIT_activity_edit_preconditions 4
-#define ACTIVITY_EDIT_activity_edit_situations 5
-#define ACTIVITY_EDIT_activity_edit_starting_situations 6
-#define ACTIVITY_EDIT_check_main 7
+
 
 // Put a DECLARE_FUNCS() here for each line item where you want a menu and parser function built. Best to name them after the variable involved.
 DECLARE_FUNCS(activity_main);
@@ -69,9 +68,9 @@ PARSEFUNC(activity_editing_entrypoint) {
 }
 
 MENUFUNC(activity_main) {
-  send_to_char(CH, "1)  Shortname (slug): ^c%s^n\r\n", ACT->get_slug());
-  send_to_char(CH, "2)  Display Name:     ^c%s^n\r\n", ACT->get_display_name());
-  send_to_char(CH, "3)  Summary:\r\n\r\n%s\r\n", ACT->get_summary());
+  send_to_char(CH, "1)  Shortname (slug): ^c%s^n\r\n", ACT->slug.empty() ? "(not set)" : ACT->get_slug());
+  send_to_char(CH, "2)  Display Name:     ^c%s^n\r\n", ACT->display_name.empty() ? "(not set)" : ACT->get_display_name());
+  send_to_char(CH, "3)  Summary:\r\n  %s\r\n", ACT->summary.empty() ? "(not set)" : ACT->get_summary());
 
   send_to_char(CH, "\r\n4)  Preconditions:\r\n%s", ACT->preconditions.empty() ? "    - None defined (always available)\r\n" : "");
   for (const auto &precondition : ACT->preconditions) {
@@ -143,10 +142,7 @@ PARSEFUNC(activity_main) {
     case '3':
       send_to_char("Enter a tantalizing non-spoiler summary for the activity.\r\n", CH);
       d->edit_mode = ACTIVITY_EDIT_activity_edit_summary;
-      DELETE_D_STR_IF_EXTANT(d);
-      INITIALIZE_NEW_D_STR(d);
-      d->max_str = MAX_MESSAGE_LENGTH;
-      d->mail_to = 0;
+      SETUP_D_STR;
       break;
     CASE_TO_EDITMODE('1', "Enter the new slug, or enter 'abort' to cancel.\r\n", ACTIVITY_EDIT_activity_edit_slug);
     CASE_TO_EDITMODE('2', "Enter the new display name, or enter 'abort' to cancel.\r\n", ACTIVITY_EDIT_activity_edit_display_name);
