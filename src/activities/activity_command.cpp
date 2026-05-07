@@ -1,5 +1,6 @@
 #include "../interpreter.hpp"
 #include "classes.hpp"
+#include "activity_olc.hpp"
 
 void do_activities_list(struct char_data *ch, char *arguments);
 void do_activities_show(struct char_data *ch, char *arguments);
@@ -71,7 +72,13 @@ void display_activities_help(struct char_data *ch) {
 }
 
 void do_activities_create(struct char_data *ch, char *arguments) {
-  
+  // Message sent in function.
+  if (!is_olc_available(ch)) { return; }
+
+  ch->desc->edit_activity = new Activity();
+
+  PLR_FLAGS(ch).SetBit(PLR_EDITING);
+  activity_activity_main_menu(ch->desc);
 }
 
 void do_activities_debug(struct char_data *ch, char *arguments) {
@@ -79,11 +86,29 @@ void do_activities_debug(struct char_data *ch, char *arguments) {
 }
 
 void do_activities_delete(struct char_data *ch, char *arguments) {
+  // Message sent in function.
+  if (!is_olc_available(ch)) { return; }
 
+  // without 'confirm', do nothing
+
+  // with 'confirm', process deletion and log
 }
 
 void do_activities_edit(struct char_data *ch, char *arguments) {
+  // Message sent in function.
+  if (!is_olc_available(ch)) { return; }
 
+  // find the activity identified by slug; error if not found
+  auto itr = global_activities.find(arguments);
+  FAILURE_CASE_PRINTF(itr == global_activities.end(), "'%s' is not a valid activity slug. Use ACTIVITIES LIST to see the ones available.", arguments);
+
+  // Ensure you have edit abilities.
+  FAILURE_CASE(itr->second.can_edit(ch), "You don't have permission to edit that activity.");
+
+  ch->desc->edit_activity = new Activity(itr->second);
+
+  PLR_FLAGS(ch).SetBit(PLR_EDITING);
+  activity_activity_main_menu(ch->desc);
 }
 
 void do_activities_list(struct char_data *ch, char *arguments) {

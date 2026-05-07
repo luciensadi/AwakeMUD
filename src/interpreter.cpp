@@ -92,6 +92,7 @@ void free_shop(struct shop_data *shop);
 void free_quest(struct quest_data *quest);
 void init_parse(struct descriptor_data *d, char *arg);
 void submersion_parse(struct descriptor_data *d, char *arg);
+void activity_activity_editing_entrypoint_parse(struct descriptor_data *d, const char *arg);
 void vehcust_parse(struct descriptor_data *d, char *arg);
 void pocketsec_parse(struct descriptor_data *d, char *arg);
 void faction_edit_parse(struct descriptor_data *d, const char *arg);
@@ -3032,6 +3033,9 @@ void nanny(struct descriptor_data * d, char *arg)
     break;
   case CON_SUBMERSION:
     submersion_parse(d, arg);
+    break;
+  case CON_ACTIVITY_EDIT:
+    activity_activity_editing_entrypoint_parse(d, arg);
     break;
   case CON_CCREATE:
     create_parse(d, arg);

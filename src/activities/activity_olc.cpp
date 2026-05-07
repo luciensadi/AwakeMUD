@@ -39,36 +39,36 @@
   } break;
 
 // todo: move to OLC header
-#define ACTIVITY_EDIT_activity_main_menu 0
+// #define ACTIVITY_EDIT_activity_main 0
 #define ACTIVITY_EDIT_activity_edit_slug 1
 #define ACTIVITY_EDIT_activity_edit_display_name 2
 #define ACTIVITY_EDIT_activity_edit_summary 3
 #define ACTIVITY_EDIT_activity_edit_preconditions 4
 #define ACTIVITY_EDIT_activity_edit_situations 5
 #define ACTIVITY_EDIT_activity_edit_starting_situations 6
-#define ACTIVITY_EDIT_check_main_menu 7
+#define ACTIVITY_EDIT_check_main 7
 
 // Put a DECLARE_FUNCS() here for each line item where you want a menu and parser function built. Best to name them after the variable involved.
-DECLARE_FUNCS(activity_main_menu);
-DECLARE_FUNCS(activity_preconditions);
-DECLARE_FUNCS(activity_situations);
-DECLARE_FUNCS(activity_starting_situations);
+DECLARE_FUNCS(activity_main);
+DECLARE_FUNCS(activity_edit_preconditions);
+DECLARE_FUNCS(activity_edit_situations);
+DECLARE_FUNCS(activity_edit_starting_situations);
 
-DECLARE_FUNCS(activity_check_main_menu);
+DECLARE_FUNCS(check_main);
 
 // This is where all commands are routed for folks in OLC mode.
 PARSEFUNC(activity_editing_entrypoint) {
   switch (d->edit_mode) {
-    MENU_CASE_TO_PARSER(activity_main_menu);
+    MENU_CASE_TO_PARSER(activity_main);
     MENU_CASE_TO_PARSER(activity_edit_preconditions);
     MENU_CASE_TO_PARSER(activity_edit_situations);
     MENU_CASE_TO_PARSER(activity_edit_starting_situations);
-    REPLACE_STRING_IF_NOT_ABORT(activity_edit_slug, slug, activity_main_menu);
-    REPLACE_STRING_IF_NOT_ABORT(activity_edit_display_name, display_name, activity_main_menu);
+    REPLACE_STRING_IF_NOT_ABORT(activity_edit_slug, slug, activity_main);
+    REPLACE_STRING_IF_NOT_ABORT(activity_edit_display_name, display_name, activity_main);
   }
 }
 
-MENUFUNC(activity_main_menu) {
+MENUFUNC(activity_main) {
   send_to_char(CH, "1)  Shortname (slug): ^c%s^n\r\n", ACT->get_slug());
   send_to_char(CH, "2)  Display Name:     ^c%s^n\r\n", ACT->get_display_name());
   send_to_char(CH, "3)  Summary:\r\n\r\n%s\r\n", ACT->get_summary());
@@ -95,10 +95,12 @@ MENUFUNC(activity_main_menu) {
   send_to_char("\r\nMake a selection: ", CH);
 }
 
-PARSEFUNC(activity_main_menu) {
+PARSEFUNC(activity_main) {
   switch (tolower(*arg)) {
     case 'q':
       {
+        bool activity_already_existed = false;
+
         // Warn on failed validations.
         if (ACT->starting_situations.empty()) {
           send_to_char("^YWARNING:^n This Activity does not have any starting situations defined, so will not function.", CH);
@@ -108,6 +110,7 @@ PARSEFUNC(activity_main_menu) {
         auto activities_iterator = global_activities.find(ACT->slug);
         if (activities_iterator != global_activities.end()) {
           global_activities.erase(activities_iterator);
+          activity_already_existed = true;
         }
 
         // If we have an old slug, drop the matching activity from the global map.
@@ -115,9 +118,12 @@ PARSEFUNC(activity_main_menu) {
           activities_iterator = global_activities.find(ACT->old_slug);
           if (activities_iterator != global_activities.end()) {
             global_activities.erase(activities_iterator);
+            activity_already_existed = true;
           }
           ACT->old_slug = "";
         }
+
+        mudlog_vfprintf(CH, LOG_WIZLOG, "%s %s activity '%s' (%s)", GET_CHAR_NAME(CH), activity_already_existed ? "overwrote" : "wrote new", ACT->get_display_name(), ACT->get_slug());
 
         ACT->updatedAt = time(0);
 
@@ -130,23 +136,23 @@ PARSEFUNC(activity_main_menu) {
       // fall through
     case 'x':
       // Clean up and return them to the playing state.
-      STATE(d) = CON_PLAYING;
       free_editing_structs(d, STATE(d));
       PLR_FLAGS(d->character).RemoveBit(PLR_EDITING);
+      STATE(d) = CON_PLAYING;
       break;
     case '3':
       send_to_char("Enter a tantalizing non-spoiler summary for the activity.\r\n", CH);
-      d->edit_mode = ACTIVITY_EDIT_summary;
+      d->edit_mode = ACTIVITY_EDIT_activity_edit_summary;
       DELETE_D_STR_IF_EXTANT(d);
       INITIALIZE_NEW_D_STR(d);
       d->max_str = MAX_MESSAGE_LENGTH;
       d->mail_to = 0;
       break;
-    CASE_TO_EDITMODE('1', "Enter the new slug, or enter 'abort' to cancel.\r\n", ACTIVITY_EDIT_slug);
-    CASE_TO_EDITMODE('2', "Enter the new display name, or enter 'abort' to cancel.\r\n", ACTIVITY_EDIT_display_name);
-    CASE_TO_MENU('4', preconditions);
-    CASE_TO_MENU('5', situations);
-    CASE_TO_MENU('6', starting_situations);
+    CASE_TO_EDITMODE('1', "Enter the new slug, or enter 'abort' to cancel.\r\n", ACTIVITY_EDIT_activity_edit_slug);
+    CASE_TO_EDITMODE('2', "Enter the new display name, or enter 'abort' to cancel.\r\n", ACTIVITY_EDIT_activity_edit_display_name);
+    CASE_TO_MENU('4', activity_edit_preconditions);
+    CASE_TO_MENU('5', activity_edit_situations);
+    CASE_TO_MENU('6', activity_edit_starting_situations);
     default:
       send_to_char(CH, "'%s' is not a valid selection. Enter a number from the menu, or Q to quit and save, or X to abort without saving.\r\n");
       break;
@@ -176,12 +182,12 @@ PARSEFUNC(activity_edit_preconditions) {
   // req: no non-deterministic checks (random, etc); aka not in extern std::vector<std::string> non_deterministic_check_functions
   switch (tolower(*arg)) {
     case 'c':
-    CASE_TO_MENU('q', activity_main_menu);
+    CASE_TO_MENU('q', activity_main);
     default:
       if (!ACT->preconditions.empty() && isnumber(*arg)) {
-        int selection = atoi(arg);
-        if (selection > ACT->preconditions.size() || selection <= 0) {
-          send_to_char(CH, "There aren't that many preconditions. Pick a number from 1 - %d.", ACT->preconditions.size());
+        unsigned long selection = atol(arg);
+        if (selection > ACT->preconditions.size() || selection <= 0 || selection >= 100) {
+          send_to_char(CH, "There aren't that many preconditions. Pick a number from 1 - %ld.", ACT->preconditions.size());
           return;
         }
         d->edit_check = &(ACT->preconditions[selection - 1]);
@@ -212,11 +218,12 @@ PARSEFUNC(activity_edit_starting_situations) {
 
 /////////////////////// Check editing
 // Precondition: d->edit_check must be valid.
-MENUFUNC(check_main_menu) {
-
+MENUFUNC(check_main) {
+  // Display the check, then depending on which d->edit_ values are populated, give options about deleting, saving, etc
+  
 }
 
-PARSEFUNC(check_main_menu) {
+PARSEFUNC(check_main) {
 
 }
 
