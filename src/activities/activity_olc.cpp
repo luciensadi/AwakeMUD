@@ -70,22 +70,22 @@ PARSEFUNC(activity_editing_entrypoint) {
 MENUFUNC(activity_main) {
   send_to_char(CH, "1)  Shortname (slug): ^c%s^n\r\n", ACT->slug.empty() ? "(not set)" : ACT->get_slug());
   send_to_char(CH, "2)  Display Name:     ^c%s^n\r\n", ACT->display_name.empty() ? "(not set)" : ACT->get_display_name());
-  send_to_char(CH, "3)  Summary:\r\n  %s\r\n", ACT->summary.empty() ? "(not set)" : ACT->get_summary());
+  send_to_char(CH, "3)  Summary:\r\n  %s^n\r\n", ACT->summary.empty() ? "(not set)" : ACT->get_summary());
 
   send_to_char(CH, "\r\n4)  Preconditions:\r\n%s", ACT->preconditions.empty() ? "    - None defined (always available)\r\n" : "");
   for (const auto &precondition : ACT->preconditions) {
-    send_to_char(CH, "    - %s\r\n", precondition.stringify());
+    send_to_char(CH, "    - ^c%s^n\r\n", precondition.stringify());
   }
 
   send_to_char(CH, "\r\n5)  Situations Available:\r\n%s", ACT->situations.empty() ? "    - ^yNone defined^n\r\n" : "");
   for (const auto &pair : ACT->situations) {
-    send_to_char(CH, "    - %s\r\n", pair.second.stringify());
+    send_to_char(CH, "    - ^c%s^n\r\n", pair.second.stringify());
   }
 
-  send_to_char(CH, "\r\n6)  Starting Situations: %s", ACT->starting_situations.empty() ? "^ynot set^n\r\n" : "");
+  send_to_char(CH, "\r\n6)  Starting Situations: ^c%s^n", ACT->starting_situations.empty() ? "^ynot set^n\r\n" : "");
   int items_printed = 0;
   for (const auto &slug : ACT->starting_situations) {
-    send_to_char(CH, "%s%s", items_printed++ == 0 ? "" : ", ", slug.c_str());
+    send_to_char(CH, "%s%s", items_printed++ == 0 ? "" : "^n, ^c", slug.c_str());
   }
   send_to_char("\r\n", CH);
 
@@ -185,7 +185,13 @@ PARSEFUNC(activity_edit_preconditions) {
   // against the param's spec from spec->params before mutating the Check.
   switch (tolower(*arg)) {
     case 'c':
-    CASE_TO_MENU('q', activity_main);
+      d->edit_check = new Check();
+      activity_check_main_menu(d);
+      break;
+    case 'q':
+      d->edit_check = nullptr;
+      activity_activity_main_menu(d);
+      break;
     default:
       if (!ACT->preconditions.empty() && isnumber(*arg)) {
         unsigned long selection = atol(arg);
@@ -193,7 +199,7 @@ PARSEFUNC(activity_edit_preconditions) {
           send_to_char(CH, "There aren't that many preconditions. Pick a number from 1 - %ld.", ACT->preconditions.size());
           return;
         }
-        d->edit_check = &(ACT->preconditions[selection - 1]);
+        d->edit_check = &(ACT->preconditions[selection - 1]); // nope, do this in a way where they can abort editing that check. Clone it. TODO
         activity_check_main_menu(d);
         break;
       }
@@ -212,6 +218,12 @@ PARSEFUNC(activity_edit_situations) {
 
 // activity starting situations
 MENUFUNC(activity_edit_starting_situations) {
+  if (ACT->situations.empty()) {
+    send_to_char(CH, "You can't select a starting situation until you create at least one situation above.\r\n");
+    activity_activity_main_menu(d);
+    return;
+  }
+
   // todo: display current list of situations, then ask for a slug to toggle starting status on, or q/0 to go back
 }
 
