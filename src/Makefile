@@ -8,7 +8,7 @@ SHELL = /bin/sh
 CXX ?= clang++
 
 # These flags are set for all builds.
-BASE_CPPFLAGS = -I/usr/local/include/ -std=c++20 -DLOG_COMMANDS
+BASE_CPPFLAGS = -I/usr/local/include/ -std=c++20 -DLOG_COMMANDS -DIDLEDELETE_DRYRUN
 BASE_CXXFLAGS = -Wall -Wextra -Wno-unused-parameter -Wno-vla -ggdb
 BASE_LDFLAGS  = -L/usr/local/lib
 BASE_LDLIBS   = -lmysqlclient -lz -lm -lboost_filesystem
@@ -26,7 +26,7 @@ IS_BUILDPORT ?= 1
 ifeq ($(IS_BUILDPORT),1)
 	BASE_CXXFLAGS += -DIS_BUILDPORT -DSELFADVANCE -DUSE_MEMORY_CANARIES
 else
-	BASE_CXXFLAGS += -DSUPPRESS_MOB_SKILL_ERRORS
+	BASE_CXXFLAGS += -DSUPPRESS_MOB_SKILL_ERRORS -DIGNORING_IC_ALSO_IGNORES_COMBAT 
 endif
 
 # Auto-detect the OS and apply the unique flags for that config
@@ -46,12 +46,12 @@ else ifeq ($(UNAME_S),Linux)  # Linux
 		# We clear the BASE_CXXFLAGS var because we don't actually care about warnings during the CI build process.
 		BASE_CXXFLAGS = 
 	else
-		OS_CPPFLAGS = -Dlinux -DDEBUG_CRYPTO -DIDLEDELETE_DRYRUN
+		OS_CPPFLAGS = -Dlinux -DDEBUG_CRYPTO -DREIMPLEMENT_STRLCPY_STRLCAT -DNO_CLS -DUSE_MYSQL_8
 		OS_LDFLAGS  = 
 		OS_LDLIBS   = -lcrypt -lnsl -lcurl -lsodium
 	endif
 else  # Windows (Cygwin/MinGW)
-	OS_CPPFLAGS = -DWIN32 -DIDLEDELETE_DRYRUN
+	OS_CPPFLAGS = -DWIN32 -DREIMPLEMENT_STRLCPY_STRLCAT
 	OS_LDFLAGS  = 
 	OS_LDLIBS   = -lcrypt -lsodium
 endif
