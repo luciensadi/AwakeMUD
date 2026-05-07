@@ -8,8 +8,8 @@ SHELL = /bin/sh
 CXX ?= clang++
 
 # These flags are set for all builds.
-BASE_CPPFLAGS = -I/usr/local/include/ -std=c++20 -DLOG_COMMANDS -DIDLEDELETE_DRYRUN
-BASE_CXXFLAGS = -Wall -Wextra -Wno-unused-parameter -Wno-vla -ggdb
+BASE_CPPFLAGS = -I/usr/local/include/ -std=c++20 -D_GNU_SOURCE -DLOG_COMMANDS -DIDLEDELETE_DRYRUN
+BASE_CXXFLAGS = -Wall -Wextra -Wno-unused-parameter -Wno-vla -Wno-char-subscripts -Wno-format-overflow -Wno-deprecated-copy -ggdb
 BASE_LDFLAGS  = -L/usr/local/lib
 BASE_LDLIBS   = -lmysqlclient -lz -lm -lboost_filesystem
 
@@ -51,7 +51,7 @@ else ifeq ($(UNAME_S),Linux)  # Linux
 		OS_LDLIBS   = -lcrypt -lnsl -lcurl -lsodium
 	endif
 else  # Windows (Cygwin/MinGW)
-	OS_CPPFLAGS = -DWIN32 -DREIMPLEMENT_STRLCPY_STRLCAT
+	OS_CPPFLAGS = -DWIN32 -DREIMPLEMENT_STRLCPY_STRLCAT -D_XOPEN_SOURCE=700 -D_REENTRANT
 	OS_LDFLAGS  = 
 	OS_LDLIBS   = -lcrypt -lsodium
 endif
