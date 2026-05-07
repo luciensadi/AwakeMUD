@@ -45,6 +45,59 @@
 
 typedef bool (*ActivityFuncPtr)(struct char_data*, const std::map<std::string, std::string>&);
 
+// Type constraints for ActivityParamSpec values. Used both for documentation and
+// runtime/OLC validation. Add new entries as needed; remember to extend the
+// validator in ActivityFunction.cpp.
+enum class ActivityParamType {
+  STRING,         // any non-empty string
+  INTEGER,        // base-10 signed int (atoi-clean, no trailing junk)
+  BOOLEAN,        // "true"/"false"/"1"/"0"/"yes"/"no" (case-insensitive)
+  SKILL_NAME,     // resolves via skill_name_to_idx()
+  SPELL_NAME,     // resolves via spell_name_to_idx()
+  POWER_NAME,     // resolves via power_name_to_idx()
+  OBJ_VNUM,       // resolves via real_object()
+  MOB_VNUM,       // resolves via real_mobile()
+  ROOM_VNUM,      // resolves via real_room()
+  QUEST_VNUM,     // resolves via real_quest()
+  NUYEN_AMOUNT,   // non-negative int (cap-able by callers)
+  KARMA_AMOUNT,   // non-negative float
+};
+
+// Convenience macros for ActivityParamSpec.required and ActivityFuncSpec.is_deterministic
+// so registry entries read as data, not magic booleans.
+#define PARAM_REQUIRED        true
+#define PARAM_OPTIONAL        false
+#define DETERMINISTIC         true
+#define NON_DETERMINISTIC     false
+
+// Describes one parameter of an ActivityFunction (Check or Effect).
+struct ActivityParamSpec {
+  std::string name;                                       // key in the settings map, e.g. "tn"
+  std::string description;                                // human-facing hint, e.g. "the target number to roll against"
+  ActivityParamType type = ActivityParamType::STRING;     // value-type constraint
+  bool required = PARAM_REQUIRED;                         // whether the param must be present
+  std::string default_value = "";                         // only meaningful when !required
+};
+
+// Describes one entry in a Check or Effect registry.
+struct ActivityFuncSpec {
+  ActivityFuncPtr func_ptr = nullptr;
+  std::string description;                                // human-facing summary of what the function does
+  std::vector<ActivityParamSpec> params = {};             // ordered: matches OLC display order
+  bool is_deterministic = DETERMINISTIC;                  // false => uses RNG / cannot be used in Activity preconditions
+};
+
+// Validates a single parameter value against a type. Returns true on success.
+// On failure, fills err_out with a builder-friendly message (no trailing newline).
+// Exposed at namespace scope so OLC code can validate before constructing a
+// Check or Effect.
+bool validate_activity_param_value(ActivityParamType type,
+                                   const std::string& value,
+                                   std::string& err_out);
+
+// Convenience: stringify an ActivityParamType for OLC menus / error messages.
+const char *activity_param_type_name(ActivityParamType type);
+
 // Base class shared by Check and Effect.
 // Holds the function pointer, func_name, settings, and provides serialization.
 // Derived classes supply their own function registry via the protected constructors.
@@ -52,15 +105,18 @@ class ActivityFunction {
 protected:
   ActivityFuncPtr func_ptr = nullptr;
 
-  // Regular construction: looks up type in func_map and stores the pointer.
+  // Regular construction: looks up type in registry, validates settings, stores
+  // the pointer (or fallback_func_ptr on validation failure -- with SYSERR log).
   ActivityFunction(const std::string& type,
                    const std::map<std::string, std::string>& settings,
-                   const std::map<std::string, ActivityFuncPtr>& func_map);
+                   const std::map<std::string, ActivityFuncSpec>& registry,
+                   ActivityFuncPtr fallback_func_ptr);
 
-  // Deserializing construction: parses JSON, looks up func_name in func_map.
-  // Falls back to fallback_func_ptr (and logs a SYSERR) if the name is not found.
+  // Deserializing construction: parses JSON, looks up func_name in registry.
+  // Falls back to fallback_func_ptr (and logs a SYSERR) if the name is not
+  // found or if validation of required params fails.
   ActivityFunction(const std::string& serialized,
-                   const std::map<std::string, ActivityFuncPtr>& func_map,
+                   const std::map<std::string, ActivityFuncSpec>& registry,
                    ActivityFuncPtr fallback_func_ptr);
 
   // Virtual destructor for inheritance, default copy/move operations for everything else
@@ -78,7 +134,10 @@ public:
   std::map<std::string, std::string> settings = {}; // A map of settings/parameters.
 
   ActivityFunction() = default;
-  void resolve_ptr(const std::map<std::string, ActivityFuncPtr>& func_map);
+
+  // Resolves func_ptr by looking up func_name in the supplied registry. Logs a
+  // SYSERR and leaves func_ptr null if not found. Used by from_json() paths.
+  void resolve_ptr(const std::map<std::string, ActivityFuncSpec>& registry);
 
   virtual std::string serialize(const int indent = -1, const char indent_char = ' ') = 0;
 };
@@ -98,6 +157,13 @@ public:
 
   // True if this specific test passed for the character, false otherwise.
   bool test(struct char_data *ch);
+
+  // Registry introspection. Both are family-locked: the Check.cpp registry is
+  // only reachable through these accessors -- you cannot extern it across
+  // translation units, so you cannot accidentally pass an Effect spec where a
+  // Check spec is expected.
+  static const ActivityFuncSpec* lookup_spec(const std::string& slug);
+  static std::vector<std::string> list_slugs();
 };
 
 // A side effect that, when encountered, modifies the character and/or their RunningActivity in some way. (todo add ptr from char struct to RunningActivity)
@@ -114,6 +180,10 @@ public:
 
   // Applying an effect can result in death. Returns true when this happens.
   bool apply(struct char_data *ch);
+
+  // Registry introspection -- see Check::lookup_spec for the family-locking rationale.
+  static const ActivityFuncSpec* lookup_spec(const std::string& slug);
+  static std::vector<std::string> list_slugs();
 };
 
 // An edge in the digraph that routes from a situation to either another situation or the end of the activity.

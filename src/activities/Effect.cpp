@@ -7,6 +7,15 @@
 Effect: A side effect that, when encountered, modifies the party in some way. Data includes:
 - the type of effect (e.g. "lose_nuyen", "phys_damage", "quest_progress")
 - a settings dict that contains further information (e.g. "lose_nuyen" might be {"amount": "50"})
+
+The registry below is the single source of truth for everything about an
+effect: function pointer, human description, parameter schema (with types),
+and the deterministic-vs-non-deterministic flag.
+
+The registry is in an anonymous namespace so it has internal linkage -- no
+other translation unit can extern it. All cross-file consumers go through
+Effect::lookup_spec() / Effect::list_slugs(), which are family-locked: you
+cannot accidentally pass a Check spec where an Effect spec is expected.
 */
 
 #define EFFECT_FUNCTION(func_name) bool _effect_function_##func_name(struct char_data *ch, const std::map<std::string, std::string>& settings)
@@ -15,18 +24,46 @@ Effect: A side effect that, when encountered, modifies the party in some way. Da
 EFFECT_FUNCTION(always_false);
 EFFECT_FUNCTION(test_func);
 
-// Maps slugs to effect functions. Remember, effect functions return TRUE on death, FALSE otherwise!
-#define MAP_EFFECT_FUNCTION(slug, func_name) {slug, (ActivityFuncPtr)&_effect_function_##func_name}
-std::map<std::string, ActivityFuncPtr> _effect_type_to_function = {
-  MAP_EFFECT_FUNCTION("_test_func", test_func)
-};
+namespace {
+  // The Effect registry. File-local (internal linkage) -- access from other
+  // translation units MUST go through Effect::lookup_spec / Effect::list_slugs.
+  const std::map<std::string, ActivityFuncSpec> _effect_registry = {
+    {"_test_func", {
+      &_effect_function_test_func,
+      "Debug-only effect that does nothing (and logs the call). Never kills.",
+      {},
+      DETERMINISTIC,
+    }},
+    {"always_false", {
+      &_effect_function_always_false,
+      "Does nothing. Used as a fallback when an unknown or invalid effect is loaded.",
+      {},
+      DETERMINISTIC,
+    }},
+  };
+} // anonymous namespace
+
+// Family-locked accessors. These are the ONLY way to reach _effect_registry
+// from outside Effect.cpp.
+const ActivityFuncSpec* Effect::lookup_spec(const std::string& slug) {
+  auto it = _effect_registry.find(slug);
+  if (it == _effect_registry.end()) return nullptr;
+  return &(it->second);
+}
+
+std::vector<std::string> Effect::list_slugs() {
+  std::vector<std::string> out;
+  out.reserve(_effect_registry.size());
+  for (const auto& kv : _effect_registry) out.push_back(kv.first);
+  return out;
+}
 
 Effect::Effect(const std::string& supplied_type, const std::map<std::string, std::string>& supplied_settings)
-  : ActivityFunction(supplied_type, supplied_settings, _effect_type_to_function) {}
+  : ActivityFunction(supplied_type, supplied_settings, _effect_registry, (ActivityFuncPtr)&_effect_function_always_false) {}
 
 // Deserialize a new Effect from a JSON string.
 Effect::Effect(const std::string serialized)
-  : ActivityFunction(serialized, _effect_type_to_function, (ActivityFuncPtr)&_effect_function_always_false) {}
+  : ActivityFunction(serialized, _effect_registry, (ActivityFuncPtr)&_effect_function_always_false) {}
 
 // Runs the associated func_ptr and returns its value. Returns true if the character dies.
 bool Effect::apply(struct char_data *ch) {
@@ -45,7 +82,7 @@ void from_json(const json& j, Effect& e) {
     // .at() is safer than [] because it throws an error if the key is missing
     j.at("func").get_to(e.func_name);
     j.at("settings").get_to(e.settings);
-    e.resolve_ptr(_effect_type_to_function);
+    e.resolve_ptr(_effect_registry);
 }
 // And the wrapper to get a string out of the serialization function. Not sure I actually need this.
 std::string Effect::serialize(const int indent, const char indent_char) {
@@ -68,6 +105,9 @@ const char *Effect::stringify() const {
 }
 
 // Fetch a setting, failing (returning false, i.e. no death) if it's not found.
+// Note: with the registry's validation in ActivityFunction's ctors, missing
+// required params should never reach this point. The macro stays as
+// defense-in-depth.
 #define GET_SETTING(setting_name)                                               \
     auto it_##setting_name = settings.find(#setting_name);                      \
     if (it_##setting_name == settings.end()) {                                  \

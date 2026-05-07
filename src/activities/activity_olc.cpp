@@ -161,7 +161,10 @@ PARSEFUNC(activity_main) {
 
 // activity preconditions
 MENUFUNC(activity_edit_preconditions) {
-  // req: no non-deterministic checks (random, etc); aka not in extern std::vector<std::string> non_deterministic_check_functions
+  // req: no non-deterministic checks (random, etc).
+  // To enforce this, when offering check slugs to add, filter via:
+  //   const ActivityFuncSpec *spec = Check::lookup_spec(slug);
+  //   if (spec && spec->is_deterministic) { /* allow */ }
   // todo: display current list of preconditions or none, then give options for add, edit parameters on existing, delete
   if (ACT->preconditions.empty()) {
     send_to_char(CH, "No preconditions are defined, so this activity is available for everyone.\r\n");
@@ -179,7 +182,11 @@ MENUFUNC(activity_edit_preconditions) {
 }
 
 PARSEFUNC(activity_edit_preconditions) {
-  // req: no non-deterministic checks (random, etc); aka not in extern std::vector<std::string> non_deterministic_check_functions
+  // req: no non-deterministic checks (random, etc).
+  // When parsing a "create" selection, look up the user-supplied slug via
+  // Check::lookup_spec(slug) and refuse if !spec->is_deterministic.
+  // For setting a parameter value, use validate_activity_param_value(type, val, err)
+  // against the param's spec from spec->params before mutating the Check.
   switch (tolower(*arg)) {
     case 'c':
     CASE_TO_MENU('q', activity_main);

@@ -7,6 +7,16 @@
 Check: A boolean test that has a pass/fail state. Data includes:
 - What is being tested (e.g. "has_skill", "skill_test", "has_item", "on_quest", etc)
 - a settings dict that contains further information (e.g. "on_quest" might be {"vnum": 3})
+
+The registry below is the single source of truth for everything about a check:
+function pointer, human description, parameter schema (with types), and the
+deterministic-vs-non-deterministic flag (used by Activity preconditions, which
+must never be non-deterministic).
+
+The registry is in an anonymous namespace so it has internal linkage -- no other
+translation unit can extern it. All cross-file consumers go through
+Check::lookup_spec() / Check::list_slugs(), which are family-locked: you cannot
+accidentally pass an Effect spec where a Check spec is expected.
 */
 
 #define CHECK_FUNCTION(func_name) bool _check_function_##func_name(struct char_data *ch, const std::map<std::string, std::string>& settings)
@@ -23,29 +33,104 @@ CHECK_FUNCTION(has_power_active);
 CHECK_FUNCTION(has_item);
 CHECK_FUNCTION(random);
 
-// Maps slugs to check functions. Remember, check functions can NEVER result in character death!
-// Adding a new non-deterministic func? Make sure to add the slug to the non_deterministic_check_functions vector below.
-#define MAP_CHECK_FUNCTION(slug, func_name) {slug, (ActivityFuncPtr)&_check_function_##func_name}
-std::map<std::string, ActivityFuncPtr> _check_type_to_function = {
-  MAP_CHECK_FUNCTION("_test_func", test_func),
-  MAP_CHECK_FUNCTION("always_false", always_false),
+namespace {
+  // The Check registry. File-local (internal linkage) -- access from other
+  // translation units MUST go through Check::lookup_spec / Check::list_slugs.
+  const std::map<std::string, ActivityFuncSpec> _check_registry = {
+    {"_test_func", {
+      &_check_function_test_func,
+      "Debug-only check that always returns true (and logs the call).",
+      {},
+      DETERMINISTIC,
+    }},
+    {"always_false", {
+      &_check_function_always_false,
+      "Always fails. Used as a fallback when an unknown or invalid check is loaded.",
+      {},
+      DETERMINISTIC,
+    }},
 
-  MAP_CHECK_FUNCTION("has_skill", has_skill),
-  MAP_CHECK_FUNCTION("roll_skill", roll_skill),
+    {"has_skill", {
+      &_check_function_has_skill,
+      "True if the character has any rank in the named skill.",
+      {
+        {"skill_name", "Skill to check (e.g. \"firearms\").", ActivityParamType::SKILL_NAME, PARAM_REQUIRED},
+      },
+      DETERMINISTIC,
+    }},
+    {"roll_skill", {
+      &_check_function_roll_skill,
+      "Rolls the named skill against a target number; passes on net successes > 0.",
+      {
+        {"skill_name", "Skill to roll (e.g. \"firearms\").", ActivityParamType::SKILL_NAME, PARAM_REQUIRED},
+        {"tn",         "Target number for the roll.",        ActivityParamType::INTEGER,    PARAM_REQUIRED},
+      },
+      NON_DETERMINISTIC,
+    }},
 
-  MAP_CHECK_FUNCTION("has_spell_active", has_spell_active),
-  MAP_CHECK_FUNCTION("could_cast_spell", could_cast_spell),
+    {"has_spell_active", {
+      &_check_function_has_spell_active,
+      "True if the character is currently affected by the named spell.",
+      {
+        {"spell_name", "Spell to look for.", ActivityParamType::SPELL_NAME, PARAM_REQUIRED},
+      },
+      DETERMINISTIC,
+    }},
+    {"could_cast_spell", {
+      &_check_function_could_cast_spell,
+      "True if the character knows the spell at >= the requested force and is capable of casting.",
+      {
+        {"spell_name", "Spell to look for.",                                ActivityParamType::SPELL_NAME, PARAM_REQUIRED},
+        {"force",      "Minimum force the character must know it at.",     ActivityParamType::INTEGER,    PARAM_OPTIONAL, "1"},
+      },
+      DETERMINISTIC,
+    }},
 
-  MAP_CHECK_FUNCTION("has_power_active", has_power_active),
+    {"has_power_active", {
+      &_check_function_has_power_active,
+      "True if the character has the named adept power active at >= the requested rank.",
+      {
+        {"power_name", "Adept power to check.",         ActivityParamType::POWER_NAME, PARAM_REQUIRED},
+        {"rank",       "Minimum rank required (>= 1).", ActivityParamType::INTEGER,    PARAM_OPTIONAL, "1"},
+      },
+      DETERMINISTIC,
+    }},
 
-  MAP_CHECK_FUNCTION("has_item", has_item),
+    {"has_item", {
+      &_check_function_has_item,
+      "True if the character is carrying or wearing an object with the given vnum.",
+      {
+        {"item_vnum", "Vnum of the object to look for.", ActivityParamType::OBJ_VNUM, PARAM_REQUIRED},
+      },
+      DETERMINISTIC,
+    }},
 
-  MAP_CHECK_FUNCTION("random", random),
-};
-// We need to track deterministic vs non-determinstic because Activities cannot have ND checks in their preconditions (it feels like a bug to the user)
-std::vector<std::string> non_deterministic_check_functions = {
-  "roll_skill", "random",
-};
+    {"random", {
+      &_check_function_random,
+      "Rolls 0..max_value-1 and passes if the result is <= this_or_lower (i.e. probabilistic gate).",
+      {
+        {"max_value",     "Upper bound (exclusive) of the random roll. Must be >= 1.", ActivityParamType::INTEGER, PARAM_REQUIRED},
+        {"this_or_lower", "Pass if the roll is < this value.",                         ActivityParamType::INTEGER, PARAM_REQUIRED},
+      },
+      NON_DETERMINISTIC,
+    }},
+  };
+} // anonymous namespace
+
+// Family-locked accessors. These are the ONLY way to reach _check_registry
+// from outside Check.cpp.
+const ActivityFuncSpec* Check::lookup_spec(const std::string& slug) {
+  auto it = _check_registry.find(slug);
+  if (it == _check_registry.end()) return nullptr;
+  return &(it->second);
+}
+
+std::vector<std::string> Check::list_slugs() {
+  std::vector<std::string> out;
+  out.reserve(_check_registry.size());
+  for (const auto& kv : _check_registry) out.push_back(kv.first);
+  return out;
+}
 
 // Serialization function.
 void to_json(json& j, const Check& e) {
@@ -59,7 +144,7 @@ void from_json(const json& j, Check& e) {
     // .at() is safer than [] because it throws an error if the key is missing
     j.at("func").get_to(e.func_name);
     j.at("settings").get_to(e.settings);
-    e.resolve_ptr(_check_type_to_function);
+    e.resolve_ptr(_check_registry);
 }
 // And the wrapper to get a string out of that.
 std::string Check::serialize(const int indent, const char indent_char) {
@@ -69,11 +154,11 @@ std::string Check::serialize(const int indent, const char indent_char) {
 }
 
 Check::Check(const std::string& supplied_type, const std::map<std::string, std::string>& supplied_settings)
-  : ActivityFunction(supplied_type, supplied_settings, _check_type_to_function) {}
+  : ActivityFunction(supplied_type, supplied_settings, _check_registry, (ActivityFuncPtr)&_check_function_always_false) {}
 
 // Deserialize a new Check from a JSON string.
 Check::Check(const std::string serialized)
-  : ActivityFunction(serialized, _check_type_to_function, (ActivityFuncPtr)&_check_function_always_false) {}
+  : ActivityFunction(serialized, _check_registry, (ActivityFuncPtr)&_check_function_always_false) {}
 
 // Runs the associated func_ptr and returns its value.
 bool Check::test(struct char_data *ch) {
@@ -93,7 +178,9 @@ const char *Check::stringify() const {
   }                                                                             \
 }
 
-// Fetch a setting, failing if it's not found.
+// Fetch a setting, failing if it's not found. Note: with the registry's
+// validation in ActivityFunction's ctors, missing required params should never
+// reach this point. The macro stays as defense-in-depth.
 #define GET_SETTING(setting_name)                                               \
     auto it_##setting_name = settings.find(#setting_name);                      \
     if (it_##setting_name == settings.end()) {                                  \
