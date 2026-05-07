@@ -6639,7 +6639,7 @@ void load_consist(void)
         continue;
 
       // Skip anything that's not a number.
-      vnum_t vnum = atol(itr->path().filename().c_str());
+      vnum_t vnum = std::stoll(itr->path().filename().string());
       if (vnum <= 0)
         continue;
 

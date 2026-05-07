@@ -208,7 +208,7 @@ void load_apartment_complexes() {
       log_vfprintf(" - Fully loaded %s.", complex->get_name());
       
       // Ensure it's been saved with the vnum instead of the name. Convert if not.
-      if (atol(filename.filename().c_str()) <= 0) {
+      if (std::stoll(filename.filename().string()) <= 0) {
         bf::path new_name = filename.parent_path() / vnum_to_string(complex->get_landlord_vnum());
         log_vfprintf(" (Complex %s was saved in the old manner ('%s' is not a number), so I'll rename it to '%s'.)", 
                      complex->get_name(),

@@ -916,7 +916,7 @@ void load_saved_veh(bool purge_existing)
       // This directory contains owner ID directories.
       if (is_directory(global_itr->status())) {
         // Calculate the owner ID.
-        idnum_t owner_id = atol(global_itr->path().filename().c_str());
+        idnum_t owner_id = std::stoll(global_itr->path().filename().string());
 
         // Skip invalid owners.
         if (owner_id == 0)
