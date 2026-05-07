@@ -1553,7 +1553,7 @@ int     getpid(void);
 */
 
 #if defined(linux)
-extern "C" char *crypt(const char *key, const char *setting) throw ();
+extern "C" char *crypt(const char *key, const char *setting);
 #endif
 
 #if defined(freebsd)
@@ -1565,7 +1565,7 @@ extern "C" char    *crypt(const char *key, const char *salt);
 #endif
 
 #if defined(__CYGWIN__)
-extern "C" char    *crypt(const char *key, const char *salt);
+#include <crypt.h>
 #endif
 
 
