@@ -15,11 +15,6 @@
 #include <vector>
 #include <algorithm>
 
-#if defined(WIN32) && !defined(__CYGWIN__)
-#define strcasecmp(x, y) _stricmp(x,y)
-#else
-#endif
-
 #include "structs.hpp"
 #include "awake.hpp"
 #include "utils.hpp"
