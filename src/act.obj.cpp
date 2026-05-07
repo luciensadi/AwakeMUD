@@ -3316,7 +3316,7 @@ void name_from_drinkcon(struct obj_data *obj)
 	buf2[0] = '\0'; // so strcats will start at the beginning
 
 	int i = 0;
-	while (*token && strcasecmp(token, drinks[GET_OBJ_VAL(obj, 2)]))
+	while (*token && str_cmp(token, drinks[GET_OBJ_VAL(obj, 2)]))
 	{
 		strlcat(buf2, token, sizeof(buf2));
 		strlcat(buf2, " ", sizeof(buf2));
