@@ -1183,12 +1183,18 @@ struct descriptor_data
   PCExDesc *edit_exdesc;
   Playergroup *edit_pgroup; /* playergroups */
 
+  // Need original pointers so we know what to overwrite.
   Activity *edit_activity;
   Check *edit_check;
+  Check *edit_check_original;
   Effect *edit_effect;
+  Effect *edit_effect_original;
   Outcome *edit_outcome;
+  Outcome *edit_outcome_original;
   Option *edit_option;
+  Option *edit_option_original;
   Situation *edit_situation;
+  Situation *edit_situation_original;
   // If you add more of these edit_whatevers, touch comm.cpp's free_editing_structs and add them!
 
   int canary;
@@ -1209,8 +1215,9 @@ struct descriptor_data
       edit_helpfile(NULL), edit_complex(NULL), edit_complex_original(NULL),
       edit_apartment(NULL), edit_apartment_original(NULL), edit_apartment_room(NULL),
       edit_apartment_room_original(NULL), edit_faction(NULL), edit_exdesc(NULL), edit_pgroup(NULL),
-      edit_activity(NULL), edit_check(NULL), edit_effect(NULL), edit_outcome(NULL), edit_option(NULL), edit_situation(NULL),
-      canary(CANARY_VALUE), pProtocol(NULL)
+      edit_activity(NULL), edit_check(NULL), edit_check_original(NULL), edit_effect(NULL), edit_effect_original(NULL),
+      edit_outcome(NULL), edit_outcome_original(NULL), edit_option(NULL), edit_option_original(NULL),
+      edit_situation(NULL), edit_situation_original(NULL), canary(CANARY_VALUE), pProtocol(NULL)
   {
     // Zero out our metrics.
     for (int i = 0; i < NUM_OF_TRACKED_NUYEN_INCOME_SOURCES; i++) {

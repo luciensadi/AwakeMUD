@@ -140,6 +140,7 @@ public:
   void resolve_ptr(const std::map<std::string, ActivityFuncSpec>& registry);
 
   virtual std::string serialize(const int indent = -1, const char indent_char = ' ') = 0;
+  const char *get_func_name() { return func_name.c_str(); }
 };
 
 // A boolean test that has a pass/fail state.

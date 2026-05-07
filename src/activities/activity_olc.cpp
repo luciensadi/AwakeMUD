@@ -186,6 +186,7 @@ PARSEFUNC(activity_edit_preconditions) {
   switch (tolower(*arg)) {
     case 'c':
       d->edit_check = new Check();
+      d->edit_check_original = nullptr;
       activity_check_main_menu(d);
       break;
     case 'q':
@@ -199,7 +200,8 @@ PARSEFUNC(activity_edit_preconditions) {
           send_to_char(CH, "There aren't that many preconditions. Pick a number from 1 - %ld.", ACT->preconditions.size());
           return;
         }
-        d->edit_check = &(ACT->preconditions[selection - 1]); // nope, do this in a way where they can abort editing that check. Clone it. TODO
+        d->edit_check = new Check(ACT->preconditions[selection - 1]);
+        d->edit_check_original = &(ACT->preconditions[selection - 1]);
         activity_check_main_menu(d);
         break;
       }
@@ -234,8 +236,8 @@ PARSEFUNC(activity_edit_starting_situations) {
 /////////////////////// Check editing
 // Precondition: d->edit_check must be valid.
 MENUFUNC(check_main) {
-  // Display the check, then depending on which d->edit_ values are populated, give options about deleting, saving, etc
-  
+  // Display the check, then: - if original ptr, give delete opt
+  send_to_char(CH, "Check type: ^c%s^n\r\n", d->edit_check->get_func_name());
 }
 
 PARSEFUNC(check_main) {
