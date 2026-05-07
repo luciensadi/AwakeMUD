@@ -5,10 +5,6 @@
 #include <sys/types.h>
 #include <time.h>
 
-#if defined(WIN32) && !defined(__CYGWIN__)
-#define strcasecmp(x, y) _stricmp(x,y)
-#endif
-
 #include "structs.hpp"
 #include "awake.hpp"
 #include "utils.hpp"
@@ -2098,13 +2094,13 @@ SPECIAL(pike) {
     temp = any_one_arg(temp, arg2);
     temp = any_one_arg(temp, arg3);
 
-    if (*arg2 && !strcasecmp("pike", arg2)) {
+    if (*arg2 && !str_cmp("pike", arg2)) {
       act("$n says, \"Hey chummer, nuyen only.\"", FALSE, pike, 0, 0, TO_ROOM);
       send_to_char(pike, "You say, \"Hey chummer, nuyen only.\"\r\n");
       return TRUE;
     }
 
-    if (!*arg3 || strcasecmp("pike", arg3))
+    if (!*arg3 || str_cmp("pike", arg3))
       return FALSE;
 
     int amount = atoi(arg1);
@@ -2181,13 +2177,13 @@ SPECIAL(jeff) {
     temp = any_one_arg(temp, arg2);
     temp = any_one_arg(temp, arg3);
 
-    if (*arg2 && !strcasecmp("jeff", arg2)) {
+    if (*arg2 && !str_cmp("jeff", arg2)) {
       act("$n says, \"Hey fraghead, nuyen only.\"", FALSE, jeff, 0, 0, TO_ROOM);
       send_to_char(jeff, "You say, \"Hey fraghead, nuyen only.\"\r\n");
       return TRUE;
     }
 
-    if (!*arg3 || (strcasecmp("jeff", arg3) && (strcasecmp("to", arg3) || strcasecmp("jeff", temp))))
+    if (!*arg3 || (str_cmp("jeff", arg3) && (str_cmp("to", arg3) || str_cmp("jeff", temp))))
       return FALSE;
 
     int amount = atoi(arg1);
@@ -2224,7 +2220,7 @@ SPECIAL(jeff) {
   } else if (CMD_IS("open")) {
     char *args = argument;
     skip_spaces(&args);
-    if (!strcasecmp("roadblock", args))
+    if (!str_cmp("roadblock", args))
       do_say(jeff, "Slot off, it's 10 creds to pass chummer.", 0, 0);
     return TRUE;
   } else {
@@ -2458,7 +2454,7 @@ SPECIAL(gate_guard_park) {
     return TRUE;
   } else if (CMD_IS("open") || CMD_IS("unlock") || CMD_IS("bypass")) {
     skip_spaces(&argument);
-    if (!strcasecmp("gate", argument)) {
+    if (!str_cmp("gate", argument)) {
       do_say(guard, "Piddle off, I'm tryin' to do my job here.", 0, 0);
       return TRUE;
     }
