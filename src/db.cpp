@@ -2584,7 +2584,7 @@ void parse_quest(File &fl, long virtual_nr)
 
   if (quest_table[quest_nr].num_mobs > 0) {
     quest_table[quest_nr].mob = new quest_om_data[quest_table[quest_nr].num_mobs];
-    memset(quest_table[quest_nr].mob, 0, sizeof(quest_om_data) * quest_table[quest_nr].num_mobs);
+    for (int idx = 0; idx < quest_table[quest_nr].num_mobs; idx++) { new (&quest_table[quest_nr].mob[idx]) quest_om_data(); }
     for (j = 0; j < quest_table[quest_nr].num_mobs; j++) {
       fl.GetLine(line, 256, FALSE);
       if (sscanf(line, "%ld %ld %ld %ld %ld %ld %ld %ld", t, t + 1, t + 2, t + 3,

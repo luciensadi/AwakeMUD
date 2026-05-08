@@ -29,6 +29,12 @@ else
 	BASE_CXXFLAGS += -DSUPPRESS_MOB_SKILL_ERRORS -DIGNORING_IC_ALSO_IGNORES_COMBAT 
 endif
 
+# Only set this if you have access to Awake CE's extended world files (not part of the repo)
+USE_PRIVATE_WORLD ?= 0
+ifeq ($(USE_PRIVATE_WORLD),1)
+	BASE_CXXFLAGS += -DUSE_PRIVATE_CE_WORLD
+endif
+
 # Auto-detect the OS and apply the unique flags for that config
 UNAME_S := $(shell uname -s)
 

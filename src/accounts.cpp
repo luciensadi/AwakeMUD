@@ -74,7 +74,7 @@ ACMD(do_account) {
 
   // TODO: RENAME <newname> [confirm]: Changes your auto-generated account's name. Only usable once.
   if (is_abbrev(command, "rename")) {
-    char *mode_remainder = any_one_arg(remainder, mode);
+    // char *mode_remainder = any_one_arg(remainder, mode);
     // TODO: You must be in an account.
     // TODO: Your account name must match your character's name.
     // TODO: New name must pass obscenity filter.

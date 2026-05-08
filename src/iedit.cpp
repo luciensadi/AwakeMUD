@@ -2517,6 +2517,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
             send_to_char("Invalid choice! Poison damage: 0=none, 1=light, 2=moderate, 3=serious, 4=deadly: ", d->character);
             return;
           }
+          break;
         case ITEM_WEAPON:
           if (number < 0 || number >= MAX_WEAP || !kosher_weapon_values[number].usable_by_builders) {
             send_to_char("Invalid choice!\r\n", d->character);

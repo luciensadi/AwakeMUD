@@ -33,18 +33,15 @@
 #include "db.hpp"
 #include "gmcp.hpp"
 #include "utils.hpp"
+#include "protocol.hpp"
 
 // Silence the ignored-cast for the various TELOPTs.
 #if defined(__clang__)
   #pragma clang diagnostic push
   #pragma clang diagnostic ignored "-Wignored-qualifiers"
-  #include "protocol.hpp"
-  #pragma clang diagnostic pop
 #elif defined(__GNUC__)
   #pragma GCC diagnostic push
   #pragma GCC diagnostic ignored "-Wignored-qualifiers"
-  #include "protocol.hpp"
-  #pragma GCC diagnostic pop
 #endif
 
 /******************************************************************************
@@ -3329,3 +3326,9 @@ static char *AllocString( const char *apString )
 
   return pResult;
 }
+
+#if defined(__clang__)
+  #pragma clang diagnostic pop
+#elif defined(__GNUC__)
+  #pragma GCC diagnostic pop
+#endif

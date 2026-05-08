@@ -41,7 +41,7 @@ ACMD(do_usenerps) {
   char msg_buf[1000];
   snprintf(msg_buf, sizeof(msg_buf), "1 '%s' is used by $n.", decapitalize_a_an(GET_OBJ_NAME(obj)));
 
-  for (struct char_data *viewer = viewer = (ch->in_room ? ch->in_room->people : ch->in_veh->people);
+  for (struct char_data *viewer = (ch->in_room ? ch->in_room->people : ch->in_veh->people);
         viewer;
         viewer = (ch->in_room ? viewer->next_in_room : viewer->next_in_veh)) 
   {

@@ -504,41 +504,6 @@ ACMD(do_debug) {
                  (void*)data->input.tail);
     delete data;
 
-    data = new sustain_data_no_init();
-    memset(data, 0, sizeof(sustain_data_no_init));
-    send_to_char(ch, "After memset initialization:  "
-                 "Spell=%u, "
-                 "Subtype=%u, "
-                 "Force=%u, "
-                 "Success=%u, "
-                 "Idnum=%d, "
-                 "Time=%d, "
-                 "TimeToTakeEffect=%u, "
-                 "IsCasterRecord=%s, "
-                 "RitualCastCost=%d, "
-                 "Focus=%s(%p), "
-                 "Spirit=%s(%p), "
-                 "Other=%s(%p), "
-                 "Next=%p, "
-                 "txt_q->head=%p, "
-                 "txt_q->tail=%p\r\n",
-                 data->spell,
-                 data->subtype,
-                 data->force,
-                 data->success,
-                 data->idnum,
-                 data->time,
-                 data->time_to_take_effect,
-                 data->is_caster_record ? "true" : "false",
-                 data->ritual_cast_cost,
-                 data->focus ? "obj" : "null", (void*)data->focus,
-                 data->spirit ? "char" : "null", (void*)data->spirit,
-                 data->other ? "char" : "null", (void*)data->other,
-                 (void*)data->next,
-                 (void*)data->input.head,
-                 (void*)data->input.tail);
-    delete data;
-
     return;
   }
 

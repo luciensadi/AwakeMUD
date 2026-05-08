@@ -2447,6 +2447,7 @@ bool biocyber_compatibility(struct obj_data *obj1, struct obj_data *obj2, struct
             return FALSE;
           }
         }
+        break;
       case CYB_FILTRATION:
         if (GET_CYBERWARE_FLAGS(cyber1) == GET_CYBERWARE_FLAGS(cyber2))
         {
