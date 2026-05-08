@@ -256,7 +256,7 @@ void redit_disp_flag_menu(struct descriptor_data * d)
   CLS(CH);
   if (!PLR_FLAGGED(CH, PLR_OLD_MAN_YELLS_AT_CLOUDS)) {
     for (auto itr : room_flag_map) {
-      send_to_char(CH, "%2d) ^c%-17s^n (%s)\r\n", counter++, itr.first.c_str(), room_flag_explanations[itr.second]);
+      send_to_char(CH, "%2d) ^c%-17s^n (%s)\r\n", counter++, STRING_TO_CSTR(itr.first), room_flag_explanations[itr.second]);
     }
   } else {
     for (int idx = 0; idx < ROOM_MAX; idx++) {

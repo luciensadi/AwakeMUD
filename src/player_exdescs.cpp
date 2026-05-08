@@ -667,7 +667,7 @@ void _pc_exdesc_edit_wear_menu(struct descriptor_data *d) {
   send_to_char("Extra descriptions can be put on the following locations:\r\n", CH);
 
   for (auto itr : wear_flag_map_for_exdescs) {
-    send_to_char(CH, "%2d) ^c%-9s^n\r\n", counter++, itr.second == ITEM_WEAR_TAKE ? "Always visible" : itr.first.c_str());
+    send_to_char(CH, "%2d) ^c%-9s^n\r\n", counter++, itr.second == ITEM_WEAR_TAKE ? "Always visible" : STRING_TO_CSTR(itr.first));
   }
 
   char exdesc_wear_bits[1000];

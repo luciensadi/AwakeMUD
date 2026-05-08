@@ -82,7 +82,7 @@ std::string join(std::vector<std::string> const &strings, std::string delim)
 {
     std::stringstream ss;
     std::copy(strings.begin(), strings.end(),
-        std::ostream_iterator<std::string>(ss, delim.c_str()));
+        std::ostream_iterator<std::string>(ss, STRING_TO_CSTR(delim)));
     return ss.str();
 }
 
@@ -685,7 +685,7 @@ ACMD(do_debug) {
       }
     }
     std::string str = join(vnum_vec, "|");
-    send_to_char(ch, "(%s)", str.c_str());
+    send_to_char(ch, "(%s)", STRING_TO_CSTR(str));
     return;
   }
 
@@ -726,7 +726,7 @@ ACMD(do_debug) {
     global_vehicles_dir = bf::system_complete("restore_vehicles");
     load_saved_veh(TRUE);
     global_vehicles_dir = bf::path(old_path);
-    send_to_char(ch, "Global vehicles dir is now: %s. Saving vehicles.\r\n", global_vehicles_dir.c_str());
+    send_to_char(ch, "Global vehicles dir is now: %s. Saving vehicles.\r\n", STRING_TO_CSTR(global_vehicles_dir));
     save_vehicles(FALSE);
     send_to_char(ch, "Save complete.\r\n");
     return;
@@ -736,7 +736,7 @@ ACMD(do_debug) {
     extern std::unordered_map<std::string, struct veh_data *> veh_map;
 
     for (auto& it: veh_map) {
-      send_to_char(ch, "%s: %s\r\n", it.first.c_str(), GET_VEH_NAME(it.second));
+      send_to_char(ch, "%s: %s\r\n", STRING_TO_CSTR(it.first), GET_VEH_NAME(it.second));
     }
     return;
   }

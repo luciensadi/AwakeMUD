@@ -422,7 +422,7 @@ void create_pet_parse(struct descriptor_data *d, const char *arg) {
               if (!pet_echo_sets.at(it.second).is_usable_by(GET_IDNUM_EVEN_IF_PROJECTING(CH)))
                 continue;
               
-              send_to_char(CH, "%2d) %s\r\n", idx++, it.first.c_str());
+              send_to_char(CH, "%2d) %s\r\n", idx++, STRING_TO_CSTR(it.first));
             }
             send_to_char(CH, "\r\nSelect a number, or enter 0 to abort: ");
             d->edit_mode = PET_EDIT_FLAVOR_MESSAGES;

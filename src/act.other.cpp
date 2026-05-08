@@ -1647,7 +1647,7 @@ void _send_alphabetized_skills_to_ch(struct char_data *ch, const char *arg, int 
     }
 
     for (auto str : vec) {
-      send_to_char(str.c_str(), ch);
+      send_to_char(STRING_TO_CSTR(str), ch);
     }
   }
 }

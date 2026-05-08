@@ -597,7 +597,7 @@ Faction::Faction(bf::path file_path) {
   editors = faction_file["editors"].get<std::vector<idnum_t>>();
 
   if (idnum == FACTION_IDNUM_UNDEFINED) {
-    log_vfprintf("Malformed faction! Got idnum %ld from path %s, which will cause bugs. Shutting down so you can fix your world files.", idnum, file_path.c_str());
+    log_vfprintf("Malformed faction! Got idnum %ld from path %s, which will cause bugs. Shutting down so you can fix your world files.", idnum, STRING_TO_CSTR(file_path));
     shutdown();
   }
 }
@@ -620,14 +620,14 @@ void Faction::save() {
 
 void parse_factions() {
   if (!bf::exists(factions_dir_path)) {
-    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Factions directory %s did not exist. Creating it.", factions_dir_path.c_str());
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Factions directory %s did not exist. Creating it.", STRING_TO_CSTR(factions_dir_path));
     bf::create_directory(factions_dir_path);
   }
 
   bf::directory_iterator end_itr; // default construction yields past-the-end
   for (bf::directory_iterator itr(factions_dir_path); itr != end_itr; ++itr) {
     bf::path filename = itr->path();
-    log_vfprintf(" - Initializing faction from file %s.", filename.c_str());
+    log_vfprintf(" - Initializing faction from file %s.", STRING_TO_CSTR(filename));
     Faction *faction = new Faction(filename);
     global_faction_map[faction->get_idnum()] = faction;
     log_vfprintf(" - Fully loaded %s.", faction->get_full_name());

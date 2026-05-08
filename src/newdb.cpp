@@ -2393,9 +2393,6 @@ bool pc_active_in_last_30_days(idnum_t owner_id) {
   return (row != NULL);
 }
 
-// Defining this for now until I have a chance to fix the nodelete logic. Currently, it sets a bit, but checks for a boolean. Need to run a migration on existing DB to apply that boolean value on everyone with the bit set.
-#define IDLEDELETE_DRYRUN
-
 void idle_delete()
 {
   int deleted = 0;

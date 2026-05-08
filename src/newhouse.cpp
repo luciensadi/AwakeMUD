@@ -192,7 +192,7 @@ void load_apartment_complexes() {
   // Iterate over the contents of the lib/housing directory.
   if (!exists(global_housing_dir)) {
     log("WARNING: Unable to find lib/housing.");
-    log_vfprintf("Rendered path: %s", global_housing_dir.c_str());
+    log_vfprintf("Rendered path: %s", STRING_TO_CSTR(global_housing_dir));
     exit(1);
   }
 
@@ -202,18 +202,18 @@ void load_apartment_complexes() {
   for (bf::directory_iterator itr(global_housing_dir); itr != end_itr; ++itr) {
     if (is_directory(itr->status())) {
       bf::path filename = itr->path();
-      log_vfprintf(" - Initializing apartment complex from file %s.", filename.c_str());
+      log_vfprintf(" - Initializing apartment complex from file %s.", STRING_TO_CSTR(filename));
       ApartmentComplex *complex = new ApartmentComplex(filename);
       global_apartment_complexes.push_back(complex);
       log_vfprintf(" - Fully loaded %s.", complex->get_name());
       
       // Ensure it's been saved with the vnum instead of the name. Convert if not.
-      if (std::stoll(filename.filename().string()) <= 0) {
+      if (atol(STRING_TO_CSTR(filename.filename())) <= 0) {
         bf::path new_name = filename.parent_path() / vnum_to_string(complex->get_landlord_vnum());
         log_vfprintf(" (Complex %s was saved in the old manner ('%s' is not a number), so I'll rename it to '%s'.)", 
                      complex->get_name(),
                      STRING_TO_CSTR(filename.filename()),
-                     new_name.c_str());
+                     STRING_TO_CSTR(new_name));
         bf::rename(filename, new_name);
       }
     }
@@ -307,7 +307,7 @@ ApartmentComplex::ApartmentComplex(vnum_t landlord) {
 
   // Becomes something like '.../lib/housing/22608'
   base_directory = global_housing_dir / vnum_to_string(GET_MOB_VNUM(&mob_proto[landlord_rnum]));
-  log_vfprintf("Newly-initialized AC w/ LL %ld's base_directory: %s", landlord_vnum, base_directory.c_str());
+  log_vfprintf("Newly-initialized AC w/ LL %ld's base_directory: %s", landlord_vnum, STRING_TO_CSTR(base_directory));
 }
 
 ApartmentComplex::ApartmentComplex(bf::path filename) :
@@ -326,7 +326,7 @@ ApartmentComplex::ApartmentComplex(bf::path filename) :
 
     // Parse out the flags, defaulting to no flags if the field is not set.
     std::string temp_flags = base_info.value("flags", std::string("0"));
-    complex_flags.FromString(temp_flags.c_str());
+    complex_flags.FromString(STRING_TO_CSTR(temp_flags));
 
     if (real_mobile(landlord_vnum) < 0) {
       log_vfprintf("SYSERR: Landlord vnum %ld does not match up with a real NPC. Terminating.\r\n", landlord_vnum);
@@ -372,7 +372,7 @@ ApartmentComplex::~ApartmentComplex() {
 
 void ApartmentComplex::ensure_base_directory_exists() {
   if (!bf::exists(base_directory)) {
-    log_vfprintf("apartmentcomplex::ensure_base_directory_exists(): Not found. Creating base directory %s.", base_directory.c_str());
+    log_vfprintf("apartmentcomplex::ensure_base_directory_exists(): Not found. Creating base directory %s.", STRING_TO_CSTR(base_directory));
     bf::create_directory(base_directory);
   }
 }
@@ -601,7 +601,7 @@ void ApartmentComplex::clone_from(ApartmentComplex *source, const char *invoker)
   landlord_vnum = source->landlord_vnum;
 
   base_directory = source->base_directory;
-  log_vfprintf("Cloned AC w/ LL %ld's base_directory: %s", landlord_vnum, base_directory.c_str());
+  log_vfprintf("Cloned AC w/ LL %ld's base_directory: %s", landlord_vnum, STRING_TO_CSTR(base_directory));
 
   editors.clear();
   for (auto idnum : source->editors) {
@@ -765,7 +765,7 @@ Apartment::Apartment(ApartmentComplex *complex, const char *new_name, vnum_t key
 
   // Becomes something like 'lib/housing/22608/3A'
   set_base_directory(complex->base_directory / shortname);
-  log_vfprintf("Apartment %s's base_directory: %s", full_name, base_directory.c_str());
+  log_vfprintf("Apartment %s's base_directory: %s", full_name, STRING_TO_CSTR(base_directory));
 }
 
 /* Load this apartment entry from files. */
@@ -788,7 +788,7 @@ Apartment::Apartment(ApartmentComplex *complex, bf::path base_directory) :
 
     // Parse out the flags, defaulting to no flags if the field is not set.
     std::string temp_flags = base_info.value("flags", std::string("0"));
-    apartment_flags.FromString(temp_flags.c_str());
+    apartment_flags.FromString(STRING_TO_CSTR(temp_flags));
 
     atrium = base_info["atrium"].get<vnum_t>();
     key_vnum = base_info["key"].get<vnum_t>();
@@ -885,7 +885,7 @@ Apartment::~Apartment() {
 
 void Apartment::ensure_base_directory_exists() {
   if (!bf::exists(base_directory)) {
-    log_vfprintf("apartmentcomplex::ensure_base_directory_exists(): Not found. Creating base directory %s.", base_directory.c_str());
+    log_vfprintf("apartmentcomplex::ensure_base_directory_exists(): Not found. Creating base directory %s.", STRING_TO_CSTR(base_directory));
     bf::create_directory(base_directory);
   }
 }
@@ -1004,8 +1004,8 @@ void Apartment::set_base_directory(bf::path new_base) {
   if (base_directory != new_base) {
     log_vfprintf("Renaming %s's base directory from %s to %s.",
                  full_name,
-                 base_directory.c_str(),
-                 new_base.c_str());
+                 STRING_TO_CSTR(base_directory),
+                 STRING_TO_CSTR(new_base));
     bf::rename(base_directory, new_base);
   }
 
@@ -1030,9 +1030,9 @@ void Apartment::save_base_info() {
   }
 
   // Ensure our base directory exists.
-  log_vfprintf("apartment::save_base_info(): Checking for base directory %s...", base_directory.c_str());
+  log_vfprintf("apartment::save_base_info(): Checking for base directory %s...", STRING_TO_CSTR(base_directory));
   if (!bf::exists(base_directory)) {
-    log_vfprintf("apartment::save_base_info(): Not found. Creating base directory %s.", base_directory.c_str());
+    log_vfprintf("apartment::save_base_info(): Not found. Creating base directory %s.", STRING_TO_CSTR(base_directory));
     complex->ensure_base_directory_exists();
     bf::create_directory(base_directory);
   }
@@ -1084,7 +1084,7 @@ void Apartment::save_rooms() {
 
   log_vfprintf("save_rooms() for %s: existing_dirs:", get_full_name());
   for (auto it : existing_dirs)
-    log_vfprintf(" - %s", it.c_str());
+    log_vfprintf(" - %s", STRING_TO_CSTR(it));
 
   log_vfprintf("save_rooms() for %s: Now saving rooms.", get_full_name());
 
@@ -1103,9 +1103,9 @@ void Apartment::save_rooms() {
 
   // For any remaining directory in vector, invalidate it (delete info json)
   for (auto dir : existing_dirs) {
-    log_vfprintf("save_rooms() for %s: %s still existed.", get_full_name(), dir.c_str());
+    log_vfprintf("save_rooms() for %s: %s still existed.", get_full_name(), STRING_TO_CSTR(dir));
     if (bf::exists(base_directory / dir / ROOM_INFO_FILE_NAME)) {
-      log_vfprintf("save_rooms() for %s: Destroying info file for %s.", get_full_name(), dir.c_str());
+      log_vfprintf("save_rooms() for %s: Destroying info file for %s.", get_full_name(), STRING_TO_CSTR(dir));
       bf::remove(base_directory / dir / ROOM_INFO_FILE_NAME);
     }
   }
@@ -1680,7 +1680,7 @@ void Apartment::set_complex(ApartmentComplex *new_complex) {
   // Change our save directory. Becomes something like 'lib/housing/22608/3A'
   // TODO: Validate that an existing apartment with this name does not already exist in that directory.
   set_base_directory(complex->base_directory / shortname);
-  log_vfprintf("Changed apartment %s's complex; new base_directory: %s", full_name, base_directory.c_str());
+  log_vfprintf("Changed apartment %s's complex; new base_directory: %s", full_name, STRING_TO_CSTR(base_directory));
 
   // Recalculate our full name.
   regenerate_full_name();
@@ -1839,7 +1839,7 @@ void Apartment::set_short_name(const char *newname) {
   // Move our files over (only if we have a base dir in the first place). Generates something like 'lib/housing/22608/3A'
   if (!base_directory.empty()) {
     if (bf::exists(base_directory)) {
-      log_vfprintf("Moving files over for %s's rename: '''%s''' -> '''%s'''", full_name, base_directory.c_str(), new_base_directory.c_str());
+      log_vfprintf("Moving files over for %s's rename: '''%s''' -> '''%s'''", full_name, STRING_TO_CSTR(base_directory), STRING_TO_CSTR(new_base_directory));
       bf::rename(base_directory, new_base_directory);
     }
   }
@@ -1847,7 +1847,7 @@ void Apartment::set_short_name(const char *newname) {
   // Change where we save to in the future.
   base_directory = new_base_directory;
 
-  log_vfprintf("Changed apartment %s's short_name: new name is %s, new base_directory is %s", full_name, shortname, base_directory.c_str());
+  log_vfprintf("Changed apartment %s's short_name: new name is %s, new base_directory is %s", full_name, shortname, STRING_TO_CSTR(base_directory));
 
   // Force all sub-rooms to recalculate as well.
   for (auto *aroom : rooms) {
@@ -1957,7 +1957,7 @@ ApartmentRoom::ApartmentRoom(Apartment *apartment, bf::path directory) :
 
   rnum_t rnum = real_room(vnum);
   if (vnum < 0 || rnum < 0) {
-    log_vfprintf("SYSERR: Invalid vnum %ld specified in %s.", vnum, directory.c_str());
+    log_vfprintf("SYSERR: Invalid vnum %ld specified in %s.", vnum, STRING_TO_CSTR(directory));
     exit(1);
   }
 
@@ -1986,7 +1986,7 @@ ApartmentRoom::ApartmentRoom(Apartment *apartment, bf::path directory) :
     bf::ifstream ifs(base_path / "decoration.txt");
     std::string content((std::istreambuf_iterator<char>(ifs)), (std::istreambuf_iterator<char>()));
     ifs.close();
-    decoration = !content.empty() ? str_dup(content.c_str()) : NULL;
+    decoration = !content.empty() ? str_dup(STRING_TO_CSTR(content)) : NULL;
 
     log_vfprintf(" ----- Applying changes from %s to world...", STRING_TO_CSTR(directory.filename()));
 
@@ -2057,10 +2057,10 @@ long ApartmentRoom::get_cost_of_contents(bool including_vehicles) {
 }
 
 void ApartmentRoom::regenerate_paths() {
-  log_vfprintf("Regenerating paths for %ld (%s || %s)...", vnum, base_path.c_str(), storage_path.c_str());
+  log_vfprintf("Regenerating paths for %ld (%s || %s)...", vnum, STRING_TO_CSTR(base_path), STRING_TO_CSTR(storage_path));
   base_path = apartment->base_directory / vnum_to_string(vnum);
   storage_path = base_path / "storage";
-  log_vfprintf("Done, got %s || %s.", base_path.c_str(), storage_path.c_str());
+  log_vfprintf("Done, got %s || %s.", STRING_TO_CSTR(base_path), STRING_TO_CSTR(storage_path));
 }
 
 void ApartmentRoom::save_info() {
@@ -2178,7 +2178,7 @@ void ApartmentRoom::purge_contents() {
   char filename[100] = {0};
   snprintf(filename, sizeof(filename), "%ld_%ld", time(0), apartment->get_owner_id());
   bf::path expired_storage_path = expired_path / filename;
-  Storage_save(expired_storage_path.c_str(), room);
+  Storage_save(STRING_TO_CSTR(expired_storage_path), room);
 #endif
 
   if (room->contents) {
@@ -2375,7 +2375,7 @@ void ApartmentRoom::save_storage(bool forced) {
     }
   }
 
-  const char *save_location = storage_path.c_str();
+  const char *save_location = STRING_TO_CSTR(storage_path);
 
   /*
   log_vfprintf("Saving storage for room %s (%ld): %s dirty, %s occupied. Saving to %s.", 
@@ -2417,7 +2417,7 @@ void ApartmentRoom::load_storage_from_specified_path(bf::path path) {
   }
 
   // Perform load.
-  House_load_storage(room, path.c_str());
+  House_load_storage(room, STRING_TO_CSTR(path));
 }
 
 const char * ApartmentRoom::get_full_name() {
@@ -2656,7 +2656,7 @@ Apartment *find_apartment(const char *full_name, struct char_data *ch) {
 }
 
 void write_json_file(bf::path path, json *contents) {
-  log_vfprintf("write_json_file(%s, ...): Beginning to write.", path.c_str());
+  log_vfprintf("write_json_file(%s, ...): Beginning to write.", STRING_TO_CSTR(path));
   bf::ofstream ofs(path);
   ofs << std::setw(4) << *contents << std::endl;
   ofs.close();
@@ -2664,10 +2664,10 @@ void write_json_file(bf::path path, json *contents) {
 
 void _json_parse_from_file(bf::path path, json &target) {
   if (!exists(path)) {
-    log_vfprintf("FATAL ERROR: Unable to find file at path %s. Terminating.", path.c_str());
+    log_vfprintf("FATAL ERROR: Unable to find file at path %s. Terminating.", STRING_TO_CSTR(path));
     exit(1);
   } else {
-    log_vfprintf("Reading JSON data from %s.", path.c_str());
+    log_vfprintf("Reading JSON data from %s.", STRING_TO_CSTR(path));
   }
 
   bf::ifstream f(path);

@@ -66,7 +66,7 @@ void SendGMCPCoreSupports ( descriptor_t *apDescriptor )
 
   // Dump the json to a string and send it.
   std::string payload = j.dump();
-  SendGMCP(apDescriptor, "Core.Supports", payload.c_str());
+  SendGMCP(apDescriptor, "Core.Supports", STRING_TO_CSTR(payload));
 }
 
 void RegisterGMCPDiscordHello( descriptor_t *apDescriptor, const json &payload )
@@ -94,9 +94,9 @@ void SendGMCPDiscordInfo ( descriptor_t *apDescriptor)
   
   // Dump the json to a string and send it.
   std::string send_payload = j.dump();
-  SendGMCP(apDescriptor, "External.Discord.Info", send_payload.c_str());
+  SendGMCP(apDescriptor, "External.Discord.Info", STRING_TO_CSTR(send_payload));
 
-  log_vfprintf("Sending GMCP Discord INFO to %s: %s", GET_CHAR_NAME(apDescriptor->character), send_payload.c_str());
+  log_vfprintf("Sending GMCP Discord INFO to %s: %s", GET_CHAR_NAME(apDescriptor->character), STRING_TO_CSTR(send_payload));
 }
 
 // { smallimage: ["iconname", "iconname2", "iconname3"], smallimagetext: "Icon hover text", details: "Details String", state: "State String", partysize: 0, partymax: 10, game: "Achaea", starttime: "timestamp for start" }
@@ -134,9 +134,9 @@ void SendGMCPDiscordStatus ( descriptor_t *apDescriptor )
 
   // Dump the json to a string and send it.
   std::string payload = j.dump();
-  SendGMCP(apDescriptor, "External.Discord.Status", payload.c_str());
+  SendGMCP(apDescriptor, "External.Discord.Status", STRING_TO_CSTR(payload));
 
-  log_vfprintf("Sending GMCP Discord status to %s: %s", GET_CHAR_NAME(apDescriptor->character), payload.c_str());
+  log_vfprintf("Sending GMCP Discord status to %s: %s", GET_CHAR_NAME(apDescriptor->character), STRING_TO_CSTR(payload));
 }
 
 void SendCustomGMCPDiscordStatus ( descriptor_t *apDescriptor, const char *smallimage, const char *smallimagetext, const char *details, const char *state)
@@ -157,9 +157,9 @@ void SendCustomGMCPDiscordStatus ( descriptor_t *apDescriptor, const char *small
 
   // Dump the json to a string and send it.
   std::string payload = j.dump();
-  SendGMCP(apDescriptor, "External.Discord.Status", payload.c_str());
+  SendGMCP(apDescriptor, "External.Discord.Status", STRING_TO_CSTR(payload));
 
-  log_vfprintf("Sending GMCP Discord status to %s: %s", GET_CHAR_NAME(apDescriptor->character), payload.c_str());
+  log_vfprintf("Sending GMCP Discord status to %s: %s", GET_CHAR_NAME(apDescriptor->character), STRING_TO_CSTR(payload));
 }
 
 void SendGMCPMatrixInfo ( struct char_data *ch )
@@ -171,7 +171,7 @@ void SendGMCPMatrixInfo ( struct char_data *ch )
 
   if (!persona || !persona->in_host || !persona->decker) {
     std::string payload = j.dump();
-    SendGMCP(ch->desc, "Matrix.Info", payload.c_str());
+    SendGMCP(ch->desc, "Matrix.Info", STRING_TO_CSTR(payload));
     return;
   }
 
@@ -187,7 +187,7 @@ void SendGMCPMatrixInfo ( struct char_data *ch )
 
   // Dump the json to a string and send it.
   std::string payload = j.dump();
-  SendGMCP(ch->desc, "Matrix.Info", payload.c_str());
+  SendGMCP(ch->desc, "Matrix.Info", STRING_TO_CSTR(payload));
 }
 
 void SendGMCPMatrixDeck ( struct char_data *ch )
@@ -199,7 +199,7 @@ void SendGMCPMatrixDeck ( struct char_data *ch )
 
   if (!persona || !persona->in_host || !persona->decker) {
     std::string payload = j.dump();
-    SendGMCP(ch->desc, "Matrix.Deck", payload.c_str());
+    SendGMCP(ch->desc, "Matrix.Deck", STRING_TO_CSTR(payload));
     return;
   }
 
@@ -234,7 +234,7 @@ void SendGMCPMatrixDeck ( struct char_data *ch )
 
   // Dump the json to a string and send it.
   std::string payload = j.dump();
-  SendGMCP(ch->desc, "Matrix.Deck", payload.c_str());
+  SendGMCP(ch->desc, "Matrix.Deck", STRING_TO_CSTR(payload));
 }
 
 void SendGMCPCharInfo( struct char_data * ch )
@@ -255,7 +255,7 @@ void SendGMCPCharInfo( struct char_data * ch )
 
   // Dump the json to a string and send it.
   std::string payload = j.dump();
-  SendGMCP(ch->desc, "Char.Info", payload.c_str());
+  SendGMCP(ch->desc, "Char.Info", STRING_TO_CSTR(payload));
 }
 
 json SerializeRoomExits( struct room_data *room )
@@ -297,7 +297,7 @@ void SendGMCPExitsInfo( struct char_data *ch )
 
   // Dump the json to a string and send it.
   std::string payload = j.dump();
-  SendGMCP(ch->desc, "Room.Exits", payload.c_str());
+  SendGMCP(ch->desc, "Room.Exits", STRING_TO_CSTR(payload));
 }
 
 void SendGMCPRoomInfo( struct char_data *ch, struct room_data *room ) 
@@ -336,7 +336,7 @@ void SendGMCPRoomInfo( struct char_data *ch, struct room_data *room )
   
   // Dump the json to a string and send it.
   std::string payload = j.dump();
-  SendGMCP(ch->desc, "Room.Info", payload.c_str());
+  SendGMCP(ch->desc, "Room.Info", STRING_TO_CSTR(payload));
 }
 
 void SendGMCP( descriptor_t *apDescriptor, const char *module, const char *apData )
@@ -388,7 +388,7 @@ void SendGMCPCharVitals( struct char_data * ch )
 
   // Dump the json to a string and send it.
   std::string payload = j.dump();
-  SendGMCP(ch->desc, "Char.Vitals", payload.c_str());
+  SendGMCP(ch->desc, "Char.Vitals", STRING_TO_CSTR(payload));
 }
 
 void SendGMCPCharPools( struct char_data * ch )
@@ -427,7 +427,7 @@ void SendGMCPCharPools( struct char_data * ch )
 
   // Dump the json to a string and send it.
   std::string payload = j.dump();
-  SendGMCP(ch->desc, "Char.Pools", payload.c_str());
+  SendGMCP(ch->desc, "Char.Pools", STRING_TO_CSTR(payload));
 }
 
 

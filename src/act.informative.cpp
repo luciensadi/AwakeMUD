@@ -6316,11 +6316,11 @@ ACMD(do_users)
     int total_hosts = 0;
     for (auto &host_it : host_map) {
       total_hosts++;
-      send_to_char(ch, "^c%s^n: ", host_it.first.c_str());
+      send_to_char(ch, "^c%s^n: ", STRING_TO_CSTR(host_it.first));
 
       int total_pcs = 0;
       for (auto &pc_it : host_it.second) {
-        send_to_char(ch, "%s%s", total_pcs++ > 0 ? ", " : "", pc_it.c_str());
+        send_to_char(ch, "%s%s", total_pcs++ > 0 ? ", " : "", STRING_TO_CSTR(pc_it));
       }
       send_to_char(ch, " (^c%d^n PC%s)\r\n", total_pcs, total_pcs == 1 ? "" : "s");
     }

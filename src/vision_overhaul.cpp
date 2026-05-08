@@ -393,7 +393,7 @@ int get_vision_penalty(struct char_data *ch, struct room_data *temp_room, char *
   }
 
   for (auto it : *penalty_vector) {
-    buf_mod(rbuf, rbuf_size, it.first.c_str(), it.second);
+    buf_mod(rbuf, rbuf_size, STRING_TO_CSTR(it.first), it.second);
   }
 
   if (penalty_chosen > 8) {

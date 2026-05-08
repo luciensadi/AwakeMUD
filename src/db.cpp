@@ -4438,7 +4438,7 @@ int vnum_room_samename(struct char_data *ch) {
 
   for (auto iterator : seen_names) {
     if (iterator.second.size() > 1) {
-      send_to_char(ch, "%3d. '^c%s^n' is shared among ", ++found, iterator.first.c_str());
+      send_to_char(ch, "%3d. '^c%s^n' is shared among ", ++found, STRING_TO_CSTR(iterator.first));
 
       bool printed_yet = FALSE;
       for (auto vnum_it : iterator.second) {
@@ -6639,7 +6639,7 @@ void load_consist(void)
         continue;
 
       // Skip anything that's not a number.
-      vnum_t vnum = std::stoll(itr->path().filename().string());
+      vnum_t vnum = atol(STRING_TO_CSTR(itr->path().filename()));
       if (vnum <= 0)
         continue;
 
