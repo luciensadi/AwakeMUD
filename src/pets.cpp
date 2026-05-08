@@ -447,6 +447,7 @@ void create_pet_parse(struct descriptor_data *d, const char *arg) {
 #endif
             d->edit_mode = PET_EDIT_WANDER;
           }
+          break;
         case 'q':
         case 'Q':
           {

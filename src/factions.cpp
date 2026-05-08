@@ -144,7 +144,7 @@ ACMD(do_factions) {
       // TODO: Find player online (search descriptors)
       // TODO: Find player offline (load char)
       // TODO: Set their rep in the selected faction
-      int rep_amt = atoi(rep_str);
+      // int rep_amt = atoi(rep_str);
       return;
     }
 

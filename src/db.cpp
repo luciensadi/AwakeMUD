@@ -2560,7 +2560,9 @@ void parse_quest(File &fl, long virtual_nr)
 
   if (quest_table[quest_nr].num_objs > 0) {
     quest_table[quest_nr].obj = new quest_om_data[quest_table[quest_nr].num_objs];
-    memset(quest_table[quest_nr].obj, 0, sizeof(quest_om_data) * quest_table[quest_nr].num_objs);
+
+    for (int idx = 0; idx < quest_table[quest_nr].num_objs; idx++) { new (&quest_table[quest_nr].obj[idx]) quest_om_data(); }
+
     for (j = 0; j < quest_table[quest_nr].num_objs; j++) {
       fl.GetLine(line, 256, FALSE);
       if (sscanf(line, "%ld %ld %ld %ld %ld %ld %ld %ld", t, t + 1, t + 2, t + 3,
@@ -3647,7 +3649,6 @@ int vnum_object_weapons(char *searchname, struct char_data * ch)
 int vnum_object_weapons_broken(char *searchname, struct char_data * ch)
 {
   char buf[MAX_STRING_LENGTH*8];
-  extern const char *wound_arr[];
   int nr, found = 0;
   buf[0] = '\0';
 

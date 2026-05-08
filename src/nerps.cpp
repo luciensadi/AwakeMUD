@@ -23,7 +23,7 @@ ACMD(do_usenerps) {
     struct char_data *viewer;
 
     // Find valid viewers.
-    for (viewer = viewer = (ch->in_room ? ch->in_room->people : ch->in_veh->people);
+    for (viewer = (ch->in_room ? ch->in_room->people : ch->in_veh->people);
          viewer;
          viewer = (ch->in_room ? viewer->next_in_room : viewer->next_in_veh)) 
     {

@@ -410,7 +410,7 @@ void do_raw_ram(struct char_data *ch, struct veh_data *veh, struct veh_data *tve
 
   // Alarm all NPCs inside the ramming vehicle. They don't get mad at the PC in particular, just mad in general.
   for (struct char_data *npc = veh->people; npc; npc = npc->next_in_veh) {
-    set_mob_alarm(npc, NULL, 30);
+    set_mob_alarm(npc, nullptr, 30);
   }
 
   if (tveh) {

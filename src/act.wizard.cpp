@@ -6841,6 +6841,7 @@ ACMD(do_set)
     snprintf(buf, sizeof(buf),"%s changed %s's highest bioware index from %d to %d.", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict), GET_HIGHEST_INDEX(vict), value);
     GET_HIGHEST_INDEX(vict) = value;
     mudlog(buf, ch, LOG_WIZLOG, TRUE );
+    break;
   case 89: /* strikes */
     {
       RANGE(0, 3);
@@ -10132,13 +10133,9 @@ float spider_connected_hosts_for_reward_func(struct host_data *host,
     return 0;
   }
   
-  try {
-    // No-op: Already there.
-    if (connected_hosts[host->vnum]) {
-      return 0;
-    }
-  } catch (std::out_of_range) {
-    // Add it to the map.
+  if (connected_hosts.contains(host->vnum)) {
+    return 0;
+  } else {
     connected_hosts[host->vnum] = host;
   }
 
@@ -10183,13 +10180,11 @@ float spider_connected_rooms_for_reward_func(struct room_data *room,
     mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Null room to spider func");
     return 0;
   }
-  
-  try {
-    // No-op: Already there.
-    if (connected_rooms[GET_ROOM_VNUM(room)]) {
-      return 0;
-    }
-  } catch (std::out_of_range) {}
+
+  // No-op: Already there.
+  if (connected_rooms.contains(GET_ROOM_VNUM(room))) {
+    return 0;
+  }
 
   float return_value = 1;
   
@@ -10288,34 +10283,27 @@ void calculate_zone_payout(struct char_data *ch, rnum_t zone_rnum) {
     switch (ZONECMD.command) {
       case 'M':
         // If room (rnum arg3) is connected, reward
-        try {
-          if (connected_rooms[world[ZONECMD.arg3].number]) {
-            connected_mobs[ZONECMD.arg2] = &mob_proto[ZONECMD.arg1];
-          }
-        } catch (std::out_of_range) {}
+        if (connected_rooms.contains(world[ZONECMD.arg3].number)) {
+          connected_mobs[ZONECMD.arg2] = &mob_proto[ZONECMD.arg1];
+        }
         break;
       case 'O':
         // If room (rnum arg3) is connected, reward
-        try {
-          if (connected_rooms[world[ZONECMD.arg3].number]) {
-            connected_objs[ZONECMD.arg2] = &obj_proto[ZONECMD.arg1];
-          }
-        } catch (std::out_of_range) {}
+        if (connected_rooms.contains(world[ZONECMD.arg3].number)) {
+          connected_objs[ZONECMD.arg2] = &obj_proto[ZONECMD.arg1];
+        }
         break;
       case 'H':
         // If host (rnum arg3) is connected, reward
-        try {
-          if (connected_hosts[matrix[ZONECMD.arg3].vnum]) {
-            connected_objs[ZONECMD.arg2] = &obj_proto[ZONECMD.arg1];
-          }
-        } catch (std::out_of_range) {}
+        if (connected_hosts.contains(matrix[ZONECMD.arg3].vnum)) {
+          connected_objs[ZONECMD.arg2] = &obj_proto[ZONECMD.arg1];
+        }
         break;
       case 'V':
         // If room (rnum arg3) is connected, reward
-        try {
-          if (connected_rooms[world[ZONECMD.arg3].number])
-            connected_vehs[ZONECMD.arg2] = &veh_proto[ZONECMD.arg1];
-        } catch (std::out_of_range) {}
+        if (connected_rooms.contains(world[ZONECMD.arg3].number)) {
+          connected_vehs[ZONECMD.arg2] = &veh_proto[ZONECMD.arg1];
+        }
         break;
       case 'S':
         // We assume the veh is connected. If someone games the system with these, they'll just get banned.
@@ -10344,11 +10332,8 @@ void calculate_zone_payout(struct char_data *ch, rnum_t zone_rnum) {
     if ((temp_rnum = real_shop(vnum)) > 0) {
       if (shop_table[temp_rnum].keeper > 0 && real_mobile(shop_table[temp_rnum].keeper) > 0) {
         // require that the keeper is on grid
-        try {
-          if (connected_mobs[shop_table[temp_rnum].keeper]) { /* no-op, just looking for membership */ }
-        } catch (std::out_of_range) {
+        if (!connected_mobs.contains(shop_table[temp_rnum].keeper))
           continue;
-        }
 
         // todo: count for-sale items
       }

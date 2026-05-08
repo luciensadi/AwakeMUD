@@ -6299,12 +6299,7 @@ ACMD(do_users)
     }
     if ((d->connected && !d->character) || CAN_SEE(ch, d->character)) {
       if (globbed) {
-        try {
-          host_map[std::string(d->host)].push_back(std::string(GET_CHAR_NAME(d->original ? d->original : d->character)));
-        } catch (std::out_of_range) {
-          host_map[std::string(d->host)] = std::vector<std::string>();
-          host_map[std::string(d->host)].push_back(std::string(GET_CHAR_NAME(d->original ? d->original : d->character)));
-        }
+        host_map[std::string(d->host)].push_back(std::string(GET_CHAR_NAME(d->original ? d->original : d->character)));
       } else {
         send_to_char(line, ch);
       }

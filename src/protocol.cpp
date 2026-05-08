@@ -29,11 +29,23 @@
 #include "structs.hpp"
 #include "constants.hpp"
 #include "comm.hpp"
-#include "protocol.hpp"
 #include "config.hpp"
 #include "db.hpp"
 #include "gmcp.hpp"
 #include "utils.hpp"
+
+// Silence the ignored-cast for the various TELOPTs.
+#if defined(__clang__)
+  #pragma clang diagnostic push
+  #pragma clang diagnostic ignored "-Wignored-qualifiers"
+  #include "protocol.hpp"
+  #pragma clang diagnostic pop
+#elif defined(__GNUC__)
+  #pragma GCC diagnostic push
+  #pragma GCC diagnostic ignored "-Wignored-qualifiers"
+  #include "protocol.hpp"
+  #pragma GCC diagnostic pop
+#endif
 
 /******************************************************************************
  The following section is for Diku/Merc derivatives.  Replace as needed.
@@ -302,8 +314,7 @@ protocol_t *ProtocolCreate( void )
     }
   }
 
-  pProtocol = new protocol_t;
-  memset(pProtocol, 0, sizeof(protocol_t));
+  pProtocol = new protocol_t{};
   pProtocol->WriteOOB = 0;
   for ( i = eNEGOTIATED_TTYPE; i < eNEGOTIATED_MAX; ++i )
     pProtocol->Negotiated[i] = FALSE;
@@ -1858,7 +1869,8 @@ static void Negotiate( descriptor_t *apDescriptor )
     ConfirmNegotiation(apDescriptor, eNEGOTIATED_MCCP, TRUE, TRUE);
     ConfirmNegotiation(apDescriptor, eNEGOTIATED_GMCP, TRUE, TRUE);
     
-    Write(apDescriptor, (char[]) { (char)IAC, (char)DO, TELOPT_NEW_ENVIRON, '\0' });
+    char msg[] = { (char)IAC, (char)DO, TELOPT_NEW_ENVIRON, '\0' };
+    Write(apDescriptor, msg);
   }
 }
 
@@ -2107,7 +2119,8 @@ static void PerformHandshake( descriptor_t *apDescriptor, char aCmd, char aProto
         PROTO_DEBUG_MSG("Received IAC WILL NEW-ENVIRON from client, requesting all available info.");
         // IAC SB NEW-ENVIRON SEND VAR "IPADDRESS" IAC SE
         // Write(apDescriptor, (char[]) { (char)IAC, (char)SB, TELOPT_NEW_ENVIRON, NEW_ENV_SEND, NEW_ENV_USERVAR, 'I', 'P', 'A', 'D', 'D', 'R', 'E', 'S', 'S', (char)IAC, (char)SE, 0 });
-        Write(apDescriptor, (char[]) { (char)IAC, (char)SB, TELOPT_NEW_ENVIRON, NEW_ENV_SEND, (char)IAC, (char)SE, 0 });
+        char msg[] = { (char)IAC, (char)SB, TELOPT_NEW_ENVIRON, NEW_ENV_SEND, (char)IAC, (char)SE, 0 };
+        Write(apDescriptor, msg);
       }
       else if ( aCmd == (char)WONT )
       {
@@ -2251,7 +2264,7 @@ static void PerformSubnegotiation( descriptor_t *apDescriptor, char aCmd, char *
               case NEW_ENV_USERVAR:
                 contents_as_str[idx] = '%';
                 break;
-              case IAC:
+              case (char) IAC:
                 contents_as_str[idx] = '!';
                 break;
               default:

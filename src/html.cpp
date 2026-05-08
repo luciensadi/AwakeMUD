@@ -114,7 +114,7 @@ const char *color_to_html(const char *color) {
     unsigned int g_base = *(color_to_convert + 4) - '0';
     unsigned int b_base = *(color_to_convert + 5) - '0';
 
-    if (r_base < 0 || r_base > 5 || g_base < 0 || g_base > 5 || b_base < 0 || b_base > 5) {
+    if (r_base > 5 || g_base > 5 || b_base > 5) {
       strlcpy(html_version, color, sizeof(html_version));
       return html_version;
     }

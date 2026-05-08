@@ -12,7 +12,7 @@
 #include "utils.hpp"
 
 // Explicitly inclusive of ENDBIT, that's a valid offset.
-#define OFFSET_IS_VALID(offset) (offset >= 0 && offset <= ENDBIT)
+#define OFFSET_IS_VALID(offset) (offset <= ENDBIT)
 
 // ______________________________
 //

@@ -494,12 +494,14 @@ bool display_exdesc(struct char_data *viewer, struct char_data *vict, const char
   return FALSE;
 }
 
-// #define EXDESCS_DEBUG(...) {                          \
-//   if (viewer && IS_SENATOR(viewer)) {                 \
-//     send_to_char(viewer, __VA_ARGS__);                \
-//     send_to_char(viewer, "\r\n"); /*force a newline*/ \
-//   }                                                   \
-// }
+/*
+#define EXDESCS_DEBUG(...) {              \
+    if (viewer && IS_SENATOR(viewer)) {   \
+      send_to_char(viewer, __VA_ARGS__);  \
+      send_to_char(viewer, "\r\n");       \
+    }                                     \
+  }
+*/
 
 #define EXDESCS_DEBUG(...)
 

@@ -30,11 +30,7 @@ const char *slot_icons[] {
 #define SLOT_PEACH        10
 
 void add_gambling_ledger_entry(struct char_data *ch, int amount) {
-  try {
-    gamba_ledger.at(GET_IDNUM(ch)) += amount;
-  } catch (std::out_of_range) {
-    gamba_ledger[GET_IDNUM(ch)] = amount;
-  }
+  gamba_ledger[GET_IDNUM(ch)] += amount;
 }
 
 bool _gamba_cmp_wins(std::pair<idnum_t, long>& a, std::pair<idnum_t, long>& b) {

@@ -2237,7 +2237,7 @@ void set_mob_alarm(struct char_data *npc, struct char_data *ch, int seconds_to_a
 
 // Wrapper for set_mob_alarm with NULL PC.
 void set_mob_alert(struct char_data *npc, int seconds_to_alarm) {
-  set_mob_alarm(npc, NULL, seconds_to_alarm);
+  set_mob_alarm(npc, nullptr, seconds_to_alarm);
 }
 
 // If they're already mad at ch, extend time, otherwise alert them for that time.

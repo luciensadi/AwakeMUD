@@ -35,7 +35,7 @@ void write_objs_to_disk(vnum_t zone);
 
 // extern vars
 extern int max_weapon_focus_rating;
-#define MAX_WEAPON_FOCUS_RATING(wpn) MIN(max_weapon_focus_rating, GET_WEAPON_REACH(wpn) == 0 ? 3 : 2)
+#define MAX_WEAPON_FOCUS_RATING(wpn) MIN(max_weapon_focus_rating, (GET_WEAPON_REACH(wpn) == 0 ? 3 : 2))
 
 // extern funcs
 extern char *prep_string_for_writing_to_savefile(char *dest, const char *src);

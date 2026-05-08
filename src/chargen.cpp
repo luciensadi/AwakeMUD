@@ -2073,8 +2073,8 @@ void create_parse(struct descriptor_data *d, const char *arg)
       if (d->ccr.is_otaku) {
         send_to_char(CH, "Sorry, you cannot change this due to code limitations. If you need to change it, please reconnect and restart creation.\r\n");
         priority_menu(d);
-        break;
       }
+      // fall through
     case 'b':
     case 'c':
     case 'd':

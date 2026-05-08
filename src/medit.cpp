@@ -1592,6 +1592,7 @@ void medit_parse(struct descriptor_data *d, const char *arg)
         send_to_char("That's not a choice. Enter a choice (A to add, D to delete, or Q to quit): ", CH);
         break;
     }
+    break;
   case MEDIT_ADD_PRECAST_SPELL:
     number = atoi(arg);
     if (number < 0 || number >= MAX_SPELLS) {
@@ -2021,7 +2022,6 @@ void ensure_spell_exists_in_mob_precast_spells(int spell, int subtype, struct ch
 
   // Create a new one.
   struct sustain_data *sust = new sustain_data;
-  memset(sust, 0, sizeof(struct sustain_data));
   sust->spell = spell;
   sust->subtype = subtype;
 }

@@ -2754,10 +2754,6 @@ void drop_while_rigging(struct char_data *ch, char *argument)
 
 ACMD(do_drop)
 {
-	extern vnum_t donation_room_1;
-	extern vnum_t donation_room_2; /* uncomment if needed! */
-	extern vnum_t donation_room_3; /* uncomment if needed! */
-
 	if (IS_RIGGING(ch))
 	{
 		drop_while_rigging(ch, argument);
