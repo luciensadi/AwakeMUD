@@ -24,15 +24,15 @@ endif
 # Default buildport mode to on. Disable via command line: make IS_BUILDPORT=0
 IS_BUILDPORT ?= 1
 ifeq ($(IS_BUILDPORT),1)
-	BASE_CXXFLAGS += -DIS_BUILDPORT -DSELFADVANCE -DUSE_MEMORY_CANARIES
+	BASE_CPPFLAGS += -DIS_BUILDPORT -DSELFADVANCE -DUSE_MEMORY_CANARIES
 else
-	BASE_CXXFLAGS += -DSUPPRESS_MOB_SKILL_ERRORS -DIGNORING_IC_ALSO_IGNORES_COMBAT 
+	BASE_CPPFLAGS += -DSUPPRESS_MOB_SKILL_ERRORS -DIGNORING_IC_ALSO_IGNORES_COMBAT 
 endif
 
 # Only set this if you have access to Awake CE's extended world files (not part of the repo)
 USE_PRIVATE_WORLD ?= 0
 ifeq ($(USE_PRIVATE_WORLD),1)
-	BASE_CXXFLAGS += -DUSE_PRIVATE_CE_WORLD
+	BASE_CPPFLAGS += -DUSE_PRIVATE_CE_WORLD
 endif
 
 # Auto-detect the OS and apply the unique flags for that config
