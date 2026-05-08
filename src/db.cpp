@@ -8134,7 +8134,6 @@ void initialize_and_alphabetize_room_flags() {
       case 8:
       case 11:
       case 13:
-      case 14:
       case ROOM_BFS_MARK:
       case ROOM_LOW_LIGHT:
       case 17:

@@ -648,7 +648,7 @@ enum {
 // UNUSED SLOT         was house, you need to clear it, also touch db.cpp room_flag_map
 #define ROOM_NO_DROP                    12  /* You can't drop things here. */
 // UNUSED SLOT         was (unused), need to clear it, also touch db.cpp room_flag_map
-// UNUSED SLOT         ok, no clear necessary, also touch db.cpp room_flag_map
+#define ROOM_NO_TAXI                    14
 #define ROOM_BFS_MARK                   15  /* (R) breadth-first srch mrk */
 #define ROOM_LOW_LIGHT                  16  /* Sets room light level to lowlight levels on boot */
 // UNUSED SLOT         was !used, also touch db.cpp room_flag_map

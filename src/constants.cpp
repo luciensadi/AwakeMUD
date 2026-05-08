@@ -275,7 +275,7 @@ const char *room_bits[] =
     "HOUSE",
     "!DROP",
     "unused",
-    "OLC",
+    "!TAXI",
     "*",                          /* BFS MARK */
     "LOW_LIGHT",
     "!USED", // Empty slot.
@@ -322,7 +322,7 @@ const char *room_flag_explanations[] =
   "unused - house",
   "Can't drop things here",
   "unused",
-  "unused - olc",
+  "Taxis can't be hailed here",
   "BFS mark ^y[don't set]^n", /* BFS MARK */
   "unused - low light",
   "unused - !used", // Empty slot.
