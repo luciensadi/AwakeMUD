@@ -26,6 +26,8 @@
 #include <mysql/mysql.h>
 #include <regex>
 
+#include <boost/filesystem.hpp>
+
 #include "md5.hpp"
 
 #if defined(WIN32) && !defined(__CYGWIN__)
@@ -5137,7 +5139,7 @@ char get_final_character_from_string(const char *str)
 const char *remove_final_punctuation(const char *str)
 {
   static char replacement_buf[MAX_INPUT_LENGTH * 2] = {0};
-  strlcpy(replacement_buf, std::regex_replace(std::string(str), std::regex("\\.[^nN]?$"), "").c_str(), sizeof(replacement_buf));
+  strlcpy(replacement_buf, STRING_TO_CSTR(std::regex_replace(std::string(str), std::regex("\\.[^nN]?$"), "")), sizeof(replacement_buf));
   return replacement_buf;
 }
 
@@ -9660,7 +9662,7 @@ const char *get_descriptor_fingerprint(struct descriptor_data *d)
   // Add NEW-ENVIRON data from our new JSON.
   if (!d->pProtocol->new_environ_info.empty())
   {
-    strlcat(result, md5_hash_from_string(get_string_after_color_code_removal(d->pProtocol->new_environ_info.dump(2, ' ', true).c_str(), NULL)), sizeof(result));
+    strlcat(result, md5_hash_from_string(get_string_after_color_code_removal(STRING_TO_CSTR(d->pProtocol->new_environ_info.dump(2, ' ', true)), NULL)), sizeof(result));
   }
 
   // Add data from KaVir's protocol snippet.

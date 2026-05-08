@@ -76,13 +76,13 @@ void RegisterGMCPDiscordHello( descriptor_t *apDescriptor, const json &payload )
   // auto private_it = payload.find("private");
   if (user_it != payload.end()) {
     if (apDescriptor->character) {
-      mudlog_vfprintf(apDescriptor->character, LOG_SYSLOG, "Got Discord.Hello from %s for %s.", user_it->get<std::string>().c_str(), GET_CHAR_NAME(apDescriptor->character));
+      mudlog_vfprintf(apDescriptor->character, LOG_SYSLOG, "Got Discord.Hello from %s for %s.", STRING_TO_CSTR(user_it->get<std::string>()), GET_CHAR_NAME(apDescriptor->character));
     } else {
-      mudlog_vfprintf(NULL, LOG_SYSLOG, "Got Discord.Hello from %s before login, so unable to associate with a character.", user_it->get<std::string>().c_str());
+      mudlog_vfprintf(NULL, LOG_SYSLOG, "Got Discord.Hello from %s before login, so unable to associate with a character.", STRING_TO_CSTR(user_it->get<std::string>()));
     }
   }
 
-  log_vfprintf("Got GMCP Discord HELLO from %s: %s", GET_CHAR_NAME(apDescriptor->character), payload.dump().c_str());
+  log_vfprintf("Got GMCP Discord HELLO from %s: %s", GET_CHAR_NAME(apDescriptor->character), STRING_TO_CSTR(payload.dump()));
 }
 
 void SendGMCPDiscordInfo ( descriptor_t *apDescriptor)
@@ -432,7 +432,7 @@ void SendGMCPCharPools( struct char_data * ch )
 
 
 void ExecuteGMCPMessage(descriptor_t *apDescriptor, const char *module, const json &payload) {
-  // log_vfprintf("GMCP module %s, payload %s", module, payload.dump().c_str());
+  // log_vfprintf("GMCP module %s, payload %s", module, STRING_TO_CSTR(payload.dump()));
   if (!strncmp(module, "Core.Supports.Get", strlen(module)))
     SendGMCPCoreSupports(apDescriptor);
   else if (!strncmp(module, "Room.Info.Get", strlen(module))) {
@@ -486,7 +486,7 @@ void ExecuteGMCPMessage(descriptor_t *apDescriptor, const char *module, const js
 #endif
 #ifdef IS_BUILDPORT
   else
-    log_vfprintf("Received Unhandled GMCP Module Call [%s]: '%s' from %s.", module, payload.dump().c_str(), GET_CHAR_NAME(apDescriptor->character));
+    log_vfprintf("Received Unhandled GMCP Module Call [%s]: '%s' from %s.", module, STRING_TO_CSTR(payload.dump()), GET_CHAR_NAME(apDescriptor->character));
 #endif
 }
 

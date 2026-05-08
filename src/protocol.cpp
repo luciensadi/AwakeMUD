@@ -33,6 +33,7 @@
 #include "config.hpp"
 #include "db.hpp"
 #include "gmcp.hpp"
+#include "utils.hpp"
 
 /******************************************************************************
  The following section is for Diku/Merc derivatives.  Replace as needed.
@@ -1143,7 +1144,7 @@ const char *CopyoverGetJSON( descriptor_t *apDescriptor )
   protocol_t *pProtocol = apDescriptor ? apDescriptor->pProtocol : NULL;
 
   if (pProtocol) {
-    strlcpy(output, pProtocol->new_environ_info.dump().c_str(), sizeof(output));
+    strlcpy(output, STRING_TO_CSTR(pProtocol->new_environ_info.dump()), sizeof(output));
   }
 
   return output;
@@ -2322,7 +2323,7 @@ static void PerformSubnegotiation( descriptor_t *apDescriptor, char aCmd, char *
             }
           }
           
-          PROTO_DEBUG_MSG("- After parsing, the resulting JSON dict is '%s'.", apDescriptor->pProtocol->new_environ_info.dump().c_str());
+          PROTO_DEBUG_MSG("- After parsing, the resulting JSON dict is '%s'.", STRING_TO_CSTR(apDescriptor->pProtocol->new_environ_info.dump()));
         }
       }
       break;

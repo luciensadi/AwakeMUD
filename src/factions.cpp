@@ -591,8 +591,8 @@ Faction::Faction(bf::path file_path) {
   _json_parse_from_file(file_path, faction_file);
 
   idnum = (idnum_t) faction_file["idnum"].get<idnum_t>();
-  full_name = str_dup(faction_file["full_name"].get<std::string>().c_str());
-  description = str_dup(faction_file["description"].get<std::string>().c_str());
+  full_name = str_dup(STRING_TO_CSTR(faction_file["full_name"].get<std::string>()));
+  description = str_dup(STRING_TO_CSTR(faction_file["description"].get<std::string>()));
   default_status = (int) faction_file["default_status"].get<int>();
   editors = faction_file["editors"].get<std::vector<idnum_t>>();
 

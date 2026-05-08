@@ -6649,7 +6649,7 @@ void load_consist(void)
       // If the room doesn't exist, or if it's not storage-flagged, this is an orphaned file.
       if (rnum < 0 || !ROOM_FLAGGED(&world[rnum], ROOM_STORAGE)) {
         log_vfprintf(" - Marking storage file %s as orphaned: %s.",
-                      itr->path().c_str(),
+                      STRING_TO_CSTR(itr->path()),
                       rnum < 0 ? "No matching vnum" : "Room not flagged storage");
         bf::rename(itr->path(), orphan_storage_files / itr->path().filename());
       }

@@ -1775,7 +1775,7 @@ void do_stat_character(struct char_data * ch, struct char_data * k)
                    k->desc->pProtocol->pVariables[eMSDP_CLIENT_VERSION]->pValueString ? k->desc->pProtocol->pVariables[eMSDP_CLIENT_VERSION]->pValueString : "NULL");
           
           if (k->desc->pProtocol->new_environ_info.find("IPADDRESS") != k->desc->pProtocol->new_environ_info.end()) {
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " (reported IP %s)", k->desc->pProtocol->new_environ_info["IPADDRESS"].get<std::string>().c_str());
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " (reported IP %s)", STRING_TO_CSTR(k->desc->pProtocol->new_environ_info["IPADDRESS"].get<std::string>()));
           }
           
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "; Fingerprint ^c%s^n\r\n",

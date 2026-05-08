@@ -226,10 +226,10 @@ void houseedit_reload(struct char_data *ch, const char *filename) {
   //  Verify that file exists.
   bf::path new_path = GET_APARTMENT_SUBROOM(ch->in_room)->get_base_directory() / filename;
   if (!exists(new_path)) {
-    send_to_char(ch, "There is no file at path '%s'.\r\n", new_path.string().c_str());
+    send_to_char(ch, "There is no file at path '%s'.\r\n", STRING_TO_CSTR(new_path));
     return;
   } else {
-    send_to_char(ch, "OK, using the file at path %s.\r\n", new_path.string().c_str());
+    send_to_char(ch, "OK, using the file at path %s.\r\n", new_path.c_str());
   }
 
   // Log and load.

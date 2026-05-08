@@ -2894,7 +2894,7 @@ int perform_dupe_check(struct descriptor_data *d)
     act("$n shakes $s head to clear it.",
         TRUE, d->character, 0, 0, TO_ROOM);
     mudlog_vfprintf(d->character, LOG_CONNLOG,  "%s has re-logged in ... disconnecting old socket.", GET_CHAR_NAME(d->character));
-    log_vfprintf("[CONNLOG: %s reconnecting from %s with fingerprint %s and JSON '''%s''']", GET_CHAR_NAME(d->character), d->host, get_descriptor_fingerprint(d), d->pProtocol ? d->pProtocol->new_environ_info.dump().c_str() : "{}");
+    log_vfprintf("[CONNLOG: %s reconnecting from %s with fingerprint %s and JSON '''%s''']", GET_CHAR_NAME(d->character), d->host, get_descriptor_fingerprint(d), d->pProtocol ? STRING_TO_CSTR(d->pProtocol->new_environ_info.dump()) : "{}");
     if (d->character->persona)
     {
       snprintf(buf, sizeof(buf), "%s depixelizes and vanishes from the host.\r\n", d->character->persona->name);
@@ -3297,7 +3297,7 @@ void nanny(struct descriptor_data * d, char *arg)
       d->character->player.host = str_dup(d->host);
       playerDB.SaveChar(d->character);
       mudlog(buf, d->character, LOG_CONNLOG, TRUE);
-      log_vfprintf("[CONNLOG: %s connecting from %s with fingerprint %s and JSON '''%s''']", GET_CHAR_NAME(d->character), d->host, get_descriptor_fingerprint(d), d->pProtocol ? d->pProtocol->new_environ_info.dump().c_str() : "{}");
+      log_vfprintf("[CONNLOG: %s connecting from %s with fingerprint %s and JSON '''%s''']", GET_CHAR_NAME(d->character), d->host, get_descriptor_fingerprint(d), d->pProtocol ? STRING_TO_CSTR(d->pProtocol->new_environ_info.dump()) : "{}");
       if (load_result) {
         snprintf(buf, sizeof(buf), "\r\n\r\n"
                 "%s%d LOGIN FAILURE%s SINCE LAST SUCCESSFUL LOGIN.%s\r\n",

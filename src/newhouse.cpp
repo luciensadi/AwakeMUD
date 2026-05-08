@@ -212,7 +212,7 @@ void load_apartment_complexes() {
         bf::path new_name = filename.parent_path() / vnum_to_string(complex->get_landlord_vnum());
         log_vfprintf(" (Complex %s was saved in the old manner ('%s' is not a number), so I'll rename it to '%s'.)", 
                      complex->get_name(),
-                     filename.filename().c_str(),
+                     STRING_TO_CSTR(filename.filename()),
                      new_name.c_str());
         bf::rename(filename, new_name);
       }
@@ -320,7 +320,7 @@ ApartmentComplex::ApartmentComplex(bf::path filename) :
     json base_info;
     _json_parse_from_file(base_directory / COMPLEX_INFO_FILE_NAME, base_info);
 
-    display_name = str_dup(base_info["display_name"].get<std::string>().c_str());
+    display_name = str_dup(STRING_TO_CSTR(base_info["display_name"].get<std::string>()));
     landlord_vnum = (vnum_t) base_info["landlord_vnum"].get<vnum_t>();
     editors = base_info["editors"].get<std::vector<idnum_t>>();
 
@@ -344,7 +344,7 @@ ApartmentComplex::ApartmentComplex(bf::path filename) :
       if (is_directory(itr->status())) {
         bf::path room_path = itr->path();
 
-#define ROOM_NAME room_path.filename().c_str()
+#define ROOM_NAME STRING_TO_CSTR(room_path.filename())
         if (!str_cmp(ROOM_NAME, DELETED_APARTMENTS_DIR_NAME))
           continue;
 
@@ -776,12 +776,12 @@ Apartment::Apartment(ApartmentComplex *complex, bf::path base_directory) :
   {
     apartment_flags.Clear();
     
-    log_vfprintf(" ---- Loading apartment base data for %s.", base_directory.filename().c_str());
+    log_vfprintf(" ---- Loading apartment base data for %s.", STRING_TO_CSTR(base_directory.filename()));
     json base_info;
     _json_parse_from_file(base_directory / APARTMENT_INFO_FILE_NAME, base_info);
 
-    shortname = str_dup(base_info["short_name"].get<std::string>().c_str());
-    name = str_dup(base_info["name"].get<std::string>().c_str());
+    shortname = str_dup(STRING_TO_CSTR(base_info["short_name"].get<std::string>()));
+    name = str_dup(STRING_TO_CSTR(base_info["name"].get<std::string>()));
     lifestyle = base_info["lifestyle"].get<int>();
     nuyen_per_month = base_info["rent"].get<long>();
     garage_override = base_info.value("garage_override", false);
@@ -841,14 +841,14 @@ Apartment::Apartment(ApartmentComplex *complex, bf::path base_directory) :
 
         // Ensure it has an info file. A missing file means this room was deleted.
         if (!bf::exists(room_path / ROOM_INFO_FILE_NAME)) {
-          log_vfprintf(" ----- Skipping sub-room '%s': No info path.", room_path.filename().c_str());
+          log_vfprintf(" ----- Skipping sub-room '%s': No info path.", STRING_TO_CSTR(room_path.filename()));
           continue;
         }
 
-        log_vfprintf(" ----- Initializing sub-room '%s'.", room_path.filename().c_str());
+        log_vfprintf(" ----- Initializing sub-room '%s'.", STRING_TO_CSTR(room_path.filename()));
         ApartmentRoom *apartment_room = new ApartmentRoom(this, room_path);
         rooms.push_back(apartment_room);
-        log_vfprintf(" ----- Fully loaded %s's %s at %ld.", name, room_path.filename().c_str(), apartment_room->get_vnum());
+        log_vfprintf(" ----- Fully loaded %s's %s at %ld.", name, STRING_TO_CSTR(room_path.filename()), apartment_room->get_vnum());
       }
     }
     recalculate_garages();
@@ -1090,7 +1090,7 @@ void Apartment::save_rooms() {
 
   // Iterate through all rooms in apartment.
   for (auto &room : rooms) {
-    log_vfprintf(" - %ld @ %s", room->get_vnum(), room->base_path.c_str());
+    log_vfprintf(" - %ld @ %s", room->get_vnum(), STRING_TO_CSTR(room->base_path));
     // Write or update room data. This also auto-creates subdir if necessary.
     room->save_info();
 
@@ -1977,7 +1977,7 @@ ApartmentRoom::ApartmentRoom(Apartment *apartment, bf::path directory) :
   if (apartment->get_paid_until() >= time(0) && apartment->has_owner() && apartment->owner_is_valid()) {
     // Load decorated name.
     if (base_info.find("decorated_name") != base_info.end()) {
-      decorated_name = str_dup(base_info["decorated_name"].get<std::string>().c_str());
+      decorated_name = str_dup(STRING_TO_CSTR(base_info["decorated_name"].get<std::string>()));
     } else {
       decorated_name = NULL;
     }
@@ -1986,9 +1986,9 @@ ApartmentRoom::ApartmentRoom(Apartment *apartment, bf::path directory) :
     bf::ifstream ifs(base_path / "decoration.txt");
     std::string content((std::istreambuf_iterator<char>(ifs)), (std::istreambuf_iterator<char>()));
     ifs.close();
-    decoration = *(content.c_str()) ? str_dup(content.c_str()) : NULL;
+    decoration = !content.empty() ? str_dup(content.c_str()) : NULL;
 
-    log_vfprintf(" ----- Applying changes from %s to world...", directory.filename().c_str());
+    log_vfprintf(" ----- Applying changes from %s to world...", STRING_TO_CSTR(directory.filename()));
 
     // Load storage.
     load_storage();
