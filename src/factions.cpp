@@ -138,8 +138,8 @@ ACMD(do_factions) {
 
     if (str_str(mode, "setrep") && access_level(ch, LVL_ADMIN)) {
       // TODO: factions setrep <target> <faction_idnum> <rep>
-      char target[MAX_INPUT_LENGTH], faction_idnum[MAX_INPUT_LENGTH];
-      const char *rep_str = two_arguments(remainder, target, faction_idnum);
+      // char target[MAX_INPUT_LENGTH], faction_idnum[MAX_INPUT_LENGTH];
+      // const char *rep_str = two_arguments(remainder, target, faction_idnum);
 
       // TODO: Find player online (search descriptors)
       // TODO: Find player offline (load char)

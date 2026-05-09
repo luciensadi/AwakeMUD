@@ -71,17 +71,8 @@ void delete_veh_from_map(struct veh_data *veh) {
   veh_map.erase(std::string(get_veh_save_key(veh)));
 }
 
-bool key_is_in_map(const char *save_key) {
-  try {
-    veh_map.at(std::string(save_key));
-    return TRUE;
-  } catch (std::out_of_range) {
-    return FALSE;
-  }
-}
-
 bool veh_is_in_map(struct veh_data *veh) {
-  return key_is_in_map(get_veh_save_key(veh));
+  return veh_map.contains(get_veh_save_key(veh));
 }
 
 vnum_t junkyard_room_numbers[] = {
@@ -487,7 +478,7 @@ void load_single_veh(const char *filename) {
   int damage = data.GetInt("VEHICLE/Damage", 0);
   idnum_t idnum = data.GetLong("VEHICLE/Idnum", 0);
 
-  if (key_is_in_map(get_veh_save_key(owner, vnum, idnum))) {
+  if (veh_map.contains(get_veh_save_key(owner, vnum, idnum))) {
     log_vfprintf("Refusing to load vehicle %ld (%ld) owned by %ld: Already loaded.", vnum, idnum, owner);
     return;
   }

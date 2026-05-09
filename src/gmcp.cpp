@@ -85,8 +85,8 @@ void RegisterGMCPDiscordHello( descriptor_t *apDescriptor, const json &payload )
   log_vfprintf("Got GMCP Discord HELLO from %s: %s", GET_CHAR_NAME(apDescriptor->character), STRING_TO_CSTR(payload.dump()));
 }
 
-void SendGMCPDiscordInfo ( descriptor_t *apDescriptor)
-{
+void SendGMCPDiscordInfo ( descriptor_t *apDescriptor){
+
   json j;
 
   j["inviteurl"] = DISCORD_SERVER_URL;
@@ -339,6 +339,15 @@ void SendGMCPRoomInfo( struct char_data *ch, struct room_data *room )
   SendGMCP(ch->desc, "Room.Info", STRING_TO_CSTR(payload));
 }
 
+// Silence the ignored-cast for the various TELOPTs.
+#if defined(__clang__)
+  #pragma clang diagnostic push
+  #pragma clang diagnostic ignored "-Wignored-qualifiers"
+#elif defined(__GNUC__)
+  #pragma GCC diagnostic push
+  #pragma GCC diagnostic ignored "-Wignored-qualifiers"
+#endif
+
 void SendGMCP( descriptor_t *apDescriptor, const char *module, const char *apData )
 {
   if (!apDescriptor->pProtocol->bGMCP) return;
@@ -349,6 +358,12 @@ void SendGMCP( descriptor_t *apDescriptor, const char *module, const char *apDat
 
   Write(apDescriptor, buf);
 }
+
+#if defined(__clang__)
+  #pragma clang diagnostic pop
+#elif defined(__GNUC__)
+  #pragma GCC diagnostic pop
+#endif
 
 void SendGMCPCharVitals( struct char_data * ch )
 {

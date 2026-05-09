@@ -17,7 +17,6 @@
 #include <sys/types.h>
 #include <stdarg.h>
 #include <iostream>
-#include <execinfo.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/socket.h>
@@ -29,6 +28,10 @@
 #include <boost/filesystem.hpp>
 
 #include "md5.hpp"
+
+#if !defined (__CYGWIN__)
+#include <execinfo.h>
+#endif
 
 #if defined(WIN32) && !defined(__CYGWIN__)
 #include <winsock.h>
@@ -8029,6 +8032,7 @@ long get_cost_of_veh_and_contents(struct veh_data *veh)
 
 void log_traceback(const char *format, ...)
 {
+#if !defined(__CYGWIN__)
   // Compose our context string.
   char context[100000];
   {
@@ -8049,6 +8053,7 @@ void log_traceback(const char *format, ...)
     fprintf(stderr, "Writing traceback for error context %s:\n", context);
     backtrace_symbols_fd(array, size, STDERR_FILENO);
   }
+#endif
 }
 
 int get_total_active_focus_rating(struct char_data *i, int &total)
