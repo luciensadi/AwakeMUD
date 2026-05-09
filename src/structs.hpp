@@ -1193,10 +1193,6 @@ struct descriptor_data
       edit_apartment_room_original(NULL), edit_faction(NULL), edit_exdesc(NULL), edit_pgroup(NULL),
       canary(CANARY_VALUE), pProtocol(NULL)
   {
-    // Zero out the communication history for all channels.
-    for (int channel = 0; channel < NUM_COMMUNICATION_CHANNELS; channel++)
-      message_history[channel] = listClass<const char *>();
-
     // Zero out our metrics.
     for (int i = 0; i < NUM_OF_TRACKED_NUYEN_INCOME_SOURCES; i++) {
       nuyen_income_this_play_session[i] = 0;
