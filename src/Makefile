@@ -6,6 +6,7 @@ SHELL = /bin/sh
 
 # Allow overriding the compiler (e.g., make CXX=g++)
 CXX ?= clang++
+IS_CLANG = $(shell $(CXX) --version | grep -qi clang && echo yes || echo no)
 
 # These flags are set for all builds.
 BASE_CPPFLAGS = -isystem external/ -isystem /usr/local/include/ -std=c++23 -D_GNU_SOURCE -DLOG_COMMANDS -DIDLEDELETE_DRYRUN
@@ -42,15 +43,22 @@ endif
 # Crank up the pain. Defaults to true on dev/buildport, false on mainport.
 JUST_FUCK_ME_UP_WITH_WARNINGS ?= 0
 ifeq ($(JUST_FUCK_ME_UP_WITH_WARNINGS),1)
-  BASE_CXXFLAGS += -Wfor-loop-analysis -Wfloat-equal -Wflexible-array-extensions -Wextra-semi \
-                   -Wexpansion-to-defined -Wenum-compare-conditional -Wempty-init-stmt -Wembedded-directive \
-                   -Wduplicate-method-arg -Wduplicate-method-match -Wduplicate-enum -Wdouble-promotion -Wdeprecated-redundant-constexpr-static-def \
-                   -Wdeprecated-implementations -Wdeprecated-dynamic-exception-spec -Wdeprecated -Wdefault-const-init -Wdate-time -Wcovered-switch-default \
-                   -Wconsumed -Wconditional-uninitialized -Wcast-qual -Wcast-function-type -Wc++-unterminated-string-initialization \
-                   -Wc++-compat -Wbool-operation -Wbitwise-op-parentheses -Wbitwise-instead-of-logical -Wbad-function-cast \
-                   -Watomic-properties -Watomic-access -Wassign-enum -Warray-parameter -Warray-bounds-pointer-arithmetic \
-                   -Waddress-of-temporary -Wabstract-vbase-init \
-                   -Wno-double-promotion
+	# Clang++ lets us use lots of spicy flags, g++ not so much.
+	ifeq ($(IS_CLANG),yes)
+		BASE_CXXFLAGS += -Wfor-loop-analysis -Wfloat-equal -Wflexible-array-extensions -Wextra-semi \
+										 -Wexpansion-to-defined -Wenum-compare-conditional -Wempty-init-stmt -Wembedded-directive \
+										 -Wduplicate-method-arg -Wduplicate-method-match -Wduplicate-enum -Wdouble-promotion -Wdeprecated-redundant-constexpr-static-def \
+										 -Wdeprecated-implementations -Wdeprecated-dynamic-exception-spec -Wdeprecated -Wdefault-const-init -Wdate-time -Wcovered-switch-default \
+										 -Wconsumed -Wconditional-uninitialized -Wcast-qual -Wcast-function-type -Wc++-unterminated-string-initialization \
+										 -Wc++-compat -Wbool-operation -Wbitwise-op-parentheses -Wbitwise-instead-of-logical -Wbad-function-cast \
+										 -Watomic-properties -Watomic-access -Wassign-enum -Warray-parameter -Warray-bounds-pointer-arithmetic \
+										 -Waddress-of-temporary -Wabstract-vbase-init \
+										 -Wno-double-promotion
+	else
+    BASE_CXXFLAGS += -Wduplicated-cond -Wduplicated-branches -Wlogical-op -Wrestrict -Wfloat-equal -Wextra-semi -Wexpansion-to-defined -Wdouble-promotion \
+		                 -Wdeprecated -Wdate-time -Wcast-qual -Wcast-function-type -Wbool-operation -Wbad-function-cast -Warray-parameter \
+										 -Wno-double-promotion
+  endif
 endif
 
 # Auto-detect the OS and apply the unique flags for that config
