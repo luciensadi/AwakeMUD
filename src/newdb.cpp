@@ -119,8 +119,8 @@ int mysql_wrapper(MYSQL *mysql, const char *query)
 
 int entry_compare(const void *one, const void *two)
 {
-  PCIndex::entry *ptr1 = (PCIndex::entry *)one;
-  PCIndex::entry *ptr2 = (PCIndex::entry *)two;
+  const PCIndex::entry *ptr1 = (const PCIndex::entry *)one;
+  const PCIndex::entry *ptr2 = (const PCIndex::entry *)two;
 
   if (ptr1->id < ptr2->id)
     return -1;

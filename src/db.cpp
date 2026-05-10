@@ -3944,7 +3944,7 @@ int vnum_object_armors(char *searchname, struct char_data * ch)
         imp /= 100;
       }
 
-      if (bal + imp != total)
+      if (int(bal + imp) != total)
         continue;
 
       sprint_obj_mods( &obj_proto[nr], xbuf, sizeof(xbuf) );

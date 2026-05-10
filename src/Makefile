@@ -8,8 +8,8 @@ SHELL = /bin/sh
 CXX ?= clang++
 
 # These flags are set for all builds.
-BASE_CPPFLAGS = -I/usr/local/include/ -std=c++23 -D_GNU_SOURCE -DLOG_COMMANDS -DIDLEDELETE_DRYRUN
-BASE_CXXFLAGS = -Wall -Wextra -Wno-unused-parameter -Wno-vla -Wno-char-subscripts -Wno-format-overflow -Wno-format-truncation -ggdb
+BASE_CPPFLAGS = -isystem external/ -isystem /usr/local/include/ -std=c++23 -D_GNU_SOURCE -DLOG_COMMANDS -DIDLEDELETE_DRYRUN
+BASE_CXXFLAGS = -Wall -Wextra -Wno-unused-parameter -Wno-vla -Wno-char-subscripts -Wno-format-truncation -ggdb
 BASE_LDFLAGS  = -L/usr/local/lib
 BASE_LDLIBS   = -lmysqlclient -lz -lm -lboost_filesystem
 
@@ -25,9 +25,10 @@ endif
 DEPLOYMENT_MODE ?= 2
 ifeq ($(DEPLOYMENT_MODE),2)
   BASE_CPPFLAGS += -DIS_BUILDPORT -DSELFADVANCE -DSUPPRESS_MOB_SKILL_ERRORS -DDEBUG -D_GLIBCXX_DEBUG
+	JUST_FUCK_ME_UP_WITH_WARNINGS ?= 1
 else ifeq ($(DEPLOYMENT_MODE),1)
   BASE_CPPFLAGS += -DIS_BUILDPORT -DSELFADVANCE -DUSE_MEMORY_CANARIES -DDEBUG -D_GLIBCXX_DEBUG
-  BASE_CXXFLAGS := $(filter-out -Wno-format-overflow,$(BASE_CXXFLAGS))
+	JUST_FUCK_ME_UP_WITH_WARNINGS ?= 1
 else
   BASE_CPPFLAGS += -DSUPPRESS_MOB_SKILL_ERRORS
 endif
@@ -38,11 +39,25 @@ ifeq ($(USE_PRIVATE_WORLD),1)
   BASE_CPPFLAGS += -DUSE_PRIVATE_CE_WORLD
 endif
 
+# Crank up the pain. Defaults to true on dev/buildport, false on mainport.
+JUST_FUCK_ME_UP_WITH_WARNINGS ?= 0
+ifeq ($(JUST_FUCK_ME_UP_WITH_WARNINGS),1)
+  BASE_CXXFLAGS += -Wfor-loop-analysis -Wfloat-equal -Wflexible-array-extensions -Wextra-semi \
+                   -Wexpansion-to-defined -Wenum-compare-conditional -Wempty-init-stmt -Wembedded-directive \
+                   -Wduplicate-method-arg -Wduplicate-method-match -Wduplicate-enum -Wdouble-promotion -Wdeprecated-redundant-constexpr-static-def \
+                   -Wdeprecated-implementations -Wdeprecated-dynamic-exception-spec -Wdeprecated -Wdefault-const-init -Wdate-time -Wcovered-switch-default \
+                   -Wconsumed -Wconditional-uninitialized -Wcast-qual -Wcast-function-type -Wc++-unterminated-string-initialization \
+                   -Wc++-compat -Wbool-operation -Wbitwise-op-parentheses -Wbitwise-instead-of-logical -Wbad-function-cast \
+                   -Watomic-properties -Watomic-access -Wassign-enum -Warray-parameter -Warray-bounds-pointer-arithmetic \
+                   -Waddress-of-temporary -Wabstract-vbase-init \
+                   -Wno-double-promotion
+endif
+
 # Auto-detect the OS and apply the unique flags for that config
 UNAME_S := $(shell uname -s)
 
 ifeq ($(UNAME_S),Darwin)  # OSX
-  OS_CPPFLAGS = -Dosx -I/opt/homebrew/include/ -DACCELERATE_FOR_TESTING
+  OS_CPPFLAGS = -Dosx -isystem /opt/homebrew/include/ -DACCELERATE_FOR_TESTING
   OS_LDFLAGS  = -L/opt/homebrew/lib/
   OS_LDLIBS   = -lcurl -lsodium
 else ifeq ($(UNAME_S),Linux)  # Linux
@@ -51,9 +66,8 @@ else ifeq ($(UNAME_S),Linux)  # Linux
     OS_LDFLAGS     = 
     OS_LDLIBS      = -lcrypt -lnsl -lcurl
     BASE_LDFLAGS  += -lboost_system
-    # BASE_CXXFLAGS := $(filter-out -ggdb,$(BASE_CXXFLAGS))
-    # We clear the BASE_CXXFLAGS var because we don't actually care about warnings during the CI build process.
-    BASE_CXXFLAGS = 
+		# Suppress all warnings during the CI build process.
+    BASE_CXXFLAGS  = -w
   else
     OS_CPPFLAGS = -Dlinux -DDEBUG_CRYPTO -DREIMPLEMENT_STRLCPY_STRLCAT -DNO_CLS -DUSE_MYSQL_8
     OS_LDFLAGS  = 

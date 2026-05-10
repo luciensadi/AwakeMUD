@@ -43,7 +43,7 @@ public:
     name = str_dup(set_name);
     arrive = str_dup(set_arrive);
     leave = str_dup(set_leave);
-  };
+  }
 
   const char *get_name() { return name; }
   void set_name(const char *replacement);

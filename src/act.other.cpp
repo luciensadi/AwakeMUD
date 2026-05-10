@@ -1682,7 +1682,7 @@ ACMD(do_reload)
   struct veh_data *veh = NULL;
   int ammotype = -1;
 
-  const char *ammo_type_ptr;
+  const char *ammo_type_ptr = NULL;
 
   argument = two_arguments(argument, buf, buf1);
 

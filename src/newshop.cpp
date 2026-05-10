@@ -1353,7 +1353,7 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
         snprintf(buf, sizeof(buf), "displays, \"ETA for %s: %d day%s.\"",
                  get_string_after_color_code_removal(GET_OBJ_NAME(obj), NULL),
                  (int) totaltime,
-                 totaltime == 1 ? "" : "s");
+                 FLOATS_ARE_EQUAL_ISH(totaltime, 1.0f) ? "" : "s");
       }
       do_new_echo(keeper, buf, cmd_echo, 0);
     } else {
@@ -1369,7 +1369,7 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
                  GET_CHAR_NAME(ch),
                  get_string_after_color_code_removal(GET_OBJ_NAME(obj), NULL),
                  (int) totaltime,
-                 totaltime == 1 ? "" : "s");
+                 FLOATS_ARE_EQUAL_ISH(totaltime, 1.0f) ? "" : "s");
       }
       do_say(keeper, buf, cmd_say, SCMD_SAYTO);
     }
@@ -1701,7 +1701,7 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
       }
 
       // Finish up with availability info.
-      if (!(sell->type == SELL_ALWAYS) && !(sell->type == SELL_AVAIL && GET_OBJ_AVAILDAY(obj) == 0)) {
+      if (!(sell->type == SELL_ALWAYS) && !(sell->type == SELL_AVAIL && FLOATS_ARE_EQUAL_ISH(GET_OBJ_AVAILDAY(obj), 0.0f))) {
         if (sell->type == SELL_AVAIL) {
           has_availtns = TRUE;
           int arbitrary_difficulty = GET_OBJ_AVAILTN(obj);

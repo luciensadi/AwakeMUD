@@ -932,9 +932,9 @@ SPECIAL(taxi)
   int comm = CMD_TAXI_NONE;
   char say[MAX_STRING_LENGTH];
 
-  vnum_t dest_vnum;
+  vnum_t dest_vnum = 0;
   rnum_t dest_rnum;
-  int dest_idx;
+  int dest_idx = 0;
 
   struct dest_data *destination_list = get_dest_data_list_from_driver_vnum(GET_MOB_VNUM(driver));
 

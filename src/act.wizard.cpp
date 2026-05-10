@@ -5309,7 +5309,7 @@ ACMD(do_show)
   case 24:
     send_to_char("\r\n\r\nAnomalous Objects (weight 5.00) -----------\r\n", ch);
     for (i = 0, j = 0; i <= top_of_objt; i++) {
-      if (GET_OBJ_WEIGHT(&obj_proto[i]) == 5 || GET_OBJ_WEIGHT(&obj_proto[i]) == 5.0) {
+      if (FLOATS_ARE_EQUAL_ISH(GET_OBJ_WEIGHT(&obj_proto[i]), 5.0f)) {
         send_to_char(ch, "%4d) [%8ld] %s %s^n\r\n",
                      j++,
                      GET_OBJ_VNUM(&obj_proto[i]),
@@ -5383,7 +5383,7 @@ ACMD(do_show)
   case 28:
     send_to_char("The following cyberdoc shops have a player-selling-to-shop profit percentage != 30%:\r\n", ch);
     for (int idx = 0; idx <= top_of_shopt; idx++) {
-      if (shop_table[idx].flags.IsSet(SHOP_DOCTOR) && shop_table[idx].profit_sell != 0.3f) {
+      if (shop_table[idx].flags.IsSet(SHOP_DOCTOR) && !FLOATS_ARE_EQUAL_ISH(shop_table[idx].profit_sell, 0.3f)) {
         if (!ch_can_bypass_edit_lock(ch, get_zone_from_vnum(shop_table[idx].vnum)))
           continue;
 
@@ -8591,7 +8591,7 @@ int audit_zone_rooms_(struct char_data *ch, int zone_num, bool verbose) {
         
 
         // Make sure it's not at origin.
-        if (room->latitude == 0 || room->longitude == 0) {
+        if (FLOATS_ARE_EQUAL_ISH(room->latitude, 0.0f) || FLOATS_ARE_EQUAL_ISH(room->longitude, 0.0f)) {
           strlcat(buf, "  - Has flight-related info with at least one ^yzeroed lat/long field^n.\r\n", sizeof(buf));
           issues++;
           
@@ -10352,7 +10352,7 @@ void calculate_zone_payout(struct char_data *ch, rnum_t zone_rnum) {
 
 ACMD(do_audit) {
   char arg1[MAX_INPUT_LENGTH];
-  rnum_t zonenum;
+  rnum_t zonenum = 0;
   vnum_t number;
 
   char *remainder = any_one_arg(argument, arg1);
@@ -10391,7 +10391,7 @@ ACMD(do_audit) {
   }
 
   // Second form: `audit all`
-  if (is_abbrev(arg1, "all")) {
+  else if (is_abbrev(arg1, "all")) {
     AUDIT_ALL_ZONES(rooms);
     AUDIT_ALL_ZONES(mobs);
     AUDIT_ALL_ZONES(objects);
@@ -10405,7 +10405,7 @@ ACMD(do_audit) {
   }
 
   // Third form: `audit submit <confirm>`
-  if (is_abbrev(arg1, "submit")) {
+  else if (is_abbrev(arg1, "submit")) {
     FAILURE_CASE(!*remainder || !str_cmp(remainder, "confirm"), "To submit your zone for review, use AUDIT SUBMIT CONFIRM while standing"
                                                                 " anywhere in the zone you want to submit. This will remove your ability"
                                                                 " to edit the zone and notify staff that it is ready for review.");
@@ -10436,8 +10436,8 @@ ACMD(do_audit) {
     return;
   }
 
-  // Third form: `audit (rooms|mobs|objects|quests|shops...) [zonenum]`
-  if (*remainder) {
+  // Fourth form: `audit (rooms|mobs|objects|quests|shops...) [zonenum]`
+  else if (*remainder) {
     number = atoi(remainder);
     if (number <= 0 || ((zonenum = real_zone(number)) < 0 || zonenum > top_of_zone_table)) {
       send_to_char(ch, "'%s' is not a zone number. Syntax: AUDIT (rooms|mobs|objects|...) [zonenum]\r\n", remainder);

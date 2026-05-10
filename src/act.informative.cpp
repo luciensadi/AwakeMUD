@@ -73,7 +73,7 @@ extern int find_sight(struct char_data *ch);
 extern int belongs_to(struct char_data *ch, struct obj_data *obj);
 extern int calculate_vehicle_entry_load(struct veh_data *veh);
 extern unsigned int get_johnson_overall_max_rep(struct char_data *johnson);
-extern const char *get_crap_count_string(int crap_count, const char *default_color = "^n", bool screenreader = FALSE);
+extern const char *get_crap_count_string(long crap_count, const char *default_color = "^n", bool screenreader = FALSE);
 extern void display_gamba_ledger_leaderboard(struct char_data *ch);
 const char *convert_and_write_string_to_file(const char *str, const char *path);
 extern void hotload_zone(rnum_t zone_rnum);

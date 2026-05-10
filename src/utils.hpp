@@ -11,7 +11,9 @@
 #ifndef _utils_h_
 #define _utils_h_
 
+#include <limits>
 #include <stdio.h>
+
 #include "bitfield.hpp"
 #include "config.hpp"
 #include "structs.hpp"
@@ -1811,5 +1813,7 @@ struct PathWrapper {
     }
 };
 #define STRING_TO_CSTR(string_or_path) ((const char *) PathWrapper(string_or_path))
+
+#define FLOATS_ARE_EQUAL_ISH(x, y) (fabs((x) - (y)) <= std::numeric_limits<double>::epsilon() * fmax(1.0f, fmax(fabs(x), fabs(y))))
 
 #endif

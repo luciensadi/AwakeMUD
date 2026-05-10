@@ -3245,11 +3245,11 @@ void write_objs_to_disk(vnum_t zonenum)
       WRITE_IF_CHANGED_STR("Material:\t%s\n", material_names[(int)GET_OBJ_MATERIAL(obj)], material_names[5]);
 
       fprintf(fp, "[POINTS]\n");
-      WRITE_IF_CHANGED("\tWeight:\t%.2f\n", GET_OBJ_WEIGHT(obj), 0);
+      if (!FLOATS_ARE_EQUAL_ISH(GET_OBJ_WEIGHT(obj), 0.0f)) { fprintf(fp, "\tWeight:\t%.2f\n", GET_OBJ_WEIGHT(obj)); }
       WRITE_IF_CHANGED("\tBarrier:\t%d\n", GET_OBJ_BARRIER(obj), 3);
       WRITE_IF_CHANGED("\tCost:\t%d\n", GET_OBJ_COST(obj), 0);
       WRITE_IF_CHANGED("\tAvailTN:\t%d\n", GET_OBJ_AVAILTN(obj), 0);
-      WRITE_IF_CHANGED("\tAvailDay:\t%.2f\n", GET_OBJ_AVAILDAY(obj), 0);
+      if (!FLOATS_ARE_EQUAL_ISH(GET_OBJ_AVAILDAY(obj), 0.0f)) { fprintf(fp, "\tAvailDay:\t%.2f\n", GET_OBJ_AVAILDAY(obj)); }
       WRITE_IF_CHANGED("\tLegalNum:\t%d\n", GET_LEGAL_NUM(obj), 0);
       WRITE_IF_CHANGED("\tLegalCode:\t%d\n", GET_LEGAL_CODE(obj), 0);
       WRITE_IF_CHANGED("\tLegalPermit:\t%d\n", GET_LEGAL_PERMIT(obj), 0);

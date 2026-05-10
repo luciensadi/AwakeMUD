@@ -349,7 +349,7 @@ public:
         : mSections( )
     {
 
-    };
+    }
 
     PERF_prof_sect *NewSection(const char *id);
     void ResetAll();

@@ -1429,7 +1429,7 @@ ACMD(do_chase)
       send_to_veh("You speed up.\r\n", veh, ch, FALSE);
       veh->cspeed = SPEED_CRUISING;
     }
-  } else if (vict) {}
+  }
 }
 
 ACMD(do_target)
@@ -2081,10 +2081,10 @@ ACMD(do_pop)
 
     // Clear the used load and recalculate it.
     {
-      int old_load = veh->usedload;
+      float old_load = veh->usedload;
       recalculate_vehicle_usedload(veh);
 
-      if (veh->usedload != old_load) {
+      if (!FLOATS_ARE_EQUAL_ISH(veh->usedload, old_load)) {
         if (veh->usedload < old_load) {
           send_to_char("Huh, someone must have stuffed some lead weights in here as a prank. You scoop them out and toss them aside.\r\n", ch);
         } else {

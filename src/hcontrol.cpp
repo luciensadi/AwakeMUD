@@ -24,7 +24,7 @@ bool name_compare_func(const char *a, const char *b) {
   return strcmp(a, b) < 0;
 }
 
-const char *get_crap_count_string(int crap_count, const char *default_color = "^n", bool screenreader = FALSE) {
+const char *get_crap_count_string(long crap_count, const char *default_color = "^n", bool screenreader = FALSE) {
   static char crap_count_string[50];
 
   const char *crap_count_color = NULL;
@@ -50,7 +50,7 @@ const char *get_crap_count_string(int crap_count, const char *default_color = "^
       default_color = " (a normal amount)";
   }
 
-  snprintf(crap_count_string, sizeof(crap_count_string), "%s%d%s item%s",
+  snprintf(crap_count_string, sizeof(crap_count_string), "%s%ld%s item%s",
            crap_count_color,
            crap_count,
            default_color,

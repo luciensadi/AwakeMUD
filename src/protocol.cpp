@@ -553,7 +553,7 @@ void ProtocolInput( descriptor_t *apDescriptor, char *apData, int aSize, char *a
   strlcat( apOut, CmdBuf, apOutSize );
 }
 
-const char *ProtocolOutput( descriptor_t *apDescriptor, const char *apData, int *apLength, bool appendGA )
+const char *ProtocolOutput( descriptor_t *apDescriptor, const char *apData, size_t *apLength, bool appendGA )
 {
   static char Result[MAX_OUTPUT_BUFFER+1];
   const char Tab[] = "\t";
@@ -567,7 +567,7 @@ const char *ProtocolOutput( descriptor_t *apDescriptor, const char *apData, int 
 #ifdef COLOUR_CHAR
   bool bColourOn = COLOUR_ON_BY_DEFAULT;
 #endif /* COLOUR_CHAR */
-  int i = 0, j = 0; /* Index values */
+  size_t i = 0, j = 0; /* Index values */
 
 #ifdef USE_DEBUG_CANARIES
   if (apDescriptor && apDescriptor->canary != 31337) {

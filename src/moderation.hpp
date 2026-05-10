@@ -20,9 +20,23 @@ public:
 
     void compile();
 
+    // 1. Add a constructor to support the list-initialization used in moderation.cpp
+    automod_entry(const char *s, const char *e, regex_t *c) 
+        : stringified_regex(s), explanation(e), compiled_regex(c) {}
+
+    // 2. Fix the copy constructor signature to use 'const'
+    // Also, ensure we don't shallow-copy the pointer to avoid a double-free
+    automod_entry(const automod_entry& other) 
+        : stringified_regex(other.stringified_regex), 
+          explanation(other.explanation), 
+          compiled_regex(nullptr) {} 
+
+    // 3. Update the destructor to 'delete' the pointer since compile() uses 'new'
     ~automod_entry() {
         if (compiled_regex) {
             regfree(compiled_regex);
+            delete compiled_regex; // Must delete if allocated with 'new' in moderation.cpp
+            compiled_regex = nullptr;
         }
     }
 };

@@ -288,6 +288,21 @@ ACMD(do_debug) {
     return;
   }
 
+  if (!str_cmp(arg1, "floateq")) {
+    float a, b;
+    for (int idx = 0; idx < 20; idx++) {
+      if (idx < 5) {
+        a = 1.0f;
+        b = 1.0f;
+      } else {
+        a = rand() % 10 * 1.0f;
+        b = rand() % 10 * 1.0f;
+      }
+      send_to_char(ch, "%f and %f are %s.\r\n", a, b, FLOATS_ARE_EQUAL_ISH(a, b) ? "equal" : "not equal");
+    }
+    return;
+  }
+
   #define _DBG_MAX_DICE 30
   #define _DBG_MAX_TN 25
   if (!str_cmp(arg1, "humanboost")) {

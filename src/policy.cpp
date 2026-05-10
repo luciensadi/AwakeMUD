@@ -14,7 +14,7 @@ public:
 
   std::vector<const char *> children = {};
 
-  PolicyNode() {};
+  PolicyNode() {}
 
   PolicyNode(const char *title, const char *summary) :
     title(str_dup(title)), summary(str_dup(summary))

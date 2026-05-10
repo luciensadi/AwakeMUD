@@ -106,12 +106,12 @@ public:
   // Used for loading a faction from disk.
   Faction(idnum_t idnum, const char *full_name, const char *description, int default_status):
     idnum(idnum), full_name(str_dup(full_name)), description(str_dup(description)), default_status(default_status)
-  {};
+  {}
 
   // Clone an existing faction for editing.
   Faction(Faction *clone_from):
     idnum(clone_from->idnum), full_name(str_dup(clone_from->full_name)), description(str_dup(clone_from->description)), default_status(clone_from->default_status)
-  {};
+  {}
 
   // Loads a faction from a given filename.
   Faction(boost::filesystem::path filename);
@@ -119,7 +119,7 @@ public:
   // Creates a new empty faction for editing.
   Faction() :
     full_name(str_dup("<unnamed faction>")), description(str_dup("<not yet described>"))
-  {};
+  {}
 
   ~Faction() {
     delete full_name;
