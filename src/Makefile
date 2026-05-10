@@ -16,50 +16,53 @@ BASE_LDLIBS   = -lmysqlclient -lz -lm -lboost_filesystem
 # Default FSAN to off. Enable via command line: make USE_FSAN=1
 USE_FSAN ?= 0
 ifeq ($(USE_FSAN),1)
-	FSAN_FLAGS = -fsanitize=address -fsanitize=undefined
-	BASE_CXXFLAGS += $(FSAN_FLAGS)
-	BASE_LDFLAGS  += $(FSAN_FLAGS)
+  FSAN_FLAGS = -fsanitize=address -fsanitize=undefined
+  BASE_CXXFLAGS += $(FSAN_FLAGS)
+  BASE_LDFLAGS  += $(FSAN_FLAGS)
 endif
 
-# Default buildport mode to on. Disable via command line: make IS_BUILDPORT=0
-IS_BUILDPORT ?= 1
-ifeq ($(IS_BUILDPORT),1)
-	BASE_CPPFLAGS += -DIS_BUILDPORT -DSELFADVANCE -DUSE_MEMORY_CANARIES
+# Modes: 2 is local dev, 1 is buildport, 0 is mainport. Change:  make DEPLOYMENT_MODE=1
+DEPLOYMENT_MODE ?= 2
+ifeq ($(DEPLOYMENT_MODE),2)
+  BASE_CPPFLAGS += -DIS_BUILDPORT -DSELFADVANCE -DSUPPRESS_MOB_SKILL_ERRORS -DDEBUG -D_GLIBCXX_DEBUG
+else ifeq ($(DEPLOYMENT_MODE),1)
+  BASE_CPPFLAGS += -DIS_BUILDPORT -DSELFADVANCE -DUSE_MEMORY_CANARIES -DDEBUG -D_GLIBCXX_DEBUG
+  BASE_CXXFLAGS := $(filter-out -Wno-format-overflow,$(BASE_CXXFLAGS))
 else
-	BASE_CPPFLAGS += -DSUPPRESS_MOB_SKILL_ERRORS
+  BASE_CPPFLAGS += -DSUPPRESS_MOB_SKILL_ERRORS
 endif
 
 # Only set this if you have access to Awake CE's extended world files (not part of the repo)
 USE_PRIVATE_WORLD ?= 0
 ifeq ($(USE_PRIVATE_WORLD),1)
-	BASE_CPPFLAGS += -DUSE_PRIVATE_CE_WORLD
+  BASE_CPPFLAGS += -DUSE_PRIVATE_CE_WORLD
 endif
 
 # Auto-detect the OS and apply the unique flags for that config
 UNAME_S := $(shell uname -s)
 
 ifeq ($(UNAME_S),Darwin)  # OSX
-	OS_CPPFLAGS = -Dosx -I/opt/homebrew/include/ -DACCELERATE_FOR_TESTING -D_GLIBCXX_DEBUG -DDEBUG -DSUPPRESS_MOB_SKILL_ERRORS
-	OS_LDFLAGS  = -L/opt/homebrew/lib/
-	OS_LDLIBS   = -lcurl -lsodium
+  OS_CPPFLAGS = -Dosx -I/opt/homebrew/include/ -DACCELERATE_FOR_TESTING
+  OS_LDFLAGS  = -L/opt/homebrew/lib/
+  OS_LDLIBS   = -lcurl -lsodium
 else ifeq ($(UNAME_S),Linux)  # Linux
-	ifeq ($(CI),true)
-		OS_CPPFLAGS    = -Dlinux -DNOCRYPT
-		OS_LDFLAGS     = 
-		OS_LDLIBS      = -lcrypt -lnsl -lcurl
-		BASE_LDFLAGS  += -lboost_system
-		# BASE_CXXFLAGS := $(filter-out -ggdb,$(BASE_CXXFLAGS))
-		# We clear the BASE_CXXFLAGS var because we don't actually care about warnings during the CI build process.
-		BASE_CXXFLAGS = 
-	else
-		OS_CPPFLAGS = -Dlinux -DDEBUG_CRYPTO -DREIMPLEMENT_STRLCPY_STRLCAT -DNO_CLS -DUSE_MYSQL_8
-		OS_LDFLAGS  = 
-		OS_LDLIBS   = -lcrypt -lnsl -lcurl -lsodium
-	endif
+  ifeq ($(CI),true)
+    OS_CPPFLAGS    = -Dlinux -DNOCRYPT
+    OS_LDFLAGS     = 
+    OS_LDLIBS      = -lcrypt -lnsl -lcurl
+    BASE_LDFLAGS  += -lboost_system
+    # BASE_CXXFLAGS := $(filter-out -ggdb,$(BASE_CXXFLAGS))
+    # We clear the BASE_CXXFLAGS var because we don't actually care about warnings during the CI build process.
+    BASE_CXXFLAGS = 
+  else
+    OS_CPPFLAGS = -Dlinux -DDEBUG_CRYPTO -DREIMPLEMENT_STRLCPY_STRLCAT -DNO_CLS -DUSE_MYSQL_8
+    OS_LDFLAGS  = 
+    OS_LDLIBS   = -lcrypt -lnsl -lcurl -lsodium
+  endif
 else  # Windows (Cygwin/MinGW)
-	OS_CPPFLAGS = -DWIN32 -DREIMPLEMENT_STRLCPY_STRLCAT -D_XOPEN_SOURCE=700 -D_REENTRANT
-	OS_LDFLAGS  = 
-	OS_LDLIBS   = -lcrypt -lsodium
+  OS_CPPFLAGS = -DWIN32 -DREIMPLEMENT_STRLCPY_STRLCAT -D_XOPEN_SOURCE=700 -D_REENTRANT
+  OS_LDFLAGS  = 
+  OS_LDLIBS   = -lcrypt -lsodium
 endif
 
 # Combine base flags with OS-specific flags
