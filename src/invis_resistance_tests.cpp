@@ -94,7 +94,7 @@ bool process_spotted_invis(struct char_data *ch, struct char_data *vict) {
       }
       return TRUE;
     } else {
-      set_mob_alarm(ch, NULL, 10);
+      set_mob_alarm(ch, nullptr, 10);
       if (access_level(vict, LVL_PRESIDENT) && PRF_FLAGGED(vict, PRF_ROLLS)) {
         send_to_char(vict, "You have been noticed while invisible! ^L[%s#%ld has become ^yalert^L!]\r\n", GET_CHAR_NAME(ch), GET_MOB_UNIQUE_ID(ch));
       }
@@ -142,7 +142,7 @@ bool can_see_through_invis(struct char_data *ch, struct char_data *vict) {
         if (mob_is_alarmed_by_ch(ch, vict)) {
           set_mob_alarm(ch, vict, 20);
         } else {
-          set_mob_alarm(ch, NULL, 20);
+          set_mob_alarm(ch, nullptr, 20);
         }
       }
     }
@@ -274,7 +274,7 @@ bool can_see_through_invis(struct char_data *ch, struct char_data *vict) {
     }
     else if (GET_EQ(vict, WEAR_LIGHT) && IS_NPC(ch)) {
       // You can't see them, but their flashlight beam is still visible. Set to Alert at minimum.
-      set_mob_alarm(ch, NULL, 20);
+      set_mob_alarm(ch, nullptr, 20);
     }
   }
 

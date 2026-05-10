@@ -35,7 +35,7 @@ void write_objs_to_disk(vnum_t zone);
 
 // extern vars
 extern int max_weapon_focus_rating;
-#define MAX_WEAPON_FOCUS_RATING(wpn) MIN(max_weapon_focus_rating, GET_WEAPON_REACH(wpn) == 0 ? 3 : 2)
+#define MAX_WEAPON_FOCUS_RATING(wpn) MIN(max_weapon_focus_rating, (GET_WEAPON_REACH(wpn) == 0 ? 3 : 2))
 
 // extern funcs
 extern char *prep_string_for_writing_to_savefile(char *dest, const char *src);
@@ -1447,7 +1447,7 @@ void iedit_disp_menu(struct descriptor_data * d)
                GET_OBJ_AVAILTN(d->edit_obj), availhrs, availhrs > 1 ? "s" : "");
   } else {
     send_to_char(CH, "b) Item availability: ^c%d^n/^c%.2f day%s^n\r\n",
-                 GET_OBJ_AVAILTN(d->edit_obj), GET_OBJ_AVAILDAY(d->edit_obj), GET_OBJ_AVAILDAY(d->edit_obj) > 1 ? "s" : "s");
+                 GET_OBJ_AVAILTN(d->edit_obj), GET_OBJ_AVAILDAY(d->edit_obj), !FLOATS_ARE_EQUAL_ISH(GET_OBJ_AVAILDAY(d->edit_obj), 1.0f) ? "s" : "");
   }
   send_to_char(CH, "c) Item timer: ^c%d^n\r\n", GET_OBJ_TIMER(d->edit_obj));
   send_to_char(CH, "d) Item Material: ^c%s^n\r\n", material_names[(int)GET_OBJ_MATERIAL(d->edit_obj)]);
@@ -2517,6 +2517,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
             send_to_char("Invalid choice! Poison damage: 0=none, 1=light, 2=moderate, 3=serious, 4=deadly: ", d->character);
             return;
           }
+          break;
         case ITEM_WEAPON:
           if (number < 0 || number >= MAX_WEAP || !kosher_weapon_values[number].usable_by_builders) {
             send_to_char("Invalid choice!\r\n", d->character);
@@ -3190,8 +3191,8 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
  Modify this code for new obj formats
  */
 
-#define WRITE_IF_CHANGED(string, thing, default) if ((thing) != (default)) { fprintf(fp, (string), (thing)); }
-#define WRITE_IF_CHANGED_STR(string, thing, default) if (str_cmp((thing), (default))) { fprintf(fp, (string), (thing)); }
+#define WRITE_IF_CHANGED(string, thing, default_val) if ((thing) != (default_val)) { fprintf(fp, (string), (thing)); }
+#define WRITE_IF_CHANGED_STR(string, thing, default_val) if (str_cmp((thing), (default_val))) { fprintf(fp, (string), (thing)); }
 void write_objs_to_disk(vnum_t zonenum)
 {
   int counter, counter2, realcounter, count = 0;
@@ -3244,15 +3245,15 @@ void write_objs_to_disk(vnum_t zonenum)
       WRITE_IF_CHANGED_STR("Material:\t%s\n", material_names[(int)GET_OBJ_MATERIAL(obj)], material_names[5]);
 
       fprintf(fp, "[POINTS]\n");
-      WRITE_IF_CHANGED("\tWeight:\t%.2f\n", GET_OBJ_WEIGHT(obj), 0);
+      if (!FLOATS_ARE_EQUAL_ISH(GET_OBJ_WEIGHT(obj), 0.0f)) { fprintf(fp, "\tWeight:\t%.2f\n", GET_OBJ_WEIGHT(obj)); }
       WRITE_IF_CHANGED("\tBarrier:\t%d\n", GET_OBJ_BARRIER(obj), 3);
       WRITE_IF_CHANGED("\tCost:\t%d\n", GET_OBJ_COST(obj), 0);
       WRITE_IF_CHANGED("\tAvailTN:\t%d\n", GET_OBJ_AVAILTN(obj), 0);
-      WRITE_IF_CHANGED("\tAvailDay:\t%.2f\n", GET_OBJ_AVAILDAY(obj), 0);
+      if (!FLOATS_ARE_EQUAL_ISH(GET_OBJ_AVAILDAY(obj), 0.0f)) { fprintf(fp, "\tAvailDay:\t%.2f\n", GET_OBJ_AVAILDAY(obj)); }
       WRITE_IF_CHANGED("\tLegalNum:\t%d\n", GET_LEGAL_NUM(obj), 0);
       WRITE_IF_CHANGED("\tLegalCode:\t%d\n", GET_LEGAL_CODE(obj), 0);
       WRITE_IF_CHANGED("\tLegalPermit:\t%d\n", GET_LEGAL_PERMIT(obj), 0);
-      WRITE_IF_CHANGED("\tStreetIndex:\t%.2f\n", GET_OBJ_STREET_INDEX(obj), 0.0);
+      if (!FLOATS_ARE_EQUAL_ISH(GET_OBJ_STREET_INDEX(obj), 0.0f)) { fprintf(fp, "\tStreetIndex:\t%.2f\n", GET_OBJ_STREET_INDEX(obj)); }
 
       if (GET_OBJ_TYPE(obj) == ITEM_WEAPON && GET_WEAPON_INTEGRAL_RECOIL_COMP(obj))
         fprintf(fp, "\tInnateRecoilComp:\t%d\n", GET_WEAPON_INTEGRAL_RECOIL_COMP(obj));

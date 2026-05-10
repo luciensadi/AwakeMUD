@@ -876,7 +876,7 @@ struct veh_data
 
   ubyte type;
   int damage;
-  sh_int cspeed;
+  int cspeed;
   int veh_destruction_timer;
   int players_in_veh;
 
@@ -1128,7 +1128,7 @@ struct descriptor_data
   char *output;                 /* ptr to the current output buffer     */
   int output_canary;
   int bufptr;                     /* ptr to end of current output               */
-  int bufspace;                 /* space left in the output buffer      */
+  size_t bufspace;                 /* space left in the output buffer      */
   struct txt_block *large_outbuf; /* ptr to large buffer, if we need it */
   struct txt_q input;             /* q of unprocessed input             */
   int input_and_character_canary;

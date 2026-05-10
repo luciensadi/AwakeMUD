@@ -1,7 +1,7 @@
 #ifndef __houseedit_complex_h__
 #define __houseedit_complex_h__
 
-#import "structs.hpp"
+#include "structs.hpp"
 
 void houseedit_create_complex(struct char_data *ch);
 void houseedit_delete_complex(struct char_data *ch, char *arg);

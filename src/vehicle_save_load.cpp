@@ -71,17 +71,8 @@ void delete_veh_from_map(struct veh_data *veh) {
   veh_map.erase(std::string(get_veh_save_key(veh)));
 }
 
-bool key_is_in_map(const char *save_key) {
-  try {
-    veh_map.at(std::string(save_key));
-    return TRUE;
-  } catch (std::out_of_range) {
-    return FALSE;
-  }
-}
-
 bool veh_is_in_map(struct veh_data *veh) {
-  return key_is_in_map(get_veh_save_key(veh));
+  return veh_map.contains(get_veh_save_key(veh));
 }
 
 vnum_t junkyard_room_numbers[] = {
@@ -110,7 +101,7 @@ void delete_veh_file(struct veh_data *veh, const char *reason) {
   if (!bf::exists(veh_file))
     return;
 
-  log_vfprintf("Deleting veh file %s: %s.", veh_file.c_str(), reason);
+  log_vfprintf("Deleting veh file %s: %s.", STRING_TO_CSTR(veh_file), reason);
   bf::remove(veh_file);
 }
 
@@ -146,7 +137,7 @@ bool save_single_vehicle(struct veh_data *veh, bool fromCopyover) {
   }
   bf::path veh_file_path = global_vehicles_dir / get_veh_save_key(veh);
 
-  if (!(fl = fopen(veh_file_path.c_str(), "w"))) {
+  if (!(fl = fopen(STRING_TO_CSTR(veh_file_path), "w"))) {
     mudlog("SYSERR: Can't Open Vehicle File For Write.", NULL, LOG_SYSLOG, TRUE);
     return FALSE;
   }
@@ -330,7 +321,7 @@ bool save_single_vehicle(struct veh_data *veh, bool fromCopyover) {
     int i = 0;
     for(std::vector<std::string>::reverse_iterator rit = obj_strings.rbegin(); rit != obj_strings.rend(); rit++ ) {
       fprintf(fl, "\t[Object %d]\n", i);
-      fprintf(fl, "%s", rit->c_str());
+      fprintf(fl, "%s", STRING_TO_CSTR(*rit));
       i++;
     }
     obj_strings.clear();
@@ -487,7 +478,7 @@ void load_single_veh(const char *filename) {
   int damage = data.GetInt("VEHICLE/Damage", 0);
   idnum_t idnum = data.GetLong("VEHICLE/Idnum", 0);
 
-  if (key_is_in_map(get_veh_save_key(owner, vnum, idnum))) {
+  if (veh_map.contains(get_veh_save_key(owner, vnum, idnum))) {
     log_vfprintf("Refusing to load vehicle %ld (%ld) owned by %ld: Already loaded.", vnum, idnum, owner);
     return;
   }
@@ -822,15 +813,15 @@ void load_vehicles_for_idnum(idnum_t owner_id) {
   if (!bf::exists(owner_dir))
     return;
 
-  log_vfprintf(" - Loading vehicles from path %s.", owner_dir.c_str());
+  log_vfprintf(" - Loading vehicles from path %s.", STRING_TO_CSTR(owner_dir));
 
   bf::directory_iterator dir_end_itr; // default construction yields past-the-end
   for (bf::directory_iterator dir_itr(owner_dir); dir_itr != dir_end_itr; ++dir_itr) {
     // This directory contains owner ID directories.
     if (!is_directory(dir_itr->status())) {
       bf::path filename = dir_itr->path();
-      // log_vfprintf(" -- Loading %s.", filename.c_str());
-      load_single_veh(filename.c_str());
+      // log_vfprintf(" -- Loading %s.", STRING_TO_CSTR(filename));
+      load_single_veh(STRING_TO_CSTR(filename));
     }
   }
 }
@@ -916,7 +907,7 @@ void load_saved_veh(bool purge_existing)
       // This directory contains owner ID directories.
       if (is_directory(global_itr->status())) {
         // Calculate the owner ID.
-        idnum_t owner_id = atol(global_itr->path().filename().c_str());
+        idnum_t owner_id = atol(STRING_TO_CSTR(global_itr->path().filename()));
 
         // Skip invalid owners.
         if (owner_id == 0)

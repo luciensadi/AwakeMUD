@@ -643,6 +643,8 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
         }
         return;
       }
+      pocketsec_bankmenu(d);
+      break;
     case SEC_MAILMENU:
       switch (LOWER(*arg)) {
         case 'r':

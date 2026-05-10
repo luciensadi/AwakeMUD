@@ -138,11 +138,7 @@ const char *generate_display_string_for_character(struct char_data *actor, struc
   bool should_highlight = !PRF_FLAGGED(viewer, PRF_NOHIGHLIGHT) && !PRF_FLAGGED(viewer, PRF_NOCOLOR);
   const char *viewer_highlight = should_highlight ? GET_CHAR_COLOR_HIGHLIGHT(viewer) : "";
 
-  struct veh_data *actor_veh = NULL, *viewer_veh = NULL, *target_veh = NULL;
-
-  if (PLR_FLAGGED(actor, PLR_REMOTE) || AFF_FLAGGED(actor, AFF_PILOT) || AFF_FLAGGED(actor, AFF_RIG)) {
-    RIG_VEH(actor, actor_veh);
-  }
+  struct veh_data *viewer_veh = NULL, *target_veh = NULL;
 
   if (PLR_FLAGGED(viewer, PLR_REMOTE) || AFF_FLAGGED(viewer, AFF_PILOT) || AFF_FLAGGED(viewer, AFF_RIG)) {
     RIG_VEH(viewer, viewer_veh);

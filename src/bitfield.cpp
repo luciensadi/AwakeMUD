@@ -12,7 +12,7 @@
 #include "utils.hpp"
 
 // Explicitly inclusive of ENDBIT, that's a valid offset.
-#define OFFSET_IS_VALID(offset) (offset >= 0 && offset <= ENDBIT)
+#define OFFSET_IS_VALID(offset) (offset <= ENDBIT)
 
 // ______________________________
 //
@@ -135,7 +135,7 @@ int  Bitfield::GetNumSet() const
 
   for (int i = 0; i < BITFIELD_SIZE; i++) {
     // Convert the unsigned long into bytes.
-    unsigned char *bytePtr = (unsigned char *)&(data[i]);
+    const unsigned char *bytePtr = (const unsigned char *)&(data[i]);
     for (size_t idx = 0; idx < sizeof(bitfield_t); idx++) {
       count += count_ones(bytePtr[idx]);
     }
@@ -168,8 +168,8 @@ int  Bitfield::GetNumShared(const Bitfield &test) const
 
   for (int i = 0; i < BITFIELD_SIZE; i++) {
     // Convert the unsigned long into bytes.
-    unsigned char *firstBytePtr = (unsigned char *)&(data[i]);
-    unsigned char *secondBytePtr = (unsigned char *)&(test.data[i]);
+    const unsigned char *firstBytePtr = (const unsigned char *)&(data[i]);
+    const unsigned char *secondBytePtr = (const unsigned char *)&(test.data[i]);
     for (size_t idx = 0; idx < sizeof(bitfield_t); idx++) {
       count += count_ones(firstBytePtr[idx] & secondBytePtr[idx]);
     }

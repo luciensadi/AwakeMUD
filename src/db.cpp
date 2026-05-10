@@ -1941,7 +1941,7 @@ void parse_mobile(File &in, long nr)
     for (idx = 0; idx < MAX_SKILLS; idx++)
       if ((idx == SKILL_UNARMED_COMBAT && !str_cmp("unarmed combat", skill_name)) || !str_cmp(skills[idx].name, skill_name))
         break;
-    if (idx > 0 || idx < MAX_SKILLS) {
+    if (idx > 0 && idx < MAX_SKILLS) {
       SET_SKILL(mob, idx, data.GetIndexInt("SKILLS", j, 0));
       mob->mob_specials.mob_skills[j * 2] = idx;
       mob->mob_specials.mob_skills[j * 2 + 1] = data.GetIndexInt("SKILLS", j, 0);
@@ -2564,7 +2564,9 @@ void parse_quest(File &fl, long virtual_nr)
 
   if (quest_table[quest_nr].num_objs > 0) {
     quest_table[quest_nr].obj = new quest_om_data[quest_table[quest_nr].num_objs];
-    memset(quest_table[quest_nr].obj, 0, sizeof(quest_om_data) * quest_table[quest_nr].num_objs);
+
+    for (int idx = 0; idx < quest_table[quest_nr].num_objs; idx++) { new (&quest_table[quest_nr].obj[idx]) quest_om_data(); }
+
     for (j = 0; j < quest_table[quest_nr].num_objs; j++) {
       fl.GetLine(line, 256, FALSE);
       if (sscanf(line, "%ld %ld %ld %ld %ld %ld %ld %ld", t, t + 1, t + 2, t + 3,
@@ -2586,7 +2588,7 @@ void parse_quest(File &fl, long virtual_nr)
 
   if (quest_table[quest_nr].num_mobs > 0) {
     quest_table[quest_nr].mob = new quest_om_data[quest_table[quest_nr].num_mobs];
-    memset(quest_table[quest_nr].mob, 0, sizeof(quest_om_data) * quest_table[quest_nr].num_mobs);
+    for (int idx = 0; idx < quest_table[quest_nr].num_mobs; idx++) { new (&quest_table[quest_nr].mob[idx]) quest_om_data(); }
     for (j = 0; j < quest_table[quest_nr].num_mobs; j++) {
       fl.GetLine(line, 256, FALSE);
       if (sscanf(line, "%ld %ld %ld %ld %ld %ld %ld %ld", t, t + 1, t + 2, t + 3,
@@ -3651,7 +3653,6 @@ int vnum_object_weapons(char *searchname, struct char_data * ch)
 int vnum_object_weapons_broken(char *searchname, struct char_data * ch)
 {
   char buf[MAX_STRING_LENGTH*8];
-  extern const char *wound_arr[];
   int nr, found = 0;
   buf[0] = '\0';
 
@@ -3947,7 +3948,7 @@ int vnum_object_armors(char *searchname, struct char_data * ch)
         imp /= 100;
       }
 
-      if (bal + imp != total)
+      if (int(bal + imp) != total)
         continue;
 
       sprint_obj_mods( &obj_proto[nr], xbuf, sizeof(xbuf) );
@@ -4442,7 +4443,7 @@ int vnum_room_samename(struct char_data *ch) {
 
   for (auto iterator : seen_names) {
     if (iterator.second.size() > 1) {
-      send_to_char(ch, "%3d. '^c%s^n' is shared among ", ++found, iterator.first.c_str());
+      send_to_char(ch, "%3d. '^c%s^n' is shared among ", ++found, STRING_TO_CSTR(iterator.first));
 
       bool printed_yet = FALSE;
       for (auto vnum_it : iterator.second) {
@@ -6643,7 +6644,7 @@ void load_consist(void)
         continue;
 
       // Skip anything that's not a number.
-      vnum_t vnum = atol(itr->path().filename().c_str());
+      vnum_t vnum = atol(STRING_TO_CSTR(itr->path().filename()));
       if (vnum <= 0)
         continue;
 
@@ -6653,7 +6654,7 @@ void load_consist(void)
       // If the room doesn't exist, or if it's not storage-flagged, this is an orphaned file.
       if (rnum < 0 || !ROOM_FLAGGED(&world[rnum], ROOM_STORAGE)) {
         log_vfprintf(" - Marking storage file %s as orphaned: %s.",
-                      itr->path().c_str(),
+                      STRING_TO_CSTR(itr->path()),
                       rnum < 0 ? "No matching vnum" : "Room not flagged storage");
         bf::rename(itr->path(), orphan_storage_files / itr->path().filename());
       }
@@ -8138,7 +8139,6 @@ void initialize_and_alphabetize_room_flags() {
       case 8:
       case 11:
       case 13:
-      case 14:
       case ROOM_BFS_MARK:
       case ROOM_LOW_LIGHT:
       case 17:

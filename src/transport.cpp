@@ -171,7 +171,7 @@ struct dest_data portland_taxi_destinations[] =
     { "tower", "ttbank", "TTBank Tower", 14743, TAXI_DEST_TYPE_OTHER, TRUE },
     { "city", "center", "City Center Parking", 14751, TAXI_DEST_TYPE_AREA_OF_TOWN, TRUE},
     { "habitat", "telestrian", "Telestrian Habitat", 18800, TAXI_DEST_TYPE_SHOPPING, TRUE },
-    { "hospital", "royal", "Royal Hospital", 14707, TAXI_DEST_TYPE_HOSPITALS, TRUE },
+    { "hospital", "clinic", "Royal Hospital", 14707, TAXI_DEST_TYPE_HOSPITALS, TRUE },
     { "toadstool", "", "The Toadstool", 14671, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE },
     { "powell's", "powell", "Powell's Technical Books", 14724, TAXI_DEST_TYPE_SHOPPING, TRUE },
     { "davis", "offices", "Davis Street Offices", 14667, TAXI_DEST_TYPE_CORPORATE_PARK, TRUE},
@@ -726,10 +726,12 @@ ACMD(do_hail)
     return;
   } else {
     // Cabs can always be caught from the freeway. Realistic? Nah, but keeps people from being stranded.
-    if (!ROOM_FLAGGED(ch->in_room, ROOM_FREEWAY)
-        && (ch->in_room->sector_type != SPIRIT_CITY
-            || !empty
-            || ROOM_FLAGGED(ch->in_room, ROOM_INDOORS))) {
+    if (ROOM_FLAGGED(ch->in_room, ROOM_NO_TAXI)
+        || (!ROOM_FLAGGED(ch->in_room, ROOM_FREEWAY)
+            && (ch->in_room->sector_type != SPIRIT_CITY
+                || !empty
+                || ROOM_FLAGGED(ch->in_room, ROOM_INDOORS))))
+    {
       send_to_char("This isn't really the kind of place that cabs frequent.\r\n", ch);
       return;
     }
@@ -930,9 +932,9 @@ SPECIAL(taxi)
   int comm = CMD_TAXI_NONE;
   char say[MAX_STRING_LENGTH];
 
-  vnum_t dest_vnum;
+  vnum_t dest_vnum = 0;
   rnum_t dest_rnum;
-  int dest_idx;
+  int dest_idx = 0;
 
   struct dest_data *destination_list = get_dest_data_list_from_driver_vnum(GET_MOB_VNUM(driver));
 

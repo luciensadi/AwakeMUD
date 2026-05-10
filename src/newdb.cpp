@@ -119,8 +119,8 @@ int mysql_wrapper(MYSQL *mysql, const char *query)
 
 int entry_compare(const void *one, const void *two)
 {
-  PCIndex::entry *ptr1 = (PCIndex::entry *)one;
-  PCIndex::entry *ptr2 = (PCIndex::entry *)two;
+  const PCIndex::entry *ptr1 = (const PCIndex::entry *)one;
+  const PCIndex::entry *ptr2 = (const PCIndex::entry *)two;
 
   if (ptr1->id < ptr2->id)
     return -1;
@@ -2064,11 +2064,10 @@ bool does_player_exist(const char *unknown_case_name)
   std::string string_name(composed_name);
 
   // Look them up in our cache.
-  try {
-    log_vfprintf("does_player_exist(%s -> %s): cache = %s", unknown_case_name, composed_name, global_existing_player_cache.at(string_name) ? "TRUE" : "FALSE");
-    // return global_existing_player_cache.at(string_name);
-  } catch (std::out_of_range) {
-    log_vfprintf("Failed to find player '%s' in does_player_exist()'s global cache, falling back to database.", composed_name);
+  if (global_existing_player_cache.contains(string_name)) {
+    log_vfprintf("does_player_exist(%s -> %s): cache = TRUE", unknown_case_name, composed_name);
+  } else {
+    log_vfprintf("Failed to find player '%s' in does_player_exist()'s global cache (from '%s'), falling back to database.", composed_name, unknown_case_name);
   }
 
   char buf[MAX_STRING_LENGTH];
@@ -2392,9 +2391,6 @@ bool pc_active_in_last_30_days(idnum_t owner_id) {
 
   return (row != NULL);
 }
-
-// Defining this for now until I have a chance to fix the nodelete logic. Currently, it sets a bit, but checks for a boolean. Need to run a migration on existing DB to apply that boolean value on everyone with the bit set.
-#define IDLEDELETE_DRYRUN
 
 void idle_delete()
 {

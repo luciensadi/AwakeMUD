@@ -14,6 +14,8 @@
 
 #include <sys/time.h>
 
+#include "utils.hpp"
+
 using perfmon::kPulsePerSecond;
 #define SEC_PER_MIN 60
 #define MIN_PER_HOUR 60
@@ -232,16 +234,16 @@ size_t PERF_repr( char *out_buf, size_t n )
     double total_pulses = total_secs * kPulsePerSecond;
 
     double pulse_min = sPulseData.GetMinMin();
-    pulse_min = (pulse_min == INFINITY) ? 0 : pulse_min;
+    pulse_min = (FLOATS_ARE_EQUAL_ISH(pulse_min, INFINITY)) ? 0 : pulse_min;
 
     double sec_min = sSecData.GetMinMin();
-    sec_min = (sec_min == INFINITY) ? 0 : sec_min;
+    sec_min = (FLOATS_ARE_EQUAL_ISH(sec_min, INFINITY)) ? 0 : sec_min;
 
     double min_min = sMinuteData.GetMinMin();
-    min_min = (min_min == INFINITY) ? 0 : min_min;
+    min_min = (FLOATS_ARE_EQUAL_ISH(min_min, INFINITY)) ? 0 : min_min;
 
     double hour_min = sHourData.GetMinMin();
-    hour_min = (hour_min == INFINITY) ? 0 : hour_min;
+    hour_min = (FLOATS_ARE_EQUAL_ISH(hour_min, INFINITY))  ? 0 : hour_min;
 
     os << std::fixed << std::setprecision(2)
        << "                     Avg         Min         Max\n\r"
@@ -349,7 +351,7 @@ public:
         : mSections( )
     {
 
-    };
+    }
 
     PERF_prof_sect *NewSection(const char *id);
     void ResetAll();

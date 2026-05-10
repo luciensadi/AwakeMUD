@@ -46,7 +46,9 @@
   #include <sys/socket.h>
   #include <sys/wait.h>
   #include <sys/time.h>
+  #include <sys/select.h>
   #include <netdb.h>
+  #include <unistd.h>
 #endif
 
 #include "telnet.hpp"
@@ -725,7 +727,7 @@ void game_loop(int mother_desc)
   struct timeval last_time, opt_time;
 #endif
   char comm[MAX_INPUT_LENGTH];
-  struct descriptor_data *d, *next_d;
+  struct descriptor_data *d, *next_d = nullptr;
   int pulse = 0, maxdesc, aliased;
   int i;
 
@@ -1771,7 +1773,7 @@ int make_prompt(struct descriptor_data * d)
         }
       }
       temp[i] = '\0';
-      int size = strlen(temp);
+      size_t size = strlen(temp);
       const char *final_str = ProtocolOutput(d, temp, &size, DO_APPEND_GA);
       data = final_str;
     }
@@ -1855,7 +1857,7 @@ void flush_queues(struct descriptor_data * d)
 /* Add a new string to a player's output queue */
 void write_to_output(const char *unmodified_txt, struct descriptor_data *t)
 {
-  int size = strlen(unmodified_txt);
+  size_t size = strlen(unmodified_txt);
 
   if (t == NULL)
     return;
@@ -2120,7 +2122,7 @@ int new_descriptor(int s)
   // Once the descriptor has been fully created and added to any lists, it's time to negotiate:
   ProtocolNegotiate(newd);
 
-  int size = strlen(GREETINGS);
+  size_t size = strlen(GREETINGS);
   SEND_TO_Q(ProtocolOutput(newd, GREETINGS, &size, DO_APPEND_GA), newd);
   return 0;
 }

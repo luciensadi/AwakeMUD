@@ -77,9 +77,7 @@ jobs:
           const char *mysql_user =     "user";       \
           const char *mysql_db =       "db";       ' \
           > mysql_config.cpp
-          
-        # 3. The biggest speedup: use all available CPU cores for the build
-        make -j$(nproc)
+        make -j$(nproc) DEPLOYMENT_MODE=0
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v4

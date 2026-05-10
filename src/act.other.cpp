@@ -1647,7 +1647,7 @@ void _send_alphabetized_skills_to_ch(struct char_data *ch, const char *arg, int 
     }
 
     for (auto str : vec) {
-      send_to_char(str.c_str(), ch);
+      send_to_char(STRING_TO_CSTR(str), ch);
     }
   }
 }
@@ -1682,7 +1682,7 @@ ACMD(do_reload)
   struct veh_data *veh = NULL;
   int ammotype = -1;
 
-  const char *ammo_type_ptr;
+  const char *ammo_type_ptr = NULL;
 
   argument = two_arguments(argument, buf, buf1);
 
@@ -5207,7 +5207,7 @@ ACMD(do_syspoints) {
                           ANALYZE_COST,
                           ANALYZE_COST == 1 ? "" : "s");
 
-      struct char_data *to = ch->in_veh ? get_char_veh(ch, buf, ch->in_veh) : to = get_char_room_vis(ch, buf);
+      struct char_data *to = ch->in_veh ? get_char_veh(ch, buf, ch->in_veh) : get_char_room_vis(ch, buf);
 
       FAILURE_CASE_PRINTF(!to, "You don't see any Johnsons named '%s' here.\r\n", buf);
       FAILURE_CASE_PRINTF(!IS_NPC(to) || !(mob_index[GET_MOB_RNUM(to)].func == johnson || mob_index[GET_MOB_RNUM(to)].sfunc == johnson), "%s is not a Johnson.", GET_NAME(to));

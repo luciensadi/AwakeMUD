@@ -82,7 +82,7 @@ std::string join(std::vector<std::string> const &strings, std::string delim)
 {
     std::stringstream ss;
     std::copy(strings.begin(), strings.end(),
-        std::ostream_iterator<std::string>(ss, delim.c_str()));
+        std::ostream_iterator<std::string>(ss, STRING_TO_CSTR(delim)));
     return ss.str();
 }
 
@@ -347,6 +347,21 @@ ACMD(do_debug) {
     return;
   }
 
+  if (!str_cmp(arg1, "floateq")) {
+    float a, b;
+    for (int idx = 0; idx < 20; idx++) {
+      if (idx < 5) {
+        a = 1.0f;
+        b = 1.0f;
+      } else {
+        a = rand() % 10 * 1.0f;
+        b = rand() % 10 * 1.0f;
+      }
+      send_to_char(ch, "%f and %f are %s.\r\n", a, b, FLOATS_ARE_EQUAL_ISH(a, b) ? "equal" : "not equal");
+    }
+    return;
+  }
+
   #define _DBG_MAX_DICE 30
   #define _DBG_MAX_TN 25
   if (!str_cmp(arg1, "humanboost")) {
@@ -563,41 +578,6 @@ ACMD(do_debug) {
                  (void*)data->input.tail);
     delete data;
 
-    data = new sustain_data_no_init();
-    memset(data, 0, sizeof(sustain_data_no_init));
-    send_to_char(ch, "After memset initialization:  "
-                 "Spell=%u, "
-                 "Subtype=%u, "
-                 "Force=%u, "
-                 "Success=%u, "
-                 "Idnum=%d, "
-                 "Time=%d, "
-                 "TimeToTakeEffect=%u, "
-                 "IsCasterRecord=%s, "
-                 "RitualCastCost=%d, "
-                 "Focus=%s(%p), "
-                 "Spirit=%s(%p), "
-                 "Other=%s(%p), "
-                 "Next=%p, "
-                 "txt_q->head=%p, "
-                 "txt_q->tail=%p\r\n",
-                 data->spell,
-                 data->subtype,
-                 data->force,
-                 data->success,
-                 data->idnum,
-                 data->time,
-                 data->time_to_take_effect,
-                 data->is_caster_record ? "true" : "false",
-                 data->ritual_cast_cost,
-                 data->focus ? "obj" : "null", (void*)data->focus,
-                 data->spirit ? "char" : "null", (void*)data->spirit,
-                 data->other ? "char" : "null", (void*)data->other,
-                 (void*)data->next,
-                 (void*)data->input.head,
-                 (void*)data->input.tail);
-    delete data;
-
     return;
   }
 
@@ -744,7 +724,7 @@ ACMD(do_debug) {
       }
     }
     std::string str = join(vnum_vec, "|");
-    send_to_char(ch, "(%s)", str.c_str());
+    send_to_char(ch, "(%s)", STRING_TO_CSTR(str));
     return;
   }
 
@@ -785,7 +765,7 @@ ACMD(do_debug) {
     global_vehicles_dir = bf::system_complete("restore_vehicles");
     load_saved_veh(TRUE);
     global_vehicles_dir = bf::path(old_path);
-    send_to_char(ch, "Global vehicles dir is now: %s. Saving vehicles.\r\n", global_vehicles_dir.c_str());
+    send_to_char(ch, "Global vehicles dir is now: %s. Saving vehicles.\r\n", STRING_TO_CSTR(global_vehicles_dir));
     save_vehicles(FALSE);
     send_to_char(ch, "Save complete.\r\n");
     return;
@@ -795,7 +775,7 @@ ACMD(do_debug) {
     extern std::unordered_map<std::string, struct veh_data *> veh_map;
 
     for (auto& it: veh_map) {
-      send_to_char(ch, "%s: %s\r\n", it.first.c_str(), GET_VEH_NAME(it.second));
+      send_to_char(ch, "%s: %s\r\n", STRING_TO_CSTR(it.first), GET_VEH_NAME(it.second));
     }
     return;
   }

@@ -226,10 +226,10 @@ void houseedit_reload(struct char_data *ch, const char *filename) {
   //  Verify that file exists.
   bf::path new_path = GET_APARTMENT_SUBROOM(ch->in_room)->get_base_directory() / filename;
   if (!exists(new_path)) {
-    send_to_char(ch, "There is no file at path '%s'.\r\n", new_path.string().c_str());
+    send_to_char(ch, "There is no file at path '%s'.\r\n", STRING_TO_CSTR(new_path));
     return;
   } else {
-    send_to_char(ch, "OK, using the file at path %s.\r\n", new_path.string().c_str());
+    send_to_char(ch, "OK, using the file at path %s.\r\n", STRING_TO_CSTR(new_path));
   }
 
   // Log and load.
@@ -526,7 +526,7 @@ void _load_apartment_from_old_house_file(Apartment *apartment, ApartmentRoom *su
     bf::path original_save_file = old_house_directory / storage_file_name;
 
     // Load our guests from the old file.
-    apartment->load_guests_from_old_house_file(original_save_file.c_str());
+    apartment->load_guests_from_old_house_file(STRING_TO_CSTR(original_save_file));
     // Load our contents from the old file.
     copy_old_file_into_subroom_if_it_exists(original_save_file, subroom, TRUE);
   } else {

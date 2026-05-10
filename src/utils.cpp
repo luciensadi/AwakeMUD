@@ -17,7 +17,6 @@
 #include <sys/types.h>
 #include <stdarg.h>
 #include <iostream>
-#include <execinfo.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/socket.h>
@@ -26,7 +25,13 @@
 #include <mysql/mysql.h>
 #include <regex>
 
+#include <boost/filesystem.hpp>
+
 #include "md5.hpp"
+
+#if !defined (__CYGWIN__)
+#include <execinfo.h>
+#endif
 
 #if defined(WIN32) && !defined(__CYGWIN__)
 #include <winsock.h>
@@ -35,6 +40,12 @@
 #else
 #include <netinet/in.h>
 #include <unistd.h>
+#include <sys/resource.h>
+#include <sys/socket.h>
+#include <sys/wait.h>
+#include <sys/time.h>
+#include <sys/select.h>
+#include <netdb.h>
 #endif
 
 #include "telnet.hpp"
@@ -1563,7 +1574,7 @@ char *buf_roll(char *rbuf, size_t rbuf_len, const char *name, int bonus)
 
 int get_speed(struct veh_data *veh)
 {
-  int speed = 0, maxspeed = (int)(veh->speed * ((veh->load - veh->usedload) / (veh->load != 0 ? veh->load : 1)));
+  int speed = 0, maxspeed = (int)(veh->speed * ((veh->load - veh->usedload) / (!FLOATS_ARE_EQUAL_ISH(veh->load, 0) ? veh->load : 1)));
   struct room_data *in_room = get_veh_in_room(veh);
   switch (veh->cspeed)
   {
@@ -2439,6 +2450,7 @@ bool biocyber_compatibility(struct obj_data *obj1, struct obj_data *obj2, struct
             return FALSE;
           }
         }
+        break;
       case CYB_FILTRATION:
         if (GET_CYBERWARE_FLAGS(cyber1) == GET_CYBERWARE_FLAGS(cyber2))
         {
@@ -5131,7 +5143,7 @@ char get_final_character_from_string(const char *str)
 const char *remove_final_punctuation(const char *str)
 {
   static char replacement_buf[MAX_INPUT_LENGTH * 2] = {0};
-  strlcpy(replacement_buf, std::regex_replace(std::string(str), std::regex("\\.[^nN]?$"), "").c_str(), sizeof(replacement_buf));
+  strlcpy(replacement_buf, STRING_TO_CSTR(std::regex_replace(std::string(str), std::regex("\\.[^nN]?$"), "")), sizeof(replacement_buf));
   return replacement_buf;
 }
 
@@ -8020,6 +8032,7 @@ long get_cost_of_veh_and_contents(struct veh_data *veh)
 
 void log_traceback(const char *format, ...)
 {
+#if !defined(__CYGWIN__)
   // Compose our context string.
   char context[100000];
   {
@@ -8040,6 +8053,7 @@ void log_traceback(const char *format, ...)
     fprintf(stderr, "Writing traceback for error context %s:\n", context);
     backtrace_symbols_fd(array, size, STDERR_FILENO);
   }
+#endif
 }
 
 int get_total_active_focus_rating(struct char_data *i, int &total)
@@ -9654,7 +9668,7 @@ const char *get_descriptor_fingerprint(struct descriptor_data *d)
   // Add NEW-ENVIRON data from our new JSON.
   if (!d->pProtocol->new_environ_info.empty())
   {
-    strlcat(result, md5_hash_from_string(get_string_after_color_code_removal(d->pProtocol->new_environ_info.dump(2, ' ', true).c_str(), NULL)), sizeof(result));
+    strlcat(result, md5_hash_from_string(get_string_after_color_code_removal(STRING_TO_CSTR(d->pProtocol->new_environ_info.dump(2, ' ', true)), NULL)), sizeof(result));
   }
 
   // Add data from KaVir's protocol snippet.
@@ -9912,7 +9926,7 @@ bool gain_syspoints(struct char_data *ch, int amount, bool is_restricted, const 
   }
 
   if (amount <= 0) {
-    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Got invalid value %d to gain_syspoints(ch, %d, %s, '%s')", amount, is_restricted ? "T" : "F", for_what);
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Got invalid value %d to gain_syspoints(ch, %d, %s, '%s')", amount, amount, is_restricted ? "T" : "F", for_what);
     return false;
   }
 

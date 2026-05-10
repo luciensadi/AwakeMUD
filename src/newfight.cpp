@@ -59,7 +59,7 @@ SPECIAL(weapon_dominator);
 
 bool hit_with_multiweapon_toggle(struct char_data *attacker, struct char_data *victim, struct obj_data *weap, struct obj_data *vict_weap, struct obj_data *weap_ammo, bool multi_weapon_modifier)
 {
-  int net_successes, successes_for_use_in_monowhip_test_check;
+  int net_successes = 0, successes_for_use_in_monowhip_test_check = 0;
   assert(attacker != NULL);
   assert(victim != NULL);
 

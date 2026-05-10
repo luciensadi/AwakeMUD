@@ -23,7 +23,7 @@ ACMD(do_usenerps) {
     struct char_data *viewer;
 
     // Find valid viewers.
-    for (viewer = viewer = (ch->in_room ? ch->in_room->people : ch->in_veh->people);
+    for (viewer = (ch->in_room ? ch->in_room->people : ch->in_veh->people);
          viewer;
          viewer = (ch->in_room ? viewer->next_in_room : viewer->next_in_veh)) 
     {
@@ -41,7 +41,7 @@ ACMD(do_usenerps) {
   char msg_buf[1000];
   snprintf(msg_buf, sizeof(msg_buf), "1 '%s' is used by $n.", decapitalize_a_an(GET_OBJ_NAME(obj)));
 
-  for (struct char_data *viewer = viewer = (ch->in_room ? ch->in_room->people : ch->in_veh->people);
+  for (struct char_data *viewer = (ch->in_room ? ch->in_room->people : ch->in_veh->people);
         viewer;
         viewer = (ch->in_room ? viewer->next_in_room : viewer->next_in_veh)) 
   {
@@ -85,7 +85,7 @@ void set_nerpsheet_spell_level(struct char_data *actor, struct char_data *vict, 
   
   FAILURE_CASE_PRINTF(level > 0 && get_nerpsheet_spell_level(vict, spell_name) <= 0 && !confirmation_given,
                       "You don't have a spell named '%s' to increase. If you'd like to buy the first level in it, use NERPSHEET PURCHASE SPELL \"%s\" CONFIRM.\r\n",
-                      spell_name);
+                      spell_name, spell_name);
 }
 
 #define NERPSHEET_SYNTAX "syntax string here"

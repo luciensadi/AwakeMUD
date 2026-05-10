@@ -410,7 +410,7 @@ void do_raw_ram(struct char_data *ch, struct veh_data *veh, struct veh_data *tve
 
   // Alarm all NPCs inside the ramming vehicle. They don't get mad at the PC in particular, just mad in general.
   for (struct char_data *npc = veh->people; npc; npc = npc->next_in_veh) {
-    set_mob_alarm(npc, NULL, 30);
+    set_mob_alarm(npc, nullptr, 30);
   }
 
   if (tveh) {
@@ -1429,7 +1429,7 @@ ACMD(do_chase)
       send_to_veh("You speed up.\r\n", veh, ch, FALSE);
       veh->cspeed = SPEED_CRUISING;
     }
-  } else if (vict) {}
+  }
 }
 
 ACMD(do_target)
@@ -2081,16 +2081,16 @@ ACMD(do_pop)
 
     // Clear the used load and recalculate it.
     {
-      int old_load = veh->usedload;
+      float old_load = veh->usedload;
       recalculate_vehicle_usedload(veh);
 
-      if (veh->usedload != old_load) {
+      if (!FLOATS_ARE_EQUAL_ISH(veh->usedload, old_load)) {
         if (veh->usedload < old_load) {
           send_to_char("Huh, someone must have stuffed some lead weights in here as a prank. You scoop them out and toss them aside.\r\n", ch);
         } else {
           send_to_char("A few helium balloons escape from under the hood...\r\n", ch);
         }
-        mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Vehicle had unexpected usedload on pop (%d != %.2f)", old_load, veh->usedload);
+        mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Vehicle had unexpected usedload on pop (%.2f != %.2f)", old_load, veh->usedload);
       }
     }
   }

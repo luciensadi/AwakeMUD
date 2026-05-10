@@ -3430,8 +3430,8 @@ SPECIAL(proc_name) {                                                            
   return FALSE;                                                                                         \
 }
 
-MAKE_BOUNCER(test_bouncer, "east", EAST, 10000, "Not this time, chummer.");
-MAKE_BOUNCER(peaceful_bones_bouncer, "south", SOUTH, 0, "Nope. You're not welcome here, not until you shape up a bit.");
+MAKE_BOUNCER(test_bouncer, "east", EAST, 10000, "Not this time, chummer.")
+MAKE_BOUNCER(peaceful_bones_bouncer, "south", SOUTH, 0, "Nope. You're not welcome here, not until you shape up a bit.")
 
 /* Special procedures for weapons                                    */
 
@@ -4382,7 +4382,7 @@ void process_auth_room(struct char_data *ch) {
       send_to_char("You have been given a radio and a pocket secretary.\r\n", ch);
     } else if (newbie_radio_rnum > -1) {
       send_to_char("You have been given a radio.^n\r\n", ch);
-    } else if (newbie_radio_rnum > -1) {
+    } else if (newbie_pocsec_rnum > -1) {
       send_to_char("You have been given a pocket secretary.^n\r\n", ch);
     }
   }
@@ -5161,11 +5161,9 @@ SPECIAL(bouncer_gentle)
       toroom = 70303;
       dir_index = NORTH;
       break;
+    default:
+      return false;
   }
-
-  // No match means we fail out.
-  if (toroom == -1)
-    return FALSE;
 
   if (CMD_IS(exitdirs[dir_index]) || CMD_IS(fulldirs[dir_index])) {
     act("$n shakes $s head at you and escorts you from the premises.", FALSE, bouncer, 0, ch, TO_VICT);

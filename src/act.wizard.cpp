@@ -1775,7 +1775,7 @@ void do_stat_character(struct char_data * ch, struct char_data * k)
                    k->desc->pProtocol->pVariables[eMSDP_CLIENT_VERSION]->pValueString ? k->desc->pProtocol->pVariables[eMSDP_CLIENT_VERSION]->pValueString : "NULL");
           
           if (k->desc->pProtocol->new_environ_info.find("IPADDRESS") != k->desc->pProtocol->new_environ_info.end()) {
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " (reported IP %s)", k->desc->pProtocol->new_environ_info["IPADDRESS"].get<std::string>().c_str());
+            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " (reported IP %s)", STRING_TO_CSTR(k->desc->pProtocol->new_environ_info["IPADDRESS"].get<std::string>()));
           }
           
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "; Fingerprint ^c%s^n\r\n",
@@ -5309,7 +5309,7 @@ ACMD(do_show)
   case 24:
     send_to_char("\r\n\r\nAnomalous Objects (weight 5.00) -----------\r\n", ch);
     for (i = 0, j = 0; i <= top_of_objt; i++) {
-      if (GET_OBJ_WEIGHT(&obj_proto[i]) == 5 || GET_OBJ_WEIGHT(&obj_proto[i]) == 5.0) {
+      if (FLOATS_ARE_EQUAL_ISH(GET_OBJ_WEIGHT(&obj_proto[i]), 5.0f)) {
         send_to_char(ch, "%4d) [%8ld] %s %s^n\r\n",
                      j++,
                      GET_OBJ_VNUM(&obj_proto[i]),
@@ -5383,7 +5383,7 @@ ACMD(do_show)
   case 28:
     send_to_char("The following cyberdoc shops have a player-selling-to-shop profit percentage != 30%:\r\n", ch);
     for (int idx = 0; idx <= top_of_shopt; idx++) {
-      if (shop_table[idx].flags.IsSet(SHOP_DOCTOR) && shop_table[idx].profit_sell != 0.3f) {
+      if (shop_table[idx].flags.IsSet(SHOP_DOCTOR) && !FLOATS_ARE_EQUAL_ISH(shop_table[idx].profit_sell, 0.3f)) {
         if (!ch_can_bypass_edit_lock(ch, get_zone_from_vnum(shop_table[idx].vnum)))
           continue;
 
@@ -6841,6 +6841,7 @@ ACMD(do_set)
     snprintf(buf, sizeof(buf),"%s changed %s's highest bioware index from %d to %d.", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict), GET_HIGHEST_INDEX(vict), value);
     GET_HIGHEST_INDEX(vict) = value;
     mudlog(buf, ch, LOG_WIZLOG, TRUE );
+    break;
   case 89: /* strikes */
     {
       RANGE(0, 3);
@@ -7742,7 +7743,7 @@ ACMD(do_slist)
   }
 
   if (!found)
-    send_to_char(ch, "No shops were found between %d and %d.\r\n", first, last);
+    send_to_char(ch, "No shops were found between %ld and %ld.\r\n", first, last);
   else
     page_string(ch->desc, buf, 1);
 }
@@ -8590,7 +8591,7 @@ int audit_zone_rooms_(struct char_data *ch, int zone_num, bool verbose) {
         
 
         // Make sure it's not at origin.
-        if (room->latitude == 0 || room->longitude == 0) {
+        if (FLOATS_ARE_EQUAL_ISH(room->latitude, 0.0f) || FLOATS_ARE_EQUAL_ISH(room->longitude, 0.0f)) {
           strlcat(buf, "  - Has flight-related info with at least one ^yzeroed lat/long field^n.\r\n", sizeof(buf));
           issues++;
           
@@ -8818,7 +8819,7 @@ int audit_zone_mobs_(struct char_data *ch, int zone_num, bool verbose) {
     }
 
     // Flag mobs with no weight or height.
-    if (GET_HEIGHT(mob) == 0 || GET_WEIGHT(mob) == 0.0) {
+    if (GET_HEIGHT(mob) == 0 || FLOATS_ARE_EQUAL_ISH(GET_WEIGHT(mob), 0.0)) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^ymissing vital statistics^n (weight %d, height %d)^n.\r\n", GET_HEIGHT(mob), GET_WEIGHT(mob));
       issues++;
     }
@@ -10132,13 +10133,9 @@ float spider_connected_hosts_for_reward_func(struct host_data *host,
     return 0;
   }
   
-  try {
-    // No-op: Already there.
-    if (connected_hosts[host->vnum]) {
-      return 0;
-    }
-  } catch (std::out_of_range) {
-    // Add it to the map.
+  if (connected_hosts.contains(host->vnum)) {
+    return 0;
+  } else {
     connected_hosts[host->vnum] = host;
   }
 
@@ -10183,13 +10180,11 @@ float spider_connected_rooms_for_reward_func(struct room_data *room,
     mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Null room to spider func");
     return 0;
   }
-  
-  try {
-    // No-op: Already there.
-    if (connected_rooms[GET_ROOM_VNUM(room)]) {
-      return 0;
-    }
-  } catch (std::out_of_range) {}
+
+  // No-op: Already there.
+  if (connected_rooms.contains(GET_ROOM_VNUM(room))) {
+    return 0;
+  }
 
   float return_value = 1;
   
@@ -10288,34 +10283,27 @@ void calculate_zone_payout(struct char_data *ch, rnum_t zone_rnum) {
     switch (ZONECMD.command) {
       case 'M':
         // If room (rnum arg3) is connected, reward
-        try {
-          if (connected_rooms[world[ZONECMD.arg3].number]) {
-            connected_mobs[ZONECMD.arg2] = &mob_proto[ZONECMD.arg1];
-          }
-        } catch (std::out_of_range) {}
+        if (connected_rooms.contains(world[ZONECMD.arg3].number)) {
+          connected_mobs[ZONECMD.arg2] = &mob_proto[ZONECMD.arg1];
+        }
         break;
       case 'O':
         // If room (rnum arg3) is connected, reward
-        try {
-          if (connected_rooms[world[ZONECMD.arg3].number]) {
-            connected_objs[ZONECMD.arg2] = &obj_proto[ZONECMD.arg1];
-          }
-        } catch (std::out_of_range) {}
+        if (connected_rooms.contains(world[ZONECMD.arg3].number)) {
+          connected_objs[ZONECMD.arg2] = &obj_proto[ZONECMD.arg1];
+        }
         break;
       case 'H':
         // If host (rnum arg3) is connected, reward
-        try {
-          if (connected_hosts[matrix[ZONECMD.arg3].vnum]) {
-            connected_objs[ZONECMD.arg2] = &obj_proto[ZONECMD.arg1];
-          }
-        } catch (std::out_of_range) {}
+        if (connected_hosts.contains(matrix[ZONECMD.arg3].vnum)) {
+          connected_objs[ZONECMD.arg2] = &obj_proto[ZONECMD.arg1];
+        }
         break;
       case 'V':
         // If room (rnum arg3) is connected, reward
-        try {
-          if (connected_rooms[world[ZONECMD.arg3].number])
-            connected_vehs[ZONECMD.arg2] = &veh_proto[ZONECMD.arg1];
-        } catch (std::out_of_range) {}
+        if (connected_rooms.contains(world[ZONECMD.arg3].number)) {
+          connected_vehs[ZONECMD.arg2] = &veh_proto[ZONECMD.arg1];
+        }
         break;
       case 'S':
         // We assume the veh is connected. If someone games the system with these, they'll just get banned.
@@ -10344,11 +10332,8 @@ void calculate_zone_payout(struct char_data *ch, rnum_t zone_rnum) {
     if ((temp_rnum = real_shop(vnum)) > 0) {
       if (shop_table[temp_rnum].keeper > 0 && real_mobile(shop_table[temp_rnum].keeper) > 0) {
         // require that the keeper is on grid
-        try {
-          if (connected_mobs[shop_table[temp_rnum].keeper]) { /* no-op, just looking for membership */ }
-        } catch (std::out_of_range) {
+        if (!connected_mobs.contains(shop_table[temp_rnum].keeper))
           continue;
-        }
 
         // todo: count for-sale items
       }
@@ -10367,7 +10352,7 @@ void calculate_zone_payout(struct char_data *ch, rnum_t zone_rnum) {
 
 ACMD(do_audit) {
   char arg1[MAX_INPUT_LENGTH];
-  rnum_t zonenum;
+  rnum_t zonenum = 0;
   vnum_t number;
 
   char *remainder = any_one_arg(argument, arg1);
@@ -10406,7 +10391,7 @@ ACMD(do_audit) {
   }
 
   // Second form: `audit all`
-  if (is_abbrev(arg1, "all")) {
+  else if (is_abbrev(arg1, "all")) {
     AUDIT_ALL_ZONES(rooms);
     AUDIT_ALL_ZONES(mobs);
     AUDIT_ALL_ZONES(objects);
@@ -10420,7 +10405,7 @@ ACMD(do_audit) {
   }
 
   // Third form: `audit submit <confirm>`
-  if (is_abbrev(arg1, "submit")) {
+  else if (is_abbrev(arg1, "submit")) {
     FAILURE_CASE(!*remainder || !str_cmp(remainder, "confirm"), "To submit your zone for review, use AUDIT SUBMIT CONFIRM while standing"
                                                                 " anywhere in the zone you want to submit. This will remove your ability"
                                                                 " to edit the zone and notify staff that it is ready for review.");
@@ -10451,8 +10436,8 @@ ACMD(do_audit) {
     return;
   }
 
-  // Third form: `audit (rooms|mobs|objects|quests|shops...) [zonenum]`
-  if (*remainder) {
+  // Fourth form: `audit (rooms|mobs|objects|quests|shops...) [zonenum]`
+  else if (*remainder) {
     number = atoi(remainder);
     if (number <= 0 || ((zonenum = real_zone(number)) < 0 || zonenum > top_of_zone_table)) {
       send_to_char(ch, "'%s' is not a zone number. Syntax: AUDIT (rooms|mobs|objects|...) [zonenum]\r\n", remainder);

@@ -29,10 +29,20 @@
 #include "structs.hpp"
 #include "constants.hpp"
 #include "comm.hpp"
-#include "protocol.hpp"
 #include "config.hpp"
 #include "db.hpp"
 #include "gmcp.hpp"
+#include "utils.hpp"
+#include "protocol.hpp"
+
+// Silence the ignored-cast for the various TELOPTs.
+#if defined(__clang__)
+  #pragma clang diagnostic push
+  #pragma clang diagnostic ignored "-Wignored-qualifiers"
+#elif defined(__GNUC__)
+  #pragma GCC diagnostic push
+  #pragma GCC diagnostic ignored "-Wignored-qualifiers"
+#endif
 
 /******************************************************************************
  The following section is for Diku/Merc derivatives.  Replace as needed.
@@ -301,8 +311,7 @@ protocol_t *ProtocolCreate( void )
     }
   }
 
-  pProtocol = new protocol_t;
-  memset(pProtocol, 0, sizeof(protocol_t));
+  pProtocol = new protocol_t{};
   pProtocol->WriteOOB = 0;
   for ( i = eNEGOTIATED_TTYPE; i < eNEGOTIATED_MAX; ++i )
     pProtocol->Negotiated[i] = FALSE;
@@ -544,7 +553,7 @@ void ProtocolInput( descriptor_t *apDescriptor, char *apData, int aSize, char *a
   strlcat( apOut, CmdBuf, apOutSize );
 }
 
-const char *ProtocolOutput( descriptor_t *apDescriptor, const char *apData, int *apLength, bool appendGA )
+const char *ProtocolOutput( descriptor_t *apDescriptor, const char *apData, size_t *apLength, bool appendGA )
 {
   static char Result[MAX_OUTPUT_BUFFER+1];
   const char Tab[] = "\t";
@@ -558,7 +567,7 @@ const char *ProtocolOutput( descriptor_t *apDescriptor, const char *apData, int 
 #ifdef COLOUR_CHAR
   bool bColourOn = COLOUR_ON_BY_DEFAULT;
 #endif /* COLOUR_CHAR */
-  int i = 0, j = 0; /* Index values */
+  size_t i = 0, j = 0; /* Index values */
 
 #ifdef USE_DEBUG_CANARIES
   if (apDescriptor && apDescriptor->canary != 31337) {
@@ -1143,7 +1152,7 @@ const char *CopyoverGetJSON( descriptor_t *apDescriptor )
   protocol_t *pProtocol = apDescriptor ? apDescriptor->pProtocol : NULL;
 
   if (pProtocol) {
-    strlcpy(output, pProtocol->new_environ_info.dump().c_str(), sizeof(output));
+    strlcpy(output, STRING_TO_CSTR(pProtocol->new_environ_info.dump()), sizeof(output));
   }
 
   return output;
@@ -2252,7 +2261,7 @@ static void PerformSubnegotiation( descriptor_t *apDescriptor, char aCmd, char *
               case NEW_ENV_USERVAR:
                 contents_as_str[idx] = '%';
                 break;
-              case IAC:
+              case (char) IAC:
                 contents_as_str[idx] = '!';
                 break;
               default:
@@ -2324,7 +2333,7 @@ static void PerformSubnegotiation( descriptor_t *apDescriptor, char aCmd, char *
             }
           }
           
-          PROTO_DEBUG_MSG("- After parsing, the resulting JSON dict is '%s'.", apDescriptor->pProtocol->new_environ_info.dump().c_str());
+          PROTO_DEBUG_MSG("- After parsing, the resulting JSON dict is '%s'.", STRING_TO_CSTR(apDescriptor->pProtocol->new_environ_info.dump()));
         }
       }
       break;
@@ -3317,3 +3326,9 @@ static char *AllocString( const char *apString )
 
   return pResult;
 }
+
+#if defined(__clang__)
+  #pragma clang diagnostic pop
+#elif defined(__GNUC__)
+  #pragma GCC diagnostic pop
+#endif

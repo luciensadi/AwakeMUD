@@ -1123,7 +1123,7 @@ ACMD(do_broadcast)
             strlcpy(radio_string, "^y\\Unintelligible Voice^y/", sizeof(radio_string));
 
             // Starting at end of buf, work backwards and fuzz out the message.
-            for (int len = strlen(message) - 1; len >= 0; len--) {
+            for (size_t len = 0; len <= strlen(message) - 1; len++) {
               switch (number(0, 2)) {
                 // case 0 does nothing here- leave the letter intact.
                 case 1:
@@ -1209,7 +1209,7 @@ ACMD(do_gen_comm)
   struct descriptor_data *d;
   int channel = 0;
 
-  static int channels[] = {
+  static dword channels[] = {
                             PRF_DEAF,
                             PRF_NOQUESTIONS,
                             PRF_NOOOC,
@@ -1648,12 +1648,12 @@ ACMD(do_gen_comm)
 
 ACMD(do_language)
 {
-  int i, lannum;
+  short lannum;
   one_argument(argument, arg);
 
   if (!*arg) {
     send_to_char("You know the following languages:\r\n", ch);
-    for (i = SKILL_ENGLISH; i < MAX_SKILLS; i++) {
+    for (int i = SKILL_ENGLISH; i < MAX_SKILLS; i++) {
       if (!SKILL_IS_LANGUAGE(i))
         continue;
 
@@ -2156,7 +2156,7 @@ void send_message_history_to_descriptor(struct descriptor_data *d, int channel, 
       continue;
 
     snprintf(buf, sizeof(buf), "  %s", currnode->data);
-    int size = strlen(buf);
+    size_t size = strlen(buf);
     write_to_output(ProtocolOutput(d, buf, &size, DONT_APPEND_GA), d);
   }
 }

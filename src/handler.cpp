@@ -566,13 +566,13 @@ void affect_total(struct char_data * ch)
   /* remove the effects of bioware */
   for (cyber = ch->bioware; cyber; cyber = cyber->next_content)
   {
-    if ((GET_OBJ_VAL(cyber, 0) != BIO_ADRENALPUMP || (GET_OBJ_VAL(cyber, 0) == BIO_ADRENALPUMP))
-        && GET_OBJ_VAL(cyber, 5) > 0)
+    if (GET_BIOWARE_TYPE(cyber) != BIO_ADRENALPUMP || (GET_BIOWARE_TYPE(cyber) == BIO_ADRENALPUMP  && GET_BIOWARE_PUMP_ADRENALINE(cyber) > 0)) {
       for (j = 0; j < MAX_OBJ_AFFECT; j++)
         affect_modify(ch,
                       cyber->affected[j].location,
                       cyber->affected[j].modifier,
                       cyber->obj_flags.bitvector, FALSE);
+    }
   }
 
   // remove the effects of spells
@@ -2412,7 +2412,7 @@ void obj_to_obj(struct obj_data * obj, struct obj_data * obj_to)
     GET_OBJ_WEIGHT(tmp_obj) += GET_OBJ_WEIGHT(obj);
 
   // Update the highest container's weight as well, provided it's not a deck or a computer.
-  if (GET_OBJ_TYPE(tmp_obj) != ITEM_CYBERDECK || GET_OBJ_TYPE(tmp_obj) != ITEM_CUSTOM_DECK || GET_OBJ_TYPE(tmp_obj) != ITEM_DECK_ACCESSORY) {
+  if (GET_OBJ_TYPE(tmp_obj) != ITEM_CYBERDECK && GET_OBJ_TYPE(tmp_obj) != ITEM_CUSTOM_DECK && GET_OBJ_TYPE(tmp_obj) != ITEM_DECK_ACCESSORY) {
     GET_OBJ_WEIGHT(tmp_obj) += GET_OBJ_WEIGHT(obj);
 
     // If someone's carrying or wearing the highest container, increment their carry weight by the weight of the obj we just put in.
@@ -2456,7 +2456,7 @@ void obj_from_obj(struct obj_data * obj)
     GET_OBJ_WEIGHT(temp) -= GET_OBJ_WEIGHT(obj);
 
   // Decks don't get their weight deducted from.
-  if (GET_OBJ_TYPE(temp) != ITEM_CYBERDECK || GET_OBJ_TYPE(temp) != ITEM_DECK_ACCESSORY || GET_OBJ_TYPE(temp) != ITEM_CUSTOM_DECK) {
+  if (GET_OBJ_TYPE(temp) != ITEM_CYBERDECK && GET_OBJ_TYPE(temp) != ITEM_DECK_ACCESSORY && GET_OBJ_TYPE(temp) != ITEM_CUSTOM_DECK) {
     GET_OBJ_WEIGHT(temp) -= GET_OBJ_WEIGHT(obj);
 
     // Recalculate the bearer's weight.

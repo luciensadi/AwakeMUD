@@ -428,7 +428,7 @@ void Storage_save(const char *file_name, struct room_data *room) {
     int i = 0;
     for(std::vector<std::string>::reverse_iterator rit = obj_strings.rbegin(); rit != obj_strings.rend(); rit++ ) {
       fprintf(fl, "\t[Object %d]\n", i);
-      fprintf(fl, "%s", rit->c_str());
+      fprintf(fl, "%s", STRING_TO_CSTR(*rit));
       i++;
     }
     obj_strings.clear();

@@ -256,7 +256,7 @@ void redit_disp_flag_menu(struct descriptor_data * d)
   CLS(CH);
   if (!PLR_FLAGGED(CH, PLR_OLD_MAN_YELLS_AT_CLOUDS)) {
     for (auto itr : room_flag_map) {
-      send_to_char(CH, "%2d) ^c%-17s^n (%s)\r\n", counter++, itr.first.c_str(), room_flag_explanations[itr.second]);
+      send_to_char(CH, "%2d) ^c%-17s^n (%s)\r\n", counter++, STRING_TO_CSTR(itr.first), room_flag_explanations[itr.second]);
     }
   } else {
     for (int idx = 0; idx < ROOM_MAX; idx++) {
@@ -1501,7 +1501,7 @@ void write_world_to_disk(vnum_t zone_vnum)
       if (RM.y != DEFAULT_DIMENSIONS_Y)
         fprintf(fp, "Y:\t%d\n", RM.y);
 
-      if (RM.z != DEFAULT_DIMENSIONS_Z)
+      if (!FLOATS_ARE_EQUAL_ISH(RM.z, DEFAULT_DIMENSIONS_Z))
         fprintf(fp, "Z:\t%.2f\n", RM.z);
 
       PRINT_TO_FILE_IF_TRUE("RoomType:\t%d\n",  RM.type);
@@ -1530,8 +1530,8 @@ void write_world_to_disk(vnum_t zone_vnum)
         PRINT_TO_FILE_IF_TRUE("\tFlightCode:\t%s\n", RM.flight_code);
       }
 
-      PRINT_TO_FILE_IF_TRUE("\tLatitude:\t%f\n", RM.latitude);
-      PRINT_TO_FILE_IF_TRUE("\tLongitude:\t%f\n", RM.longitude);
+      if (!FLOATS_ARE_EQUAL_ISH(RM.latitude, 0.0f)) { fprintf(fp, ("\tLatitude:\t%f\n"), (RM.latitude)); }
+      if (!FLOATS_ARE_EQUAL_ISH(RM.longitude, 0.0f)) { fprintf(fp, ("\tLongitude:\t%f\n"), (RM.longitude)); }
 
       for (counter2 = 0; counter2 < NUM_OF_DIRS; counter2++) {
         room_direction_data *ptr = RM.dir_option[counter2];

@@ -81,7 +81,7 @@
   * If the input fills out a block of 512 bits, apply the algorithm (md5Step)
   * and save the result in the buffer. Also updates the overall size.
   */
- void md5Update(MD5Context *ctx, uint8_t *input_buffer, size_t input_len){
+ void md5Update(MD5Context *ctx, const uint8_t *input_buffer, size_t input_len){
      uint32_t input[16];
      unsigned int offset = ctx->size % 64;
      ctx->size += (uint64_t)input_len;
@@ -198,7 +198,7 @@
  void md5String(const char *input, uint8_t *result){
      MD5Context ctx;
      md5Init(&ctx);
-     md5Update(&ctx, (uint8_t *)input, strlen(input));
+     md5Update(&ctx, (const uint8_t *)input, strlen(input));
      md5Finalize(&ctx);
  
      memcpy(result, ctx.digest, 16);
@@ -212,7 +212,7 @@
      md5Init(&ctx);
  
      while((input_size = fread(input_buffer, 1, 1024, file)) > 0){
-         md5Update(&ctx, (uint8_t *)input_buffer, input_size);
+         md5Update(&ctx, (const uint8_t *)input_buffer, input_size);
      }
  
      md5Finalize(&ctx);
