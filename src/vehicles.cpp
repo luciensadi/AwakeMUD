@@ -460,9 +460,9 @@ int get_obj_vehicle_load_usage(struct obj_data *obj, bool is_installed_mod) {
 }
 
 void recalculate_vehicle_usedload(struct veh_data *veh) {
-  int old_load = veh->usedload;
+  float old_load = veh->usedload;
 
-  veh->usedload = 0;
+  veh->usedload = 0.0f;
 
   // Recalculate mod weights.
   for (int mod_idx = 0; mod_idx < NUM_MODS; mod_idx++) {

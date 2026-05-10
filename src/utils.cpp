@@ -1574,7 +1574,7 @@ char *buf_roll(char *rbuf, size_t rbuf_len, const char *name, int bonus)
 
 int get_speed(struct veh_data *veh)
 {
-  int speed = 0, maxspeed = (int)(veh->speed * ((veh->load - veh->usedload) / (!FLOATS_ARE_EQUAL_ISH(veh->load, 0) ? veh->load : 1)));
+  int speed = 0, maxspeed = (int)(veh->speed * ((veh->load - veh->usedload) / (!FLOATS_ARE_EQUAL_ISH(veh->load, 0.0f) ? veh->load : 1)));
   struct room_data *in_room = get_veh_in_room(veh);
   switch (veh->cspeed)
   {
