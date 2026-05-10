@@ -14,24 +14,35 @@ BASE_CXXFLAGS = -Wall -Wextra -Wno-unused-parameter -Wno-vla -Wno-char-subscript
 BASE_LDFLAGS  = -L/usr/local/lib
 BASE_LDLIBS   = -lmysqlclient -lz -lm -lboost_filesystem
 
-# Default FSAN to off. Enable via command line: make USE_FSAN=1
-USE_FSAN ?= 0
-ifeq ($(USE_FSAN),1)
-  FSAN_FLAGS = -fsanitize=address -fsanitize=undefined
-  BASE_CXXFLAGS += $(FSAN_FLAGS)
-  BASE_LDFLAGS  += $(FSAN_FLAGS)
-endif
-
 # Modes: 2 is local dev, 1 is buildport, 0 is mainport. Change:  make DEPLOYMENT_MODE=1
 DEPLOYMENT_MODE ?= 2
 ifeq ($(DEPLOYMENT_MODE),2)
   BASE_CPPFLAGS += -DIS_BUILDPORT -DSELFADVANCE -DSUPPRESS_MOB_SKILL_ERRORS -DDEBUG -D_GLIBCXX_DEBUG
 	JUST_FUCK_ME_UP_WITH_WARNINGS ?= 1
+	USE_FSAN ?= 1  # FSAN in address,undefined mode
 else ifeq ($(DEPLOYMENT_MODE),1)
   BASE_CPPFLAGS += -DIS_BUILDPORT -DSELFADVANCE -DUSE_MEMORY_CANARIES -DDEBUG -D_GLIBCXX_DEBUG
 	JUST_FUCK_ME_UP_WITH_WARNINGS ?= 1
+	USE_FSAN ?= 1  # FSAN in address,undefined mode
 else
   BASE_CPPFLAGS += -DSUPPRESS_MOB_SKILL_ERRORS
+	USE_FSAN ?= 0
+endif
+
+# FSAN has various defaults (set above). Force it via command line: make USE_FSAN=1
+ifeq ($(USE_FSAN),1)
+  FSAN_FLAGS = -fsanitize=address,undefined
+  BASE_CXXFLAGS += $(FSAN_FLAGS)
+  BASE_LDFLAGS  += $(FSAN_FLAGS)
+else ifeq ($(USE_FSAN),2)
+	# -fsanitize=memory is only available in Clang, so force that compiler.
+	ifneq ($(IS_CLANG), yes)
+		echo "Overriding compiler to Clang++ due to -fsanitize=memory being selected."
+		CXX = clang++
+	endif
+  FSAN_FLAGS = -fsanitize=memory,undefined -fsanitize-memory-track-origins
+  BASE_CXXFLAGS += $(FSAN_FLAGS)
+  BASE_LDFLAGS  += $(FSAN_FLAGS)
 endif
 
 # Only set this if you have access to Awake CE's extended world files (not part of the repo)
