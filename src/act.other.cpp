@@ -1529,6 +1529,17 @@ ACMD(do_toggle)
     } else if (is_abbrev(argument, "roundtime messages") || is_abbrev(argument, "no roundtime messages") || is_abbrev(argument, "round time messages") || is_abbrev(argument, "no round time messages")) {
       result = PRF_TOG_CHK(ch, PRF_NOROUNDTIME);
       mode = 54;
+    } else if (is_abbrev(argument, "alphabetize parts") || is_abbrev(argument, "alphabetize programs") || is_abbrev(argument, "alphabetize deckbuilding")) {
+      // don't @ me about using a PLR flag for a PRF, it's just really convenient because it's already set to 1 for everyone who exists.
+      if (PLR_FLAGGED(ch, PLR_DEALPHABETIZE_DECKBUILDING)) {
+        send_to_char(ch, "OK, you will now see alphabetized lists of parts and programs during deck creation.\r\n");
+        PLR_FLAGS(ch).RemoveBit(PLR_DEALPHABETIZE_DECKBUILDING);
+      } else {
+        send_to_char(ch, "You have been restored to the old-style interface of internal index numbers for parts and software during deck creation.\r\n");
+        PLR_FLAGS(ch).SetBit(PLR_DEALPHABETIZE_DECKBUILDING);
+      }
+      playerDB.SaveChar(ch);
+      return;
     } else {
       send_to_char("That is not a valid toggle option.\r\n", ch);
       return;

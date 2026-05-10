@@ -1092,21 +1092,27 @@ bool CAN_SEE_ROOM_SPECIFIED(struct char_data *subj, struct char_data *obj, struc
 // ITEM_CAMERA convenience defines
 
 // ITEM_PART convenience defines
-#define GET_PART_TYPE(part)                    (GET_OBJ_VAL((part), 0))
-#define GET_PART_RATING(part)                  (GET_OBJ_VAL((part), 1))
-#define GET_PART_TARGET_MPCP(part)             (GET_OBJ_VAL((part), 2))
-#define GET_PART_DESIGN_TICKS_REMAINING(part)  (GET_OBJ_VAL((part), 3)) /* 0 = done, -1 = required and not started, positive integer started */
-#define GET_PART_BUILD_TICKS_REMAINING(part)   (GET_OBJ_VAL((part), 4))
-#define GET_PART_DESIGN_SUCCESSES(part)        (GET_OBJ_VAL((part), 5))
-#define GET_PART_BUILDER_IDNUM(part)           (GET_OBJ_VAL((part), 7))
-#define GET_PART_PART_COST(part)               (GET_OBJ_VAL((part), 8))
-#define GET_PART_CHIP_COST(part)               (GET_OBJ_VAL((part), 9))
-#define GET_PART_INITIAL_BUILD_TICKS(part)     (GET_OBJ_VAL((part), 10))
-#define GET_PART_RADIO_FREQ(part)              (GET_OBJ_VAL((part), 11)) // Settable by player
+#define GET_PART_TYPE(part)                         (GET_OBJ_VAL((part), 0))
+#define GET_PART_RATING(part)                       (GET_OBJ_VAL((part), 1))
+#define GET_PART_TARGET_MPCP(part)                  (GET_OBJ_VAL((part), 2))
+#define GET_PART_DESIGN_TICKS_REMAINING(part)       (GET_OBJ_VAL((part), 3)) /* 0 = done, -1 = required and not started, positive integer started */
+#define GET_PART_BUILD_TICKS_REMAINING(part)        (GET_OBJ_VAL((part), 4))
+#define GET_PART_DESIGN_SUCCESSES(part)             (GET_OBJ_VAL((part), 5))
+#define GET_PART_BUILDER_IDNUM(part)                (GET_OBJ_VAL((part), 7))
+#define GET_PART_PART_COST(part)                    (GET_OBJ_VAL((part), 8))
+#define GET_PART_CHIP_COST(part)                    (GET_OBJ_VAL((part), 9))
+#define GET_PART_INITIAL_BUILD_TICKS(part)          (GET_OBJ_VAL((part), 10))
+#define GET_PART_BUILD_SUCCESSES_ROLLED(part)       (GET_OBJ_TIMER((part)))
+// Specific part subclasses have additional defines here.
+#define GET_PART_RADIO_FREQ(part)                   (GET_OBJ_VAL((part), 11)) // Settable by player
 #ifdef ENABLE_RADIO_CRYPT
-  #define GET_PART_RADIO_CRYPT(part)             (GET_OBJ_VAL((part), 12)) // Settable by player
+  #define GET_PART_RADIO_CRYPT(part)                (GET_OBJ_VAL((part), 12)) // Settable by player
 #endif
-#define GET_PART_BUILD_SUCCESSES_ROLLED(part)  (GET_OBJ_TIMER((part)))
+
+#define GET_PART_REALITY_FILTER_DESIGNED_FOR(part)  (GET_OBJ_VAL((part), 11))
+// If you add more subclass defines, make sure to clear them in deck_build.cpp's DEDIT_TYPE parse case.
+
+
 
 // ITEM_WEAPON convenience defines
 #define GET_WEAPON_POWER(weapon)                 (GET_OBJ_VAL((weapon), 0))

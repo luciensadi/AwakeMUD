@@ -8195,7 +8195,9 @@ void initialize_and_alphabetize_wear_flags_for_exdescs() {
   }
 }
 
+extern void initialize_and_alphabetize_deck_part_map();
 extern void alphabetize_pet_echoes_by_name();
+extern void initialize_and_alphabetize_deck_software_map();
 
 void initialize_and_alphabetize_flag_maps() {
   alphabetize_pet_echoes_by_name();
@@ -8203,4 +8205,8 @@ void initialize_and_alphabetize_flag_maps() {
   initialize_and_alphabetize_item_extra_flags();
   initialize_and_alphabetize_mob_flags();
   initialize_and_alphabetize_wear_flags_for_exdescs();
+
+  // Technically not a flag map, but these are alphabetized lists used for OLC.
+  initialize_and_alphabetize_deck_part_map();
+  initialize_and_alphabetize_deck_software_map();
 }

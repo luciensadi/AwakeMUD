@@ -3742,6 +3742,11 @@ void do_probe_object(struct char_data * ch, struct obj_data * j, bool is_in_shop
                GET_PART_PART_COST(j),
                GET_PART_CHIP_COST(j)
              );
+      if (GET_PART_TYPE(j) == PART_REALITY_FILTER && GET_PART_REALITY_FILTER_DESIGNED_FOR(j) && GET_PART_REALITY_FILTER_DESIGNED_FOR(j) != GET_IDNUM(ch)) {
+        const char *player_name = get_player_name(GET_PART_REALITY_FILTER_DESIGNED_FOR(j));
+        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "\r\n^yIt has been designed for ^Y%s^y and will not work for you.^n", player_name);
+        delete [] player_name;
+      }
       break;
     case ITEM_CUSTOM_DECK:
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "You should EXAMINE this deck, or jack in and view its SOFTWARE.");

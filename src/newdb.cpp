@@ -309,7 +309,7 @@ void do_start(struct char_data * ch, bool wipe_skills)
   PRF_FLAGS(ch).Clear();
 
   // Set the appropriate flags.
-  PLR_FLAGS(ch).SetBits(PLR_NEWBIE, PLR_NOT_YET_AUTHED, PLR_RECEIVED_CYBEREYE_ESSENCE_DELTA, ENDBIT);
+  PLR_FLAGS(ch).SetBits(PLR_NEWBIE, PLR_NOT_YET_AUTHED, ENDBIT);
   PRF_FLAGS(ch).SetBits(PRF_AUTOEXIT, PRF_LONGEXITS, PRF_SEE_TIPS, PRF_AUTOSTAND, ENDBIT);
 
   // PLR_FLAGS(ch).SetBit(PLR_NOT_YET_AUTHED);
@@ -1783,7 +1783,6 @@ char_data *CreateChar(char_data *ch)
 
   // Ensure we don't run this character through any rectifying functions.
   PLR_FLAGS(ch).SetBits(PLR_COMPLETED_EXPERT_DRIVER_OVERHAUL,
-                        PLR_RECEIVED_CYBEREYE_ESSENCE_DELTA,
                         PLR_RECEIVED_GHOUL_INDEX_DELTA,
                         ENDBIT);
   
@@ -1877,9 +1876,6 @@ char_data *PCIndex::LoadChar(const char *name, bool logon, int load_origin)
   recalculate_character_magic_rating(ch);
 
   fix_ghoul_index(ch);
-
-  // At this point, cybereye migration has been done for over a year. Disabled.
-  // fix_character_essence_after_cybereye_migration(ch);
 
   return ch;
 }
@@ -3335,153 +3331,6 @@ void fix_ghoul_index(struct char_data *ch) {
                  "Good news: You have been refunded half of your bioware index and highest bioware index rating."
                  " If you're a mage/adept, you've regained the relevant amount of magic and powerpoints."
                  " Going forward, ghouls will no longer pay double for bioware index costs.");
-}
-
-/* Because we've changed the essence cost of cybereyes, we need to refund the difference to people. */
-void fix_character_essence_after_cybereye_migration(struct char_data *ch) {
-  int old_essence_cost, new_essence_cost, essence_delta;
-
-  // First, check for the flag. If it's set, we already did this-- skip.
-  if (PLR_FLAGGED(ch, PLR_RECEIVED_CYBEREYE_ESSENCE_DELTA))
-    return;
-
-  // Next, ensure that we won't be sending them below 0 essence. If we would, log and abort.
-  {
-    int total_essence_delta = 0;
-
-    struct obj_data fake_cyber;
-
-    // Total up all the expected changes.
-    for (struct obj_data *obj = ch->cyberware; obj; obj = obj->next_content) {
-      if (GET_CYBERWARE_TYPE(obj) == CYB_EYES) {
-        // Construct a fake cyberware item, then price it. This gives us an item that reflects the new values.
-        GET_CYBERWARE_TYPE(&fake_cyber) = GET_CYBERWARE_TYPE(obj);
-        GET_CYBERWARE_FLAGS(&fake_cyber) = GET_CYBERWARE_FLAGS(obj);
-        GET_CYBERWARE_GRADE(&fake_cyber) = GET_CYBERWARE_GRADE(obj);
-        price_cyber(&fake_cyber);
-
-        old_essence_cost = get_deprecated_cybereye_essence_cost(ch, obj);
-        new_essence_cost = fake_cyber.obj_flags.value[4];
-        essence_delta = old_essence_cost - new_essence_cost;
-        total_essence_delta += essence_delta;
-      }
-    }
-
-    // Deduct their essence hole from the total.
-    total_essence_delta -= GET_ESSHOLE(ch);
-
-    // If there's a remainder after essence hole, ensure it won't kill them or wipe their magic.
-    if (total_essence_delta > 0) {
-      if (GET_REAL_ESS(ch) + total_essence_delta > GET_RACIAL_STARTING_ESSENCE_FOR_RACE(GET_RACE(ch))) {
-        snprintf(buf, sizeof(buf), "%s refusing to perform cybereye rectification: it would put me above %d essence!", capitalize(GET_CHAR_NAME(ch)), (int) (GET_RACIAL_STARTING_ESSENCE_FOR_RACE(GET_RACE(ch)) / 100));
-        mudlog(buf, ch, LOG_SYSLOG, TRUE);
-        return;
-      }
-    }
-    else if (total_essence_delta < 0) {
-      if (GET_TRADITION(ch) != TRAD_MUNDANE && GET_REAL_MAG(ch) + total_essence_delta < 100) {
-        snprintf(buf, sizeof(buf), "%s refusing to perform cybereye rectification: it would put me below 1 magic!", capitalize(GET_CHAR_NAME(ch)));
-        mudlog(buf, ch, LOG_SYSLOG, TRUE);
-        return;
-      }
-
-      if (GET_REAL_ESS(ch) + total_essence_delta <= 0) {
-        snprintf(buf, sizeof(buf), "%s refusing to perform cybereye rectification: it would put me at or below 0 essence!", capitalize(GET_CHAR_NAME(ch)));
-        mudlog(buf, ch, LOG_SYSLOG, TRUE);
-        return;
-      }
-    }
-  }
-
-  // Otherwise, perform all the expected changes.
-  {
-    int total_magic_delta = 0, total_essence_delta = 0, total_esshole_delta = 0;
-
-    for (struct obj_data *obj = ch->cyberware; obj; obj = obj->next_content) {
-      if (GET_CYBERWARE_TYPE(obj) == CYB_EYES) {
-        // Update the item.
-        price_cyber(obj);
-
-        // Calculate the old values and delta.
-        old_essence_cost = get_deprecated_cybereye_essence_cost(ch, obj);
-        new_essence_cost = calculate_ware_essence_or_index_cost(ch, obj);
-        essence_delta = old_essence_cost - new_essence_cost;
-
-        // If there are changes to make, write a log entry so we can trace things later.
-        if (essence_delta != 0) {
-          snprintf(buf, sizeof(buf), "Processing %s's cybereye migration for %s (%ld): Delta %d.", GET_CHAR_NAME(ch), GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj), essence_delta);
-          mudlog(buf, ch, LOG_SYSLOG, TRUE);
-        } else {
-          snprintf(buf, sizeof(buf), "Processing %s's cybereye migration for %s (%ld): No delta.", GET_CHAR_NAME(ch), GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj));
-          mudlog(buf, ch, LOG_SYSLOG, TRUE);
-          // Otherwise, just skip this one.
-          continue;
-        }
-
-        if (essence_delta > 0) {
-          // The new one costs less than the old one did. Refund the essence.
-          total_essence_delta += essence_delta;
-          GET_REAL_ESS(ch) += essence_delta;
-
-          // Next, handle magic restoration if needed.
-          if (GET_TRADITION(ch) != TRAD_MUNDANE) {
-            total_magic_delta += essence_delta;
-            GET_SETTABLE_REAL_MAG(ch) += essence_delta;
-          }
-        }
-
-        else if (essence_delta < 0) {
-          // The new one costs more than the old one did. Whoops...
-          int ess_cost_after_esshole = 0;
-
-          // Make the delta positive for better readability.
-          essence_delta *= -1;
-
-          // If their essence hole can cover it, deduct from that alone.
-          if (GET_ESSHOLE(ch) >= essence_delta) {
-            total_esshole_delta -= essence_delta;
-            GET_ESSHOLE(ch) -= essence_delta;
-          }
-          // Otherwise, we have to pull from real essence too. Now we're dealing with magic loss.
-          else {
-            ess_cost_after_esshole = essence_delta - GET_ESSHOLE(ch);
-
-            // Wipe their esshole for them. We here at Awakened Worlds use only the finest 2-ply code for this process.
-            total_esshole_delta -= GET_ESSHOLE(ch);
-            GET_ESSHOLE(ch) = 0;
-
-            // Deduct the remaining cost from their essence.
-            total_essence_delta -= essence_delta;
-            GET_REAL_ESS(ch) -= essence_delta;
-
-            // Cause magic loss, BUT not in the standard way. Instead of stripping powers etc, we just reduce their magic stat.
-            if (GET_TRADITION(ch) != TRAD_MUNDANE) {
-              total_magic_delta -= ess_cost_after_esshole;
-              GET_SETTABLE_REAL_MAG(ch) -= ess_cost_after_esshole;
-            }
-          }
-        }
-      }
-    } /* end for loop */
-
-    // Message them if they had a change.
-    if (total_magic_delta != 0 || total_essence_delta != 0 || total_esshole_delta != 0) {
-      send_to_char(ch, "^WSYSTEM NOTICE:^n Cybereye essence costs were fixed, and your character was included in the cleanup process. The following changes have been automatically made to your character to true things up:\r\n"
-                       "^W- Essence Hole:^c %d^n\r\n"
-                       "^W- Essence:^c %d^n\r\n"
-                       "^W- Magic:^c %d^n\r\n", total_esshole_delta, total_essence_delta, total_magic_delta);
-
-      // Write a log, too.
-      snprintf(buf, sizeof(buf), "Post-trueup deltas for %s: EH %d, ES %d, MG %d.", GET_CHAR_NAME(ch), total_esshole_delta, total_essence_delta, total_magic_delta);
-      mudlog(buf, ch, LOG_SYSLOG, TRUE);
-    }
-  }
-
-  // Flag them so they won't go through this again.
-  PLR_FLAGS(ch).SetBit(PLR_RECEIVED_CYBEREYE_ESSENCE_DELTA);
-
-  // Finally, save them. TODO: Does saving them in the middle of the load process break things?
-  save_char(ch, GET_LOADROOM(ch));
 }
 
 extern struct obj_data *shop_package_up_ware(struct obj_data *obj);

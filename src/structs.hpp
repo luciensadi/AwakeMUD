@@ -1318,12 +1318,14 @@ struct part_data {
   sh_int tools;
   unsigned char software;
   signed char design;
+  const char *description;
 };
 
 struct program_data {
   char name[30];
   unsigned char multiplier;
   bool nerps;
+  const char *description;
 };
 
 struct spirit_table {

@@ -25,6 +25,7 @@
 #define PEDIT_NAME 2
 #define PEDIT_RATING 3
 #define PEDIT_WOUND 4
+#define PEDIT_PART_HELP 5
 
 extern void part_design(struct char_data *ch, struct obj_data *design);
 extern void spell_design(struct char_data *ch, struct obj_data *design);
@@ -32,6 +33,10 @@ extern void complex_form_design(struct char_data *ch, struct obj_data *design);
 extern void ammo_test(struct char_data *ch, struct obj_data *obj);
 extern void weight_change_object(struct obj_data * obj, float weight);
 extern bool focus_is_usable_by_ch(struct obj_data *focus, struct char_data *ch);
+
+void display_program_help(struct descriptor_data *d, int prog_idx);
+
+std::map<std::string, int> deck_program_map = {};
 
 void pedit_disp_menu(struct descriptor_data *d)
 {
@@ -51,20 +56,42 @@ void pedit_disp_menu(struct descriptor_data *d)
     program_size *= programs[GET_DESIGN_PROGRAM(d->edit_obj)].multiplier;
   }
   send_to_char(CH, "\r\nInitial Design Size: ^c%d^n\r\n", (int) (program_size * 1.1));
-  send_to_char(CH, "Completed Size: ^c%d^n\r\n\r\n", program_size);
+  send_to_char(CH, "Completed Size: ^c%d^n\r\n", program_size);
 
-  send_to_char(CH, "q) Quit and save\r\nEnter your choice: ");
+  if (GET_DESIGN_PROGRAM(d->edit_obj) > 0) {
+    send_to_char(CH, "\r\n  %s\r\n", programs[GET_DESIGN_PROGRAM(d->edit_obj)].description);
+  }
+
+  send_to_char(CH, "\r\nq) Quit and save\r\n"
+                   "x) Exit without saving\r\n"
+                   "\r\n"
+                   "Enter your choice:\r\n");
   d->edit_mode = PEDIT_MENU;
 }
 
 void pedit_disp_program_menu(struct descriptor_data *d)
 {
   CLS(CH);
+  int prog_idx = 1;
 
-  strncpy(buf, "", sizeof(buf) - 1);
-
-  for (int counter = 1; counter < NUM_PROGRAMS; counter++) {
-    send_to_char(d->character, "%d) %s%s\r\n", counter, programs[counter].name, programs[counter].nerps ? "  (not implemented)" : "");
+  if (!PLR_FLAGGED(CH, PLR_DEALPHABETIZE_DECKBUILDING)) {
+    for (auto itr : deck_program_map) {
+      send_to_char(d->character, "%s%2d^n) %s%s^n%s\r\n",
+                   programs[itr.second].nerps ? "^L" : "",
+                   prog_idx++,
+                   programs[itr.second].nerps ? "^L" : "^c",
+                   itr.first.c_str(),
+                   programs[itr.second].nerps ? "  ^L(not implemented)^n" : "");
+    }
+  } else {
+    for (; prog_idx < NUM_PROGRAMS; prog_idx++) {
+      send_to_char(d->character, "%s%2d^n) %s%s^n%s\r\n",
+                   programs[prog_idx].nerps ? "^L" : "",
+                   prog_idx,
+                   programs[prog_idx].nerps ? "^L" : "^c",
+                   programs[prog_idx].name,
+                   programs[prog_idx].nerps ? "  ^L(not implemented)^n" : "");
+    }
   }
   send_to_char(d->character, "\r\nSelect program type: ");
   d->edit_mode = PEDIT_TYPE;
@@ -103,6 +130,12 @@ void pedit_parse(struct descriptor_data *d, const char *arg)
         send_to_char(CH, "1) Light\r\n2) Moderate\r\n3) Serious\r\n4) Deadly\r\nEnter your choice: ");
         d->edit_mode = PEDIT_WOUND;
       }
+      break;
+    case 'x':
+      send_to_char(CH, "Aborted.\r\n");
+      extract_obj(d->edit_obj);
+      d->edit_obj = nullptr;
+      STATE(d) = CON_PLAYING;
       break;
     case 'q':
     case 'Q':
@@ -188,20 +221,45 @@ void pedit_parse(struct descriptor_data *d, const char *arg)
     }
     break;
   case PEDIT_TYPE:
-    if (number < 1 || number >= NUM_PROGRAMS)
-      send_to_char(CH, "Not a valid option!\r\nEnter your choice: ");
-    else if (number == SOFT_EVALUATE && !GET_SKILL(CH, SKILL_DATA_BROKERAGE)) {
-      send_to_char("You need to know Data Brokerage to create Evaluate programs.\r\nEnter your choice: ", CH);
-    } else {
-      GET_DESIGN_PROGRAM(d->edit_obj) = number;
-      GET_DESIGN_RATING(d->edit_obj) = 1;
-
-      if (GET_DESIGN_PROGRAM(d->edit_obj) == SOFT_ATTACK) {
-        // Default to Deadly damage.
-        GET_DESIGN_PROGRAM_WOUND_LEVEL(d->edit_obj) = DEADLY;
+    if (*arg == '?') {
+      if (isdigit(arg[1])) {
+        number = atoi(arg + 1);
+        display_program_help(d, number);
+      } else {
+        send_to_char(CH, "Syntax for looking up program descriptions is ?<number>, e.g. ?3.\r\n");
+        send_to_char(CH, "Enter a program number to select, or ?<number> for more info: ");
       }
+    }
+    if (number < 1 || number >= NUM_PROGRAMS) {
+      send_to_char(CH, "Not a valid option!\r\nEnter your choice: ");
+    }
+    else {
+      if (!PLR_FLAGGED(CH, PLR_DEALPHABETIZE_DECKBUILDING)) {
+        int counter = 1;
+        int entry = atoi(arg);
+        for (auto itr : deck_program_map) {
+          if (entry == counter++) {
+            number = itr.second;
+            break;
+          }
+        }
+      } else {
+        number = atoi(arg);
+      }
+      
+      if (number == SOFT_EVALUATE && !GET_SKILL(CH, SKILL_DATA_BROKERAGE)) {
+        send_to_char("You need to know Data Brokerage to create Evaluate programs.\r\nEnter your choice: ", CH);
+      } else {
+        GET_DESIGN_PROGRAM(d->edit_obj) = number;
+        GET_DESIGN_RATING(d->edit_obj) = 1;
 
-      pedit_disp_menu(d);
+        if (GET_DESIGN_PROGRAM(d->edit_obj) == SOFT_ATTACK) {
+          // Default to Deadly damage.
+          GET_DESIGN_PROGRAM_WOUND_LEVEL(d->edit_obj) = DEADLY;
+        }
+
+        pedit_disp_menu(d);
+      }
     }
     break;
   }
@@ -926,5 +984,22 @@ void update_buildrepair(void)
       }
     }
   }
+}
 
+void display_program_help(struct descriptor_data *d, int prog_idx) {
+  if (prog_idx < 0 || prog_idx >= NUM_PARTS) {
+    send_to_char(d->character, "Which program number would you like to learn more about?\r\n");
+    d->edit_mode = PEDIT_PART_HELP;
+    return;
+  }
+
+  send_to_char(d->character, "%s\r\n", programs[prog_idx].description);
+  send_to_char(d->character, "Enter a program number, or ?<number> for more info: ");
+  d->edit_mode = PEDIT_PART_HELP;
+}
+
+void initialize_and_alphabetize_deck_software_map() {
+  for (int idx = 1; idx < NUM_PROGRAMS; idx++) {
+    deck_program_map[std::string(programs[idx].name)] = idx;
+  }
 }

@@ -15,6 +15,7 @@
 #include "newmagic.hpp"
 #include "newmatrix.hpp"
 #include "bullet_pants.hpp"
+#include "newdb.hpp"
 
 #define CH d->character
 #define PART d->edit_obj
@@ -23,18 +24,23 @@
 #define DEDIT_MPCP 2
 #define DEDIT_NAME 3
 #define DEDIT_RATING 4
+#define DEDIT_PART_HELP 5
+#define DEDIT_REALITY_FILTER_RECIPIENT 6
 
 extern void ammo_build(struct char_data *ch, struct obj_data *obj);
 
 void set_cyberdeck_part_pointer(struct obj_data *part, struct obj_data *deck);
 void clear_cyberdeck_part_pointer(struct obj_data *part);
 bool part_is_compatible_with_deck(struct obj_data *part, struct obj_data *deck, struct char_data *ch);
+void display_part_help(struct descriptor_data *d, int part_idx);
 
 ACMD_DECLARE(do_sit);
 
 std::vector<struct obj_data *> global_in_progress_deck_parts = {};
 
 #define PART_CAN_HAVE_MPCP_SET(the_part) (parts[GET_PART_TYPE(the_part)].design >= 0 || GET_PART_TYPE(the_part) == PART_ACTIVE || GET_PART_TYPE(the_part) == PART_STORAGE || GET_PART_TYPE(the_part) == PART_MATRIX_INTERFACE)
+
+std::map<std::string, int> deck_part_map = {};
 
 bool part_is_nerps(int part_type) {
   switch (part_type) {
@@ -207,36 +213,80 @@ void partbuild_main_menu(struct descriptor_data *d) {
   send_to_char(CH, "3) MPCP Designed For: ^c%-30d^n  Chips Cost: ^c%d nuyen^n\r\n",
                GET_PART_TARGET_MPCP(PART),
                get_chip_cost(GET_PART_TYPE(PART), GET_PART_RATING(PART), GET_PART_TARGET_MPCP(PART)));
-  if (GET_PART_TARGET_MPCP(PART) && part_can_have_its_rating_set(PART))
+  if (GET_PART_TARGET_MPCP(PART) && part_can_have_its_rating_set(PART)) {
     send_to_char(CH, "4) %s: ^c%d^n\r\n",
-                GET_OBJ_VAL(d->edit_obj, 0) == PART_STORAGE || GET_OBJ_VAL(d->edit_obj, 0) == PART_ACTIVE ? "Capacity" : "Rating",
-                GET_PART_RATING(PART));
-  send_to_char(CH, "q) Save and Quit\r\n");
-  send_to_char(CH, "Enter Option: ");
-  d->edit_mode = DEDIT_MAIN;
-}
-
-void render_part_type_to_character(struct char_data *ch, int index, int part_type, bool newline) {
-  char type_string[1000];
-  strlcpy(type_string, parts[part_type].name, sizeof(type_string));
-
-  if (part_is_nerps(part_type)) {
-    strlcat(type_string, " (Not Implemented)", sizeof(type_string));
+                 GET_OBJ_VAL(d->edit_obj, 0) == PART_STORAGE || GET_OBJ_VAL(d->edit_obj, 0) == PART_ACTIVE ? "Capacity" : "Rating",
+                 GET_PART_RATING(PART));
   }
-  send_to_char(ch, "%2d) %-40s%s", index, type_string, newline ? "\r\n" : "");
+
+  if (GET_PART_TYPE(PART) == PART_REALITY_FILTER) {
+    if (GET_PART_REALITY_FILTER_DESIGNED_FOR(PART) == GET_IDNUM(CH)) {
+      send_to_char(CH, "r) Reality Filter customized for: ^cYou^n\r\n");
+    } else {
+      const char *player_name = get_player_name(GET_PART_REALITY_FILTER_DESIGNED_FOR(PART));
+      send_to_char(CH, "r) Reality Filter customized for: ^y%s^n (unusable by you)\r\n", player_name);
+      delete [] player_name;
+    }
+  }
+
+  if (GET_PART_TYPE(PART) > 0) {
+    send_to_char(CH, "\r\n  %s\r\n", parts[GET_PART_TYPE(PART)].description);
+  }
+
+  send_to_char(CH, "\r\n");
+  send_to_char(CH, "q) Save and Quit\r\n");
+  send_to_char(CH, "x) Abort without Saving\r\n");
+  send_to_char(CH, "\r\nEnter Option: ");
+  d->edit_mode = DEDIT_MAIN;
 }
 
 void partbuild_disp_types(struct descriptor_data *d) {
   CLS(CH);
-  for (int x = 1; x < NUM_PARTS; x++)
-    render_part_type_to_character(CH, x, x, D_PRF_FLAGGED(d, PRF_SCREENREADER) ? TRUE : x % 2 == 0);
-  send_to_char(CH, "\r\nEnter Part Number: ");
+  int part_idx = 1;
+
+  if (!PLR_FLAGGED(CH, PLR_DEALPHABETIZE_DECKBUILDING)) {
+    for (auto itr : deck_part_map) {
+      send_to_char(CH, "%s%2d^n) %s%s^n%s\r\n",
+                 part_is_nerps(itr.second) ? "^L" : "",
+                 part_idx++,
+                 part_is_nerps(itr.second) ? "^L" : "^c",
+                 itr.first.c_str(),
+                 part_is_nerps(itr.second) ? " ^L(not implemented)^n" : "");
+    }
+  } else {
+    for (; part_idx < NUM_PARTS; part_idx++) {
+      send_to_char(CH, "%s%2d^n) %s%s^n%s\r\n",
+                 part_is_nerps(part_idx) ? "^L" : "",
+                 part_idx,
+                 part_is_nerps(part_idx) ? "^L" : "^c",
+                 parts[part_idx].name,
+                 part_is_nerps(part_idx) ? " ^L(not implemented)^n" : "");
+    }
+  }
+  send_to_char(CH, "\r\nEnter part number, or ?<number> to learn about parts:\r\n");
   d->edit_mode = DEDIT_TYPE;
 }
 
 void pbuild_parse(struct descriptor_data *d, const char *arg) {
     int number = atoi(arg);
     switch (d->edit_mode) {
+    case DEDIT_REALITY_FILTER_RECIPIENT:
+      {
+        if (!*arg) {
+          send_to_char(CH, "Aborting.\r\n");
+          partbuild_main_menu(d);
+        }
+        idnum_t idnum = (!str_cmp(arg, "me") || !str_cmp(arg, "self")) ? GET_IDNUM(CH) : get_player_id(arg);
+        if (idnum <= 0) {
+          send_to_char(CH, "That's not a valid character name. Try again:\r\n");
+        } else if (get_player_rank(idnum) >= LVL_BUILDER && !access_level(CH, LVL_BUILDER)) {
+          send_to_char(CH, "You can't design parts for staff usage. Try again:\r\n");
+        } else {
+          GET_PART_REALITY_FILTER_DESIGNED_FOR(PART) = idnum;
+          partbuild_main_menu(d);
+        }
+      }
+      break;
     case DEDIT_MAIN:
         switch (*arg) {
         case '1':
@@ -252,6 +302,52 @@ void pbuild_parse(struct descriptor_data *d, const char *arg) {
                 d->edit_mode = DEDIT_MPCP;
             } else
                 send_to_char(CH, "That is not needed for this part. Enter Option: ");
+            break;
+        case '4':
+            if (part_can_have_its_rating_set(PART)) {
+              if (GET_PART_TARGET_MPCP(PART) <= 0) {
+                send_to_char(CH, "You must specify the MPCP rating first.\r\n");
+                return;
+              }
+              
+              switch (GET_PART_TYPE(PART)) {
+                case PART_IO:
+                  send_to_char(CH, "I/O rating (max %d): ", get_part_maximum_rating(PART));
+                  break;
+                case PART_STORAGE:
+                  send_to_char(CH, "Storage capacity (max %d): ", get_part_maximum_rating(PART));
+                  break;
+                case PART_ACTIVE:
+                  send_to_char(CH, "Memory capacity (max %d): ", get_part_maximum_rating(PART));
+                  break;
+                case PART_RESPONSE:
+                  send_to_char(CH, "Response increase (max %d): ", get_part_maximum_rating(PART));
+                  break;
+                default:
+                  send_to_char(CH, "Rating of part (max %d): ", get_part_maximum_rating(PART));
+                  break;
+              }
+
+              d->edit_mode = DEDIT_RATING;
+              break;
+            } else {
+              send_to_char(CH, "Invalid Option! Enter Option: ");
+            }
+            break;
+        case 'r': // Designed-for selection
+            if (GET_PART_TYPE(PART) != PART_REALITY_FILTER) {
+              send_to_char(CH, "Invalid Option! Enter Option: ");
+            } else {
+              send_to_char(CH, "Enter the canonical name of the character you want to design this for (i.e. if you remembered Lucien as Lucy, you still must enter Lucien here).\r\n");
+              send_to_char(CH, "Enter 'self' or 'me' to design it for yourself.\r\n");
+              d->edit_mode = DEDIT_REALITY_FILTER_RECIPIENT;
+            }
+            break;
+        case 'x':
+            send_to_char(CH, "Aborting.\r\n");
+            extract_obj(PART);
+            PART = nullptr;
+            STATE(d) = CON_PLAYING;
             break;
         case 'q':
         case 'Q':
@@ -293,42 +389,13 @@ void pbuild_parse(struct descriptor_data *d, const char *arg) {
             STATE(d) = CON_PLAYING;
             send_to_char(CH, "Design Saved!\r\n");
             break;
-        case '4':
-            if (GET_PART_TARGET_MPCP(PART) <= 0) {
-              send_to_char(CH, "You must specify the MPCP rating first.\r\n");
-              return;
-            }
-            if (part_can_have_its_rating_set(PART)) {
-              switch (GET_PART_TYPE(PART)) {
-                case PART_IO:
-                  send_to_char(CH, "I/O rating (max %d): ", get_part_maximum_rating(PART));
-                  break;
-                case PART_STORAGE:
-                  send_to_char(CH, "Storage capacity (max %d): ", get_part_maximum_rating(PART));
-                  break;
-                case PART_ACTIVE:
-                  send_to_char(CH, "Memory capacity (max %d): ", get_part_maximum_rating(PART));
-                  break;
-                case PART_RESPONSE:
-                  send_to_char(CH, "Response increase (max %d): ", get_part_maximum_rating(PART));
-                  break;
-                default:
-                  send_to_char(CH, "Rating of part (max %d): ", get_part_maximum_rating(PART));
-                  break;
-              }
-
-              d->edit_mode = DEDIT_RATING;
-              break;
-            }
-            // Explicit fallthrough-- we only allow option 4 if the part can accept a rating in the first place.
-            // fall through
         default:
             send_to_char(CH, "Invalid Option! Enter Option: ");
             break;
         }
         break;
     case DEDIT_RATING:
-#define WARN_IF_PART_BELOW_RATING(min_rating, warning_string) if (number < (min_rating)) { send_to_char(CH, "^yWARNING:^n You've picked a pretty " #warning_string "! The maximum is %d. Be sure you want this!\r\n", get_part_maximum_rating(PART)); }
+#define WARN_IF_PART_BELOW_RATING(min_rating, warning_string) if (number < (min_rating)) { send_to_char(CH, "^yWARNING:^n You've picked a pretty " #warning_string "! The allowed maximum is %d. Be sure you want this!\r\n", get_part_maximum_rating(PART)); }
         switch (GET_PART_TYPE(PART)) {
           case PART_IO:
             if (number < 1 || number > get_part_maximum_rating(PART)) {
@@ -396,12 +463,45 @@ void pbuild_parse(struct descriptor_data *d, const char *arg) {
         }
         break;
     case DEDIT_TYPE:
-        if (number < PART_ACTIVE || number >= NUM_PARTS)
+        if (*arg == '?') {
+          if (isdigit(arg[1])) {
+            number = atoi(arg + 1);
+            display_part_help(d, number);
+          } else {
+            send_to_char(CH, "Syntax for looking up part descriptions is ?<number>, e.g. ?3.\r\n");
+            send_to_char(CH, "Enter a part number to select, or ?<number> for more info: ");
+          }
+        }
+        else if (number < PART_ACTIVE || number >= NUM_PARTS) {
             send_to_char(CH, "Invalid Selection! Enter Part Number: ");
-        else {
-            GET_PART_TYPE(PART) = number;
-            GET_PART_RATING(PART) = 0;
-            partbuild_main_menu(d);
+        } else {
+          // Parse it out of the alphabetized menu.
+          if (!PLR_FLAGGED(CH, PLR_DEALPHABETIZE_DECKBUILDING)) {
+            int counter = 1;
+            int entry = atoi(arg);
+            for (auto itr : deck_part_map) {
+              if (entry == counter++) {
+                number = itr.second;
+                break;
+              }
+            }
+          } else {
+            number = atoi(arg);
+          }
+        
+          // Clear out radio freq/crypt and reality filter customizations.
+          if (GET_PART_TYPE(PART) == PART_RADIO || GET_PART_TYPE(PART) == PART_REALITY_FILTER) {
+            GET_OBJ_VAL(PART, 11) = GET_OBJ_VAL(PART, 12) = 0;
+          } 
+
+          GET_PART_TYPE(PART) = number;
+          GET_PART_RATING(PART) = 0;
+
+          if (number == PART_REALITY_FILTER) {
+            GET_PART_REALITY_FILTER_DESIGNED_FOR(PART) = GET_IDNUM(CH);
+          }
+
+          partbuild_main_menu(d);
         }
         break;
     case DEDIT_NAME:
@@ -1341,5 +1441,24 @@ bool part_is_compatible_with_deck(struct obj_data *part, struct obj_data *deck, 
 
   return TRUE;
 }
+
+void display_part_help(struct descriptor_data *d, int part_idx) {
+  if (part_idx < 0 || part_idx >= NUM_PARTS) {
+    send_to_char(CH, "Which part number would you like to learn more about?\r\n");
+    d->edit_mode = DEDIT_PART_HELP;
+    return;
+  }
+
+  send_to_char(CH, "%s\r\n", parts[part_idx].description);
+  send_to_char(CH, "Enter a part number, or ?<number> for more info: ");
+  d->edit_mode = DEDIT_TYPE;
+}
+
+void initialize_and_alphabetize_deck_part_map() {
+  for (int idx = 1; idx < NUM_PARTS; idx++) {
+    deck_part_map[std::string(parts[idx].name)] = idx;
+  }
+}
+
 #undef MSG_CHAR
 #undef PART_CAN_HAVE_MPCP_SET
