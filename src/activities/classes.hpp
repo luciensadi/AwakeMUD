@@ -234,7 +234,7 @@ public:
          slug(slug), menu_text(menu_text), preconditions(preconditions), tests(tests), pass(pass), fail(fail) {
           pass.is_pass_outcome = true;
           fail.is_pass_outcome = false;
-         };
+         }
 
   explicit Option(const std::string serialized_json);
 
@@ -283,7 +283,7 @@ public:
   // Display the Situation for easy reading. Only used in edit/debug contexts.
   const char *stringify() const;
 
-  bool meets_preconditions(struct char_data *ch) { for (auto check : preconditions) { if (!check.test(ch)) return false; } return true; };
+  bool meets_preconditions(struct char_data *ch) { for (auto check : preconditions) { if (!check.test(ch)) return false; } return true; }
 
   bool apply(struct char_data *ch) { for (auto& effect : effects) { if (effect.apply(ch)) { return true; } }    return false; }
 
@@ -343,7 +343,7 @@ public:
 
   std::string serialize(const int indent = -1, const char indent_char = ' ') const;
 
-  bool meets_preconditions(struct char_data *ch) { for (auto check : preconditions) { if (!check.test(ch)) return false; } return true; };
+  bool meets_preconditions(struct char_data *ch) { for (auto check : preconditions) { if (!check.test(ch)) return false; } return true; }
   bool can_edit(struct char_data *ch) const { return access_level(ch, LVL_BUILDER) && (GET_IDNUM(ch) == author || access_level(ch, LVL_ADMIN)); }
 
   // Gets a starting situation that ch passes preconditions for, or nullptr if no such situation exists.

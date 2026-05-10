@@ -6,7 +6,7 @@
 #include "classes.hpp"
 #include "../db.hpp"
 #include "../utils.hpp"
-#include "../nlohmann/json.hpp"
+#include "nlohmann/json.hpp"
 
 /*
 ActivityFunction: Base class for Check and Effect.

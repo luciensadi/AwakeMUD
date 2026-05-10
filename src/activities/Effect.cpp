@@ -1,7 +1,7 @@
 #include "classes.hpp"
 #include "../handler.hpp"
 #include "../db.hpp"
-#include "../nlohmann/json.hpp"
+#include "nlohmann/json.hpp"
 
 /*
 Effect: A side effect that, when encountered, modifies the party in some way. Data includes:

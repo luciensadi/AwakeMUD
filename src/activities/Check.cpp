@@ -1,7 +1,7 @@
 #include "classes.hpp"
 #include "../handler.hpp"
 #include "../db.hpp"
-#include "../nlohmann/json.hpp"
+#include "nlohmann/json.hpp"
 
 /*
 Check: A boolean test that has a pass/fail state. Data includes:

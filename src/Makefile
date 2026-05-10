@@ -53,7 +53,7 @@ ifeq ($(JUST_FUCK_ME_UP_WITH_WARNINGS),1)
 										 -Wc++-compat -Wbool-operation -Wbitwise-op-parentheses -Wbitwise-instead-of-logical -Wbad-function-cast \
 										 -Watomic-properties -Watomic-access -Wassign-enum -Warray-parameter -Warray-bounds-pointer-arithmetic \
 										 -Waddress-of-temporary -Wabstract-vbase-init \
-										 -Wno-double-promotion
+										 -Wno-double-promotion -Wno-c++98-compat-extra-semi
 	else
     BASE_CXXFLAGS += -Wduplicated-cond -Wduplicated-branches -Wlogical-op -Wrestrict -Wfloat-equal -Wextra-semi -Wexpansion-to-defined -Wdouble-promotion \
 		                 -Wdeprecated -Wdate-time -Wcast-qual -Wcast-function-type -Wbool-operation -Warray-parameter \

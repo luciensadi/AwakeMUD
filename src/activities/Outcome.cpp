@@ -1,5 +1,5 @@
 #include "classes.hpp"
-#include "../nlohmann/json.hpp"
+#include "nlohmann/json.hpp"
 
 extern void to_json(json& j, const Effect& e);
 extern void from_json(const json& j, Effect& e);
