@@ -1561,10 +1561,6 @@ int     getpid(void);
 #endif
 */
 
-#if defined(linux)
-extern "C" char *crypt(const char *key, const char *setting);
-#endif
-
 #if defined(freebsd)
 extern "C" char *crypt(const char *key, const char *setting);
 #endif

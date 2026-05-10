@@ -90,6 +90,7 @@ extern bool mob_is_aggressive(struct char_data *ch, bool include_base_aggression
 extern bool process_spotted_invis(struct char_data *ch, struct char_data *vict);
 extern int get_max_skill_for_char(struct char_data *ch, int skill, int type);
 extern int find_sight(struct char_data *ch);
+extern void restore_carried_vehicle_pointers();
 
 extern SPECIAL(johnson);
 extern SPECIAL(landlord_spec);
@@ -9763,6 +9764,7 @@ const char *cleanup_invalid_color_codes(const char *str) {
 struct veh_data *resolve_vehicle_from_vehcontainer(struct obj_data *obj) {
   // Load vehicles owned by the identified owner to reduce cases of stuck containers.
   load_vehicles_for_idnum(GET_VEHCONTAINER_VEH_OWNER(obj));
+  restore_carried_vehicle_pointers();
 
   // Find the veh storage room.
   rnum_t vehicle_storage_rnum = real_room(RM_PORTABLE_VEHICLE_STORAGE);

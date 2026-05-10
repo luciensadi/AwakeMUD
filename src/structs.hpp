@@ -883,7 +883,7 @@ struct veh_data
 
   idnum_t idnum;
   idnum_t owner;
-  long spare, spare2;
+  long spare, load_data_inveh;
   bool locked;
   struct room_data *dest;
   Bitfield flags;
@@ -920,7 +920,7 @@ struct veh_data
       long_description(NULL), restring_long(NULL), decorate_front(NULL), decorate_rear(NULL),
       inside_description(NULL), rear_description(NULL), veh_destruction_timer(0), players_in_veh(0),
       followers(NULL), following(NULL), followch(NULL), mount(NULL), sub(FALSE), sub_rank(0),
-      idnum(0), owner(0), spare(0), spare2(0), dest(NULL), defined_position(NULL),
+      idnum(0), owner(0), spare(0), load_data_inveh(0), dest(NULL), defined_position(NULL),
       contents(NULL), people(NULL), rigger(NULL), fighting(NULL), fight_veh(NULL), next_veh(NULL),
       next_sub(NULL), prev_sub(NULL), carriedvehs(NULL), in_veh(NULL), towing(NULL), grid(NULL),
       leave(NULL), arrive(NULL), next(NULL), flight_target(NULL), flight_duration(0),

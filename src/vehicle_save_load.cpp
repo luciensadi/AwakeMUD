@@ -502,7 +502,7 @@ void load_single_veh(const char *filename) {
   veh->owner = owner;
   veh->idnum = idnum;
   veh->spare = data.GetLong("VEHICLE/Spare", 0);
-  veh->spare2 = data.GetLong("VEHICLE/InVeh", 0);
+  veh->load_data_inveh = data.GetLong("VEHICLE/InVeh", 0);
   veh->locked = TRUE;
   veh->sub = data.GetLong("VEHICLE/Subscribed", 0);
   veh->sub_rank = data.GetInt("VEHICLE/SubRank", 0);
@@ -546,7 +546,7 @@ void load_single_veh(const char *filename) {
   if (veh_flag_string)
     veh->flags.FromString(veh_flag_string);
 
-  if (!veh->spare2)
+  if (!veh->load_data_inveh)
     veh_to_room(veh, &world[veh_room_rnum]);
   veh->restring = str_dup(cleanup_invalid_color_codes(data.GetString("VEHICLE/VRestring", NULL)));
   veh->restring_long = str_dup(cleanup_invalid_color_codes(data.GetString("VEHICLE/VRestringLong", NULL)));
@@ -828,17 +828,19 @@ void load_vehicles_for_idnum(idnum_t owner_id) {
 
 void restore_carried_vehicle_pointers() {
   for (struct veh_data *veh = veh_list; veh; veh = veh->next) {
-    if (veh->spare2) {
+    if (veh->load_data_inveh) {
       for (struct veh_data *veh2 = veh_list; veh2 && !veh->in_veh; veh2 = veh2->next) {
-        if (veh->spare2 == veh2->idnum) {
+        if (veh2 != veh && veh->load_data_inveh == veh2->idnum) {
           veh_to_veh(veh, veh2);
-          veh->spare2 = 0;
+          veh->load_data_inveh = 0;
           veh->locked = FALSE;
 
           #ifdef USE_DEBUG_CANARIES
             assert(veh->canary == CANARY_VALUE);
             assert(veh2->canary == CANARY_VALUE);
           #endif
+
+          break;
         }
       }
       if (!veh->in_veh) {
@@ -852,7 +854,7 @@ void restore_carried_vehicle_pointers() {
                   veh->name, veh->veh_number, veh->desired_in_room_on_load);
         }
         mudlog(buf, NULL, LOG_SYSLOG, TRUE);
-        veh->spare2 = 0;
+        veh->load_data_inveh = 0;
         veh_to_room(veh, &world[veh_room_rnum]);
 
         #ifdef USE_DEBUG_CANARIES
@@ -860,6 +862,7 @@ void restore_carried_vehicle_pointers() {
         #endif
       }
     }
+    veh->load_data_inveh = 0;
   }
 }
 
