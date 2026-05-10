@@ -583,7 +583,11 @@ void load_player_faction_info(struct char_data *ch) {
   mysql_free_result(res);
 }
 
-const fs::path factions_dir_path = fs::absolute("lib") / "factions";
+// Replace the global const fs::path get_factions_dir_path() ...
+const fs::path &get_factions_dir_path() {
+  static const fs::path path = fs::absolute("lib") / "factions";
+  return path;
+}
 
 /* File save/load for factions themselves. */
 Faction::Faction(fs::path file_path) {
@@ -611,21 +615,21 @@ void Faction::save() {
   faction_file["default_status"] = default_status;
   faction_file["editors"] = editors;
 
-  if (!fs::exists(factions_dir_path)) {
-    fs::create_directory(factions_dir_path);
+  if (!fs::exists(get_factions_dir_path())) {
+    fs::create_directory(get_factions_dir_path());
   }
 
-  write_json_file(factions_dir_path / vnum_to_string(idnum), &faction_file);
+  write_json_file(get_factions_dir_path() / vnum_to_string(idnum), &faction_file);
 }
 
 void parse_factions() {
-  if (!fs::exists(factions_dir_path)) {
-    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Factions directory %s did not exist. Creating it.", STRING_TO_CSTR(factions_dir_path));
-    fs::create_directory(factions_dir_path);
+  if (!fs::exists(get_factions_dir_path())) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Factions directory %s did not exist. Creating it.", STRING_TO_CSTR(get_factions_dir_path()));
+    fs::create_directory(get_factions_dir_path());
   }
 
   fs::directory_iterator end_itr; // default construction yields past-the-end
-  for (fs::directory_iterator itr(factions_dir_path); itr != end_itr; ++itr) {
+  for (fs::directory_iterator itr(get_factions_dir_path()); itr != end_itr; ++itr) {
     fs::path filename = itr->path();
     log_vfprintf(" - Initializing faction from file %s.", STRING_TO_CSTR(filename));
     Faction *faction = new Faction(filename);
