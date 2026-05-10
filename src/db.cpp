@@ -32,9 +32,9 @@
 #include <unistd.h>
 #endif
 
-#include <boost/filesystem.hpp>
-#include <boost/filesystem/fstream.hpp>
-namespace bf = boost::filesystem;
+#include <filesystem>
+
+namespace fs = std::filesystem;
 
 #ifndef NOCRYPT
 #include <sodium.h>
@@ -6621,22 +6621,18 @@ void load_consist(void)
   // First, move all storage files that aren't linked to rooms.
   {
     log("Moving orphaned storage files.");
-    bf::path storage_directory = bf::path("storage");
+    fs::path storage_directory = fs::path("storage");
 
     // Ensure our orphaned storage files directory exists if it does not already.
-    bf::path orphan_storage_files = storage_directory / "orphaned";
-    if (!bf::exists(orphan_storage_files)) {
-      bf::create_directory(orphan_storage_files);
+    fs::path orphan_storage_files = storage_directory / "orphaned";
+    if (!fs::exists(orphan_storage_files)) {
+      fs::create_directory(orphan_storage_files);
     }
 
-    bf::directory_iterator end_itr; // default construction yields past-the-end
-    for (bf::directory_iterator itr(storage_directory); itr != end_itr; ++itr) {
+    fs::directory_iterator end_itr; // default construction yields past-the-end
+    for (fs::directory_iterator itr(storage_directory); itr != end_itr; ++itr) {
       // Skip directories.
       if (is_directory(itr->status()))
-        continue;
-
-      // Skip . and .. meta-files.
-      if (itr->path().filename_is_dot() || itr->path().filename_is_dot_dot())
         continue;
 
       // Skip anything that's not a number.
@@ -6652,7 +6648,7 @@ void load_consist(void)
         log_vfprintf(" - Marking storage file %s as orphaned: %s.",
                       STRING_TO_CSTR(itr->path()),
                       rnum < 0 ? "No matching vnum" : "Room not flagged storage");
-        bf::rename(itr->path(), orphan_storage_files / itr->path().filename());
+        fs::rename(itr->path(), orphan_storage_files / itr->path().filename());
       }
 
       // EVENTUALTODO: Load the file here directly instead of iterating through the whole world as is done in the old code below.

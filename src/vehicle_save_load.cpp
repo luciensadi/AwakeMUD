@@ -12,9 +12,9 @@
 #include <algorithm>
 #include <unordered_map>
 
-#include <boost/filesystem.hpp>
-#include <boost/filesystem/fstream.hpp>
-namespace bf = boost::filesystem;
+#include <filesystem>
+
+namespace fs = std::filesystem;
 
 #include "structs.hpp"
 #include "perfmon.hpp"
@@ -40,9 +40,9 @@ bool should_save_this_vehicle(struct veh_data *veh, char *reason);
 int get_obj_vehicle_load_usage(struct obj_data *obj, bool is_installed_mod);
 
 #ifdef IS_BUILDPORT
-  bf::path global_vehicles_dir = bf::system_complete("lib") / "buildport-vehicles";
+  fs::path global_vehicles_dir = fs::absolute("lib") / "buildport-vehicles";
 #else
-  bf::path global_vehicles_dir = bf::system_complete("lib") / "vehicles";
+  fs::path global_vehicles_dir = fs::absolute("lib") / "vehicles";
 #endif
 
 // TODO: extraction
@@ -91,18 +91,18 @@ void delete_veh_file(struct veh_data *veh, const char *reason) {
   if (veh->owner == 0)
     return;
 
-  bf::path owner_dir = global_vehicles_dir / vnum_to_string(veh->owner);
+  fs::path owner_dir = global_vehicles_dir / vnum_to_string(veh->owner);
 
-  if (!bf::exists(owner_dir))
+  if (!fs::exists(owner_dir))
     return;
 
-  bf::path veh_file = global_vehicles_dir / get_veh_save_key(veh);
+  fs::path veh_file = global_vehicles_dir / get_veh_save_key(veh);
 
-  if (!bf::exists(veh_file))
+  if (!fs::exists(veh_file))
     return;
 
   log_vfprintf("Deleting veh file %s: %s.", STRING_TO_CSTR(veh_file), reason);
-  bf::remove(veh_file);
+  fs::remove(veh_file);
 }
 
 bool save_single_vehicle(struct veh_data *veh, bool fromCopyover) {
@@ -131,11 +131,11 @@ bool save_single_vehicle(struct veh_data *veh, bool fromCopyover) {
   }
 
   // Ensure our owner directory exists.
-  bf::path owner_dir = global_vehicles_dir / vnum_to_string(veh->owner);
-  if (!bf::exists(owner_dir)) {
-    bf::create_directory(owner_dir);
+  fs::path owner_dir = global_vehicles_dir / vnum_to_string(veh->owner);
+  if (!fs::exists(owner_dir)) {
+    fs::create_directory(owner_dir);
   }
-  bf::path veh_file_path = global_vehicles_dir / get_veh_save_key(veh);
+  fs::path veh_file_path = global_vehicles_dir / get_veh_save_key(veh);
 
   if (!(fl = fopen(STRING_TO_CSTR(veh_file_path), "w"))) {
     mudlog("SYSERR: Can't Open Vehicle File For Write.", NULL, LOG_SYSLOG, TRUE);
@@ -807,19 +807,19 @@ void load_single_veh(const char *filename) {
 }
 
 void load_vehicles_for_idnum(idnum_t owner_id) {
-  bf::path owner_dir = global_vehicles_dir / vnum_to_string(owner_id);
+  fs::path owner_dir = global_vehicles_dir / vnum_to_string(owner_id);
 
   // Skip trying to load vehicles for an owner who has none saved.
-  if (!bf::exists(owner_dir))
+  if (!fs::exists(owner_dir))
     return;
 
   log_vfprintf(" - Loading vehicles from path %s.", STRING_TO_CSTR(owner_dir));
 
-  bf::directory_iterator dir_end_itr; // default construction yields past-the-end
-  for (bf::directory_iterator dir_itr(owner_dir); dir_itr != dir_end_itr; ++dir_itr) {
+  fs::directory_iterator dir_end_itr; // default construction yields past-the-end
+  for (fs::directory_iterator dir_itr(owner_dir); dir_itr != dir_end_itr; ++dir_itr) {
     // This directory contains owner ID directories.
     if (!is_directory(dir_itr->status())) {
-      bf::path filename = dir_itr->path();
+      fs::path filename = dir_itr->path();
       // log_vfprintf(" -- Loading %s.", STRING_TO_CSTR(filename));
       load_single_veh(STRING_TO_CSTR(filename));
     }
@@ -879,10 +879,10 @@ void load_saved_veh(bool purge_existing)
     }
   }
 
-  if (!bf::exists(global_vehicles_dir)) {
+  if (!fs::exists(global_vehicles_dir)) {
     log(" - Migrating old vehicles directory to new format.");
     // We've never run our migration. Load the old files.
-    bf::create_directory(global_vehicles_dir);
+    fs::create_directory(global_vehicles_dir);
 
     if (!(fl = fopen("veh/vfile", "r"))) {
       log("SYSERR: Could not open vfile for reading.");
@@ -902,8 +902,8 @@ void load_saved_veh(bool purge_existing)
     }
   } else {
     // Iterate over directories in /vehicles.
-    bf::directory_iterator global_dir_end_itr; // default construction yields past-the-end
-    for (bf::directory_iterator global_itr(global_vehicles_dir); global_itr != global_dir_end_itr; ++global_itr) {
+    fs::directory_iterator global_dir_end_itr; // default construction yields past-the-end
+    for (fs::directory_iterator global_itr(global_vehicles_dir); global_itr != global_dir_end_itr; ++global_itr) {
       // This directory contains owner ID directories.
       if (is_directory(global_itr->status())) {
         // Calculate the owner ID.

@@ -1,9 +1,9 @@
 #include <fstream>
 #include <iostream>
 
-#include <boost/filesystem.hpp>
-#include <boost/filesystem/fstream.hpp>
-namespace bf = boost::filesystem;
+#include <filesystem>
+
+namespace fs = std::filesystem;
 
 #include "nlohmann/json.hpp"
 using nlohmann::json;
@@ -64,9 +64,9 @@ STRETCH:
 // TODO: Add audit command to check for complexes / apartments with rents out of lifestyle bounds
 // TODO: If they haven't selected a lifestyle string: Iterate over all apartments, finding the best one that belongs to them, and return a string from that. "Best" is first by highest lifestyle, then by not-garage as a tiebreaker.
 
-extern void _json_parse_from_file(bf::path path, json &target);
+extern void _json_parse_from_file(fs::path path, json &target);
 
-const bf::path global_lifestyles_file = bf::system_complete("lib") / "etc" / "lifestyles.json";
+const fs::path global_lifestyles_file = fs::absolute("lib") / "etc" / "lifestyles.json";
 
 // Set name and default rent values that are overridden on load.
 struct lifestyle_data lifestyles[] = {
@@ -368,7 +368,7 @@ void save_lifestyles_file() {
     };
   }
 
-  bf::ofstream o(global_lifestyles_file);
+  std::ofstream o(global_lifestyles_file);
   o << std::setw(4) << lifestyle_info << std::endl;
   o.close();
 }

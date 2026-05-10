@@ -10,8 +10,8 @@
 #include "nlohmann/json.hpp"
 using nlohmann::json;
 
-extern void write_json_file(bf::path path, json *contents);
-extern void _json_parse_from_file(bf::path path, json &target);
+extern void write_json_file(fs::path path, json *contents);
+extern void _json_parse_from_file(fs::path path, json &target);
 void faction_edit_main_menu(struct descriptor_data * d);
 
 #define FACTION_DEBUG(ch, ...) { if ((ch) && GET_LEVEL((ch)) == LVL_PRESIDENT) { send_to_char((ch), __VA_ARGS__ ); } }
@@ -583,10 +583,10 @@ void load_player_faction_info(struct char_data *ch) {
   mysql_free_result(res);
 }
 
-const bf::path factions_dir_path = bf::system_complete("lib") / "factions";
+const fs::path factions_dir_path = fs::absolute("lib") / "factions";
 
 /* File save/load for factions themselves. */
-Faction::Faction(bf::path file_path) {
+Faction::Faction(fs::path file_path) {
   json faction_file;
   _json_parse_from_file(file_path, faction_file);
 
@@ -611,22 +611,22 @@ void Faction::save() {
   faction_file["default_status"] = default_status;
   faction_file["editors"] = editors;
 
-  if (!bf::exists(factions_dir_path)) {
-    bf::create_directory(factions_dir_path);
+  if (!fs::exists(factions_dir_path)) {
+    fs::create_directory(factions_dir_path);
   }
 
   write_json_file(factions_dir_path / vnum_to_string(idnum), &faction_file);
 }
 
 void parse_factions() {
-  if (!bf::exists(factions_dir_path)) {
+  if (!fs::exists(factions_dir_path)) {
     mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Factions directory %s did not exist. Creating it.", STRING_TO_CSTR(factions_dir_path));
-    bf::create_directory(factions_dir_path);
+    fs::create_directory(factions_dir_path);
   }
 
-  bf::directory_iterator end_itr; // default construction yields past-the-end
-  for (bf::directory_iterator itr(factions_dir_path); itr != end_itr; ++itr) {
-    bf::path filename = itr->path();
+  fs::directory_iterator end_itr; // default construction yields past-the-end
+  for (fs::directory_iterator itr(factions_dir_path); itr != end_itr; ++itr) {
+    fs::path filename = itr->path();
     log_vfprintf(" - Initializing faction from file %s.", STRING_TO_CSTR(filename));
     Faction *faction = new Faction(filename);
     global_faction_map[faction->get_idnum()] = faction;

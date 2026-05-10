@@ -4,8 +4,8 @@
 #include <string>
 #include <vector>
 
-#include <boost/filesystem.hpp>
-namespace bf = boost::filesystem;
+#include <filesystem>
+namespace fs = std::filesystem;
 
 #include "types.hpp"
 #include "awake.hpp"
@@ -19,7 +19,7 @@ class ApartmentRoom;
 class Apartment;
 class ApartmentComplex;
 
-extern const bf::path global_housing_dir;
+extern const fs::path global_housing_dir;
 
 extern void warn_about_apartment_deletion();
 extern void save_all_apartments_and_storage_rooms();
@@ -54,7 +54,7 @@ class ApartmentComplex {
     const char *display_name = NULL;
 
     // The name of the directory where we store this complex's data.
-    bf::path base_directory;
+    fs::path base_directory;
 
     // The vnum of the landlord
     vnum_t landlord_vnum = -1;
@@ -74,7 +74,7 @@ class ApartmentComplex {
     Bitfield complex_flags;
   public:
     // Given a filename to read from, instantiate an apartment complex.
-    ApartmentComplex(bf::path filename);
+    ApartmentComplex(fs::path filename);
     ApartmentComplex(vnum_t);
     ApartmentComplex();
     ~ApartmentComplex();
@@ -84,7 +84,7 @@ class ApartmentComplex {
     vnum_t get_landlord_vnum() { return landlord_vnum; }
     std::vector<Apartment*> get_apartments() { return apartments; }
     std::vector<idnum_t> get_editors() { return editors; }
-    bf::path get_base_directory() { return base_directory; }
+    fs::path get_base_directory() { return base_directory; }
     int get_lifestyle() { return lifestyle; }
 
     // Mutators.
@@ -93,7 +93,7 @@ class ApartmentComplex {
     void toggle_editor(idnum_t idnum);
     void add_editor(idnum_t idnum);
     void remove_editor(idnum_t idnum);
-    void set_base_directory(bf::path path) { base_directory = path; }
+    void set_base_directory(fs::path path) { base_directory = path; }
     void add_apartment(Apartment *apartment);
     void remove_apartment(Apartment *apartment);
 
@@ -128,7 +128,7 @@ class Apartment {
     const char *name = NULL; // Unit 309
     const char *full_name = NULL; // Evergreen Multiplex's Unit 309 (derived)
     long nuyen_per_month = 0;
-    bf::path base_directory;
+    fs::path base_directory;
     bool garage_override = FALSE;
 
     // Location and world data for the primary / entrance room.
@@ -164,7 +164,7 @@ class Apartment {
     bool is_editing_struct = FALSE;
 
     // Given a filename to read from, instantiate an individual apartment.
-    Apartment(ApartmentComplex *complex, bf::path filename);
+    Apartment(ApartmentComplex *complex, fs::path filename);
     Apartment(ApartmentComplex *complex, const char *, vnum_t, vnum_t, int, idnum_t, time_t);
     Apartment();
     ~Apartment();
@@ -179,7 +179,7 @@ class Apartment {
     time_t get_paid_until() { return paid_until; }
     std::vector<long> get_guests() { return guests; }
     ApartmentComplex *get_complex() { return complex; }
-    bf::path get_base_directory() { return base_directory; }
+    fs::path get_base_directory() { return base_directory; }
     unsigned long get_garage_count() { return garages; }
     int get_lifestyle() { return lifestyle >= LIFESTYLE_STREETS ? lifestyle : complex->get_lifestyle(); }
     bool get_garage_override() { return garage_override; }
@@ -201,7 +201,7 @@ class Apartment {
     void set_key_vnum(vnum_t vnum) {key_vnum = vnum;}
     bool set_rent(long amount, struct char_data *ch=NULL);
     bool set_lifestyle(int new_lifestyle, struct char_data *ch=NULL);
-    void set_base_directory(bf::path path);
+    void set_base_directory(fs::path path);
     void set_garage_override(bool value) { garage_override = value; }
 
 
@@ -268,14 +268,14 @@ class ApartmentRoom {
     const char *decoration = NULL;
     const char *decorated_name = NULL;
 
-    bf::path base_path;
-    bf::path storage_path;
+    fs::path base_path;
+    fs::path storage_path;
 
     // Backlink to our apartment.
     Apartment *apartment = NULL;
 
   public:
-    ApartmentRoom(Apartment *apartment, bf::path filename);
+    ApartmentRoom(Apartment *apartment, fs::path filename);
     ApartmentRoom(Apartment *apartment, struct room_data *room);
     ApartmentRoom(ApartmentRoom *);
     ~ApartmentRoom();
@@ -286,7 +286,7 @@ class ApartmentRoom {
     const char *get_decoration() { return decoration; }
     Apartment *get_apartment() { return apartment; }
     ApartmentComplex *get_complex() { return apartment->complex; }
-    bf::path get_base_directory() { return base_path; }
+    fs::path get_base_directory() { return base_path; }
 
     // Mutators.
     void set_decorated_name(const char *new_name);
@@ -299,7 +299,7 @@ class ApartmentRoom {
 
     // Utility.
     void load_storage();
-    void load_storage_from_specified_path(bf::path path);
+    void load_storage_from_specified_path(fs::path path);
     const char *get_full_name();
     void regenerate_paths();
     void kick_out_characters();

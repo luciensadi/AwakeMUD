@@ -262,9 +262,9 @@ void houseedit_complex_parse(struct descriptor_data *d, const char *arg) {
                 return;
               }
 
-              bf::path new_save_dir = global_housing_dir / std::string(name_without_color);
+              fs::path new_save_dir = global_housing_dir / std::string(name_without_color);
 
-              if (bf::exists(new_save_dir)) {
+              if (fs::exists(new_save_dir)) {
                 send_to_char("There's already a directory that matches your new complex. You'll need to change its name.\r\n", CH);
                 houseedit_display_complex_edit_menu(d);
                 return;

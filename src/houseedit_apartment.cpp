@@ -434,8 +434,8 @@ void houseedit_apartment_parse(struct descriptor_data *d, const char *arg) {
 
       {
         // Create our new dir and check to make sure it doesn't already exist.
-        bf::path new_save_dir = APT->get_complex()->get_base_directory() / arg; // safe because we filtered characters earlier
-        if (bf::exists(new_save_dir) && (!d->edit_apartment_original || new_save_dir != d->edit_apartment_original->get_base_directory())) {
+        fs::path new_save_dir = APT->get_complex()->get_base_directory() / arg; // safe because we filtered characters earlier
+        if (fs::exists(new_save_dir) && (!d->edit_apartment_original || new_save_dir != d->edit_apartment_original->get_base_directory())) {
           send_to_char("There's already a directory that matches your new apartment. You'll need to change its name.\r\n", CH);
           houseedit_display_apartment_edit_menu(d);
           return;

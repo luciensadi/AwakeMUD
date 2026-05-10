@@ -14,9 +14,9 @@
 #include <sstream>
 #include <iterator>
 
-#include <boost/filesystem.hpp>
-#include <boost/filesystem/fstream.hpp>
-namespace bf = boost::filesystem;
+#include <filesystem>
+
+namespace fs = std::filesystem;
 
 #include "telnet.hpp"
 
@@ -178,7 +178,7 @@ extern void SendGMCPDiscordInfo ( descriptor_t *apDescriptor );
 extern void SendGMCPDiscordStatus ( descriptor_t *apDescriptor );
 extern void SendCustomGMCPDiscordStatus ( descriptor_t *apDescriptor, const char *smallimage, const char *smallimagetext, const char *details, const char *state);
 
-extern bf::path global_vehicles_dir;
+extern fs::path global_vehicles_dir;
 
 // Discord debug vars.
 char _discord_state[200] = {0};
@@ -702,10 +702,10 @@ ACMD(do_debug) {
 
   if (!str_cmp(arg1, "reloadallvehicles")) {
     send_to_char("Reloading vehicles...\r\n", ch);
-    bf::path old_path = bf::path(global_vehicles_dir);
-    global_vehicles_dir = bf::system_complete("restore_vehicles");
+    fs::path old_path = fs::path(global_vehicles_dir);
+    global_vehicles_dir = fs::absolute("restore_vehicles");
     load_saved_veh(TRUE);
-    global_vehicles_dir = bf::path(old_path);
+    global_vehicles_dir = fs::path(old_path);
     send_to_char(ch, "Global vehicles dir is now: %s. Saving vehicles.\r\n", STRING_TO_CSTR(global_vehicles_dir));
     save_vehicles(FALSE);
     send_to_char(ch, "Save complete.\r\n");

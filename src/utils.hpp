@@ -12,6 +12,7 @@
 #define _utils_h_
 
 #include <limits>
+#include <filesystem>
 #include <stdio.h>
 
 #include "bitfield.hpp"
@@ -1798,16 +1799,15 @@ struct obj_data *get_datajack(struct char_data *ch, bool is_rigging);
 extern void verify_every_pointer_we_can_think_of();
 #endif
 
-/* Specifically because Cygwin is an incessant drama queen, we now wrap what were formerly straightforward Boost filesystem path .c_str() calls
+/* Specifically because Cygwin is an incessant drama queen, we now wrap what were formerly straightforward std::filesystem path .c_str() calls
    in this new helper function to convert from Windows wide-character paths to standard chars. Thanks, Bill Gates.
 */
 struct PathWrapper {
     std::string internal_data;
 
-    // Overload for Boost Paths
-    PathWrapper(const boost::filesystem::path& p) {
-        // Ideally we'd use .u8string() here, but that's not supported in our current Boost version.
-        internal_data = p.string(); 
+    // Overload for std::filesystem paths
+    PathWrapper(const std::filesystem::path& p) {
+        internal_data = p.string();
     }
 
     // Overload for Standard Strings

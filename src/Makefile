@@ -12,7 +12,7 @@ IS_CLANG = $(shell $(CXX) --version | grep -qi clang && echo yes || echo no)
 BASE_CPPFLAGS = -isystem external/ -isystem /usr/local/include/ -std=c++23 -D_GNU_SOURCE -DLOG_COMMANDS -DIDLEDELETE_DRYRUN
 BASE_CXXFLAGS = -Wall -Wextra -Wno-unused-parameter -Wno-vla -Wno-char-subscripts -Wno-format-truncation -ggdb
 BASE_LDFLAGS  = -L/usr/local/lib
-BASE_LDLIBS   = -lmysqlclient -lz -lm -lboost_filesystem
+BASE_LDLIBS   = -lmysqlclient -lz -lm
 
 # Modes: 2 is local dev, 1 is buildport, 0 is mainport. Change:  make DEPLOYMENT_MODE=1
 DEPLOYMENT_MODE ?= 2
@@ -84,7 +84,6 @@ else ifeq ($(UNAME_S),Linux)  # Linux
     OS_CPPFLAGS    = -Dlinux -DNOCRYPT
     OS_LDFLAGS     = 
     OS_LDLIBS      = -lcrypt -lnsl -lcurl
-    BASE_LDFLAGS  += -lboost_system
 		# Suppress all warnings during the CI build process.
     BASE_CXXFLAGS  = -w
   else
