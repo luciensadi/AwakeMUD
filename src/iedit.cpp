@@ -1447,7 +1447,7 @@ void iedit_disp_menu(struct descriptor_data * d)
                GET_OBJ_AVAILTN(d->edit_obj), availhrs, availhrs > 1 ? "s" : "");
   } else {
     send_to_char(CH, "b) Item availability: ^c%d^n/^c%.2f day%s^n\r\n",
-                 GET_OBJ_AVAILTN(d->edit_obj), GET_OBJ_AVAILDAY(d->edit_obj), GET_OBJ_AVAILDAY(d->edit_obj) != 1 ? "s" : "");
+                 GET_OBJ_AVAILTN(d->edit_obj), GET_OBJ_AVAILDAY(d->edit_obj), !FLOATS_ARE_EQUAL_ISH(GET_OBJ_AVAILDAY(d->edit_obj), 1.0f) ? "s" : "");
   }
   send_to_char(CH, "c) Item timer: ^c%d^n\r\n", GET_OBJ_TIMER(d->edit_obj));
   send_to_char(CH, "d) Item Material: ^c%s^n\r\n", material_names[(int)GET_OBJ_MATERIAL(d->edit_obj)]);
