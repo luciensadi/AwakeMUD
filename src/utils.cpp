@@ -9850,7 +9850,7 @@ bool spend_syspoints(struct char_data *ch, int amount, bool use_restricted, cons
   }
 
   if (amount <= 0) {
-    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Got invalid value %d to spend_syspoints(ch, %d, %s, '%s')", amount, use_restricted ? "T" : "F", for_what);
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Got invalid value %d to spend_syspoints(ch, %d, %s, '%s')", amount, amount, use_restricted ? "T" : "F", for_what);
     return false;
   }
 
@@ -9926,7 +9926,7 @@ bool gain_syspoints(struct char_data *ch, int amount, bool is_restricted, const 
   }
 
   if (amount <= 0) {
-    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Got invalid value %d to gain_syspoints(ch, %d, %s, '%s')", amount, is_restricted ? "T" : "F", for_what);
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Got invalid value %d to gain_syspoints(ch, %d, %s, '%s')", amount, amount, is_restricted ? "T" : "F", for_what);
     return false;
   }
 

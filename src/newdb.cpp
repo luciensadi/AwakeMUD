@@ -2065,9 +2065,9 @@ bool does_player_exist(const char *unknown_case_name)
 
   // Look them up in our cache.
   if (global_existing_player_cache.contains(string_name)) {
-    log_vfprintf("does_player_exist(%s -> %s): cache = TRUE");
+    log_vfprintf("does_player_exist(%s -> %s): cache = TRUE", unknown_case_name, composed_name);
   } else {
-    log_vfprintf("Failed to find player '%s' in does_player_exist()'s global cache, falling back to database.", composed_name);
+    log_vfprintf("Failed to find player '%s' in does_player_exist()'s global cache (from '%s'), falling back to database.", composed_name, unknown_case_name);
   }
 
   char buf[MAX_STRING_LENGTH];

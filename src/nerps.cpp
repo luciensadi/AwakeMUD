@@ -85,7 +85,7 @@ void set_nerpsheet_spell_level(struct char_data *actor, struct char_data *vict, 
   
   FAILURE_CASE_PRINTF(level > 0 && get_nerpsheet_spell_level(vict, spell_name) <= 0 && !confirmation_given,
                       "You don't have a spell named '%s' to increase. If you'd like to buy the first level in it, use NERPSHEET PURCHASE SPELL \"%s\" CONFIRM.\r\n",
-                      spell_name);
+                      spell_name, spell_name);
 }
 
 #define NERPSHEET_SYNTAX "syntax string here"

@@ -7743,7 +7743,7 @@ ACMD(do_slist)
   }
 
   if (!found)
-    send_to_char(ch, "No shops were found between %d and %d.\r\n", first, last);
+    send_to_char(ch, "No shops were found between %ld and %ld.\r\n", first, last);
   else
     page_string(ch->desc, buf, 1);
 }

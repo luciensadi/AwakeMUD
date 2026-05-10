@@ -529,8 +529,8 @@ ACMD(do_cook) {
         break;
   }
 
-  FAILURE_CASE_PRINTF(!chip, "You don't see '%s' installed on any computers here.");
-  FAILURE_CASE_PRINTF(GET_OBJ_TYPE(chip) != ITEM_PROGRAM, "You must finish programming %s first.");
+  FAILURE_CASE_PRINTF(!chip, "You don't see '%s' installed on any computers here.", argument);
+  FAILURE_CASE_PRINTF(GET_OBJ_TYPE(chip) != ITEM_PROGRAM, "You must finish programming %s first.", CAP(GET_OBJ_NAME(chip)));
   FAILURE_CASE_PRINTF(GET_PROGRAM_IS_COOKED(chip), "%s has already been encoded.", CAP(GET_OBJ_NAME(chip)));
   FAILURE_CASE(GET_PROGRAM_TYPE(chip) == SOFT_SUITE, "Programming suites don't need to be cooked-- just leave them installed on the computer to get their benefits.");
   

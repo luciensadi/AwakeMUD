@@ -2090,7 +2090,7 @@ ACMD(do_pop)
         } else {
           send_to_char("A few helium balloons escape from under the hood...\r\n", ch);
         }
-        mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Vehicle had unexpected usedload on pop (%d != %.2f)", old_load, veh->usedload);
+        mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Vehicle had unexpected usedload on pop (%.2f != %.2f)", old_load, veh->usedload);
       }
     }
   }
