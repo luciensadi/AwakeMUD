@@ -24,15 +24,13 @@
 #define DEDIT_MPCP 2
 #define DEDIT_NAME 3
 #define DEDIT_RATING 4
-#define DEDIT_PART_HELP 5
-#define DEDIT_REALITY_FILTER_RECIPIENT 6
+#define DEDIT_REALITY_FILTER_RECIPIENT 5
 
 extern void ammo_build(struct char_data *ch, struct obj_data *obj);
 
 void set_cyberdeck_part_pointer(struct obj_data *part, struct obj_data *deck);
 void clear_cyberdeck_part_pointer(struct obj_data *part);
 bool part_is_compatible_with_deck(struct obj_data *part, struct obj_data *deck, struct char_data *ch);
-void display_part_help(struct descriptor_data *d, int part_idx);
 
 ACMD_DECLARE(do_sit);
 
@@ -40,6 +38,7 @@ std::vector<struct obj_data *> global_in_progress_deck_parts = {};
 
 #define PART_CAN_HAVE_MPCP_SET(the_part) (parts[GET_PART_TYPE(the_part)].design >= 0 || GET_PART_TYPE(the_part) == PART_ACTIVE || GET_PART_TYPE(the_part) == PART_STORAGE || GET_PART_TYPE(the_part) == PART_MATRIX_INTERFACE)
 
+int alphabetized_part_to_idx(int alphabetized_idx, struct char_data *ch);
 std::map<std::string, int> deck_part_map = {};
 
 bool part_is_nerps(int part_type) {
@@ -465,29 +464,25 @@ void pbuild_parse(struct descriptor_data *d, const char *arg) {
     case DEDIT_TYPE:
         if (*arg == '?') {
           if (isdigit(arg[1])) {
-            number = atoi(arg + 1);
-            display_part_help(d, number);
+            number = atoi(arg+1);
+            if (number < PART_ACTIVE || number >= NUM_PARTS) {
+              send_to_char(CH, "Invalid Selection! Enter Part Number: ");
+              return;
+            }
+            number = alphabetized_part_to_idx(number, CH);
+            send_to_char(d->character, "%s\r\n", parts[number].description);
           } else {
-            send_to_char(CH, "Syntax for looking up part descriptions is ?<number>, e.g. ?3.\r\n");
-            send_to_char(CH, "Enter a part number to select, or ?<number> for more info: ");
+            send_to_char(CH, "The syntax for looking up part descriptions is ?<number>, e.g. ?3.\r\n");
           }
+          send_to_char(CH, "Enter a part number to select, or ?<number> for more info: ");
         }
         else if (number < PART_ACTIVE || number >= NUM_PARTS) {
-            send_to_char(CH, "Invalid Selection! Enter Part Number: ");
-        } else {
-          // Parse it out of the alphabetized menu.
-          if (!PLR_FLAGGED(CH, PLR_DEALPHABETIZE_DECKBUILDING)) {
-            int counter = 1;
-            int entry = atoi(arg);
-            for (auto itr : deck_part_map) {
-              if (entry == counter++) {
-                number = itr.second;
-                break;
-              }
-            }
-          } else {
-            number = atoi(arg);
-          }
+          send_to_char(CH, "Invalid Selection! Enter Part Number: ");
+          return;
+        }
+        else {
+          // If they've not opted out, parse their input out of the alphabetized menu.
+          number = alphabetized_part_to_idx(number, CH);
         
           // Clear out radio freq/crypt and reality filter customizations.
           if (GET_PART_TYPE(PART) == PART_RADIO || GET_PART_TYPE(PART) == PART_REALITY_FILTER) {
@@ -1442,22 +1437,25 @@ bool part_is_compatible_with_deck(struct obj_data *part, struct obj_data *deck, 
   return TRUE;
 }
 
-void display_part_help(struct descriptor_data *d, int part_idx) {
-  if (part_idx < 0 || part_idx >= NUM_PARTS) {
-    send_to_char(CH, "Which part number would you like to learn more about?\r\n");
-    d->edit_mode = DEDIT_PART_HELP;
-    return;
-  }
-
-  send_to_char(CH, "%s\r\n", parts[part_idx].description);
-  send_to_char(CH, "Enter a part number, or ?<number> for more info: ");
-  d->edit_mode = DEDIT_TYPE;
-}
-
 void initialize_and_alphabetize_deck_part_map() {
   for (int idx = 1; idx < NUM_PARTS; idx++) {
     deck_part_map[std::string(parts[idx].name)] = idx;
   }
+}
+
+int alphabetized_part_to_idx(int alphabetized_idx, struct char_data *ch) {
+  if (ch && PLR_FLAGGED(ch, PLR_DEALPHABETIZE_DECKBUILDING))
+    return alphabetized_idx;
+
+  int counter = 1;
+  for (auto itr : deck_part_map) {
+    if (alphabetized_idx == counter++) {
+      return itr.second;
+    }
+  }
+  mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Got invalid idx %d to %s", alphabetized_idx, __func__);
+
+  return 1;
 }
 
 #undef MSG_CHAR

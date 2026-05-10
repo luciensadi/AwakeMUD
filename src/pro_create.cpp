@@ -25,7 +25,6 @@
 #define PEDIT_NAME 2
 #define PEDIT_RATING 3
 #define PEDIT_WOUND 4
-#define PEDIT_PART_HELP 5
 
 extern void part_design(struct char_data *ch, struct obj_data *design);
 extern void spell_design(struct char_data *ch, struct obj_data *design);
@@ -34,8 +33,7 @@ extern void ammo_test(struct char_data *ch, struct obj_data *obj);
 extern void weight_change_object(struct obj_data * obj, float weight);
 extern bool focus_is_usable_by_ch(struct obj_data *focus, struct char_data *ch);
 
-void display_program_help(struct descriptor_data *d, int prog_idx);
-
+int alphabetized_program_to_idx(int alphabetized_idx, struct char_data *ch);
 std::map<std::string, int> deck_program_map = {};
 
 void pedit_disp_menu(struct descriptor_data *d)
@@ -93,7 +91,7 @@ void pedit_disp_program_menu(struct descriptor_data *d)
                    programs[prog_idx].nerps ? "  ^L(not implemented)^n" : "");
     }
   }
-  send_to_char(d->character, "\r\nSelect program type: ");
+  send_to_char(d->character, "\r\nSelect program type, or use ?<number> for more info: ");
   d->edit_mode = PEDIT_TYPE;
 }
 
@@ -223,15 +221,18 @@ void pedit_parse(struct descriptor_data *d, const char *arg)
   case PEDIT_TYPE:
     if (*arg == '?') {
       if (isdigit(arg[1])) {
-        number = atoi(arg + 1);
-        display_program_help(d, number);
-      } else {
-        send_to_char(CH, "Syntax for looking up program descriptions is ?<number>, e.g. ?3.\r\n");
-        send_to_char(CH, "Enter a program number to select, or ?<number> for more info: ");
+        number = atoi(arg+1);
+        if (number < 1 || number >= NUM_PROGRAMS) {
+          send_to_char(CH, "Invalid Selection! Enter program number: ");
+          return;
+        }
+        number = alphabetized_program_to_idx(number, CH);
+        send_to_char(CH, "%s\r\n", programs[number].description);
       }
     }
-    if (number < 1 || number >= NUM_PROGRAMS) {
-      send_to_char(CH, "Not a valid option!\r\nEnter your choice: ");
+    else if (number < 1 || number >= NUM_PROGRAMS) {
+      send_to_char(CH, "Invalid Selection! Enter program number: ");
+      return;
     }
     else {
       if (!PLR_FLAGGED(CH, PLR_DEALPHABETIZE_DECKBUILDING)) {
@@ -986,20 +987,23 @@ void update_buildrepair(void)
   }
 }
 
-void display_program_help(struct descriptor_data *d, int prog_idx) {
-  if (prog_idx < 0 || prog_idx >= NUM_PARTS) {
-    send_to_char(d->character, "Which program number would you like to learn more about?\r\n");
-    d->edit_mode = PEDIT_PART_HELP;
-    return;
-  }
-
-  send_to_char(d->character, "%s\r\n", programs[prog_idx].description);
-  send_to_char(d->character, "Enter a program number, or ?<number> for more info: ");
-  d->edit_mode = PEDIT_PART_HELP;
-}
-
 void initialize_and_alphabetize_deck_software_map() {
   for (int idx = 1; idx < NUM_PROGRAMS; idx++) {
     deck_program_map[std::string(programs[idx].name)] = idx;
   }
+}
+
+int alphabetized_program_to_idx(int alphabetized_idx, struct char_data *ch) {
+  if (ch && PLR_FLAGGED(ch, PLR_DEALPHABETIZE_DECKBUILDING))
+    return alphabetized_idx;
+
+  int counter = 1;
+  for (auto itr : deck_program_map) {
+    if (alphabetized_idx == counter++) {
+      return itr.second;
+    }
+  }
+
+  mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Got invalid idx %d to %s", alphabetized_idx, __func__);
+  return 1;
 }
