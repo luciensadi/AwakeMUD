@@ -1447,7 +1447,7 @@ void iedit_disp_menu(struct descriptor_data * d)
                GET_OBJ_AVAILTN(d->edit_obj), availhrs, availhrs > 1 ? "s" : "");
   } else {
     send_to_char(CH, "b) Item availability: ^c%d^n/^c%.2f day%s^n\r\n",
-                 GET_OBJ_AVAILTN(d->edit_obj), GET_OBJ_AVAILDAY(d->edit_obj), GET_OBJ_AVAILDAY(d->edit_obj) > 1 ? "s" : "s");
+                 GET_OBJ_AVAILTN(d->edit_obj), GET_OBJ_AVAILDAY(d->edit_obj), GET_OBJ_AVAILDAY(d->edit_obj) != 1 ? "s" : "");
   }
   send_to_char(CH, "c) Item timer: ^c%d^n\r\n", GET_OBJ_TIMER(d->edit_obj));
   send_to_char(CH, "d) Item Material: ^c%s^n\r\n", material_names[(int)GET_OBJ_MATERIAL(d->edit_obj)]);
@@ -3191,8 +3191,8 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
  Modify this code for new obj formats
  */
 
-#define WRITE_IF_CHANGED(string, thing, default) if ((thing) != (default)) { fprintf(fp, (string), (thing)); }
-#define WRITE_IF_CHANGED_STR(string, thing, default) if (str_cmp((thing), (default))) { fprintf(fp, (string), (thing)); }
+#define WRITE_IF_CHANGED(string, thing, default_val) if ((thing) != (default_val)) { fprintf(fp, (string), (thing)); }
+#define WRITE_IF_CHANGED_STR(string, thing, default_val) if (str_cmp((thing), (default_val))) { fprintf(fp, (string), (thing)); }
 void write_objs_to_disk(vnum_t zonenum)
 {
   int counter, counter2, realcounter, count = 0;
@@ -3253,7 +3253,7 @@ void write_objs_to_disk(vnum_t zonenum)
       WRITE_IF_CHANGED("\tLegalNum:\t%d\n", GET_LEGAL_NUM(obj), 0);
       WRITE_IF_CHANGED("\tLegalCode:\t%d\n", GET_LEGAL_CODE(obj), 0);
       WRITE_IF_CHANGED("\tLegalPermit:\t%d\n", GET_LEGAL_PERMIT(obj), 0);
-      WRITE_IF_CHANGED("\tStreetIndex:\t%.2f\n", GET_OBJ_STREET_INDEX(obj), 0.0);
+      if (!FLOATS_ARE_EQUAL_ISH(GET_OBJ_STREET_INDEX(obj), 0.0f)) { fprintf(fp, "\tStreetIndex:\t%.2f\n", GET_OBJ_STREET_INDEX(obj)); }
 
       if (GET_OBJ_TYPE(obj) == ITEM_WEAPON && GET_WEAPON_INTEGRAL_RECOIL_COMP(obj))
         fprintf(fp, "\tInnateRecoilComp:\t%d\n", GET_WEAPON_INTEGRAL_RECOIL_COMP(obj));

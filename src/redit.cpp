@@ -1501,7 +1501,7 @@ void write_world_to_disk(vnum_t zone_vnum)
       if (RM.y != DEFAULT_DIMENSIONS_Y)
         fprintf(fp, "Y:\t%d\n", RM.y);
 
-      if (RM.z != DEFAULT_DIMENSIONS_Z)
+      if (!FLOATS_ARE_EQUAL_ISH(RM.z, DEFAULT_DIMENSIONS_Z))
         fprintf(fp, "Z:\t%.2f\n", RM.z);
 
       PRINT_TO_FILE_IF_TRUE("RoomType:\t%d\n",  RM.type);
@@ -1530,8 +1530,8 @@ void write_world_to_disk(vnum_t zone_vnum)
         PRINT_TO_FILE_IF_TRUE("\tFlightCode:\t%s\n", RM.flight_code);
       }
 
-      PRINT_TO_FILE_IF_TRUE("\tLatitude:\t%f\n", RM.latitude);
-      PRINT_TO_FILE_IF_TRUE("\tLongitude:\t%f\n", RM.longitude);
+      if (!FLOATS_ARE_EQUAL_ISH(RM.latitude, 0.0f)) { fprintf(fp, ("\tLatitude:\t%f\n"), (RM.latitude)); }
+      if (!FLOATS_ARE_EQUAL_ISH(RM.longitude, 0.0f)) { fprintf(fp, ("\tLongitude:\t%f\n"), (RM.longitude)); }
 
       for (counter2 = 0; counter2 < NUM_OF_DIRS; counter2++) {
         room_direction_data *ptr = RM.dir_option[counter2];

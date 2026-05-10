@@ -43,7 +43,7 @@
 #include "accounts.hpp"
 
 #define ACCOUNTS_NON_STAFF_USAGE_STRING "mort usage string here"
-#define ACCOUNTS_STAFF_ONLY_USAGE_STRING "mort usage string here"
+#define ACCOUNTS_STAFF_ONLY_USAGE_STRING "staff usage string here"
 #define STAFF_LEVEL_REQUIRED_FOR_ELEVATED_ACTIONS LVL_CONSPIRATOR
 
 ACMD(do_account) {

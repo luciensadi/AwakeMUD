@@ -6681,21 +6681,11 @@ const char *get_spell_name(int spell, int subtype) {
 
   strlcpy(spell_name, spells[spell].name, sizeof(spell_name));
 
-  if (spell == SPELL_INCATTR
-      || spell == SPELL_INCCYATTR
-      || spell == SPELL_DECATTR
-      || spell == SPELL_DECCYATTR)
-  {
+  if (SPELL_HAS_SUBTYPE(spell)) {
     if (subtype == -1) {
       strlcat(spell_name, "Attribute", sizeof(spell_name));
     } else {
       snprintf(ENDOF(spell_name), sizeof(spell_name) - strlen(spell_name), "%s", attributes[subtype]);
-    }
-  } else if (SPELL_HAS_SUBTYPE(spell)) {
-    if (subtype == -1) {
-      strlcat(spell_name, "Attribute", sizeof(spell_name));
-    } else {
-      snprintf(ENDOF(spell_name), sizeof(spell_name) - strlen(spell_name), " (%s)", attributes[subtype]);
     }
   }
 

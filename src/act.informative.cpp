@@ -7606,16 +7606,7 @@ ACMD(do_status)
 
   for (struct sustain_data *sust = GET_SUSTAINED(targ); sust; sust = sust->next) {
     if (!sust->is_caster_record) {
-      snprintf(buf, sizeof(buf), "  %s", spells[sust->spell].name);
-      if (sust->spell == SPELL_INCATTR
-          || sust->spell == SPELL_INCCYATTR
-          || sust->spell == SPELL_DECATTR
-          || sust->spell == SPELL_DECCYATTR)
-      {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s", attributes[sust->subtype]);
-      } else if (SPELL_HAS_SUBTYPE(sust->spell)) {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " (%s)", attributes[sust->subtype]);
-      }
+      snprintf(buf, sizeof(buf), "  %s%s", spells[sust->spell].name, SPELL_HAS_SUBTYPE(sust->spell) ? attributes[sust->subtype] : "");
       if ((IS_SENATOR(ch) || sust->spell == SPELL_MINDLINK) && sust->other && sust->other != targ)
         snprintf(ENDOF(aff_buf), sizeof(aff_buf) - strlen(aff_buf), "%s (cast by ^c%s^n)\r\n", buf, GET_CHAR_NAME(sust->other));
       else

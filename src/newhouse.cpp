@@ -2115,7 +2115,7 @@ void ApartmentRoom::set_decorated_name(const char *new_desc) {
   strlcpy(formatted_desc, new_desc, formatted_desc_size);
 
   // Ensure that it's terminated with a color code.
-  if (new_desc[new_desc_len - 2] != '^' || (new_desc[new_desc_len - 1] != 'n' || new_desc[new_desc_len - 1] != 'N')) {
+  if (new_desc[new_desc_len - 2] != '^' || !(new_desc[new_desc_len - 1] == 'n' || new_desc[new_desc_len - 1] == 'N')) {
     strlcat(formatted_desc, "^n", formatted_desc_size);
   }
 
@@ -2143,7 +2143,7 @@ void ApartmentRoom::set_decoration(const char *new_desc) {
   strlcpy(formatted_desc, new_desc, formatted_desc_size);
 
   // Ensure that it's terminated with a color code.
-  if (new_desc[new_desc_len - 2] != '^' || (new_desc[new_desc_len - 1] != 'n' || new_desc[new_desc_len - 1] != 'N')) {
+  if (new_desc[new_desc_len - 2] != '^' || !(new_desc[new_desc_len - 1] == 'n' || new_desc[new_desc_len - 1] == 'N')) {
     strlcat(formatted_desc, "^n", formatted_desc_size);
   }
 

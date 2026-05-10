@@ -1123,7 +1123,7 @@ ACMD(do_broadcast)
             strlcpy(radio_string, "^y\\Unintelligible Voice^y/", sizeof(radio_string));
 
             // Starting at end of buf, work backwards and fuzz out the message.
-            for (size_t len = strlen(message) - 1; len >= 0; len--) {
+            for (size_t len = 0; len <= strlen(message) - 1; len++) {
               switch (number(0, 2)) {
                 // case 0 does nothing here- leave the letter intact.
                 case 1:

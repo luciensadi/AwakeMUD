@@ -4382,7 +4382,7 @@ void process_auth_room(struct char_data *ch) {
       send_to_char("You have been given a radio and a pocket secretary.\r\n", ch);
     } else if (newbie_radio_rnum > -1) {
       send_to_char("You have been given a radio.^n\r\n", ch);
-    } else if (newbie_radio_rnum > -1) {
+    } else if (newbie_pocsec_rnum > -1) {
       send_to_char("You have been given a pocket secretary.^n\r\n", ch);
     }
   }

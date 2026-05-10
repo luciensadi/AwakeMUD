@@ -56,7 +56,7 @@ ifeq ($(JUST_FUCK_ME_UP_WITH_WARNINGS),1)
 										 -Wno-double-promotion
 	else
     BASE_CXXFLAGS += -Wduplicated-cond -Wduplicated-branches -Wlogical-op -Wrestrict -Wfloat-equal -Wextra-semi -Wexpansion-to-defined -Wdouble-promotion \
-		                 -Wdeprecated -Wdate-time -Wcast-qual -Wcast-function-type -Wbool-operation -Wbad-function-cast -Warray-parameter \
+		                 -Wdeprecated -Wdate-time -Wcast-qual -Wcast-function-type -Wbool-operation -Warray-parameter \
 										 -Wno-double-promotion
   endif
 endif
