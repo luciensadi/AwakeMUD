@@ -99,6 +99,8 @@ void faction_edit_parse(struct descriptor_data *d, const char *arg);
 int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info);
 const char *get_descriptor_fingerprint(struct descriptor_data *d);
 
+extern void restore_carried_vehicle_pointers();
+
 #ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
 extern void verify_every_pointer_we_can_think_of();
 #endif
@@ -3483,8 +3485,9 @@ void nanny(struct descriptor_data * d, char *arg)
         d->pProtocol->do_coerce_ansi_capable_colors_to_ansi = TRUE;
       }
 
-      // Load their vehicles.
+      // Load their vehicles and true up their locations.
       load_vehicles_for_idnum(GET_IDNUM(d->character));
+      restore_carried_vehicle_pointers();
 
       // Clear any mistaken / bugged bits.
       PLR_FLAGS(d->character).RemoveBit(PLR_IS_TEMPORARILY_LOADED);

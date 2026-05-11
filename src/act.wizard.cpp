@@ -8819,7 +8819,7 @@ int audit_zone_mobs_(struct char_data *ch, int zone_num, bool verbose) {
     }
 
     // Flag mobs with no weight or height.
-    if (GET_HEIGHT(mob) == 0 || FLOATS_ARE_EQUAL_ISH(GET_WEIGHT(mob), 0.0)) {
+    if (GET_HEIGHT(mob) == 0 || GET_WEIGHT(mob) == 0) {
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  - ^ymissing vital statistics^n (weight %d, height %d)^n.\r\n", GET_HEIGHT(mob), GET_WEIGHT(mob));
       issues++;
     }

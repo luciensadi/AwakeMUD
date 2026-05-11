@@ -17,7 +17,7 @@ extern void ASSIGNMOB(long mob, SPECIAL(fname));
 void houseedit_import_from_old_files(struct char_data *ch, bool nuke_and_pave, struct room_data *target_room);
 void houseedit_reload(struct char_data *ch, const char *filename);
 void houseedit_trueup_lifestyles_to_rent(struct char_data *ch);
-int copy_old_file_into_subroom_if_it_exists(bf::path old_file, ApartmentRoom *subroom, bool is_house_file);
+int copy_old_file_into_subroom_if_it_exists(fs::path old_file, ApartmentRoom *subroom, bool is_house_file);
 void _load_apartment_from_old_house_file(Apartment *apartment, ApartmentRoom *subroom, struct room_data *room, idnum_t owner, time_t paid_until, bool force_load);
 
 #define HED_NUKEANDPAVE TRUE
@@ -224,7 +224,7 @@ void houseedit_reload(struct char_data *ch, const char *filename) {
     FAILURE_CASE(!string_is_valid_for_paths(filename), "That's not a filename. You must specify a filename that exists at this subroom's base directory.");
 
   //  Verify that file exists.
-  bf::path new_path = GET_APARTMENT_SUBROOM(ch->in_room)->get_base_directory() / filename;
+  fs::path new_path = GET_APARTMENT_SUBROOM(ch->in_room)->get_base_directory() / filename;
   if (!exists(new_path)) {
     send_to_char(ch, "There is no file at path '%s'.\r\n", STRING_TO_CSTR(new_path));
     return;
@@ -458,7 +458,7 @@ void houseedit_trueup_lifestyles_to_rent(struct char_data *ch) {
 }
 
 // Loads an old file into a subroom. Returns 0 on success, anything else on failure.
-int copy_old_file_into_subroom_if_it_exists(bf::path old_file, ApartmentRoom *subroom, bool is_house_file) {
+int copy_old_file_into_subroom_if_it_exists(fs::path old_file, ApartmentRoom *subroom, bool is_house_file) {
   if (old_file.empty()) {
     mudlog("SYSERR: Received EMPTY old_file path to copy_old_file_into_subroom()!", NULL, LOG_SYSLOG, TRUE);
     return 1;
@@ -469,7 +469,7 @@ int copy_old_file_into_subroom_if_it_exists(bf::path old_file, ApartmentRoom *su
     return 2;
   }
 
-  if (!bf::exists(old_file)) {
+  if (!fs::exists(old_file)) {
     // This not an error case, we allow non-existant files to be loaded here.
     return 0;
   }
@@ -480,12 +480,8 @@ int copy_old_file_into_subroom_if_it_exists(bf::path old_file, ApartmentRoom *su
                   subroom->get_apartment()->get_full_name());
 
   // Compose our new location, then transfer the existing file to that location.
-  bf::path new_save_file = subroom->get_base_directory() / "storage";
-#ifdef USE_OLD_BOOST
-  bf::copy_file(old_file, new_save_file, bf::copy_option::overwrite_if_exists);
-#else
-  bf::copy_file(old_file, new_save_file, bf::copy_options::overwrite_existing);
-#endif
+  fs::path new_save_file = subroom->get_base_directory() / "storage";
+  fs::copy_file(old_file, new_save_file, fs::copy_options::overwrite_existing);
 
   // Immediately load from the newly-transferred file so that we don't lose room contents in a room save.
   subroom->load_storage_from_specified_path(new_save_file);
@@ -498,8 +494,8 @@ int copy_old_file_into_subroom_if_it_exists(bf::path old_file, ApartmentRoom *su
 void _load_apartment_from_old_house_file(Apartment *apartment, ApartmentRoom *subroom, struct room_data *room, idnum_t owner, time_t paid_until, bool force_load) {
   char storage_file_name[256];
 
-  bf::path old_house_directory("house");
-  bf::path old_storage_directory("storage");
+  fs::path old_house_directory("house");
+  fs::path old_storage_directory("storage");
 
   // Clone the current desc as a decoration, provided no decoration already exists.
   if (!subroom->get_decoration() && *(GET_ROOM_DESC(room))) {
@@ -523,7 +519,7 @@ void _load_apartment_from_old_house_file(Apartment *apartment, ApartmentRoom *su
 
     // Look for the old house file. If it exists, clobber existing contents and load this in.
     snprintf(storage_file_name, sizeof(storage_file_name), "%ld.house", GET_ROOM_VNUM(room));
-    bf::path original_save_file = old_house_directory / storage_file_name;
+    fs::path original_save_file = old_house_directory / storage_file_name;
 
     // Load our guests from the old file.
     apartment->load_guests_from_old_house_file(STRING_TO_CSTR(original_save_file));
@@ -542,7 +538,7 @@ void _load_apartment_from_old_house_file(Apartment *apartment, ApartmentRoom *su
 
     if (world_room && world_room != room) {
       // Check for storage files even if the room isn't storage-flagged (addresses a bug on prod)
-      bf::path original_save_file = old_storage_directory / vnum_to_string(GET_ROOM_VNUM(world_room));
+      fs::path original_save_file = old_storage_directory / vnum_to_string(GET_ROOM_VNUM(world_room));
       copy_old_file_into_subroom_if_it_exists(original_save_file, subroom_itr, FALSE);
 
 #ifdef IS_BUILDPORT

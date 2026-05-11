@@ -55,7 +55,7 @@ KEY:
 // TODO: Ensure that you only get the witness penalty from hitting someone once per combat
 
 #include <map>
-#include <boost/filesystem.hpp>
+#include <filesystem>
 
 #include "structs.hpp"
 
@@ -114,7 +114,7 @@ public:
   {}
 
   // Loads a faction from a given filename.
-  Faction(boost::filesystem::path filename);
+  Faction(std::filesystem::path filename);
 
   // Creates a new empty faction for editing.
   Faction() :

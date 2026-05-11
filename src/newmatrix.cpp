@@ -18,11 +18,14 @@
 #include "pets.hpp"
 #include "otaku.hpp"
 #include "gmcp.hpp"
+#include "newdb.hpp"
 
 #define PERSONA ch->persona
 #define PERSONA_CONDITION ch->persona->condition
 #define DECKER PERSONA->decker
 struct ic_info dummy_ic;
+
+#define GET_DECKER_HOT_ASIST(decker_struct) (decker_struct->asist[0])
 
 extern struct otaku_echo echoes[];
 
@@ -271,15 +274,20 @@ void roll_matrix_init(struct matrix_icon *icon)
   int init_dice = 1;
   if (icon->decker && icon->decker->ch)
   {
+    // You only get the response boost if in Hot ASIST mode.
+    int response_increase_rating = GET_DECKER_HOT_ASIST(icon->decker) ? icon->decker->response : 0;
+    // Same for the pure DNI boost.
+    bool pure_dni = GET_DECKER_HOT_ASIST(icon->decker);
+    
     if (icon->type == ICON_LIVING_PERSONA) {
       // Matrix pg 138 & 145, 4 dice with a possible +1 from overclock
       init_dice = 4 + (GET_ECHO(icon->decker->ch, ECHO_OVERCLOCK) ? 1 : 0);
       // This is the living persona's matrix reaction, not response increase
-      icon->initiative = icon->decker->response;
+      icon->initiative = response_increase_rating;
     } else {
       // Matrix pg 18 & 24, available bonuses are response increase, reality filter, and hot asist
-      init_dice += icon->decker->response + (icon->decker->reality ? 1 : 0) + (icon->decker->asist[0] ? 1 : 0);
-      icon->initiative = GET_REA(icon->decker->ch) + (icon->decker->response * 2) + (icon->decker->reality ? 2 : 0) + (icon->decker->asist[0] ? 2 : 0);
+      init_dice += response_increase_rating + (icon->decker->reality ? 1 : 0) + (pure_dni ? 1 : 0);
+      icon->initiative = GET_REA(icon->decker->ch) + (response_increase_rating * 2) + (icon->decker->reality ? 2 : 0) + (pure_dni ? 2 : 0);
     }
 
     // Apply Matrix 'trode net cap (max init dice 2d6)
@@ -992,11 +1000,12 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
     if (icon->ic.type >= IC_LETHAL_BLACK)
       power -= targ->decker->hardening;
     else 
-      for (soft = targ->decker->software; soft; soft = soft->next_content)
-        if (GET_OBJ_VAL(soft, 0) == SOFT_ARMOR) {
-          power -= GET_OBJ_VAL(soft, 1);
+      for (soft = targ->decker->software; soft; soft = soft->next_content) {
+        if (GET_PROGRAM_TYPE(soft) == SOFT_ARMOR) {
+          power -= GET_PROGRAM_RATING(soft);
           break;
         }
+      }
 
     if (!targ->decker->ras)
       power += 4;
@@ -1130,6 +1139,19 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
     send_to_icon(icon, "You obliterate %s^n.\r\n", decapitalize_a_an(targ->name));
   }
 
+  if (targ->decker) {
+    for (struct obj_data *soft = targ->decker->software; soft; soft = soft->next_content) {
+      if (GET_PROGRAM_TYPE(soft) == SOFT_ARMOR) {
+        GET_PROGRAM_RATING(soft)--;
+        if (GET_PROGRAM_RATING(soft) <= 0) {
+          send_to_icon(targ, "Your armor program crashes as the rating is depleted.\r\n");
+          unload_active_program(targ, soft);
+        }
+        break;
+      }
+    }
+  }
+
   struct char_data *ch = targ->decker ? targ->decker->ch : NULL;
   if (do_damage_persona(targ, icondam) || (ch && GET_POS(ch) <= POS_STUNNED)) {
     // If do_damage_persona returns true then the icon condition monitor is overloaded,
@@ -1145,9 +1167,8 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
     // Living persona don't take a second round of black IC damage, it was already done above
     if (ICON_IS_IC(icon) && icon->ic.type >= IC_LETHAL_BLACK && targ->type != ICON_LIVING_PERSONA) {
       int resist = 0;
-      bool lethal = icon->ic.type == IC_LETHAL_BLACK ? TRUE : FALSE;
-      if (!targ->decker->asist[0] && lethal)
-        lethal = FALSE;
+      bool lethal = GET_DECKER_HOT_ASIST(targ->decker) ? icon->ic.type == IC_LETHAL_BLACK : FALSE;
+      
       if (lethal)
         resist = GET_BOD(ch);
       else
@@ -2364,7 +2385,7 @@ ACMD(do_connect)
   }
 
   if (matrix[host].alert > 2) {
-    send_to_char("It seems that host has been shut down.\r\n", ch);
+    send_to_char("It seems that the host behind this jackpoint has been shut down.\r\n", ch);
     return;
   }
 
@@ -2399,29 +2420,6 @@ ACMD(do_connect)
   }
   PERSONA = icon;
   DECKER = new deck_info;
-  if (GET_OBJ_VNUM(cyberdeck) == OBJ_CUSTOM_CYBERDECK_SHELL) {
-    struct obj_data *parts = cyberdeck->contains;
-    for (; parts; parts = parts->next_content)
-      if (GET_OBJ_TYPE(parts) == ITEM_PART && (GET_OBJ_VAL(parts, 0) == PART_ASIST_HOT || GET_OBJ_VAL(parts, 0) == PART_ASIST_COLD))
-        break;
-    if (!parts) {
-      struct obj_data* cyber = NULL;
-      for (cyber = ch->cyberware; cyber; cyber = cyber->next_content)
-        if (GET_OBJ_VAL(cyber, 0) == CYB_ASIST)
-          break;
-      if (!cyber) {
-        send_to_char("You need an ASIST interface to use that.\r\n", ch);
-        extract_icon(PERSONA);
-        PERSONA = NULL;
-        PLR_FLAGS(ch).RemoveBit(PLR_MATRIX);
-        return;
-      }
-      DECKER->asist[1] = 0;
-      DECKER->asist[0] = 0;
-      GET_MAX_HACKING(ch) = 0;
-      DECKER->response = 0;
-    }
-  }
   DECKER->ch = ch;
   DECKER->phone = new phone_data;
   DECKER->phone->next = phone_list;
@@ -2433,14 +2431,59 @@ ACMD(do_connect)
   PERSONA->idnum = GET_IDNUM(ch);
   DECKER->deck = cyberdeck;
   DECKER->proxy_deck = proxy_deck;
-  DECKER->mpcp = GET_OBJ_VAL(cyberdeck, 0);
-  DECKER->hardening = GET_OBJ_VAL(cyberdeck, 1);
-  DECKER->active = GET_OBJ_VAL(cyberdeck, 2);
-  DECKER->response = GET_OBJ_VAL(cyberdeck, 6);
+  DECKER->mpcp = GET_CYBERDECK_MPCP(cyberdeck);
+  DECKER->hardening = GET_CYBERDECK_HARDENING(cyberdeck);
+  DECKER->active = GET_CYBERDECK_ACTIVE_MEMORY(cyberdeck);
+  DECKER->response = GET_CYBERDECK_RESPONSE_INCREASE(cyberdeck);
   DECKER->ras = GET_OBJ_VNUM(cyberdeck) == ITEM_CUSTOM_DECK ? FALSE : TRUE;
   affect_total(ch);
   GET_REM_HACKING(ch) = GET_HACKING(ch);
   GET_MAX_HACKING(ch) = (int)(GET_HACKING(ch) / 3);
+
+  bool is_using_cold_asist = false;
+  if (GET_OBJ_VNUM(cyberdeck) == OBJ_CUSTOM_CYBERDECK_SHELL) {
+    struct obj_data *parts = cyberdeck->contains;
+    for (; parts; parts = parts->next_content)
+      if (GET_OBJ_TYPE(parts) == ITEM_PART && (GET_OBJ_VAL(parts, 0) == PART_ASIST_HOT || GET_OBJ_VAL(parts, 0) == PART_ASIST_COLD))
+        break;
+    if (!parts) {
+      struct obj_data* cyber = NULL;
+      for (cyber = ch->cyberware; cyber; cyber = cyber->next_content)
+        if (GET_OBJ_VAL(cyber, 0) == CYB_ASIST)
+          break;
+      if (!cyber) {
+        send_to_char("You need an installed or implanted ASIST interface to use that.\r\n", ch);
+        extract_icon(PERSONA);
+        PERSONA = NULL;
+        PLR_FLAGS(ch).RemoveBit(PLR_MATRIX);
+        return;
+      }
+      is_using_cold_asist = true;
+    }
+  }
+
+  // We iterate twice: First here to look for a reality filter (decreases MPCP by 1 when in use per Matrix p20), then later to load everything else.
+  for (struct obj_data *soft = cyberdeck->contains; soft; soft = soft->next_content) {
+    if (GET_OBJ_TYPE(soft) == ITEM_PART && GET_PART_TYPE(soft) == PART_REALITY_FILTER) {
+      if (GET_PART_REALITY_FILTER_DESIGNED_FOR(soft) != GET_IDNUM(ch)) {
+        // Matrix p20: Reality filters are custom-designed for each user. This is supposed to give you +2 TN, but it can be turned off, so we just start with it off.
+        if (GET_PART_REALITY_FILTER_DESIGNED_FOR(soft) != 0) {  // If idnum is zero, this is a part built before this change-- skip this check and just lock it to the first user.
+          send_to_char(ch, "The reality filter installed in this deck warps your vision unpleasantly-- you quickly disable it. Time to ask the deck's builder to write you a new one.\r\n");
+          DECKER->reality = FALSE;
+          break;
+        }
+
+        // Reality filters did not previously have the p20 restriction of being designed for one person only; set that here.
+        GET_PART_REALITY_FILTER_DESIGNED_FOR(soft) = GET_IDNUM(ch);
+        // fall through
+      }
+      
+      send_to_char(ch, "Your reality filter kicks in, drawing down a significant portion of your MPCP's capacity.\r\n");
+      DECKER->reality = TRUE;
+      DECKER->mpcp--;
+      break;
+    }
+  }
 
   // Cap the IO speed based on the room's I/O rating. 0 is uncapped, -1 is capped by MPCP * 50, all other ratings cap to that rating.
   if (ch->in_room->io == 0) {
@@ -2449,9 +2492,7 @@ ACMD(do_connect)
     DECKER->io = MIN(DECKER->mpcp * 50, GET_CYBERDECK_IO_RATING(cyberdeck));
   } else {
     if (ch->in_room->io <= 100) {
-      char warnbuf[1000];
-      snprintf(warnbuf, sizeof(warnbuf), "Warning: I/O speed in %s (%ld) is low at %d.", GET_ROOM_NAME(ch->in_room), GET_ROOM_VNUM(ch->in_room), ch->in_room->io);
-      mudlog(warnbuf, ch, LOG_SYSLOG, TRUE);
+      mudlog_vfprintf(ch, LOG_SYSLOG, "Warning: I/O speed in %s (%ld) is low at %d.", GET_ROOM_NAME(ch->in_room), GET_ROOM_VNUM(ch->in_room), ch->in_room->io);
     }
     DECKER->io = MIN(ch->in_room->io, GET_CYBERDECK_IO_RATING(cyberdeck));
   }
@@ -2460,12 +2501,11 @@ ACMD(do_connect)
   DECKER->io = MAX(1, (int)(DECKER->io / 10));
 
   if (GET_OBJ_VNUM(cyberdeck) != OBJ_CUSTOM_CYBERDECK_SHELL 
-    && !cyberdeck->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_RESONANCE)) {
-    DECKER->asist[1] = 0;
-    DECKER->asist[0] = 0;
-    GET_MAX_HACKING(ch) = 0;
-    DECKER->response = 0;
+      && !cyberdeck->obj_flags.extra_flags.IsSet(ITEM_EXTRA_OTAKU_RESONANCE))
+  {
+    is_using_cold_asist = true;
   }
+
   for (struct obj_data *soft = cyberdeck->contains; soft; soft = soft->next_content) {
     if (GET_OBJ_TYPE(soft) == ITEM_PROGRAM) {
       GET_OBJ_VAL(soft, 8) = GET_OBJ_VAL(soft, 9) = 0;
@@ -2493,7 +2533,9 @@ ACMD(do_connect)
         // OTAKU living persona don't need to check this, as all programs are complex forms
         // and we already checked that when we created the deck.
         if (PERSONA->type != ICON_LIVING_PERSONA && GET_OBJ_VAL(soft, 1) > DECKER->mpcp) {
-          send_to_char(ch, "%s^n is too advanced for your deck's MPCP rating, so it failed to load.\r\n", GET_OBJ_NAME(soft));
+          send_to_char(ch, "%s^n is too advanced for your deck's %sMPCP rating, so it failed to load.\r\n",
+                       GET_OBJ_NAME(soft),
+                       DECKER->reality ? "reality-filter-suppressed " : "");
           continue;
         }
         struct obj_data *active = read_object(GET_OBJ_RNUM(soft), REAL, OBJ_LOAD_REASON_MTX_CONNECT);
@@ -2526,20 +2568,13 @@ ACMD(do_connect)
         if (PERSONA->type == ICON_LIVING_PERSONA) DECKER->evasion = MIN(DECKER->mpcp*1.5, DECKER->evasion + GET_ECHO(ch, ECHO_PERSONA_EVAS));
         break;
       case PART_ASIST_HOT:
-        DECKER->asist[1] = 1;
-        DECKER->asist[0] = 1;
+        is_using_cold_asist = false;
         break;
       case PART_ASIST_COLD:
-        DECKER->asist[1] = 0;
-        DECKER->asist[0] = 0;
-        GET_MAX_HACKING(ch) = 0;
-        DECKER->response = 0;
+        is_using_cold_asist = true;
         break;
       case PART_RAS_OVERRIDE:
         DECKER->ras = TRUE;
-        break;
-      case PART_REALITY_FILTER:
-        DECKER->reality = TRUE;
         break;
       case PART_ICCM:
         DECKER->iccm = TRUE;
@@ -2553,7 +2588,9 @@ ACMD(do_connect)
   icon_list = PERSONA;
   icon_to_host(PERSONA, host);
   if (PERSONA->type != ICON_LIVING_PERSONA && (DECKER->bod + DECKER->sensor + DECKER->evasion + DECKER->masking > DECKER->mpcp * 3)) {
-    send_to_char(ch, "Your deck overloads on persona programs and crashes. You'll have to keep the combined bod, sensor, evasion, and masking rating less than or equal to %d.\r\n", DECKER->mpcp * 3);
+    send_to_char(ch, "Your deck overloads on persona programs and crashes. You'll have to keep the combined bod, sensor, evasion, and masking rating less than or equal to %d%s.\r\n",
+                 DECKER->mpcp * 3,
+                 DECKER->reality ? " (lowered by reality filter)" : "");
     extract_icon(PERSONA);
     PERSONA = NULL;
     PLR_FLAGS(ch).RemoveBit(PLR_MATRIX);
@@ -2576,6 +2613,16 @@ ACMD(do_connect)
     return;
   }
 
+  // If you're forced into cold ASIST, apply the restriction here.
+  if (is_using_cold_asist) {
+    DECKER->asist[1] = 0;
+    DECKER->asist[0] = 0;
+    GET_MAX_HACKING(ch) = 0;
+    DECKER->response = 0;
+  } else {
+    DECKER->asist[1] = 1;
+    DECKER->asist[0] = 1;
+  }
 
   if (GET_OBJ_TYPE(jack) == ITEM_CYBERWARE) {
     if (GET_CYBERWARE_TYPE(jack) == CYB_DATAJACK) {
@@ -2799,11 +2846,12 @@ ACMD(do_download)
                    && GET_OBJ_TYPE(soft) != ITEM_PROGRAM)
         {
           int power = GET_DECK_ACCESSORY_FILE_RATING(soft);
-          for (struct obj_data *prog = DECKER->software; prog; prog = prog->next_content)
-            if (GET_OBJ_VAL(prog, 0) == SOFT_ARMOR) {
-              power -= GET_OBJ_VAL(prog, 1);
+          for (struct obj_data *prog = DECKER->software; prog; prog = prog->next_content) {
+            if (GET_PROGRAM_TYPE(prog) == SOFT_ARMOR) {
+              power -= GET_PROGRAM_RATING(prog);
               break;
             }
+          }
           success = -success_test(DECKER->bod + MIN(GET_MAX_HACKING(ch), GET_REM_HACKING(ch)), power);
           GET_REM_HACKING(ch) = MAX(0, GET_REM_HACKING(ch) - GET_MAX_HACKING(ch));
           int dam = convert_damage(stage(success, GET_OBJ_VAL(soft, 5) == 2 ? DEADLY : MODERATE));
@@ -2814,11 +2862,24 @@ ACMD(do_download)
               return;
             }
             if (PERSONA_CONDITION < 1) {
-              send_to_icon(PERSONA, "The %s explodes, ripping your icon into junk logic\r\n", GET_OBJ_VAL(soft, 5) == 2 ? "Data Bomb" : "Pavlov");
+              send_to_icon(PERSONA, "The %s explodes, ripping your icon into junk logic!\r\n", GET_OBJ_VAL(soft, 5) == 2 ? "Data Bomb" : "Pavlov");
               dumpshock(PERSONA);
               return;
-            } else
+            } else {
               send_to_icon(PERSONA, "The %s explodes, damaging your icon.\r\n", GET_OBJ_VAL(soft, 5) == 2 ? "Data Bomb" : "Pavlov");
+              if (PERSONA->decker) {
+                for (soft = PERSONA->decker->software; soft; soft = soft->next_content) {
+                  if (GET_PROGRAM_TYPE(soft) == SOFT_ARMOR) {
+                    GET_PROGRAM_RATING(soft)--;
+                    if (GET_PROGRAM_RATING(soft) <= 0) {
+                      send_to_icon(PERSONA, "Your armor program crashes as the rating is depleted.\r\n");
+                      unload_active_program(PERSONA, soft);
+                    }
+                    break;
+                  }
+                }
+              }
+            }
           }
           if (GET_DECK_ACCESSORY_FILE_PROTECTION(soft) == 2) { // TODO magic number
             GET_DECK_ACCESSORY_FILE_PROTECTION(soft) = 0;
@@ -3306,10 +3367,16 @@ ACMD(do_software)
                  GET_PROGRAM_SIZE(soft));
       } else if (GET_OBJ_TYPE(soft) == ITEM_PART) {
         has_components = TRUE;
-        snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "%s^n Type: ^c%-24s^n (rating ^c%d^n)\r\n",
+        snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), "%s^n Type: ^c%-24s^n (rating ^c%d^n)",
                 get_obj_name_with_padding(soft, 40),
                 parts[GET_PART_TYPE(soft)].name,
                 GET_PART_RATING(soft));
+        if (GET_PART_TYPE(soft) == PART_REALITY_FILTER && GET_PART_REALITY_FILTER_DESIGNED_FOR(soft) && GET_PART_REALITY_FILTER_DESIGNED_FOR(soft) != GET_IDNUM(ch)) {
+          const char *player_name = get_player_name(GET_PART_REALITY_FILTER_DESIGNED_FOR(soft));
+          snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), " ^y(designed for ^Y%s^y)^n", player_name);
+          delete [] player_name;
+        }
+        strlcat(buf2, "\r\n", sizeof(buf2));
       } else if ((GET_OBJ_TYPE(cyberdeck) == ITEM_CYBERDECK) && (GET_OBJ_TYPE(soft) == ITEM_PROGRAM) && (GET_PROGRAM_TYPE(soft) <= SOFT_SENSOR)) {
         // Persona programs in store-bought decks are handled here as components
         has_components = TRUE;
@@ -4354,21 +4421,19 @@ ACMD(do_matrix_max)
 
 ACMD(do_asist)
 {
-  if (!PERSONA)
-    send_to_char("You can't do that while hitching.\r\n", ch);
-  else if (PERSONA->type == ICON_LIVING_PERSONA)
-    send_to_char("You can't switch ASIST modes while using a living persona.\r\n", ch);
-  else if (!DECKER->asist[1])
-    send_to_char("You can't switch ASIST modes with a cold ASIST interface.\r\n", ch);
-  else if (DECKER->asist[0]) {
-    DECKER->asist[0] = 0;
+  FAILURE_CASE(!PERSONA, "You can't do that while hitching.");
+  FAILURE_CASE(PERSONA->type == ICON_LIVING_PERSONA, "You can't switch ASIST modes while using a living persona.");
+  FAILURE_CASE(!DECKER->asist[1], "You can't switch ASIST modes with a cold ASIST interface.");
+  
+  if (GET_DECKER_HOT_ASIST(DECKER)) {
+    GET_DECKER_HOT_ASIST(DECKER) = 0;
     send_to_char("You switch to cold ASIST mode.\r\n", ch);
     GET_MAX_HACKING(ch) = 0;
     DECKER->response = 0;
   } else {
+    GET_DECKER_HOT_ASIST(DECKER) = 1;
     send_to_char("You switch to hot ASIST mode.\r\n", ch);
-    DECKER->asist[0] = 1;
-    DECKER->response = GET_OBJ_VAL(DECKER->deck, 6);
+    DECKER->response = GET_CYBERDECK_RESPONSE_INCREASE(DECKER->deck);
     GET_MAX_HACKING(ch) = (int)(GET_HACKING(ch) / 3);
   }
 }

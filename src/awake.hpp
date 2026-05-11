@@ -320,7 +320,7 @@ enum {
 #define PLR_NEWBIE                           4  /* Player is a newbie still               */
 #define PLR_JUST_DIED                        5  /* Player just died                       */
 #define PLR_VISA                             6  /* Player needs to be crash-saved         */
-#define PLR_RECEIVED_CYBEREYE_ESSENCE_DELTA  7  /* Player has had their cybereye essence cost reset */
+#define PLR_DEALPHABETIZE_DECKBUILDING       7  /* Use the non-alphabetized version of the part and software list. */
 #define PLR_SITEOK                           8  /* Player has been site-cleared           */
 #define PLR_NOSHOUT                          9  /* Player not allowed to shout/goss       */
 #define PLR_NOTITLE                          10 /* Player not allowed to set title        */
@@ -1780,7 +1780,9 @@ enum {
 #define SOFT_KILLJOY            53
 #define SOFT_STEAMROLLER        54
 #define SOFT_RESTORE            55
-#define NUM_PROGRAMS            56
+#define SOFT_ENCRYPT            56
+#define SOFT_SNIFFER            57
+#define NUM_PROGRAMS            58
 
 #define PART_ACTIVE    1
 #define PART_STORAGE    2
