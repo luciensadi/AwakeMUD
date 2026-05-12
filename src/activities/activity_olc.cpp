@@ -23,17 +23,20 @@
   }                                                                  \
   void activity_##name_component##_inner(struct descriptor_data *d)
 
+// Various switch case shorteners. Not sure I like these; they do make things shorter but harder to read
 #define MENU_CASE_TO_PARSER(name_component) case ACTIVITY_EDIT_##name_component: activity_##name_component##_parse(d, arg); break
 #define CASE_TO_PARSER(switchcase, name_component) case switchcase: activity_##name_component##_parse(d, arg); break
 #define CASE_TO_MENU(switchcase, name_component) case switchcase: activity_##name_component##_menu(d); break
 #define CASE_TO_EDITMODE(switchcase, message, the_mode) case switchcase: send_to_char(message, CH); d->edit_mode = the_mode; break
 
+// Run this macro to set up for going into modify.cpp.
 #define SETUP_D_STR \
   DELETE_D_STR_IF_EXTANT(d); \
   INITIALIZE_NEW_D_STR(d); \
   d->max_str = MAX_MESSAGE_LENGTH; \
   d->mail_to = 0;
 
+// Replace the named variable with the string in arg if that string isn't empty or 'abort'.
 #define REPLACE_STRING_IF_NOT_ABORT(switchcase, var_name, menu_component)  \
   case ACTIVITY_EDIT_##switchcase: {                                       \
     if (!str_cmp(arg, "abort") || !*arg) {                                 \
@@ -43,9 +46,6 @@
     }                                                                      \
     activity_##menu_component##_menu(d);                                   \
   } break;
-
-// todo: move to OLC header
-
 
 // Put a DECLARE_FUNCS() here for each line item where you want a menu and parser function built. Best to name them after the variable involved.
 DECLARE_FUNCS(activity_main);
@@ -58,10 +58,12 @@ DECLARE_FUNCS(check_main);
 // This is where all commands are routed for folks in OLC mode.
 PARSEFUNC(activity_editing_entrypoint) {
   switch (d->edit_mode) {
+    // If your edit mode matches up with one of these menus, send you off to that menu function.
     MENU_CASE_TO_PARSER(activity_main);
     MENU_CASE_TO_PARSER(activity_edit_preconditions);
     MENU_CASE_TO_PARSER(activity_edit_situations);
     MENU_CASE_TO_PARSER(activity_edit_starting_situations);
+    // If your edit mode is one of these, replace the named variable (e.g. 'slug') with your arg contents, aborting if necessary.
     REPLACE_STRING_IF_NOT_ABORT(activity_edit_slug, slug, activity_main);
     REPLACE_STRING_IF_NOT_ABORT(activity_edit_display_name, display_name, activity_main);
   }

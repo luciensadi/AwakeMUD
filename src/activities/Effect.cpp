@@ -135,7 +135,7 @@ EFFECT_FUNCTION(test_func) {
   for (int i = 0; i < count_val; i++)
     mudlog_vfprintf(ch, LOG_SYSLOG, "Effect _test_func: message='%s' (%d/%d), returning false.", message, i + 1, count_val);
   return false;
-};
+}
 
 #undef EFFECT_FUNCTION
 

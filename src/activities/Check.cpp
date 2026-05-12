@@ -208,7 +208,7 @@ CHECK_FUNCTION(test_func) {
   for (int i = 0; i < count_val; i++)
     mudlog_vfprintf(ch, LOG_SYSLOG, "Check _test_func: message='%s' (%d/%d), returning true.", message, i + 1, count_val);
   return true;
-};
+}
 
 /////////////// Skills section
 
@@ -217,7 +217,7 @@ CHECK_FUNCTION(has_skill) {
   int skill_idx = skill_name_to_idx(skill_name);
   CHECK_FAILURE_CASE(skill_idx < 0, "Bad skill name: %s", skill_name);
   return GET_SKILL(ch, skill_idx) > 0;
-};
+}
 
 CHECK_FUNCTION(roll_skill) {
   GET_SETTING(skill_name);

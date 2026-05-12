@@ -1,6 +1,6 @@
-#include <boost/filesystem.hpp>
-#include <boost/filesystem/fstream.hpp>
-namespace bf = boost::filesystem;
+#include <filesystem>
+#include <fstream>
+namespace fs = std::filesystem;
 
 #include "classes.hpp"
 
@@ -71,9 +71,9 @@ Activity::Activity(const std::string serialized_json) {
   from_json(json::parse(serialized_json), *this);
 }
 
-Activity::Activity(bf::path path_to_file) {
+Activity::Activity(fs::path path_to_file) {
   // We've got this real handy function from newhouse.cpp to crib:
-  extern void _json_parse_from_file(bf::path path, json &target);
+  extern void _json_parse_from_file(fs::path path, json &target);
 
   json basic_info;
   _json_parse_from_file(path_to_file, basic_info);
@@ -82,13 +82,13 @@ Activity::Activity(bf::path path_to_file) {
 
 void Activity::save_to_disk() {
   // Saves to `lib/activities/slug`
-  bf::path base_path = BASE_ACTIVITY_PATH;
-  bf::create_directories(base_path);
+  fs::path base_path = BASE_ACTIVITY_PATH;
+  fs::create_directories(base_path);
 
   json basic_info;
   to_json(basic_info, *this);
 
-  bf::ofstream ofs(base_path / slug);
+  std::ofstream ofs(base_path / slug);
   ofs << std::setw(4) << basic_info << std::endl;
   ofs.close();
 }

@@ -2,6 +2,7 @@
 #define _ACTIVITIES_CLASSES_HPP_
 
 #include <exception>
+#include <filesystem>
 #include <string>
 #include <map>
 #include <vector>
@@ -10,7 +11,9 @@
 
 #include "../structs.hpp"
 
-#define BASE_ACTIVITY_PATH bf::system_complete("lib") / "activities"
+namespace fs = std::filesystem;
+
+#define BASE_ACTIVITY_PATH fs::absolute("lib") / "activities"
 
 #define STRING_GETTER(varname)  const char *get_##varname() { return varname.c_str(); }
 
@@ -334,7 +337,7 @@ public:
   explicit Activity(std::string serialized_json);
 
   // Load from a file.
-  Activity(bf::path path_to_file);
+  Activity(fs::path path_to_file);
 
   // Getters, which kindly return C strings to prevent having to go .c_str() all the time.
   STRING_GETTER(slug)
