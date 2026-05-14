@@ -331,7 +331,7 @@ PetEchoSet *get_pet_echo_set(idnum_t idnum) {
   return NULL;
 }
 
-void pet_acts(struct obj_data *pet, int pet_act_filter) {
+void pet_acts(struct obj_data *pet, unsigned int pet_act_filter) {
   if (!pet->in_room || !pet->in_room->people || !pet->in_room->apartment)
     return;
 

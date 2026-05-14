@@ -68,6 +68,6 @@ public:
 void create_pet(struct char_data *ch);
 void create_pet_main_menu(struct descriptor_data *d);
 void create_pet_parse(struct descriptor_data *d, const char *arg);
-void pet_acts(struct obj_data *pet, int pet_act_tick);
+void pet_acts(struct obj_data *pet, unsigned int pet_act_tick);
 
 #endif // __PETS_H
