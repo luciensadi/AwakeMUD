@@ -1561,10 +1561,11 @@ int     getpid(void);
 #endif
 */
 
+/*
 #if defined(freebsd)
 extern "C" char *crypt(const char *key, const char *setting);
 #endif
-
+*/
 #if defined(WIN32)
 extern "C" char    *crypt(const char *key, const char *salt);
 #endif
