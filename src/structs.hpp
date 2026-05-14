@@ -32,6 +32,7 @@
 #include "chargen.hpp"
 #include "vision_overhaul.hpp"
 #include "drugs.hpp"
+#include "MenuFrame.hpp"
 
 class Faction;
 class ApartmentComplex;
@@ -1183,6 +1184,8 @@ struct descriptor_data
   PCExDesc *edit_exdesc;
   Playergroup *edit_pgroup; /* playergroups */
 
+  std::vector<std::unique_ptr<MenuFrame>> menu_frame_stack;
+
   // Need original pointers so we know what to overwrite.
   Activity *edit_activity;
   Check *edit_check;
@@ -1214,7 +1217,7 @@ struct descriptor_data
       edit_zon(NULL), edit_cmd(NULL), edit_veh(NULL), edit_host(NULL), edit_icon(NULL),
       edit_helpfile(NULL), edit_complex(NULL), edit_complex_original(NULL),
       edit_apartment(NULL), edit_apartment_original(NULL), edit_apartment_room(NULL),
-      edit_apartment_room_original(NULL), edit_faction(NULL), edit_exdesc(NULL), edit_pgroup(NULL),
+      edit_apartment_room_original(NULL), edit_faction(NULL), edit_exdesc(NULL), edit_pgroup(NULL), menu_frame_stack(),
       edit_activity(NULL), edit_check(NULL), edit_check_original(NULL), edit_effect(NULL), edit_effect_original(NULL),
       edit_outcome(NULL), edit_outcome_original(NULL), edit_option(NULL), edit_option_original(NULL),
       edit_situation(NULL), edit_situation_original(NULL), canary(CANARY_VALUE), pProtocol(NULL)

@@ -86,6 +86,9 @@ void dbuild_parse(struct descriptor_data *d, const char *arg);
 void pbuild_parse(struct descriptor_data *d, const char *arg);
 void spedit_parse(struct descriptor_data *d, const char *arg);
 void aedit_parse(struct descriptor_data *d, const char *arg);
+int parse_class(struct descriptor_data *d, char *arg);
+int parse_race(struct descriptor_data *d, char *arg);
+int parse_totem(struct descriptor_data *d, char *arg);
 void houseedit_apartment_parse(struct descriptor_data *d, const char *arg);
 void houseedit_complex_parse(struct descriptor_data *d, const char *arg);
 void free_shop(struct shop_data *shop);
@@ -2954,11 +2957,44 @@ void nanny(struct descriptor_data * d, char *arg)
   rnum_t load_room_rnum = 0;
   bool dirty_password = FALSE;
 
-  int parse_class(struct descriptor_data *d, char *arg);
-  int parse_race(struct descriptor_data *d, char *arg);
-  int parse_totem(struct descriptor_data *d, char *arg);
-
   skip_spaces(&arg);
+
+  // If descriptor has anything in the menu stack, that overrides their state.
+  if (!d->menu_frame_stack.empty()) {
+  #ifdef IS_BUILDPORT
+    send_to_char(d->character, "^L(debug: routing to menu frame stack)^n\r\n");
+  #endif
+    // Send their input to the top of their MenuFrame stack for parsing.
+    MenuFrameResult result = d->menu_frame_stack.back().get()->parse(d, arg);
+
+    // Depending on what the result of that parse was:
+    switch (result.action) {
+      // Continue (just trigger display again-- typically means invalid input was supplied.)
+      case MenuFrameAction::Continue:
+        d->menu_frame_stack.back().get()->display(d);
+        break;
+      // Pop (this frame is done; pull it off and pass the result data up to the parent, then trigger parent display)
+      case MenuFrameAction::Pop:
+        d->menu_frame_stack.pop_back();
+        if (!d->menu_frame_stack.empty()) {
+          d->menu_frame_stack.back().get()->handle_child_result(result.data);
+          d->menu_frame_stack.back().get()->display(d);
+        } else {
+          STATE(d) = CON_PLAYING;
+        }
+        break;
+      // Push: WE NEED TO GO DEEPER
+      case MenuFrameAction::Push:
+        if (!result.nextFrame) {
+          mudlog_vfprintf(d->character, LOG_SYSLOG, "SYSERR: Got Push result from MenuFrame without an attached frame!");
+          return;
+        }
+        d->menu_frame_stack.push_back(std::move(result.nextFrame));
+        d->menu_frame_stack.back().get()->display(d);
+        break;
+    }
+    return;
+  }
 
   switch (STATE(d))
   {
