@@ -585,7 +585,7 @@ void load_player_faction_info(struct char_data *ch) {
 
 // Replace the global const fs::path get_factions_dir_path() ...
 const fs::path &get_factions_dir_path() {
-  static const fs::path path = fs::absolute("lib") / "factions";
+  static const fs::path path = fs::absolute("factions");
   return path;
 }
 
