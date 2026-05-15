@@ -3349,7 +3349,7 @@ void shedit_parse(struct descriptor_data *d, const char *arg)
         if (!number) {
           struct shop_sell_data *temp;
           REMOVE_FROM_LIST(sell, SHOP->selling, next);
-          delete [] sell;
+          delete sell;
           break;
         }
       }
