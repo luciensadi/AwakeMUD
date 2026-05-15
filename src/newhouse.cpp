@@ -95,7 +95,9 @@ ACMD(do_decorate) {
   FAILURE_CASE(!ch->in_room || !GET_APARTMENT(ch->in_room), "You must be in an apartment or vehicle to decorate it.");
   FAILURE_CASE(!GET_APARTMENT(ch->in_room)->has_owner_privs(ch), "You must be the owner of this apartment to decorate it.")
   FAILURE_CASE(!GET_APARTMENT_SUBROOM(ch->in_room), "This apartment is bugged! Notify staff.");
-  FAILURE_CASE(GET_APARTMENT(ch->in_room)->get_lifestyle() <= LIFESTYLE_SQUATTER && !VNUM_IS_NERPCORPOLIS(GET_ROOM_VNUM(ch->in_room)), "Squats can't be redecorated.");
+  FAILURE_CASE(GET_APARTMENT(ch->in_room)->get_lifestyle() <= LIFESTYLE_SQUATTER
+               && !VNUM_IS_NERPCORPOLIS(GET_ROOM_VNUM(ch->in_room))
+               && !(GET_APARTMENT(ch->in_room) && GET_APARTMENT(ch->in_room)->is_office()), "Squats can't be redecorated.");
   
   if (!GET_APARTMENT_SUBROOM(ch->in_room)->get_decoration() && !VNUM_IS_NERPCORPOLIS(GET_ROOM_VNUM(ch->in_room))) {
     FAILURE_CASE_PRINTF(GET_NUYEN(ch) < COST_TO_DECORATE_APT, "You need %d nuyen on hand to cover the materials.", COST_TO_DECORATE_APT);

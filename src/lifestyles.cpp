@@ -80,8 +80,6 @@ struct lifestyle_data lifestyles[] = {
 
 // Returns your best lifestyle. Changes to negative if it's a garage lifestyle.
 void calculate_best_lifestyle(struct char_data *ch) {
-  Apartment *best_apartment = NULL;
-
   // Snap back to their original so we're not finding the apartment of a projection or whatnot.
   if (ch->desc && ch->desc->original) {
     ch = ch->desc->original;
