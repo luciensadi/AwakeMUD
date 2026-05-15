@@ -1780,4 +1780,8 @@ void gen_size(int &min, int &max, bool height, int race)
   // Apply modifiers evenly across the absolute ranges
   min = base_min * 0.75;
   max = base_max * 1.25;
+
+  // weight can go up even higher, we're all about that bass
+  if (!height)
+    max *= 1.75;
 }
