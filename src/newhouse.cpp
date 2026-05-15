@@ -103,7 +103,7 @@ ACMD(do_decorate) {
     send_to_char(ch, "You spend %d nuyen to purchase new decorating materials.\r\n", COST_TO_DECORATE_APT);
     lose_nuyen(ch, COST_TO_DECORATE_APT, NUYEN_OUTFLOW_DECORATING);
   }
-  
+
   // If they've specified an argument, use that to set the room's name.
   skip_spaces(&argument);
   if (*argument) {

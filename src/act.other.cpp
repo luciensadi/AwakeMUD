@@ -2956,24 +2956,14 @@ void cedit_parse(struct descriptor_data *d, char *arg)
       d->edit_mode = CEDIT_LEAVE;
       break;
     case '7':
-      /* if (!PLR_FLAGGED(CH, PLR_NEWBIE))
-        cedit_disp_menu(d, 0);
-      else */
-      {
-        CLS(CH);
-        send_to_char(CH, "1) Tiny\r\n2) Small\r\n3) Average\r\n4) Large\r\n5) Huge\r\nEnter desired height range: ");
-        d->edit_mode = CEDIT_HEIGHT;
-      }
+      CLS(CH);
+      send_to_char(CH, "Enter desired height in centimeters: ");
+      d->edit_mode = CEDIT_HEIGHT;
       break;
     case '8':
-      /* if (!PLR_FLAGGED(CH, PLR_NEWBIE))
-        cedit_disp_menu(d, 0);
-      else */
-      {
-        CLS(CH);
-        send_to_char(CH, "1) Tiny\r\n2) Small\r\n3) Average\r\n4) Large\r\n5) Huge\r\nEnter desired weight range: ");
-        d->edit_mode = CEDIT_WEIGHT;
-      }
+      CLS(CH);
+      send_to_char(CH, "Enter desired weight in kilograms: ");
+      d->edit_mode = CEDIT_WEIGHT;
       break;
     case '9':
       cedit_lifestyle_menu(d);
@@ -2997,12 +2987,28 @@ void cedit_parse(struct descriptor_data *d, char *arg)
 
     break;
   case CEDIT_HEIGHT:
-    GET_HEIGHT(CH) = (int)gen_size(GET_RACE(CH), 1, atoi(arg), GET_PRONOUNS(CH));
-    cedit_disp_menu(d, 0);
+    {
+      int min, max, number = atoi(arg);
+      gen_size(min, max, true, GET_RACE(CH));
+      if (number < min || number > max) {
+        send_to_char(CH, "Acceptable range for your metatype is %d - %d cm. Try again:", min, max);
+        return;
+      }
+      GET_HEIGHT(CH) = number;
+      cedit_disp_menu(d, 0);
+    }
     break;
   case CEDIT_WEIGHT:
-    GET_WEIGHT(CH) = (int)gen_size(GET_RACE(CH), 0, atoi(arg), GET_PRONOUNS(CH));
-    cedit_disp_menu(d, 0);
+    {
+      int min, max, number = atoi(arg);
+      gen_size(min, max, false, GET_RACE(CH));
+      if (number < min || number > max) {
+        send_to_char(CH, "Acceptable range for your metatype is %d - %d kg. Try again:", min, max);
+        return;
+      }
+      GET_WEIGHT(CH) = number;
+      cedit_disp_menu(d, 0);
+    }
     break;
   case CEDIT_ALIAS:
     if (strlen(arg) >= MAX_KEYWORDS_LEN || get_string_length_after_color_code_removal(arg, CH) >= LINE_LENGTH || strlen(arg) < 5 || strlen(prepare_quotes(buf3, arg, sizeof(buf3), false, false)) >= MAX_KEYWORDS_LEN) {
