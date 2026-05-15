@@ -115,6 +115,10 @@ bool can_see_through_invis(struct char_data *ch, struct char_data *vict) {
     act("Processing can_see_through_invis ($n looking at $N).", FALSE, ch, 0, vict, TO_ROLLS);
   */
 
+  // Skip victs who should never care.
+  if (IS_PC_CONJURED_ELEMENTAL(vict) || IS_PC_CONJURED_SPIRIT(vict))
+    return true;
+
   // NPCs and PCs have their own separate maps.
   if (IS_NPC(ch)) {
     if (!vict->mob_invis_resistance_test_results)
