@@ -757,7 +757,6 @@ struct command_info cmd_info[] =
     { "icedit"     , POS_DEAD    , do_icedit   , LVL_BUILDER, 0, BLOCKS_IDLE_REWARD },
     { "iclist"     , POS_DEAD    , do_iclist   , LVL_BUILDER, 0, BLOCKS_IDLE_REWARD },
     { "iclone"     , POS_DEAD    , do_iclone   , LVL_BUILDER, 0, BLOCKS_IDLE_REWARD },
-    { "identify"   , POS_RESTING , do_examine  , 0, SCMD_PROBE, ALLOWS_IDLE_REWARD }, // deliberately out of order to guard idea
     { "idea"       , POS_DEAD    , do_gen_write, 0, SCMD_IDEA, ALLOWS_IDLE_REWARD },
     //{ "idelete"  , POS_DEAD    , do_idelete  , LVL_PRESIDENT, 0, BLOCKS_IDLE_REWARD },
     { "iedit"      , POS_DEAD    , do_iedit    , LVL_BUILDER, 0, BLOCKS_IDLE_REWARD },
@@ -4176,6 +4175,7 @@ int fix_common_command_fuckups(const char *arg, struct command_info *cmd_info) {
   COMMAND_ALIAS("penalty", "penalties");
   COMMAND_ALIAS("whois", "finger");
   COMMAND_ALIAS("kecho", "kemote");
+  COMMAND_ALIAS("identify", "probe");
 
   // Some otaku conveniences because human language is weird
   COMMAND_ALIAS("form", "forms");
