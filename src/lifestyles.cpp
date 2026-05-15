@@ -79,21 +79,22 @@ struct lifestyle_data lifestyles[] = {
 };
 
 // Returns your best lifestyle. Changes to negative if it's a garage lifestyle.
-int calculate_best_lifestyle(struct char_data *ch) {
-  int best_lifestyle_found = LIFESTYLE_SQUATTER;
-  bool best_lifestyle_is_garage = FALSE;
+void calculate_best_lifestyle(struct char_data *ch) {
   Apartment *best_apartment = NULL;
-
-  // Check for NPC status. If they don't have one, they don't get this.
-  if (IS_NPC(ch) && !ch->desc) {
-    GET_BEST_LIFESTYLE(ch) = LIFESTYLE_SQUATTER;
-    return LIFESTYLE_SQUATTER;
-  }
 
   // Snap back to their original so we're not finding the apartment of a projection or whatnot.
   if (ch->desc && ch->desc->original) {
     ch = ch->desc->original;
   }
+
+  // Check for NPC status. If they don't have one, bail out with defaults.
+  if (IS_NPC(ch) && !ch->desc) {
+    return;
+  }
+
+  // Clear their current calculated bests.
+  GET_BEST_NORMAL_LIFESTYLE(ch) = LIFESTYLE_SQUATTER;
+  GET_BEST_GARAGE_LIFESTYLE(ch) = LIFESTYLE_STREETS;  
 
   for (auto &complex : global_apartment_complexes) {
     for (auto &apartment : complex->get_apartments()) {
@@ -101,68 +102,37 @@ int calculate_best_lifestyle(struct char_data *ch) {
         int found_lifestyle = apartment->get_lifestyle();
 
         // An apartment is a lifestyle garage if more than half of the rooms are garages.
-        bool found_lifestyle_is_garage = apartment->is_garage_lifestyle();
-
-        if (found_lifestyle > best_lifestyle_found || (found_lifestyle == best_lifestyle_found && !best_lifestyle_is_garage)) {
-          best_lifestyle_found = found_lifestyle;
-          best_lifestyle_is_garage = found_lifestyle_is_garage;
-          best_apartment = apartment;
+        if (apartment->is_garage_lifestyle()) {
+          GET_BEST_GARAGE_LIFESTYLE(ch) = MAX(GET_BEST_GARAGE_LIFESTYLE(ch), found_lifestyle);
+        } else {
+          GET_BEST_NORMAL_LIFESTYLE(ch) = MAX(GET_BEST_NORMAL_LIFESTYLE(ch), found_lifestyle);
         }
       }
     }
   }
 
-  if (best_apartment) {
-    /*
-    log_vfprintf("Using %s (%s / %s) as best apartment for %s.",
-                 best_apartment->get_full_name(),
-                 lifestyles[best_apartment->get_lifestyle()].name,
-                 best_apartment->is_garage_lifestyle() ? "garage" : "standard",
-                 GET_CHAR_NAME(ch));
-    */
-
-    if (best_lifestyle_is_garage)
-      best_lifestyle_found *= -1;
-
-    GET_BEST_LIFESTYLE(ch) = best_lifestyle_found;
-  } else {
-    //log_vfprintf("No apartment found for %s. Using Squatter lifestyle.", GET_CHAR_NAME(ch));
-    GET_BEST_LIFESTYLE(ch) = LIFESTYLE_SQUATTER;
-  }
-
   // Ensure their lifestyle string matches the expected value.
   set_lifestyle_string(ch, get_lifestyle_string(ch));
-
-  return GET_BEST_LIFESTYLE(ch);
 }
 
-#define APPEND_VECTOR_TO_RESULTS(vecname) { results.insert(results.end(), vecname.begin(), vecname.end() ); }
+#define APPEND_VECTOR_TO_RESULTS(vecname) { results.insert(results.end(), (vecname).begin(), (vecname).end() ); }
 std::vector<const char *> *_get_lifestyle_vector(struct char_data *ch) {
   static std::vector<const char *> results = {};
   results.clear();
 
-  int best_lifestyle = GET_BEST_LIFESTYLE(ch);
-  bool is_garage = FALSE;
+  ch = ch->desc && ch->desc->original ? ch->desc->original : ch;
 
-  if (best_lifestyle < 0) {
-    best_lifestyle *= -1;
-    is_garage = TRUE;
-  }
-
-  // mudlog_vfprintf(ch, LOG_SYSLOG, "Best lifestyle for %s is %s, which %s a garage.", GET_CHAR_NAME(ch), lifestyles[best_lifestyle].name, is_garage ? "is" : "is NOT");
+  int best_lifestyle = MAX(GET_BEST_NORMAL_LIFESTYLE(ch), GET_BEST_GARAGE_LIFESTYLE(ch));
 
   for (int lifestyle_idx = best_lifestyle; lifestyle_idx >= LIFESTYLE_STREETS; lifestyle_idx--) {
-    if (GET_PRONOUNS(ch) == PRONOUNS_NEUTRAL) {
-      if (is_garage) {
-        APPEND_VECTOR_TO_RESULTS(lifestyles[lifestyle_idx].garage_strings_neutral);
-      } else {
-        APPEND_VECTOR_TO_RESULTS(lifestyles[lifestyle_idx].default_strings_neutral);
+    for (int is_garage_mode = 0; is_garage_mode < 2; is_garage_mode++) {
+      if (is_garage_mode && GET_BEST_GARAGE_LIFESTYLE(ch) >= lifestyle_idx) {
+        APPEND_VECTOR_TO_RESULTS(GET_PRONOUNS(ch) == PRONOUNS_NEUTRAL ? lifestyles[lifestyle_idx].garage_strings_neutral
+                                                                      : lifestyles[lifestyle_idx].garage_strings_gendered);
       }
-    } else {
-      if (is_garage) {
-        APPEND_VECTOR_TO_RESULTS(lifestyles[lifestyle_idx].garage_strings_gendered);
-      } else {
-        APPEND_VECTOR_TO_RESULTS(lifestyles[lifestyle_idx].default_strings_gendered);
+      else if (!is_garage_mode && GET_BEST_NORMAL_LIFESTYLE(ch) >= lifestyle_idx) {
+        APPEND_VECTOR_TO_RESULTS(GET_PRONOUNS(ch) == PRONOUNS_NEUTRAL ? lifestyles[lifestyle_idx].default_strings_neutral
+                                                                      : lifestyles[lifestyle_idx].default_strings_gendered);
       }
     }
   }
@@ -171,15 +141,6 @@ std::vector<const char *> *_get_lifestyle_vector(struct char_data *ch) {
   if (GET_TKE(ch) <= NEWBIE_KARMA_THRESHOLD) {
     results.push_back("The metallic scent of the Neophyte Guild clings to $m.");
   }
-
-  /*
-  if (!IS_NPC(ch)) {
-    log_vfprintf("LV for %s is:", GET_CHAR_NAME(ch));
-    for (auto &it: results) {
-      log(it);
-    }
-  }
-  */
 
   return &results;
 }

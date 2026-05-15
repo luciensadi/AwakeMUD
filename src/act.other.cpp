@@ -2719,7 +2719,8 @@ void cedit_parse(struct descriptor_data *d, char *arg)
 
       // Copy over lifestyle-impacting information.
       GET_PRONOUNS(d->edit_mob) = GET_PRONOUNS(CH);
-      GET_BEST_LIFESTYLE(d->edit_mob) = GET_BEST_LIFESTYLE(CH);
+      GET_BEST_NORMAL_LIFESTYLE(d->edit_mob) = GET_BEST_NORMAL_LIFESTYLE(CH);
+      GET_BEST_GARAGE_LIFESTYLE(d->edit_mob) = GET_BEST_GARAGE_LIFESTYLE(CH);
 
       if (STATE(d) == CON_BCUSTOMIZE)
         d->edit_mob->player.background = str_dup(CH->player.background);

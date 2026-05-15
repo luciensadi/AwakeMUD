@@ -130,7 +130,8 @@ void mental_gain(struct char_data * ch)
       gain *= (((float) GET_POWER(ch, ADEPT_HEALING) / 2) + 1);
 
     // Lifestyle boost: The better-fed and better-rested you are, the more you heal.
-    gain *= 1 + MAX(0.0, 0.1 * (GET_BEST_LIFESTYLE(ch) - LIFESTYLE_SQUATTER));
+    int lifestyle_boost = MAX(GET_BEST_NORMAL_LIFESTYLE(ch), GET_BEST_GARAGE_LIFESTYLE(ch) - 1) - LIFESTYLE_SQUATTER;
+    gain *= 1 + MAX(0.0, 0.1 * lifestyle_boost);
 
     // Room related bonuses
     if (find_workshop(ch, TYPE_MEDICAL))
@@ -247,7 +248,8 @@ void physical_gain(struct char_data * ch)
       gain *= (((float) GET_POWER(ch, ADEPT_HEALING) / 2) + 1);
 
     // Lifestyle boost: The better-fed and better-rested you are, the more you heal.
-    gain *= 1 + MAX(0.0, 0.1 * (GET_BEST_LIFESTYLE(ch) - LIFESTYLE_SQUATTER));
+    int lifestyle_boost = MAX(GET_BEST_NORMAL_LIFESTYLE(ch), GET_BEST_GARAGE_LIFESTYLE(ch) - 1) - LIFESTYLE_SQUATTER;
+    gain *= 1 + MAX(0.0, 0.1 * lifestyle_boost);
       
     // Room related bonuses
     if (find_workshop(ch, TYPE_MEDICAL))

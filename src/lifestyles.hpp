@@ -3,7 +3,8 @@
 
 #include <vector>
 
-#define GET_BEST_LIFESTYLE(ch)    ((ch)->player_specials->saved.best_lifestyle)
+#define GET_BEST_NORMAL_LIFESTYLE(ch)    ((ch)->player_specials->saved.best_normal_lifestyle)
+#define GET_BEST_GARAGE_LIFESTYLE(ch)    ((ch)->player_specials->saved.best_garage_lifestyle)
 
 // The lifestyle data structure itself.
 struct lifestyle_data {
@@ -24,6 +25,6 @@ extern void set_lifestyle_string(struct char_data *ch, const char *str);
 extern void cedit_lifestyle_parse(struct descriptor_data *d, char *arg);
 extern void cedit_lifestyle_menu(struct descriptor_data *d);
 extern void load_lifestyles();
-extern int calculate_best_lifestyle(struct char_data *ch);
+extern void calculate_best_lifestyle(struct char_data *ch);
 
 #endif // __LIFESTYLES_HPP__

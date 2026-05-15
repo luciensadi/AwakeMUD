@@ -1169,11 +1169,11 @@ void Apartment::break_lease() {
 
   // Iterate over all characters in the game and have them recalculate their lifestyles. This also confirms their lifestyle string.
   for (struct char_data *plr = character_list; plr; plr = plr->next_in_character_list) {
-    int old_best_lifestyle = GET_BEST_LIFESTYLE(plr);
+    int old_best_lifestyle = MAX(GET_BEST_NORMAL_LIFESTYLE(plr), GET_BEST_GARAGE_LIFESTYLE(plr));
     
     calculate_best_lifestyle(plr);
 
-    if (plr->desc && PRF_FLAGGED(plr, PRF_SEE_TIPS) && GET_BEST_LIFESTYLE(plr) < old_best_lifestyle) {
+    if (plr->desc && PRF_FLAGGED(plr, PRF_SEE_TIPS) && MAX(GET_BEST_NORMAL_LIFESTYLE(plr), GET_BEST_GARAGE_LIFESTYLE(plr)) < old_best_lifestyle) {
       send_to_char("^L(Hint: Your lifestyle went down due to a broken lease. You should select a new lifestyle string with the Change Lifestyle option in ^wCUSTOMIZE PHYSICAL^L.)^n\r\n", plr);
     }
   }
@@ -1467,10 +1467,10 @@ bool Apartment::create_or_extend_lease(struct char_data *ch) {
   save_lease();
 
   // Update their lifestyle, forcing confirmation of lifestyle string validity.
-  int old_best_lifestyle = GET_BEST_LIFESTYLE(ch);
+  int old_best_lifestyle = MAX(GET_BEST_NORMAL_LIFESTYLE(ch), GET_BEST_GARAGE_LIFESTYLE(ch));
   calculate_best_lifestyle(ch);
 
-  if (GET_BEST_LIFESTYLE(ch) > old_best_lifestyle) {
+  if (MAX(GET_BEST_NORMAL_LIFESTYLE(ch), GET_BEST_GARAGE_LIFESTYLE(ch)) > old_best_lifestyle) {
     if (PRF_FLAGGED(ch, PRF_SEE_TIPS)) {
       send_to_char("^L(Hint: Since your lifestyle has just increased, you can flaunt your new status with the Change Lifestyle option in ^wCUSTOMIZE PHYSICAL^L!)^n\r\n", ch);
     }
