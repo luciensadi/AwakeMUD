@@ -97,6 +97,13 @@ ACMD(do_decorate) {
   FAILURE_CASE(!GET_APARTMENT_SUBROOM(ch->in_room), "This apartment is bugged! Notify staff.");
   FAILURE_CASE(GET_APARTMENT(ch->in_room)->get_lifestyle() <= LIFESTYLE_SQUATTER && !VNUM_IS_NERPCORPOLIS(GET_ROOM_VNUM(ch->in_room)), "Squats can't be redecorated.");
   
+  if (!GET_APARTMENT_SUBROOM(ch->in_room)->get_decoration() && !VNUM_IS_NERPCORPOLIS(GET_ROOM_VNUM(ch->in_room))) {
+    FAILURE_CASE_PRINTF(GET_NUYEN(ch) < COST_TO_DECORATE_APT, "You need %d nuyen on hand to cover the materials.", COST_TO_DECORATE_APT);
+
+    send_to_char(ch, "You spend %d nuyen to purchase new decorating materials.\r\n", COST_TO_DECORATE_APT);
+    lose_nuyen(ch, COST_TO_DECORATE_APT, NUYEN_OUTFLOW_DECORATING);
+  }
+  
   // If they've specified an argument, use that to set the room's name.
   skip_spaces(&argument);
   if (*argument) {
@@ -113,13 +120,6 @@ ACMD(do_decorate) {
     send_to_char("Clearing the old decorated name (you must re-specify it with DECORATE <name> when editing if you want to keep it).\r\n", ch);
     GET_APARTMENT_SUBROOM(ch->in_room)->delete_decorated_name();
     GET_APARTMENT_SUBROOM(ch->in_room)->save_decoration();
-  }
-
-  if (!GET_APARTMENT_SUBROOM(ch->in_room)->get_decoration() && !VNUM_IS_NERPCORPOLIS(GET_ROOM_VNUM(ch->in_room))) {
-    FAILURE_CASE_PRINTF(GET_NUYEN(ch) < COST_TO_DECORATE_APT, "You need %d nuyen on hand to cover the materials.", COST_TO_DECORATE_APT);
-
-    send_to_char(ch, "You spend %d nuyen to purchase new decorating materials.\r\n", COST_TO_DECORATE_APT);
-    lose_nuyen(ch, COST_TO_DECORATE_APT, NUYEN_OUTFLOW_DECORATING);
   }
 
   PLR_FLAGS(ch).SetBit(PLR_WRITING);
