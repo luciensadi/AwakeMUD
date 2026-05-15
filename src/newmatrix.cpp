@@ -4133,13 +4133,7 @@ ACMD(do_comcall)
         if (k->persona)
           send_to_icon(k->persona, "A small telephone symbol blinks in the top left of your view.\r\n");
         else {
-          tch = k->phone->carried_by;
-          if (!tch)
-            tch = k->phone->worn_by;
-          if (!tch && k->phone->in_obj)
-            tch = k->phone->in_obj->carried_by;
-          if (!tch && k->phone->in_obj)
-            tch = k->phone->in_obj->worn_by;
+          tch = get_obj_possessor(k->phone);
           if (tch) {
             if (GET_POS(tch) == POS_SLEEPING) {
               if (success_test(GET_WIL(tch), 4)) {
