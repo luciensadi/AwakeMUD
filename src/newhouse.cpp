@@ -2375,22 +2375,23 @@ void ApartmentRoom::save_storage(bool forced) {
     }
   }
 
-  const char *save_location = STRING_TO_CSTR(storage_path);
-
   /*
-  log_vfprintf("Saving storage for room %s (%ld): %s dirty, %s occupied. Saving to %s.", 
+  log_vfprintf("Saving storage for room %s (%ld): %s dirty, %s occupied. Saving to %s.",
                 GET_ROOM_NAME(room),
                 GET_ROOM_VNUM(room),
                 room->dirty_bit ? "is" : "not",
                 room->people ? "is" : "not",
-                save_location);
+                STRING_TO_CSTR(storage_path));
   */
 
   // Clear the dirty bit now that we've processed it.
   room->dirty_bit = FALSE;
 
   // Write the file.
-  Storage_save(save_location, room);
+  // NB: STRING_TO_CSTR(p) yields a pointer into a temporary PathWrapper that
+  // dies at the end of the full-expression. ALWAYS pass it inline as a
+  // function argument; never bind the result to a named variable.
+  Storage_save(STRING_TO_CSTR(storage_path), room);
 }
 
 void ApartmentRoom::load_storage() {
