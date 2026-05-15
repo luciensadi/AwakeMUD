@@ -4156,6 +4156,7 @@ ACMD(do_examine)
   if (subcmd == SCMD_EXAMINE) {
     skip_spaces(&remainder);
     look_at_target(ch, arg, remainder);
+    // fall through
   }
 
   if (!ch->in_veh || (ch->in_veh && !ch->vfront))

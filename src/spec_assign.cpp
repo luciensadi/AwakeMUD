@@ -1022,9 +1022,10 @@ void assign_objects(void)
   ASSIGNOBJ(9826, locker);
   ASSIGNOBJ(60500, chargen_hopper);
   ASSIGNOBJ(10033, quest_debug_scanner);
-  ASSIGNOBJ(OBJ_INITIATIVE_TRACKER, initiative_tracker);
   ASSIGNOBJ(10093, slot_machine);
 #ifdef USE_PRIVATE_CE_WORLD
+  ASSIGNOBJ(OBJ_INITIATIVE_TRACKER, initiative_tracker);
+  ASSIGNOBJ(6999, initiative_tracker);
   ASSIGNOBJ(102208, trideo);
   ASSIGNOBJ(94331, trideo);
   ASSIGNOBJ(70605, desktop);
