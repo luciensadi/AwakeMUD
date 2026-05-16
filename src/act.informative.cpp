@@ -8502,7 +8502,7 @@ ACMD(do_count) {
   if (!str_cmp(argument, "all")) {
     send_to_char("Counting all of your character's stuff across the game...\r\n", ch);
     crapcount_target(ch, ch);
-    send_to_char("\r\nIf this seems high, note that each individual pocket secretary note is an item. Deleting old notes will help.\r\n", ch);
+    send_to_char("\r\nIf this seems high, note that each individual pocket secretary mail is an item. Deleting old mail etc will help.\r\n", ch);
     return;
   }
 
@@ -8616,7 +8616,7 @@ ACMD(do_count) {
     }
   }
 
-  send_to_char("\r\nIf any of this seems high, note that each individual pocket secretary note is an item. Deleting old notes will help.\r\n", ch);
+  send_to_char("\r\nIf any of this seems high, note that each individual pocket secretary mail is an item. Deleting old mail etc will help.\r\n", ch);
 }
 
 void write_gsgp_file(int player_count, const char *path) {
