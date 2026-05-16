@@ -2462,6 +2462,7 @@ ACMD(do_connect)
     }
   }
 
+#ifdef ENABLE_REALITY_FILTERS
   // We iterate twice: First here to look for a reality filter (decreases MPCP by 1 when in use per Matrix p20), then later to load everything else.
   for (struct obj_data *soft = cyberdeck->contains; soft; soft = soft->next_content) {
     if (GET_OBJ_TYPE(soft) == ITEM_PART && GET_PART_TYPE(soft) == PART_REALITY_FILTER) {
@@ -2484,6 +2485,9 @@ ACMD(do_connect)
       break;
     }
   }
+#else
+  DECKER->reality = FALSE;
+#endif
 
   // Cap the IO speed based on the room's I/O rating. 0 is uncapped, -1 is capped by MPCP * 50, all other ratings cap to that rating.
   if (ch->in_room->io == 0) {
@@ -4129,13 +4133,7 @@ ACMD(do_comcall)
         if (k->persona)
           send_to_icon(k->persona, "A small telephone symbol blinks in the top left of your view.\r\n");
         else {
-          tch = k->phone->carried_by;
-          if (!tch)
-            tch = k->phone->worn_by;
-          if (!tch && k->phone->in_obj)
-            tch = k->phone->in_obj->carried_by;
-          if (!tch && k->phone->in_obj)
-            tch = k->phone->in_obj->worn_by;
+          tch = get_obj_possessor(k->phone);
           if (tch) {
             if (GET_POS(tch) == POS_SLEEPING) {
               if (success_test(GET_WIL(tch), 4)) {

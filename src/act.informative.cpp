@@ -2701,14 +2701,11 @@ void look_at_target(struct char_data * ch, char *arg, char *extra_args)
   struct veh_data *found_veh = NULL;
   char *desc;
 
-  if (!*arg)
-  {
-    send_to_char("Look at what?\r\n", ch);
-    return;
+  FAILURE_CASE(!*arg, "Look at what?");
+  
+  if (ch->char_specials.rigging && ch->char_specials.rigging->type == VEH_DRONE) {
+    ch->in_room = get_veh_in_room(ch->char_specials.rigging);
   }
-  if (ch->char_specials.rigging)
-    if (ch->char_specials.rigging->type == VEH_DRONE)
-      ch->in_room = get_veh_in_room(ch->char_specials.rigging);
 
   bits = generic_find(arg, FIND_OBJ_INV | FIND_OBJ_ROOM | FIND_OBJ_EQUIP |
                       FIND_CHAR_ROOM | FIND_OBJ_VEH_ROOM | FIND_CHAR_VEH_ROOM, ch, &found_char, &found_obj);
@@ -2718,6 +2715,7 @@ void look_at_target(struct char_data * ch, char *arg, char *extra_args)
     if (AFF_FLAGGED(ch, AFF_RIG))
     {
       send_to_char(GET_VEH_DESC(ch->in_veh), ch);
+      ch->in_room = was_in;
       return;
     } else if (PLR_FLAGGED(ch, PLR_REMOTE))
     {
@@ -2737,14 +2735,12 @@ void look_at_target(struct char_data * ch, char *arg, char *extra_args)
 
   if (found_veh) {
     send_to_char(GET_VEH_DESC(found_veh), ch);
-    if (PLR_FLAGGED(ch, PLR_REMOTE))
-      ch->in_room = was_in;
+    ch->in_room = was_in;
     return;
   }
 
   /* Is the target a character? */
-  if (found_char != NULL)
-  {
+  if (found_char) {
     // If this isn't an exdesc invocation, look at the character.
     if (!look_at_exdescs(ch, found_char, extra_args)) {
       look_at_char(found_char, ch, arg);
@@ -2758,8 +2754,8 @@ void look_at_target(struct char_data * ch, char *arg, char *extra_args)
     */
     ch->in_room = was_in;
     return;
-  } else if (ch->in_veh)
-  {
+  }
+  else if (ch->in_veh) {
     found_char = get_char_veh(ch, arg, ch->in_veh);
     if (found_char) {
       // If this isn't an exdesc invocation, look at the character.
@@ -2787,40 +2783,44 @@ void look_at_target(struct char_data * ch, char *arg, char *extra_args)
     return;
   }
   /* Does the argument match a piece of equipment */
-  for (j = 0; j < NUM_WEARS && !found; j++)
-    if (ch->equipment[j] && CAN_SEE_OBJ(ch, ch->equipment[j]) &&
-        isname(arg, ch->equipment[j]->text.keywords))
-      if (ch->equipment[j]->text.look_desc)
-      {
-        send_to_char(ch->equipment[j]->text.look_desc, ch);
-        found = TRUE;
-      }
+  for (j = 0; j < NUM_WEARS && !found; j++) {
+    if (ch->equipment[j] 
+        && CAN_SEE_OBJ(ch, ch->equipment[j])
+        && isname(arg, ch->equipment[j]->text.keywords)
+        && ch->equipment[j]->text.look_desc)
+    {
+      send_to_char(ch->equipment[j]->text.look_desc, ch);
+      found = TRUE;
+    }
+  }
   /* Does the argument match an extra desc in the char's equipment? */
-  for (j = 0; j < NUM_WEARS && !found; j++)
-    if (ch->equipment[j] && CAN_SEE_OBJ(ch, ch->equipment[j]))
-      if ((desc = find_exdesc(arg, ch->equipment[j]->ex_description)) != NULL)
-      {
-        page_string(ch->desc, desc, 1);
-        found = 1;
-      }
+  for (j = 0; j < NUM_WEARS && !found; j++) {
+    if (ch->equipment[j]
+        && CAN_SEE_OBJ(ch, ch->equipment[j])
+        && (desc = find_exdesc(arg, ch->equipment[j]->ex_description)) != NULL)
+    {
+      page_string(ch->desc, desc, 1);
+      found = 1;
+    }
+  }
   /* Does the argument match an extra desc in the char's inventory? */
-  for (obj = ch->carrying; obj && !found; obj = obj->next_content)
-  {
-    if (CAN_SEE_OBJ(ch, obj))
-      if ((desc = find_exdesc(arg, obj->ex_description)) != NULL) {
-        page_string(ch->desc, desc, 1);
-        found = 1;
-      }
+  for (obj = ch->carrying; obj && !found; obj = obj->next_content) {
+    if (CAN_SEE_OBJ(ch, obj)
+        && (desc = find_exdesc(arg, obj->ex_description)) != NULL)
+    {
+      page_string(ch->desc, desc, 1);
+      found = 1;
+    }
   }
 
   /* Does the argument match an extra desc of an object in the room? */
   if (ch->in_room) {
     FOR_ITEMS_AROUND_CH(ch, obj) {
-      if (CAN_SEE_OBJ(ch, obj)) {
-        if ((desc = find_exdesc(arg, obj->ex_description)) != NULL) {
-          send_to_char(desc, ch);
-          found = 1;
-        }
+      if (CAN_SEE_OBJ(ch, obj)
+          && (desc = find_exdesc(arg, obj->ex_description)) != NULL)
+      {
+        send_to_char(desc, ch);
+        found = 1;
       }
     }
   }
@@ -4156,7 +4156,7 @@ ACMD(do_examine)
   if (subcmd == SCMD_EXAMINE) {
     skip_spaces(&remainder);
     look_at_target(ch, arg, remainder);
-    return;
+    // fall through
   }
 
   if (!ch->in_veh || (ch->in_veh && !ch->vfront))

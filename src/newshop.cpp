@@ -1283,7 +1283,7 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
                                        GET_AVAIL_OFFSET(ch),
                                        GET_POWER(ch, ADEPT_KINESICS),
                                        get_metavariant_penalty(ch, keeper),
-                                       abs(GET_BEST_LIFESTYLE(ch)),
+                                       abs(MAX(GET_BEST_NORMAL_LIFESTYLE(ch), GET_BEST_GARAGE_LIFESTYLE(ch) - 1)),
                                        phero ? GET_BIOWARE_RATING(phero) * (GET_BIOWARE_IS_CULTURED(phero) ? 2 : 1) : 0,
                                        0);
 
@@ -3349,7 +3349,7 @@ void shedit_parse(struct descriptor_data *d, const char *arg)
         if (!number) {
           struct shop_sell_data *temp;
           REMOVE_FROM_LIST(sell, SHOP->selling, next);
-          delete [] sell;
+          delete sell;
           break;
         }
       }

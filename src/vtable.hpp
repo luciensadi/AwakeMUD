@@ -11,7 +11,7 @@ class VTable
 {
   static const int MAX_SECTION_LENGTH = 32;
   static const int MAX_FIELD_LENGTH = 32;
-  static const int MAX_LINE_LENGTH = 256;
+  static const int MAX_LINE_LENGTH = 512;
 
   struct field
   {

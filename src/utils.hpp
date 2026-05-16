@@ -87,7 +87,7 @@ char *  string_to_uppercase(const char *source);
 char *  string_to_lowercase(const char *source);
 int     get_speed(struct veh_data *veh);
 int     negotiate(struct char_data *ch, struct char_data *tch, int second_skill_to_roll, int basevalue, int base_mod, bool buy, bool include_metavariant_penalty);
-float   gen_size(int race, bool height, int size, int pronouns);
+void    gen_size(int &min, int &max, bool height, int race);
 int     get_best_skill_num(struct char_data *ch, int requested_skill);
 int     get_skill(struct char_data *ch, int skill, int &target, char *mb=NULL, size_t mb_len=0);
 void    add_follower(struct char_data *ch, struct char_data *leader);
@@ -1575,10 +1575,11 @@ int     getpid(void);
 #endif
 */
 
+/*
 #if defined(freebsd)
 extern "C" char *crypt(const char *key, const char *setting);
 #endif
-
+*/
 #if defined(WIN32)
 extern "C" char    *crypt(const char *key, const char *salt);
 #endif

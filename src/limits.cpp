@@ -130,7 +130,8 @@ void mental_gain(struct char_data * ch)
       gain *= (((float) GET_POWER(ch, ADEPT_HEALING) / 2) + 1);
 
     // Lifestyle boost: The better-fed and better-rested you are, the more you heal.
-    gain *= 1 + MAX(0.0, 0.1 * (GET_BEST_LIFESTYLE(ch) - LIFESTYLE_SQUATTER));
+    int lifestyle_boost = MAX(GET_BEST_NORMAL_LIFESTYLE(ch), GET_BEST_GARAGE_LIFESTYLE(ch) - 1) - LIFESTYLE_SQUATTER;
+    gain *= 1 + MAX(0.0, 0.1 * lifestyle_boost);
 
     // Room related bonuses
     if (find_workshop(ch, TYPE_MEDICAL))
@@ -247,7 +248,8 @@ void physical_gain(struct char_data * ch)
       gain *= (((float) GET_POWER(ch, ADEPT_HEALING) / 2) + 1);
 
     // Lifestyle boost: The better-fed and better-rested you are, the more you heal.
-    gain *= 1 + MAX(0.0, 0.1 * (GET_BEST_LIFESTYLE(ch) - LIFESTYLE_SQUATTER));
+    int lifestyle_boost = MAX(GET_BEST_NORMAL_LIFESTYLE(ch), GET_BEST_GARAGE_LIFESTYLE(ch) - 1) - LIFESTYLE_SQUATTER;
+    gain *= 1 + MAX(0.0, 0.1 * lifestyle_boost);
       
     // Room related bonuses
     if (find_workshop(ch, TYPE_MEDICAL))
@@ -1675,459 +1677,111 @@ void misc_update(void)
   // loop through all the characters
 }
 
-float gen_size(int race, bool height, int size, int pronouns)
+void gen_size(int &min, int &max, bool height, int race)
 {
-  float mod;
-  switch (size) {
-    case 1:
-      mod = 0.75;
-      break;
-    case 2:
-      mod = 0.88;
-      break;
-    case 3:
-    default:
-      mod = 1;
-      break;
-    case 4:
-      mod = 1.13;
-      break;
-    case 5:
-      mod = 1.25;
-      break;
+  int base_min = 0;
+  int base_max = 0;
 
-  }
   switch (race) {
-    case RACE_HUMAN:
-      if (pronouns == PRONOUNS_MASCULINE) {
-        if (height)
-          return number(160, 187) * mod;
-        else
-          return number(65, 77) * mod;
-      } else {
-        if (height)
-          return number(145, 175) * mod;
-        else
-          return number(56, 69) * mod;
-      }
-      break;
     case RACE_DWARF:
-      if (pronouns == PRONOUNS_MASCULINE) {
-        if (height)
-          return number(115, 133) * mod;
-        else
-          return number(50, 62) * mod;
-      } else {
-        if (height)
-          return number(80, 115) * mod;
-        else
-          return number(45, 56) * mod;
-      }
-      break;
-    case RACE_ELF:
-      if (pronouns == PRONOUNS_MASCULINE) {
-        if (height)
-          return number(180, 205) * mod;
-        else
-          return number(70, 82) * mod;
-      } else {
-        if (height)
-          return number(175, 195) * mod;
-        else
-          return number(60, 75) * mod;
-      }
-      break;
-    case RACE_ORK:
-      if (pronouns == PRONOUNS_MASCULINE) {
-        if (height)
-          return number(185, 210) * mod;
-        else
-          return number(90, 105) * mod;
-      } else {
-        if (height)
-          return number(178, 195) * mod;
-        else
-          return number(90, 105) * mod;
-      }
-      break;
-    case RACE_TROLL:
-      if (pronouns == PRONOUNS_MASCULINE) {
-        if (height)
-          return number(270, 295) * mod;
-        else
-          return number(215, 245) * mod;
-
-      } else {
-        if (height)
-          return number(255, 280) * mod;
-        else
-          return number(200, 230) * mod;
-      }
-      break;
-    case RACE_CYCLOPS:
-      if (pronouns == PRONOUNS_MASCULINE) {
-        if (height)
-          return number(290, 340) * mod;
-        else
-          return number(240, 350) * mod;
-      } else {
-        if (height)
-          return number(275, 320) * mod;
-        else
-          return number(220, 340) * mod;
-      }
-      break;
-    case RACE_KOBOROKURU:
-      if (pronouns == PRONOUNS_MASCULINE) {
-        if (height)
-          return number(115, 133) * mod;
-        else
-          return number(50, 62) * mod;
-      } else {
-        if (height)
-          return number(80, 112) * mod;
-        else
-          return number(45, 56) * mod;
-      }
-      break;
-    case RACE_FOMORI:
-      if (pronouns == PRONOUNS_MASCULINE) {
-        if (height)
-          return number(270, 295) * mod;
-        else
-          return number(215, 245) * mod;
-      } else {
-        if (height)
-          return number(255, 280) * mod;
-        else
-          return number(200, 230) * mod;
-      }
-      break;
-    case RACE_MENEHUNE:
-      if (pronouns == PRONOUNS_MASCULINE) {
-        if (height)
-          return number(115, 133) * mod;
-        else
-          return number(50, 62) * mod;
-      } else {
-        if (height)
-          return number(80, 112) * mod;
-        else
-          return number(45, 56) * mod;
-      }
-      break;
-    case RACE_HOBGOBLIN:
-      if (pronouns == PRONOUNS_MASCULINE) {
-        if (height)
-          return number(185, 210) * mod;
-        else
-          return number(90, 105) * mod;
-      } else {
-        if (height)
-          return number(178, 195) * mod;
-        else
-          return number(85, 95) * mod;
-      }
-      break;
-    case RACE_GIANT:
-      if (pronouns == PRONOUNS_MASCULINE) {
-        if (height)
-          return number(300, 450) * mod;
-        else
-          return number(380, 477) * mod;
-      } else {
-        if (height)
-          return number(296, 369) * mod;
-        else
-          return number(380, 430) * mod;
-      }
-      break;
-    case RACE_GNOME:
-      if (pronouns == PRONOUNS_MASCULINE) {
-        if (height)
-          return number(85, 137) * mod;
-        else
-          return number(45, 59) * mod;
-      } else {
-        if (height)
-          return number(75, 95) * mod;
-        else
-          return number(39, 52) * mod;
-      }
-      break;
-    case RACE_ONI:
-      if (pronouns == PRONOUNS_MASCULINE) {
-        if (height)
-          return number(185, 215) * mod;
-        else
-          return number(90, 105) * mod;
-      } else {
-        if (height)
-          return number(178, 195) * mod;
-        else
-          return number(80, 95) * mod;
-      }
-      break;
-    case RACE_WAKYAMBI:
-      if (pronouns == PRONOUNS_MASCULINE) {
-        if (height)
-          return number(270, 295) * mod;
-        else
-          return number(100, 115) * mod;
-      } else {
-        if (height)
-          return number(255, 280) * mod;
-        else
-          return number(90, 105) * mod;
-      }
-      break;
-    case RACE_OGRE:
-      if (pronouns == PRONOUNS_MASCULINE) {
-        if (height)
-          return number(185, 235) * mod;
-        else
-          return number(90, 105) * mod;
-      } else {
-        if (height)
-          return number(175, 195) * mod;
-        else
-          return number(85, 96) * mod;
-      }
-      break;
-    case RACE_MINOTAUR:
-      if (pronouns == PRONOUNS_MASCULINE) {
-        if (height)
-          return number(200, 255) * mod;
-        else
-          return number(100, 145) * mod;
-      } else {
-        if (height)
-          return number(145, 180) * mod;
-        else
-          return number(95, 120) * mod;
-      }
-      break;
-    case RACE_SATYR:
-      if (pronouns == PRONOUNS_MASCULINE) {
-        if (height)
-          return number(180, 217) * mod;
-        else
-          return number(90, 105) * mod;
-      } else {
-        if (height)
-          return number(175, 195) * mod;
-        else
-          return number(80, 95) * mod;
-      }
-      break;
-    case RACE_NIGHTONE:
-      if (pronouns == PRONOUNS_MASCULINE) {
-        if (height)
-          return number(185, 227) * mod;
-        else
-          return number(90, 108) * mod;
-      } else {
-        if (height)
-          return number(180, 188) * mod;
-        else
-          return number(80, 91) * mod;
-      }
-      break;
-    case RACE_DRYAD:
-      if (pronouns == PRONOUNS_MASCULINE) {
-        if (height)
-          return number(115, 133) * mod;
-        else
-          return number(50, 62) * mod;
-      } else {
-        if (height)
-          return number(80, 115) * mod;
-        else
-          return number(45, 56) * mod;
-      }
-      break;
-    case RACE_WESTERN_DRAGON:
-      if (pronouns == PRONOUNS_MASCULINE) {
-        if (height)
-          return number(185, 210) * mod;
-        else
-          return number(90, 105) * mod;
-      } else {
-        if (height)
-          return number(178, 195) * mod;
-        else
-          return number(90, 105) * mod;
-      }
-      break;
-    case RACE_EASTERN_DRAGON:
-      if (pronouns == PRONOUNS_MASCULINE) {
-        if (height)
-          return number(185, 210) * mod;
-        else
-          return number(90, 105) * mod;
-      } else {
-        if (height)
-          return number(178, 195) * mod;
-        else
-          return number(90, 105) * mod;
-      }
-      break;
-    case RACE_FEATHERED_SERPENT:
-      if (pronouns == PRONOUNS_MASCULINE) {
-        if (height)
-          return number(185, 210) * mod;
-        else
-          return number(90, 105) * mod;
-      } else {
-        if (height)
-          return number(178, 195) * mod;
-        else
-          return number(90, 105) * mod;
-      }
-      break;
-    case RACE_DRAKE_HUMAN:
-      if (pronouns == PRONOUNS_MASCULINE) {
-        if (height)
-          return number(160, 187) * mod;
-        else
-          return number(65, 77) * mod;
-      } else {
-        if (height)
-          return number(145, 175) * mod;
-        else
-          return number(56, 69) * mod;
-      }
-      break;
     case RACE_DRAKE_DWARF:
-      if (pronouns == PRONOUNS_MASCULINE) {
-        if (height)
-          return number(115, 133) * mod;
-        else
-          return number(50, 62) * mod;
-      } else {
-        if (height)
-          return number(80, 115) * mod;
-        else
-          return number(45, 56) * mod;
-      }
-      break;
-    case RACE_DRAKE_ELF:
-      if (pronouns == PRONOUNS_MASCULINE) {
-        if (height)
-          return number(180, 205) * mod;
-        else
-          return number(70, 82) * mod;
-      } else {
-        if (height)
-          return number(175, 195) * mod;
-        else
-          return number(60, 75) * mod;
-      }
-      break;
-    case RACE_DRAKE_ORK:
-      if (pronouns == PRONOUNS_MASCULINE) {
-        if (height)
-          return number(185, 210) * mod;
-        else
-          return number(90, 105) * mod;
-      } else {
-        if (height)
-          return number(178, 195) * mod;
-        else
-          return number(90, 105) * mod;
-      }
-      break;
-    case RACE_DRAKE_TROLL:
-      if (pronouns == PRONOUNS_MASCULINE) {
-        if (height)
-          return number(270, 295) * mod;
-        else
-          return number(215, 245) * mod;
-
-      } else {
-        if (height)
-          return number(255, 280) * mod;
-        else
-          return number(200, 230) * mod;
-      }
-      break;
-    case RACE_GHOUL_HUMAN:
-      if (pronouns == PRONOUNS_MASCULINE) {
-        if (height)
-          return number(160, 187) * mod;
-        else
-          return number(65, 77) * mod;
-      } else {
-        if (height)
-          return number(145, 175) * mod;
-        else
-          return number(56, 69) * mod;
-      }
-      break;
     case RACE_GHOUL_DWARF:
-      if (pronouns == PRONOUNS_MASCULINE) {
-        if (height)
-          return number(115, 133) * mod;
-        else
-          return number(50, 62) * mod;
-      } else {
-        if (height)
-          return number(80, 115) * mod;
-        else
-          return number(45, 56) * mod;
-      }
+    case RACE_DRYAD:
+    case RACE_KOBOROKURU:
+    case RACE_MENEHUNE:
+      base_min = height ? 80 : 45;
+      base_max = height ? 133 : 62;
       break;
-    case RACE_GHOUL_ELF:
-      if (pronouns == PRONOUNS_MASCULINE) {
-        if (height)
-          return number(180, 205) * mod;
-        else
-          return number(70, 82) * mod;
-      } else {
-        if (height)
-          return number(175, 195) * mod;
-        else
-          return number(60, 75) * mod;
-      }
-      break;
-    case RACE_GHOUL_ORK:
-      if (pronouns == PRONOUNS_MASCULINE) {
-        if (height)
-          return number(185, 210) * mod;
-        else
-          return number(90, 105) * mod;
-      } else {
-        if (height)
-          return number(178, 195) * mod;
-        else
-          return number(90, 105) * mod;
-      }
-      break;
-    case RACE_GHOUL_TROLL:
-      if (pronouns == PRONOUNS_MASCULINE) {
-        if (height)
-          return number(270, 295) * mod;
-        else
-          return number(215, 245) * mod;
 
-      } else {
-        if (height)
-          return number(255, 280) * mod;
-        else
-          return number(200, 230) * mod;
-      }
+    case RACE_GNOME:
+      base_min = height ? 75 : 39;
+      base_max = height ? 137 : 59;
       break;
+
+    case RACE_ELF:
+    case RACE_DRAKE_ELF:
+    case RACE_GHOUL_ELF:
+      base_min = height ? 175 : 60;
+      base_max = height ? 205 : 82;
+      break;
+
+    case RACE_ORK:
+    case RACE_DRAKE_ORK:
+    case RACE_GHOUL_ORK:
+    case RACE_WESTERN_DRAGON:
+    case RACE_EASTERN_DRAGON:
+    case RACE_FEATHERED_SERPENT:
+      base_min = height ? 178 : 90;
+      base_max = height ? 210 : 105;
+      break;
+
+    case RACE_HOBGOBLIN:
+      base_min = height ? 178 : 85;
+      base_max = height ? 210 : 105;
+      break;
+
+    case RACE_ONI:
+      base_min = height ? 178 : 80;
+      base_max = height ? 215 : 105;
+      break;
+
+    case RACE_SATYR:
+      base_min = height ? 175 : 80;
+      base_max = height ? 217 : 105;
+      break;
+
+    case RACE_NIGHTONE:
+      base_min = height ? 180 : 80;
+      base_max = height ? 227 : 108;
+      break;
+
+    case RACE_OGRE:
+      base_min = height ? 175 : 85;
+      base_max = height ? 235 : 105;
+      break;
+
+    case RACE_MINOTAUR:
+      base_min = height ? 145 : 95;
+      base_max = height ? 255 : 145;
+      break;
+
+    case RACE_TROLL:
+    case RACE_FOMORI:
+    case RACE_DRAKE_TROLL:
+    case RACE_GHOUL_TROLL:
+      base_min = height ? 255 : 200;
+      base_max = height ? 295 : 245;
+      break;
+
+    case RACE_WAKYAMBI:
+      base_min = height ? 255 : 90;
+      base_max = height ? 295 : 115;
+      break;
+
+    case RACE_CYCLOPS:
+      base_min = height ? 275 : 220;
+      base_max = height ? 340 : 350;
+      break;
+
+    case RACE_GIANT:
+      base_min = height ? 296 : 380;
+      base_max = height ? 450 : 477;
+      break;
+
+    case RACE_HUMAN:
+    case RACE_DRAKE_HUMAN:
+    case RACE_GHOUL_HUMAN:
     default:
-      if (pronouns == PRONOUNS_MASCULINE) {
-        if (height)
-          return number(160, 187) * mod;
-        else
-          return number(65, 77) * mod;
-      } else {
-        if (height)
-          return number(145, 175) * mod;
-        else
-          return number(56, 69) * mod;
-      }
+      base_min = height ? 145 : 56;
+      base_max = height ? 187 : 77;
+      break;
   }
+
+  // Apply modifiers evenly across the absolute ranges
+  min = base_min * 0.75;
+  max = base_max * 1.25;
+
+  // weight can go up even higher, we're all about that bass
+  if (!height)
+    max *= 1.75;
 }

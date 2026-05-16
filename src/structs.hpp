@@ -724,7 +724,8 @@ struct player_special_data_saved
   int system_points;
   int restricted_system_points;
 
-  int best_lifestyle;
+  int best_normal_lifestyle;
+  int best_garage_lifestyle;
   const char *lifestyle_string;
 
   std::vector<PCExDesc *> exdescs;
@@ -734,7 +735,8 @@ struct player_special_data_saved
     last_in(0), last_veh(NOTHING), bad_pws(0), automod_counter(0), totem(0), totemspirit(0),
     att_points(0), skill_points(0), channel_points(0), force_points(0), restring_points(0), zonenum(0),
     archetype(0), archetypal(FALSE), prestige_alt_id(0), restricted_sysp_spent_on_prestige(0),
-    system_points(0), restricted_system_points(0), best_lifestyle(LIFESTYLE_SQUATTER), lifestyle_string(NULL)
+    system_points(0), restricted_system_points(0), best_normal_lifestyle(LIFESTYLE_SQUATTER),
+    best_garage_lifestyle(LIFESTYLE_STREETS), lifestyle_string(NULL)
   {
     ZERO_OUT_ARRAY(conditions, 3);
   }

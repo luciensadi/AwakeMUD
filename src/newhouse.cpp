@@ -95,8 +95,17 @@ ACMD(do_decorate) {
   FAILURE_CASE(!ch->in_room || !GET_APARTMENT(ch->in_room), "You must be in an apartment or vehicle to decorate it.");
   FAILURE_CASE(!GET_APARTMENT(ch->in_room)->has_owner_privs(ch), "You must be the owner of this apartment to decorate it.")
   FAILURE_CASE(!GET_APARTMENT_SUBROOM(ch->in_room), "This apartment is bugged! Notify staff.");
-  FAILURE_CASE(GET_APARTMENT(ch->in_room)->get_lifestyle() <= LIFESTYLE_SQUATTER && !VNUM_IS_NERPCORPOLIS(GET_ROOM_VNUM(ch->in_room)), "Squats can't be redecorated.");
+  FAILURE_CASE(GET_APARTMENT(ch->in_room)->get_lifestyle() <= LIFESTYLE_SQUATTER
+               && !VNUM_IS_NERPCORPOLIS(GET_ROOM_VNUM(ch->in_room))
+               && !(GET_APARTMENT(ch->in_room) && GET_APARTMENT(ch->in_room)->is_office()), "Squats can't be redecorated.");
   
+  if (!GET_APARTMENT_SUBROOM(ch->in_room)->get_decoration() && !VNUM_IS_NERPCORPOLIS(GET_ROOM_VNUM(ch->in_room))) {
+    FAILURE_CASE_PRINTF(GET_NUYEN(ch) < COST_TO_DECORATE_APT, "You need %d nuyen on hand to cover the materials.", COST_TO_DECORATE_APT);
+
+    send_to_char(ch, "You spend %d nuyen to purchase new decorating materials.\r\n", COST_TO_DECORATE_APT);
+    lose_nuyen(ch, COST_TO_DECORATE_APT, NUYEN_OUTFLOW_DECORATING);
+  }
+
   // If they've specified an argument, use that to set the room's name.
   skip_spaces(&argument);
   if (*argument) {
@@ -113,13 +122,6 @@ ACMD(do_decorate) {
     send_to_char("Clearing the old decorated name (you must re-specify it with DECORATE <name> when editing if you want to keep it).\r\n", ch);
     GET_APARTMENT_SUBROOM(ch->in_room)->delete_decorated_name();
     GET_APARTMENT_SUBROOM(ch->in_room)->save_decoration();
-  }
-
-  if (!GET_APARTMENT_SUBROOM(ch->in_room)->get_decoration() && !VNUM_IS_NERPCORPOLIS(GET_ROOM_VNUM(ch->in_room))) {
-    FAILURE_CASE_PRINTF(GET_NUYEN(ch) < COST_TO_DECORATE_APT, "You need %d nuyen on hand to cover the materials.", COST_TO_DECORATE_APT);
-
-    send_to_char(ch, "You spend %d nuyen to purchase new decorating materials.\r\n", COST_TO_DECORATE_APT);
-    lose_nuyen(ch, COST_TO_DECORATE_APT, NUYEN_OUTFLOW_DECORATING);
   }
 
   PLR_FLAGS(ch).SetBit(PLR_WRITING);
@@ -1169,11 +1171,11 @@ void Apartment::break_lease() {
 
   // Iterate over all characters in the game and have them recalculate their lifestyles. This also confirms their lifestyle string.
   for (struct char_data *plr = character_list; plr; plr = plr->next_in_character_list) {
-    int old_best_lifestyle = GET_BEST_LIFESTYLE(plr);
+    int old_best_lifestyle = MAX(GET_BEST_NORMAL_LIFESTYLE(plr), GET_BEST_GARAGE_LIFESTYLE(plr));
     
     calculate_best_lifestyle(plr);
 
-    if (plr->desc && PRF_FLAGGED(plr, PRF_SEE_TIPS) && GET_BEST_LIFESTYLE(plr) < old_best_lifestyle) {
+    if (plr->desc && PRF_FLAGGED(plr, PRF_SEE_TIPS) && MAX(GET_BEST_NORMAL_LIFESTYLE(plr), GET_BEST_GARAGE_LIFESTYLE(plr)) < old_best_lifestyle) {
       send_to_char("^L(Hint: Your lifestyle went down due to a broken lease. You should select a new lifestyle string with the Change Lifestyle option in ^wCUSTOMIZE PHYSICAL^L.)^n\r\n", plr);
     }
   }
@@ -1467,10 +1469,10 @@ bool Apartment::create_or_extend_lease(struct char_data *ch) {
   save_lease();
 
   // Update their lifestyle, forcing confirmation of lifestyle string validity.
-  int old_best_lifestyle = GET_BEST_LIFESTYLE(ch);
+  int old_best_lifestyle = MAX(GET_BEST_NORMAL_LIFESTYLE(ch), GET_BEST_GARAGE_LIFESTYLE(ch));
   calculate_best_lifestyle(ch);
 
-  if (GET_BEST_LIFESTYLE(ch) > old_best_lifestyle) {
+  if (MAX(GET_BEST_NORMAL_LIFESTYLE(ch), GET_BEST_GARAGE_LIFESTYLE(ch)) > old_best_lifestyle) {
     if (PRF_FLAGGED(ch, PRF_SEE_TIPS)) {
       send_to_char("^L(Hint: Since your lifestyle has just increased, you can flaunt your new status with the Change Lifestyle option in ^wCUSTOMIZE PHYSICAL^L!)^n\r\n", ch);
     }
@@ -2375,22 +2377,23 @@ void ApartmentRoom::save_storage(bool forced) {
     }
   }
 
-  const char *save_location = STRING_TO_CSTR(storage_path);
-
   /*
-  log_vfprintf("Saving storage for room %s (%ld): %s dirty, %s occupied. Saving to %s.", 
+  log_vfprintf("Saving storage for room %s (%ld): %s dirty, %s occupied. Saving to %s.",
                 GET_ROOM_NAME(room),
                 GET_ROOM_VNUM(room),
                 room->dirty_bit ? "is" : "not",
                 room->people ? "is" : "not",
-                save_location);
+                STRING_TO_CSTR(storage_path));
   */
 
   // Clear the dirty bit now that we've processed it.
   room->dirty_bit = FALSE;
 
   // Write the file.
-  Storage_save(save_location, room);
+  // NB: STRING_TO_CSTR(p) yields a pointer into a temporary PathWrapper that
+  // dies at the end of the full-expression. ALWAYS pass it inline as a
+  // function argument; never bind the result to a named variable.
+  Storage_save(STRING_TO_CSTR(storage_path), room);
 }
 
 void ApartmentRoom::load_storage() {

@@ -153,8 +153,13 @@ static void init_char(struct char_data * ch)
   ch->player.time.played = 0;
   ch->player.time.lastdisc = time(0);
 
-  ch->player.weight = (int)gen_size(GET_RACE(ch), 0, 3, GET_PRONOUNS(ch));
-  ch->player.height = (int)gen_size(GET_RACE(ch), 1, 3, GET_PRONOUNS(ch));
+  int min, max;
+
+  gen_size(min, max, true, GET_RACE(ch));
+  ch->player.weight = number(min, max);
+
+  gen_size(min, max, false, GET_RACE(ch));
+  ch->player.height = number(min, max);
 
   ch->points.max_mental = 1000;
   ch->points.max_physical = 1000;
