@@ -50,6 +50,12 @@
     nextFrame = std::make_unique<YesNoPromptFrame>(__VA_ARGS__); \
     return { MenuFrameAction::Push };
 
+#define MF_BOILERPLATE_CLASS(class_name) \
+class class_name : public MenuFrame { \
+  MenuFrameResult parse(struct descriptor_data *, char *) override; \
+  void display(struct descriptor_data *) const override; \
+  const MenuFrameResult handle_child_response(struct descriptor_data *d, const MenuFrameResult &) override; \
+};
 /*
   The Generic Input family of menu frames requests a typed input and returns it.
   Their default display is to just send the prompt again.

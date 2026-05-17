@@ -3,6 +3,8 @@
 #include "../db.hpp"
 #include "nlohmann/json.hpp"
 
+#include "activity_olc.hpp"
+
 /*
 Check: A boolean test that has a pass/fail state. Data includes:
 - What is being tested (e.g. "has_skill", "skill_test", "has_item", "on_quest", etc)
@@ -301,6 +303,67 @@ CHECK_FUNCTION(random) {
 }
 
 #undef CHECK_FUNCTION
+
+
+/*
+class Check : public ActivityFunction {
+public:  
+  std::string serialize(const int indent = -1, const char indent_char = ' ') override;
+
+  std::string func_name = "not set"; // The string that identifies the function to run.
+  std::map<std::string, std::string> settings = {}; // A map of settings/parameters.
+  
+  // Display the Check for easy reading. Only used in edit/debug contexts.
+  const char *stringify() const;
+
+  // True if this specific test passed for the character, false otherwise.
+  bool test(struct char_data *ch);
+
+
+  // Registry introspection. Both are family-locked: the Check.cpp registry is
+  // only reachable through these accessors -- you cannot extern it across
+  // translation units, so you cannot accidentally pass an Effect spec where a
+  // Check spec is expected.
+  static const ActivityFuncSpec* lookup_spec(const std::string& slug);
+  static std::vector<std::string> list_slugs();
+};
+*/
+
+
+//// OLC
+void CheckMenuFrame::display(struct descriptor_data *d) const {
+  send_to_char(CH, "1) Function: %s\r\n", CHK->func_name.empty() ? "(not set)" : CHK->func_name);
+
+  send_to_char(CH, "2) Settings:\r\n");
+
+  // TODO: look up the settings config from the registry
+  // TODO: list required and optional settings, and what they're currently set to
+
+  send_to_char(CH, "\r\n"
+                   "q) Keep changes\r\n",
+                   "x) Discard changes\r\n"
+                   "\r\n"
+                   "Enter your choice: ");
+}
+
+MenuFrameResult CheckMenuFrame::parse(struct descriptor_data *d, char *arg) {
+  switch (*arg) {
+    case '1':
+      MF_PROMPT_INT_AUTOSET_D_AND_RETURN("Type an int between 0-10: ", edit_number2, 0, 10);
+    case '2':
+      // todo: push a settings frame
+      break;
+    case 'x':
+      // Discard changes: drop our current val and replace it with a clone of original
+      delete d->edit_check;
+      d->edit_check = d->edit_check_original;
+      // fall through
+    case 'q': // 'save' changes and quit-- this is a no-op, we want to maintain what we've done to the d->edit_check.
+      return { MenuFrameAction::Pop };
+  }
+  send_to_char(d->character, "'%s' is not a valid selection, try again:", arg);
+  return { MenuFrameAction::JustDisplay };
+}
 
 
 

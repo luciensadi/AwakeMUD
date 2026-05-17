@@ -117,7 +117,7 @@ MenuFrameResult DebugMenuFrame::parse(struct descriptor_data *d, char *arg) {
     case 'q':
       MF_PROMPT_YESNO_AND_RETURN("do you want to save?", 1);
   }
-  send_to_char(d->character, "'%s' is not a valid selection, try again:");
+  send_to_char(d->character, "'%s' is not a valid selection, try again:", arg);
   return { MenuFrameAction::JustDisplay };
 }
 

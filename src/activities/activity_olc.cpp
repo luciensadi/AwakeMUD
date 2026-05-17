@@ -1,14 +1,6 @@
 #include "classes.hpp"
 #include "activity_olc.hpp"
 
-#define CH (d->character)
-#define ACT (d->edit_activity)
-#define CHK (d->edit_check)
-#define EFT (d->edit_effect)
-#define OPT (d->edit_option)
-#define OUT (d->edit_outcome)
-#define SIT (d->edit_situation)
-
 #define DECLARE_FUNCS(name_component) \
   void activity_##name_component##_parse(struct descriptor_data *d, const char *arg); \
   void activity_##name_component##_menu(struct descriptor_data *d); \
