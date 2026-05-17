@@ -60,7 +60,7 @@ int add_spaces(char *str, size_t size, int from, int spaces)
   log_vfprintf("Entering add_spaces (str, %lu, %d, %d) w/ str '''%s'''", size, from, spaces, str);
   int i;
 
-  if (strlen(str) + spaces >= (size - from)) {
+  if (strlen(str) + spaces >= size) {
     log_vfprintf("Hit guard case, bailing: %lu + %d > (%d - %d)", strlen(str), spaces, size, from);
     return 0;
   }
@@ -82,6 +82,11 @@ void format_string(struct descriptor_data *d, int indent)
   if (strlen(*d->str) >= 1023)
     return;
    */
+
+  char *expanded_str = new char[d->max_str + 1];
+  strlcpy(expanded_str, *d->str, d->max_str + 1);
+  delete [] *d->str;
+  *d->str = expanded_str;
 
   log_vfprintf("Entering format_string with this d->str: '''%s'''", *d->str);
 
