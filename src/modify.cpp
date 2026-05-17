@@ -60,11 +60,15 @@ int add_spaces(char *str, size_t size, int from, int spaces)
   log_vfprintf("Entering add_spaces (str, %lu, %d, %d) w/ str '''%s'''", size, from, spaces, str);
   int i;
 
-  if (strlen(str) + spaces >= size)
+  if (strlen(str) + spaces >= (size - from)) {
+    log_vfprintf("Hit guard case, bailing: %lu + %d > (%d - %d)", strlen(str), spaces, size, from);
     return 0;
+  }
 
-  for (i = strlen(str) + spaces; i > from + spaces - 1; i--)
+  for (i = strlen(str) + spaces; i > from + spaces - 1; i--) {
+    log_vfprintf(" - i=%d, i-spaces=%d, termination clause is i > %d", i, i - spaces, from + spaces - 1);
     str[i] = str[i-spaces];
+  }
 
   log("Completed add_spaces()");
   return 1;
