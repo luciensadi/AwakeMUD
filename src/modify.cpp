@@ -97,7 +97,7 @@ void format_string(struct descriptor_data *d, int indent)
   }
 
   for (i = 0; (*d->str)[i]; i++) {
-    log_vfprintf("iterating: i=%d, c='%c'", i, (*d->str)[i]);
+    log_vfprintf("iterating: i=%d, c='%d' (%c)", i, (*d->str)[i], (*d->str)[i]);
     while ((*d->str)[i] == '\r' || (*d->str)[i] == '\n')
     {
       if ((*d->str)[i] == '\n' && (*d->str)[i+1] != '\r') {
