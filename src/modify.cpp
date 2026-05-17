@@ -57,20 +57,20 @@ extern void faction_edit_main_menu(struct descriptor_data * d);
 // add_spaces(*d->str, 5120, i, 3)
 int add_spaces(char *str, size_t size, int from, int spaces)
 {
-  log_vfprintf("Entering add_spaces (str, %lu, %d, %d) w/ str '''%s'''", size, from, spaces, str);
+  // log_vfprintf("Entering add_spaces (str, %lu, %d, %d) w/ str '''%s'''", size, from, spaces, str);
   int i;
 
   if (strlen(str) + spaces >= size) {
-    log_vfprintf("Hit guard case, bailing: %lu + %d > (%d - %d)", strlen(str), spaces, size, from);
+    // log_vfprintf("Hit guard case, bailing: %lu + %d > (%d - %d)", strlen(str), spaces, size, from);
     return 0;
   }
 
   for (i = strlen(str) + spaces; i > from + spaces - 1; i--) {
-    log_vfprintf(" - i=%d, i-spaces=%d, termination clause is i > %d", i, i - spaces, from + spaces - 1);
+    // log_vfprintf(" - i=%d, i-spaces=%d, termination clause is i > %d", i, i - spaces, from + spaces - 1);
     str[i] = str[i-spaces];
   }
 
-  log("Completed add_spaces()");
+  // log("Completed add_spaces()");
   return 1;
 }
 
@@ -88,13 +88,13 @@ void format_string(struct descriptor_data *d, int indent)
   delete [] *d->str;
   *d->str = expanded_str;
 
-  log_vfprintf("Entering format_string with this d->str: '''%s'''", *d->str);
+  // log_vfprintf("Entering format_string with this d->str: '''%s'''", *d->str);
 
   // if the editor is an implementor and begins with the sequence
   // /**/, then we know not to format this string
   if (*(*d->str) == '/' && *(*d->str + 1) == '*' && *(*d->str + 2) == '*' && *(*d->str + 3) == '/')
   {
-    log_vfprintf(" - skipping format, has escape sequence");
+    // log_vfprintf(" - skipping format, has escape sequence");
     for (i = 0; i < (int)(strlen(*d->str) - 4); i++)
       (*d->str)[i] = (*d->str)[i+4];
     (*d->str)[strlen(*d->str) - 4] = '\0';
@@ -102,16 +102,16 @@ void format_string(struct descriptor_data *d, int indent)
   }
 
   for (i = 0; (*d->str)[i]; i++) {
-    log_vfprintf("iterating: i=%d, c='%d' (%c)", i, (*d->str)[i], (*d->str)[i]);
+    // log_vfprintf("iterating: i=%d, c='%d' (%c)", i, (*d->str)[i], (*d->str)[i]);
     while ((*d->str)[i] == '\r' || (*d->str)[i] == '\n')
     {
       if ((*d->str)[i] == '\n' && (*d->str)[i+1] != '\r') {
-        log("case 1");
+        // log("case 1");
         // convert '\n[^\r]' to ' [^\r]'
         (*d->str)[i] = ' ';
       }
       else {
-        log("case 2");
+        // log("case 2");
         // delete the first character of patterns '\n\r' '\r.*'
         for (j = i; (*d->str)[j]; j++)
           (*d->str)[j] = (*d->str)[j+1];
@@ -119,11 +119,11 @@ void format_string(struct descriptor_data *d, int indent)
 
       // if pattern was '\n\r' or '\r\r' then:
       if ((*d->str)[i] == '\r') {
-        log_vfprintf("case 3, indent=%d", indent);
+        // log_vfprintf("case 3, indent=%d", indent);
         // if it starts with \r, leave it in place-- it's an official newline character
         i += 2;
         if (indent && add_spaces(*d->str, d->max_str, i, 3)) {
-        log("case A");
+          // log("case A");
           (*d->str)[i] = (*d->str)[i+1] = (*d->str)[i+2] = ' ';
           while ((*d->str)[i+3] == ' ')
             for (j = i+3; (*d->str)[j]; j++)
@@ -131,7 +131,7 @@ void format_string(struct descriptor_data *d, int indent)
           (*d->str)[i+3] = UPPER((*d->str)[i+3]);
         }
         else if (add_spaces(*d->str, d->max_str, i, 2)) {
-          log("case B");
+          // log("case B");
           (*d->str)[i] = '\r';
           (*d->str)[i+1] = '\n';
           while ((*d->str)[i+2] == ' ')
