@@ -96,6 +96,8 @@ extern char help[];
 // act.wizard.cpp
 extern idnum_t global_copyover_enqueued_by_idnum;
 
+extern void handle_menu_frames(struct descriptor_data *d, char *arg);
+
 #ifdef USE_PRIVATE_CE_WORLD
 extern void do_secret_ticks(int pulse);
 #endif
@@ -941,6 +943,8 @@ void game_loop(int mother_desc)
             string_add(d, comm);
           } else if (d->showstr_point) {     /* reading something w/ pager   */
             show_string(d, comm);
+          } else if (!d->menu_frame_stack.empty()) {
+            handle_menu_frames(d, comm);
           } else if (d->connected != CON_PLAYING) {  /* in menus, etc.       */
             nanny(d, comm);
           } else {                          /* else: we're playing normally */

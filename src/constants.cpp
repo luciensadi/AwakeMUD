@@ -956,6 +956,7 @@ const char *connected_types[] =
     "Creating a Pet",
     "Creating Complex Form",
     "Increasing Submersion",
+    "In Menu Frame",
     "\n"
   };
 

@@ -2360,7 +2360,8 @@ enum {
 #define CON_CF_CREATE           57
 #define CON_SUBMERSION          58
 #define CON_ACTIVITY_EDIT       59
-#define CON_MAX                 59
+#define CON_MENUFRAME           60
+#define CON_MAX                 60
 #define IS_VALID_STATE_TO_RECEIVE_COMMS(s) ((s) == CON_PLAYING || ((s) >= CON_PRO_CREATE && (s) <= CON_AMMO_CREATE) || (s) == CON_PGEDIT || ((s) >= CON_DECORATE_VEH && (s) <= CON_ART_CREATE))
 // If you add another state, you need to touch comm.cpp's close_socket and make sure it's reflected there!
 // Also add it to constants's connected_types.

@@ -37,6 +37,7 @@ namespace fs = std::filesystem;
 #include "deck_build.hpp"
 #include "newshop.hpp"
 #include "bullet_pants.hpp"
+#include "MenuFrameGenerics.hpp"
 
 // The linked list of loaded playergroups.
 extern Playergroup *loaded_playergroups;
@@ -272,6 +273,12 @@ ACMD(do_debug) {
   // Extract the mode switch argument.
   rest_of_argument = any_one_arg(argument, arg1);
   skip_spaces(&rest_of_argument);
+
+  if (!str_cmp(arg1, "menuframes")) {
+    extern void debug_menu_frames(struct char_data *, char *);
+    debug_menu_frames(ch, rest_of_argument);
+    return;
+  }
 
   if (!str_cmp(arg1, "activities")) {
     extern void run_check_debug_tests(struct char_data *ch);
