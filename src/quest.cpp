@@ -1612,8 +1612,102 @@ SPECIAL(johnson)
   }
 
   // Hack to get around the fact that moving the failure check after the interact check would make you double-speak and double-act.
-  if (need_to_speak)
-    do_say(ch, argument, 0, is_sayto ? SCMD_SAYTO : 0);
+  if (need_to_speak) {
+    if (!char_can_make_noise(ch, nullptr)) {
+      switch (number(1, 50)) {
+        case 1:
+          send_to_char(ch, "You can't figure out how to make any noises, so you do a bit of an interpretive dance to try to get your point across.\r\n");
+          act("$n does a wiggly-wriggly interpretive dance in $N's direction.", TRUE, ch, nullptr, johnson, TO_NOTVICT);
+          break;
+        case 2:
+          send_to_char(ch, "You can't make a single sound, so you try to communicate by pretending to be trapped in an invisible box.\r\n");
+          act("$n mimes leaning heavily against an invisible wall, looking desperately at $N for help.", TRUE, ch, nullptr, johnson, TO_NOTVICT);
+          break;
+        case 3:
+          send_to_char(ch, "Your voice completely refuses to work, leaving you to open and close your mouth aggressively like a gasping fish.\r\n");
+          act("$n stares intensely at $N, flapping $s jaw open and closed in complete, eerie silence.", TRUE, ch, nullptr, johnson, TO_NOTVICT);
+          break;
+        case 4:
+          send_to_char(ch, "Realizing you are currently incapable of making noise, you hold up two fingers and start aggressively playing charades.\r\n");
+          act("$n holds up two fingers, points at $N, and starts furiously pantomiming... something.", TRUE, ch, nullptr, johnson, TO_NOTVICT);
+          break;
+        case 5:
+          send_to_char(ch, "You can't figure out how to make any noises, so you hold a thumb and pinky to your ear and mouth 'call me' at them.\r\n");
+          act("$n makes a phone gesture with $s hand, winking suggestively at $N in dead silence.", TRUE, ch, nullptr, johnson, TO_NOTVICT);
+          break;
+        case 6:
+          send_to_char(ch, "Since you can't produce a single peep, you decide to stare unblinkingly until they magically read your mind.\r\n");
+          act("$n steps way too close to $N, staring unblinkingly into $S eyes with intense, wordless desperation.", TRUE, ch, nullptr, johnson, TO_NOTVICT);
+          break;
+        case 7:
+          send_to_char(ch, "There's no sound coming out of your mouth, so you make a sock puppet shape with your hand to do the talking.\r\n");
+          act("$n forms a hand puppet with $s fingers and makes it 'talk' aggressively at $N.", TRUE, ch, nullptr, johnson, TO_NOTVICT);
+          break;
+        case 8:
+          send_to_char(ch, "You can't make any noise at all, so you try to furiously spell out your request in the air with a finger.\r\n");
+          act("$n frantically scribbles invisible words in the air, looking at $N expectantly.", TRUE, ch, nullptr, johnson, TO_NOTVICT);
+          break;
+        case 9:
+          send_to_char(ch, "Talking just isn't happening for you, so you clutch your chest and stumble around to show how important this is.\r\n");
+          act("$n gasps soundlessly, clutching $s heart and throwing a dramatic, mute tantrum toward $N.", TRUE, ch, nullptr, johnson, TO_NOTVICT);
+          break;
+        case 10:
+          send_to_char(ch, "Completely stripped of your ability to make noise, you resort to flapping your arms and bobbing your head.\r\n");
+          act("$n awkwardly flaps $s arms and bobs $s head at $N like an anxious, mute chicken.", TRUE, ch, nullptr, johnson, TO_NOTVICT);
+          break;
+        case 11:
+          send_to_char(ch, "No words or sounds will form, so you bust out some frantic, desperate jazz hands to convey your meaning.\r\n");
+          act("$n thrusts $s hands forward into a vibrant, completely soundless set of jazz hands at $N.", TRUE, ch, nullptr, johnson, TO_NOTVICT);
+          break;
+        case 12:
+          send_to_char(ch, "You can't make a single noise, so you tap your wide-open mouth and shrug with tragic intensity.\r\n");
+          act("$n points a finger into $s wide-open mouth, shrugging frantically at $N like a broken animatronic.", TRUE, ch, nullptr, johnson, TO_NOTVICT);
+          break;
+        case 13:
+          send_to_char(ch, "Speaking is a no-go right now. You try to look casual by throwing out some deeply awkward finger guns.\r\n");
+          act("$n fires a pair of slow, intensely awkward finger guns at $N, smiling through the heavy silence.", TRUE, ch, nullptr, johnson, TO_NOTVICT);
+          break;
+        case 14:
+          send_to_char(ch, "Since making noise is out of the question, you attempt to communicate via mechanical robot dancing.\r\n");
+          act("$n begins doing a series of rigid, jerky robot movements in $N's general direction.", TRUE, ch, nullptr, johnson, TO_NOTVICT);
+          break;
+        case 15:
+          send_to_char(ch, "Trapped in a glass case of soundless emotion, you just stand there jerking your head around like a maniac.\r\n");
+          act("$n stares at $N and begins jerking $s head around so vigorously it looks like it might fly off.", TRUE, ch, nullptr, johnson, TO_NOTVICT);
+          break;
+        case 16:
+          send_to_char(ch, "You can't utter a word, so you puff out your lower lip and try to look incredibly pathetic.\r\n");
+          act("$n gives $N a pair of massive, silent puppy-dog eyes, quivering $s lower lip dramatically.", TRUE, ch, nullptr, johnson, TO_NOTVICT);
+          break;
+        case 17:
+          send_to_char(ch, "Sound is out of the question, so you tap an invisible wristwatch to express your wordless urgency.\r\n");
+          act("$n taps $s foot impatiently, pointing at $s bare wrist while glaring soundlessly at $N.", TRUE, ch, nullptr, johnson, TO_NOTVICT);
+          break;
+        case 18:
+          send_to_char(ch, "Unable to voice your thoughts, you just aggressively flash two thumbs up with a manic, sweaty grin.\r\n");
+          act("$n flashes a double thumbs-up at $N, maintaining a tense, silent, and slightly terrifying grin.", TRUE, ch, nullptr, johnson, TO_NOTVICT);
+          break;
+        case 19:
+          send_to_char(ch, "You can't produce a single sound, so your face contorts into what looks like a permanently stuck, painful sneeze.\r\n");
+          act("$n faces $N, $s face twisted into a bizarre, mute grimace like $e is about to sneeze for eternity.", TRUE, ch, nullptr, johnson, TO_NOTVICT);
+          break;
+        case 20:
+          send_to_char(ch, "With no voice to use, you strike an elaborate, eldritch-looking rigid pose to look interesting.\r\n");
+          act("$n strikes a elaborate, eldritch-looking rigid pose, shuffling sideways toward $N in total silence.", TRUE, ch, nullptr, johnson, TO_NOTVICT);
+          break;
+        case 21:
+          send_to_char(ch, "You find yourself completely unable to make a sound, so you peek out from behind your own hands like a nervous toddler.\r\n");
+          act("$n covers $s face with $s hands, then peeks through $s fingers at $N with wordless desperation.", TRUE, ch, nullptr, johnson, TO_NOTVICT);
+          break;
+        default:
+          send_to_char(ch, "You can't speak, so you do your best to make yourself understood with pantomime.\r\n");
+          act("$n does some wordless pantomime in $N's direction.", TRUE, ch, nullptr, johnson, TO_NOTVICT);
+          break;
+      }
+    } else {
+      do_say(ch, argument, 0, is_sayto ? SCMD_SAYTO : 0);
+    }
+  }
   if (need_to_act)
     do_action(ch, argument, cmd, 0);
 
