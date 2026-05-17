@@ -947,7 +947,10 @@ ACMD(do_gen_write)
     return;
   }
 
-  FAILURE_CASE(subcmd == SCMD_TYPO && (str_str(argument, "chernobyl") || str_str(argument, "chornobyl")), "Thanks for the report, but we use the Ukrainian spelling of Chornobyl here.");
+  if (subcmd == SCMD_TYPO) {
+    FAILURE_CASE((str_str(argument, "chernobyl") || str_str(argument, "chornobyl")), "Thanks for the report, but we use the Ukrainian spelling of Chornobyl here.");
+    FAILURE_CASE((str_str(argument, "produccion")), "Thanks for the report, but Meridional is an Andalusian company, so the Spanish is intended.");
+  }
 
   mudlog_vfprintf(ch, LOG_MISCLOG, "%s %s: %s",
                   (ch->desc->original ? GET_CHAR_NAME(ch->desc->original) : GET_CHAR_NAME(ch)),
