@@ -20,9 +20,14 @@
 #define OPT (d->edit_option)
 #define OUT (d->edit_outcome)
 #define SIT (d->edit_situation)
+#define PARAMS (d->edit_params)
 
 extern bool is_olc_available(struct char_data *ch);
 
+extern void activity_activity_main_menu(struct descriptor_data *d);
+
 MF_BOILERPLATE_CLASS(CheckMenuFrame);
+MF_BOILERPLATE_CLASS(CheckFunctionMenuFrame);
+MF_BOILERPLATE_CLASS(CheckParametersMenuFrame);
 
 #endif // __ACTIVITY_OLC_HPP__

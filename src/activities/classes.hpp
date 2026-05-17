@@ -15,7 +15,7 @@ namespace fs = std::filesystem;
 
 #define BASE_ACTIVITY_PATH fs::absolute("lib") / "activities"
 
-#define STRING_GETTER(varname)  const char *get_##varname() { return varname.c_str(); }
+#define STRING_GETTER(varname)  const char *get_##varname() { return varname.empty() ? "(not set)" : varname.c_str(); }
 
 /*
   Design:
@@ -143,7 +143,9 @@ public:
   void resolve_ptr(const std::map<std::string, ActivityFuncSpec>& registry);
 
   virtual std::string serialize(const int indent = -1, const char indent_char = ' ') = 0;
-  const char *get_func_name() { return func_name.c_str(); }
+  const char *get_func_name() { return func_name.empty() ? "(not set)" : func_name.c_str(); }
+
+  bool func_ptr_is_set() { return func_ptr != nullptr; }
 };
 
 // A boolean test that has a pass/fail state.

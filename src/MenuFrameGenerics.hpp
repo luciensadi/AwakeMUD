@@ -50,12 +50,21 @@
     nextFrame = std::make_unique<YesNoPromptFrame>(__VA_ARGS__); \
     return { MenuFrameAction::Push };
 
+// Generic for defining a frame; forces you to write the parse(), display(), and handle_child_response() funcs.
 #define MF_BOILERPLATE_CLASS(class_name) \
 class class_name : public MenuFrame { \
+public: \
+  class_name(int child_identifier) : MenuFrame(child_identifier) {} \
   MenuFrameResult parse(struct descriptor_data *, char *) override; \
   void display(struct descriptor_data *) const override; \
   const MenuFrameResult handle_child_response(struct descriptor_data *d, const MenuFrameResult &) override; \
 };
+
+// Generic for pushing a fully qualified frame (no prompt or lambda needed)
+#define MF_PUSH_FRAME(frame, child_identifier) \
+    nextFrame = std::make_unique<frame>(child_identifier); \
+    return { MenuFrameAction::Push };
+
 /*
   The Generic Input family of menu frames requests a typed input and returns it.
   Their default display is to just send the prompt again.

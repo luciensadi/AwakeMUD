@@ -48,6 +48,7 @@ class Outcome;
 class Option;
 class Situation;
 class RunningActivity;
+struct ActivityParamSpec;
 
 /***********************************************************************
  * Structures                                                          *
@@ -1200,6 +1201,8 @@ struct descriptor_data
   Option *edit_option_original;
   Situation *edit_situation;
   Situation *edit_situation_original;
+  std::vector<ActivityParamSpec> *edit_params;
+  std::vector<ActivityParamSpec> *edit_params_original;
   // If you add more of these edit_whatevers, touch comm.cpp's free_editing_structs and add them!
 
   int canary;
@@ -1222,7 +1225,7 @@ struct descriptor_data
       edit_apartment_room_original(NULL), edit_faction(NULL), edit_exdesc(NULL), edit_pgroup(NULL), menu_frame_stack(),
       edit_activity(NULL), edit_check(NULL), edit_check_original(NULL), edit_effect(NULL), edit_effect_original(NULL),
       edit_outcome(NULL), edit_outcome_original(NULL), edit_option(NULL), edit_option_original(NULL),
-      edit_situation(NULL), edit_situation_original(NULL), canary(CANARY_VALUE), pProtocol(NULL)
+      edit_situation(NULL), edit_situation_original(NULL), edit_params(NULL), edit_params_original(NULL), canary(CANARY_VALUE), pProtocol(NULL)
   {
     // Zero out our metrics.
     for (int i = 0; i < NUM_OF_TRACKED_NUYEN_INCOME_SOURCES; i++) {

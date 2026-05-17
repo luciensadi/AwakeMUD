@@ -331,14 +331,28 @@ public:
 
 
 //// OLC
+void _display_check_parameters_for_olc(struct descriptor_data *d, bool with_indentation) {
+  for (auto param_itr : CHK->lookup_spec(CHK->get_func_name())->params) {
+    auto check_param = CHK->settings.find(param_itr.name);
+
+    send_to_char(CH, "%s%20s ^c%s^n%s\r\n",
+                 with_indentation ? "  " : "",
+                 std::string(param_itr.name + ":").c_str(),
+                 check_param == CHK->settings.end() ? (param_itr.required ? "^y(not set)^n" : "(not set)") : check_param->second.c_str(),
+                 !param_itr.required ? " (optional)" : "");
+  }
+}
+// CheckMenuFrame defines
 void CheckMenuFrame::display(struct descriptor_data *d) const {
-  send_to_char(CH, "1) Function: %s\r\n", CHK->func_name.empty() ? "(not set)" : CHK->func_name);
-
-  send_to_char(CH, "2) Settings:\r\n");
-
-  // TODO: look up the settings config from the registry
-  // TODO: list required and optional settings, and what they're currently set to
-
+  send_to_char(CH, "1) Function: ^c%s^n\r\n", CHK->get_func_name());
+  
+  if (CHK->func_ptr_is_set()) {
+    send_to_char(CH, "2) Parameters:\r\n\r\n");
+    _display_check_parameters_for_olc(d, true);
+  } else {
+    send_to_char(CH, "2) Parameters: ^c(not set)^n\r\n");
+  }
+  
   send_to_char(CH, "\r\n"
                    "q) Keep changes\r\n",
                    "x) Discard changes\r\n"
@@ -349,10 +363,12 @@ void CheckMenuFrame::display(struct descriptor_data *d) const {
 MenuFrameResult CheckMenuFrame::parse(struct descriptor_data *d, char *arg) {
   switch (*arg) {
     case '1':
-      MF_PROMPT_INT_AUTOSET_D_AND_RETURN("Type an int between 0-10: ", edit_number2, 0, 10);
+      MF_PUSH_FRAME(CheckFunctionMenuFrame, 1);
     case '2':
-      // todo: push a settings frame
-      break;
+      MF_TRYAGAIN_CASE(!CHK->func_ptr_is_set(), "You need to set the function before you can modify its parameters. Enter a different choice:");
+      PARAMS = new std::vector<ActivityParamSpec>;
+      std::copy(CHK->settings.begin(), CHK->settings.end(), std::back_inserter(PARAMS));
+      MF_PUSH_FRAME(CheckParametersMenuFrame, 2);
     case 'x':
       // Discard changes: drop our current val and replace it with a clone of original
       delete d->edit_check;
@@ -362,8 +378,72 @@ MenuFrameResult CheckMenuFrame::parse(struct descriptor_data *d, char *arg) {
       return { MenuFrameAction::Pop };
   }
   send_to_char(d->character, "'%s' is not a valid selection, try again:", arg);
+  return { MenuFrameAction::DoNothing };
+}
+
+const MenuFrameResult CheckMenuFrame::handle_child_response(struct descriptor_data *d, const MenuFrameResult & result) {
+  if (result.child_identifier == 2 && PARAMS) {
+    CHK->settings.clear();
+    std::copy(PARAMS->begin(), PARAMS->end(), std::back_inserter(CHK->settings));
+  }
   return { MenuFrameAction::JustDisplay };
 }
+
+// CheckFunctionMenuFrame defines
+void CheckFunctionMenuFrame::display(struct descriptor_data *d) const {
+  if (CHK->func_ptr_is_set()) {
+    send_to_char(CH, "This check is currently set to the function '^c%s^n':\r\n", CHK->get_func_name());
+    send_to_char(CH, "  ^c%s^n\r\n", CHK->lookup_spec(CHK->get_func_name())->description.c_str());
+    send_to_char(CH, "^yChanging it will clear the existing parameters.^n\r\n");
+  }
+  send_to_char(CH, "Available functions:\r\n");
+  for (auto func_itr : _check_registry) {
+    send_to_char(CH, "  ^W%20s^n: ^c%s^n\r\n", func_itr.first.c_str(), func_itr.second.description.c_str());
+  }
+  send_to_char(CH, "\r\nSelect a new function name, or 'abort' to cancel:");
+}
+
+MenuFrameResult CheckFunctionMenuFrame::parse(struct descriptor_data *d, char *arg) {
+  if (!str_cmp(arg, "abort") || !str_cmp(arg, CHK->get_func_name())) {
+    send_to_char(CH, "OK, aborting without changes.\r\n");
+    return { MenuFrameAction::Pop };
+  }
+
+  MF_TRYAGAIN_CASE(_check_registry.find(arg) == _check_registry.end(), "That's not a valid function name. Enter a slug from above, or 'abort' to cancel: ");
+
+  // Valid function name-- blow away current check and replace it with a new one of that function.
+  delete CHK;
+  CHK = new Check(std::string(arg), {});
+  return { MenuFrameAction::Pop, child_identifier };
+}
+
+const MenuFrameResult CheckFunctionMenuFrame::handle_child_response(struct descriptor_data *d, const MenuFrameResult & result) { return { MenuFrameAction::JustDisplay }; }
+
+// CheckParametersMenuFrame defines
+void CheckParametersMenuFrame::display(struct descriptor_data *d) const {
+  _display_check_parameters_for_olc(d, false);
+  send_to_char(CH, "\r\n"
+                   "q) Keep changes\r\n",
+                   "x) Discard changes\r\n"
+                   "\r\n"
+                   "Enter a parameter name, or 'abort' to cancel: ");
+}
+
+MenuFrameResult CheckParametersMenuFrame::parse(struct descriptor_data *d, char *arg) {
+  // Handle quit-and-save and quit-and-discard modes.
+  if (!str_cmp(arg, "x") || !str_cmp(arg, "q")) {
+    if (!str_cmp(arg, "x")) {
+      delete PARAMS;
+      PARAMS = nullptr;
+    }
+    return { MenuFrameAction::Pop, child_identifier };
+  }
+
+  // They want to set a parameter.
+  // TODO: put them into a param capturing frame based on the allowed type of the parameter. Parsing/validation happens there.
+}
+
+const MenuFrameResult CheckParametersMenuFrame::handle_child_response(struct descriptor_data *d, const MenuFrameResult & result) { return { MenuFrameAction::JustDisplay }; }
 
 
 

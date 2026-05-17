@@ -24,6 +24,7 @@
 #include "newmail.hpp"
 #include "boards.hpp"
 #include "olc.hpp"
+#undef CH // redefined in activity_olc.hpp
 #include "quest.hpp"
 #include "newmagic.hpp"
 #include "newmatrix.hpp"
