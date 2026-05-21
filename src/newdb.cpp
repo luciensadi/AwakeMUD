@@ -78,7 +78,6 @@ void save_bioware_to_db(struct char_data *player);
 void save_cyberware_to_db(struct char_data *player);
 void fix_ghoul_index(struct char_data *ch);
 void fix_character_essence_after_cybereye_migration(struct char_data *ch);
-void fix_character_essence_after_expert_driver_change(struct char_data *ch);
 void recalculate_character_magic_rating(struct char_data *ch);
 void save_player_faction_info(struct char_data *player);
 void load_player_faction_info(struct char_data *player);
@@ -1876,8 +1875,6 @@ char_data *PCIndex::LoadChar(const char *name, bool logon, int load_origin)
 
   load_char(name, ch, logon, load_origin);
 
-  fix_character_essence_after_expert_driver_change(ch);
-
   recalculate_character_magic_rating(ch);
 
   fix_ghoul_index(ch);
@@ -3422,52 +3419,6 @@ void uninstall_and_refund_ware(struct char_data *ch, struct obj_data *ware, char
            (float) magic_refund_amount / 100,
            GET_TRADITION(ch) == TRAD_ADEPT ? " and powerpoints" : "",
            nuyen_refund);
-}
-
-#define UNINSTALL_ALL_WARE(ware_type) while ((ware = find_cyberware(ch, ware_type))) { uninstall_and_refund_ware(ch, ware, buf, sizeof(buf)); changed_anything = TRUE; }
-/* Because we've changed the essence cost of cybereyes, we need to refund the difference to people. */
-void fix_character_essence_after_expert_driver_change(struct char_data *ch) {
-  // First, check for the flag. If it's set, we already did this-- skip.
-  if (PLR_FLAGGED(ch, PLR_COMPLETED_EXPERT_DRIVER_OVERHAUL))
-    return;
-
-  PLR_FLAGS(ch).SetBit(PLR_COMPLETED_EXPERT_DRIVER_OVERHAUL);
-
-  // Mundanes are not affected by this change.
-  if (GET_TRADITION(ch) == TRAD_MUNDANE) {
-    return;
-  }
-
-  strlcpy(buf, "^WSYSTEM NOTICE:^n The functionality of Chipjack Expert Drivers has been changed,"
-               " making them less valuable in certain builds. To ensure this doesn't break your"
-               " build, we have uninstalled the following 'ware and placed it in your inventory:\r\n", sizeof(buf));
-
-  bool changed_anything = FALSE;
-  struct obj_data *ware = NULL;
-
-  // Remove chipjacks, unjacking in the process.
-  while ((ware = find_cyberware(ch, CYB_CHIPJACK))) {
-    for (struct obj_data *chip = ware->contains, *next_obj; chip; chip = next_obj) {
-      next_obj = chip->next_content;
-      deactivate_single_skillsoft(chip, ch, FALSE);
-      obj_from_obj(chip);
-      obj_to_char(chip, ch);
-    }
-
-    uninstall_and_refund_ware(ch, ware, buf, sizeof(buf));
-    changed_anything = TRUE;
-  }
-
-  // Remove skillwires and expert drivers.
-  UNINSTALL_ALL_WARE(CYB_SKILLWIRE);
-  UNINSTALL_ALL_WARE(CYB_CHIPJACKEXPERT);
-  
-  if (changed_anything) {
-    raw_store_mail(GET_IDNUM(ch), 0, "(OOC System Message)", buf);
-  }
-
-  // Finally, save them.
-  save_char(ch, GET_LOADROOM(ch));
 }
 
 // Check if a PC has a specified DB tag applied to them.
