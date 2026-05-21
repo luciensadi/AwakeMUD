@@ -6045,6 +6045,13 @@ ACMD(do_vset)
     veh->sub = value;
     snprintf(buf, sizeof(buf), "%s's subscribed status was set to %s", GET_VEH_NAME(veh), ONOFF(value));
     mudlog_vfprintf(ch, LOG_SYSLOG, "Set %s [%ld]'s subscribed status to %s.", GET_VEH_NAME(veh), GET_VEH_VNUM(veh), ONOFF(value));
+  } else if (is_abbrev(field, "restring")) {
+    FAILURE_CASE(!*val_arg, "Syntax: VSET <vehicle> RESTRING <what to change it to>");
+    delete [] veh->restring;
+    veh->restring = str_dup(val_arg);
+    send_to_char(ch, "Done.\r\n");
+    mudlog_vfprintf(ch, LOG_WIZLOG, "%s set vehicle %ld's restring to '%s'.", GET_CHAR_NAME(ch), veh->idnum, veh->restring);
+    return;
   }
   send_to_char(buf, ch);
   return;

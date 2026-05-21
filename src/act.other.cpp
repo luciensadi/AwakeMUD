@@ -3177,6 +3177,7 @@ int recog(struct char_data *ch, struct char_data *i, const char *name)
 
 }
 
+extern void write_veh_room_desc_to_buf_as_seen_by_ch(struct veh_data * vehicle, struct char_data * ch, char *write_buf, size_t write_buf_sz);
 #define IS_INVIS_ON_CAMERA(vict) (AFF_FLAGGED(vict, AFF_IMP_INVIS) || AFF_FLAGGED(vict, AFF_SPELLIMPINVIS) || GET_INVIS_LEV(vict) > 1 || affected_by_spell(vict, SPELL_IMP_INVIS) || (MOB_FLAGGED(vict, MOB_ASTRAL) && !AFF_FLAGGED(vict, AFF_MANIFEST)))
 ACMD(do_photo)
 {
@@ -3393,39 +3394,8 @@ ACMD(do_photo)
 
     for (struct veh_data *vehicle = ch->in_room->vehicles; vehicle; vehicle = vehicle->next_veh) {
       if (ch->in_veh != vehicle) {
-        strlcat(buf, "^y", sizeof(buf));
-        if (vehicle->damage >= VEH_DAM_THRESHOLD_DESTROYED) {
-          strlcat(buf, GET_VEH_NAME(vehicle), sizeof(buf));
-          strlcat(buf, " lies here wrecked.\r\n", sizeof(buf));
-        } else {
-          if (vehicle->type == VEH_BIKE && vehicle->people)
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s sitting on ", GET_NAME(vehicle->people));
-          switch (vehicle->cspeed) {
-          case SPEED_OFF:
-            if (vehicle->type == VEH_BIKE && vehicle->people) {
-              strlcat(buf, GET_VEH_NAME(vehicle), sizeof(buf));
-              strlcat(buf, " waits here.\r\n", sizeof(buf));
-            } else
-              strlcat(buf, vehicle->description, sizeof(buf));
-            break;
-          case SPEED_IDLE:
-            strlcat(buf, GET_VEH_NAME(vehicle), sizeof(buf));
-            strlcat(buf, " idles here.\r\n", sizeof(buf));
-            break;
-          case SPEED_CRUISING:
-            strlcat(buf, GET_VEH_NAME(vehicle), sizeof(buf));
-            strlcat(buf, " cruises through here.\r\n", sizeof(buf));
-            break;
-          case SPEED_SPEEDING:
-            strlcat(buf, GET_VEH_NAME(vehicle), sizeof(buf));
-            strlcat(buf, " speeds past.\r\n", sizeof(buf));
-            break;
-          case SPEED_MAX:
-            strlcat(buf, GET_VEH_NAME(vehicle), sizeof(buf));
-            strlcat(buf, " zooms by.\r\n", sizeof(buf));
-            break;
-          }
-        }
+        // Pass a NULL character so it's treated as camera mode.
+        write_veh_room_desc_to_buf_as_seen_by_ch(vehicle, NULL, ENDOF(buf), sizeof(buf) - strlen(buf));
       }
     }
     if (ch->in_veh)
