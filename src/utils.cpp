@@ -1490,7 +1490,7 @@ void add_follower(struct char_data *ch, struct char_data *leader)
 
       if (!IS_NPC(ch) && !IS_NPC(leader) && PRF_FLAGGED(leader, PRF_SEE_TIPS))
       {
-        act("^c(Tip: If you want $n to participate in jobs with you, make sure you ^WGROUP^c $m!)^n", TRUE, ch, 0, leader, TO_VICT);
+        act("^c(Tip: If you want $n to participate in jobs with you, make sure you ^WGROUP^c $m!)^n\r\n", TRUE, ch, 0, leader, TO_VICT);
       }
     }
   }
