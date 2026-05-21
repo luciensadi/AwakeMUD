@@ -3506,7 +3506,7 @@ bool char_can_make_noise(struct char_data *ch, const char *message)
   {
     // reject: spell was cast directly on char, and they've been given instructions on breaking it.
     if (message)
-      send_to_char(ch, "(OOC: You're affected by a stealth spell. You can end it with ^WBREAK STEALTH^n.)");
+      send_to_char(ch, "(OOC: You're affected by a stealth spell. You can end it with ^WBREAK STEALTH^n.)\r\n");
     return FALSE;
   }
 
