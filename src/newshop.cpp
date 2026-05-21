@@ -2458,7 +2458,7 @@ void shop_check(char *arg, struct char_data *ch, struct char_data *keeper, vnum_
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " %d %s%s\r\n", 
                  days < 1 ? hours : days,
                  days < 1 ? "hour" : "day",
-                 days < 1 ? (hours == 1 ? "s" : "") : (days == 1 ? "s" : ""));
+                 days < 1 ? (hours == 1 ? "" : "s") : (days == 1 ? "" : "s"));
       }
     }
   if (i == 0)
