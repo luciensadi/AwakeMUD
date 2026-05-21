@@ -347,6 +347,7 @@ int get_program_skill(char_data *ch, obj_data *prog, int target)
   case SOFT_COUNTERFEIT:
   case SOFT_GUARDIAN:
   case SOFT_REMOTE_CONTROL:
+  case SOFT_SNIFFER:
     skill = get_skill(ch, SKILL_PROGRAM_SPECIAL, target);
     break;
   case SOFT_CAMO:
@@ -358,6 +359,7 @@ int get_program_skill(char_data *ch, obj_data *prog, int target)
   case SOFT_SNOOPER:
   case SOFT_ANALYZE:
   case SOFT_DECRYPT:
+  case SOFT_ENCRYPT:
   case SOFT_DECEPTION:
   case SOFT_RELOCATE:
   case SOFT_SCANNER:
