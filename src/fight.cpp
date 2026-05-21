@@ -6256,6 +6256,9 @@ void perform_violence(void)
         act("$N is banished to the metaplanes as $n drains the last of its magical force.", FALSE, mage, 0, spirit, TO_ROOM);
         stop_fighting(spirit);
         stop_fighting(mage);
+        if (COULD_BE_ON_QUEST(mage)) {
+          check_quest_kill(mage, spirit);
+        } 
         end_spirit_existance(spirit, TRUE);
         AFF_FLAGS(mage).RemoveBit(AFF_BANISH);
       } else if ((GET_REAL_MAG(mage) / 100) - GET_TEMP_MAGIC_LOSS(mage) < 1) {
