@@ -834,9 +834,9 @@ bool create_sustained(struct char_data *ch, struct char_data *vict, int spell, i
     send_to_char("^yYour mental burden increases from sustaining your new spell.^n\r\n", ch);
     if (PRF_FLAGGED(ch, PRF_SEE_TIPS) && GET_TKE(ch) <= 50) {
       if (force <= 4) {
-        send_to_char("^[F222](OOC: Sustaining spells is taxing! You should see if you can find a sustaining focus to carry your spell.)^n", ch);
+        send_to_char("^[F222](OOC: Sustaining spells is taxing! You should see if you can find a sustaining focus to carry your spell.)^n\r\n", ch);
       } else {
-        send_to_char("^[F222](OOC: Sustaining spells is taxing! Best to avoid combat while doing this.)^n", ch);
+        send_to_char("^[F222](OOC: Sustaining spells is taxing! Best to avoid combat while doing this.)^n\r\n", ch);
       }
     }
   }
