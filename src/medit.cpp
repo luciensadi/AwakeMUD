@@ -579,6 +579,28 @@ void medit_parse(struct descriptor_data *d, const char *arg)
               new_mob_index[counter + 1] = mob_index[counter];
               new_mob_proto[counter + 1] = mob_proto[counter];
               new_mob_proto[counter + 1].nr = counter + 1;
+              // FIX: Update back-pointers for the element we just shifted right
+              {
+                // Cyberware.
+                for (struct obj_data *obj = new_mob_proto[counter + 1].cyberware; obj; obj = obj->next_content) {
+                  obj->carried_by = &new_mob_proto[counter + 1];
+                }
+                mob_proto[counter].cyberware = NULL;
+
+                // Same for bioware.
+                for (struct obj_data *obj = new_mob_proto[counter + 1].bioware; obj; obj = obj->next_content) {
+                  obj->carried_by = &new_mob_proto[counter + 1];
+                }
+                mob_proto[counter].bioware = NULL;
+
+                // And then equipment.
+                for (int wearloc = 0; wearloc < NUM_WEARS; wearloc++) {
+                  GET_EQ(&mob_proto[counter], wearloc) = NULL;
+                  if (GET_EQ(&new_mob_proto[counter + 1], wearloc)) {
+                    GET_EQ(&new_mob_proto[counter + 1], wearloc)->worn_by = &new_mob_proto[counter + 1];
+                  }
+                }
+              }
             } else {
               /* just copy from old to new, no num change */
               new_mob_proto[counter] = mob_proto[counter];
