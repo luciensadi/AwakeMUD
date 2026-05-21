@@ -486,7 +486,7 @@ void recalculate_vehicle_usedload(struct veh_data *veh) {
   }
   
   if (!FLOATS_ARE_EQUAL_ISH(veh->usedload, old_load)) {
-    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Vehicle %s (%ld-%ld) @ %ld had unexpected usedload (%d != %.2f)",
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Vehicle %s (%ld-%ld) @ %ld had unexpected usedload (%.2f != %.2f)",
                     GET_VEH_NAME(veh),
                     GET_VEH_VNUM(veh),
                     GET_VEH_IDNUM(veh),
