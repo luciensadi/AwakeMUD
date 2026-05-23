@@ -791,7 +791,7 @@ int calculate_swim_successes(struct char_data *ch) {
   int swim_test_target, skill_dice, opposing_dice, successes, water_wings_bonus = 0, levitate_bonus = 0, fin_bonus = 0;
 
   if (IS_NPC(ch) || IS_SENATOR(ch) || !ch->in_room)
-    return 20;
+    return 100;
 
   for (int x = WEAR_LIGHT; x < NUM_WEARS; x++)
     if (GET_EQ(ch, x) && GET_OBJ_TYPE(GET_EQ(ch, x)) == ITEM_CLIMBING && GET_OBJ_VAL(GET_EQ(ch, x), 1) == CLIMBING_TYPE_WATER_WINGS)
