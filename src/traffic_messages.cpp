@@ -227,9 +227,11 @@ const char *_person_adjectives[] = {
   "slovenly",
   "cheery",
   "rugged-looking",
-  "bleary-eyed"
+  "bleary-eyed",
+  "suspiciously rat-like",
+  "neon-limned"
 };
-#define _NUM_PERSON_ADJECTIVES 36
+#define _NUM_PERSON_ADJECTIVES 38
 
 const char *_person_shortdescs[] = {
   "troll",
@@ -252,8 +254,23 @@ const char *_person_shortdescs[] = {
   "wastrel",
   "'runner",
   "figure that's definitely not several raccoons stacked on top of each other in a trench coat",
+  "suit",
+  "courier",
+  "nomad",
+  "grease monkey",
+  "neon-lit stranger",
+  "local cryptid",
+  "wage-mage",
+  "razorboy",
+  "razorgirl",
+  "chummer",
+  "ghoul wearing high-end designer shades",
+  "sasquatch",
+  "free spirit just trying to vibe",
+  "guy who is 85% cyberware and 15% regrets",
+  "exec"
 };
-#define _NUM_PERSON_SHORTDESCS 20
+#define _NUM_PERSON_SHORTDESCS 35
 
 const char *generate_dynamic_traffic_message__returns_new() {
   char msg_buf[1000] = { '\0' };

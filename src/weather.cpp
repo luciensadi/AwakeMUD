@@ -326,39 +326,18 @@ void weather_change(void)
 }
 
 void weaken_or_terminate_spirits(bool sunrise) {
-      bool should_loop = TRUE;
-      int loop_rand = rand();
-      int loop_counter = 0;
-
-      while (should_loop) {
-        should_loop = FALSE;
-        loop_counter++;
-
-        for (struct char_data *ch = character_list; ch; ch = ch->next_in_character_list) {
-          if (ch->last_loop_rand == loop_rand) {
-            continue;
-          } else {
-            ch->last_loop_rand = loop_rand;
-          }
-          
-          if (IS_PC_CONJURED_SPIRIT(ch)) {
-            if (--GET_SPARE2(ch) <= 0) {
-              act("$n abruptly fades from existance.", TRUE, ch, 0, 0, TO_ROOM);
-              end_spirit_existance(ch, FALSE);
-              should_loop = TRUE;
-              break;
-            } else {
-              if (sunrise) {
-                act("$n weakens as the metaphysical power of sunrise ripples through it.\r\n", TRUE, ch, 0, 0, TO_ROOM);
-              } else {
-                act("$n weakens as the metaphysical power of sunset ripples through it.\r\n", TRUE, ch, 0, 0, TO_ROOM);
-              }
-            }
-          }
-        }
-
-        if (loop_counter > 1) {
-          // mudlog_vfprintf(NULL, LOG_SYSLOG, "Looped %d times over weaken_or_terminate_spirits().", loop_counter);
+  for_everyone_in_character_list_safe(__func__, [sunrise](struct char_data *ch) {
+    if (IS_PC_CONJURED_SPIRIT(ch)) {
+      if (--GET_SPARE2(ch) <= 0) {
+        act("$n abruptly fades from existance.", TRUE, ch, 0, 0, TO_ROOM);
+        end_spirit_existance(ch, FALSE);
+      } else {
+        if (sunrise) {
+          act("$n weakens as the metaphysical power of sunrise ripples through it.\r\n", TRUE, ch, 0, 0, TO_ROOM);
+        } else {
+          act("$n weakens as the metaphysical power of sunset ripples through it.\r\n", TRUE, ch, 0, 0, TO_ROOM);
         }
       }
     }
+  });
+}

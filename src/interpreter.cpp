@@ -2770,7 +2770,7 @@ int _parse_name(char *arg, char *name)
 int perform_dupe_check(struct descriptor_data *d)
 {
   struct descriptor_data *k, *next_k;
-  struct char_data *target = NULL, *ch, *next_ch;
+  struct char_data *target = NULL;
   int mode = 0;
 
   int id = GET_IDNUM(d->character);
@@ -2825,33 +2825,30 @@ int perform_dupe_check(struct descriptor_data *d)
    * duplicates, though theoretically none should be able to exist).
    */
 
-  for (ch = character_list; ch; ch = next_ch)
-  {
-    next_ch = ch->next_in_character_list;
-
+  for_everyone_in_character_list_safe(__func__, [id, &target, &mode](struct char_data *ch) {
     if (IS_NPC(ch))
-      continue;
+      LAMBDA_CONTINUE;
     if (GET_IDNUM(ch) != id)
-      continue;
+      LAMBDA_CONTINUE;
 
     /* ignore chars with descriptors (already handled by above step) */
     if (ch->desc)
-      continue;
+      LAMBDA_CONTINUE;
 
     /* don't extract the target char we've found one already */
     if (ch == target)
-      continue;
+      LAMBDA_CONTINUE;
 
     /* we don't already have a target and found a candidate for switching */
     if (!target) {
       target = ch;
       mode = RECON;
-      continue;
+      LAMBDA_CONTINUE;
     }
 
-    /* we've found a duplicate - blow him away. */
+    /* we've found a duplicate - blow him away and start over (next might be an auto-extracted follower, quest target etc). */
     extract_char(ch);
-  }
+  });
 
   /* no target for swicthing into was found - allow login to continue */
   if (!target)

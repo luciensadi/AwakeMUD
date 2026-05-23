@@ -314,6 +314,11 @@ int get_program_skill(char_data *ch, obj_data *prog, int target)
   case SOFT_ASIST_COLD:
   case SOFT_ASIST_HOT:
   case SOFT_HARDENING:
+  case SOFT_CELLULAR_LINK:
+  case SOFT_SATELLITE_LINK:
+  case SOFT_MASER_LINK:
+  case SOFT_MICROWAVE_LINK:
+  case SOFT_LASER_LINK:
   case SOFT_ICCM:
   case SOFT_ICON:
   case SOFT_MPCP:

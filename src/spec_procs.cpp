@@ -397,7 +397,8 @@ int summon_mob(struct char_data *ch, int vnum, int number)
   number = MIN(number, mob_index[rnum].number - num);
 
   // since it is necessary, find and summon the mob(s)
-  for (tch = character_list; tch && number > 0; tch = tch->next_in_character_list)
+  global_a_character_was_extracted = false;
+  for (tch = character_list; !global_a_character_was_extracted && tch && number > 0; tch = tch->next_in_character_list)
     if (GET_MOB_VNUM(tch) == vnum && ch->in_room != tch->in_room &&
         !FIGHTING(tch) && GET_POS(tch) > POS_SLEEPING)
     {
@@ -4334,10 +4335,19 @@ void process_auth_room(struct char_data *ch) {
     int amount = ((int) GET_NUYEN(ch) / 5000) * 5000;
     add_cash_to_housing_card(ch, amount, FALSE);
     send_to_char(ch, "You receive a housing card with your remaining %d nuyen on it.\r\n", amount);
+    // Clear the rest, it can't be kept.
+    GET_NUYEN_RAW(ch) = 0;
   }
 
-  // Clear the rest, it can't be kept.
-  GET_NUYEN_RAW(ch) = 0;
+  if (GET_BANK(ch)) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: %s (%ld) ended up with %d banked nuyen after chargen.", GET_CHAR_NAME(ch), GET_IDNUM(ch), GET_BANK(ch));
+    if (GET_BANK(ch) >= 5000) {
+      int amount = ((int) GET_BANK(ch) / 5000) * 5000;
+      add_cash_to_housing_card(ch, amount, FALSE);
+      send_to_char(ch, "You receive a housing card with your remaining %d banked nuyen on it.\r\n", amount);
+      GET_BANK_RAW(ch) = 0;
+    }
+  }
 
   char_from_room(ch);
   char_to_room(ch, &world[real_room(RM_NEWBIE_LOBBY)]);

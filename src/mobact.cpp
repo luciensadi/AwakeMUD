@@ -1912,11 +1912,10 @@ void mobile_activity(void)
 {
   PERF_PROF_SCOPE(pr_, __func__);
 
-  // Iterate through all characters in the game.
-  for (struct char_data *ch = character_list, *next_ch; ch; ch = next_ch) {
-    next_ch = ch->next_in_character_list;
+  // Iterate safely through everyone in the game.
+  for_everyone_in_character_list_safe(__func__, [](struct char_data *ch) {
     do_single_mobile_activity(ch);
-  }
+  });
 }
 
 int violates_zsp(int security, struct char_data *ch, int pos, struct char_data *mob)

@@ -14,6 +14,7 @@
 #include <stdio.h>
 #include <limits>
 #include "bitfield.hpp"
+#include "structs.hpp"
 
 // Versioning for flat file formats. Gonna start adding these as it will make updating formats a lot
 // easier to handle in code.
@@ -204,8 +205,56 @@ extern rnum_t top_of_world;
 extern struct zone_data *zone_table;
 extern rnum_t top_of_zone_table;
 
+/*
+  Look, I know. I KNOW. But this shit-tacular spaghetti codebase does the following things:
+  - When a character dies, IMMEDIATELY 'extracts' them, including deleting them in memory
+  - Has a convention of returning TRUE from functions where a character dies, but this is _not universally upheld_ and sometimes cannot be (e.g. you need to update a func to do that, but it already returns a bool as a status code)
+  - Has no convention for a non-active character dying as a side effect (e.g. driver rams and vehicle wrecks and passenger dies but driver survives: no warning return)
+  - Loves janky linked lists which can end up pointing at extracted characters without warning
+  So I added this to extract_char(). Usage is to set it to 'false' right before the for-loop where you need it, and if it flips to true, either abort, or set it false again and restart.
+*/
+extern bool global_a_character_was_extracted;
+
 extern struct descriptor_data *descriptor_list;
 extern struct char_data *character_list;
+
+// Lambda for safely iterating over character_list where extraction is a possibility.
+template<typename Func>
+inline void for_everyone_in_character_list_safe(const char* func_name, Func action) {
+  static uint64_t current_loop_id = 0;
+  current_loop_id++;
+  
+  bool should_loop = true;
+  int loop_counter = 0;
+
+  while (should_loop) {
+    should_loop = false;
+    loop_counter++;
+    global_a_character_was_extracted = false;
+
+    for (struct char_data *ch = character_list, *next_ch; !global_a_character_was_extracted && ch; ch = next_ch) {
+      next_ch = ch->next_in_character_list;
+      
+      if (ch->last_loop_id == current_loop_id) {
+        continue;
+      }
+      ch->last_loop_id = current_loop_id;
+
+      action(ch);
+    }
+    
+    if (global_a_character_was_extracted) {
+      should_loop = true;
+    }
+  }
+
+  if (loop_counter > 1) {
+    log_vfprintf("Ran %s %d time%s due to mid-run alterations.", func_name, loop_counter, loop_counter == 1 ? "" : "s");
+  }
+}
+// You can't write 'continue' in the above's lambda definition, but exiting action() just hands execution back to the loop rather than terminating early.
+#define LAMBDA_CONTINUE return
+
 extern struct player_special_data dummy_mob;
 extern struct player_index_element *player_table;
 extern int top_of_p_table;

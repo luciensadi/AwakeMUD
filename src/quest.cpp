@@ -397,47 +397,24 @@ void load_quest_targets(struct char_data *johnson, struct char_data *ch)
 
 void extract_quest_targets(idnum_t questor_idnum)
 {
-  struct obj_data *obj, *next_obj;
-  int i;
+  for_everyone_in_character_list_safe(__func__, [questor_idnum](struct char_data *mob) {
+    if (IS_NPC(mob) && mob->mob_specials.quest_id == questor_idnum) {
+      for (struct obj_data *obj = mob->carrying, *next_obj; obj; obj = next_obj) {
+        next_obj = obj->next_content;
+        extract_obj(obj);
+      }
 
-  {
-    bool should_loop = TRUE;
-    int loop_counter = 0;
-    int loop_rand = rand();
-
-    while (should_loop) {
-      should_loop = FALSE;
-      loop_counter++;
-
-      for (struct char_data *mob = character_list; mob; mob = mob->next_in_character_list) {
-        if (mob->last_loop_rand == loop_rand) {
-          continue;
-        } else {
-          mob->last_loop_rand = loop_rand;
-        }
-
-        if (IS_NPC(mob) && mob->mob_specials.quest_id == questor_idnum) {
-          for (obj = mob->carrying; obj; obj = next_obj) {
-            next_obj = obj->next_content;
-            extract_obj(obj);
-          }
-          for (i = 0; i < NUM_WEARS; i++)
-            if (GET_EQ(mob, i))
-              extract_obj(GET_EQ(mob, i));
-
-          // We extracted a character, so start over.
-          act("$n slips away quietly.", FALSE, mob, 0, 0, TO_ROOM);
-          extract_char(mob);
-          should_loop = TRUE;
-          break;
+      for (int i = 0; i < NUM_WEARS; i++) {
+        if (GET_EQ(mob, i)) {
+          extract_obj(GET_EQ(mob, i));
+          GET_EQ(mob, i) = nullptr;
         }
       }
 
-      if (loop_counter > 1) {
-        // mudlog_vfprintf(NULL, LOG_SYSLOG, "Looped %d times over extract_quest_targets().", loop_counter);
-      }
+      act("$n slips away quietly.", FALSE, mob, 0, 0, TO_ROOM);
+      extract_char(mob);
     }
-  }
+  });
 
   ObjList.RemoveQuestObjs(questor_idnum);
 }
@@ -1733,7 +1710,7 @@ SPECIAL(johnson)
       }
 
       // Precondition: You must have gotten the quest from me.
-      if (!memory(johnson, ch)) {
+      if (!memory(johnson, ch) || quest_table[GET_QUEST(ch)].johnson != GET_MOB_VNUM(johnson)) {
         do_say(johnson, "Whoever you got your job from, it wasn't me. What, do we all look alike to you?", 0 , 0);
         send_to_char("^L(OOC note: You can hit RECAP to see who gave you your current job.)^n\r\n", ch);
         return TRUE;
@@ -2998,9 +2975,9 @@ void qedit_disp_menu(struct descriptor_data *d)
                QUEST->min_rep, CCNRM(CH, C_CMP), CCCYN(CH, C_CMP),
                QUEST->max_rep, CCNRM(CH, C_CMP));
   send_to_char(CH, "%s) Bonus nuyen: %s%d%s\r\n", GET_LEVEL(CH) >= LVL_ADMIN ? "4" : "-", CCCYN(CH, C_CMP),
-               QUEST->nuyen, CCNRM(CH, C_CMP));
+               (int) (QUEST->nuyen * NUYEN_GAIN_MULTIPLIER), CCNRM(CH, C_CMP));
   send_to_char(CH, "%s) Bonus karma: %s%0.2f%s\r\n", GET_LEVEL(CH) >= LVL_ADMIN ? "5" : "-", CCCYN(CH, C_CMP),
-               ((float)QUEST->karma / 100), CCNRM(CH, C_CMP));
+               ((float)QUEST->karma * KARMA_GAIN_MULTIPLIER / 100), CCNRM(CH, C_CMP));
   send_to_char(CH, "6) Item objective menu\r\n");
   send_to_char(CH, "7) Mobile objective menu\r\n");
   send_to_char(CH, "\r\n");
@@ -3413,7 +3390,7 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
     if (number < 0 || number > 500000)
       send_to_char("Invalid amount.  Enter bonus nuyen: ", CH);
     else {
-      QUEST->nuyen = number;
+      QUEST->nuyen = (int) (number / NUYEN_GAIN_MULTIPLIER);
       qedit_disp_menu(d);
     }
     break;
@@ -3422,7 +3399,7 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
     if (karma < 0.0 || karma > 25.0)
       send_to_char("Invalid amount.  Enter bonus karma: ", CH);
     else {
-      QUEST->karma = (int)(karma * 100);
+      QUEST->karma = (int)(karma * 100 / KARMA_GAIN_MULTIPLIER);
       qedit_disp_menu(d);
     }
     break;
@@ -3483,7 +3460,7 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
     if (number < 0 || number > 25000)
       send_to_char("Invalid amount.  Enter nuyen reward: ", CH);
     else {
-      QUEST->mob[d->edit_number2].nuyen = number;
+      QUEST->mob[d->edit_number2].nuyen = number / NUYEN_GAIN_MULTIPLIER;
       d->edit_mode = QEDIT_M_KARMA;
       send_to_char("Enter karma reward: ", CH);
     }
@@ -3493,7 +3470,7 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
     if (karma < 0.0 || karma > 5.0)
       send_to_char("Invalid amount.  Enter karma reward: ", CH);
     else {
-      QUEST->mob[d->edit_number2].karma = (int)(karma * 100);
+      QUEST->mob[d->edit_number2].karma = (int)(karma * 100 / KARMA_GAIN_MULTIPLIER);
       qedit_disp_mob_loads(d);
     }
     break;
@@ -3749,7 +3726,7 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
     if (number < 0 || number > 25000)
       send_to_char("Invalid amount.  Enter nuyen reward: ", CH);
     else {
-      QUEST->obj[d->edit_number2].nuyen = number;
+      QUEST->obj[d->edit_number2].nuyen = number / NUYEN_GAIN_MULTIPLIER;
       d->edit_mode = QEDIT_O_KARMA;
       send_to_char("Enter karma reward: ", CH);
     }
@@ -3759,7 +3736,7 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
     if (karma < 0.0 || karma > 5.0)
       send_to_char("Invalid amount.  Enter karma reward: ", CH);
     else {
-      QUEST->obj[d->edit_number2].karma = (int)(karma * 100);
+      QUEST->obj[d->edit_number2].karma = (int)(karma * 100) / KARMA_GAIN_MULTIPLIER;
       qedit_disp_obj_loads(d);
     }
     break;

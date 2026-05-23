@@ -628,7 +628,7 @@ ACMD(do_cook) {
   FAILURE_CASE_PRINTF(GET_OBJ_TYPE(chip) != ITEM_PROGRAM, "You must finish programming %s first.", CAP(GET_OBJ_NAME(chip)));
   FAILURE_CASE_PRINTF(GET_PROGRAM_IS_COOKED(chip), "%s has already been encoded.", CAP(GET_OBJ_NAME(chip)));
   FAILURE_CASE(GET_PROGRAM_TYPE(chip) == SOFT_SUITE, "Programming suites don't need to be cooked-- just leave them installed on the computer to get their benefits.");
-  
+
   FOR_ITEMS_AROUND_CH(ch, cooker) {
     if (GET_OBJ_TYPE(cooker) == ITEM_DECK_ACCESSORY && GET_DECK_ACCESSORY_TYPE(cooker) == TYPE_COOKER && !cooker->contains)
       break;

@@ -12,6 +12,7 @@
 #include <ctime>
 
 #include "awake.hpp"
+#include "structs.hpp"
 #include "db.hpp"
 #include "newdb.hpp"
 #include "utils.hpp"

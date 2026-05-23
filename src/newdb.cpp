@@ -59,6 +59,7 @@ extern int get_deprecated_cybereye_essence_cost(struct char_data *ch, struct obj
 extern void price_cyber(struct obj_data *obj);
 extern int get_skill_price(struct char_data *ch, int i);
 extern int get_max_skill_for_char(struct char_data *ch, int skill, int type);
+extern void cleanup_excess_elementals(struct char_data *ch);
 
 void auto_repair_obj(struct obj_data *obj, idnum_t owner);
 
@@ -684,6 +685,9 @@ bool load_char(const char *name, char_data *ch, bool logon, int pc_load_origin)
         last = spirit;
       }
       mysql_free_result(res);
+
+      // If you have too many elementals, prune them now.
+      cleanup_excess_elementals(ch);
     }
   }
 
@@ -2333,9 +2337,10 @@ void DeleteChar(long idx)
   mysql_wrapper(mysql, buf);
   if ((res = mysql_use_result(mysql))) {
     if ((row = mysql_fetch_row(res))) {
+      idnum_t group_idnum = atoi(row[0]);
       mysql_free_result(res);
       char *cname = get_player_name(idx);
-      snprintf(buf, sizeof(buf), "INSERT INTO pgroup_logs (idnum, message, redacted) VALUES (%ld, \"%s has left the group. (Reason: deletion)\", 0)", idx, cname);
+      snprintf(buf, sizeof(buf), "INSERT INTO pgroup_logs (idnum, message, redacted) VALUES (%ld, \"%s has left the group. (Reason: deletion)\", 0)", group_idnum, cname);
       delete [] cname;
       mysql_wrapper(mysql, buf);
       snprintf(buf, sizeof(buf), "DELETE FROM pfiles_playergroups WHERE idnum=%ld", idx);

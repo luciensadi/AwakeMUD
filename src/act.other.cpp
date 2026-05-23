@@ -2464,7 +2464,7 @@ ACMD(do_astral)
   }
 
   if (IS_PROJECT(ch)) {
-    send_to_char("But you are already projecting!\r\n", ch);
+    send_to_char("But you are already projecting! (Did you mean to ^WRETURN^n?)\r\n", ch);
     return;
   }
 
@@ -2477,6 +2477,12 @@ ACMD(do_astral)
       PLR_FLAGS(ch).SetBit(PLR_PERCEIVE);
       send_to_char("Your physical body seems distant, as the astral plane slides into view.\r\n", ch);
     }
+    return;
+  }
+
+  // It's projection (boogie woogie woogie)
+  if (!can_take_exclusive_magical_action(ch, "projecting")) {
+    // message sent in function
     return;
   }
 
@@ -4415,8 +4421,21 @@ ACMD(do_dice)
     send_to_char("Roll how many dice?\r\n", ch);
     return;
   }
-  dice = atoi(buf);
-  snprintf(buf, sizeof(buf), "%d dice are %srolled by $n ", dice, subcmd == SCMD_PRIVATE_ROLL ? "privately " : "");
+
+  // Roll non-exploding dice with !.
+  bool dice_explode = true;
+  if (*buf == '!') {
+    dice_explode = false;
+    dice = atoi(buf + 1);
+  } else {
+    dice = atoi(buf);
+  }
+
+  snprintf(buf, sizeof(buf), "%d %sdice are %srolled by $n ",
+           dice,
+           dice_explode ? "" : "non-exploding ",
+           subcmd == SCMD_PRIVATE_ROLL ? "^cprivately^n " : "");
+
   if (*buf1 && atoi(buf1)) {
     tn = MAX(2, atoi(buf1));
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "against a TN of %d ", tn);
@@ -4431,7 +4450,7 @@ ACMD(do_dice)
     strlcat(buf, "and scores:", sizeof(buf));
     for (;dice > 0; dice--) {
        roll = tot = number(1, 6);
-       while (roll == 6) {
+       while (dice_explode && roll == 6) {
          tot += roll = number(1, 6);
        }
        if (tn > 0)

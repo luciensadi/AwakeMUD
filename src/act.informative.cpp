@@ -1139,7 +1139,7 @@ void look_at_char(struct char_data * i, struct char_data * ch, const char *used_
         }
 
         // Hidden focus (still visible to staff)
-        if (ch != i && !IS_SENATOR(ch) && GET_OBJ_TYPE(eq) == ITEM_FOCUS && IS_OBJ_STAT(eq, ITEM_EXTRA_CONCEALED_IN_EQ)) {
+        if (!IS_SENATOR(ch) && GET_OBJ_TYPE(eq) == ITEM_FOCUS && IS_OBJ_STAT(eq, ITEM_EXTRA_CONCEALED_IN_EQ)) {
           continue;
         }
 
@@ -3500,7 +3500,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j, bool is_in_shop
       if (GET_PROGRAM_TYPE(j) == SOFT_ATTACK)
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " Its damage code is ^c%s^n.", GET_WOUND_NAME(GET_OBJ_VAL(j, 3)));
 
-      if (GET_OBJ_VNUM(j) == OBJ_BLANK_PROGRAM && (GET_PROGRAM_TYPE(j) >= SOFT_ASIST_COLD || GET_PROGRAM_TYPE(j) < SOFT_SENSOR)) {
+      if (GET_OBJ_VNUM(j) == OBJ_BLANK_PROGRAM && GET_PROGRAM_TYPE(j) != SOFT_SUITE) {
         if (GET_OBJ_TIMER(j) < 0)
           strlcat(buf, " It was ruined in cooking and is useless.\r\n", sizeof(buf));
         else if (!GET_OBJ_TIMER(j))
@@ -3744,7 +3744,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j, bool is_in_shop
       break;
     case ITEM_PART:
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is %s rating-^C%d^n ^c%s^n intended for MPCP ^c%d^n decks. It will cost %d nuyen in parts and %d nuyen in chips to build.",
-               GET_PART_DESIGN_TICKS_REMAINING(j) < 0 ? "a not-yet-designed" : (GET_PART_DESIGN_TICKS_REMAINING(j) > 0 ? "a design-in-progress" : "a"),
+               GET_PART_DESIGN_TICKS_REMAINING(j) < 0 ? "a not-yet-designed" : (GET_PART_DESIGN_TICKS_REMAINING(j) > 0 ? "a design-in-progress" : "a ready-to-install"),
                GET_PART_RATING(j),
                parts[GET_PART_TYPE(j)].name,
                GET_PART_TARGET_MPCP(j),
@@ -4363,7 +4363,7 @@ ACMD(do_examine)
       else
         strncpy(buf, "The small LED is currently green, indicating a successful encode.\r\n", sizeof(buf));
       send_to_char(buf, ch);
-    } else if (GET_OBJ_TYPE(tmp_object) == ITEM_PROGRAM && (GET_OBJ_VAL(tmp_object, 0) >= SOFT_ASIST_COLD || GET_OBJ_VAL(tmp_object, 0) < SOFT_SENSOR)) {
+    } else if (GET_OBJ_TYPE(tmp_object) == ITEM_PROGRAM && GET_PROGRAM_TYPE(tmp_object) != SOFT_SUITE) {
       if (GET_OBJ_TIMER(tmp_object) < 0)
         strncpy(buf, "This chip has been ruined.\r\n", sizeof(buf));
       else if (!GET_OBJ_TIMER(tmp_object))
@@ -8200,13 +8200,18 @@ void display_room_name(struct char_data *ch, struct room_data *in_room, bool in_
       APPEND_ROOM_FLAG(ROOM_FLAGGED(in_room, ROOM_STORAGE) && !ROOM_FLAGGED(in_room, ROOM_CORPSE_SAVE_HACK), " (Storage)");
       if (GET_APARTMENT(in_room)) {
         if (GET_APARTMENT(in_room)->is_office()) {
-          strlcat(room_title_buf, " (Office)", sizeof(room_title_buf));
+          snprintf(ENDOF(room_title_buf), sizeof(room_title_buf) - strlen(room_title_buf), " (%s Office)", GET_APARTMENT(in_room)->get_paid_until() > time(0) ? "Leased" : "^gAvailable^n");
         } else {
           snprintf(ENDOF(room_title_buf), sizeof(room_title_buf) - strlen(room_title_buf), " (%s-Class Apartment)",
                    lifestyles[GET_APARTMENT(in_room)->get_lifestyle()].name);
         }
+
+        if (ROOM_FLAGGED(in_room, ROOM_STERILE) && GET_APARTMENT(in_room)->is_owner_or_guest_with_valid_lease(ch)) {
+          strlcat(room_title_buf, " (Sterile)", sizeof(room_title_buf));
+        }
+      } else {
+        APPEND_ROOM_FLAG(ROOM_FLAGGED(in_room, ROOM_STERILE), " (Sterile)");
       }
-      APPEND_ROOM_FLAG(ROOM_FLAGGED(in_room, ROOM_STERILE), " (Sterile)");
       APPEND_ROOM_FLAG(ROOM_FLAGGED(in_room, ROOM_ARENA), " ^y(Arena)^n");
       APPEND_ROOM_FLAG(ROOM_FLAGGED(in_room, ROOM_PEACEFUL), " (Peaceful)");
       APPEND_ROOM_FLAG(IS_WATER(in_room), " ^B(Flooded)^n");
