@@ -6,7 +6,6 @@
 #include "comm.hpp"
 #include "constants.hpp"
 #include "interpreter.hpp"
-#include "structs.hpp"
 #include "utils.hpp"
 #include "handler.hpp"
 #include "bullet_pants.hpp"

@@ -866,6 +866,7 @@ enum {
 #define AURA_PLAYERCOMBAT  16
 #define AURA_PLAYERDEATH   17
 #define NUM_AURAS          18
+// adding a new one? update the aura increment logic in limits.cpp to not treat it like a player aura and wipe it out
 
 #define COMBAT      1
 #define DETECTION    2

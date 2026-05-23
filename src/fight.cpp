@@ -6109,11 +6109,11 @@ void perform_violence(void)
     engulfed = FALSE;
 
     // Prevent people from being processed multiple times per loop.
-    if (ch->last_loop_rand == loop_rand) {
+    if (ch->last_loop_id == loop_rand) {
       // mudlog("SYSERR: Encountered someone who already went this combat turn. Fix set_fighting().", ch, LOG_SYSLOG, TRUE);
       continue;
     } else {
-      ch->last_loop_rand = loop_rand;
+      ch->last_loop_id = loop_rand;
     }
 
     // You're not in combat or not awake.

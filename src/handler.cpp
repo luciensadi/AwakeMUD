@@ -3014,7 +3014,7 @@ void extract_char(struct char_data * ch, bool do_save)
     }
   }
 
-  /* transfer objects to room, if any */
+  /* destroy carried objects, if any */
   while (ch->carrying)
   {
     obj = ch->carrying;
@@ -3041,7 +3041,7 @@ void extract_char(struct char_data * ch, bool do_save)
     extract_obj(obj, TRUE);
   }
 
-  /* transfer equipment to room, if any */
+  /* destroy equipment, if any */
   for (i = 0; i < NUM_WEARS; i++)
     if (GET_EQ(ch, i))
       extract_obj(unequip_char(ch, i, TRUE), TRUE);

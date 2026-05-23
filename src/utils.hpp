@@ -32,16 +32,6 @@ extern struct weather_data weather_info;
 struct char_data;
 struct obj_data;
 
-/*
-  Look, I know. I KNOW. But this shit-tacular spaghetti codebase does the following things:
-  - When a character dies, IMMEDIATELY 'extracts' them, including deleting them in memory
-  - Has a convention of returning TRUE from functions where a character dies, but this is _not universally upheld_ and sometimes cannot be (e.g. you need to update a func to do that, but it already returns a bool as a status code)
-  - Has no convention for a non-active character dying as a side effect (e.g. driver rams and vehicle wrecks and passenger dies but driver survives: no warning return)
-  - Loves janky linked lists which can end up pointing at extracted characters without warning
-  So I added this to extract_char(). Usage is to set it to 'false' right before the for-loop where you need it, and if it flips to true, either abort, or set it false again and restart.
-*/
-extern bool global_a_character_was_extracted;
-
 /* public functions in utils.c */
 bool    has_cyberweapon(struct char_data *ch);
 char *  str_dup(const char *source);
