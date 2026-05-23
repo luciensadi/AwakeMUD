@@ -2333,9 +2333,10 @@ void DeleteChar(long idx)
   mysql_wrapper(mysql, buf);
   if ((res = mysql_use_result(mysql))) {
     if ((row = mysql_fetch_row(res))) {
+      idnum_t group_idnum = atoi(row[0]);
       mysql_free_result(res);
       char *cname = get_player_name(idx);
-      snprintf(buf, sizeof(buf), "INSERT INTO pgroup_logs (idnum, message, redacted) VALUES (%ld, \"%s has left the group. (Reason: deletion)\", 0)", idx, cname);
+      snprintf(buf, sizeof(buf), "INSERT INTO pgroup_logs (idnum, message, redacted) VALUES (%ld, \"%s has left the group. (Reason: deletion)\", 0)", group_idnum, cname);
       delete [] cname;
       mysql_wrapper(mysql, buf);
       snprintf(buf, sizeof(buf), "DELETE FROM pfiles_playergroups WHERE idnum=%ld", idx);
