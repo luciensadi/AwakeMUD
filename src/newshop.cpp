@@ -1155,6 +1155,8 @@ void shop_buy(char *arg, size_t arg_len, struct char_data *ch, struct char_data 
       // Adapt for the player probably meaning an item number instead of an item with a numeric keyword.
       char oopsbuf[strlen(arg) + 2];
       snprintf(oopsbuf, sizeof(oopsbuf), "#%s", arg);
+      // Overwrite it so we don't accidentally force them to buy a quantity of this thing.
+      strlcpy(arg, oopsbuf, arg_len);
       sell = find_obj_shop(oopsbuf, shop_nr, &obj, ch);
     }
     if (!sell) {
@@ -1428,8 +1430,8 @@ int negotiate_and_payout_sellprice(struct char_data *ch, struct char_data *keepe
   if (!shop_table[shop_nr].flags.IsSet(SHOP_WONT_NEGO) && !MOB_FLAGGED(keeper, MOB_INANIMATE))
     sellprice = negotiate(ch, keeper, 0, sellprice, 0, FALSE, TRUE);
 
-  // Pay it out as nuyen.
-  if (shop_table[shop_nr].type == SHOP_BLACK) {
+  // Pay it out as nuyen. Chargen shops are forced to pay cash even if they're grey/black.
+  if (shop_table[shop_nr].type == SHOP_BLACK || shop_table[shop_nr].flags.IsSet(SHOP_CHARGEN)) {
     gain_nuyen(ch, sellprice, NUYEN_INCOME_SHOP_SALES);
   } else {
     gain_bank(ch, sellprice, NUYEN_INCOME_SHOP_SALES);
