@@ -3779,7 +3779,7 @@ SPECIAL(toggled_invis)
         obj->obj_flags.bitvector.RemoveBit(AFF_RUTHENIUM);
         send_to_char(ch, "You feel the static fade as the ruthenium polymers in %s power down.\r\n", GET_OBJ_NAME(obj));
         act("The air shimmers briefly as $n fades into view.", FALSE, ch, 0, 0, TO_ROOM);
-        WAIT_STATE(ch, 1 RL_SEC);
+        WAIT_STATE(ch, 0.5 RL_SEC);
 
         // NPCs around you become alert/alarmed depending on disposition.
         for (struct char_data *viewer = ch->in_veh ? ch->in_veh->people : ch->in_room->people;
@@ -3804,7 +3804,7 @@ SPECIAL(toggled_invis)
       if (!obj->obj_flags.bitvector.IsSet(AFF_RUTHENIUM)) {
         send_to_char(ch, "You feel a tiny static charge as the ruthenium polymers in %s power up.\r\n", GET_OBJ_NAME(obj));
         act("The world bends around $n as $e vanishes from sight.", FALSE, ch, 0, 0, TO_ROOM);
-        WAIT_STATE(ch, 1 RL_SEC);
+        WAIT_STATE(ch, 0.5 RL_SEC);
 
         // NPCs around you become alert/alarmed depending on disposition.
         for (struct char_data *viewer = ch->in_veh ? ch->in_veh->people : ch->in_room->people;

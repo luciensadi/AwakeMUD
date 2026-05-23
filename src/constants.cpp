@@ -1458,7 +1458,12 @@ struct program_data programs[] =
     {"Steamroller",              3,  TRUE , "Not implemented, but destroys tar IC programs." },
     {"Restore",                  3,  TRUE , "Not implemented, but restores damage to persona programs software (not including hardware damage)." },
     {"Encrypt",                  1,  TRUE , "Not implemented, but reduces the target number for System Tests involving encryption." },
-    {"Sniffer",                  3,  TRUE , "Not implemented, but reduces the target number for Intercept Data System Tests." }
+    {"Sniffer",                  3,  TRUE , "Not implemented, but reduces the target number for Intercept Data System Tests." },
+    {"Cellular Link",            1,  TRUE , "A hardware driver. Required for part installation." },
+    {"Satellite Link",           1,  TRUE , "A hardware driver. Required for part installation." },
+    {"Maser Link",               1,  TRUE , "A hardware driver. Required for part installation." },
+    {"Microwave Link",           1,  TRUE , "A hardware driver. Required for part installation." },
+    {"Laser Link",               1,  TRUE , "A hardware driver. Required for part installation." }
   };
 
 int attack_multiplier[] = { 0, 2, 3, 4, 5 };
@@ -1485,12 +1490,12 @@ struct part_data parts[] =
     { "Reality Filter", TYPE_WORKSHOP, SOFT_REALITY, 2, "Reduces your effective MPCP by 1, but adds +2 Matrix Reaction and +1d6 Matrix Initiative. Must be designed for a specific person." },
     { "Response Increase", TYPE_WORKSHOP, SOFT_RESPONSE, 1, "Adds +2 Matrix Reaction and +1d6 Matrix Initiative per level. Requires Hot ASIST."},
     { "Matrix Interface", TYPE_KIT, 0, -1, "Adds a fiberoptic cable for connecting to jackpoints. Required." },
-    { "Maser Interface", TYPE_KIT, 0, 0, "Not implemented, but allows connection over the power grid." },
-    { "Cellular Interface", TYPE_KIT, 0, 1, "Not implemented, but allows connection over the cellular network." },
-    { "Laser Interface", TYPE_KIT, 0, 0, "Not implemented, but allows connection through a matching laser transciever within line of sight." },
-    { "Microwave Interface", TYPE_WORKSHOP, 0, 1, "Not implemented, but allows connection through a nearby microwave transponder." },
+    { "Maser Interface", TYPE_KIT, SOFT_MASER_LINK, 0, "Not implemented, but allows connection over the power grid." },
+    { "Cellular Interface", TYPE_KIT, SOFT_CELLULAR_LINK, 1, "Not implemented, but allows connection over the cellular network." },
+    { "Laser Interface", TYPE_KIT, SOFT_LASER_LINK, 0, "Not implemented, but allows connection through a matching laser transciever within line of sight." },
+    { "Microwave Interface", TYPE_WORKSHOP, SOFT_MICROWAVE_LINK, 1, "Not implemented, but allows connection through a nearby microwave transponder." },
     { "Radio Interface", TYPE_KIT, 0, 0, "Partially implemented. Supposed to allow connection through radio network, but instead allows you to send and receive broadcast messages while decking." },
-    { "Satellite Interface", TYPE_WORKSHOP, 0, 2, "Not implemented, but allows connection through a satellite transponder." },
+    { "Satellite Interface", TYPE_WORKSHOP, SOFT_SATELLITE_LINK, 2, "Not implemented, but allows connection through a satellite transponder." },
     { "Signal Amplifier", TYPE_KIT, 0, -1, "Not implemented, but improves your wireless connection range through certain interfaces." },
   };
 const char *log_types[] =
