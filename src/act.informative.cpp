@@ -1139,7 +1139,7 @@ void look_at_char(struct char_data * i, struct char_data * ch, const char *used_
         }
 
         // Hidden focus (still visible to staff)
-        if (ch != i && !IS_SENATOR(ch) && GET_OBJ_TYPE(eq) == ITEM_FOCUS && IS_OBJ_STAT(eq, ITEM_EXTRA_CONCEALED_IN_EQ)) {
+        if (!IS_SENATOR(ch) && GET_OBJ_TYPE(eq) == ITEM_FOCUS && IS_OBJ_STAT(eq, ITEM_EXTRA_CONCEALED_IN_EQ)) {
           continue;
         }
 
