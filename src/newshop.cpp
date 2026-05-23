@@ -147,23 +147,26 @@ int buy_price(struct obj_data *obj, vnum_t shop_nr, idnum_t faction_idnum, struc
   // Base cost.
   int cost = GET_OBJ_COST(obj);
 
-  // Multiply base cost by the shop's profit. Under no circumstances will we sell to them for less than 1x cost.
-  cost = (int) round(cost * MAX(1, shop_table[shop_nr].profit_buy));
+  // Chargen shops always do the baseline cost.
+  if (!shop_table[shop_nr].flags.IsSet(SHOP_CHARGEN)) {
+    // Multiply base cost by the shop's profit. Under no circumstances will we sell to them for less than 1x cost.
+    cost = (int) round(cost * MAX(1, shop_table[shop_nr].profit_buy));
 
-  // If the shop is black or grey market, multiply base cost by the item's street index.
-  if (shop_table[shop_nr].type != SHOP_LEGAL && GET_OBJ_STREET_INDEX(obj) > 0)
-    cost = (int) round(cost * GET_OBJ_STREET_INDEX(obj));
+    // If the shop is black or grey market, multiply base cost by the item's street index.
+    if (shop_table[shop_nr].type != SHOP_LEGAL && GET_OBJ_STREET_INDEX(obj) > 0)
+      cost = (int) round(cost * GET_OBJ_STREET_INDEX(obj));
 
-  // If it's a faction shop, multiply by the faction rep multiplier.
-  if (faction_idnum)
-    cost *= get_shop_faction_sell_to_player_multiplier(faction_idnum, ch);
+    // If it's a faction shop, multiply by the faction rep multiplier.
+    if (faction_idnum)
+      cost *= get_shop_faction_sell_to_player_multiplier(faction_idnum, ch);
 
-  // Add the random multiplier to the cost.
-  cost += (int) round((cost * shop_table[shop_nr].random_current) / 100);
+    // Add the random multiplier to the cost.
+    cost += (int) round((cost * shop_table[shop_nr].random_current) / 100);
 
-  // Enforce the final 1x cost requirement. This is an anti-exploit measure to prevent buying a cheap thing at shop A and reselling at shop B for profit.
-  // Note that negotiation happens AFTER this, so people can still negotiate down.
-  cost = MAX(cost, GET_OBJ_COST(obj));
+    // Enforce the final 1x cost requirement. This is an anti-exploit measure to prevent buying a cheap thing at shop A and reselling at shop B for profit.
+    // Note that negotiation happens AFTER this, so people can still negotiate down.
+    cost = MAX(cost, GET_OBJ_COST(obj));
+  }
 
   // Return the final value.
   return cost;
@@ -175,17 +178,20 @@ int sell_price(struct obj_data *obj, vnum_t shop_nr, idnum_t faction_idnum, stru
   // Base cost.
   int cost = (int) round(GET_OBJ_COST(obj) * shop_table[shop_nr].profit_sell);
 
-  // If the street index is set but is less than 1, multiply by this index regardless of shop legality.
-  // This fixes an exploit where someone could buy a discounted thing at a black/grey shop and sell to a legal one for a profit.
-  if (GET_OBJ_STREET_INDEX(obj) > 0 && GET_OBJ_STREET_INDEX(obj) < 1)
-    cost = (int) round(cost * GET_OBJ_STREET_INDEX(obj));
+  // Chargen shops always do the baseline cost.
+  if (!shop_table[shop_nr].flags.IsSet(SHOP_CHARGEN)) {
+    // If the street index is set but is less than 1, multiply by this index regardless of shop legality.
+    // This fixes an exploit where someone could buy a discounted thing at a black/grey shop and sell to a legal one for a profit.
+    if (GET_OBJ_STREET_INDEX(obj) > 0 && GET_OBJ_STREET_INDEX(obj) < 1)
+      cost = (int) round(cost * GET_OBJ_STREET_INDEX(obj));
 
-  // If it's a faction shop, multiply by the faction rep multiplier.
-  if (faction_idnum)
-    cost *= get_shop_faction_buy_from_player_multiplier(faction_idnum, ch);
+    // If it's a faction shop, multiply by the faction rep multiplier.
+    if (faction_idnum)
+      cost *= get_shop_faction_buy_from_player_multiplier(faction_idnum, ch);
 
-  // Add the random multiplier to the cost.
-  cost += (int) round((cost * shop_table[shop_nr].random_current) / 100);
+    // Add the random multiplier to the cost.
+    cost += (int) round((cost * shop_table[shop_nr].random_current) / 100);
+  }
 
   return cost;
 }
@@ -1427,7 +1433,7 @@ int negotiate_and_payout_sellprice(struct char_data *ch, struct char_data *keepe
 #endif
 
   // Negotiate the total cost.
-  if (!shop_table[shop_nr].flags.IsSet(SHOP_WONT_NEGO) && !MOB_FLAGGED(keeper, MOB_INANIMATE))
+  if (!shop_table[shop_nr].flags.AreAnySet(SHOP_WONT_NEGO, SHOP_CHARGEN, ENDBIT) && !MOB_FLAGGED(keeper, MOB_INANIMATE))
     sellprice = negotiate(ch, keeper, 0, sellprice, 0, FALSE, TRUE);
 
   // Pay it out as nuyen. Chargen shops are forced to pay cash even if they're grey/black.
