@@ -1913,7 +1913,8 @@ void mobile_activity(void)
   PERF_PROF_SCOPE(pr_, __func__);
 
   // Iterate through all characters in the game.
-  for (struct char_data *ch = character_list, *next_ch; ch; ch = next_ch) {
+  global_a_character_was_extracted = false;
+  for (struct char_data *ch = character_list, *next_ch; !global_a_character_was_extracted && ch; ch = next_ch) {
     next_ch = ch->next_in_character_list;
     do_single_mobile_activity(ch);
   }
