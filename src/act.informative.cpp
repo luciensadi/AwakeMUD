@@ -3495,8 +3495,8 @@ void do_probe_object(struct char_data * ch, struct obj_data * j, bool is_in_shop
               GET_OBJ_VAL(j, 3), GET_OBJ_VAL(j, 4));
       break;
     case ITEM_PROGRAM:
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^crating-%d %s^n program, ^c%d^n units in size.",
-               GET_PROGRAM_RATING(j), programs[GET_PROGRAM_TYPE(j)].name, GET_PROGRAM_SIZE(j));
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is %s ^crating-%d %s^n program, ^c%d^n units in size.",
+               GET_PROGRAM_IS_COOKED(j) ? "a cooked" : "an uncooked", GET_PROGRAM_RATING(j), programs[GET_PROGRAM_TYPE(j)].name, GET_PROGRAM_SIZE(j));
       if (GET_PROGRAM_TYPE(j) == SOFT_ATTACK)
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " Its damage code is ^c%s^n.", GET_WOUND_NAME(GET_OBJ_VAL(j, 3)));
 
