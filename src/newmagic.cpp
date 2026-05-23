@@ -3318,6 +3318,10 @@ ACMD(do_contest)
     send_to_char("You don't have the ability to do that.\r\n", ch);
     return;
   }
+  if (!can_take_exclusive_magical_action(ch, "contesting")) {
+    // message was sent in function
+    return;
+  }
   struct char_data *mob, *caster = NULL;
   skip_spaces(&argument);
   if (!(mob = get_char_room_vis(ch, argument))) {
@@ -3905,6 +3909,10 @@ ACMD(do_conjure)
     send_to_char(TOOBUSY, ch);
     return;
   }
+  if (!can_take_exclusive_magical_action(ch, "conjuring")) {
+    // message was sent in function
+    return;
+  }
   if (ch->in_veh) {
     send_to_char("There is not enough room to conjure in here.\r\n", ch);
     return;
@@ -4456,8 +4464,8 @@ ACMD(do_banish)
     send_to_char("You don't have the ability to do that.\r\n", ch);
     return;
   }
-  if (IS_PROJECT(ch)) {
-    send_to_char("You cannot banish while projecting.\r\n", ch);
+  if (!can_take_exclusive_magical_action(ch, "banish")) {
+    // message was sent in function
     return;
   }
   if (AFF_FLAGGED(ch, AFF_BANISH)) {
@@ -6811,6 +6819,47 @@ void end_all_sustained_spells(struct char_data *ch) {
   while (ch->sustained) {
     end_sustained_spell(ch, ch->sustained);
   }
+}
+
+/*
+  exclusive magical actions:
+  - summoning a nature spirit (p186)
+  - conjuring an elemental (p186; also takes a number of hours equal to force)
+  - controlling and banishing
+  - projecting
+*/
+
+// You can't self-sustain a spell while performing an exclusive magical action.
+bool can_take_exclusive_magical_action(struct char_data *ch, const char *message_prefix_or_null_for_no_message) {
+  // core p172: pretty much anything projection-related is exclusive
+  if (IS_PROJECT(ch)) {
+    if (message_prefix_or_null_for_no_message) {
+      send_to_char(ch, "%s is an exclusive magical action, so you can't do that while projecting.\r\n", CAP(message_prefix_or_null_for_no_message));
+    }
+    return false;
+  }
+
+  // core p180: banishing is an exclusive complex action
+  if (AFF_FLAGGED(ch, AFF_BANISH)) {
+    if (message_prefix_or_null_for_no_message) {
+      send_to_char(ch, "%s is an exclusive magical action, so you can't do that while banishing.\r\n", CAP(message_prefix_or_null_for_no_message));
+    }
+    return false;
+  }
+
+  // sustaining, while not an exclusive action itself, precludes doing exclusive magical things
+  for (struct sustain_data *sust = ch->sustained; sust; sust = sust->next) {
+    if (!sust->is_caster_record)
+      continue;
+
+    if (!sust->focus && !sust->spirit) {
+      if (message_prefix_or_null_for_no_message) {
+        send_to_char(ch, "%s is an exclusive magical action, so you can't do that while sustaining a spell.\r\n", CAP(message_prefix_or_null_for_no_message));
+      }
+      return false;
+    }
+  }
+  return true;
 }
 
 // TODO: debug why a character showed up twice in the character list: maybe write a function to add a char to the list, scanning the whole list for duplicates in the process

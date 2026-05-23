@@ -2464,7 +2464,7 @@ ACMD(do_astral)
   }
 
   if (IS_PROJECT(ch)) {
-    send_to_char("But you are already projecting!\r\n", ch);
+    send_to_char("But you are already projecting! (Did you mean to ^WRETURN^n?)\r\n", ch);
     return;
   }
 
@@ -2477,6 +2477,12 @@ ACMD(do_astral)
       PLR_FLAGS(ch).SetBit(PLR_PERCEIVE);
       send_to_char("Your physical body seems distant, as the astral plane slides into view.\r\n", ch);
     }
+    return;
+  }
+
+  // It's projection (boogie woogie woogie)
+  if (!can_take_exclusive_magical_action(ch, "projecting")) {
+    // message sent in function
     return;
   }
 
