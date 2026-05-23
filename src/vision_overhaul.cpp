@@ -678,6 +678,9 @@ int get_character_light_sources(struct char_data *ch) {
 #endif
   }
 
+  if (AFF_FLAGGED(ch, AFF_HAS_EYE_LIGHT))
+    sources++;
+
   // log_vfprintf("Got %d sources from get_character_light_sources(%s)", sources, GET_CHAR_NAME(ch));
   return sources;
 }
@@ -692,14 +695,14 @@ void recalculate_room_light(struct room_data *room) {
 
   // Characters with lights add to the light level.
   for (struct char_data *ch = room->people; ch; ch = ch->next_in_room) {
-    room->light[ROOM_LIGHT_HEADLIGHTS_AND_FLASHLIGHTS] += get_character_light_sources(ch);
-
     // If they're staff, max out the light level and stop processing.
     // This isn't enough to make a room more than partially lit, but it's partial AF.
     if (IS_SENATOR(ch) && PRF_FLAGGED(ch, PRF_HOLYLIGHT)) {
       room->light[ROOM_LIGHT_HEADLIGHTS_AND_FLASHLIGHTS] = 16;
       return;
     }
+
+    room->light[ROOM_LIGHT_HEADLIGHTS_AND_FLASHLIGHTS] += get_character_light_sources(ch);
   }
 
   // Vehicles always provide light.

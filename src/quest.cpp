@@ -1503,11 +1503,6 @@ SPECIAL(johnson)
     return FALSE;
   }
 
-  // Drop memory on movement.
-  if (CMD_IS("north") || CMD_IS("east") || CMD_IS("south") || CMD_IS("west") || CMD_IS("up") || CMD_IS("down") || CMD_IS("ne") || CMD_IS("se") || CMD_IS("sw") || CMD_IS("nw") || CMD_IS("leave")) {
-    forget(johnson, ch);
-  }
-
   skip_spaces(&argument);
 
   bool need_to_speak = FALSE;
@@ -1738,7 +1733,7 @@ SPECIAL(johnson)
       }
 
       // Precondition: You must have gotten the quest from me.
-      if (!memory(johnson, ch)) {
+      if (!memory(johnson, ch) || quest_table[GET_QUEST(ch)].johnson != GET_MOB_VNUM(johnson)) {
         do_say(johnson, "Whoever you got your job from, it wasn't me. What, do we all look alike to you?", 0 , 0);
         send_to_char("^L(OOC note: You can hit RECAP to see who gave you your current job.)^n\r\n", ch);
         return TRUE;

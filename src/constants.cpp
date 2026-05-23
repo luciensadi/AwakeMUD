@@ -891,6 +891,7 @@ const char *affected_bits[] =
     "Wearing DocWagon Receiver",
     "Cheatlog Mark",
     "Complex Form Design",
+    "Has Eye Light",
     MAX_FLAG_MARKER
   };
 
