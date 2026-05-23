@@ -132,7 +132,7 @@
     "monthly_cost_min": 750000,
     "default_strings_neutral": [
       "You feel like they probably rub shoulders with the social elite.",
-      "Sharply groomed and tailored, they know how take care of themselves.",
+      "Sharply groomed and tailored, they know how to take care of themselves.",
       "There's a sense of privileged wealth about them.",
       "Every piece of their clothing looks custom-made.",
       "Their outfit probably costs more than the average car.",
@@ -140,7 +140,7 @@
     ],
     "default_strings_gendered": [
       "You feel like $e probably rubs shoulders with the social elite.",
-      "Sharply groomed and tailored, $e knows how take care of $mself.",
+      "Sharply groomed and tailored, $e knows how to take care of $mself.",
       "There's a sense of privileged wealth about $m.",
       "Every piece of $s clothing looks custom-made.",
       "$s outfit probably costs more than the average car.",

@@ -166,7 +166,7 @@ ACMD(do_flyto) {
   // Short-circuit: No going to restricted zones until you're ready for them.
   #define JURISDICTION_SECRET_TKE_REQUIREMENT_TO_ENTER 250
   FAILURE_CASE_PRINTF(GET_JURISDICTION(target_room) == JURISDICTION_SECRET && GET_TKE(ch) < JURISDICTION_SECRET_TKE_REQUIREMENT_TO_ENTER,
-                      "You've heard rumors about that place. Best not head that way until you've got a little more experience under your belt.\r\n(OOC: You need at least %d TKE to go there.)",
+                      "You've heard rumors about that place. Best not head that way until you've got a little more experience under your belt.\r\n(OOC: You need at least %d TKE to go there.)\r\n",
                       JURISDICTION_SECRET_TKE_REQUIREMENT_TO_ENTER);
 
   // Valid destination. Calculate fuel cost.
