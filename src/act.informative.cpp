@@ -3500,7 +3500,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j, bool is_in_shop
       if (GET_PROGRAM_TYPE(j) == SOFT_ATTACK)
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " Its damage code is ^c%s^n.", GET_WOUND_NAME(GET_OBJ_VAL(j, 3)));
 
-      if (GET_OBJ_VNUM(j) == OBJ_BLANK_PROGRAM && (GET_PROGRAM_TYPE(j) >= SOFT_ASIST_COLD || GET_PROGRAM_TYPE(j) < SOFT_SENSOR)) {
+      if (GET_OBJ_VNUM(j) == OBJ_BLANK_PROGRAM && GET_PROGRAM_TYPE(j) != SOFT_SUITE) {
         if (GET_OBJ_TIMER(j) < 0)
           strlcat(buf, " It was ruined in cooking and is useless.\r\n", sizeof(buf));
         else if (!GET_OBJ_TIMER(j))
@@ -4363,7 +4363,7 @@ ACMD(do_examine)
       else
         strncpy(buf, "The small LED is currently green, indicating a successful encode.\r\n", sizeof(buf));
       send_to_char(buf, ch);
-    } else if (GET_OBJ_TYPE(tmp_object) == ITEM_PROGRAM && (GET_OBJ_VAL(tmp_object, 0) >= SOFT_ASIST_COLD || GET_OBJ_VAL(tmp_object, 0) < SOFT_SENSOR)) {
+    } else if (GET_OBJ_TYPE(tmp_object) == ITEM_PROGRAM && GET_PROGRAM_TYPE(tmp_object) != SOFT_SUITE) {
       if (GET_OBJ_TIMER(tmp_object) < 0)
         strncpy(buf, "This chip has been ruined.\r\n", sizeof(buf));
       else if (!GET_OBJ_TIMER(tmp_object))

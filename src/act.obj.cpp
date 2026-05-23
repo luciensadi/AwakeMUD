@@ -475,9 +475,9 @@ void perform_put_cyberdeck(struct char_data *ch, struct obj_data *obj,
 		}
 	}
 
-	if (!GET_OBJ_TIMER(obj) && GET_OBJ_VNUM(obj) == OBJ_BLANK_PROGRAM)
-		send_to_char(ch, "You'll have to cook %s before you can install it.\r\n", GET_OBJ_NAME(obj));
-	else if (GET_CYBERDECK_MPCP(cont) == 0 || GET_CYBERDECK_IS_INCOMPLETE(cont))
+	FAILURE_CASE_PRINTF(GET_OBJ_VNUM(obj) == OBJ_BLANK_PROGRAM && !GET_PROGRAM_IS_COOKED(obj), "You'll have to cook %s before you can install it.\r\n", GET_OBJ_NAME(obj));
+
+  if (GET_CYBERDECK_MPCP(cont) == 0 || GET_CYBERDECK_IS_INCOMPLETE(cont))
 		display_cyberdeck_issues(ch, cont);
 	else if (search_cyberdeck(cont, obj))
 		act("You already have a similar program installed in $P.", FALSE, ch, obj, cont, TO_CHAR);
