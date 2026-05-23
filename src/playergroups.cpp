@@ -1008,8 +1008,13 @@ void do_pgroup_roster(struct char_data *ch, char *argument) {
   nodeStruct<struct pgroup_roster_data *> *ns = NULL;
   pgroup_roster_data *roster_data = NULL;
   while ((row = mysql_fetch_row(res))) {
+    idnum_t idnum = atoi(row[0]);
+    if (!does_player_exist(idnum)) {
+      continue;
+    }
+
     roster_data = new struct pgroup_roster_data;
-    roster_data->idnum = atoi(row[0]);
+    roster_data->idnum = idnum;
     roster_data->rank = atoi(row[1]);
     roster_data->privileges.FromString(row[2]);
     results.AddItem(NULL, roster_data);
