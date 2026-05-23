@@ -863,7 +863,7 @@ bool _mob_is_alert(struct char_data *npc);
           } else {                                                                                      \
             (ch)->desc->wait = (cycle);                                                                 \
             if (!PRF_FLAGGED((ch), PRF_NOROUNDTIME)) {                                                  \
-              send_to_char((ch), "^L(Entering round time of %d ticks)^n\r\n", cycle);                   \
+              send_to_char((ch), "^L(Entering round time of %d ticks)^n\r\n", (int) cycle);             \
             }                                                                                           \
           }                                                                                             \
         } else if (IS_NPC(ch)) {                                                                        \
@@ -875,7 +875,7 @@ bool _mob_is_alert(struct char_data *npc);
         if ((ch)->desc) {                                                                               \
           (ch)->desc->wait = (cycle);                                                                   \
           if (!PRF_FLAGGED((ch), PRF_NOROUNDTIME)) {                                                    \
-            send_to_char((ch), "^L(Entering round time of %d ticks)^n\r\n", cycle);                     \
+            send_to_char((ch), "^L(Entering round time of %d ticks)^n\r\n", (int) cycle);               \
           }                                                                                             \
         } else if (IS_NPC(ch)) {                                                                        \
           GET_MOB_WAIT(ch) = (cycle);                                                                   \
