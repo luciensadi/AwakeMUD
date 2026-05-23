@@ -2849,8 +2849,9 @@ int perform_dupe_check(struct descriptor_data *d)
       continue;
     }
 
-    /* we've found a duplicate - blow him away. */
+    /* we've found a duplicate - blow him away and start over (next might be an auto-extracted follower, quest target etc). */
     extract_char(ch);
+    ch = character_list;
   }
 
   /* no target for swicthing into was found - allow login to continue */

@@ -59,6 +59,7 @@ extern int get_deprecated_cybereye_essence_cost(struct char_data *ch, struct obj
 extern void price_cyber(struct obj_data *obj);
 extern int get_skill_price(struct char_data *ch, int i);
 extern int get_max_skill_for_char(struct char_data *ch, int skill, int type);
+extern void cleanup_excess_elementals(struct char_data *ch);
 
 void auto_repair_obj(struct obj_data *obj, idnum_t owner);
 
@@ -684,6 +685,9 @@ bool load_char(const char *name, char_data *ch, bool logon, int pc_load_origin)
         last = spirit;
       }
       mysql_free_result(res);
+
+      // If you have too many elementals, prune them now.
+      cleanup_excess_elementals(ch);
     }
   }
 

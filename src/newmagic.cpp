@@ -44,6 +44,8 @@ extern void _char_with_spell_to_room(struct char_data *ch, int spell_num, room_s
 extern bool handle_player_docwagon_track(struct char_data *ch, char *argument);
 extern void check_quest_destroy(struct char_data *ch, struct obj_data *obj);
 
+void delete_spirit_or_elemental_from_entry(struct char_data *ch, struct spirit_data *sdata);
+
 char modify_target_rbuf_for_newmagic[MAX_STRING_LENGTH];
 
 bool focus_is_usable_by_ch(struct obj_data *focus, struct char_data *ch);
@@ -535,8 +537,7 @@ void elemental_fulfilled_services(struct char_data *ch, struct char_data *mob, s
   if (spirit->services < 1 && !(MOB_FLAGGED(mob, MOB_SPIRITGUARD) || MOB_FLAGGED(mob, MOB_STUDY) || GET_SUSTAINED(mob) || GET_SUSTAINED_NUM(mob) || CH_IN_COMBAT(mob)))
   {
     send_to_char(ch, "Its services fulfilled, %s departs to the metaplanes.\r\n", CAP(GET_NAME(mob)));
-    end_spirit_existance(mob, FALSE);
-    GET_ELEMENTALS_DIRTY_BIT(ch) = TRUE;
+    delete_spirit_or_elemental_from_entry(ch, spirit);
   }
 }
 
@@ -3762,11 +3763,9 @@ ACMD(do_release)
       send_to_char(ch, "Which %s do you wish to release from your services?\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
       return;
     }
-    int real_mob;
-    GET_ELEMENTALS_DIRTY_BIT(ch) = TRUE;
+    rnum_t real_mob;
     for (struct spirit_data *spirit = GET_SPIRIT(ch); spirit; spirit = spirit->next) {
       if (--i == 0) {
-        struct spirit_data *temp;
         if (GET_TRADITION(ch) == TRAD_HERMETIC) {
           send_to_char(ch, "You release %s from its obligations and it departs to the metaplanes.\r\n",
                        (real_mob = real_mobile(elements[spirit->type].vnum)) >= 0 ? GET_NAME(&mob_proto[real_mob]) : "an elemental");
@@ -3774,17 +3773,8 @@ ACMD(do_release)
         else
           send_to_char(ch, "You release %s from its obligations and it departs to the metaplanes.\r\n",
                        (real_mob = real_mobile(spirits[spirit->type].vnum)) >= 0 ? GET_NAME(&mob_proto[real_mob]) : "a spirit");
-        if (spirit->called)
-          for (struct char_data *mob = character_list; mob; mob = mob->next_in_character_list)
-            if (IS_NPC(mob) && GET_ACTIVE(mob) == GET_IDNUM(ch) && GET_GRADE(mob) == spirit->id) {
-              act("Freed from its services, $n returns to the metaplanes", TRUE, mob, 0, ch, TO_NOTVICT);
-              extract_char(mob);
-              break;
-            }
-        REMOVE_FROM_LIST(spirit, GET_SPIRIT(ch), next);
-        delete spirit;
-        GET_NUM_SPIRITS(ch)--;
-        playerDB.SaveChar(ch, GET_LOADROOM(ch));
+
+        delete_spirit_or_elemental_from_entry(ch, spirit);
         return;
       }
     }
@@ -3913,6 +3903,7 @@ ACMD(do_conjure)
     // message was sent in function
     return;
   }
+  FAILURE_CASE_PRINTF(GET_NUM_SPIRITS(ch) >= GET_REAL_CHA(ch), "You're limited in the number of %s you can have by your unaugmented charisma.", GET_TRADITION(ch) == TRAD_HERMETIC ? "elementals" : "spirits");
   if (ch->in_veh) {
     send_to_char("There is not enough room to conjure in here.\r\n", ch);
     return;
@@ -6860,6 +6851,68 @@ bool can_take_exclusive_magical_action(struct char_data *ch, const char *message
     }
   }
   return true;
+}
+
+// Wipes out the spirit/elemental from character's spirit list, cleans up the mob, and deletes the pointed spirit data.
+void delete_spirit_or_elemental_from_entry(struct char_data *ch, struct spirit_data *sdata) {
+  // Pop it from the linked list.
+  if (sdata == GET_SPIRIT(ch)) {
+    GET_SPIRIT(ch) = sdata->next;
+  } else {
+    for (struct spirit_data *itr = GET_SPIRIT(ch); itr; itr = itr->next) {
+      if (itr->next == sdata) {
+        itr->next = sdata->next;
+        break;
+      }
+    }
+  }
+
+  GET_NUM_SPIRITS(ch)--;
+
+  // Clean up the physical manifestation, if any.
+  if (sdata->called) {
+    for (struct char_data *mob = character_list; mob; mob = mob->next_in_character_list) {
+      if (IS_NPC(mob) && GET_ACTIVE(mob) == GET_IDNUM(ch) && GET_GRADE(mob) == sdata->id) {
+        act("Freed from its services, $n returns to the metaplanes", TRUE, mob, 0, ch, TO_NOTVICT);
+        extract_char(mob);
+        break;
+      }
+    }
+  }
+
+  delete sdata;
+}
+
+void cleanup_excess_elementals(struct char_data *ch) {
+  if (GET_TRADITION(ch) == TRAD_HERMETIC && GET_SPIRIT(ch)) {
+    if (GET_NUM_SPIRITS(ch) <= GET_REAL_CHA(ch))
+      return;
+    
+    while (GET_NUM_SPIRITS(ch) > GET_REAL_CHA(ch)) {
+      struct spirit_data *lowest_force = GET_SPIRIT(ch);
+      // Find the excess elemental with the lowest force (and lowest service count in case of a tie)
+      for (struct spirit_data *itr = GET_SPIRIT(ch)->next; itr; itr = itr->next) {
+        if (itr->force < lowest_force->force || (itr->force == lowest_force->force && itr->services < lowest_force->services)) {
+          lowest_force = itr;
+        }
+      }
+      
+      // Log and clean up.
+      mudlog_vfprintf(ch, LOG_SYSLOG, "%s has too many bound elementals (qty %d > cha %d), so popping a force-%d %s elemental (%d service%s).",
+                      GET_CHAR_NAME(ch),
+                      GET_NUM_SPIRITS(ch),
+                      GET_REAL_CHA(ch),
+                      lowest_force->force,
+                      CAP(elements[lowest_force->type].name),
+                      lowest_force->services,
+                      lowest_force->services == 1 ? "" : "s");
+
+      delete_spirit_or_elemental_from_entry(ch, lowest_force);
+    }
+  }
+
+  GET_ELEMENTALS_DIRTY_BIT(ch) = TRUE;
+  playerDB.SaveChar(ch, GET_LOADROOM(ch));
 }
 
 // TODO: debug why a character showed up twice in the character list: maybe write a function to add a char to the list, scanning the whole list for duplicates in the process

@@ -639,7 +639,8 @@ void check_idling(void)
   ACMD_DECLARE(do_disconnect);
   struct char_data *ch, *next;
 
-  for (ch = character_list; ch; ch = next) {
+  global_a_character_was_extracted = false;
+  for (ch = character_list; !global_a_character_was_extracted && ch; ch = next) {
     next = ch->next_in_character_list;
 
     if (IS_NPC(ch) && ch->desc && ch->desc->original) {
@@ -729,6 +730,9 @@ void check_idling(void)
         perform_immort_invis(ch, 2);
       }
     }
+  }
+  if (global_a_character_was_extracted) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "INFO: check_idling() was aborted due to global_a_character_was_extracted being true.");
   }
 }
 
@@ -963,7 +967,8 @@ void process_regeneration(int half_hour)
       should_loop = FALSE;
       loop_counter++;
 
-      for (struct char_data *ch = character_list; ch; ch = ch->next_in_character_list) {
+      global_a_character_was_extracted = false;
+      for (struct char_data *ch = character_list; !global_a_character_was_extracted && ch; ch = ch->next_in_character_list) {
         bool is_npc = IS_NPC(ch);
 
         if (ch->last_loop_rand == loop_rand) {
@@ -1073,6 +1078,8 @@ void process_regeneration(int half_hour)
           }
         }
       }
+      if (global_a_character_was_extracted)
+        should_loop = true;
     }
 
     if (loop_counter > 1) {
@@ -1130,7 +1137,8 @@ void point_update(void)
       should_loop = FALSE;
       loop_counter++;
 
-      for (struct char_data *i = character_list; i; i = i->next_in_character_list) {
+      global_a_character_was_extracted = false;
+      for (struct char_data *i = character_list; !global_a_character_was_extracted && i; i = i->next_in_character_list) {
         if (i->last_loop_rand == loop_rand) {
           // mudlog("SYSERR: Encountered someone who's already been point_updated. Fix point_update().", i, LOG_SYSLOG, TRUE);
           continue;
@@ -1336,6 +1344,8 @@ void point_update(void)
         }
       }
 
+      if (global_a_character_was_extracted)
+        should_loop = true;
     }
   
     if (loop_counter > 1) {
@@ -1417,7 +1427,8 @@ void misc_update(void)
       should_loop = FALSE;
       loop_counter++;
 
-      for (struct char_data *ch = character_list, *next_ch; ch; ch = next_ch) {
+      global_a_character_was_extracted = false;
+      for (struct char_data *ch = character_list, *next_ch; !global_a_character_was_extracted && ch; ch = next_ch) {
         next_ch = ch->next_in_character_list;
         
         if (ch->last_loop_rand == loop_rand) {
@@ -1667,6 +1678,8 @@ void misc_update(void)
           }
         }
       }
+      if (global_a_character_was_extracted)
+        should_loop = true;
     }
 
     if (loop_counter > 1) {

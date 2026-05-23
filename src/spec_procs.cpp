@@ -397,7 +397,8 @@ int summon_mob(struct char_data *ch, int vnum, int number)
   number = MIN(number, mob_index[rnum].number - num);
 
   // since it is necessary, find and summon the mob(s)
-  for (tch = character_list; tch && number > 0; tch = tch->next_in_character_list)
+  global_a_character_was_extracted = false;
+  for (tch = character_list; !global_a_character_was_extracted && tch && number > 0; tch = tch->next_in_character_list)
     if (GET_MOB_VNUM(tch) == vnum && ch->in_room != tch->in_room &&
         !FIGHTING(tch) && GET_POS(tch) > POS_SLEEPING)
     {
