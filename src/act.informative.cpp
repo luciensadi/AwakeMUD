@@ -8200,13 +8200,18 @@ void display_room_name(struct char_data *ch, struct room_data *in_room, bool in_
       APPEND_ROOM_FLAG(ROOM_FLAGGED(in_room, ROOM_STORAGE) && !ROOM_FLAGGED(in_room, ROOM_CORPSE_SAVE_HACK), " (Storage)");
       if (GET_APARTMENT(in_room)) {
         if (GET_APARTMENT(in_room)->is_office()) {
-          strlcat(room_title_buf, " (Office)", sizeof(room_title_buf));
+          snprintf(ENDOF(room_title_buf), sizeof(room_title_buf) - strlen(room_title_buf), " (%s Office)", GET_APARTMENT(in_room)->get_paid_until() > time(0) ? "Leased" : "^gAvailable^n");
         } else {
           snprintf(ENDOF(room_title_buf), sizeof(room_title_buf) - strlen(room_title_buf), " (%s-Class Apartment)",
                    lifestyles[GET_APARTMENT(in_room)->get_lifestyle()].name);
         }
+
+        if (ROOM_FLAGGED(in_room, ROOM_STERILE) && GET_APARTMENT(in_room)->is_owner_or_guest_with_valid_lease(ch)) {
+          strlcat(room_title_buf, " (Sterile)", sizeof(room_title_buf));
+        }
+      } else {
+        APPEND_ROOM_FLAG(ROOM_FLAGGED(in_room, ROOM_STERILE), " (Sterile)");
       }
-      APPEND_ROOM_FLAG(ROOM_FLAGGED(in_room, ROOM_STERILE), " (Sterile)");
       APPEND_ROOM_FLAG(ROOM_FLAGGED(in_room, ROOM_ARENA), " ^y(Arena)^n");
       APPEND_ROOM_FLAG(ROOM_FLAGGED(in_room, ROOM_PEACEFUL), " (Peaceful)");
       APPEND_ROOM_FLAG(IS_WATER(in_room), " ^B(Flooded)^n");
