@@ -2998,9 +2998,9 @@ void qedit_disp_menu(struct descriptor_data *d)
                QUEST->min_rep, CCNRM(CH, C_CMP), CCCYN(CH, C_CMP),
                QUEST->max_rep, CCNRM(CH, C_CMP));
   send_to_char(CH, "%s) Bonus nuyen: %s%d%s\r\n", GET_LEVEL(CH) >= LVL_ADMIN ? "4" : "-", CCCYN(CH, C_CMP),
-               QUEST->nuyen, CCNRM(CH, C_CMP));
+               (int) (QUEST->nuyen * NUYEN_GAIN_MULTIPLIER), CCNRM(CH, C_CMP));
   send_to_char(CH, "%s) Bonus karma: %s%0.2f%s\r\n", GET_LEVEL(CH) >= LVL_ADMIN ? "5" : "-", CCCYN(CH, C_CMP),
-               ((float)QUEST->karma / 100), CCNRM(CH, C_CMP));
+               ((float)QUEST->karma * KARMA_GAIN_MULTIPLIER / 100), CCNRM(CH, C_CMP));
   send_to_char(CH, "6) Item objective menu\r\n");
   send_to_char(CH, "7) Mobile objective menu\r\n");
   send_to_char(CH, "\r\n");
@@ -3413,7 +3413,7 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
     if (number < 0 || number > 500000)
       send_to_char("Invalid amount.  Enter bonus nuyen: ", CH);
     else {
-      QUEST->nuyen = number;
+      QUEST->nuyen = (int) (number / NUYEN_GAIN_MULTIPLIER);
       qedit_disp_menu(d);
     }
     break;
@@ -3422,7 +3422,7 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
     if (karma < 0.0 || karma > 25.0)
       send_to_char("Invalid amount.  Enter bonus karma: ", CH);
     else {
-      QUEST->karma = (int)(karma * 100);
+      QUEST->karma = (int)(karma * 100 / KARMA_GAIN_MULTIPLIER);
       qedit_disp_menu(d);
     }
     break;
@@ -3483,7 +3483,7 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
     if (number < 0 || number > 25000)
       send_to_char("Invalid amount.  Enter nuyen reward: ", CH);
     else {
-      QUEST->mob[d->edit_number2].nuyen = number;
+      QUEST->mob[d->edit_number2].nuyen = number / NUYEN_GAIN_MULTIPLIER;
       d->edit_mode = QEDIT_M_KARMA;
       send_to_char("Enter karma reward: ", CH);
     }
@@ -3493,7 +3493,7 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
     if (karma < 0.0 || karma > 5.0)
       send_to_char("Invalid amount.  Enter karma reward: ", CH);
     else {
-      QUEST->mob[d->edit_number2].karma = (int)(karma * 100);
+      QUEST->mob[d->edit_number2].karma = (int)(karma * 100 / KARMA_GAIN_MULTIPLIER);
       qedit_disp_mob_loads(d);
     }
     break;
@@ -3749,7 +3749,7 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
     if (number < 0 || number > 25000)
       send_to_char("Invalid amount.  Enter nuyen reward: ", CH);
     else {
-      QUEST->obj[d->edit_number2].nuyen = number;
+      QUEST->obj[d->edit_number2].nuyen = number / NUYEN_GAIN_MULTIPLIER;
       d->edit_mode = QEDIT_O_KARMA;
       send_to_char("Enter karma reward: ", CH);
     }
@@ -3759,7 +3759,7 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
     if (karma < 0.0 || karma > 5.0)
       send_to_char("Invalid amount.  Enter karma reward: ", CH);
     else {
-      QUEST->obj[d->edit_number2].karma = (int)(karma * 100);
+      QUEST->obj[d->edit_number2].karma = (int)(karma * 100) / KARMA_GAIN_MULTIPLIER;
       qedit_disp_obj_loads(d);
     }
     break;
