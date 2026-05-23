@@ -1503,6 +1503,11 @@ SPECIAL(johnson)
     return FALSE;
   }
 
+  // Drop memory on movement.
+  if (CMD_IS("north") || CMD_IS("east") || CMD_IS("south") || CMD_IS("west") || CMD_IS("up") || CMD_IS("down") || CMD_IS("ne") || CMD_IS("se") || CMD_IS("sw") || CMD_IS("nw") || CMD_IS("leave")) {
+    forget(johnson, ch);
+  }
+
   skip_spaces(&argument);
 
   bool need_to_speak = FALSE;
