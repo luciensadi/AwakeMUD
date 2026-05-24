@@ -104,7 +104,7 @@ LDFLAGS  = $(BASE_LDFLAGS) $(OS_LDFLAGS)
 LDLIBS   = $(BASE_LDLIBS) $(OS_LDLIBS)
 
 # Further setup (identify source files etc)
-sourcefiles   = $(wildcard *.cpp activities/*.cpp)
+sourcefiles   = $(wildcard activities/*.cpp *.cpp)
 objfiles      = $(sourcefiles:.cpp=.o)
 test_objfiles = $(sourcefiles:.cpp=.test.o) # Separate objects for testing
 depfiles      = $(sourcefiles:.cpp=.d) $(sourcefiles:.cpp=.test.d)

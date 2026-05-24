@@ -77,7 +77,7 @@ jobs:
           const char *mysql_user =     "user";       \
           const char *mysql_db =       "db";       ' \
           > mysql_config.cpp
-        make -j$(nproc) DEPLOYMENT_MODE=0
+        make -j$(nproc) DEPLOYMENT_MODE=1 USE_PRIVATE_WORLD=1 JUST_FUCK_ME_UP_WITH_WARNINGS=0 USE_FSAN=0
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v4
