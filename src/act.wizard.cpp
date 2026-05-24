@@ -131,6 +131,7 @@ SPECIAL(shop_keeper);
 SPECIAL(johnson);
 
 idnum_t global_copyover_enqueued_by_idnum = 0;
+time_t global_copyover_override_quests_at = 0;
 
 /* Copyover Code, ported to Awake by Harlequin *
  * (c) 1996-97 Erwin S. Andreasen <erwin@andreasen.org> */
@@ -447,19 +448,46 @@ ACMD(do_copyover)
     }
   }
 #ifdef IS_BUILDPORT
-  else if (!str_cmp(argument, "start") || !str_cmp(argument, "begin")) {
+  else if (!str_cmp(argument, "start") || !str_cmp(argument, "begin") || !str_cmp(argument, "enqueue")) {
     FAILURE_CASE(global_copyover_enqueued_by_idnum, "A copyover has already been enqueued. You can cancel it with COPYOVER STOP.");
-    send_to_char(ch, "OK, enqueued a forced copyover for when everyone is out of menus.");
+    mudlog_vfprintf(ch, LOG_WIZLOG, "%s has enqueued a copyover.", GET_CHAR_NAME(ch));
+
+    for (d = descriptor_list; d; d = d->next) {
+      if (d->character && d->character != ch) {
+        send_to_char(d->character, "^CSystem Notice:^n ^WThe game will copyover to install new code sometime within the next 20 minutes.^n"
+                                   " Please finish work in menus and wrap up autoruns in progress."
+                                   " Any runs in progress at copyover will be canceled with no penalty.");
+      }
+    }
+    send_to_char(ch, "OK, enqueued a copyover. Jobs will be canceled in 10 minutes, copyover forced in 20 minutes.");
+
     global_copyover_enqueued_by_idnum = GET_IDNUM_EVEN_IF_PROJECTING(ch);
+    global_copyover_override_quests_at = time(0) + (10 * 60);
+
+    // Disable OLC.
+    olc_state = 0;
+    mudlog_vfprintf(ch, LOG_WIZLOG, "OLC turned OFF by %s in preparation for copyover.", GET_CHAR_NAME(ch));
     return;
   }
-  else if (!str_cmp(argument, "stop") || !str_cmp(argument, "cancel")) {
+  else if (!str_cmp(argument, "stop") || !str_cmp(argument, "cancel") || !str_cmp(argument, "dequeue") || !str_cmp(argument, "abort")) {
     FAILURE_CASE(!global_copyover_enqueued_by_idnum, "No copyover is currently queued.");
+    mudlog_vfprintf(ch, LOG_WIZLOG, "%s has canceled the enqueued copyover.", GET_CHAR_NAME(ch));
+
+    for (d = descriptor_list; d; d = d->next) {
+      if (d->character && d->character != ch) {
+        send_to_char(d->character, "^CSystem Notice:^n ^WThe copyover has been canceled.^n You may now return to your regularly-scheduled shenanigans.");
+      }
+    }
 
     const char *char_name = get_player_name(global_copyover_enqueued_by_idnum);
-    send_to_char(ch, "OK, canceled the forced copyover queued by %s (%ld).", char_name, global_copyover_enqueued_by_idnum);
-    global_copyover_enqueued_by_idnum = 0;
+    send_to_char(ch, "OK, canceled the forced copyover enqueued by %s (%ld).", char_name, global_copyover_enqueued_by_idnum);
     delete [] char_name;
+
+    global_copyover_enqueued_by_idnum = 0;
+
+    // Enable OLC.
+    olc_state = 1;
+    mudlog_vfprintf(ch, LOG_WIZLOG, "OLC turned ON by %s due to copyover cancelation.", GET_CHAR_NAME(ch));
     return;
   }
 #endif
