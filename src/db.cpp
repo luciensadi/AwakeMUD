@@ -8049,6 +8049,54 @@ void price_bio(struct obj_data *obj)
       GET_OBJ_AVAILTN(obj) = 4;
       GET_OBJ_AVAILDAY(obj) = 4;
       break;
+    case BIO_CHLOROPLASTSKIN:
+      GET_OBJ_COST(obj) = 10000;
+      GET_BIOWARE_ESSENCE_COST(obj) = 20;
+      GET_OBJ_AVAILTN(obj) = 6;
+      GET_OBJ_AVAILDAY(obj) = 8;
+      break;
+    case BIO_CLEANMETABOLISM:
+      GET_OBJ_COST(obj) = 10000;
+      GET_BIOWARE_ESSENCE_COST(obj) = 20;
+      GET_OBJ_AVAILTN(obj) = 6;
+      GET_OBJ_AVAILDAY(obj) = 8;
+      break;
+    case BIO_CLEANMETABOLISM:
+      GET_OBJ_COST(obj) = 10000;
+      GET_BIOWARE_ESSENCE_COST(obj) = 20;
+      GET_OBJ_AVAILTN(obj) = 4;
+      GET_OBJ_AVAILDAY(obj) = 4;
+      break;
+    case BIO_DIETWARE:
+      GET_OBJ_COST(obj) = 10000;
+      GET_BIOWARE_ESSENCE_COST(obj) = 20;
+      GET_OBJ_AVAILTN(obj) = 4;
+      GET_OBJ_AVAILDAY(obj) = 4;
+      break;
+    case BIO_HAIRGROWTH:
+      GET_OBJ_COST(obj) = 2000;
+      GET_BIOWARE_ESSENCE_COST(obj) = 10;
+      GET_OBJ_AVAILTN(obj) = 4;
+      GET_OBJ_AVAILDAY(obj) = 4;
+      break;
+    case BIO_SCENTGLANDS:
+      GET_OBJ_COST(obj) = 5000;
+      GET_BIOWARE_ESSENCE_COST(obj) = 10;
+      GET_OBJ_AVAILTN(obj) = 4;
+      GET_OBJ_AVAILDAY(obj) = 4;
+      break;
+    case BIO_SENSITIVESKIN:
+      GET_OBJ_COST(obj) = 10000;
+      GET_BIOWARE_ESSENCE_COST(obj) = 20;
+      GET_OBJ_AVAILTN(obj) = 6;
+      GET_OBJ_AVAILDAY(obj) = 6;
+      break;
+    case BIO_SKINPIGMENTATION:
+      GET_OBJ_COST(obj) = 5000;
+      GET_BIOWARE_ESSENCE_COST(obj) = 10;
+      GET_OBJ_AVAILTN(obj) = 6;
+      GET_OBJ_AVAILDAY(obj) = 6;
+      break;
     default:
       mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Unknown bioware type %d passed to price_bio(%ld).", GET_BIOWARE_TYPE(obj), GET_OBJ_VNUM(obj));
       break;
