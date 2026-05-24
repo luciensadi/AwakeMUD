@@ -1240,6 +1240,7 @@ bool is_weapon_focus_usable_by(struct obj_data *focus, struct char_data *ch);
 
 // ITEM_CONTAINER convenience defines
 #define GET_CONTAINER_FLAGS(cont)                 (GET_OBJ_VAL((cont), 1))
+#define GET_CONTAINER_KEY_VNUM(cont)              (GET_OBJ_VAL((cont), 2))
 #define GET_CORPSE_IS_PC(corpse)                  (GET_OBJ_VAL((corpse), 4))
 #define GET_CORPSE_IDNUM(corpse)                  (GET_OBJ_VAL((corpse), 5))
 

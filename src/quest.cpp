@@ -73,6 +73,7 @@ const char *obj_loads[] =
     "Install item in a target",
     "Load at a location",
     "Load at host",
+    "Load at location, in an object",
     "\n"
   };
 
@@ -361,38 +362,60 @@ void load_quest_targets(struct char_data *johnson, struct char_data *ch)
     }
   }
 
-  for (i = 0; i < quest_table[num].num_objs; i++)
-    if ((rnum = real_object(quest_table[num].obj[i].vnum)) > -1)
-      switch (quest_table[num].obj[i].load)
-      {
-      case QOL_LOCATION:
-        if ((room = real_room(quest_table[num].obj[i].l_data)) > -1) {
-          obj = instantiate_quest_object(rnum, OBJ_LOAD_REASON_QUEST_LOCATION, ch);
-          obj_to_room(obj, &world[room]);
+  for (i = 0; i < quest_table[num].num_objs; i++) {
+    if (quest_table[num].obj[i].load == QOL_LOCATION_INOBJ) {
+      rnum_t load_obj_rnum = real_object(quest_table[num].obj[i].vnum);
+      rnum_t load_target_rnum = real_object(quest_table[num].obj[i].l_data2);
+      rnum_t room_rnum = real_room(quest_table[num].obj[i].l_data);
+
+      if (load_obj_rnum >= 0 && load_target_rnum >= 0 && room_rnum >= 0) {
+        struct obj_data *obj = instantiate_quest_object(load_obj_rnum, OBJ_LOAD_REASON_QUEST_LOCATION, ch);
+        struct obj_data *container = instantiate_quest_object(load_target_rnum, OBJ_LOAD_REASON_QUEST_LOCATION, ch);
+        obj_to_obj(obj, container);
+        obj_to_room(container, &world[room_rnum]);
+
+        if (IS_SET(GET_CONTAINER_FLAGS(container), CONT_CLOSEABLE)) {
+          SET_BIT(GET_CONTAINER_FLAGS(container), CONT_CLOSED);
+          if (GET_CONTAINER_KEY_VNUM(container) > 0 && real_object(GET_CONTAINER_KEY_VNUM(container)) >= 0) {
+            SET_BIT(GET_CONTAINER_FLAGS(container), CONT_LOCKED);
+          }
         }
-        obj = NULL;
-        break;
-      case QOL_HOST:
-        if ((room = real_host(quest_table[num].obj[i].l_data)) > -1) {
-          obj = instantiate_quest_object(rnum, OBJ_LOAD_REASON_QUEST_HOST, ch);
-          GET_DECK_ACCESSORY_FILE_FOUND_BY(obj) = GET_IDNUM(ch);
-          GET_DECK_ACCESSORY_FILE_REMAINING(obj) = 1;
-          obj_to_host(obj, &matrix[room]);
-        }
-        obj = NULL;
-        break;
-      case QOL_JOHNSON:
-        obj = instantiate_quest_object(rnum, OBJ_LOAD_REASON_QUEST_JOHNSON, ch);
-        obj_to_char(obj, johnson);
-        if (!perform_give(johnson, ch, obj)) {
-          char buf[512];
-          snprintf(buf, sizeof(buf), "Looks like your hands are full. You'll need %s for the run.", decapitalize_a_an(obj->text.name));
-          do_say(johnson, buf, 0, 0);
-          perform_drop(johnson, obj, SCMD_DROP, "drop", NULL);
-        }
-        obj = NULL;
-        break;
       }
+      return;
+    }
+
+    if ((rnum = real_object(quest_table[num].obj[i].vnum)) > -1) {
+      switch (quest_table[num].obj[i].load) {
+        case QOL_LOCATION:
+          if ((room = real_room(quest_table[num].obj[i].l_data)) > -1) {
+            obj = instantiate_quest_object(rnum, OBJ_LOAD_REASON_QUEST_LOCATION, ch);
+            obj_to_room(obj, &world[room]);
+          }
+          obj = NULL;
+          break;
+        case QOL_HOST:
+          if ((room = real_host(quest_table[num].obj[i].l_data)) > -1) {
+            obj = instantiate_quest_object(rnum, OBJ_LOAD_REASON_QUEST_HOST, ch);
+            GET_DECK_ACCESSORY_FILE_FOUND_BY(obj) = GET_IDNUM(ch);
+            GET_DECK_ACCESSORY_FILE_REMAINING(obj) = 1;
+            obj_to_host(obj, &matrix[room]);
+          }
+          obj = NULL;
+          break;
+        case QOL_JOHNSON:
+          obj = instantiate_quest_object(rnum, OBJ_LOAD_REASON_QUEST_JOHNSON, ch);
+          obj_to_char(obj, johnson);
+          if (!perform_give(johnson, ch, obj)) {
+            char buf[512];
+            snprintf(buf, sizeof(buf), "Looks like your hands are full. You'll need %s for the run.", decapitalize_a_an(obj->text.name));
+            do_say(johnson, buf, 0, 0);
+            perform_drop(johnson, obj, SCMD_DROP, "drop", NULL);
+          }
+          obj = NULL;
+          break;
+      }
+    }
+  }
 }
 
 void extract_quest_targets(idnum_t questor_idnum)
@@ -2563,6 +2586,8 @@ void qedit_list_obj_objectives(struct descriptor_data *d)
 
     rnum_t obj_rnum = real_object(QUEST->obj[i].vnum);
     struct obj_data *obj = (obj_rnum >= 0 ? &obj_proto[obj_rnum] : NULL);
+    rnum_t cont_rnum = real_object(QUEST->obj[i].l_data2);
+    struct obj_data *cont = (cont_rnum >= 0 ? &obj_proto[cont_rnum] : NULL);
 
     {
       // These are derived from l_data, which is not used in the second stanza.
@@ -2627,6 +2652,15 @@ void qedit_list_obj_objectives(struct descriptor_data *d)
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Load %ld (%s) in room %ld (%s)", 
                    QUEST->obj[i].vnum,
                    obj ? GET_OBJ_NAME(obj) : "N/A",
+                   QUEST->obj[i].l_data,
+                   room ? GET_ROOM_NAME(room) : "NULL");
+          break;
+        case QOL_LOCATION_INOBJ:
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Load %ld (%s) in obj %ld (%s) in room %ld (%s)", 
+                   QUEST->obj[i].vnum,
+                   obj ? GET_OBJ_NAME(obj) : "N/A",
+                   QUEST->obj[i].l_data2,
+                   cont ? GET_OBJ_NAME(cont) : "N/A",
                    QUEST->obj[i].l_data,
                    room ? GET_ROOM_NAME(room) : "NULL");
           break;
@@ -3772,6 +3806,10 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
         d->edit_mode = QEDIT_O_LDATA;
         send_to_char(CH, "Enter vnum of room to load item into: ");
         break;
+      case QOL_LOCATION_INOBJ:
+        d->edit_mode = QEDIT_O_LDATA;
+        send_to_char(CH, "Enter vnum of room to load container into: ");
+        break;
       default:
         qedit_disp_obj_objectives(d);
         break;
@@ -3851,6 +3889,15 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
         qedit_disp_obj_objectives(d);
       }
       break;
+    case QOL_LOCATION_INOBJ:
+      if (real_room(number) < 0)
+        send_to_char(CH, "Enter vnum of room to load item into: ");
+      else {
+        QUEST->obj[d->edit_number2].l_data = number;
+        send_to_char(CH, "Enter vnum of container to load into the room: ");
+        d->edit_mode = QEDIT_O_LDATA2;
+      }
+      break;
     case QOL_HOST:
       if (real_host(number) < 0)
         send_to_char(CH, "Enter vnum of host to load item into: ");
@@ -3862,13 +3909,32 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
     }
     break;
   case QEDIT_O_LDATA2:
-    // only QOL_TARMOB_E should ever make it here
-    number = atoi(arg);
-    if (number < 1 || number > (NUM_WEARS - 1))
-      qedit_disp_locations(d);
-    else {
-      QUEST->obj[d->edit_number2].l_data2 = number - 1;
-      qedit_disp_obj_objectives(d);
+    switch (QUEST->obj[d->edit_number2].load) {
+      case QOL_TARMOB_E:
+        // only QOL_TARMOB_E should ever make it here
+        number = atoi(arg);
+        if (number < 1 || number > (NUM_WEARS - 1))
+          qedit_disp_locations(d);
+        else {
+          QUEST->obj[d->edit_number2].l_data2 = number - 1;
+          qedit_disp_obj_objectives(d);
+        }
+        break;
+      case QOL_LOCATION_INOBJ:
+        {
+          number = atoi(arg);
+          rnum_t rnum = real_object(number);
+          if (number != 0 && rnum < 0) {
+            send_to_char("No such item.  Enter vnum of container (0 for nothing): ", CH);
+          } else if (number != 0 && GET_OBJ_TYPE(&obj_proto[rnum]) != ITEM_CONTAINER) {
+            send_to_char(CH, "%s is not a container. Enter vnum of a container (0 for nothing): ", CAP(GET_OBJ_NAME(&obj_proto[rnum])));
+          } else {
+            QUEST->obj[d->edit_number2].l_data2 = number;
+            qedit_disp_obj_objectives(d);
+          }
+        }
+        break;
+        
     }
     break;
   case QEDIT_O_ODATA:
@@ -4179,6 +4245,7 @@ void display_quest_goals_to_ch(struct char_data *ch) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Download '%s' ", GET_OBJ_NAME(obj));
         break;
       case QOL_LOCATION:
+      case QOL_LOCATION_INOBJ:
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Locate '%s' ", GET_OBJ_NAME(obj));
         break;
       default:

@@ -20,7 +20,8 @@ typedef  std::vector<emote_t>   emote_vector_t;
 #define QOL_TARMOB_C       4
 #define QOL_LOCATION       5
 #define QOL_HOST           6
-#define NUM_OBJ_LOADS      7
+#define QOL_LOCATION_INOBJ 7
+#define NUM_OBJ_LOADS      8
 
 #define QML_DONT_LOAD      0
 #define QML_LOCATION       1
