@@ -1300,8 +1300,9 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
   // Write a single log message each time we save. This will help trace how often we're doing this and if there are excessive calls.
   // log_vfprintf("Saving %s to DB.", GET_CHAR_NAME(player));
 
+#ifndef DONT_TRY_TO_SAVE_GEAR_FROM_THAT_ONE_BUG_THAT_I_THINK_I_FIXED_ALREADY_ANYWAYS
   // Check all their stuff over. If it's ALL empty, this is a bugged character and should not be saved.
-  {
+  if (GET_TKE(player) > 0) { // Check TKE to make sure we're not rejecting brand-new naked characters (just stepped into chargen)
     bool has_any_item = player->cyberware || player->bioware || player->carrying;
     
     for (int wear_idx = 0; !has_any_item && wear_idx < NUM_WEARS; wear_idx++) {
@@ -1311,14 +1312,15 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
       }
     }
 
-#ifdef TRY_TO_SAVE_GEAR_FROM_THAT_ONE_BUG_THAT_I_THINK_I_FIXED_ALREADY_ANYWAYS
     if (!has_any_item && !PLR_FLAGGED(player, PLR_JUST_DIED)) {
       // Friendly notice: If you're reading this and going "oh hey, I could use this to drop all my stuff and quit to dupe my gear!" etc, that's code abuse and will result in a purge and ban. As you can see, it's logged ;)
-      mudlog_vfprintf(player, LOG_SYSLOG, "SYSERR: Got completely nude character to save_char(). Refusing to save them under the assumption that this is a stripped char from that untraced bug that sometimes destroys gear.\r\n");
+      mudlog_vfprintf(player, LOG_SYSLOG, "SYSERR: Got completely nude character %s (%ld) to save_char(). Refusing to save them under the assumption that this is a stripped char from that untraced bug that sometimes destroys gear.\r\n",
+                      GET_CHAR_NAME(player),
+                      GET_IDNUM(player));
       return false;
     }
-#endif
   }
+#endif
 
   MYSQL_RES *res;
   MYSQL_ROW row;
