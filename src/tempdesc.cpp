@@ -1,3 +1,6 @@
+#include <filesystem>
+namespace fs = std::filesystem;
+
 #include "awake.hpp"
 #include "structs.hpp"
 #include "interpreter.hpp"
@@ -5,13 +8,64 @@
 #include "comm.hpp"
 #include "db.hpp"
 
+#include "nlohmann/json.hpp"
+
 extern void write_world_to_disk(vnum_t vnum);
+extern void write_json_file(fs::path path, json *contents);
+extern void _json_parse_from_file(fs::path path, json &target);
+
+const fs::path global_tempdesc_dir = fs::absolute("lib") / "tempdescs";
+
+void boot_tempdescs() {
+  if (!fs::exists(global_tempdesc_dir)) {
+    log_vfprintf("boot_tempdescs(): Global dir not found. Creating %s.", STRING_TO_CSTR(global_tempdesc_dir));
+    fs::create_directory(global_tempdesc_dir);
+    return;
+  }
+
+  fs::directory_iterator end_itr; // default construction yields past-the-end
+  for (fs::directory_iterator itr(global_tempdesc_dir); itr != end_itr; ++itr) {
+    if (!is_directory(itr->status())) {
+      json td_info;
+      _json_parse_from_file(itr->path(), td_info);
+
+      vnum_t vnum = (vnum_t) td_info["landlord_vnum"].get<vnum_t>();
+      rnum_t rnum = real_room(vnum);
+
+      if (rnum < 0) {
+        mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Attempting to restore tempdesc to room %ld, but it doesn't exist!", vnum);
+        continue;
+      }
+
+      time_t invalid_after = (time_t) td_info["timeout"].get<time_t>();
+
+      if (invalid_after < time(0)) {
+        mudlog_vfprintf(NULL, LOG_SYSLOG, "Skipping load of tempdesc for room %ld (it's in the past)", vnum);
+        continue;
+      }
+
+      world[rnum].temp_desc = str_dup(STRING_TO_CSTR(td_info["desc"].get<std::string>()));
+      world[rnum].temp_desc_timeout = (invalid_after - time(0)) / 60;
+      world[rnum].temp_desc_author_idnum = (idnum_t) td_info["author"].get<idnum_t>();
+
+      mudlog_vfprintf(NULL, LOG_SYSLOG, "Successfully restored tempdesc to room %ld.", vnum);
+    }
+  }
+}
 
 void set_room_tempdesc(struct room_data *room, const char *desc, idnum_t idnum) {
   DELETE_AND_NULL_ARRAY(room->temp_desc);
   room->temp_desc = str_dup(desc);
   room->temp_desc_timeout = MAX(1, room->temp_desc_timeout);
   room->temp_desc_author_idnum = idnum;
+
+  // Save to disk.
+  json td_info;
+  td_info["vnum"]    = GET_ROOM_VNUM(room);
+  td_info["desc"]    = std::string(desc);
+  td_info["timeout"] = time(0) + (room->temp_desc_timeout * 60);
+  td_info["author"]  = room->temp_desc_author_idnum;
+  write_json_file(global_tempdesc_dir / vnum_to_string(GET_ROOM_VNUM(room)), &td_info);
 
   if (room->people) {
     send_to_room("You blink and your surroundings look a little different.\r\n", room);
@@ -54,11 +108,17 @@ void clear_temp_desc(struct room_data *room, struct char_data *clearer) {
   room->temp_desc_timeout = 0;
   room->temp_desc_author_idnum = 0;
 
+  // Delete the file on disk.
+  if (fs::exists(global_tempdesc_dir / vnum_to_string(GET_ROOM_VNUM(room)))) {
+    fs::remove(global_tempdesc_dir / vnum_to_string(GET_ROOM_VNUM(room)));
+  }
+
   if (room->people) {
     send_to_room("You blink and your surroundings look a little different.\r\n", room);
   }
 }
 
+// Once per IRL minute
 void tick_down_room_tempdesc_expiries() {
   for (int idx = 0; idx < top_of_world; idx++) {
     if (world[idx].temp_desc && --world[idx].temp_desc_timeout <= 0) {

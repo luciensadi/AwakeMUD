@@ -601,7 +601,8 @@ enum {
 #define AFF_WEARING_ACTIVE_DOCWAGON_RECEIVER        55
 #define AFF_CHEATLOG_MARK                           56
 #define AFF_COMPLEX_FORM_PROGRAM                    57
-#define AFF_MAX                                     58
+#define AFF_HAS_EYE_LIGHT                           58
+#define AFF_MAX                                     59
 // TODO: If you add another long-state action like building, designing, etc:
 // - Add it to the BR_TASK_AFF_FLAGS section below, which affects bioware_check and the B/R flag in the wholist
 // - Add it to the IS_WORKING and STOP_WORKING macros in utils.h
@@ -865,6 +866,7 @@ enum {
 #define AURA_PLAYERCOMBAT  16
 #define AURA_PLAYERDEATH   17
 #define NUM_AURAS          18
+// adding a new one? update the aura increment logic in limits.cpp to not treat it like a player aura and wipe it out
 
 #define COMBAT      1
 #define DETECTION    2
@@ -1782,7 +1784,12 @@ enum {
 #define SOFT_RESTORE            55
 #define SOFT_ENCRYPT            56
 #define SOFT_SNIFFER            57
-#define NUM_PROGRAMS            58
+#define SOFT_CELLULAR_LINK      58
+#define SOFT_SATELLITE_LINK     59
+#define SOFT_MASER_LINK         60
+#define SOFT_MICROWAVE_LINK     61
+#define SOFT_LASER_LINK         62
+#define NUM_PROGRAMS            63
 
 #define PART_ACTIVE    1
 #define PART_STORAGE    2

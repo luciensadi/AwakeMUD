@@ -4,7 +4,7 @@ attrs==19.3.0
 chardet==3.0.4
 discord==1.0.1
 discord.py==1.2.5
-idna==3.7
+idna==3.15
 multidict==4.7.2
 python-dotenv==1.2.2
 websockets==9.1

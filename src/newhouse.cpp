@@ -2891,17 +2891,18 @@ SPECIAL(landlord_spec)
             int seconds = apartment->get_paid_until() - time(0);
             
             if (days > 0) {
-              snprintf(buf2, sizeof(buf2), "%s is paid up for another %d day%s.", CAP(apartment->get_name()), days, days == 1 ? "" : "s");
+              snprintf(say_string, sizeof(say_string), "%s is paid up for another %d day%s.", CAP(apartment->get_name()), days, days == 1 ? "" : "s");
             } else if (hours > 0) {
-              snprintf(buf2, sizeof(buf2), "%s is paid up for another %d hour%s.", CAP(apartment->get_name()), hours, hours == 1 ? "" : "s");
+              snprintf(say_string, sizeof(say_string), "%s is paid up for another %d hour%s.", CAP(apartment->get_name()), hours, hours == 1 ? "" : "s");
             } else if (minutes > 0) {
-              snprintf(buf2, sizeof(buf2), "%s is paid up for another %d minute%s.", CAP(apartment->get_name()), minutes, minutes == 1 ? "" : "s");
+              snprintf(say_string, sizeof(say_string), "%s is paid up for another %d minute%s.", CAP(apartment->get_name()), minutes, minutes == 1 ? "" : "s");
             } else {
-              snprintf(buf2, sizeof(buf2), "%s is paid up for another %d second%s.", CAP(apartment->get_name()), seconds, seconds == 1 ? "" : "s");
+              snprintf(say_string, sizeof(say_string), "%s is paid up for another %d second%s.", CAP(apartment->get_name()), seconds, seconds == 1 ? "" : "s");
             }
-            mob_say(recep, buf2);
-            strlcpy(buf2, "(Note: That's in real-world time.)", sizeof(buf2));
-            do_say(recep, buf2, 0, SCMD_OSAY);
+            snprintf(ENDOF(say_string), sizeof(say_string) - strlen(say_string), " Extending will cost %ld nuyen.", apartment->get_rent_cost());
+            mob_say(recep, say_string);
+            strlcpy(say_string, "(Note: That's in real-world time.)", sizeof(say_string));
+            do_say(recep, say_string, 0, SCMD_OSAY);
           }
         }
 

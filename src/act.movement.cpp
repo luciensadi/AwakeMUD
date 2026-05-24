@@ -2261,6 +2261,10 @@ void leave_veh(struct char_data *ch)
     if ((veh == k->follower->in_veh) && (GET_POS(k->follower) >= POS_SITTING)) {
       act("You follow $N.\r\n", FALSE, k->follower, 0, ch, TO_CHAR);
       leave_veh(k->follower);
+
+      if (ch->in_room && IS_NPC(k->follower) && k->follower->in_room == ch->in_room && COULD_BE_ON_QUEST(ch)) {
+        check_quest_destination(ch, k->follower);
+      }
     }
   }
 }
@@ -2274,7 +2278,7 @@ ACMD(do_leave)
 
   struct room_data *in_room = get_ch_in_room(ch);
   if (!in_room) {
-    send_to_char("Panic strikes you-- you're floating in a void!\r\n", ch);
+    send_to_char("Panic strikes you-- you're floating in a void! Use the STUCK command.\r\n", ch);
     mudlog("SYSERR: Char has no in_room!", ch, LOG_SYSLOG, TRUE);
     return;
   }

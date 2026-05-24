@@ -319,6 +319,31 @@ void execute_copyover() {
       GET_NUYEN_RAW(och) += MAX_CAB_FARE;
     }
 
+    // Refund services for sustained spells: iterate through characters on the descriptor
+    for (struct char_data *ch_ptr = och; ch_ptr; ch_ptr = (ch_ptr == d->character ? d->original : nullptr)) {
+      // iterate through their sustains
+      for (struct sustain_data *sust = ch_ptr->sustained; sust; sust = sust->next) {
+        // Skip spells cast on them, and spells that aren't sustained by a spirit.
+        if (!sust->is_caster_record || !sust->spirit)
+          continue;
+
+        // Spell is sustained by a spirit; iterate through your spiritdata to find it
+        for (struct spirit_data *spiritdata = GET_SPIRIT(ch_ptr); spiritdata; spiritdata = spiritdata->next) {
+          if (spiritdata->id == GET_GRADE(sust->spirit)) {
+            // Found it. Add one to the services and bail.
+            mudlog_vfprintf(ch_ptr, LOG_SYSLOG, "Adding 1 service to %s's spirit record #%d (f%d-%d) from sustained %s.",
+                            GET_CHAR_NAME(ch_ptr),
+                            spiritdata->id,
+                            spiritdata->force,
+                            spiritdata->type,
+                            spells[sust->spell].name);
+            spiritdata->services++;
+            break;
+          }
+        }
+      }
+    }
+
     fprintf (fp, "%d\t%s\t%s\t%s\t%s\n", d->descriptor, GET_CHAR_NAME(och), d->host, CopyoverGet(d), CopyoverGetJSON(d));
     GET_LAST_IN(och) = get_ch_in_room(och)->number;
     if (!GET_LAST_IN(och) || GET_LAST_IN(och) == NOWHERE) {
@@ -6020,6 +6045,13 @@ ACMD(do_vset)
     veh->sub = value;
     snprintf(buf, sizeof(buf), "%s's subscribed status was set to %s", GET_VEH_NAME(veh), ONOFF(value));
     mudlog_vfprintf(ch, LOG_SYSLOG, "Set %s [%ld]'s subscribed status to %s.", GET_VEH_NAME(veh), GET_VEH_VNUM(veh), ONOFF(value));
+  } else if (is_abbrev(field, "restring")) {
+    FAILURE_CASE(!*val_arg, "Syntax: VSET <vehicle> RESTRING <what to change it to>");
+    delete [] veh->restring;
+    veh->restring = str_dup(val_arg);
+    send_to_char(ch, "Done.\r\n");
+    mudlog_vfprintf(ch, LOG_WIZLOG, "%s set vehicle %ld's restring to '%s'.", GET_CHAR_NAME(ch), veh->idnum, veh->restring);
+    return;
   }
   send_to_char(buf, ch);
   return;

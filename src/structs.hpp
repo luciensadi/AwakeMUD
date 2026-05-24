@@ -1003,7 +1003,7 @@ struct char_data
 
   int congregation_bonus_pool;         /* Bonuses accrued from spending time in a congregation room */
 
-  int last_loop_rand;
+  uint64_t last_loop_id;
 
   // See invis_resistance_tests.cpp for details.
   std::unordered_map<idnum_t, bool> *pc_invis_resistance_test_results = {};
@@ -1039,7 +1039,7 @@ struct char_data
       vfront(FALSE), hitched_to(NULL), persona(NULL), squeue(NULL), sustained(NULL), ssust(NULL), carrying(NULL), desc(NULL),
       cyberware(NULL), bioware(NULL), next_in_room(NULL), next_in_character_list(NULL), next_fighting(NULL), next_in_zone(NULL),
       next_in_veh(NULL), next_watching(NULL), followers(NULL), master(NULL), spells(NULL), ignore_data(NULL), pgroup(NULL),
-      pgroup_invitations(NULL), congregation_bonus_pool(0), last_loop_rand(0), pc_invis_resistance_test_results(NULL),
+      pgroup_invitations(NULL), congregation_bonus_pool(0), last_loop_id(0), pc_invis_resistance_test_results(NULL),
       mob_invis_resistance_test_results(NULL), alias_dirty_bit(FALSE), mob_loaded_in_room(0), precast_spells(NULL),
       is_carrying_vehicle(FALSE)
   {

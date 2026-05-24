@@ -2872,12 +2872,12 @@ ACMD(do_download)
             } else {
               send_to_icon(PERSONA, "The %s explodes, damaging your icon.\r\n", GET_OBJ_VAL(soft, 5) == 2 ? "Data Bomb" : "Pavlov");
               if (PERSONA->decker) {
-                for (soft = PERSONA->decker->software; soft; soft = soft->next_content) {
-                  if (GET_PROGRAM_TYPE(soft) == SOFT_ARMOR) {
-                    GET_PROGRAM_RATING(soft)--;
-                    if (GET_PROGRAM_RATING(soft) <= 0) {
+                for (struct obj_data *armorprog = PERSONA->decker->software; armorprog; armorprog = armorprog->next_content) {
+                  if (GET_PROGRAM_TYPE(armorprog) == SOFT_ARMOR) {
+                    GET_PROGRAM_RATING(armorprog)--;
+                    if (GET_PROGRAM_RATING(armorprog) <= 0) {
                       send_to_icon(PERSONA, "Your armor program crashes as the rating is depleted.\r\n");
-                      unload_active_program(PERSONA, soft);
+                      unload_active_program(PERSONA, armorprog);
                     }
                     break;
                   }

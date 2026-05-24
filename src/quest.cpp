@@ -73,6 +73,7 @@ const char *obj_loads[] =
     "Install item in a target",
     "Load at a location",
     "Load at host",
+    "Load at location, in an object",
     "\n"
   };
 
@@ -361,83 +362,82 @@ void load_quest_targets(struct char_data *johnson, struct char_data *ch)
     }
   }
 
-  for (i = 0; i < quest_table[num].num_objs; i++)
-    if ((rnum = real_object(quest_table[num].obj[i].vnum)) > -1)
-      switch (quest_table[num].obj[i].load)
-      {
-      case QOL_LOCATION:
-        if ((room = real_room(quest_table[num].obj[i].l_data)) > -1) {
-          obj = instantiate_quest_object(rnum, OBJ_LOAD_REASON_QUEST_LOCATION, ch);
-          obj_to_room(obj, &world[room]);
+  for (i = 0; i < quest_table[num].num_objs; i++) {
+    if (quest_table[num].obj[i].load == QOL_LOCATION_INOBJ) {
+      rnum_t load_obj_rnum = real_object(quest_table[num].obj[i].vnum);
+      rnum_t load_target_rnum = real_object(quest_table[num].obj[i].l_data2);
+      rnum_t room_rnum = real_room(quest_table[num].obj[i].l_data);
+
+      if (load_obj_rnum >= 0 && load_target_rnum >= 0 && room_rnum >= 0) {
+        struct obj_data *obj = instantiate_quest_object(load_obj_rnum, OBJ_LOAD_REASON_QUEST_LOCATION, ch);
+        struct obj_data *container = instantiate_quest_object(load_target_rnum, OBJ_LOAD_REASON_QUEST_LOCATION, ch);
+        obj_to_obj(obj, container);
+        obj_to_room(container, &world[room_rnum]);
+
+        if (IS_SET(GET_CONTAINER_FLAGS(container), CONT_CLOSEABLE)) {
+          SET_BIT(GET_CONTAINER_FLAGS(container), CONT_CLOSED);
+          if (GET_CONTAINER_KEY_VNUM(container) > 0 && real_object(GET_CONTAINER_KEY_VNUM(container)) >= 0) {
+            SET_BIT(GET_CONTAINER_FLAGS(container), CONT_LOCKED);
+          }
         }
-        obj = NULL;
-        break;
-      case QOL_HOST:
-        if ((room = real_host(quest_table[num].obj[i].l_data)) > -1) {
-          obj = instantiate_quest_object(rnum, OBJ_LOAD_REASON_QUEST_HOST, ch);
-          GET_DECK_ACCESSORY_FILE_FOUND_BY(obj) = GET_IDNUM(ch);
-          GET_DECK_ACCESSORY_FILE_REMAINING(obj) = 1;
-          obj_to_host(obj, &matrix[room]);
-        }
-        obj = NULL;
-        break;
-      case QOL_JOHNSON:
-        obj = instantiate_quest_object(rnum, OBJ_LOAD_REASON_QUEST_JOHNSON, ch);
-        obj_to_char(obj, johnson);
-        if (!perform_give(johnson, ch, obj)) {
-          char buf[512];
-          snprintf(buf, sizeof(buf), "Looks like your hands are full. You'll need %s for the run.", decapitalize_a_an(obj->text.name));
-          do_say(johnson, buf, 0, 0);
-          perform_drop(johnson, obj, SCMD_DROP, "drop", NULL);
-        }
-        obj = NULL;
-        break;
       }
+      return;
+    }
+
+    if ((rnum = real_object(quest_table[num].obj[i].vnum)) > -1) {
+      switch (quest_table[num].obj[i].load) {
+        case QOL_LOCATION:
+          if ((room = real_room(quest_table[num].obj[i].l_data)) > -1) {
+            obj = instantiate_quest_object(rnum, OBJ_LOAD_REASON_QUEST_LOCATION, ch);
+            obj_to_room(obj, &world[room]);
+          }
+          obj = NULL;
+          break;
+        case QOL_HOST:
+          if ((room = real_host(quest_table[num].obj[i].l_data)) > -1) {
+            obj = instantiate_quest_object(rnum, OBJ_LOAD_REASON_QUEST_HOST, ch);
+            GET_DECK_ACCESSORY_FILE_FOUND_BY(obj) = GET_IDNUM(ch);
+            GET_DECK_ACCESSORY_FILE_REMAINING(obj) = 1;
+            obj_to_host(obj, &matrix[room]);
+          }
+          obj = NULL;
+          break;
+        case QOL_JOHNSON:
+          obj = instantiate_quest_object(rnum, OBJ_LOAD_REASON_QUEST_JOHNSON, ch);
+          obj_to_char(obj, johnson);
+          if (!perform_give(johnson, ch, obj)) {
+            char buf[512];
+            snprintf(buf, sizeof(buf), "Looks like your hands are full. You'll need %s for the run.", decapitalize_a_an(obj->text.name));
+            do_say(johnson, buf, 0, 0);
+            perform_drop(johnson, obj, SCMD_DROP, "drop", NULL);
+          }
+          obj = NULL;
+          break;
+      }
+    }
+  }
 }
 
 void extract_quest_targets(idnum_t questor_idnum)
 {
-  struct obj_data *obj, *next_obj;
-  int i;
+  for_everyone_in_character_list_safe(__func__, [questor_idnum](struct char_data *mob) {
+    if (IS_NPC(mob) && mob->mob_specials.quest_id == questor_idnum) {
+      for (struct obj_data *obj = mob->carrying, *next_obj; obj; obj = next_obj) {
+        next_obj = obj->next_content;
+        extract_obj(obj);
+      }
 
-  {
-    bool should_loop = TRUE;
-    int loop_counter = 0;
-    int loop_rand = rand();
-
-    while (should_loop) {
-      should_loop = FALSE;
-      loop_counter++;
-
-      for (struct char_data *mob = character_list; mob; mob = mob->next_in_character_list) {
-        if (mob->last_loop_rand == loop_rand) {
-          continue;
-        } else {
-          mob->last_loop_rand = loop_rand;
-        }
-
-        if (IS_NPC(mob) && mob->mob_specials.quest_id == questor_idnum) {
-          for (obj = mob->carrying; obj; obj = next_obj) {
-            next_obj = obj->next_content;
-            extract_obj(obj);
-          }
-          for (i = 0; i < NUM_WEARS; i++)
-            if (GET_EQ(mob, i))
-              extract_obj(GET_EQ(mob, i));
-
-          // We extracted a character, so start over.
-          act("$n slips away quietly.", FALSE, mob, 0, 0, TO_ROOM);
-          extract_char(mob);
-          should_loop = TRUE;
-          break;
+      for (int i = 0; i < NUM_WEARS; i++) {
+        if (GET_EQ(mob, i)) {
+          extract_obj(GET_EQ(mob, i));
+          GET_EQ(mob, i) = nullptr;
         }
       }
 
-      if (loop_counter > 1) {
-        // mudlog_vfprintf(NULL, LOG_SYSLOG, "Looped %d times over extract_quest_targets().", loop_counter);
-      }
+      act("$n slips away quietly.", FALSE, mob, 0, 0, TO_ROOM);
+      extract_char(mob);
     }
-  }
+  });
 
   ObjList.RemoveQuestObjs(questor_idnum);
 }
@@ -1612,8 +1612,102 @@ SPECIAL(johnson)
   }
 
   // Hack to get around the fact that moving the failure check after the interact check would make you double-speak and double-act.
-  if (need_to_speak)
-    do_say(ch, argument, 0, is_sayto ? SCMD_SAYTO : 0);
+  if (need_to_speak) {
+    if (!char_can_make_noise(ch, nullptr)) {
+      switch (number(1, 50)) {
+        case 1:
+          send_to_char(ch, "You can't figure out how to make any noises, so you do a bit of an interpretive dance to try to get your point across.\r\n");
+          act("$n does a wiggly-wriggly interpretive dance in $N's direction.", TRUE, ch, nullptr, johnson, TO_NOTVICT);
+          break;
+        case 2:
+          send_to_char(ch, "You can't make a single sound, so you try to communicate by pretending to be trapped in an invisible box.\r\n");
+          act("$n mimes leaning heavily against an invisible wall, looking desperately at $N for help.", TRUE, ch, nullptr, johnson, TO_NOTVICT);
+          break;
+        case 3:
+          send_to_char(ch, "Your voice completely refuses to work, leaving you to open and close your mouth aggressively like a gasping fish.\r\n");
+          act("$n stares intensely at $N, flapping $s jaw open and closed in complete, eerie silence.", TRUE, ch, nullptr, johnson, TO_NOTVICT);
+          break;
+        case 4:
+          send_to_char(ch, "Realizing you are currently incapable of making noise, you hold up two fingers and start aggressively playing charades.\r\n");
+          act("$n holds up two fingers, points at $N, and starts furiously pantomiming... something.", TRUE, ch, nullptr, johnson, TO_NOTVICT);
+          break;
+        case 5:
+          send_to_char(ch, "You can't figure out how to make any noises, so you hold a thumb and pinky to your ear and mouth 'call me' at them.\r\n");
+          act("$n makes a phone gesture with $s hand, winking suggestively at $N in dead silence.", TRUE, ch, nullptr, johnson, TO_NOTVICT);
+          break;
+        case 6:
+          send_to_char(ch, "Since you can't produce a single peep, you decide to stare unblinkingly until they magically read your mind.\r\n");
+          act("$n steps way too close to $N, staring unblinkingly into $S eyes with intense, wordless desperation.", TRUE, ch, nullptr, johnson, TO_NOTVICT);
+          break;
+        case 7:
+          send_to_char(ch, "There's no sound coming out of your mouth, so you make a sock puppet shape with your hand to do the talking.\r\n");
+          act("$n forms a hand puppet with $s fingers and makes it 'talk' aggressively at $N.", TRUE, ch, nullptr, johnson, TO_NOTVICT);
+          break;
+        case 8:
+          send_to_char(ch, "You can't make any noise at all, so you try to furiously spell out your request in the air with a finger.\r\n");
+          act("$n frantically scribbles invisible words in the air, looking at $N expectantly.", TRUE, ch, nullptr, johnson, TO_NOTVICT);
+          break;
+        case 9:
+          send_to_char(ch, "Talking just isn't happening for you, so you clutch your chest and stumble around to show how important this is.\r\n");
+          act("$n gasps soundlessly, clutching $s heart and throwing a dramatic, mute tantrum toward $N.", TRUE, ch, nullptr, johnson, TO_NOTVICT);
+          break;
+        case 10:
+          send_to_char(ch, "Completely stripped of your ability to make noise, you resort to flapping your arms and bobbing your head.\r\n");
+          act("$n awkwardly flaps $s arms and bobs $s head at $N like an anxious, mute chicken.", TRUE, ch, nullptr, johnson, TO_NOTVICT);
+          break;
+        case 11:
+          send_to_char(ch, "No words or sounds will form, so you bust out some frantic, desperate jazz hands to convey your meaning.\r\n");
+          act("$n thrusts $s hands forward into a vibrant, completely soundless set of jazz hands at $N.", TRUE, ch, nullptr, johnson, TO_NOTVICT);
+          break;
+        case 12:
+          send_to_char(ch, "You can't make a single noise, so you tap your wide-open mouth and shrug with tragic intensity.\r\n");
+          act("$n points a finger into $s wide-open mouth, shrugging frantically at $N like a broken animatronic.", TRUE, ch, nullptr, johnson, TO_NOTVICT);
+          break;
+        case 13:
+          send_to_char(ch, "Speaking is a no-go right now. You try to look casual by throwing out some deeply awkward finger guns.\r\n");
+          act("$n fires a pair of slow, intensely awkward finger guns at $N, smiling through the heavy silence.", TRUE, ch, nullptr, johnson, TO_NOTVICT);
+          break;
+        case 14:
+          send_to_char(ch, "Since making noise is out of the question, you attempt to communicate via mechanical robot dancing.\r\n");
+          act("$n begins doing a series of rigid, jerky robot movements in $N's general direction.", TRUE, ch, nullptr, johnson, TO_NOTVICT);
+          break;
+        case 15:
+          send_to_char(ch, "Trapped in a glass case of soundless emotion, you just stand there jerking your head around like a maniac.\r\n");
+          act("$n stares at $N and begins jerking $s head around so vigorously it looks like it might fly off.", TRUE, ch, nullptr, johnson, TO_NOTVICT);
+          break;
+        case 16:
+          send_to_char(ch, "You can't utter a word, so you puff out your lower lip and try to look incredibly pathetic.\r\n");
+          act("$n gives $N a pair of massive, silent puppy-dog eyes, quivering $s lower lip dramatically.", TRUE, ch, nullptr, johnson, TO_NOTVICT);
+          break;
+        case 17:
+          send_to_char(ch, "Sound is out of the question, so you tap an invisible wristwatch to express your wordless urgency.\r\n");
+          act("$n taps $s foot impatiently, pointing at $s bare wrist while glaring soundlessly at $N.", TRUE, ch, nullptr, johnson, TO_NOTVICT);
+          break;
+        case 18:
+          send_to_char(ch, "Unable to voice your thoughts, you just aggressively flash two thumbs up with a manic, sweaty grin.\r\n");
+          act("$n flashes a double thumbs-up at $N, maintaining a tense, silent, and slightly terrifying grin.", TRUE, ch, nullptr, johnson, TO_NOTVICT);
+          break;
+        case 19:
+          send_to_char(ch, "You can't produce a single sound, so your face contorts into what looks like a permanently stuck, painful sneeze.\r\n");
+          act("$n faces $N, $s face twisted into a bizarre, mute grimace like $e is about to sneeze for eternity.", TRUE, ch, nullptr, johnson, TO_NOTVICT);
+          break;
+        case 20:
+          send_to_char(ch, "With no voice to use, you strike an elaborate, eldritch-looking rigid pose to look interesting.\r\n");
+          act("$n strikes a elaborate, eldritch-looking rigid pose, shuffling sideways toward $N in total silence.", TRUE, ch, nullptr, johnson, TO_NOTVICT);
+          break;
+        case 21:
+          send_to_char(ch, "You find yourself completely unable to make a sound, so you peek out from behind your own hands like a nervous toddler.\r\n");
+          act("$n covers $s face with $s hands, then peeks through $s fingers at $N with wordless desperation.", TRUE, ch, nullptr, johnson, TO_NOTVICT);
+          break;
+        default:
+          send_to_char(ch, "You can't speak, so you do your best to make yourself understood with pantomime.\r\n");
+          act("$n does some wordless pantomime in $N's direction.", TRUE, ch, nullptr, johnson, TO_NOTVICT);
+          break;
+      }
+    } else {
+      do_say(ch, argument, 0, is_sayto ? SCMD_SAYTO : 0);
+    }
+  }
   if (need_to_act)
     do_action(ch, argument, cmd, 0);
 
@@ -1639,7 +1733,7 @@ SPECIAL(johnson)
       }
 
       // Precondition: You must have gotten the quest from me.
-      if (!memory(johnson, ch)) {
+      if (!memory(johnson, ch) || quest_table[GET_QUEST(ch)].johnson != GET_MOB_VNUM(johnson)) {
         do_say(johnson, "Whoever you got your job from, it wasn't me. What, do we all look alike to you?", 0 , 0);
         send_to_char("^L(OOC note: You can hit RECAP to see who gave you your current job.)^n\r\n", ch);
         return TRUE;
@@ -2492,6 +2586,8 @@ void qedit_list_obj_objectives(struct descriptor_data *d)
 
     rnum_t obj_rnum = real_object(QUEST->obj[i].vnum);
     struct obj_data *obj = (obj_rnum >= 0 ? &obj_proto[obj_rnum] : NULL);
+    rnum_t cont_rnum = real_object(QUEST->obj[i].l_data2);
+    struct obj_data *cont = (cont_rnum >= 0 ? &obj_proto[cont_rnum] : NULL);
 
     {
       // These are derived from l_data, which is not used in the second stanza.
@@ -2556,6 +2652,15 @@ void qedit_list_obj_objectives(struct descriptor_data *d)
           snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Load %ld (%s) in room %ld (%s)", 
                    QUEST->obj[i].vnum,
                    obj ? GET_OBJ_NAME(obj) : "N/A",
+                   QUEST->obj[i].l_data,
+                   room ? GET_ROOM_NAME(room) : "NULL");
+          break;
+        case QOL_LOCATION_INOBJ:
+          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Load %ld (%s) in obj %ld (%s) in room %ld (%s)", 
+                   QUEST->obj[i].vnum,
+                   obj ? GET_OBJ_NAME(obj) : "N/A",
+                   QUEST->obj[i].l_data2,
+                   cont ? GET_OBJ_NAME(cont) : "N/A",
                    QUEST->obj[i].l_data,
                    room ? GET_ROOM_NAME(room) : "NULL");
           break;
@@ -2904,9 +3009,9 @@ void qedit_disp_menu(struct descriptor_data *d)
                QUEST->min_rep, CCNRM(CH, C_CMP), CCCYN(CH, C_CMP),
                QUEST->max_rep, CCNRM(CH, C_CMP));
   send_to_char(CH, "%s) Bonus nuyen: %s%d%s\r\n", GET_LEVEL(CH) >= LVL_ADMIN ? "4" : "-", CCCYN(CH, C_CMP),
-               QUEST->nuyen, CCNRM(CH, C_CMP));
+               (int) (QUEST->nuyen * NUYEN_GAIN_MULTIPLIER), CCNRM(CH, C_CMP));
   send_to_char(CH, "%s) Bonus karma: %s%0.2f%s\r\n", GET_LEVEL(CH) >= LVL_ADMIN ? "5" : "-", CCCYN(CH, C_CMP),
-               ((float)QUEST->karma / 100), CCNRM(CH, C_CMP));
+               ((float)QUEST->karma * KARMA_GAIN_MULTIPLIER / 100), CCNRM(CH, C_CMP));
   send_to_char(CH, "6) Item objective menu\r\n");
   send_to_char(CH, "7) Mobile objective menu\r\n");
   send_to_char(CH, "\r\n");
@@ -3319,7 +3424,7 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
     if (number < 0 || number > 500000)
       send_to_char("Invalid amount.  Enter bonus nuyen: ", CH);
     else {
-      QUEST->nuyen = number;
+      QUEST->nuyen = (int) (number / NUYEN_GAIN_MULTIPLIER);
       qedit_disp_menu(d);
     }
     break;
@@ -3328,7 +3433,7 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
     if (karma < 0.0 || karma > 25.0)
       send_to_char("Invalid amount.  Enter bonus karma: ", CH);
     else {
-      QUEST->karma = (int)(karma * 100);
+      QUEST->karma = (int)(karma * 100 / KARMA_GAIN_MULTIPLIER);
       qedit_disp_menu(d);
     }
     break;
@@ -3389,7 +3494,7 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
     if (number < 0 || number > 25000)
       send_to_char("Invalid amount.  Enter nuyen reward: ", CH);
     else {
-      QUEST->mob[d->edit_number2].nuyen = number;
+      QUEST->mob[d->edit_number2].nuyen = number / NUYEN_GAIN_MULTIPLIER;
       d->edit_mode = QEDIT_M_KARMA;
       send_to_char("Enter karma reward: ", CH);
     }
@@ -3399,7 +3504,7 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
     if (karma < 0.0 || karma > 5.0)
       send_to_char("Invalid amount.  Enter karma reward: ", CH);
     else {
-      QUEST->mob[d->edit_number2].karma = (int)(karma * 100);
+      QUEST->mob[d->edit_number2].karma = (int)(karma * 100 / KARMA_GAIN_MULTIPLIER);
       qedit_disp_mob_loads(d);
     }
     break;
@@ -3655,7 +3760,7 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
     if (number < 0 || number > 25000)
       send_to_char("Invalid amount.  Enter nuyen reward: ", CH);
     else {
-      QUEST->obj[d->edit_number2].nuyen = number;
+      QUEST->obj[d->edit_number2].nuyen = number / NUYEN_GAIN_MULTIPLIER;
       d->edit_mode = QEDIT_O_KARMA;
       send_to_char("Enter karma reward: ", CH);
     }
@@ -3665,7 +3770,7 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
     if (karma < 0.0 || karma > 5.0)
       send_to_char("Invalid amount.  Enter karma reward: ", CH);
     else {
-      QUEST->obj[d->edit_number2].karma = (int)(karma * 100);
+      QUEST->obj[d->edit_number2].karma = (int)(karma * 100) / KARMA_GAIN_MULTIPLIER;
       qedit_disp_obj_loads(d);
     }
     break;
@@ -3700,6 +3805,10 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
       case QOL_LOCATION:
         d->edit_mode = QEDIT_O_LDATA;
         send_to_char(CH, "Enter vnum of room to load item into: ");
+        break;
+      case QOL_LOCATION_INOBJ:
+        d->edit_mode = QEDIT_O_LDATA;
+        send_to_char(CH, "Enter vnum of room to load container into: ");
         break;
       default:
         qedit_disp_obj_objectives(d);
@@ -3780,6 +3889,15 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
         qedit_disp_obj_objectives(d);
       }
       break;
+    case QOL_LOCATION_INOBJ:
+      if (real_room(number) < 0)
+        send_to_char(CH, "Enter vnum of room to load item into: ");
+      else {
+        QUEST->obj[d->edit_number2].l_data = number;
+        send_to_char(CH, "Enter vnum of container to load into the room: ");
+        d->edit_mode = QEDIT_O_LDATA2;
+      }
+      break;
     case QOL_HOST:
       if (real_host(number) < 0)
         send_to_char(CH, "Enter vnum of host to load item into: ");
@@ -3791,13 +3909,32 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
     }
     break;
   case QEDIT_O_LDATA2:
-    // only QOL_TARMOB_E should ever make it here
-    number = atoi(arg);
-    if (number < 1 || number > (NUM_WEARS - 1))
-      qedit_disp_locations(d);
-    else {
-      QUEST->obj[d->edit_number2].l_data2 = number - 1;
-      qedit_disp_obj_objectives(d);
+    switch (QUEST->obj[d->edit_number2].load) {
+      case QOL_TARMOB_E:
+        // only QOL_TARMOB_E should ever make it here
+        number = atoi(arg);
+        if (number < 1 || number > (NUM_WEARS - 1))
+          qedit_disp_locations(d);
+        else {
+          QUEST->obj[d->edit_number2].l_data2 = number - 1;
+          qedit_disp_obj_objectives(d);
+        }
+        break;
+      case QOL_LOCATION_INOBJ:
+        {
+          number = atoi(arg);
+          rnum_t rnum = real_object(number);
+          if (number != 0 && rnum < 0) {
+            send_to_char("No such item.  Enter vnum of container (0 for nothing): ", CH);
+          } else if (number != 0 && GET_OBJ_TYPE(&obj_proto[rnum]) != ITEM_CONTAINER) {
+            send_to_char(CH, "%s is not a container. Enter vnum of a container (0 for nothing): ", CAP(GET_OBJ_NAME(&obj_proto[rnum])));
+          } else {
+            QUEST->obj[d->edit_number2].l_data2 = number;
+            qedit_disp_obj_objectives(d);
+          }
+        }
+        break;
+        
     }
     break;
   case QEDIT_O_ODATA:
@@ -4108,6 +4245,7 @@ void display_quest_goals_to_ch(struct char_data *ch) {
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Download '%s' ", GET_OBJ_NAME(obj));
         break;
       case QOL_LOCATION:
+      case QOL_LOCATION_INOBJ:
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "Locate '%s' ", GET_OBJ_NAME(obj));
         break;
       default:

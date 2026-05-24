@@ -1490,7 +1490,7 @@ void add_follower(struct char_data *ch, struct char_data *leader)
 
       if (!IS_NPC(ch) && !IS_NPC(leader) && PRF_FLAGGED(leader, PRF_SEE_TIPS))
       {
-        act("^c(Tip: If you want $n to participate in jobs with you, make sure you ^WGROUP^c $m!)^n", TRUE, ch, 0, leader, TO_VICT);
+        act("^c(Tip: If you want $n to participate in jobs with you, make sure you ^WGROUP^c $m!)^n\r\n", TRUE, ch, 0, leader, TO_VICT);
       }
     }
   }
@@ -3494,7 +3494,8 @@ bool char_can_make_noise(struct char_data *ch, const char *message)
     // The silence spell only affects players if they're the caster or are grouped with them.
     if (spell_affecting_ch_is_cast_by_ch_or_group_member(ch, SPELL_SILENCE))
     {
-      send_to_char(message, ch);
+      if (message)
+        send_to_char(message, ch);
       send_to_char("(OOC: You're in a silent room.)\r\n", ch);
       return FALSE;
     }
@@ -3504,7 +3505,8 @@ bool char_can_make_noise(struct char_data *ch, const char *message)
   if (is_stealth)
   {
     // reject: spell was cast directly on char, and they've been given instructions on breaking it.
-    send_to_char(ch, "(OOC: You're affected by a stealth spell. You can end it with ^WBREAK STEALTH^n.)");
+    if (message)
+      send_to_char(ch, "(OOC: You're affected by a stealth spell. You can end it with ^WBREAK STEALTH^n.)\r\n");
     return FALSE;
   }
 

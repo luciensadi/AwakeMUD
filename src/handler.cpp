@@ -2877,6 +2877,7 @@ void extract_obj(struct obj_data * obj, bool dont_warn_on_kept_items)
 #endif
 }
 
+bool global_a_character_was_extracted = false; // look, don't @ me, this is the best I've got right now
 /* Extract a ch completely from the world, and leave his stuff behind */
 void extract_char(struct char_data * ch, bool do_save)
 {
@@ -2884,6 +2885,8 @@ void extract_char(struct char_data * ch, bool do_save)
     mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Received NULL char to extract_ch()!");
     return;
   }
+
+  global_a_character_was_extracted = true;
 
   struct char_data *k, *temp;
   struct descriptor_data *t_desc;
@@ -3011,7 +3014,7 @@ void extract_char(struct char_data * ch, bool do_save)
     }
   }
 
-  /* transfer objects to room, if any */
+  /* destroy carried objects, if any */
   while (ch->carrying)
   {
     obj = ch->carrying;
@@ -3038,7 +3041,7 @@ void extract_char(struct char_data * ch, bool do_save)
     extract_obj(obj, TRUE);
   }
 
-  /* transfer equipment to room, if any */
+  /* destroy equipment, if any */
   for (i = 0; i < NUM_WEARS; i++)
     if (GET_EQ(ch, i))
       extract_obj(unequip_char(ch, i, TRUE), TRUE);

@@ -26,15 +26,14 @@ mkdir -p bin
 
 # Clean stale .d dependency files — container and host generate these with different
 # absolute paths, and the shared volume mount means they cross-contaminate.
-rm -f src/*.d src/pch.hpp.d
+rm -f src/*.d
 
 # Build with Linux flags (overrides host Makefile settings without modifying the file)
 echo "=== Building AwakeMUD... ==="
 BUILD_START=$(date +%s)
 make -C src -j"$(nproc)" \
-    CXX="ccache clang" CC="ccache g++" \
-    LIBS="-lcrypt -L/usr/local/lib -lmysqlclient -lz -lm -lstdc++ -std=c++11 -lboost_filesystem -lboost_system -lnsl -lsodium -lcurl" \
-    MYFLAGS="-DDEBUG -DSELFADVANCE -DIDLEDELETE_DRYRUN -DREIMPLEMENT_STRLCPY_STRLCAT -Dlinux -I /usr/local/include/ -Wall -Wextra -Wno-unused-parameter -DSUPPRESS_MOB_SKILL_ERRORS -std=c++11"
+    CXX="ccache clang++" \
+    OS_CPPFLAGS="-Dlinux -DDEBUG_CRYPTO -DNO_CLS -DUSE_MYSQL_8"
 echo "=== Build succeeded in $(($(date +%s) - BUILD_START))s ==="
 
 if [ "${DEBUGGER:-0}" = "1" ]; then

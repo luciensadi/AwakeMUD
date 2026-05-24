@@ -3293,7 +3293,8 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
   if (IS_PROJECT(victim) && victim->desc && victim->desc->original)
     real_body = victim->desc->original;
 
-  if (attacktype != TYPE_BIOWARE && attacktype != TYPE_DRUGS && attacktype != TYPE_POISON && attacktype != TYPE_FOCUS_OVERUSE) {
+  // Bioware does not apply against certain types of damate (generally internal, self-inflicted, or spiritual damage)
+  if (attacktype != TYPE_BIOWARE && attacktype != TYPE_DRUGS && attacktype != TYPE_POISON && attacktype != TYPE_FOCUS_OVERUSE && !IS_PROJECT(victim)) {
     for (bio = real_body->bioware; bio; bio = bio->next_content) {
       if (GET_BIOWARE_TYPE(bio) == BIO_PLATELETFACTORY && dam >= 3 && is_physical)
         dam--;
@@ -6108,11 +6109,11 @@ void perform_violence(void)
     engulfed = FALSE;
 
     // Prevent people from being processed multiple times per loop.
-    if (ch->last_loop_rand == loop_rand) {
+    if (ch->last_loop_id == loop_rand) {
       // mudlog("SYSERR: Encountered someone who already went this combat turn. Fix set_fighting().", ch, LOG_SYSLOG, TRUE);
       continue;
     } else {
-      ch->last_loop_rand = loop_rand;
+      ch->last_loop_id = loop_rand;
     }
 
     // You're not in combat or not awake.
@@ -6256,6 +6257,9 @@ void perform_violence(void)
         act("$N is banished to the metaplanes as $n drains the last of its magical force.", FALSE, mage, 0, spirit, TO_ROOM);
         stop_fighting(spirit);
         stop_fighting(mage);
+        if (COULD_BE_ON_QUEST(mage)) {
+          check_quest_kill(mage, spirit);
+        } 
         end_spirit_existance(spirit, TRUE);
         AFF_FLAGS(mage).RemoveBit(AFF_BANISH);
       } else if ((GET_REAL_MAG(mage) / 100) - GET_TEMP_MAGIC_LOSS(mage) < 1) {

@@ -947,7 +947,10 @@ ACMD(do_gen_write)
     return;
   }
 
-  FAILURE_CASE(subcmd == SCMD_TYPO && (str_str(argument, "chernobyl") || str_str(argument, "chornobyl")), "Thanks for the report, but we use the Ukrainian spelling of Chornobyl here.");
+  if (subcmd == SCMD_TYPO) {
+    FAILURE_CASE((str_str(argument, "chernobyl") || str_str(argument, "chornobyl")), "Thanks for the report, but we use the Ukrainian spelling of Chornobyl here.");
+    FAILURE_CASE((str_str(argument, "produccion")), "Thanks for the report, but Meridional is an Andalusian company, so the Spanish is intended.");
+  }
 
   mudlog_vfprintf(ch, LOG_MISCLOG, "%s %s: %s",
                   (ch->desc->original ? GET_CHAR_NAME(ch->desc->original) : GET_CHAR_NAME(ch)),
@@ -2461,7 +2464,7 @@ ACMD(do_astral)
   }
 
   if (IS_PROJECT(ch)) {
-    send_to_char("But you are already projecting!\r\n", ch);
+    send_to_char("But you are already projecting! (Did you mean to ^WRETURN^n?)\r\n", ch);
     return;
   }
 
@@ -2474,6 +2477,12 @@ ACMD(do_astral)
       PLR_FLAGS(ch).SetBit(PLR_PERCEIVE);
       send_to_char("Your physical body seems distant, as the astral plane slides into view.\r\n", ch);
     }
+    return;
+  }
+
+  // It's projection (boogie woogie woogie)
+  if (!can_take_exclusive_magical_action(ch, "projecting")) {
+    // message sent in function
     return;
   }
 
@@ -3174,6 +3183,7 @@ int recog(struct char_data *ch, struct char_data *i, const char *name)
 
 }
 
+extern void write_veh_room_desc_to_buf_as_seen_by_ch(struct veh_data * vehicle, struct char_data * ch, char *write_buf, size_t write_buf_sz);
 #define IS_INVIS_ON_CAMERA(vict) (AFF_FLAGGED(vict, AFF_IMP_INVIS) || AFF_FLAGGED(vict, AFF_SPELLIMPINVIS) || GET_INVIS_LEV(vict) > 1 || affected_by_spell(vict, SPELL_IMP_INVIS) || (MOB_FLAGGED(vict, MOB_ASTRAL) && !AFF_FLAGGED(vict, AFF_MANIFEST)))
 ACMD(do_photo)
 {
@@ -3295,6 +3305,11 @@ ACMD(do_photo)
               continue;
             }
 
+            // Concealed foci should not show in photos
+            if (GET_OBJ_TYPE(GET_EQ(found_ch, j)) == ITEM_FOCUS && IS_OBJ_STAT(GET_EQ(found_ch, j), ITEM_EXTRA_CONCEALED_IN_EQ)) {
+              continue;
+            }
+
             snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s%s\r\n", where[j], GET_OBJ_NAME(GET_EQ(found_ch, j)));
           }
         found = TRUE;
@@ -3385,39 +3400,8 @@ ACMD(do_photo)
 
     for (struct veh_data *vehicle = ch->in_room->vehicles; vehicle; vehicle = vehicle->next_veh) {
       if (ch->in_veh != vehicle) {
-        strlcat(buf, "^y", sizeof(buf));
-        if (vehicle->damage >= VEH_DAM_THRESHOLD_DESTROYED) {
-          strlcat(buf, GET_VEH_NAME(vehicle), sizeof(buf));
-          strlcat(buf, " lies here wrecked.\r\n", sizeof(buf));
-        } else {
-          if (vehicle->type == VEH_BIKE && vehicle->people)
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s sitting on ", GET_NAME(vehicle->people));
-          switch (vehicle->cspeed) {
-          case SPEED_OFF:
-            if (vehicle->type == VEH_BIKE && vehicle->people) {
-              strlcat(buf, GET_VEH_NAME(vehicle), sizeof(buf));
-              strlcat(buf, " waits here.\r\n", sizeof(buf));
-            } else
-              strlcat(buf, vehicle->description, sizeof(buf));
-            break;
-          case SPEED_IDLE:
-            strlcat(buf, GET_VEH_NAME(vehicle), sizeof(buf));
-            strlcat(buf, " idles here.\r\n", sizeof(buf));
-            break;
-          case SPEED_CRUISING:
-            strlcat(buf, GET_VEH_NAME(vehicle), sizeof(buf));
-            strlcat(buf, " cruises through here.\r\n", sizeof(buf));
-            break;
-          case SPEED_SPEEDING:
-            strlcat(buf, GET_VEH_NAME(vehicle), sizeof(buf));
-            strlcat(buf, " speeds past.\r\n", sizeof(buf));
-            break;
-          case SPEED_MAX:
-            strlcat(buf, GET_VEH_NAME(vehicle), sizeof(buf));
-            strlcat(buf, " zooms by.\r\n", sizeof(buf));
-            break;
-          }
-        }
+        // Pass a NULL character so it's treated as camera mode.
+        write_veh_room_desc_to_buf_as_seen_by_ch(vehicle, NULL, ENDOF(buf), sizeof(buf) - strlen(buf));
       }
     }
     if (ch->in_veh)
@@ -4437,8 +4421,21 @@ ACMD(do_dice)
     send_to_char("Roll how many dice?\r\n", ch);
     return;
   }
-  dice = atoi(buf);
-  snprintf(buf, sizeof(buf), "%d dice are %srolled by $n ", dice, subcmd == SCMD_PRIVATE_ROLL ? "privately " : "");
+
+  // Roll non-exploding dice with !.
+  bool dice_explode = true;
+  if (*buf == '!') {
+    dice_explode = false;
+    dice = atoi(buf + 1);
+  } else {
+    dice = atoi(buf);
+  }
+
+  snprintf(buf, sizeof(buf), "%d %sdice are %srolled by $n ",
+           dice,
+           dice_explode ? "" : "non-exploding ",
+           subcmd == SCMD_PRIVATE_ROLL ? "^cprivately^n " : "");
+
   if (*buf1 && atoi(buf1)) {
     tn = MAX(2, atoi(buf1));
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "against a TN of %d ", tn);
@@ -4453,7 +4450,7 @@ ACMD(do_dice)
     strlcat(buf, "and scores:", sizeof(buf));
     for (;dice > 0; dice--) {
        roll = tot = number(1, 6);
-       while (roll == 6) {
+       while (dice_explode && roll == 6) {
          tot += roll = number(1, 6);
        }
        if (tn > 0)

@@ -462,6 +462,7 @@ void redit_parse(struct descriptor_data * d, const char *arg)
              as a temporary measure */
           d->edit_room->contents = world[room_num].contents;
           d->edit_room->people = world[room_num].people;
+          d->edit_room->vehicles = world[room_num].vehicles;
 
           // Update the peace values.
           bool edit_room_peaceful = d->edit_room->room_flags.IsSet(ROOM_PEACEFUL);
@@ -1254,7 +1255,7 @@ void redit_parse(struct descriptor_data * d, const char *arg)
     // What's displayed to you when you walk into the exit.
     DELETE_ARRAY_IF_EXTANT(DOOR->go_into_secondperson);
     if (*arg) {
-      strcpy(buf, arg);
+      strlcpy(buf, arg, sizeof(buf));
       delete_doubledollar(buf);
       DOOR->go_into_secondperson = str_dup(buf);
     }
@@ -1264,7 +1265,7 @@ void redit_parse(struct descriptor_data * d, const char *arg)
     // What's displayed to others when you walk into the exit.
     DELETE_ARRAY_IF_EXTANT(DOOR->go_into_thirdperson);
     if (arg && *arg) {
-      strcpy(buf, arg);
+      strlcpy(buf, arg, sizeof(buf));
       delete_doubledollar(buf);
       DOOR->go_into_thirdperson = str_dup(buf);
     }
@@ -1274,7 +1275,7 @@ void redit_parse(struct descriptor_data * d, const char *arg)
     // What's displayed when you walk out of the exit into the room.
     DELETE_ARRAY_IF_EXTANT(DOOR->come_out_of_thirdperson);
     if (*arg) {
-      strcpy(buf, arg);
+      strlcpy(buf, arg, sizeof(buf));
       delete_doubledollar(buf);
       DOOR->come_out_of_thirdperson = str_dup(buf);
     }

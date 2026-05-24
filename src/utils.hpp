@@ -877,7 +877,7 @@ bool _mob_is_alert(struct char_data *npc);
           } else {                                                                                      \
             (ch)->desc->wait = (cycle);                                                                 \
             if (!PRF_FLAGGED((ch), PRF_NOROUNDTIME)) {                                                  \
-              send_to_char((ch), "^L(Entering round time of %d ticks)^n\r\n", cycle);                   \
+              send_to_char((ch), "^L(Entering round time of %d ticks)^n\r\n", (int) cycle);             \
             }                                                                                           \
           }                                                                                             \
         } else if (IS_NPC(ch)) {                                                                        \
@@ -889,7 +889,7 @@ bool _mob_is_alert(struct char_data *npc);
         if ((ch)->desc) {                                                                               \
           (ch)->desc->wait = (cycle);                                                                   \
           if (!PRF_FLAGGED((ch), PRF_NOROUNDTIME)) {                                                    \
-            send_to_char((ch), "^L(Entering round time of %d ticks)^n\r\n", cycle);                     \
+            send_to_char((ch), "^L(Entering round time of %d ticks)^n\r\n", (int) cycle);               \
           }                                                                                             \
         } else if (IS_NPC(ch)) {                                                                        \
           GET_MOB_WAIT(ch) = (cycle);                                                                   \
@@ -1254,6 +1254,7 @@ bool is_weapon_focus_usable_by(struct obj_data *focus, struct char_data *ch);
 
 // ITEM_CONTAINER convenience defines
 #define GET_CONTAINER_FLAGS(cont)                 (GET_OBJ_VAL((cont), 1))
+#define GET_CONTAINER_KEY_VNUM(cont)              (GET_OBJ_VAL((cont), 2))
 #define GET_CORPSE_IS_PC(corpse)                  (GET_OBJ_VAL((corpse), 4))
 #define GET_CORPSE_IDNUM(corpse)                  (GET_OBJ_VAL((corpse), 5))
 

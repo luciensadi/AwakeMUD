@@ -492,40 +492,45 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
 
 }
 
-void show_veh_to_char(struct veh_data * vehicle, struct char_data * ch)
+#define IS_INVIS_ON_CAMERA(vict) (AFF_FLAGGED(vict, AFF_IMP_INVIS) || AFF_FLAGGED(vict, AFF_SPELLIMPINVIS) || GET_INVIS_LEV(vict) > 1 || affected_by_spell(vict, SPELL_IMP_INVIS) || (MOB_FLAGGED(vict, MOB_ASTRAL) && !AFF_FLAGGED(vict, AFF_MANIFEST)))
+void write_veh_room_desc_to_buf_as_seen_by_ch(struct veh_data * vehicle, struct char_data * ch, char *write_buf, size_t write_buf_sz)
 {
-  *buf = '\0';
+  *write_buf = '\0';
 
-  strlcpy(buf, CCHAR ? CCHAR : "", sizeof(buf));
+  strlcpy(write_buf, (ch && CCHAR) ? CCHAR : "^y", write_buf_sz);
 
   snprintf(buf2, sizeof(buf2), "%s", replace_neutral_color_codes(GET_VEH_NAME_NOFORMAT(vehicle), "^y"));
   const char *veh_name = buf2;
 
   if (vehicle->damage >= VEH_DAM_THRESHOLD_DESTROYED)
   {
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s^y lies here wrecked.", CAP(veh_name));
+    snprintf(ENDOF(write_buf), write_buf_sz - strlen(write_buf), "%s^y lies here wrecked.", CAP(veh_name));
   }
 
   else {
     bool should_capitalize = TRUE;
-    if (vehicle->type == VEH_BIKE && vehicle->people && CAN_SEE(ch, vehicle->people)) {
+    if (vehicle->type == VEH_BIKE
+        && vehicle->people
+        && (ch ? CAN_SEE(ch, vehicle->people) : !IS_INVIS_ON_CAMERA(vehicle->people)))
+    {
       should_capitalize = FALSE;
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s^y sitting on ", CAP(safe_found_mem(ch, vehicle->people) ?
-                                                safe_found_mem(ch, vehicle->people)->mem :
-                                                GET_NAME(vehicle->people)));
+      snprintf(ENDOF(write_buf), write_buf_sz - strlen(write_buf),
+               "%s^y sitting on ",
+               CAP((ch && safe_found_mem(ch, vehicle->people)) ? safe_found_mem(ch, vehicle->people)->mem
+                                                                 : GET_NAME(vehicle->people)));
     }
 
     if (GET_VEH_DEFPOS(vehicle) && (vehicle->cspeed == SPEED_OFF || vehicle->cspeed == SPEED_IDLE)) {
       if (vehicle->towing) {
         bool towing_comma = ispunct(get_final_character_from_string(get_string_after_color_code_removal(GET_VEH_DEFPOS(vehicle), NULL)));
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s^y %s^y%stowing %s^y%s", 
+        snprintf(ENDOF(write_buf), write_buf_sz - strlen(write_buf), "%s^y %s^y%stowing %s^y%s", 
                  should_capitalize ? CAP(veh_name) : decapitalize_a_an(veh_name), 
                  GET_VEH_DEFPOS(vehicle),
                  towing_comma ? ", " : " (",
                  GET_VEH_NAME(vehicle->towing),
                  towing_comma ? ")" : "");
       } else {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s^y %s^y", 
+        snprintf(ENDOF(write_buf), write_buf_sz - strlen(write_buf), "%s^y %s^y", 
                should_capitalize ? CAP(veh_name) : decapitalize_a_an(veh_name), 
                GET_VEH_DEFPOS(vehicle));
       }
@@ -533,47 +538,51 @@ void show_veh_to_char(struct veh_data * vehicle, struct char_data * ch)
       switch (vehicle->cspeed) {
         case SPEED_OFF:
           if ((vehicle->type == VEH_BIKE && vehicle->people) || vehicle->restring) {
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s^y waits here", should_capitalize ? CAP(veh_name) : decapitalize_a_an(veh_name));
+            snprintf(ENDOF(write_buf), write_buf_sz - strlen(write_buf), "%s^y waits here", should_capitalize ? CAP(veh_name) : decapitalize_a_an(veh_name));
           } else {
-            strlcat(buf, GET_VEH_ROOM_DESC(vehicle), sizeof(buf));
+            strlcat(write_buf, GET_VEH_ROOM_DESC(vehicle), write_buf_sz);
           }
           break;
         case SPEED_IDLE:
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s^y idles here", should_capitalize ? CAP(veh_name) : decapitalize_a_an(veh_name));
+          snprintf(ENDOF(write_buf), write_buf_sz - strlen(write_buf), "%s^y idles here", should_capitalize ? CAP(veh_name) : decapitalize_a_an(veh_name));
           break;
         case SPEED_CRUISING:
           if (veh_is_currently_flying(vehicle)) {
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s^y is airborne somewhere in the distance", should_capitalize ? CAP(veh_name) : decapitalize_a_an(veh_name));
+            snprintf(ENDOF(write_buf), write_buf_sz - strlen(write_buf), "%s^y is airborne somewhere in the distance", should_capitalize ? CAP(veh_name) : decapitalize_a_an(veh_name));
           } else if (veh_can_traverse_air(vehicle)) {
             if (vehicle->type == VEH_DRONE) {
-              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s^y is flying around", should_capitalize ? CAP(veh_name) : decapitalize_a_an(veh_name));
+              snprintf(ENDOF(write_buf), write_buf_sz - strlen(write_buf), "%s^y is flying around", should_capitalize ? CAP(veh_name) : decapitalize_a_an(veh_name));
             } else {
-              snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s^y taxis around here", should_capitalize ? CAP(veh_name) : decapitalize_a_an(veh_name));
+              snprintf(ENDOF(write_buf), write_buf_sz - strlen(write_buf), "%s^y taxis around here", should_capitalize ? CAP(veh_name) : decapitalize_a_an(veh_name));
             }
           } else {
-            snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s^y cruises through here", should_capitalize ? CAP(veh_name) : decapitalize_a_an(veh_name));
+            snprintf(ENDOF(write_buf), write_buf_sz - strlen(write_buf), "%s^y cruises through here", should_capitalize ? CAP(veh_name) : decapitalize_a_an(veh_name));
           }
           break;
         case SPEED_SPEEDING:
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s^y speeds past you", should_capitalize ? CAP(veh_name) : decapitalize_a_an(veh_name));
+          snprintf(ENDOF(write_buf), write_buf_sz - strlen(write_buf), "%s^y speeds past you", should_capitalize ? CAP(veh_name) : decapitalize_a_an(veh_name));
           break;
         case SPEED_MAX:
-          snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s^y zooms by you", should_capitalize ? CAP(veh_name) : decapitalize_a_an(veh_name));
+          snprintf(ENDOF(write_buf), write_buf_sz - strlen(write_buf), "%s^y zooms by you", should_capitalize ? CAP(veh_name) : decapitalize_a_an(veh_name));
           break;
       }
       if (vehicle->towing) {
-        snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", towing %s^y", GET_VEH_NAME(vehicle->towing));
+        snprintf(ENDOF(write_buf), write_buf_sz - strlen(write_buf), ", towing %s^y", GET_VEH_NAME(vehicle->towing));
       }
-      strlcat(buf, ".", sizeof(buf));
+      strlcat(write_buf, ".", write_buf_sz);
     }
   }
 
   if (vehicle->rigger) {
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " (Rigged by %s^y)", GET_CHAR_NAME(vehicle->rigger));
+    snprintf(ENDOF(write_buf), write_buf_sz - strlen(write_buf), " (Rigged by %s^y)", GET_CHAR_NAME(vehicle->rigger));
   }
-  if (vehicle->owner && GET_IDNUM(ch) == vehicle->owner)
-    strlcat(buf, " ^Y(Yours)", sizeof(buf));
-  strlcat(buf, "^N\r\n", sizeof(buf));
+  if (ch && vehicle->owner && GET_IDNUM(ch) == vehicle->owner)
+    strlcat(write_buf, " ^Y(Yours)", write_buf_sz);
+  strlcat(write_buf, "^N\r\n", write_buf_sz);
+}
+
+void show_veh_to_char(struct veh_data * vehicle, struct char_data * ch) {
+  write_veh_room_desc_to_buf_as_seen_by_ch(vehicle, ch, buf, sizeof(buf));
   send_to_char(buf, ch);
 }
 
@@ -910,7 +919,7 @@ void diag_char_to_char(struct char_data * i, struct char_data * ch)
       }
     }
     if (LAST_HEAL(i) > 0) {
-      send_to_char(ch, "%s%s received recent treatment, so further treatments will be more difficult (TN +%d).",
+      send_to_char(ch, "%s%s received recent treatment, so further treatments will be more difficult (TN +%d).\r\n",
                        CAP(HSSH(i)),
                        !HSSH_SHOULD_PLURAL(i) ? "'ve" : "'s",
                        MIN(LAST_HEAL(i) * 3/2, 8));
@@ -1130,7 +1139,7 @@ void look_at_char(struct char_data * i, struct char_data * ch, const char *used_
         }
 
         // Hidden focus (still visible to staff)
-        if (ch != i && !IS_SENATOR(ch) && GET_OBJ_TYPE(eq) == ITEM_FOCUS && IS_OBJ_STAT(eq, ITEM_EXTRA_CONCEALED_IN_EQ)) {
+        if (!IS_SENATOR(ch) && GET_OBJ_TYPE(eq) == ITEM_FOCUS && IS_OBJ_STAT(eq, ITEM_EXTRA_CONCEALED_IN_EQ)) {
           continue;
         }
 
@@ -3486,12 +3495,12 @@ void do_probe_object(struct char_data * ch, struct obj_data * j, bool is_in_shop
               GET_OBJ_VAL(j, 3), GET_OBJ_VAL(j, 4));
       break;
     case ITEM_PROGRAM:
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is a ^crating-%d %s^n program, ^c%d^n units in size.",
-               GET_PROGRAM_RATING(j), programs[GET_PROGRAM_TYPE(j)].name, GET_PROGRAM_SIZE(j));
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is %s ^crating-%d %s^n program, ^c%d^n units in size.",
+               GET_PROGRAM_IS_COOKED(j) ? "a cooked" : "an uncooked", GET_PROGRAM_RATING(j), programs[GET_PROGRAM_TYPE(j)].name, GET_PROGRAM_SIZE(j));
       if (GET_PROGRAM_TYPE(j) == SOFT_ATTACK)
         snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " Its damage code is ^c%s^n.", GET_WOUND_NAME(GET_OBJ_VAL(j, 3)));
 
-      if (GET_OBJ_VNUM(j) == OBJ_BLANK_PROGRAM && (GET_PROGRAM_TYPE(j) >= SOFT_ASIST_COLD || GET_PROGRAM_TYPE(j) < SOFT_SENSOR)) {
+      if (GET_OBJ_VNUM(j) == OBJ_BLANK_PROGRAM && GET_PROGRAM_TYPE(j) != SOFT_SUITE) {
         if (GET_OBJ_TIMER(j) < 0)
           strlcat(buf, " It was ruined in cooking and is useless.\r\n", sizeof(buf));
         else if (!GET_OBJ_TIMER(j))
@@ -3735,7 +3744,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j, bool is_in_shop
       break;
     case ITEM_PART:
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "It is %s rating-^C%d^n ^c%s^n intended for MPCP ^c%d^n decks. It will cost %d nuyen in parts and %d nuyen in chips to build.",
-               GET_PART_DESIGN_TICKS_REMAINING(j) < 0 ? "a not-yet-designed" : (GET_PART_DESIGN_TICKS_REMAINING(j) > 0 ? "a design-in-progress" : "a"),
+               GET_PART_DESIGN_TICKS_REMAINING(j) < 0 ? "a not-yet-designed" : (GET_PART_DESIGN_TICKS_REMAINING(j) > 0 ? "a design-in-progress" : "a ready-to-install"),
                GET_PART_RATING(j),
                parts[GET_PART_TYPE(j)].name,
                GET_PART_TARGET_MPCP(j),
@@ -4354,7 +4363,7 @@ ACMD(do_examine)
       else
         strncpy(buf, "The small LED is currently green, indicating a successful encode.\r\n", sizeof(buf));
       send_to_char(buf, ch);
-    } else if (GET_OBJ_TYPE(tmp_object) == ITEM_PROGRAM && (GET_OBJ_VAL(tmp_object, 0) >= SOFT_ASIST_COLD || GET_OBJ_VAL(tmp_object, 0) < SOFT_SENSOR)) {
+    } else if (GET_OBJ_TYPE(tmp_object) == ITEM_PROGRAM && GET_PROGRAM_TYPE(tmp_object) != SOFT_SUITE) {
       if (GET_OBJ_TIMER(tmp_object) < 0)
         strncpy(buf, "This chip has been ruined.\r\n", sizeof(buf));
       else if (!GET_OBJ_TIMER(tmp_object))
@@ -8191,13 +8200,18 @@ void display_room_name(struct char_data *ch, struct room_data *in_room, bool in_
       APPEND_ROOM_FLAG(ROOM_FLAGGED(in_room, ROOM_STORAGE) && !ROOM_FLAGGED(in_room, ROOM_CORPSE_SAVE_HACK), " (Storage)");
       if (GET_APARTMENT(in_room)) {
         if (GET_APARTMENT(in_room)->is_office()) {
-          strlcat(room_title_buf, " (Office)", sizeof(room_title_buf));
+          snprintf(ENDOF(room_title_buf), sizeof(room_title_buf) - strlen(room_title_buf), " (%s Office)", GET_APARTMENT(in_room)->get_paid_until() > time(0) ? "Leased" : "^gAvailable^n");
         } else {
           snprintf(ENDOF(room_title_buf), sizeof(room_title_buf) - strlen(room_title_buf), " (%s-Class Apartment)",
                    lifestyles[GET_APARTMENT(in_room)->get_lifestyle()].name);
         }
+
+        if (ROOM_FLAGGED(in_room, ROOM_STERILE) && GET_APARTMENT(in_room)->is_owner_or_guest_with_valid_lease(ch)) {
+          strlcat(room_title_buf, " (Sterile)", sizeof(room_title_buf));
+        }
+      } else {
+        APPEND_ROOM_FLAG(ROOM_FLAGGED(in_room, ROOM_STERILE), " (Sterile)");
       }
-      APPEND_ROOM_FLAG(ROOM_FLAGGED(in_room, ROOM_STERILE), " (Sterile)");
       APPEND_ROOM_FLAG(ROOM_FLAGGED(in_room, ROOM_ARENA), " ^y(Arena)^n");
       APPEND_ROOM_FLAG(ROOM_FLAGGED(in_room, ROOM_PEACEFUL), " (Peaceful)");
       APPEND_ROOM_FLAG(IS_WATER(in_room), " ^B(Flooded)^n");

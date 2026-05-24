@@ -693,17 +693,13 @@ void send_echo_to_char(struct char_data *actor, struct char_data *viewer, const 
   // Add a newline.
   strlcat(mutable_echo_string, "\r\n", sizeof(mutable_echo_string));
 
-  // Prepend a kinesics to kemotes
-  if (subcmd == SCMD_KEMOTE) {
-    if (echo_string[0] == '\'' && echo_string[1] == 's') {
-      snprintf(mutable_echo_string, sizeof(mutable_echo_string), "(Kinesics) @self%s", echo_string);
-    } else {
-      snprintf(mutable_echo_string, sizeof(mutable_echo_string), "(Kinesics) @self %s", echo_string);
-    }
-  }
-
   // Finally(!), send it to the viewer.
-  send_to_char(viewer, capitalize(mutable_echo_string));
+  if (subcmd == SCMD_KEMOTE) {
+    // Prepend a kinesics to kemotes
+    send_to_char(viewer, "(Kinesics) %s", capitalize(mutable_echo_string));
+  } else {
+    send_to_char(viewer, capitalize(mutable_echo_string));
+  }
 
   // And put it in their emote history.
   store_message_to_history(viewer->desc, COMM_CHANNEL_EMOTES, mutable_echo_string);
