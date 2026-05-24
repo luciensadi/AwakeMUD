@@ -56,6 +56,7 @@ extern int get_paydata_market_minimum(int host_color);
 extern void save_shop_orders();
 extern bool docwagon(struct char_data *ch);
 extern struct time_info_data time_info;
+extern bool cleanup_excess_elementals(struct char_data *ch);
 
 void mental_gain(struct char_data * ch)
 {
@@ -1046,7 +1047,10 @@ void point_update(void)
     bool is_npc = IS_NPC(i);
 
     if (!is_npc) {
-      playerDB.SaveChar(i, GET_LOADROOM(i));
+      if (!cleanup_excess_elementals(i)) {
+        // Cleanup function saves, so we only need to save if it did not do so already.
+        playerDB.SaveChar(i, GET_LOADROOM(i));
+      }
 
       AFF_FLAGS(i).RemoveBit(AFF_DAMAGED);
 

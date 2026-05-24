@@ -3903,7 +3903,6 @@ ACMD(do_conjure)
     // message was sent in function
     return;
   }
-  FAILURE_CASE_PRINTF(GET_NUM_SPIRITS(ch) >= GET_REAL_CHA(ch), "You're limited in the number of %s you can have by your unaugmented charisma.", GET_TRADITION(ch) == TRAD_HERMETIC ? "elementals" : "spirits");
   if (ch->in_veh) {
     send_to_char("There is not enough room to conjure in here.\r\n", ch);
     return;
@@ -6883,12 +6882,11 @@ void delete_spirit_or_elemental_from_entry(struct char_data *ch, struct spirit_d
   delete sdata;
 }
 
-void cleanup_excess_elementals(struct char_data *ch) {
-  if (GET_TRADITION(ch) == TRAD_HERMETIC && GET_SPIRIT(ch)) {
-    if (GET_NUM_SPIRITS(ch) <= GET_REAL_CHA(ch))
-      return;
-    
-    while (GET_NUM_SPIRITS(ch) > GET_REAL_CHA(ch)) {
+bool cleanup_excess_elementals(struct char_data *ch) {
+  if (ch->desc && GET_SPIRIT(ch) && GET_NUM_SPIRITS(ch) > GET_CHA(ch)){
+    send_to_char(ch, "You realize with a dawning sense of horror that your charisma is no longer high enough to allow you to control so many %s, and you quickly set about releasing the weakest.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elementals" : "spirits");
+
+    while (GET_NUM_SPIRITS(ch) > GET_CHA(ch)) {
       struct spirit_data *lowest_force = GET_SPIRIT(ch);
       // Find the excess elemental with the lowest force (and lowest service count in case of a tie)
       for (struct spirit_data *itr = GET_SPIRIT(ch)->next; itr; itr = itr->next) {
@@ -6896,23 +6894,30 @@ void cleanup_excess_elementals(struct char_data *ch) {
           lowest_force = itr;
         }
       }
-      
+
       // Log and clean up.
-      mudlog_vfprintf(ch, LOG_SYSLOG, "%s has too many bound elementals (qty %d > cha %d), so popping a force-%d %s elemental (%d service%s).",
+      mudlog_vfprintf(ch, LOG_SYSLOG, "%s has too many bound %s (qty %d > cha %d), so popping a force-%d %s %s (%d service%s).",
                       GET_CHAR_NAME(ch),
+                      GET_TRADITION(ch) == TRAD_HERMETIC ? "elementals" : "spirits",
                       GET_NUM_SPIRITS(ch),
-                      GET_REAL_CHA(ch),
+                      GET_CHA(ch),
                       lowest_force->force,
-                      CAP(elements[lowest_force->type].name),
+                      CAP((GET_TRADITION(ch) == TRAD_HERMETIC ? elements[lowest_force->type].name : spirits[lowest_force->type].name)),
+                      GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit",
                       lowest_force->services,
                       lowest_force->services == 1 ? "" : "s");
 
+      send_to_char(ch, "You release a force-%d %s %s from your services.\r\n",
+                   lowest_force->force,
+                   CAP((GET_TRADITION(ch) == TRAD_HERMETIC ? elements[lowest_force->type].name : spirits[lowest_force->type].name)),
+                   GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
+
       delete_spirit_or_elemental_from_entry(ch, lowest_force);
     }
+    GET_ELEMENTALS_DIRTY_BIT(ch) = TRUE;
+    playerDB.SaveChar(ch, GET_LOADROOM(ch));
+
+    return true;
   }
-
-  GET_ELEMENTALS_DIRTY_BIT(ch) = TRUE;
-  playerDB.SaveChar(ch, GET_LOADROOM(ch));
+  return false;
 }
-
-// TODO: debug why a character showed up twice in the character list: maybe write a function to add a char to the list, scanning the whole list for duplicates in the process
