@@ -1201,8 +1201,8 @@ struct descriptor_data
   Option *edit_option_original;
   Situation *edit_situation;
   Situation *edit_situation_original;
-  std::vector<ActivityParamSpec> *edit_params;
-  std::vector<ActivityParamSpec> *edit_params_original;
+  std::map<std::string, std::string> *edit_params;
+  std::map<std::string, std::string> *edit_params_original;
   // If you add more of these edit_whatevers, touch comm.cpp's free_editing_structs and add them!
 
   int canary;

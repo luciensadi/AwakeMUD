@@ -1,5 +1,11 @@
 #include "MenuFrameGenerics.hpp"
 #include "interpreter.hpp"
+#include "constants.hpp"
+
+#define AS_BOOL(thing)   std::variant<int, float, bool, std::string>{std::in_place_type<bool>, thing}
+#define AS_INT(thing)    std::variant<int, float, bool, std::string>{std::in_place_type<int>, thing}
+#define AS_FLOAT(thing)  std::variant<int, float, bool, std::string>{std::in_place_type<float>, thing}
+#define AS_STRING(thing) std::variant<int, float, bool, std::string>{std::in_place_type<std::string>, thing}
 
 MenuFrameResult YesNoPromptFrame::parse(struct descriptor_data *d, char *arg) {
   skip_spaces(&arg);
@@ -11,7 +17,7 @@ MenuFrameResult YesNoPromptFrame::parse(struct descriptor_data *d, char *arg) {
   if (on_choice_) {
     on_choice_(value);
   }
-  return { MenuFrameAction::Pop, child_identifier, value };
+  return { MenuFrameAction::Pop, child_identifier, AS_BOOL(value) };
 }
 
 MenuFrameResult IntPromptFrame::parse(struct descriptor_data *d, char *arg) {
@@ -23,7 +29,7 @@ MenuFrameResult IntPromptFrame::parse(struct descriptor_data *d, char *arg) {
   if (on_choice_) {
     on_choice_(value);
   }
-  return { MenuFrameAction::Pop, child_identifier, value };
+  return { MenuFrameAction::Pop, child_identifier, AS_BOOL(value) };
 }
 
 MenuFrameResult FloatPromptFrame::parse(struct descriptor_data *d, char *arg) {
@@ -38,7 +44,7 @@ MenuFrameResult FloatPromptFrame::parse(struct descriptor_data *d, char *arg) {
   if (on_choice_) {
     on_choice_(value);
   }
-  return { MenuFrameAction::Pop, child_identifier, value };
+  return { MenuFrameAction::Pop, child_identifier, AS_BOOL(value) };
 }
 
 MenuFrameResult StringPromptFrame::parse(struct descriptor_data *d, char *arg) {
@@ -54,5 +60,90 @@ MenuFrameResult StringPromptFrame::parse(struct descriptor_data *d, char *arg) {
   if (on_choice_) {
     on_choice_(std::string(arg));
   }
-  return { MenuFrameAction::Pop, child_identifier, std::string(arg) };
+  return { MenuFrameAction::Pop, child_identifier, AS_STRING(std::string(arg)) };
 }
+
+//////////////////////////////////////////////////////////////////////
+// Less-generic generics below here (skill, spell, power, etc inputs)
+//////////////////////////////////////////////////////////////////////
+
+#define SYNTAX "Invalid input: Must be a name of a skill (e.g. Pistols), or 'abort' to cancel.\r\n"
+MenuFrameResult SkillNamePromptFrame::parse(struct descriptor_data *d, char *arg) {
+  skip_spaces(&arg);
+
+  MF_TRYAGAIN_CASE(!*arg, SYNTAX);
+
+  if (!str_cmp(arg, "abort")) {
+    // Don't call on_choice_, just bail.
+    return { MenuFrameAction::Pop, child_identifier, AS_INT(-1) };
+  }
+
+  int result = skill_name_to_idx(arg, true);
+
+  if (result == -1) {
+    if (d->character) {
+      send_to_char(d->character, SYNTAX);
+    }
+    return { MenuFrameAction::JustDisplay };
+  }
+
+  if (on_choice_) {
+    on_choice_(result);
+  }
+  return { MenuFrameAction::Pop, child_identifier, AS_INT(result) };  
+}
+#undef SYNTAX
+
+#define SYNTAX "Invalid input: Must be a name of a spell (e.g. Manabolt), or 'abort' to cancel.\r\n"
+MenuFrameResult SpellNamePromptFrame::parse(struct descriptor_data *d, char *arg) {
+  skip_spaces(&arg);
+
+  MF_TRYAGAIN_CASE(!*arg, SYNTAX);
+
+  if (!str_cmp(arg, "abort")) {
+    // Don't call on_choice_, just bail.
+    return { MenuFrameAction::Pop, child_identifier, AS_INT(-1) };
+  }
+
+  int result = spell_name_to_idx(arg, true);
+
+  if (result == -1) {
+    if (d->character) {
+      send_to_char(d->character, SYNTAX);
+    }
+    return { MenuFrameAction::JustDisplay };
+  }
+
+  if (on_choice_) {
+    on_choice_(result);
+  }
+  return { MenuFrameAction::Pop, child_identifier, AS_INT(result) };  
+}
+#undef SYNTAX
+
+#define SYNTAX "Invalid input: Must be a name of an adept power (e.g. Kinesics), or 'abort' to cancel.\r\n"
+MenuFrameResult PowerNamePromptFrame::parse(struct descriptor_data *d, char *arg) {
+  skip_spaces(&arg);
+
+  MF_TRYAGAIN_CASE(!*arg, SYNTAX);
+
+  if (!str_cmp(arg, "abort")) {
+    // Don't call on_choice_, just bail.
+    return { MenuFrameAction::Pop, child_identifier, AS_INT(-1) };
+  }
+
+  int result = power_name_to_idx(arg, true);
+
+  if (result == -1) {
+    if (d->character) {
+      send_to_char(d->character, SYNTAX);
+    }
+    return { MenuFrameAction::JustDisplay };
+  }
+
+  if (on_choice_) {
+    on_choice_(result);
+  }
+  return { MenuFrameAction::Pop, child_identifier, AS_INT(result) };  
+}
+#undef SYNTAX

@@ -82,7 +82,7 @@ public:
 };
 
 class YesNoPromptFrame : public GenericInputMenuFrame {
-private:
+protected:
   std::function<void(bool)> on_choice_ = nullptr;
 public:
   YesNoPromptFrame(std::string prompt, int child_identifier, std::function<void(bool)> on_choice=nullptr)
@@ -91,7 +91,7 @@ public:
 };
 
 class IntPromptFrame : public GenericInputMenuFrame {
-private:
+protected:
   std::function<void(int)> on_choice_ = nullptr;
   int min_val, max_val;
 public:
@@ -100,8 +100,18 @@ public:
   MenuFrameResult parse(struct descriptor_data *d, char *arg) override;
 };
 
+class VnumPromptFrame : public GenericInputMenuFrame {
+protected:
+  std::function<void(vnum_t)> on_choice_ = nullptr;
+  int min_val, max_val;
+public:
+  VnumPromptFrame(std::string prompt, int child_identifier, std::function<void(vnum_t)> on_choice=nullptr, vnum_t min=INT_MIN, vnum_t max=INT_MAX)
+      : GenericInputMenuFrame(std::move(prompt), child_identifier), on_choice_(std::move(on_choice)), min_val(min), max_val(max) {}
+  MenuFrameResult parse(struct descriptor_data *d, char *arg) override;
+};
+
 class FloatPromptFrame : public GenericInputMenuFrame {
-private:
+protected:
   std::function<void(float)> on_choice_ = nullptr;
   int min_val, max_val;
 public:
@@ -111,7 +121,7 @@ public:
 };
 
 class StringPromptFrame : public GenericInputMenuFrame {
-private:
+protected:
   std::function<void(std::string)> on_choice_ = nullptr;
   size_t min_length, max_length_with_color;
   int max_length_after_color_removal;
@@ -130,3 +140,61 @@ public:
       {}
   MenuFrameResult parse(struct descriptor_data *d, char *arg) override;
 };
+
+//////////////////////////////////////////////////////////////////////
+// Less-generic generics below here (skill, spell, power, etc inputs)
+//////////////////////////////////////////////////////////////////////
+
+// Prompts for a skill name, returns the skill index (int). Also accepts 'abort' to cancel.
+class SkillNamePromptFrame : public IntPromptFrame {
+public:
+  SkillNamePromptFrame(std::string prompt, int child_identifier, std::function<void(int)> on_choice=nullptr)
+      : IntPromptFrame(std::move(prompt), child_identifier, std::move(on_choice)) {}
+  MenuFrameResult parse(struct descriptor_data *d, char *arg) override;
+};
+
+// Prompts for a spell name, returns the spell index (int). Does not have handling for spells with subtypes (e.g. Increase/Decrease). Also accepts 'abort' to cancel.
+class SpellNamePromptFrame : public IntPromptFrame {
+public:
+  SpellNamePromptFrame(std::string prompt, int child_identifier, std::function<void(int)> on_choice=nullptr)
+      : IntPromptFrame(std::move(prompt), child_identifier, std::move(on_choice)) {}
+  MenuFrameResult parse(struct descriptor_data *d, char *arg) override;
+};
+
+// Prompts for a power name, returns the power index (int). Also accepts 'abort' to cancel.
+class PowerNamePromptFrame : public IntPromptFrame {
+public:
+  PowerNamePromptFrame(std::string prompt, int child_identifier, std::function<void(int)> on_choice=nullptr)
+      : IntPromptFrame(std::move(prompt), child_identifier, std::move(on_choice)) {}
+  MenuFrameResult parse(struct descriptor_data *d, char *arg) override;
+};
+
+// Prompts for an object vnum, validates that it exists, then returns the vnum. Also accepts -1 to cancel.
+class ObjVnumPromptFrame : public VnumPromptFrame {
+public:
+  ObjVnumPromptFrame(std::string prompt, int child_identifier, std::function<void(int)> on_choice=nullptr)
+      : VnumPromptFrame(std::move(prompt), child_identifier, std::move(on_choice)) {}
+  MenuFrameResult parse(struct descriptor_data *d, char *arg) override;
+};
+/*
+
+        case ActivityParamType::OBJ_VNUM:
+          nextFrame = std::make_unique<ObjVnumPromptFrame>("Enter the object vnum: ", 0, [param_name=param_itr.name, d](vnum_t vnum){ (*PARAMS)[param_name] = std::to_string(vnum); });
+          return { MenuFrameAction::Push };
+        case ActivityParamType::MOB_VNUM:
+          nextFrame = std::make_unique<MobVnumPromptFrame>("Enter the mob's vnum: ", 0, [param_name=param_itr.name, d](vnum_t vnum){ (*PARAMS)[param_name] = std::to_string(vnum); });
+          return { MenuFrameAction::Push };
+        case ActivityParamType::ROOM_VNUM:
+          nextFrame = std::make_unique<ObjVnumPromptFrame>("Enter the room's vnum: ", 0, [param_name=param_itr.name, d](vnum_t vnum){ (*PARAMS)[param_name] = std::to_string(vnum); });
+          return { MenuFrameAction::Push };
+        case ActivityParamType::QUEST_VNUM:
+          nextFrame = std::make_unique<ObjVnumPromptFrame>("Enter the quest's vnum: ", 0, [param_name=param_itr.name, d](vnum_t vnum){ (*PARAMS)[param_name] = std::to_string(vnum); });
+          return { MenuFrameAction::Push };
+        case ActivityParamType::NUYEN_AMOUNT:
+          nextFrame = std::make_unique<NuyenQtyPromptFrame>("Enter the nuyen quantity: ", 0, [param_name=param_itr.name, d](int amount){ (*PARAMS)[param_name] = std::to_string(amount); });
+          return { MenuFrameAction::Push };
+        case ActivityParamType::BOOLEAN:
+          MF_PROMPT_YESNO_AND_RETURN("Enter Y or N: ", 0, [param_name=param_itr.name, d](bool result){ (*PARAMS)[param_name] = result; });
+        case ActivityParamType::KARMA_AMOUNT:
+          nextFrame = std::make_unique<KarmaQtyPromptFrame
+*/

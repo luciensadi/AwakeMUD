@@ -21,6 +21,8 @@ Check::lookup_spec() / Check::list_slugs(), which are family-locked: you cannot
 accidentally pass an Effect spec where a Check spec is expected.
 */
 
+extern int is_abbrev(const char *arg1, const char *arg2);
+
 #define CHECK_FUNCTION(func_name) bool _check_function_##func_name(struct char_data *ch, const std::map<std::string, std::string>& settings)
 
 // Check function prototypes. Remember, check functions can NEVER result in character death!
@@ -342,7 +344,11 @@ void _display_check_parameters_for_olc(struct descriptor_data *d, bool with_inde
                  !param_itr.required ? " (optional)" : "");
   }
 }
+
+////////////////////////////////////////////////////////
 // CheckMenuFrame defines
+////////////////////////////////////////////////////////
+
 void CheckMenuFrame::display(struct descriptor_data *d) const {
   send_to_char(CH, "1) Function: ^c%s^n\r\n", CHK->get_func_name());
   
@@ -366,8 +372,8 @@ MenuFrameResult CheckMenuFrame::parse(struct descriptor_data *d, char *arg) {
       MF_PUSH_FRAME(CheckFunctionMenuFrame, 1);
     case '2':
       MF_TRYAGAIN_CASE(!CHK->func_ptr_is_set(), "You need to set the function before you can modify its parameters. Enter a different choice:");
-      PARAMS = new std::vector<ActivityParamSpec>;
-      std::copy(CHK->settings.begin(), CHK->settings.end(), std::back_inserter(PARAMS));
+      PARAMS = new std::map<std::string, std::string>;
+      *(PARAMS) = CHK->settings;
       MF_PUSH_FRAME(CheckParametersMenuFrame, 2);
     case 'x':
       // Discard changes: drop our current val and replace it with a clone of original
@@ -384,12 +390,15 @@ MenuFrameResult CheckMenuFrame::parse(struct descriptor_data *d, char *arg) {
 const MenuFrameResult CheckMenuFrame::handle_child_response(struct descriptor_data *d, const MenuFrameResult & result) {
   if (result.child_identifier == 2 && PARAMS) {
     CHK->settings.clear();
-    std::copy(PARAMS->begin(), PARAMS->end(), std::back_inserter(CHK->settings));
+    CHK->settings = *(PARAMS);
   }
   return { MenuFrameAction::JustDisplay };
 }
 
+////////////////////////////////////////////////////////
 // CheckFunctionMenuFrame defines
+////////////////////////////////////////////////////////
+
 void CheckFunctionMenuFrame::display(struct descriptor_data *d) const {
   if (CHK->func_ptr_is_set()) {
     send_to_char(CH, "This check is currently set to the function '^c%s^n':\r\n", CHK->get_func_name());
@@ -419,7 +428,10 @@ MenuFrameResult CheckFunctionMenuFrame::parse(struct descriptor_data *d, char *a
 
 const MenuFrameResult CheckFunctionMenuFrame::handle_child_response(struct descriptor_data *d, const MenuFrameResult & result) { return { MenuFrameAction::JustDisplay }; }
 
+////////////////////////////////////////////////////////
 // CheckParametersMenuFrame defines
+////////////////////////////////////////////////////////
+
 void CheckParametersMenuFrame::display(struct descriptor_data *d) const {
   _display_check_parameters_for_olc(d, false);
   send_to_char(CH, "\r\n"
@@ -439,9 +451,55 @@ MenuFrameResult CheckParametersMenuFrame::parse(struct descriptor_data *d, char 
     return { MenuFrameAction::Pop, child_identifier };
   }
 
-  // They want to set a parameter.
-  // TODO: put them into a param capturing frame based on the allowed type of the parameter. Parsing/validation happens there.
+  // They want to set a parameter, the name of which is in arg.
+  for (auto param_itr : CHK->lookup_spec(CHK->get_func_name())->params) {
+    // If they selected this parameter:
+    if (is_abbrev(arg, param_itr.name.c_str())) {
+      // Send them into the appropriate menuframe primitive to extract the value.
+      switch (param_itr.type) {
+        case ActivityParamType::STRING:
+          MF_PROMPT_STRING_AND_RETURN("Enter a string: ", 0, [param_name=param_itr.name, d](std::string result){ (*PARAMS)[param_name] = result; });
+        case ActivityParamType::SKILL_NAME:
+          nextFrame = std::make_unique<SkillNamePromptFrame>("Enter the name of the skill: ", 0, [param_name=param_itr.name, d](int skill_idx){ (*PARAMS)[param_name] = std::to_string(skill_idx); });
+          return { MenuFrameAction::Push };
+        case ActivityParamType::SPELL_NAME:
+          nextFrame = std::make_unique<SpellNamePromptFrame>("Enter the name of the spell: ", 0, [param_name=param_itr.name, d](int spell_idx){ (*PARAMS)[param_name] = std::to_string(spell_idx); });
+          return { MenuFrameAction::Push };
+        case ActivityParamType::POWER_NAME:
+          nextFrame = std::make_unique<PowerNamePromptFrame>("Enter the name of the power: ", 0, [param_name=param_itr.name, d](int power_idx){ (*PARAMS)[param_name] = std::to_string(power_idx); });
+          return { MenuFrameAction::Push };
+        case ActivityParamType::INTEGER:
+          MF_PROMPT_INT_AND_RETURN("Enter an integer: ", 0, [param_name=param_itr.name, d](int result){ (*PARAMS)[param_name] = result; });
+        case ActivityParamType::OBJ_VNUM:
+          nextFrame = std::make_unique<ObjVnumPromptFrame>("Enter the object vnum: ", 0, [param_name=param_itr.name, d](vnum_t vnum){ (*PARAMS)[param_name] = std::to_string(vnum); });
+          return { MenuFrameAction::Push };
+        case ActivityParamType::MOB_VNUM:
+          nextFrame = std::make_unique<MobVnumPromptFrame>("Enter the mob's vnum: ", 0, [param_name=param_itr.name, d](vnum_t vnum){ (*PARAMS)[param_name] = std::to_string(vnum); });
+          return { MenuFrameAction::Push };
+        case ActivityParamType::ROOM_VNUM:
+          nextFrame = std::make_unique<ObjVnumPromptFrame>("Enter the room's vnum: ", 0, [param_name=param_itr.name, d](vnum_t vnum){ (*PARAMS)[param_name] = std::to_string(vnum); });
+          return { MenuFrameAction::Push };
+        case ActivityParamType::QUEST_VNUM:
+          nextFrame = std::make_unique<ObjVnumPromptFrame>("Enter the quest's vnum: ", 0, [param_name=param_itr.name, d](vnum_t vnum){ (*PARAMS)[param_name] = std::to_string(vnum); });
+          return { MenuFrameAction::Push };
+        case ActivityParamType::NUYEN_AMOUNT:
+          nextFrame = std::make_unique<NuyenQtyPromptFrame>("Enter the nuyen quantity: ", 0, [param_name=param_itr.name, d](int amount){ (*PARAMS)[param_name] = std::to_string(amount); });
+          return { MenuFrameAction::Push };
+        case ActivityParamType::BOOLEAN:
+          MF_PROMPT_YESNO_AND_RETURN("Enter Y or N: ", 0, [param_name=param_itr.name, d](bool result){ (*PARAMS)[param_name] = result; });
+        case ActivityParamType::KARMA_AMOUNT:
+          nextFrame = std::make_unique<KarmaQtyPromptFrame>("Enter the karma amount as a decimal number (ex: 2.3): ", 0, [param_name=param_itr.name, d](float amount){ (*PARAMS)[param_name] = std::to_string(amount); });
+          return { MenuFrameAction::Push };
+      };
+    }
+  }
+
+  // If they got here, their specified parameter name was not part of the check's valid parameter list; show an error and bail
+  send_to_char(d->character, "That's not a valid selection. Enter the name of the parameter you want to edit, or 'q' to save, or 'x' to abort without saving.\r\n");
+  return { MenuFrameAction::JustDisplay };
 }
+
+// todo: figure out a debug func or way to dive into this menu to test things. I feel like it already exists, but don't recall what it is right now?
 
 const MenuFrameResult CheckParametersMenuFrame::handle_child_response(struct descriptor_data *d, const MenuFrameResult & result) { return { MenuFrameAction::JustDisplay }; }
 
