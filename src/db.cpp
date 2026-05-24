@@ -5900,6 +5900,9 @@ void free_room(struct room_data *room)
     if (room->dir_option[counter]) {
       DELETE_ARRAY_IF_EXTANT(room->dir_option[counter]->general_description);
       DELETE_ARRAY_IF_EXTANT(room->dir_option[counter]->keyword);
+      DELETE_ARRAY_IF_EXTANT(room->dir_option[counter]->go_into_secondperson);
+      DELETE_ARRAY_IF_EXTANT(room->dir_option[counter]->go_into_thirdperson);
+      DELETE_ARRAY_IF_EXTANT(room->dir_option[counter]->come_out_of_thirdperson);
       DELETE_IF_EXTANT(room->dir_option[counter]);
     }
     room->dir_option[counter] = NULL;

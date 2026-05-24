@@ -264,20 +264,21 @@ ACMD (do_redit)
       room->flight_code = str_dup(world[room_num].flight_code);
     room->zone = world[room_num].zone;
     /* exits - alloc only if necessary */
+#define DUPLICATE_EXIT_STRING(strname) if (world[room_num].dir_option[counter]->strname) { room->dir_option[counter]->strname = str_dup(world[room_num].dir_option[counter]->strname); }
     for (counter = 0; counter < NUM_OF_DIRS; counter++) {
       if (world[room_num].dir_option[counter]) {
         room->dir_option[counter] = new room_direction_data;
         /* copy numbers over */
         *room->dir_option[counter] = *world[room_num].dir_option[counter];
         /* New'd strings */
-        if (world[room_num].dir_option[counter]->general_description)
-          room->dir_option[counter]->general_description =
-            str_dup(world[room_num].dir_option[counter]->general_description);
-        if (world[room_num].dir_option[counter]->keyword)
-          room->dir_option[counter]->keyword =
-            str_dup(world[room_num].dir_option[counter]->keyword);
+        DUPLICATE_EXIT_STRING(general_description);
+        DUPLICATE_EXIT_STRING(keyword);
+        DUPLICATE_EXIT_STRING(go_into_secondperson);
+        DUPLICATE_EXIT_STRING(go_into_thirdperson);
+        DUPLICATE_EXIT_STRING(come_out_of_thirdperson);
       }
     }
+#undef DUPLICATE_EXIT_STRING
     if (world[room_num].ex_description) {
       struct extra_descr_data *This, *temp, *temp2;
 
