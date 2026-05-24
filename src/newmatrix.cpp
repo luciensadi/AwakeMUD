@@ -3772,6 +3772,8 @@ void matrix_hour_update()
 
 void matrix_violence()
 {
+  static uint64_t current_loop_id = 0;
+
   PERF_PROF_SCOPE(pr_, __func__);
   struct matrix_icon *temp, *icon;
   rnum_t rnum = 1;
@@ -3787,7 +3789,6 @@ void matrix_violence()
         order_list(HOST.fighting);
       }
 
-      uint64_t current_loop_id = 0;
       current_loop_id++;
       bool should_loop = true;
       int loop_counter = 0;
@@ -3798,8 +3799,12 @@ void matrix_violence()
         global_an_icon_was_extracted = false;
 
         for (icon = HOST.fighting; icon && !global_an_icon_was_extracted; icon = icon->next_fighting) {
-          if (icon->last_loop_id == current_loop_id)
+          if (icon->last_loop_id == current_loop_id) {
+#ifdef IS_BUILDPORT
+            send_to_icon(icon, "Skipping your Matrix fight eval (iteration %d) due to you already having been evaluated this loop.\r\n", loop_counter);
+#endif
             continue;
+          }
           icon->last_loop_id = current_loop_id;
 
           if (icon->initiative > 0) {
