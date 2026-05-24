@@ -94,6 +94,7 @@ extern void initialize_traffic_msgs();
 extern void migrate_pocket_secretaries_in_database();
 extern void attempt_to_offload_unused_zones();
 extern void boot_logging_regexes();
+extern void boot_tempdescs();
 
 extern void auto_repair_obj(struct obj_data *obj, idnum_t owner);
 
@@ -756,6 +757,7 @@ void DBInit()
   initialize_traffic_msgs();
   initialize_and_alphabetize_flag_maps();
   set_up_pet_dummy_mob();
+  boot_tempdescs();
 
   log("Loading social messages.");
   boot_social_messages();
