@@ -25,18 +25,18 @@ To enable remote debugging with `lldb-server`, uncomment the debug block in `doc
 
 ## OS Support
 Actively tested on:
-- Mac OS 13
-- Ubuntu 18 LTS
+- Mac OS 26
+- Ubuntu 22.04 LTS
 
 Previously tested on (it worked there in the past, but is not guaranteed to now):
 - Amazon Linux
 - Cygwin (beta)
-- Mac OS 10.12-10.14, 12
+- Mac OS 10.12-10.14, 12, 13
 - Raspbian Jessie
-- Ubuntu 14, 16
+- Ubuntu 14, 16, 18
 
 ## Installation (Ubuntu commands in parentheses)
-- Install [MySQL 5.7](https://dev.mysql.com/doc/refman/5.7/en/installing.html), including its development headers (ensure `mysql/mysql.h` exists in your path).
+- Install [MySQL 5.7](https://dev.mysql.com/doc/refman/5.7/en/installing.html), including its development headers (ensure `mysql/mysql.h` exists in your path); alternatively use MySQL 8 and set `-DUSE_MYSQL_8` in the makefile.
 - Install automake, make, gcc, g++, clang, libtool, autoconf, zlib1g-dev, libcurl4-openssl-dev, and libmysqlclient-dev if they're not already present (`sudo apt-get install automake make gcc g++ clang libtool autoconf zlib1g-dev libcurl4-openssl-dev libmysqlclient-dev`)
 - Install [libsodium](https://github.com/jedisct1/libsodium/releases) per their [installation instructions](https://download.libsodium.org/doc/installation). Version 1.0.16 is known to work, but higher versions should work as well.
 - Set your server's timezone to the West Coast to enable RP time to work correctly (`sudo timedatectl set-timezone America/Los_Angeles`)
