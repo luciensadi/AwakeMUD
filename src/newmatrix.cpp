@@ -47,6 +47,8 @@ extern void create_ammo(struct char_data *ch);
 extern void create_art(struct char_data *ch);
 extern void create_complex_form(struct char_data *ch);
 
+extern bool global_an_icon_was_extracted;
+
 ACMD_DECLARE(do_look);
 
 struct matrix_icon *find_icon_by_id(vnum_t idnum);
@@ -710,13 +712,13 @@ void evade_detection(struct matrix_icon *icon)
     int success = maneuver_test(icon);
     if (success > 0) {
       send_to_icon(icon, "You maneuver away from %s^n.\r\n", decapitalize_a_an(icon->fighting->name));
-      icon->evasion = success;
+      icon->evasion = MAX(icon->evasion, success);
       icon->parry = 0;
       icon->fighting->parry = 0;
       if (icon->fighting->decker) {
         send_to_icon(icon->fighting, "%s^n vanishes from your sight.\r\n", CAP(icon->name));
       } else {
-        icon->fighting->ic.targ_evasion = success;
+        icon->fighting->ic.targ_evasion = MAX(icon->fighting->ic.targ_evasion, success);
       }
     } else
       send_to_icon(icon, "You fail to evade %s^n.\r\n", decapitalize_a_an(icon->fighting->name));
@@ -737,7 +739,7 @@ void parry_attack(struct matrix_icon *icon)
   {
     int success = maneuver_test(icon);
     if (success > 0) {
-      icon->parry = success;
+      icon->parry = MAX(icon->parry, success);
       send_to_icon(icon, "You manage to enhance your defenses.\r\n");
     } else
       send_to_icon(icon, "You fail to enhance your defenses.\r\n");
@@ -760,14 +762,14 @@ void position_attack(struct matrix_icon *icon)
       send_to_icon(icon, "You maneuver yourself to attack!\r\n");
       if (!icon->evasion)
         send_to_icon(icon->fighting, "%s^n maneuvers themselves into a better position!\r\n", CAP(icon->name));
-      icon->position = success;
+      icon->position = MAX(icon->position, success);
       icon->fighting->position = 0;
     } else if (success < 0) {
       send_to_icon(icon, "You manage to put yourself in a worse position than before!\r\n");
       if (!icon->evasion)
         send_to_icon(icon->fighting, "%s^n tries to maneuver into a better position but ends up right in your sights!\r\n", CAP(icon->name));
       icon->position = 0;
-      icon->fighting->position = -success;
+      icon->fighting->position = MAX(icon->fighting->position, -success);
     } else
       send_to_icon(icon, "You fail to put yourself in a better position.\r\n");
   } else
@@ -805,13 +807,16 @@ bool try_execute_shield_program(struct matrix_icon *icon, struct matrix_icon *ta
   return FALSE;
 }
 
-void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
+bool matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
 {
   struct obj_data *soft = NULL;
   int target = 0, skill, bod = 0, dam = 0, icondam = 0, power, success;
   int iconrating = icon->ic.rating;
-  if (!targ)
-    return;
+  if (!targ) {
+    // technically nobody died, but this is an invalidating case because something went real wrong
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Got null target to matrix_fight()!");
+    return true;
+  }
   if (!targ->fighting && !(ICON_IS_IC(targ) && (!IS_PROACTIVE(targ) || targ->ic.type == IC_SCOUT)))
   {
     targ->fighting = icon;
@@ -879,7 +884,7 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
   if (icon->decker)
     send_to_icon(icon, "matrix_fight(): failed to find attack soft, bailing out\r\n");
 #endif
-      return;
+      return false;
     }
     skill = GET_OBJ_VAL(soft, 1) + MIN(GET_MAX_HACKING(icon->decker->ch), GET_REM_HACKING(icon->decker->ch));
     GET_REM_HACKING(icon->decker->ch) -= skill - GET_OBJ_VAL(soft, 1);
@@ -907,7 +912,7 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
     // Crippler/ripper IC vs decker
     if (ICON_IS_IC(icon) && (icon->ic.type == IC_CRIPPLER || icon->ic.type == IC_RIPPER)) {
       if (!targ->decker->deck)
-        return;
+        return false;
       extern const char *crippler[4];
       if (targ->type == ICON_LIVING_PERSONA) 
         send_to_icon(targ, "%s^n takes a shot at your living persona's %s^n attribute!\r\n", CAP(icon->name), crippler[icon->ic.subtype]);
@@ -929,7 +934,7 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
       }
       success = success_test(matrix[targ->in_host].security, bod);
       if (try_execute_shield_program(icon, targ, success) && success <= 0) {
-        return;
+        return false;
       }
       int resist = success_test(bod + MIN(GET_MAX_HACKING(targ->decker->ch), GET_REM_HACKING(targ->decker->ch)), iconrating);
       GET_REM_HACKING(targ->decker->ch) = MAX(0, GET_REM_HACKING(targ->decker->ch) - GET_MAX_HACKING(targ->decker->ch));
@@ -938,22 +943,24 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
       // Results of crippler/ripper IC vs decker
       if (targ->type == ICON_LIVING_PERSONA) {
         if (success <= 0) {
-          return send_to_icon(targ, "It fails to damage your living persona.\r\n");
+          send_to_icon(targ, "It fails to damage your living persona.\r\n");
+          return false;
         }
         // Houserule: handle like Killer IC instead of Bioware Stress
         // Hacking pool was already used to resist with the targeted attribute, so only bod here
         success -= success_test(targ->decker->bod, power);
         if (icondam <= 0) {
-          return send_to_icon(targ, "You power through it and nullify the damage.\r\n");
+          send_to_icon(targ, "You power through it and nullify the damage.\r\n");
+          return false;
         } else {
           icondam = convert_damage(stage(success, dam));
           send_to_icon(targ, "It tears into your living persona!\r\n");
           struct char_data *ch = targ->decker ? targ->decker->ch : NULL;
           if (do_damage_persona(targ, icondam) || (ch && GET_POS(ch) <= POS_STUNNED)) {
-            return;
+            return true;
           }
         }
-        return;
+        return false;
       } else if (success >= 2) {
         send_to_icon(targ, "It tears into the program!\r\n");
         bod -= success / 2;
@@ -963,11 +970,11 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
           bod = 0;
           success = success_test(iconrating, targ->decker->mpcp + targ->decker->hardening);
           if (fry_mpcp(icon, targ, success))
-            return;
+            return true;
         }
       } else {
         send_to_icon(targ, "It failed to cause any damage.\r\n");
-        return;
+        return false;
       }
 
       // Only damage attributes to non-otaku personae
@@ -987,12 +994,14 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
             targ->decker->masking = bod;
             break;
         }
-        if (targ->decker->mpcp == 0)
+        if (targ->decker->mpcp == 0) {
           dumpshock(targ);
+          return true;
+        }
       }
 
       // Do not proceed further; ripper do not do attacks beyond this
-      return;
+      return false;
     }
 
     // Non-crippler/ripper IC vs decker
@@ -1040,7 +1049,7 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
     send_to_icon(targ, "%s^n's program fails to run.\r\n", CAP(icon->name));
     if (!icon->decker && icon->ic.options.IsSet(IC_CASCADE))
       cascade(icon);
-    return;
+    return false;
   }
 
   // Block!
@@ -1049,7 +1058,7 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
     if (icon->decker)
       send_to_icon(icon, "matrix_fight(): shield program failed, bailing out\r\n");
 #endif
-    return;
+    return false;
   }
 
   // Results of non-damaging attacks
@@ -1062,7 +1071,7 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
         if (targ->decker->scout > iconrating)
           targ->decker->scout = iconrating;
       }
-      return;
+      return false;
     } else if (icon->ic.type == IC_TRACE)
     {
       success -= success_test(targ->decker->evasion, iconrating);
@@ -1093,7 +1102,7 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
           }
       } else
         send_to_icon(targ, "You manage to avoid %s^n's attack.\r\n", decapitalize_a_an(icon->name));
-      return;
+      return false;
     }
   } // else { implementations of slow, etc, would go here }
 
@@ -1158,7 +1167,7 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
     // or it's an otaku that has fainted/died from brain bleeding.
     // ~~If it's the latter we check if they're uncon/dead, and then return early.~~
     // We can't tell which, and damage() returning true means the character was extracted, so we assume the targ has been extracted and bail.
-    return;
+    return true;
   }
 
   if (icondam > 0 && ch)
@@ -1182,25 +1191,24 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
 
       if (damage(ch, ch, meatdam, TYPE_BLACKIC, lethal ? PHYSICAL : MENTAL)) {
         // Oh shit, they died. Guess they don't take MPCP damage, since their struct is zeroed out now.
-        return;
+        return true;
       }
       // If they're not still connected to the matrix, bail.
       if (!ch->persona) {
-        return;
+        return true;
       }
       if (targ && targ->decker) {
         if (ch && !AWAKE(ch)) {
           success = success_test(iconrating * 2, targ->decker->mpcp + targ->decker->hardening);
           if (fry_mpcp(icon, targ, success))
-            return;
-          dumpshock(targ);
-          return;
+            return true;
+          return dumpshock(targ);
         } else if (!ch) {
           success = success_test(iconrating * 2, targ->decker->mpcp + targ->decker->hardening);
           if (fry_mpcp(icon, targ, success))
-            return;
+            return true;
           extract_icon(targ);
-          return;
+          return false;
         }
       }
     } else {
@@ -1219,7 +1227,7 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
       if (success_test(GET_WIL(ch), power) < 1) {
         send_to_icon(targ, "Your interface overloads.\r\n");
         if (damage(ch, ch, 1, TYPE_TASER, MENTAL)) {
-          return;
+          return true;
         }
       }
     }
@@ -1235,22 +1243,22 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
           send_to_icon(targ, "%s^n sends jolts of electricity into your deck!\r\n", CAP(icon->name));
           success = success_test(iconrating, targ->decker->mpcp + targ->decker->hardening + 2);
           if (fry_mpcp(icon, targ, success))
-            return;
+            return true;
           success = success - success_test(GET_BOD(targ->decker->ch), iconrating - targ->decker->hardening);
           dam = convert_damage(stage(success, MODERATE));
           if (damage(targ->decker->ch, targ->decker->ch, dam, TYPE_BLACKIC, PHYSICAL)) {
-            return;
+            return true;
           }
           break;
         case IC_BLASTER:
           success = success_test(iconrating, targ->decker->mpcp + targ->decker->hardening);
           if (fry_mpcp(icon, targ, success))
-            return;
+            return true;
           break;
         }
       }
       if (dumpshock(targ))
-        return;
+        return true;
     } else {
       if (!icon->decker) {
         mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Got an IC to the decker-killed-target stanza of matrix_fight.");
@@ -1281,9 +1289,10 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
       extract_icon(targ);
       if (icon->decker)
         check_trigger(icon->in_host, icon->decker->ch);
-      return;
+      return false;
     }
   }
+  return false;
 }
 
 // Award karma to icon on destruction of targ.
@@ -2204,7 +2213,8 @@ ACMD(do_logoff)
     for (struct matrix_icon *icon = matrix[PERSONA->in_host].icons; PERSONA && icon; icon = icon->next_in_host)
       if (icon->fighting == PERSONA && icon->ic.type >= IC_LETHAL_BLACK) {
         send_to_icon(PERSONA, "The IC takes a final shot.\r\n");
-        matrix_fight(icon, PERSONA);
+        if (matrix_fight(icon, PERSONA))
+          return;
       }
     if (PERSONA)
       dumpshock(PERSONA);
@@ -3765,54 +3775,90 @@ void matrix_violence()
   PERF_PROF_SCOPE(pr_, __func__);
   struct matrix_icon *temp, *icon;
   rnum_t rnum = 1;
-  for (;rnum <= top_of_matrix; rnum++)
+  for (;rnum <= top_of_matrix; rnum++) {
     if (HOST.fighting) {
       HOST.pass++;
       order_list(HOST.fighting);
+
       if (HOST.fighting->initiative <= 0) {
         HOST.pass = 0;
         for (icon = HOST.fighting; icon; icon = icon->next_fighting)
           roll_matrix_init(icon);
         order_list(HOST.fighting);
       }
-      for (icon = HOST.fighting; icon; icon = icon->next_fighting) {
-        if (icon->initiative > 0) {
-          icon->initiative -= 10;
-          if (icon->fighting) {
-            if (icon->decker) {
-              if (icon->evasion && !HOST.pass)
-                icon->evasion--;
-              if (!icon->fighting->evasion)
-                matrix_fight(icon, icon->fighting);
-            } else {
-              switch(icon->evasion ? number(0, 5) : number(0, 10)) {
-              case 1:
-                parry_attack(icon);
-                break;
-              case 2:
-                position_attack(icon);
-                break;
-              case 3:
-              case 4:
-                if (!icon->evasion)
-                  evade_detection(icon);
-                break;
+
+      uint64_t current_loop_id = 0;
+      current_loop_id++;
+      bool should_loop = true;
+      int loop_counter = 0;
+
+      while (should_loop) {
+        should_loop = false;
+        loop_counter++;
+        global_an_icon_was_extracted = false;
+
+        for (icon = HOST.fighting; icon && !global_an_icon_was_extracted; icon = icon->next_fighting) {
+          if (icon->last_loop_id == current_loop_id)
+            continue;
+          icon->last_loop_id = current_loop_id;
+
+          if (icon->initiative > 0) {
+            icon->initiative -= 10;
+            if (icon->fighting) {
+              if (icon->decker) {
+                if (icon->evasion && !HOST.pass)
+                  icon->evasion--;
+                if (icon->fighting->evasion <= 0) {
+                  if (matrix_fight(icon, icon->fighting)) {
+                    should_loop = true;
+                    break;
+                  }
+                }
+              } else {
+                switch(icon->evasion ? number(0, 5) : number(0, 10)) {
+                  case 1:
+                    parry_attack(icon);
+                    break;
+                  case 2:
+                    position_attack(icon);
+                    break;
+                  case 3:
+                  case 4:
+                    if (!icon->evasion)
+                      evade_detection(icon);
+                    break;
+                }
+                if (icon->ic.targ_evasion) {
+                  if (!HOST.pass)
+                    icon->ic.targ_evasion--;
+                } else if (!icon->evasion) {
+                  if (matrix_fight(icon, icon->fighting)) {
+                    should_loop = true;
+                    break;
+                  }
+                  else if (!HOST.pass) {
+                    icon->evasion--;
+                  }
+                }
               }
-              if (icon->ic.targ_evasion) {
-                if (!HOST.pass)
-                  icon->ic.targ_evasion--;
-              } else if (!icon->evasion)
-                matrix_fight(icon, icon->fighting);
-              else if (!HOST.pass)
-                icon->evasion--;
+            } else {
+              REMOVE_FROM_LIST(icon, matrix[icon->in_host].fighting, next_fighting);
             }
-          } else
-            REMOVE_FROM_LIST(icon, matrix[icon->in_host].fighting, next_fighting);
+          }
         }
+        
+          if (global_an_icon_was_extracted) {
+            should_loop = true;
+          }
+        }
+
+      if (loop_counter > 1) {
+        log_vfprintf("Ran %s %d time%s due to mid-run alterations.", __func__, loop_counter, loop_counter == 1 ? "" : "s");
       }
     } else {
       HOST.pass = 0;
     }
+  }
 }
 
 ACMD(do_crash)

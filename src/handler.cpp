@@ -2475,12 +2475,15 @@ void obj_from_obj(struct obj_data * obj)
     temp->in_room->dirty_bit = TRUE;
 }
 
+bool global_an_icon_was_extracted = false;
 void extract_icon(struct matrix_icon * icon)
 {
   if (!icon) {
     mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Received NULL icon to extract_icon()!");
     return;
   }
+
+  global_an_icon_was_extracted = true;
 
   struct matrix_icon *temp;
 

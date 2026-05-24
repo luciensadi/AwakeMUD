@@ -250,6 +250,8 @@ struct matrix_icon {
   struct matrix_icon *next_in_host;
   struct matrix_icon *next_fighting;
 
+  uint64_t last_loop_id;
+
 #ifdef USE_DEBUG_CANARIES
   int canary;
 #endif
@@ -257,7 +259,8 @@ struct matrix_icon {
   matrix_icon():
     name(NULL), long_desc(NULL), look_desc(NULL), type(ICON_MATRIX), idnum(0), rnum(0),
     vnum(0), condition(10), initiative(0), parry(0), evasion(0), position(0),
-    decker(NULL), fighting(NULL), next(NULL), next_in_host(NULL), next_fighting(NULL)
+    decker(NULL), fighting(NULL), next(NULL), next_in_host(NULL), next_fighting(NULL),
+    last_loop_id(999)
   {
 #ifdef USE_DEBUG_CANARIES
     canary = CANARY_VALUE;
