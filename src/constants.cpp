@@ -2936,7 +2936,14 @@ const char *bio_types[] = {
   "Phenotypic Alteration (Bod)",
   "Phenotypic Alteration (Qui)",
   "Phenotypic Alteration (Str)",
-  "Biosculpting Treatment"
+  "Biosculpting Treatment",
+  "Chloroplast Skin",
+  "Clean Metabolism",
+  "Dietware",
+  "Hair Growth",
+  "Scent Glands",
+  "Sensitive Skin",
+  "Skin Pigmentation"
 };
 
 const char *decap_bio_types[] = {

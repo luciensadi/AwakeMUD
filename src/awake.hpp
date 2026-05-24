@@ -1721,7 +1721,15 @@ enum {
 #define BIO_PHENOTYPIC_STR       31
 // End of auto-cultured items.
 #define BIO_BIOSCULPTING         32
-#define NUM_BIOWARE              33
+// Cosmetic bioware -Vile
+#define BIO_CHLOROPLASTSKIN      33
+#define BIO_CLEANMETABOLISM      34
+#define BIO_DIETWARE             35
+#define BIO_HAIRGROWTH           36
+#define BIO_SCENTGLANDS          37
+#define BIO_SENSITIVESKIN        38
+#define BIO_SKINPIGMENTATION     39
+#define NUM_BIOWARE              40
 
 #define BIOWARE_STANDARD 0
 #define BIOWARE_CULTURED 1
