@@ -4431,9 +4431,10 @@ ACMD(do_dice)
     dice = atoi(buf);
   }
 
-  snprintf(buf, sizeof(buf), "%d %sdice are %srolled by $n ",
+  snprintf(buf, sizeof(buf), "%d %s%s %srolled by $n ",
            dice,
            dice_explode ? "" : "non-exploding ",
+           dice == 1 ? "die is" : "dice are",
            subcmd == SCMD_PRIVATE_ROLL ? "^cprivately^n " : "");
 
   if (*buf1 && atoi(buf1)) {
@@ -4447,7 +4448,7 @@ ACMD(do_dice)
   } else if (dice >= 100) {
     send_to_char("You can't roll that many dice.\r\n", ch);
   } else {
-    strlcat(buf, "and scores:", sizeof(buf));
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "and %s:", dice == 1 ? "scores" : "score");
     for (;dice > 0; dice--) {
        roll = tot = number(1, 6);
        while (dice_explode && roll == 6) {
