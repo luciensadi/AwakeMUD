@@ -156,10 +156,10 @@ static void init_char(struct char_data * ch)
   int min, max;
 
   gen_size(min, max, true, GET_RACE(ch));
-  ch->player.weight = number(min, max);
+  ch->player.weight = number(min * 1.5, max / 2);
 
   gen_size(min, max, false, GET_RACE(ch));
-  ch->player.height = number(min, max);
+  ch->player.height = number(min * 1.5, max / 1.5);
 
   ch->points.max_mental = 1000;
   ch->points.max_physical = 1000;
