@@ -45,15 +45,13 @@ Previously tested on (it worked there in the past, but is not guaranteed to now)
 - Run `./gensql.sh` (or do the steps manually if it doesn't support your OS). If you plan on running this with MariaDB, use the `--skip-checks` command-line flag.
 - Install the houses file (`mv ../lib/etc/houses.template ../lib/etc/houses`).
 - Change to the repository's SRC directory (`cd ../src`).
-- Edit `Makefile` and uncomment the OS that looks closest to yours by removing the # marks in front of it. Comment out the others by ensuring they have a # in front of their lines. The default is Mac OS X; you'll probably want to switch it to Linux. You probably also want to remove the `-DGITHUB_INTEGRATION` flag from the Makefile at this time.
-- From that same src directory, run `make clean && make`.
+- From that same src directory, run `make clean && make -j 8` (change 8 to the number of processor cores you have; most *nix OSes have an `nproc` command you can run to get this figure, allowing `make -j $(nproc)`).
 - Change to the root directory (`cd ..`) and run the game (raw invocation `bin/awake`, or use a debugger like `gdb bin/awake`, or `lldb bin/awake` on OS X to help troubleshoot issues).
 - Connect to the game with telnet at `127.0.0.1:4000` and enjoy!
 
 ### Additional Cygwin Installation Notes
 - AwakeCE can run in Windows under Cygwin.
 - To build it, you need Cygwin (64bit) and Cygwin apps/libraries: clang, make, automake, mysql-server, mysql-client, libmariadb-devel, dos2unix, g++, libcrypt, libsodium, gcc, gdb. You'll want the debugs too. If it fails to install one of these, retry, or try another mirror; manual install is possible but not recommended.
-- In src/Makefile, comment out the OSX config, and uncomment the Cygwin config.
 - Make sure to initialize the DB with `mysql_install_db` if you haven't done so already. Start it with `mysqld_safe &`, then `mysql_secure_installation` and accept all the options.
 - You may need to `dos2unix gensql.sh` to get it to read properly before executing with `bash ./gensql.sh -s`.
 - Build by doing `cd src;make` from the root directory.
@@ -74,16 +72,7 @@ Previously tested on (it worked there in the past, but is not guaranteed to now)
 
 If you get an error like `newdb.cpp:11:10: fatal error: mysql/mysql.h: No such file or directory` while running `make`, you either haven't installed the MySQL development headers, or you haven't made them visible to your operating system. Since each OS is different, Google is your best bet for resolving this, but your goal / end state is to have the header inclusion path `mysql/mysql.h` resolve successfully.
 
-```
-/home/ubuntu/AwakeMUD/src/act.informative.cpp:2769: undefined reference to `mysql_num_rows'
-/home/ubuntu/AwakeMUD/src/act.informative.cpp:2774: undefined reference to `mysql_fetch_row'
-/home/ubuntu/AwakeMUD/src/act.informative.cpp:2779: undefined reference to `mysql_free_result'
-```
-If you see a wall of errors like the one above, you need to edit `src/Makefile` and uncomment the lines belonging to the OS you're running.
-
-If you get an error like `AwakeMUD/src/act.wizard.cpp:3841: undefined reference to 'crypt'`, it means that you've probably not selected the right OS in your `src/Makefile`. Make sure you comment out the OS X lines near the top by adding a `#` at their beginnings, and uncomment the Linux lines by removing their `#`.
-
-If you get errors like `/home/ubuntu/AwakeMUD/src/act.other.cpp:954: undefined reference to 'github_issues_url'`, you need to remove -DGITHUB_INTEGRATION from your selected OS in your Makefile, then `make clean && make` to scrub the references to the GitHub integration code.
+If you get errors like `/home/ubuntu/AwakeMUD/src/act.other.cpp:954: undefined reference to 'github_issues_url'`, you need to remove -DGITHUB_INTEGRATION from your selected OS in your Makefile, then `make clean && make -j 8` to scrub the references to the GitHub integration code.
 
 If you get an error like `structs.h:8:10: fatal error: sodium.h: No such file or directory`, it means you need to install [libsodium](https://github.com/jedisct1/libsodium/releases) (`./configure; make; (sudo) make install`).
 
@@ -95,6 +84,6 @@ If you get an error like `error while loading shared libraries: libsodium.so.23:
 
 If you get an error like `MYSQLERROR: Table 'awakemud.pfiles_mail' doesn't exist`, you need to run the command found in `SQL/mail_fixes.sql` in your database. This will upgrade your database to be compatible with the new mail system. This command is automatically run for new databases.
 
-If it takes an exceedingly long time between you entering your password and the MUD responding, but the MUD is responsive for all other input, the machine that's hosting the MUD is not powerful enough for the password storage algorithm used by default. You may opt to either endure the delay (more secure, less convenient) or either lessen the work factor or add `-DNOCRYPT` to your Makefile (not at all secure, convenient, will break all current passwords and require you to either fix them by hand or purge and re-create your database and all characters in it).
+If it takes an exceedingly long time between you entering your password and the MUD responding, but the MUD is responsive for all other input, the machine that's hosting the MUD is not powerful enough for the password storage algorithm used by default. You may opt to either endure the delay (more secure, less convenient) or either lessen the work factor or add `-DNOCRYPT` to your Makefile (not at all secure). Note that any changes to either the work factor or the -DNOCRYPT status will break all current passwords and require you to either fix them by hand or purge and re-create your database and all characters in it.
 
 If you log on for the first time and you're not a staff member, quit out and change your rank in the database. Rank 10 is the maximum. Your MySQL command will look something like: `update pfiles set rank=10 where idnum=1;`
