@@ -882,7 +882,7 @@ void game_loop(int mother_desc)
     // If we have an enqueued copyover, run it forcefully if qualifications are met.
     if (global_copyover_enqueued_by_idnum) {
       bool can_proceed = true;
-      for (d = descriptor_list; d; d = next_d) {
+      for (d = descriptor_list; d; d = d->next) {
         if (d->character && STATE(d) != CON_PLAYING) {
           can_proceed = false;
           break;
