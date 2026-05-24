@@ -607,10 +607,10 @@ void iedit_disp_val3_menu(struct descriptor_data * d)
       send_to_char("Enter Cyberware Grade: ", CH);
       break;
     case ITEM_BIOWARE:
-      if (GET_OBJ_VAL(OBJ, 0) < BIO_CEREBRALBOOSTER)
+      if (GET_BIOWARE_TYPE(OBJ) < BIO_CEREBRALBOOSTER || GET_BIOWARE_TYPE(OBJ) >= BIO_BIOSCULPTING)
         send_to_char(CH, "Cultured (%d - Yes, %d - No): ", BIOWARE_CULTURED, BIOWARE_STANDARD);
       else {
-        GET_OBJ_VAL(OBJ, 2) = BIOWARE_CULTURED;
+        GET_SETTABLE_BIOWARE_IS_CULTURED(OBJ) = BIOWARE_CULTURED;
         if (GET_BIOWARE_TYPE(OBJ) == BIO_REFLEXRECORDER) {
           iedit_disp_val6_menu(d);
         } else {
