@@ -8061,12 +8061,6 @@ void price_bio(struct obj_data *obj)
       GET_OBJ_AVAILTN(obj) = 6;
       GET_OBJ_AVAILDAY(obj) = 8;
       break;
-    case BIO_CLEANMETABOLISM:
-      GET_OBJ_COST(obj) = 10000;
-      GET_BIOWARE_ESSENCE_COST(obj) = 20;
-      GET_OBJ_AVAILTN(obj) = 4;
-      GET_OBJ_AVAILDAY(obj) = 4;
-      break;
     case BIO_DIETWARE:
       GET_OBJ_COST(obj) = 10000;
       GET_BIOWARE_ESSENCE_COST(obj) = 20;
