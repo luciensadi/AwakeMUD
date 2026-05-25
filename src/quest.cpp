@@ -381,7 +381,7 @@ void load_quest_targets(struct char_data *johnson, struct char_data *ch)
           }
         }
       }
-      return;
+      continue;
     }
 
     if ((rnum = real_object(quest_table[num].obj[i].vnum)) > -1) {
