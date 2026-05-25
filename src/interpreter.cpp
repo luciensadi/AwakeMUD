@@ -2769,18 +2769,17 @@ int _parse_name(char *arg, char *name)
 
 int perform_dupe_check(struct descriptor_data *d)
 {
-  struct descriptor_data *k, *next_k;
   struct char_data *target = NULL;
   int mode = 0;
 
-  int id = GET_IDNUM(d->character);
+  idnum_t id = GET_IDNUM(d->character);
 
   /*
    * Now that this descriptor has successfully logged in, disconnect all
    * other descriptors controlling a character with the same ID number.
    */
 
-  for (k = descriptor_list; k; k = next_k)
+  for (struct descriptor_data *k = descriptor_list, *next_k; k; k = next_k)
   {
     next_k = k->next;
 
@@ -2793,25 +2792,39 @@ int perform_dupe_check(struct descriptor_data *d)
       if (!target) {
         target = k->original;
         mode = UNSWITCH;
+      } else {
+        k->original->desc = NULL;
+        extract_char(k->original);
       }
-      // TODO: Desc is leaked?
-      if (k->character)
+
+      if (k->character) {
         k->character->desc = NULL;
-      // TODO: Character is leaked?
-      k->character = NULL;
+        extract_char(k->character);
+        k->character = NULL;
+      }
+
       // Original is not leaked since it's inherited by the new connection.
       k->original = NULL;
-    } else if (k->character && (GET_IDNUM(k->character) == id)) {
+    }
+    else if (k->character && (GET_IDNUM(k->character) == id)) {
+      k->character->desc = NULL;
+
       if (!target && STATE(k) == CON_PLAYING) {
         SEND_TO_Q("\r\nThis body has been usurped!\r\n", k);
         target = k->character;
         mode = USURP;
+      } else {
+        extract_char(k->character);
       }
-      // TODO: Desc is leaked?
-      k->character->desc = NULL;
-      // TODO: Character is leaked?
+
       k->character = NULL;
-      k->original = NULL;
+
+      if (k->original) {
+        k->original->desc = NULL;
+        extract_char(k->original);
+        k->original = NULL;
+      }
+
       SEND_TO_Q("\r\nMultiple login detected (type 2) -- disconnecting.\r\n", k);
       STATE(k) = CON_CLOSE;
     }
@@ -3285,16 +3298,11 @@ void nanny(struct descriptor_data * d, char *arg)
       else
         SEND_TO_Q(motd, d);
 
-      if(PLR_FLAGGED(d->character,PLR_NOT_YET_AUTHED))
-        snprintf(buf, sizeof(buf), "%s has connected (UNAUTHORIZED).",
-                GET_CHAR_NAME(d->character));
-      else
-        snprintf(buf, sizeof(buf), "%s has connected.",
-                 GET_CHAR_NAME(d->character));
       DELETE_ARRAY_IF_EXTANT(d->character->player.host);
       d->character->player.host = str_dup(d->host);
       playerDB.SaveChar(d->character);
-      mudlog(buf, d->character, LOG_CONNLOG, TRUE);
+
+      mudlog_vfprintf(d->character, LOG_CONNLOG, "%s has connected%s.", GET_CHAR_NAME(d->character), PLR_FLAGGED(d->character,PLR_NOT_YET_AUTHED) ? " (UNAUTHORIZED)" : "");
       log_vfprintf("[CONNLOG: %s connecting from %s with fingerprint %s and JSON '''%s''']", GET_CHAR_NAME(d->character), d->host, get_descriptor_fingerprint(d), d->pProtocol ? STRING_TO_CSTR(d->pProtocol->new_environ_info.dump()) : "{}");
       if (load_result) {
         snprintf(buf, sizeof(buf), "\r\n\r\n"
