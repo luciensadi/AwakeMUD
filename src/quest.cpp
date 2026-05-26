@@ -3364,12 +3364,11 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
   case QEDIT_JOHNSON:
     number = atoi(arg);
     if (real_mobile(number) < 0) {
-      send_to_char("No such mob!  Enter Johnson's vnum: ", CH);
-      return;
-    } else {
-      QUEST->johnson = number;
-      qedit_disp_menu(d);
+      send_to_char("No such mob!", CH);
+      number = -1;
     }
+    QUEST->johnson = number;
+    qedit_disp_menu(d);
     break;
   case QEDIT_PREREQUISITE:
     number = atoi(arg);
@@ -3391,8 +3390,8 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
     return;
   case QEDIT_TIME:
     number = atoi(arg);
-    if (number < 30 || number > 1440)
-      send_to_char("Time must range from 30 to 1440 mud minutes.\r\n"
+    if (number != 0 && (number < 30 || number > 1440))
+      send_to_char("Time must range from 30 to 1440 mud minutes (or 0 for no limit).\r\n"
                    "Enter allowed time: ", CH);
     else {
       QUEST->time = number;
