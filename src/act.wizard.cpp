@@ -456,10 +456,10 @@ ACMD(do_copyover)
       if (d->character && d->character != ch) {
         send_to_char(d->character, "^CSystem Notice:^n ^WThe game will copyover to install new code sometime within the next 20 minutes.^n"
                                    " Please finish work in menus and wrap up autoruns in progress."
-                                   " Any runs in progress at copyover will be canceled with no penalty.");
+                                   " Any runs in progress at copyover will be canceled with no penalty.\r\n");
       }
     }
-    send_to_char(ch, "OK, enqueued a copyover. Jobs will be canceled in 10 minutes, copyover forced in 20 minutes.");
+    send_to_char(ch, "OK, enqueued a copyover. Jobs will be canceled in 10 minutes, copyover forced in 20 minutes.\r\n");
 
     global_copyover_enqueued_by_idnum = GET_IDNUM_EVEN_IF_PROJECTING(ch);
     global_copyover_override_quests_at = time(0) + (10 * 60);
@@ -475,7 +475,7 @@ ACMD(do_copyover)
 
     for (d = descriptor_list; d; d = d->next) {
       if (d->character && d->character != ch) {
-        send_to_char(d->character, "^CSystem Notice:^n ^WThe copyover has been canceled.^n You may now return to your regularly-scheduled shenanigans.");
+        send_to_char(d->character, "^CSystem Notice:^n ^WThe copyover has been canceled.^n You may now return to your regularly-scheduled shenanigans.\r\n");
       }
     }
 

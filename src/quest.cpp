@@ -2323,15 +2323,14 @@ void reboot_quest(int rnum, struct quest_data *quest)
   {
     ojn = real_mobile(quest_table[rnum].johnson);
     njn = real_mobile(quest->johnson);
-    if (njn < 0) {
-      char oopsbuf[5000];
-      snprintf(oopsbuf, sizeof(oopsbuf), "BUILD ERROR: Quest %ld has non-existent new Johnson %ld.", quest_table[rnum].vnum, quest->johnson);
-      mudlog(oopsbuf, NULL, LOG_SYSLOG, TRUE);
-      return;
-    }
 
     // It's possible for ojn to be -1 in the case of the quest first being built.
     if (ojn >= 0) {
+      if (njn < 0) {
+        mudlog_vfprintf(NULL, LOG_SYSLOG, "BUILD ERROR: Quest %ld has non-existent new Johnson %ld.", quest_table[rnum].vnum, quest->johnson);
+        return;
+      }
+      
       if (mob_index[ojn].func == johnson) {
         mob_index[ojn].func = mob_index[ojn].sfunc;
         mob_index[ojn].sfunc = NULL;

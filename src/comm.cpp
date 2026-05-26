@@ -886,7 +886,7 @@ void game_loop(int mother_desc)
       bool nobody_is_on_quests = true;
 
       // Hard timeout means we don't bother checking anything, we just roll with it.
-      if ((time(0) + (10 * 60)) >= global_copyover_override_quests_at) {
+      if (global_copyover_override_quests_at && time(0) >= (global_copyover_override_quests_at + (10 * 60))) {
         const char *char_name = get_player_name(global_copyover_enqueued_by_idnum);
         mudlog_vfprintf(NULL, LOG_SYSLOG, "Hard timeout reached, kicking off the copyover enqueued by %s (%ld).", char_name, global_copyover_enqueued_by_idnum);
         delete [] char_name;
@@ -895,7 +895,7 @@ void game_loop(int mother_desc)
       }
 
       // First, check for people in menus and on quests.
-      for (d = descriptor_list; d; d = d->next) {
+      for (d = descriptor_list; d && !nobody_is_editing && !nobody_is_on_quests; d = d->next) {
         if (d->character && GET_QUEST(d->character)) {
           nobody_is_on_quests = false;
         }
@@ -917,7 +917,6 @@ void game_loop(int mother_desc)
 
         // If we got here, they're in an unacceptable state; data loss (e.g. edited content) will occur.
         nobody_is_editing = false;
-        break;
       }
 
       if (nobody_is_editing) {
