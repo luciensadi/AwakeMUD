@@ -81,7 +81,7 @@ ifeq ($(UNAME_S),Darwin)  # OSX
   OS_LDLIBS   = -lcurl -lsodium
 else ifeq ($(UNAME_S),Linux)  # Linux
   ifeq ($(CI),true)
-    OS_CPPFLAGS    = -Dlinux -DNOCRYPT
+    OS_CPPFLAGS    = -Dlinux -DNOCRYPT -DADD_SECRET_STUBS
     OS_LDFLAGS     = 
     OS_LDLIBS      = -lcrypt -lnsl -lcurl
 		# Suppress all warnings during the CI build process.
