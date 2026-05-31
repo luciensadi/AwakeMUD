@@ -3923,7 +3923,7 @@ int _get_weapon_focus_bonus_dice(struct char_data *ch, struct obj_data *weapon) 
     return 0;
 
   if (GET_OBJ_TYPE(weapon) == ITEM_WEAPON && WEAPON_IS_FOCUS(weapon) && is_weapon_focus_usable_by(weapon, ch)) {
-    return GET_WEAPON_FOCUS_RATING(GET_EQ(ch, WEAR_WIELD));
+    return GET_WEAPON_FOCUS_RATING(weapon);
   }
 
   return 0;
