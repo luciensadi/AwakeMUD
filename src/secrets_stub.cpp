@@ -1,7 +1,7 @@
 /* A stub file to allow compilation of the game in the absence of the actual secrets.cpp file.
    The info in that file is kept out of the repo to avoid spoilers for Awake CE. */
 
-#ifndef USE_PRIVATE_CE_WORLD
+#if defined(ADD_SECRET_STUBS) || !defined(USE_PRIVATE_CE_WORLD)
 
 #include "structs.hpp"
 
