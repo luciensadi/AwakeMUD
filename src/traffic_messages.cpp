@@ -146,7 +146,7 @@ const char *_vehicle_types__ride_in[] = {
 const char *_vehicle_speeds[] = {
   "putters by", // 0
   "splutters on through",
-  "backfires as it passes",
+  "passes by you",
   "idles past",
   "speeds past",
   "speeds past you",
