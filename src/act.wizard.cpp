@@ -354,7 +354,7 @@ void execute_copyover() {
       mudlog(buf, och, LOG_SYSLOG, TRUE);
       GET_LAST_IN(och) = RM_ENTRANCE_TO_DANTES;
     }
-    playerDB.SaveChar(och, GET_LOADROOM(och), TRUE);
+    SaveChar(och, GET_LOADROOM(och), TRUE);
     write_to_descriptor(d->descriptor, messages[mesnum]);
   }
 
@@ -2265,7 +2265,7 @@ ACMD(do_stat)
       if (!(does_player_exist(buf2)))
         send_to_char(ch, "Couldn't find any PC named '%s'.\r\n", buf2);
       else {
-        victim = playerDB.LoadChar(buf2, TRUE, PC_LOAD_REASON_OFFLINE_WIZSTAT);
+        victim = LoadChar(buf2, TRUE, PC_LOAD_REASON_OFFLINE_WIZSTAT);
         do_stat_character(ch, victim);
         extract_char(victim);
       }
@@ -3073,7 +3073,7 @@ void do_advance_with_mode(struct char_data *ch, char *argument, int cmd, int sub
       }
 
       is_file = TRUE;
-      victim = playerDB.LoadChar(name, FALSE, PC_LOAD_REASON_OFFLINE_ADVANCE);
+      victim = LoadChar(name, FALSE, PC_LOAD_REASON_OFFLINE_ADVANCE);
     } else if (!(victim = get_char_vis(ch, name))) {
       send_to_char("That player is not here.\r\n", ch);
       return;
@@ -3179,7 +3179,7 @@ void do_advance_with_mode(struct char_data *ch, char *argument, int cmd, int sub
   if (is_file) {
     extract_char(victim);
   } else {
-    playerDB.SaveChar(victim);
+    SaveChar(victim);
   }
 }
 
@@ -3626,7 +3626,7 @@ void staff_induced_karma_alteration_for_online_char(struct char_data *ch, struct
   mudlog(buf2, ch, LOG_WIZLOG, TRUE);
 
   // Persist results.
-  playerDB.SaveChar(vict);
+  SaveChar(vict);
 
   // Send game update
   SendGMCPCharInfo(vict);
@@ -4642,7 +4642,7 @@ ACMD(do_wizutil)
         log("SYSERR: Unknown subcmd passed to do_wizutil (act.wizard.c)");
         break;
     }
-    playerDB.SaveChar(vict);
+    SaveChar(vict);
   }
 }
 
@@ -4747,7 +4747,7 @@ void print_zone_to_buf(char *bufptr, int buf_size, int zone, int detailed, struc
             zone_table[zone].approved ? ", Approved and Connected" : " ",
             jurisdictions[zone_table[zone].jurisdiction]);
 /* FIXCHE   for (i = 0; i < NUM_ZONE_EDITOR_IDS; i++) {
-      const char *name = playerDB.GetNameV(zone_table[zone].editor_ids[i]);
+      const char *name = GetNameV(zone_table[zone].editor_ids[i]);
 
       if (name) {
         if (first)
@@ -4980,7 +4980,6 @@ ACMD(do_show)
 
     snprintf(buf, sizeof(buf), "Current stats:\r\n");
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  Players in game: ^C%-5d^n  Connected: ^g%-5d^n\r\n", i, con);
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  Registered players: ^c%-5d^n\r\n", playerDB.NumPlayers());
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  Mobiles: ^c%-5d^n          Prototypes: ^y%-5ld^n Available: ^L%-5ld^n\r\n",
             j, top_of_mobt + 1, top_of_mob_array - top_of_mobt + 1);
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "  Objects: ^c%-5d^n          Prototypes: ^y%-5ld^n Available: ^L%-5ld^n\r\n",
@@ -6019,7 +6018,7 @@ if ((save) && !IS_NPC(vict)) {                   \
   if (is_file) {                                 \
     extract_char(vict);                          \
   } else {                                       \
-    playerDB.SaveChar(vict, GET_LOADROOM(vict)); \
+    SaveChar(vict, GET_LOADROOM(vict)); \
   }                                              \
 }
 
@@ -6247,7 +6246,7 @@ ACMD(do_set)
       return;
     }
 
-    vict = playerDB.LoadChar(name, FALSE, PC_LOAD_REASON_OFFLINE_SET);
+    vict = LoadChar(name, FALSE, PC_LOAD_REASON_OFFLINE_SET);
 
     if (vict) {
       if (!access_level(ch, GET_LEVEL(vict)+1)) {

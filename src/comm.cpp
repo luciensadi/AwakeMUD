@@ -144,7 +144,6 @@ void flush_queues(struct descriptor_data * d);
 void nonblock(int s);
 int perform_subst(struct descriptor_data * t, char *orig, char *subst);
 int perform_alias(struct descriptor_data * d, char *orig);
-void record_usage(void);
 int make_prompt(struct descriptor_data * point);
 void check_idle_passwords(void);
 void init_descriptor (struct descriptor_data *newd, int desc);
@@ -408,7 +407,7 @@ void copyover_recover()
 
     /* Now, find the pfile */
 
-    if ((d->character = playerDB.LoadChar(name, FALSE, PC_LOAD_REASON_COPYOVER_RECOVERY))) {
+    if ((d->character = LoadChar(name, FALSE, PC_LOAD_REASON_COPYOVER_RECOVERY))) {
       d->character->desc = d;
       if (!PLR_FLAGGED(d->character, PLR_DELETED))
         PLR_FLAGS(d->character).RemoveBits(PLR_WRITING, PLR_MAILING, ENDBIT);
@@ -1367,33 +1366,6 @@ struct timeval timediff(struct timeval * a, struct timeval * b)
       rslt.tv_usec = a->tv_usec - b->tv_usec;
     return rslt;
   }
-}
-
-void record_usage(void)
-{
-  int sockets_connected = 0, sockets_playing = 0;
-  struct descriptor_data *d;
-
-  for (d = descriptor_list; d; d = d->next) {
-    sockets_connected++;
-    if (!d->connected)
-      sockets_playing++;
-  }
-
-  log_vfprintf("usage: %-3d sockets connected, %-3d sockets playing",
-      sockets_connected, sockets_playing);
-
-#ifdef RUSAGE
-
-  {
-    struct rusage ru;
-
-    getrusage(0, &ru);
-    log("rusage: user time: %ld sec, system time: %ld sec, max res size: %ld",
-        ru.ru_utime.tv_sec, ru.ru_stime.tv_sec, ru.ru_maxrss);
-  }
-#endif
-
 }
 
 /*
@@ -2693,7 +2665,7 @@ void close_socket(struct descriptor_data *d)
         d->edit_obj = NULL;
         d->edit_mob = NULL;
       }
-      playerDB.SaveChar(d->character);
+      SaveChar(d->character);
       act("^L[OOC]: $n has lost $s link.^n", TRUE, d->character, 0, 0, TO_ROOM);
       mudlog_vfprintf(d->character, LOG_CONNLOG, "Closing link to: %s. (%s)", GET_CHAR_NAME(d->character), connected_types[d->connected]);
       if (d->character->persona) {
@@ -2835,18 +2807,6 @@ void checkpointing(int Empty)
     tics = 0;
 }
 
-
-
-void unrestrict_game(int Empty)
-{
-  extern struct ban_list_element *ban_list;
-
-  mudlog("Received SIGUSR2 - completely unrestricting game (emergency)",
-         NULL, LOG_SYSLOG, TRUE);
-  ban_list = NULL;
-  restrict_mud = 0;
-}
-
 void free_up_memory(int Empty)
 {
   std::cerr << "SYSERR: Out of memory, saving houses and shutting down...\n";
@@ -2871,13 +2831,6 @@ void hupsig(int Empty)
 void intsig(int Empty)
 {
   mudlog("Received SIGINT.  Shutting down...", NULL, LOG_SYSLOG, TRUE);
-  save_all_apartments_and_storage_rooms();
-  exit(EXIT_CODE_ZERO_ALL_IS_WELL);
-}
-
-void termsig(int Empty)
-{
-  mudlog("Received SIGTERM.  Shutting down...", NULL, LOG_SYSLOG, TRUE);
   save_all_apartments_and_storage_rooms();
   exit(EXIT_CODE_ZERO_ALL_IS_WELL);
 }

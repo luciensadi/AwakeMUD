@@ -128,7 +128,7 @@ void holiday_entry::award_gift(struct char_data *ch) {
   set_db_tag(GET_IDNUM(ch), holiday_name);
 
   // Save them.
-  playerDB.SaveChar(ch);
+  SaveChar(ch);
 
   // Log it for posterity.
   mudlog_vfprintf(ch, LOG_SYSLOG, "Gave %s (%ld) a holiday gift (%d sysp, %d tokens, %d heals) for %s.",

@@ -859,7 +859,7 @@ ACMD(do_spellset)
   mudlog(buf, ch, LOG_WIZLOG, TRUE);
 
   // Save them.
-  playerDB.SaveChar(vict);
+  SaveChar(vict);
 }
 
 
@@ -1062,46 +1062,6 @@ ACMD(do_abilityset)
 
 
 /* db stuff *********************************************** */
-
-
-/* One_Word is like one_argument, execpt that words in quotes "" are */
-/* regarded as ONE word                                              */
-
-char *one_word(char *argument, char *first_arg)
-{
-  int begin, look_at;
-
-  begin = 0;
-
-  do {
-    for (; isspace(*(argument + begin)); begin++)
-      ;
-
-    if (*(argument + begin) == '\"') {  /* is it a quote */
-
-      begin++;
-
-      for (look_at = 0; (*(argument + begin + look_at) >= ' ') &&
-           (*(argument + begin + look_at) != '\"'); look_at++)
-        *(first_arg + look_at) = LOWER(*(argument + begin + look_at));
-
-      if (*(argument + begin + look_at) == '\"')
-        begin++;
-
-    } else {
-
-      for (look_at = 0; *(argument + begin + look_at) > ' '; look_at++)
-        *(first_arg + look_at) = LOWER(*(argument + begin + look_at));
-
-    }
-
-    *(first_arg + look_at) = '\0';
-    begin += look_at;
-  } while (fill_word(first_arg));
-
-  return (argument + begin);
-}
-
 
 void page_string(struct descriptor_data *d, char *str, int keep_internal)
 {

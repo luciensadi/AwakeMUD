@@ -1541,7 +1541,7 @@ ACMD(do_toggle)
         send_to_char(ch, "You have been restored to the old-style interface of internal index numbers for parts and software during deck creation.\r\n");
         PLR_FLAGS(ch).SetBit(PLR_DEALPHABETIZE_DECKBUILDING);
       }
-      playerDB.SaveChar(ch);
+      SaveChar(ch);
       return;
     } else {
       send_to_char("That is not a valid toggle option.\r\n", ch);
@@ -1553,7 +1553,7 @@ ACMD(do_toggle)
       send_to_char(tog_messages[mode][0], ch);
   }
 
-  playerDB.SaveChar(ch);
+  SaveChar(ch);
 }
 
 ACMD(do_brief) {
@@ -2877,7 +2877,7 @@ void cedit_parse(struct descriptor_data *d, char *arg)
       STATE(d) = CON_PLAYING;
       snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), " WHERE idnum=%ld;", GET_IDNUM(CH));
       mysql_wrapper(mysql, buf2);
-      playerDB.SaveChar(CH);
+      SaveChar(CH);
       break;
 
     case 'n':
@@ -5146,7 +5146,7 @@ ACMD(do_syspoints) {
         delete [] name;
 
       // Save the result on the actor.
-      playerDB.SaveChar(ch);
+      SaveChar(ch);
 
       send_to_char(ch, "Done. Please note that this command is only for transferring to ^Wyour own alts^n. If the character you transferred to is not your alt, please request the points back, or contact staff for next steps.\r\n");
       return;
@@ -5455,7 +5455,7 @@ ACMD(do_syspoints) {
     mudlog(buf, ch, LOG_WIZLOG, TRUE);
 
     // Finally, save.
-    playerDB.SaveChar(vict);
+    SaveChar(vict);
     return;
   }
 }

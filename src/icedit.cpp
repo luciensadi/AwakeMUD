@@ -46,7 +46,10 @@ void write_ic_to_disk(int vnum)
   char tmp_file_name[1000];
   snprintf(tmp_file_name, sizeof(tmp_file_name), "%s.tmp", final_file_name);
   
-  fl = fopen(tmp_file_name, "w+");
+  if (!(fl = fopen(tmp_file_name, "w+"))) {
+    perror("Error opening file in write_ic_to_disk()"); 
+    return;
+  }
 
   for (counter = zone_table[zone].number * 100;
        counter <= zone_table[zone].top;

@@ -6915,7 +6915,7 @@ bool cleanup_excess_elementals(struct char_data *ch) {
       delete_spirit_or_elemental_from_entry(ch, lowest_force);
     }
     GET_ELEMENTALS_DIRTY_BIT(ch) = TRUE;
-    playerDB.SaveChar(ch, GET_LOADROOM(ch));
+    SaveChar(ch, GET_LOADROOM(ch));
 
     return true;
   }

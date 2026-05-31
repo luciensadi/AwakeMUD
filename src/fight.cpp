@@ -4255,31 +4255,6 @@ bool astral_fight(struct char_data *ch, struct char_data *vict)
   */
 }
 
-void remove_throwing(struct char_data *ch)
-{
-  struct obj_data *obj = NULL;
-  int i, pos, type;
-
-  for (pos = WEAR_WIELD; pos <= WEAR_HOLD; pos++) {
-    if (GET_EQ(ch, pos))
-    {
-      type = GET_OBJ_VAL(GET_EQ(ch, pos), 3);
-      if (type == TYPE_SHURIKEN || type == TYPE_THROWING_KNIFE) {
-        extract_obj(unequip_char(ch, pos, TRUE));
-        for (i = 0; i < NUM_WEARS; i++)
-          if (GET_EQ(ch, i) && GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_QUIVER)
-            for (obj = GET_EQ(ch, i)->contains; obj; obj = obj->next_content)
-              if (GET_OBJ_TYPE(obj) == ITEM_WEAPON && GET_OBJ_VAL(obj, 3) == type) {
-                obj_from_obj(obj);
-                equip_char(ch, obj, WEAR_WIELD);
-                return;
-              }
-        return;
-      }
-    }
-  }
-}
-
 void combat_message_process_single_ranged_response(struct char_data *ch, struct char_data *tch) {
   if (IS_NPC(tch)) {
     // Everyone ends up on edge when they hear gunfire nearby.

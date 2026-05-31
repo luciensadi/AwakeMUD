@@ -37,10 +37,12 @@ bool File::EoF() const
   return feof(fl);
 }
 
+/*
 bool File::IsWriteable() const
 {
   return (IsOpen() && (strchr(mode, 'w') || strchr(mode, 'a')));
 }
+*/
 
 bool File::Open(const char *_filename, const char *_mode)
 {

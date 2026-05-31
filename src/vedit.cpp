@@ -720,7 +720,10 @@ void write_vehs_to_disk(int zone)
   char tmp_file_name[1000];
   snprintf(tmp_file_name, sizeof(tmp_file_name), "%s.tmp", final_file_name);
   
-  fp = fopen(tmp_file_name, "w+");
+  if (!(fp = fopen(tmp_file_name, "w+"))) {
+    perror("Error opening file in write_vehs_to_disk()"); 
+    return;
+  }
 
   /* start running through all vehicles in this zone */
   for (counter = zone_table[zone].number * 100; counter <= zone_table[zone].top; counter++) {

@@ -47,7 +47,6 @@ char *global_large_query_buf = new char[CODEBASE_REQUIRED_MYSQL_MAX_PACKET_MINIM
 
 extern void kill_ems(char *);
 extern void init_char_sql(struct char_data *ch, const char *origin);
-static const char *const INDEX_FILENAME = "etc/pfiles/index";
 extern void add_phone_to_list(struct obj_data *);
 extern Playergroup *loaded_playergroups;
 extern int get_cyberware_install_cost(struct obj_data *ware);
@@ -85,18 +84,6 @@ void load_player_faction_info(struct char_data *player);
 SPECIAL(weapon_dominator);
 SPECIAL(pocket_sec);
 
-// ____________________________________________________________________________
-//
-// global variables
-// ____________________________________________________________________________
-
-PCIndex playerDB;
-
-// ____________________________________________________________________________
-//
-// PCIndex -- the PC database class: implementation
-// ____________________________________________________________________________
-
 int mysql_wrapper(MYSQL *mysql, const char *query)
 {
   char buf[MAX_STRING_LENGTH];
@@ -114,19 +101,6 @@ int mysql_wrapper(MYSQL *mysql, const char *query)
     log(buf);
   }
   return result;
-}
-
-int entry_compare(const void *one, const void *two)
-{
-  const PCIndex::entry *ptr1 = (const PCIndex::entry *)one;
-  const PCIndex::entry *ptr2 = (const PCIndex::entry *)two;
-
-  if (ptr1->id < ptr2->id)
-    return -1;
-  else if (ptr1->id > ptr2->id)
-    return 1;
-
-  return 0;
 }
 
 static void init_char(struct char_data * ch)
@@ -355,7 +329,7 @@ void advance_level(struct char_data * ch)
                           PRF_NOHASSLE, ENDBIT);
   }
 
-  playerDB.SaveChar(ch);
+  SaveChar(ch);
 
   snprintf(buf, sizeof(buf), "%s [%s] advanced to %s.",
           GET_CHAR_NAME(ch), ch->desc && *ch->desc->host ? ch->desc->host : "<no host>", status_ratings[(int)GET_LEVEL(ch)]);
@@ -1267,7 +1241,7 @@ bool load_char(const char *name, char_data *ch, bool logon, int pc_load_origin)
     }
 
     if (need_save) {
-      playerDB.SaveChar(ch);
+      SaveChar(ch);
     }
   }
 
@@ -1281,7 +1255,7 @@ bool load_char(const char *name, char_data *ch, bool logon, int pc_load_origin)
   }                                                              \
 }
 
-static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopyover = FALSE)
+static bool save_char(char_data *player, vnum_t loadroom, bool fromCopyover = FALSE)
 {
   PERF_PROF_SCOPE(pr_, __func__);
   char buf[MAX_STRING_LENGTH*4], buf2[MAX_STRING_LENGTH*4], buf3[MAX_STRING_LENGTH*4];
@@ -1615,58 +1589,6 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom, bool fromCopy
 
 #undef SAVE_IF_DIRTY_BIT_SET
 
-PCIndex::PCIndex()
-{
-  tab = NULL;
-  entry_cnt = entry_size = 0;
-  needs_save = false;
-}
-
-PCIndex::~PCIndex()
-{
-  reset();
-}
-
-bool PCIndex::Save()
-{
-  if (!needs_save)
-    return true;
-
-  FILE *index = fopen(INDEX_FILENAME, "w");
-
-  if (!tab) {
-    if (entry_cnt > 0)
-      log("--Error: no table when there should be?!  That's fucked up, man.");
-    fclose(index);
-    return false;
-  }
-
-  if (!index) {
-    log_vfprintf("--Error: Could not open player index file %s\n",
-        INDEX_FILENAME);
-    return false;
-  }
-
-  fprintf(index,
-          "* Player index file\n"
-          "* Generated automatically by PCIndex::Save\n\n");
-
-  for (int i = 0; i < entry_cnt; i++) {
-    entry *ptr = tab+i;
-
-    fprintf(index,
-            "%ld %d %u %lu %s\n",
-            ptr->id, ptr->level, ptr->flags, ptr->last, ptr->name);
-  }
-
-  fprintf(index, "END\n");
-  fclose(index);
-
-  needs_save = false;
-
-  return true;
-}
-
 // You motherfuckers better sanitize your queries that you pass to this, because it's going in RAW.
 // Only used for idnums right now, so -1 is the error code.
 idnum_t get_one_number_from_query(const char *query) {
@@ -1784,7 +1706,7 @@ char_data *CreateChar(char_data *ch)
                           PRF_NOHASSLE, PRF_AUTOINVIS, PRF_AUTOEXIT, ENDBIT);
   } else {
     PLR_FLAGS(ch).SetBit(PLR_NOT_YET_AUTHED);
-    GET_IDNUM(ch) = MAX(playerDB.find_open_id(), highest_idnum_in_use + 1);
+    GET_IDNUM(ch) = highest_idnum_in_use + 1;
   }
 
   // Ensure we don't run this character through any rectifying functions.
@@ -1801,72 +1723,7 @@ char_data *CreateChar(char_data *ch)
   return ch;
 }
 
-/*
-char_data *PCIndex::CreateChar(char_data *ch)
-{
-  if (entry_cnt >= entry_size)
-    resize_table();
-
-  entry info;
-
-  if (strlen(GET_CHAR_NAME(ch)) >= MAX_NAME_LENGTH) {
-    log("--Fatal error: Could not fit name into player index..\n"
-        "             : Increase MAX_NAME_LENGTH");
-    shutdown();
-  }
-
-  // if this is the first character, make him president
-  if (entry_cnt < 1) {
-    log_vfprintf("%s promoted to %s, by virtue of first-come, first-serve.",
-        status_ratings[LVL_MAX], GET_CHAR_NAME(ch));
-
-    // TODO: this is a duplicate of the other president code, can they be consolidated?
-
-    for (int i = 0; i < 3; i++)
-      GET_COND(ch, i) = (char) -1;
-
-    GET_KARMA(ch) = 0;
-    GET_LEVEL(ch) = LVL_MAX;
-    GET_REP(ch) = 0;
-    GET_NOT(ch) = 0;
-    GET_TKE(ch) = 0;
-
-    PLR_FLAGS(ch).RemoveBits(PLR_NEWBIE, PLR_NOT_YET_AUTHED, ENDBIT);
-    PLR_FLAGS(ch).SetBits(PLR_OLC, PLR_NODELETE, ENDBIT);
-    PRF_FLAGS(ch).SetBits(PRF_HOLYLIGHT, PRF_CONNLOG, PRF_ROOMFLAGS,
-                          PRF_NOHASSLE, PRF_AUTOINVIS, PRF_AUTOEXIT, ENDBIT);
-  } else {
-    PLR_FLAGS(ch).SetBit(PLR_NOT_YET_AUTHED);
-  }
-  init_char(ch);
-  init_char_strings(ch);
-
-  strcpy(info.name, GET_CHAR_NAME(ch));
-  info.id = find_open_id();
-  info.level = GET_LEVEL(ch);
-  info.flags = (PLR_FLAGGED(ch, PLR_NODELETE) ? NODELETE : 0);
-  info.active_data = ch;
-  info.instance_cnt = 1;
-
-  // sync IDs
-  GET_IDNUM(ch) = info.id;
-
-  // update the logon time
-  time(&info.last);
-
-  // insert the new info in the correct place
-  sorted_insert(&info);
-
-  if (!needs_save)
-    needs_save = true;
-
-  Save();
-
-  return ch;
-}
-*/
-
-char_data *PCIndex::LoadChar(const char *name, bool logon, int load_origin)
+char_data *LoadChar(const char *name, bool logon, int load_origin)
 {
   // load the character data
   char_data *ch = Mem->GetCh();
@@ -1884,7 +1741,7 @@ char_data *PCIndex::LoadChar(const char *name, bool logon, int load_origin)
   return ch;
 }
 
-bool PCIndex::SaveChar(char_data *ch, vnum_t loadroom, bool fromCopyover)
+bool SaveChar(char_data *ch, vnum_t loadroom, bool fromCopyover)
 {
   if (IS_NPC(ch))
     return false;
@@ -1900,161 +1757,6 @@ bool PCIndex::SaveChar(char_data *ch, vnum_t loadroom, bool fromCopyover)
   }
 
   return ret;
-}
-
-void PCIndex::reset()
-{
-  if (tab != NULL) {
-    delete [] tab;
-    tab = NULL;
-  }
-
-  entry_cnt = entry_size = 0;
-  needs_save = false;
-}
-
-bool PCIndex::load()
-{
-  // Sorry, PCIndex::load, but with the SQL DB in place you'll never work again.
-  /*
-  File index(INDEX_FILENAME, "r");
-
-  if (!index.IsOpen()) {
-    log("--WARNING: Could not open player index file %s...\n"
-        "         : Starting game with NO PLAYERS!!!\n",
-        INDEX_FILENAME);
-
-    FILE *test = fopen(INDEX_FILENAME, "r");
-    if (test) {
-      log("_could_ open it normally, tho");
-      fclose(test);
-    }
-
-    return false;
-  }
-
-  reset();
-
-  char line[512];
-  int line_num = 0;
-  int idx = 0;
-
-  entry_cnt = count_entries(&index);
-  resize_table();
-
-  line_num += index.GetLine(line, 512, FALSE);
-  while (!index.EoF() && strcmp(line, "END")) {
-    entry *ptr = tab+idx;
-    char temp[512];           // for paranoia
-
-    if (sscanf(line, " %ld %d %u %lu %s ",
-               &ptr->id, &ptr->level, &ptr->flags, &ptr->last, temp) != 5) {
-      log("--Fatal error: syntax error in player index file, line %d",
-          line_num);
-      shutdown();
-    }
-
-    strncpy(ptr->name, temp, MAX_NAME_LENGTH);
-    *(ptr->name+MAX_NAME_LENGTH-1) = '\0';
-
-    ptr->active_data = NULL;
-
-    line_num += index.GetLine(line, 512, FALSE);
-    idx++;
-  }
-
-  if (entry_cnt != idx)
-    entry_cnt = idx;
-
-  log("--Successfully loaded %d entries from the player index file.",
-      entry_cnt);
-
-  sort_by_id();
- // clear_by_time();
-  return true;
-  */
-  return false;
-}
-
-int  PCIndex::count_entries(File *index)
-{
-  char line[512];
-  int count = 0;
-
-  index->GetLine(line, 512, FALSE);
-  while (!index->EoF() && strcmp(line, "END")) {
-    count++;
-    index->GetLine(line, 512, FALSE);
-  }
-
-  index->Rewind();
-
-  return count;
-}
-
-void PCIndex::sort_by_id()
-{
-  qsort(tab, entry_cnt, sizeof(entry), entry_compare);
-}
-
-void PCIndex::resize_table(int empty_slots)
-{
-  entry_size = entry_cnt + empty_slots;
-  entry *new_tab = new entry[entry_size];
-
-  if (tab) {
-    for (int i = 0; i < entry_cnt; i++)
-      new_tab[i] = tab[i];
-
-    // delete the old table
-    delete [] tab;
-  }
-
-  // finally, update the pointer
-  tab = new_tab;
-}
-
-void PCIndex::sorted_insert(const entry *info)
-{
-  int i;
-
-  // whee!! linear!
-
-  // first, find the correct index
-  for (i = 0; i < entry_cnt; i++)
-    if (tab[i].id > info->id)
-      break;
-
-  // create an empty space for the new entry
-  for (int j = entry_cnt; j > i; j--)
-    tab[j] = tab[j-1];
-
-  tab[i] = *info;
-
-  log_vfprintf("--Inserting %s's (id#%ld) entry into position %d",
-      info->name, info->id, i);
-
-  // update entry_cnt, and we're done
-  entry_cnt++;
-  needs_save = true;
-}
-
-DBIndex::vnum_t PCIndex::find_open_id()
-{
-  if (entry_cnt < 1)
-    return 1;
-
-  /* this won't work right now since id#s are used to store
-     owners of foci, etc.  So once there's a universal id# invalidator,
-     this should be put in
-  */
-  /*
-  for (int i = 1; i < entry_cnt; i++)
-    if (tab[i].id > (tab[i-1].id+1))
-      return (tab[i-1].id+1);
-  */
-
-  return (tab[entry_cnt-1].id+1);
 }
 
 std::unordered_map<std::string, bool> global_existing_player_cache = {};
@@ -2726,7 +2428,7 @@ ACMD(do_register) {
 
   send_to_char(ch, "OK, your email address has been set to '%s'.\r\n", GET_EMAIL(ch));
 
-  playerDB.SaveChar(ch);
+  SaveChar(ch);
 }
 
 void save_adept_powers_to_db(struct char_data *player) {

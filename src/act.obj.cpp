@@ -36,7 +36,6 @@
 
 /* extern variables */
 extern int drink_aff[][3];
-extern PCIndex playerDB;
 
 ACMD_DECLARE(do_bond);
 
@@ -1759,7 +1758,7 @@ void get_from_room(struct char_data *ch, char *arg)
 				mudlog(buf, ch, GET_IDNUM(ch) != veh->owner ? LOG_CHEATLOG : LOG_GRIDLOG, TRUE);
 				DELETE_ARRAY_IF_EXTANT(owner);
 
-				playerDB.SaveChar(ch);
+				SaveChar(ch);
 				save_single_vehicle(veh);
 				return;
 			}
@@ -2310,45 +2309,6 @@ ACMD(do_get)
 	}
 }
 
-void perform_drop_gold(struct char_data *ch, int amount, byte mode, struct room_data *random_donation_room)
-{
-	struct obj_data *obj;
-
-	FAILURE_CASE(mode != SCMD_DROP, "You can't do that!");
-	FAILURE_CASE(amount < 1, "You can't drop less than one nuyen.");
-	FAILURE_CASE(amount > GET_NUYEN(ch), "You don't even have that much!");
-	FAILURE_CASE(GET_LEVEL(ch) > LVL_MORTAL && !access_level(ch, LVL_PRESIDENT),
-							 "Staff can't drop nuyen. Use the PAYOUT command to award a character.");
-
-	obj = read_object(OBJ_ROLL_OF_NUYEN, VIRTUAL, OBJ_LOAD_REASON_DROP_GOLD);
-	GET_OBJ_VAL(obj, 0) = amount;
-
-	if (!IS_NPC(ch) && (access_level(ch, LVL_BUILDER) || IS_NPC(ch)))
-		obj->obj_flags.extra_flags.SetBit(ITEM_EXTRA_WIZLOAD);
-
-	obj->obj_flags.extra_flags.SetBit(ITEM_EXTRA_CHEATLOG_MARK);
-
-	// Dropping money is not a sink.
-	GET_NUYEN_RAW(ch) -= amount;
-	act("You drop $p.", FALSE, ch, obj, 0, TO_CHAR);
-	act("$n drops $p.", TRUE, ch, obj, 0, TO_ROOM);
-	affect_total(ch);
-
-	if (ch->in_veh)
-	{
-		obj_to_veh(obj, ch->in_veh);
-		obj->vfront = ch->vfront;
-	}
-	else
-		obj_to_room(obj, ch->in_room);
-
-	snprintf(buf, sizeof(buf), "%s drops: %d nuyen *", GET_CHAR_NAME(ch), amount);
-	mudlog(buf, ch, amount > 5 ? LOG_CHEATLOG : LOG_GRIDLOG, TRUE);
-	set_dropped_by_info(obj, ch);
-
-	return;
-}
-
 #define VANISH(mode) ((mode == SCMD_DONATE || mode == SCMD_JUNK) ? "  It vanishes into a recycling bin!" : "")
 
 int perform_drop(struct char_data *ch, struct obj_data *obj, byte mode,
@@ -2501,7 +2461,7 @@ int perform_drop(struct char_data *ch, struct obj_data *obj, byte mode,
       GET_VEHCONTAINER_VEH_VNUM(obj) = GET_VEHCONTAINER_VEH_IDNUM(obj) = GET_VEHCONTAINER_VEH_OWNER(obj) = 0;
       extract_obj(obj);
 
-      playerDB.SaveChar(ch);
+      SaveChar(ch);
       save_single_vehicle(veh);
       return 0;
 		}
@@ -2815,7 +2775,6 @@ ACMD(do_drop)
 		if (!str_cmp("nuyen", arg))
 		{
 			send_to_char("Nuyen can't be dropped. You can ^WGIVE^n it to another player to pay them, or store it in your bank account at an ATM.\r\n", ch);
-			// perform_drop_gold(ch, amount, mode, random_donation_room);
 		}
 		else
 		{
@@ -5837,7 +5796,7 @@ ACMD(do_keep)
 		GET_OBJ_EXTRA(obj).SetBit(ITEM_EXTRA_KEPT);
 	}
 
-	playerDB.SaveChar(ch);
+	SaveChar(ch);
 }
 
 ACMD(do_conceal_reveal)
@@ -5883,7 +5842,7 @@ ACMD(do_conceal_reveal)
 		{
 			send_to_char("You rearrange your equipment.\r\n", ch);
 			act("$n rearranges $s equipment.", TRUE, ch, 0, 0, TO_ROOM);
-			playerDB.SaveChar(ch);
+			SaveChar(ch);
 		}
 		else
 		{
@@ -5917,5 +5876,5 @@ ACMD(do_conceal_reveal)
 
 	send_to_char("You rearrange your equipment.\r\n", ch);
 	act("$n rearranges $s equipment.", TRUE, ch, 0, 0, TO_ROOM);
-	playerDB.SaveChar(ch);
+	SaveChar(ch);
 }

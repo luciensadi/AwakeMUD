@@ -576,7 +576,7 @@ void archetype_selection_parse(struct descriptor_data *d, const char *arg) {
   // Set up the character and save them.
   do_start(CH, FALSE);
   GET_LOADROOM(d->character) = archetypes[i]->start_room;
-  playerDB.SaveChar(d->character, archetypes[i]->start_room);
+  SaveChar(d->character, archetypes[i]->start_room);
 }
 
 #undef ATTACH_IF_EXISTS
@@ -1696,7 +1696,7 @@ void create_parse(struct descriptor_data *d, const char *arg)
                       GET_CHAR_NAME(victim),
                       pc_race_types[d->ccr.prestige_race]);
 
-      playerDB.SaveChar(victim);
+      SaveChar(victim);
 
       SEND_TO_Q("Nice, you're all paid up.", d);
       GET_RACE(d->character) = d->ccr.prestige_race;
@@ -2329,7 +2329,7 @@ void refund_chargen_prestige_syspoints_if_needed(struct char_data *ch) {
     gain_syspoints(payer, refund_amount - restricted_spent, false, "prestige refund(unrestricted)");
   }
 
-  playerDB.SaveChar(payer, GET_LOADROOM(payer));
+  SaveChar(payer, GET_LOADROOM(payer));
 
   mudlog_vfprintf(ch, LOG_CHEATLOG, "Refunded %d (%dr) prestige-purchase syspoints to %s due to %s deleting in character generation (%du/%dr -> %du/%dr)",
                   refund_amount,

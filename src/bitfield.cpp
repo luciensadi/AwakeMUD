@@ -162,6 +162,7 @@ bool Bitfield::AreAnyShared(const Bitfield &test) const
   return false;
 }
 
+/*
 int  Bitfield::GetNumShared(const Bitfield &test) const
 {
   int count = 0;
@@ -177,6 +178,7 @@ int  Bitfield::GetNumShared(const Bitfield &test) const
 
   return count;
 }
+*/
 
 bool Bitfield::operator==(const Bitfield &two) const
 {

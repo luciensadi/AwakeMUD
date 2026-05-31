@@ -463,7 +463,7 @@ void do_pgroup_abdicate(struct char_data *ch, char *argument) {
   // If they weren't online, attempt to load them from the DB.
   if (!new_leader) {
     new_leader_is_logged_in = FALSE;
-    if (!(new_leader = playerDB.LoadChar(name, FALSE, PC_LOAD_REASON_PGROUP_ABDICATION_LEADER_LOAD))) {
+    if (!(new_leader = LoadChar(name, FALSE, PC_LOAD_REASON_PGROUP_ABDICATION_LEADER_LOAD))) {
       // We were unable to find them online or load them from DB-- fail out.
       mudlog("SYSERR: Failed to fetch PC from DB for pgroup abdication.", ch, LOG_SYSLOG, TRUE);
       send_to_char("Sorry, an error has occurred. Abdication aborted.\r\n", ch);
@@ -503,14 +503,14 @@ void do_pgroup_abdicate(struct char_data *ch, char *argument) {
   // Save the new leader.
   if (new_leader_is_logged_in) {
     // Online characters are saved to the DB without unloading.
-    playerDB.SaveChar(new_leader, GET_LOADROOM(new_leader));
+    SaveChar(new_leader, GET_LOADROOM(new_leader));
   } else {
     // Loaded characters are unloaded (saving happens during extract_char).
     extract_char(new_leader);
   }
 
   // Save the old leader.
-  playerDB.SaveChar(ch, GET_LOADROOM(ch));
+  SaveChar(ch, GET_LOADROOM(ch));
 }
 
 void do_pgroup_balance(struct char_data *ch, char *argument) {
@@ -753,7 +753,7 @@ void do_pgroup_found(struct char_data *ch, char *argument) {
   // Eventual TODO: Should this be done in a specific place or in the presence of a specific NPC for RP reasons?
   send_to_char(ch, "You pay %d nuyen to found '%s'.\r\n", COST_TO_FOUND_GROUP, GET_PGROUP(ch)->get_name());
   lose_nuyen(ch, COST_TO_FOUND_GROUP, NUYEN_OUTFLOW_PGROUP);
-  playerDB.SaveChar(ch);
+  SaveChar(ch);
 
   GET_PGROUP(ch)->set_founded(TRUE);
   GET_PGROUP(ch)->save_pgroup_to_db();
@@ -903,7 +903,7 @@ void do_pgroup_outcast(struct char_data *ch, char *argument) {
   // If they weren't online, attempt to load them from the DB.
   if (!vict) {
     vict_is_logged_in = FALSE;
-    if (!(vict = playerDB.LoadChar(name, FALSE, PC_LOAD_REASON_PGROUP_OFFLINE_OUTCAST))) {
+    if (!(vict = LoadChar(name, FALSE, PC_LOAD_REASON_PGROUP_OFFLINE_OUTCAST))) {
       // We were unable to find them online or load them from DB-- fail out.
       send_to_char("There is no such player.\r\n", ch);
       return;
@@ -951,7 +951,7 @@ void do_pgroup_outcast(struct char_data *ch, char *argument) {
   if (vict_is_logged_in) {
     send_to_char(buf, vict);
     // Online characters are saved to the DB without unloading.
-    playerDB.SaveChar(vict, GET_LOADROOM(vict));
+    SaveChar(vict, GET_LOADROOM(vict));
   } else {
     // Loaded characters are unloaded (saving happens during extract_char).
     extract_char(vict);
@@ -1329,7 +1329,7 @@ void pgedit_parse(struct descriptor_data * d, const char *arg) {
             send_to_char(CH, "Created new group '%s^n'.\r\n", GET_PGROUP(CH)->get_name());
 
             // Save the character to ensure the DB reflects their new membership.
-            playerDB.SaveChar(CH, GET_LOADROOM(CH));
+            SaveChar(CH, GET_LOADROOM(CH));
           }
 
           // Return character to game.
@@ -1515,7 +1515,7 @@ void perform_pgroup_grant_revoke(struct char_data *ch, char *argument, bool revo
   // If they weren't online, attempt to load them from the DB.
   if (!vict) {
     vict_is_logged_in = FALSE;
-    if (!(vict = playerDB.LoadChar(name, FALSE, PC_LOAD_REASON_PGROUP_OFFLINE_GRANT_REVOKE))) {
+    if (!(vict = LoadChar(name, FALSE, PC_LOAD_REASON_PGROUP_OFFLINE_GRANT_REVOKE))) {
       // We were unable to find them online or load them from DB-- fail out.
       send_to_char("There is no such player.\r\n", ch);
       return;
@@ -1578,7 +1578,7 @@ void perform_pgroup_grant_revoke(struct char_data *ch, char *argument, bool revo
   if (vict_is_logged_in) {
     // Online characters are saved to the DB without unloading.
     send_to_char(buf, vict);
-    playerDB.SaveChar(vict, GET_LOADROOM(vict));
+    SaveChar(vict, GET_LOADROOM(vict));
   } else {
     // Loaded characters are unloaded (saving happens during extract_char).
     store_mail(GET_IDNUM(vict), ch, buf);
@@ -1630,7 +1630,7 @@ void do_pgroup_promote_demote(struct char_data *ch, char *argument, bool promote
   // If they weren't online, attempt to load them from the DB.
   if (!vict) {
     vict_is_logged_in = FALSE;
-    if (!(vict = playerDB.LoadChar(name, FALSE, PC_LOAD_REASON_PGROUP_OFFLINE_PROMOTE_DEMOTE))) {
+    if (!(vict = LoadChar(name, FALSE, PC_LOAD_REASON_PGROUP_OFFLINE_PROMOTE_DEMOTE))) {
       // We were unable to find them online or load them from DB-- fail out.
       send_to_char("There is no such player.\r\n", ch);
       return;
@@ -1683,7 +1683,7 @@ void do_pgroup_promote_demote(struct char_data *ch, char *argument, bool promote
   if (vict_is_logged_in) {
     // Online characters are saved to the DB without unloading.
     send_to_char(buf, vict);
-    playerDB.SaveChar(vict, GET_LOADROOM(vict));
+    SaveChar(vict, GET_LOADROOM(vict));
   } else {
     // Loaded characters are unloaded (saving happens during extract_char).
     // TODO: Using store_mail like this is info disclosure if ch is secret.
@@ -1889,7 +1889,7 @@ ACMD(do_pgset) {
     if (!target) {
       from_file = TRUE;
       const char *name = get_player_name(idnum);
-      target = playerDB.LoadChar(name, FALSE, PC_LOAD_REASON_PGROUP_OFFLINE_PGSET_LEADER);
+      target = LoadChar(name, FALSE, PC_LOAD_REASON_PGROUP_OFFLINE_PGSET_LEADER);
       delete [] name;
     }
 

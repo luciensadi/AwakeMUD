@@ -197,7 +197,6 @@ int market[5] = { 5000, 5000, 5000, 5000, 5000 };
 MYSQL *mysql;
 
 /* local functions */
-void setup_dir(FILE * fl, int room, int dir);
 void index_boot(int mode);
 void discrete_load(File &fl, int mode);
 void parse_room(File &in, long nr);
@@ -762,9 +761,6 @@ void DBInit()
   log("Loading social messages.");
   boot_social_messages();
 
-  log("Loading player index.");
-  playerDB.Load();
-
   log("Generating character creation archetypes.");
   generate_archetypes();
 
@@ -1245,7 +1241,7 @@ void parse_host(File &fl, long nr)
     exit(ERROR_WORLD_BOOT_FORMAT_ERROR);
   }
 
-  static DBIndex::rnum_t rnum = 0, zone = 0;
+  static rnum_t rnum = 0, zone = 0;
   char field[64];
   if (nr <= (zone ? zone_table[zone - 1].top : -1)) {
     log_vfprintf("FATAL ERROR: Host #%ld is below zone %d.\n", nr, zone_table[zone].number);
@@ -1350,7 +1346,7 @@ void parse_ic(File &fl, long nr)
     exit(ERROR_WORLD_BOOT_FORMAT_ERROR);
   }
 
-  static DBIndex::rnum_t rnum = 0, zone = 0;
+  static rnum_t rnum = 0, zone = 0;
   ic_index[rnum].vnum = nr;
   ic_index[rnum].number = 0;
   ic_index[rnum].func = NULL;
@@ -1396,7 +1392,7 @@ void parse_room(File &fl, long nr)
     exit(ERROR_WORLD_BOOT_FORMAT_ERROR);
   }
 
-  static DBIndex::rnum_t rnum = 0, zone = 0;
+  static rnum_t rnum = 0, zone = 0;
 
   if (nr <= (zone ? zone_table[zone - 1].top : -1)) {
     log_vfprintf("FATAL ERROR: Room #%ld is below zone %d.\n", nr, zone_table[zone].number);
@@ -1619,46 +1615,6 @@ void parse_room(File &fl, long nr)
   }
 }
 
-/* read direction data */
-void setup_dir(FILE * fl, int room, int dir)
-{
-  int t[7];
-  char line[256];
-  int retval;
-
-  snprintf(buf2, sizeof(buf2), "room #%ld, direction D%d", world[room].number, dir);
-
-  world[room].dir_option[dir] = new room_direction_data;
-  world[room].dir_option[dir]->general_description = fread_string(fl, buf2);
-  world[room].dir_option[dir]->keyword = fread_string(fl, buf2);
-
-  if (!get_line(fl, line)) {
-    fprintf(stderr, "FATAL ERROR: Format error, %s: Cannot get line from file.\n", buf2);
-    exit(ERROR_WORLD_BOOT_FORMAT_ERROR);
-  }
-  if ((retval = sscanf(line, " %d %d %d %d %d %d %d", t, t + 1, t + 2, t + 3,
-                       t + 4, t + 5, t + 6)) < 4) {
-    fprintf(stderr, "FATAL ERROR: Format error, %s: Expected seven numbers like ' # # # # # # #'\n", buf2);
-    exit(ERROR_WORLD_BOOT_FORMAT_ERROR);
-  }
-  if (t[0] == 1)
-    world[room].dir_option[dir]->exit_info = EX_ISDOOR;
-  else if (t[0] == 2)
-    world[room].dir_option[dir]->exit_info = EX_ISDOOR | EX_PICKPROOF;
-  else
-    world[room].dir_option[dir]->exit_info = 0;
-
-  world[room].dir_option[dir]->key = t[1];
-  world[room].dir_option[dir]->to_room = &world[0]; // Will be set properly during world renumbering.
-  world[room].dir_option[dir]->to_room_vnum = MAX(0, t[2]);
-  world[room].dir_option[dir]->key_level = t[3];
-
-  world[room].dir_option[dir]->material = (retval > 4) ? t[4] : 5;
-  world[room].dir_option[dir]->barrier = (retval > 5) ? t[5] : 4;
-  world[room].dir_option[dir]->condition = (retval > 5) ? t[5] : 4;
-  world[room].dir_option[dir]->hidden = (retval > 6) ? t[6] : 0;
-}
-
 /* make sure the start rooms exist & resolve their vnums to rnums */
 void check_start_rooms(void)
 {
@@ -1705,7 +1661,7 @@ void renum_world(void)
 
 #define ZCMD zone_table[zone].cmd[cmd_no]
 
-bool can_load_this_thing_in_zone_commands(DBIndex::rnum_t rnum, int zone, int cmd_no) {
+bool can_load_this_thing_in_zone_commands(rnum_t rnum, int zone, int cmd_no) {
   if (rnum < 0) {
     log_zone_error(zone, cmd_no, "Negative rnum.");
     return FALSE;
@@ -1831,7 +1787,7 @@ void parse_mobile(File &in, long nr)
     exit(ERROR_WORLD_BOOT_FORMAT_ERROR);
   }
 
-  static DBIndex::rnum_t rnum = 0;
+  static rnum_t rnum = 0;
 
   char_data *mob = mob_proto+rnum;
 
@@ -2077,7 +2033,7 @@ void parse_object(File &fl, long nr)
     exit(ERROR_WORLD_BOOT_FORMAT_ERROR);
   }
 
-  static DBIndex::rnum_t rnum = 0;
+  static rnum_t rnum = 0;
 
   OBJ_VNUM_RNUM(rnum) = nr;
   obj_index[rnum].number = 0;
@@ -2667,7 +2623,7 @@ void parse_shop(File &fl, long virtual_nr)
     exit(ERROR_WORLD_BOOT_FORMAT_ERROR);
   }
 
-  static DBIndex::rnum_t rnum = 0, zone = 0;
+  static rnum_t rnum = 0, zone = 0;
   char field[64];
   if (virtual_nr <= (zone ? zone_table[zone - 1].top : -1)) {
     log_vfprintf("FATAL ERROR: Shop #%ld is below zone %d.\n", virtual_nr, zone_table[zone].number);

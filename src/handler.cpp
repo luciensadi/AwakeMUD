@@ -2529,7 +2529,7 @@ void extract_icon(struct matrix_icon * icon)
       send_to_char(icon->decker->hitcher, "You return to your senses.\r\n");
       clear_hitcher(icon->decker->hitcher, FALSE);
     }
-    for (struct obj_data *obj = icon->decker->software, *temp; obj; obj = temp) {
+    for (struct obj_data *obj = icon->decker->software, *temp = nullptr; obj; obj = temp) {
       temp = obj->next_content;
       extract_obj(obj);
     }
@@ -2931,7 +2931,7 @@ void extract_char(struct char_data * ch, bool do_save)
 
     // Save the player.
     if (do_save)
-      playerDB.SaveChar(ch, GET_LOADROOM(ch));
+      SaveChar(ch, GET_LOADROOM(ch));
 
     // Hollow player body? Figure out who this was supposed to belong to and return them.
     if (!ch->desc) {

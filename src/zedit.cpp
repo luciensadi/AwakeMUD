@@ -67,7 +67,10 @@ void write_zone_to_disk(int vnum)
   char tmp_file_name[1000];
   snprintf(tmp_file_name, sizeof(tmp_file_name), "%s.tmp", final_file_name);
   
-  fp = fopen(tmp_file_name, "w+");
+  if (!(fp = fopen(tmp_file_name, "w+"))) {
+    perror("Error opening file in write_zone_to_disk()"); 
+    return;
+  }
 
   // write it out!
   fprintf(fp, "#%d\n", vnum);

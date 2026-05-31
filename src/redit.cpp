@@ -987,12 +987,6 @@ void redit_parse(struct descriptor_data * d, const char *arg)
     if ((number < 0) || (number > ROOM_MAX)) {
       send_to_char("That's not a valid choice!\r\n", d->character);
       redit_disp_flag_menu(d);
-#ifndef DEATH_FLAGS
-    } else if (number == ROOM_DEATH + 1) {
-      send_to_char("Sorry, death flags have been disabled in this game.\r\n", d->character);
-      ROOM->room_flags.RemoveBit(number-1);
-      redit_disp_flag_menu(d);
-#endif
     } else if ((number == ROOM_HELIPAD + 1 || number == ROOM_RUNWAY + 1)
                && !ROOM->room_flags.IsSet(number-1)
                && !access_level(CH, MIN_LEVEL_TO_CONFIGURE_AIRFIELDS))
@@ -1454,7 +1448,11 @@ void write_world_to_disk(vnum_t zone_vnum)
   char tmp_file_name[1000];
   snprintf(tmp_file_name, sizeof(tmp_file_name), "%s.tmp", final_file_name);
 
-  fp = fopen(tmp_file_name, "w+");
+  if (!(fp = fopen(tmp_file_name, "w+"))) {
+    perror("Error opening file in write_world_to_disk()"); 
+    return;
+  }
+
   for (counter = zone_table[znum].number * 100;
        counter <= zone_table[znum].top; counter++) {
     realcounter = real_room(counter);
@@ -1593,7 +1591,7 @@ void write_world_to_disk(vnum_t zone_vnum)
           if (ptr->barrier != DEFAULT_EXIT_BARRIER_RATING)
             fprintf(fp, "\tBarrier:\t%d\n", ptr->barrier);
 
-          if (DBIndex::IsValidV(ptr->key))
+          if (ptr->key > 0)
             fprintf(fp, "\tKeyVnum:\t%ld\n", ptr->key);
 
           if (ptr->key_level > 0)

@@ -27,10 +27,7 @@ public:
   {
     return filename;
   }
-  const char *Mode() const
-  {
-    return mode;
-  }
+  // const char *Mode() const { return mode; }
   int LineNumber() const  // only working for reading
   {
     return line_num;
@@ -40,7 +37,7 @@ public:
   {
     return (fl != NULL);
   }
-  inline bool IsWriteable() const;
+  // inline bool IsWriteable() const;
 
   bool EoF() const;
 

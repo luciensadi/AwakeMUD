@@ -128,7 +128,7 @@ class VTable
   section top;
 
 public:
-  int  NumSections() const;
+  // int  NumSections() const;
   int  NumSubsections(const char *sect);
   int  NumFields(const char *sect_name);
 
@@ -158,8 +158,11 @@ public:
   // returns the int of the nth field in section
   int GetIndexInt(const char *sect_name, int n, int defawlt);
 
+  /*
   const char *GetIndexString(const char *sect_name, int n,
                              const char *defawlt);
+  */
+
   // float GetIndexFloat();
 
   // bool AddInt(const char *where, int n);

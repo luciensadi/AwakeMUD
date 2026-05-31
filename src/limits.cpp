@@ -1049,7 +1049,7 @@ void point_update(void)
     if (!is_npc) {
       if (!cleanup_excess_elementals(i)) {
         // Cleanup function saves, so we only need to save if it did not do so already.
-        playerDB.SaveChar(i, GET_LOADROOM(i));
+        SaveChar(i, GET_LOADROOM(i));
       }
 
       AFF_FLAGS(i).RemoveBit(AFF_DAMAGED);

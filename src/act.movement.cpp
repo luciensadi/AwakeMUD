@@ -557,36 +557,6 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
     }
   }
 
-#ifdef DEATH_FLAGS
-  if (ROOM_FLAGGED(ch->in_room, ROOM_DEATH) && !IS_NPC(ch) && !IS_SENATOR(ch)) {
-    send_to_char("You feel the world slip into darkness, you better hope a wandering DocWagon finds you.\r\n", ch);
-    death_cry(ch, 0);
-    act("$n vanishes into thin air.", FALSE, ch, 0, 0, TO_ROOM);
-    death_penalty(ch);
-    for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content)
-      if (GET_OBJ_VAL(bio, 0) == BIO_PLATELETFACTORY)
-        GET_OBJ_VAL(bio, 5) = 24;
-      else if (GET_OBJ_VAL(bio, 0) == BIO_ADRENALPUMP) {
-        if (GET_OBJ_VAL(bio, 5) > 0)
-          for (int i = 0; i < MAX_OBJ_AFFECT; i++)
-            affect_modify(ch,
-                          bio->affected[i].location,
-                          bio->affected[i].modifier,
-                          bio->obj_flags.bitvector, FALSE);
-        GET_OBJ_VAL(bio, 5) = 0;
-      }
-    PLR_FLAGS(ch).SetBit(PLR_JUST_DIED);
-    PLR_FLAGS(ch).RemoveBit(PLR_DOCWAGON_READY);
-    if (CH_IN_COMBAT(ch))
-      stop_fighting(ch);
-    log_death_trap(ch);
-    char_from_room(ch);
-    char_to_room(ch, real_room(RM_SEATTLE_DOCWAGON));
-    extract_char(ch);
-   return 1;
-  }
-#endif
-
   if (ROOM_FLAGGED(ch->in_room, ROOM_FALL) && !IS_ASTRAL(ch) && !(IS_SENATOR(ch) && PRF_FLAGGED(ch, PRF_NOHASSLE)) && !AFF_FLAGGED(ch, AFF_LEVITATE)) {
     bool character_died;
     // We break the return code paradigm here to avoid having the code check follower data for a dead NPC.
@@ -718,38 +688,6 @@ bool perform_fall(struct char_data *ch)
     char_to_room(ch, was_in->dir_option[DOWN]->to_room);
     snprintf(buf, sizeof(buf), "^R$n %s in from above!^n", levels > 1 ? "plummets" : "falls");
     act(buf, TRUE, ch, 0, 0, TO_ROOM);
-#ifdef DEATH_FLAGS
-    if (ROOM_FLAGGED(ch->in_room, ROOM_DEATH) && !IS_NPC(ch) &&
-        !IS_SENATOR(ch)) {
-      send_to_char("You feel the world slip into darkness, you better hope a wandering DocWagon finds you.\r\n", ch);
-      death_cry(ch, 0);
-      act("$n vanishes into thin air.", FALSE, ch, 0, 0, TO_ROOM);
-      death_penalty(ch);
-      for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content)
-        if (GET_OBJ_VAL(bio, 0) == BIO_PLATELETFACTORY)
-          GET_OBJ_VAL(bio, 5) = 24;
-        else if (GET_OBJ_VAL(bio, 0) == BIO_ADRENALPUMP) {
-          if (GET_OBJ_VAL(bio, 5) > 0)
-            for (int i = 0; i < MAX_OBJ_AFFECT; i++)
-              affect_modify(ch,
-                            bio->affected[i].location,
-                            bio->affected[i].modifier,
-                            bio->obj_flags.bitvector, FALSE);
-          GET_OBJ_VAL(bio, 5) = 0;
-        }
-      PLR_FLAGS(ch).SetBit(PLR_JUST_DIED);
-      if (CH_IN_COMBAT(ch))
-        stop_fighting(ch);
-      snprintf(buf, sizeof(buf), "%s ran into DeathTrap at %ld",
-              GET_CHAR_NAME(ch), ch->in_room->number);
-      mudlog(buf, ch, LOG_DEATHLOG, TRUE);
-      char_from_room(ch);
-      char_to_room(ch, real_room(RM_SEATTLE_DOCWAGON));
-
-      extract_char(ch);
-      return TRUE;
-    }
-#endif
   }
 
   if (levels)

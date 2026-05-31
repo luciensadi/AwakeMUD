@@ -1863,7 +1863,10 @@ void write_mobs_to_disk(vnum_t zone_num)
   char tmp_file_name[1000];
   snprintf(tmp_file_name, sizeof(tmp_file_name), "%s.tmp", final_file_name);
 
-  fp = fopen(tmp_file_name, "w+");
+  if (!(fp = fopen(tmp_file_name, "w+"))) {
+    perror("Error opening file in write_mobs_to_disk()"); 
+    return;
+  }
 
   /* start running through all mobiles in this zone */
   for (counter = zone_table[znum].number * 100;

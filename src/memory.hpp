@@ -34,8 +34,6 @@ public:
   {
     return max_size;
   }
-  void Push(T *NewItem);
-  T *Pop();
   void PopDelete();
   bool StackIsEmpty()
   {
@@ -81,29 +79,6 @@ stackClass<T>::~stackClass()
 {
   while (top >= 0)
     PopDelete();
-}
-
-template <class T>
-void stackClass<T>::Push(T *NewItem)
-{
-  // make sure you have room in the array
-  if (top < max_size - 1) {
-    ++top;
-    Items[top] = NewItem;
-  } else { // if not, resize the array (larger), and re-Push the item
-    assert(ResizeStack());
-    Push(NewItem);
-  }
-}
-
-template <class T>
-T *stackClass<T>::Pop()
-{
-  if (top < 0)
-    return NULL;
-
-  --top;
-  return (Items[top + 1]);
 }
 
 template <class T>
@@ -165,14 +140,6 @@ public:
   memoryClass(const memoryClass& mClass);
 
   // size operations for general info
-  int ObjSize()
-  {
-    return Obj->Size();
-  }
-  int ChSize()
-  {
-    return Ch->Size();
-  }
   int RoomSize()
   {
     return Room->Size();
@@ -181,22 +148,6 @@ public:
   {
     return Veh->Size();
   }
-  int HostSize()
-  {
-    return Host->Size();
-  }
-  int IconSize()
-  {
-    return Icon->Size();
-  }
-  int ObjMaxSize()
-  {
-    return Obj->MaxSize();
-  }
-  int ChMaxSize()
-  {
-    return Ch->MaxSize();
-  }
   int RoomMaxSize()
   {
     return Room->MaxSize();
@@ -204,14 +155,6 @@ public:
   int VehMaxSize()
   {
     return Veh->MaxSize();
-  }
-  int HostMaxSize()
-  {
-    return Host->MaxSize();
-  }
-  int IconMaxSize()
-  {
-    return Icon->MaxSize();
   }
 
   // get routines which return objects from the different stacks

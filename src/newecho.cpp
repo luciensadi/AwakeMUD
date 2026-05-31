@@ -104,7 +104,7 @@ ACMD(do_highlight) {
   SETTABLE_CHAR_COLOR_HIGHLIGHT(ch) = str_dup(argument);
   send_to_char(ch, "OK, your highlight is now '%s' (%s*^n).\r\n", double_up_color_codes(GET_CHAR_COLOR_HIGHLIGHT(ch)), GET_CHAR_COLOR_HIGHLIGHT(ch));
 
-  playerDB.SaveChar(ch);
+  SaveChar(ch);
 }
 
 /* Technically, language is supposed to restrict the types of things you can understand.

@@ -2466,8 +2466,7 @@ int write_quests_to_disk(int zone) {
 
   if (!(fp = fopen(tmp_file_name, "w+"))) {
     log_vfprintf("SYSERR: could not open file %s", tmp_file_name);
-
-    fclose(fp);
+    perror("unable to open file in write_quests_to_disk()");
     return 0;
   }
 
@@ -2547,7 +2546,10 @@ int write_quests_to_disk(int zone) {
 
   // If we wrote anything for this zone, update the index file.
   if (wrote_something) {
-    fp = fopen("world/qst/index", "w+");
+    if (!(fp = fopen("world/qst/index", "w+"))) {
+      perror("Error opening file in write_quests_to_disk()"); 
+      return false;
+    }
 
     for (i = 0; i <= top_of_zone_table; ++i) {
       found = 0;

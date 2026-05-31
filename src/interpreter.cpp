@@ -3098,7 +3098,7 @@ void nanny(struct descriptor_data * d, char *arg)
         return;
       }
       if (does_player_exist(tmp_name)) {
-        d->character = playerDB.LoadChar(tmp_name, TRUE, PC_LOAD_REASON_ENTER_PASSWORD);
+        d->character = LoadChar(tmp_name, TRUE, PC_LOAD_REASON_ENTER_PASSWORD);
         d->character->desc = d;
 
         snprintf(buf, sizeof(buf), "Welcome back. Enter your password. Not %s? Enter 'abort' to try a different name. ", CAP(tmp_name));
@@ -3221,7 +3221,7 @@ void nanny(struct descriptor_data * d, char *arg)
         mudlog(buf, d->character, LOG_CONNLOG, TRUE);
         GET_BAD_PWS(d->character)++;
         d->character->in_room = &world[MAX(0, real_room(GET_LAST_IN(d->character)))];
-        playerDB.SaveChar(d->character, GET_LOADROOM(d->character));
+        SaveChar(d->character, GET_LOADROOM(d->character));
         if (++(d->bad_pws) >= max_bad_pws) {    /* 3 strikes and you're out. */
           SEND_TO_Q("Wrong password... disconnecting.\r\n", d);
           STATE(d) = CON_CLOSE;
@@ -3252,7 +3252,7 @@ void nanny(struct descriptor_data * d, char *arg)
       GET_BAD_PWS(d->character) = 0;
 
       d->character->in_room = &world[MAX(0, real_room(GET_LAST_IN(d->character)))];
-      playerDB.SaveChar(d->character, GET_LOADROOM(d->character));
+      SaveChar(d->character, GET_LOADROOM(d->character));
 
       // TODO: Don't these returns leak memory by not cleaning up d->character?
       if (isbanned(d->host) == BAN_SELECT &&
@@ -3300,7 +3300,7 @@ void nanny(struct descriptor_data * d, char *arg)
 
       DELETE_ARRAY_IF_EXTANT(d->character->player.host);
       d->character->player.host = str_dup(d->host);
-      playerDB.SaveChar(d->character);
+      SaveChar(d->character);
 
       mudlog_vfprintf(d->character, LOG_CONNLOG, "%s has connected%s.", GET_CHAR_NAME(d->character), PLR_FLAGGED(d->character,PLR_NOT_YET_AUTHED) ? " (UNAUTHORIZED)" : "");
       log_vfprintf("[CONNLOG: %s connecting from %s with fingerprint %s and JSON '''%s''']", GET_CHAR_NAME(d->character), d->host, get_descriptor_fingerprint(d), d->pProtocol ? STRING_TO_CSTR(d->pProtocol->new_environ_info.dump()) : "{}");
@@ -3360,10 +3360,10 @@ void nanny(struct descriptor_data * d, char *arg)
       ccr_pronoun_menu(d);
     } else {
       if (STATE(d) != CON_CHPWD_VRFY)
-        d->character = playerDB.LoadChar(GET_CHAR_NAME(d->character), TRUE, PC_LOAD_REASON_CON_QVERIFYPW);
+        d->character = LoadChar(GET_CHAR_NAME(d->character), TRUE, PC_LOAD_REASON_CON_QVERIFYPW);
       SEND_TO_Q("\r\nDone.\r\n", d);
       if (PLR_FLAGGED(d->character,PLR_NOT_YET_AUTHED)) {
-        playerDB.SaveChar(d->character);
+        SaveChar(d->character);
         SEND_TO_Q(MENU, d);
         STATE(d) = CON_MENU;
       }
@@ -3415,7 +3415,7 @@ void nanny(struct descriptor_data * d, char *arg)
           do_start(d->character, TRUE);
         }
 
-        playerDB.SaveChar(d->character, load_room_vnum);
+        SaveChar(d->character, load_room_vnum);
       }
       close_socket(d);
       break;
@@ -3433,7 +3433,7 @@ void nanny(struct descriptor_data * d, char *arg)
         strlcpy(char_name, GET_CHAR_NAME(d->character), sizeof(char_name));
         extract_char(d->character, FALSE);
 
-        d->character = playerDB.LoadChar(char_name, false, PC_LOAD_REASON_MAIN_MENU_1);
+        d->character = LoadChar(char_name, false, PC_LOAD_REASON_MAIN_MENU_1);
         d->character->desc = d;
         PLR_FLAGS(d->character).RemoveBits(PLR_JUST_DIED, PLR_DOCWAGON_READY, ENDBIT);
         if (PLR_FLAGGED(d->character, PLR_NEWBIE)) {
@@ -3467,7 +3467,7 @@ void nanny(struct descriptor_data * d, char *arg)
           PLR_FLAGS(d->character).SetBit(PLR_PERCEIVE);
         }
 
-        playerDB.SaveChar(d->character, GET_LOADROOM(d->character));
+        SaveChar(d->character, GET_LOADROOM(d->character));
       }
       // Wipe out various pointers related to game state and recalculate carry weight.
       reset_char(d->character);
@@ -3603,12 +3603,12 @@ void nanny(struct descriptor_data * d, char *arg)
           do_start(d->character, TRUE);
         }
 
-        playerDB.SaveChar(d->character, GET_ROOM_VNUM(&world[load_room_rnum]));
+        SaveChar(d->character, GET_ROOM_VNUM(&world[load_room_rnum]));
         send_to_char(START_MESSG, d->character);
       } else {
         // Save their updated load room.
         if (GET_LOADROOM(d->character) != load_room_vnum && load_room_vnum != GET_LAST_IN(d->character)) {
-          playerDB.SaveChar(d->character, GET_ROOM_VNUM(&world[load_room_rnum]));
+          SaveChar(d->character, GET_ROOM_VNUM(&world[load_room_rnum]));
         }
 
         send_to_char(WELC_MESSG, d->character);
