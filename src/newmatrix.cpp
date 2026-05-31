@@ -370,10 +370,9 @@ bool dumpshock(struct matrix_icon *icon)
 {
   if (!icon) return FALSE;
 
-  struct char_data *ch = icon->decker->ch;
-
-  if (icon->decker && ch)
+  if (icon->decker && icon->decker->ch)
   {
+    struct char_data *ch = icon->decker->ch;
     send_to_char(ch, "You are dumped from the matrix!\r\n");
     snprintf(buf, sizeof(buf), "%s^n depixelates and vanishes from the host.\r\n", CAP(icon->name));
     send_to_host(icon->in_host, buf, icon, FALSE);
