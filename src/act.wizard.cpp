@@ -83,9 +83,12 @@ extern int max_ability(int i);
 extern int count_objects(struct obj_data *obj);
 extern void list_mob_precast_spells_to_ch(struct char_data *mob, struct char_data *ch);
 extern const char *get_faction_name(idnum_t idnum, struct char_data *viewer);
+
+#ifdef USE_ZONE_HOTLOADING
 extern void modify_players_in_zone(rnum_t in_zone, int amount, const char *origin);
 extern void modify_players_in_veh(struct veh_data *veh, int amount, const char *origin);
 extern void hotload_zone(rnum_t zone_idx);
+#endif
 
 extern const char *wound_arr[];
 extern const char *material_names[];
@@ -2438,6 +2441,7 @@ ACMD(do_wizpossess)
             GET_CHAR_NAME(ch),GET_NAME(victim));
     mudlog(buf, ch, LOG_WIZLOG, TRUE);
 
+#ifdef USE_ZONE_HOTLOADING
     // Add the possessing staff record to the vehicle and room they're in.
     if (victim->in_veh) {
       modify_players_in_veh(victim->in_veh, +1, "staff possession");
@@ -2446,6 +2450,7 @@ ACMD(do_wizpossess)
       rnum_t in_zone = get_ch_in_room(victim)->zone;
       modify_players_in_zone(in_zone, +1, "staff possession");
     }
+#endif
 
     victim->desc = ch->desc;
     ch->desc = NULL;
@@ -2484,6 +2489,7 @@ ACMD(do_return)
         // Staff switch. Pull their zone and vehicle player tracker info.
         PLR_FLAGS(ch->desc->original).RemoveBit(PLR_SWITCHED);
 
+#ifdef USE_ZONE_HOTLOADING
         // Remove the possessing staff record from the vehicle and room they're in.
         if (ch->in_veh) {
           modify_players_in_veh(ch->in_veh, -1, "do_return (staff possession)");
@@ -2492,6 +2498,7 @@ ACMD(do_return)
           rnum_t in_zone = get_ch_in_room(ch)->zone;
           modify_players_in_zone(in_zone, -1, "do_return (staff possession)");
         }
+#endif
       }
 
       /* JE 2/22/95 */
@@ -4437,7 +4444,9 @@ ACMD(do_zreset)
     for (i = 0; i <= top_of_zone_table; i++) {
       // Ensure it's loaded.
       zone_table[i].last_player_action = time(0);
+#ifdef USE_ZONE_HOTLOADING
       hotload_zone(i);
+#endif
       // Reset it.
       reset_zone(i, 0);
     }

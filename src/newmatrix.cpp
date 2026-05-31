@@ -4442,8 +4442,10 @@ ACMD(do_create)
     return;
   }
 
+#ifdef USE_DISCORD_RICH_PRESENCE
   // Update their GMCP status to reflect their new icon.
   update_gmcp_discord_info(ch->desc);
+#endif
 }
 
 ACMD(do_matrix_max)

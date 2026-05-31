@@ -174,17 +174,19 @@ extern void load_saved_veh(bool purge_existing);
 extern void save_vehicles(bool);
 extern void debug_pet_menu(struct char_data *ch);
 
+#ifdef USE_DISCORD_RICH_PRESENCE
 extern void SendGMCPDiscordInfo ( descriptor_t *apDescriptor );
 extern void SendGMCPDiscordStatus ( descriptor_t *apDescriptor );
 extern void SendCustomGMCPDiscordStatus ( descriptor_t *apDescriptor, const char *smallimage, const char *smallimagetext, const char *details, const char *state);
-
-extern fs::path global_vehicles_dir;
 
 // Discord debug vars.
 char _discord_state[200] = {0};
 char _discord_details[200] = {0};
 char _discord_smallimage[100] = {0};
 char _discord_smallimagetext[200] = {0};
+#endif
+
+extern fs::path global_vehicles_dir;
 
 void derpify(const char *phrase, std::initializer_list<const char *> fill_words, struct char_data *ch) {
   std::optional<std::vector<const char *>> argparse(const char *input, std::initializer_list<const char *> fill_words, struct char_data *ch);
@@ -407,12 +409,14 @@ ACMD(do_debug) {
     return;
   }
 
+#ifdef USE_ZONE_HOTLOADING
   if (!str_cmp(arg1, "offloadzones")) {
     send_to_char(ch, "OK, offloading all zones that don't have PCs in them...\r\n");
     attempt_to_offload_unused_zones();
     send_to_char(ch, "Done.\r\n");
     return;
   }
+#endif
 
   if (!str_cmp(arg1, "test_argparse")) {
     derpify(" test input phrase", {}, ch);
@@ -423,12 +427,14 @@ ACMD(do_debug) {
     return;
   }
 
+#ifdef USE_ZONE_HOTLOADING
   if (!str_cmp(arg1, "cleanup_zone_pcs")) {
     send_to_char(ch, "OK, validating zone and vehicle character counts...\r\n");
     recalculate_whole_game_players_in_zone();
     send_to_char(ch, "Done.\r\n");
     return;
   }
+#endif
 
   struct sustain_data_no_init {
     ush_int spell;
@@ -589,6 +595,7 @@ ACMD(do_debug) {
     return;
   }
 
+#ifdef USE_DISCORD_RICH_PRESENCE
   if (!str_cmp(arg1, "discord")) {
     rest_of_argument = any_one_arg(rest_of_argument, arg2);
 
@@ -634,6 +641,7 @@ ACMD(do_debug) {
     SendCustomGMCPDiscordStatus(ch->desc, _discord_smallimage, _discord_smallimagetext, _discord_details, _discord_state);
     return;
   }
+#endif
 
   if (!str_cmp(arg1, "idledelete")) {
     idnum_t idnum = atol(rest_of_argument);

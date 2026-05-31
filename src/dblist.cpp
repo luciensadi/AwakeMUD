@@ -75,12 +75,6 @@ int objList::PrintBelongings(struct char_data *ch)
   return num;
 }
 
-void objList::Traverse(void (*func)(struct obj_data *))
-{
-  for (nodeStruct<struct obj_data *> *temp = head; temp; temp = temp->next)
-    func(temp->data);
-}
-
 #ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
 void objList::CheckPointers()
 {

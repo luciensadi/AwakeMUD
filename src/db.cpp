@@ -804,8 +804,10 @@ void DBInit()
     // log("Written.");
   }
 
+#ifdef USE_ZONE_HOTLOADING
   log("Offloading all zones now that we've loaded J's, specs, etc...");
   attempt_to_offload_unused_zones();
+#endif
 
   log("Migrating pocket secretaries in database.");
   migrate_pocket_secretaries_in_database();

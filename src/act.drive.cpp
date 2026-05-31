@@ -38,8 +38,11 @@ extern int max_npc_vehicle_lootwreck_time;
 extern void rectify_desc_host(struct descriptor_data *desc);
 extern int get_obj_vehicle_load_usage(struct obj_data *obj, bool is_installed_mod);
 extern void recalculate_vehicle_usedload(struct veh_data *veh);
+
+#ifdef USE_ZONE_HOTLOADING
 extern void modify_players_in_zone(rnum_t in_zone, int amount, const char *origin);
 extern void modify_players_in_veh(struct veh_data *veh, int amount, const char *origin);
+#endif
 
 #define VEH ch->in_veh
 
@@ -2517,12 +2520,14 @@ void start_rigging(struct char_data *ch, struct veh_data *veh, bool is_remote) {
 
   if (is_remote) {
     PLR_FLAGS(ch).SetBit(PLR_REMOTE);
+#ifdef USE_ZONE_HOTLOADING
     // Add them to the vehicle's player counter AND the zone's player counter.
     modify_players_in_veh(veh, +1, "start_rigging");
     if (get_veh_in_room(veh)) {
       rnum_t in_zone = get_veh_in_room(veh)->zone;
       modify_players_in_zone(in_zone, +1, "start_rigging");
     }
+#endif
   } else {
     AFF_FLAGS(ch).SetBits(AFF_PILOT, AFF_RIG);
   }
@@ -2551,12 +2556,14 @@ void stop_rigging(struct char_data *ch, bool send_message) {
   stop_vehicle(veh);
 
   if (PLR_FLAGGED(ch, PLR_REMOTE)) {
+#ifdef USE_ZONE_HOTLOADING
     // Remove them from the zone's player counter AND the vehicle's player counter.
     modify_players_in_veh(veh, -1, "stop_rigging");
     if (get_veh_in_room(veh)) {
       rnum_t in_zone = get_veh_in_room(veh)->zone;
       modify_players_in_zone(in_zone, -1, "stop_rigging");
     }
+#endif
   }
 
   // Clear their pointers and flags.

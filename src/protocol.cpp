@@ -1333,6 +1333,7 @@ void MSDPUpdate( descriptor_t *apDescriptor )
   }
 }
 
+/*
 void MSDPFlush( descriptor_t *apDescriptor, variable_t aMSDP )
 {
   if ( aMSDP > eMSDP_NONE && aMSDP < eMSDP_MAX )
@@ -1347,6 +1348,7 @@ void MSDPFlush( descriptor_t *apDescriptor, variable_t aMSDP )
     }
   }
 }
+*/
 
 void MSDPSend( descriptor_t *apDescriptor, variable_t aMSDP )
 {
@@ -1547,6 +1549,7 @@ void MSDPSetString( descriptor_t *apDescriptor, variable_t aMSDP, const char *ap
   }
 }
 
+/*
 void MSDPSetTable( descriptor_t *apDescriptor, variable_t aMSDP, const char *apValue )
 {
   protocol_t *pProtocol = apDescriptor ? apDescriptor->pProtocol : NULL;
@@ -1555,7 +1558,7 @@ void MSDPSetTable( descriptor_t *apDescriptor, variable_t aMSDP, const char *apV
   {
     if ( *apValue == '\0' )
     {
-      /* It's easier to call MSDPSetString if the value is empty */
+      // It's easier to call MSDPSetString if the value is empty
       MSDPSetString(apDescriptor, aMSDP, apValue);
     }
     else if ( VariableNameTable[aMSDP].bString )
@@ -1564,7 +1567,7 @@ void MSDPSetTable( descriptor_t *apDescriptor, variable_t aMSDP, const char *apV
       const char MsdpTableStop[]  = { (char)MSDP_TABLE_CLOSE, '\0' };
 
       const size_t pTableSize = strlen(apValue) + 3;
-      char *pTable = new char[pTableSize]; /* 3: START, STOP, NUL */
+      char *pTable = new char[pTableSize]; // 3: START, STOP, NUL
 
       strlcpy(pTable, MsdpTableStart, pTableSize);
       strlcat(pTable, apValue, pTableSize);
@@ -1576,14 +1579,16 @@ void MSDPSetTable( descriptor_t *apDescriptor, variable_t aMSDP, const char *apV
         pProtocol->pVariables[aMSDP]->pValueString = pTable;
         pProtocol->pVariables[aMSDP]->bDirty = TRUE;
       }
-      else /* Just discard the table, we've already got one */
+      else // Just discard the table, we've already got one
       {
         delete [] pTable;
       }
     }
   }
 }
+*/
 
+/*
 void MSDPSetArray( descriptor_t *apDescriptor, variable_t aMSDP, const char *apValue )
 {
   protocol_t *pProtocol = apDescriptor ? apDescriptor->pProtocol : NULL;
@@ -1592,7 +1597,7 @@ void MSDPSetArray( descriptor_t *apDescriptor, variable_t aMSDP, const char *apV
   {
     if ( *apValue == '\0' )
     {
-      /* It's easier to call MSDPSetString if the value is empty */
+      // It's easier to call MSDPSetString if the value is empty
       MSDPSetString(apDescriptor, aMSDP, apValue);
     }
     else if ( VariableNameTable[aMSDP].bString )
@@ -1601,7 +1606,7 @@ void MSDPSetArray( descriptor_t *apDescriptor, variable_t aMSDP, const char *apV
       const char MsdpArrayStop[]  = { (char)MSDP_ARRAY_CLOSE, '\0' };
 
       const size_t pArrayLen = strlen(apValue) + 3;
-      char *pArray = new char[pArrayLen]; /* 3: START, STOP, NUL */
+      char *pArray = new char[pArrayLen]; // 3: START, STOP, NUL
 
       strlcpy(pArray, MsdpArrayStart, pArrayLen);
       strlcat(pArray, apValue, pArrayLen);
@@ -1613,13 +1618,14 @@ void MSDPSetArray( descriptor_t *apDescriptor, variable_t aMSDP, const char *apV
         pProtocol->pVariables[aMSDP]->pValueString = pArray;
         pProtocol->pVariables[aMSDP]->bDirty = TRUE;
       }
-      else /* Just discard the array, we've already got one */
+      else // Just discard the array, we've already got one
       {
         delete [] pArray;
       }
     }
   }
 }
+*/
 
 /******************************************************************************
  MSSP global functions.
@@ -1637,6 +1643,7 @@ void MSSPSetPlayers( int aPlayers )
  MXP global functions.
  ******************************************************************************/
 
+/*
 const char *MXPCreateTag( descriptor_t *apDescriptor, const char *apTag )
 {
   protocol_t *pProtocol = apDescriptor ? apDescriptor->pProtocol : NULL;
@@ -1648,11 +1655,12 @@ const char *MXPCreateTag( descriptor_t *apDescriptor, const char *apTag )
     snprintf( MXPBuffer, sizeof(MXPBuffer), "\033[1z%s\033[7z", apTag );
     return MXPBuffer;
   }
-  else /* Leave the tag as-is, don't try to MXPify it */
+  else // Leave the tag as-is, don't try to MXPify it
   {
     return apTag;
   }
 }
+*/
 
 void MXPSendTag( descriptor_t *apDescriptor, const char *apTag )
 {
@@ -1695,9 +1703,10 @@ void MXPSendTag( descriptor_t *apDescriptor, const char *apTag )
  Sound global functions.
  ******************************************************************************/
 
+ /*
 void SoundSend( descriptor_t *apDescriptor, const char *apTrigger )
 {
-  const int MaxTriggerLength = 128; /* Used for the buffer size */
+  const int MaxTriggerLength = 128; // Used for the buffer size
 
   if ( apDescriptor != NULL && apTrigger != NULL )
   {
@@ -1707,12 +1716,12 @@ void SoundSend( descriptor_t *apDescriptor, const char *apTrigger )
     {
       if ( pProtocol->bMSDP || pProtocol->bATCP )
       {
-        /* Send the sound trigger through MSDP or ATCP */
+        // Send the sound trigger through MSDP or ATCP
         MSDPSendPair( apDescriptor, "PLAY_SOUND", apTrigger );
       }
       else if ( strlen(apTrigger) <= MaxTriggerLength )
       {
-        /* Use an old MSP-style trigger */
+        // Use an old MSP-style trigger
         size_t length = MaxTriggerLength+10;
         char *pBuffer = new char[length];
         snprintf( pBuffer, length, "\t!SOUND(%s)", apTrigger );
@@ -1722,6 +1731,7 @@ void SoundSend( descriptor_t *apDescriptor, const char *apTrigger )
     }
   }
 }
+*/
 
 /******************************************************************************
  Colour global functions.

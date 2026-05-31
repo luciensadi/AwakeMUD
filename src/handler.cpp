@@ -2529,12 +2529,12 @@ void extract_icon(struct matrix_icon * icon)
       send_to_char(icon->decker->hitcher, "You return to your senses.\r\n");
       clear_hitcher(icon->decker->hitcher, FALSE);
     }
-    for (struct obj_data *obj = icon->decker->software, *temp = nullptr; obj; obj = temp) {
-      temp = obj->next_content;
+    for (struct obj_data *obj = icon->decker->software, *temp_obj = nullptr; obj; obj = temp_obj) {
+      temp_obj = obj->next_content;
       extract_obj(obj);
     }
-    for (struct seen_data *seen = icon->decker->seen, *temp2; seen; seen = temp2) {
-      temp2 = seen->next;
+    for (struct seen_data *seen = icon->decker->seen, *temp_seen; seen; seen = temp_seen) {
+      temp_seen = seen->next;
       delete seen;
     }
     // Clear the deck if this is an otaku

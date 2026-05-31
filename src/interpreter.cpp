@@ -2890,6 +2890,7 @@ int perform_dupe_check(struct descriptor_data *d)
             GET_CHAR_NAME(d->character));
     mudlog(buf, d->character, LOG_CONNLOG, TRUE);
     log_vfprintf("[CONNLOG: %s has reconnected from %s]", GET_CHAR_NAME(d->character), d->host);
+#ifdef USE_ZONE_HOTLOADING
     {
       struct room_data *in_room = (d->character ? get_ch_in_room(d->character) : NULL);
       if (in_room) {
@@ -2899,6 +2900,7 @@ int perform_dupe_check(struct descriptor_data *d)
         recalculate_whole_game_players_in_zone();
       }
     }
+#endif
     break;
   case USURP:
     SEND_TO_Q("You take over your own body, already in use!\r\n", d);

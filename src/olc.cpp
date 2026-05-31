@@ -1071,8 +1071,11 @@ ACMD (do_iedit)
 #else
 
     iedit_disp_menu(d);
+
+#ifdef USE_DISCORD_RICH_PRESENCE
     update_gmcp_discord_info(d);
-#endif
+#endif // discord
+#endif // not confirm_existing
 
     return;
   } else {
@@ -1092,7 +1095,9 @@ ACMD (do_iedit)
     d->edit_obj->obj_flags.condition = d->edit_obj->obj_flags.barrier = 1;
 
     d->edit_mode = IEDIT_CONFIRM_EDIT;
+#ifdef USE_DISCORD_RICH_PRESENCE
     update_gmcp_discord_info(d);
+#endif
 
     return;
   }

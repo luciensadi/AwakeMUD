@@ -1554,15 +1554,6 @@ char *buf_mod(char *rbuf, size_t rbuf_len, const char *name, int bonus)
   return rbuf;
 }
 
-char *buf_roll(char *rbuf, size_t rbuf_len, const char *name, int bonus)
-{
-  if (!rbuf)
-    return rbuf;
-  rbuf += strlen(rbuf);
-  snprintf(rbuf, rbuf_len, " [%s %d]", name, bonus);
-  return rbuf;
-}
-
 int get_speed(struct veh_data *veh)
 {
   int speed = 0, maxspeed = (int)(veh->speed * ((veh->load - veh->usedload) / (!FLOATS_ARE_EQUAL_ISH(veh->load, 0.0f) ? veh->load : 1)));

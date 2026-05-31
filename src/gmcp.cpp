@@ -28,7 +28,9 @@ using nlohmann::json;
 
 #define DISCORD_BUFFER_SIZE 200
 
+#ifdef USE_DISCORD_RICH_PRESENCE
 void generate_discord_details(descriptor_t *apDescriptor, char *smallimage, char *smallimagetext, char *details, char *state);
+#endif
 
 static void Write( descriptor_t *apDescriptor, const char *apData )
 {
@@ -69,6 +71,7 @@ void SendGMCPCoreSupports ( descriptor_t *apDescriptor )
   SendGMCP(apDescriptor, "Core.Supports", STRING_TO_CSTR(payload));
 }
 
+#ifdef USE_DISCORD_RICH_PRESENCE
 void RegisterGMCPDiscordHello( descriptor_t *apDescriptor, const json &payload )
 {
   // Log their Discord username for the character. Later on we'll associate this in a more permanent manner.
@@ -161,6 +164,7 @@ void SendCustomGMCPDiscordStatus ( descriptor_t *apDescriptor, const char *small
 
   log_vfprintf("Sending GMCP Discord status to %s: %s", GET_CHAR_NAME(apDescriptor->character), STRING_TO_CSTR(payload));
 }
+#endif
 
 void SendGMCPMatrixInfo ( struct char_data *ch )
 {
@@ -547,6 +551,7 @@ void ParseGMCP( descriptor_t *apDescriptor, const char *apData )
 
 /////// Helper functions.
 
+#ifdef USE_DISCORD_RICH_PRESENCE
 const char *generate_discord_quest_string(idnum_t quest_rnum) {
   static char result[100] = {0};
 
@@ -747,3 +752,4 @@ void update_gmcp_discord_info(struct descriptor_data *desc) {
   }
 #endif
 }
+#endif // USE_DISCORD_RICH_PRESENCE

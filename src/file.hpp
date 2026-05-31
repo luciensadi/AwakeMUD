@@ -47,7 +47,6 @@ public:
   bool Close();
 
   void Rewind();
-  inline int  Seek(long offset, int origin);
 
   // '*' at the beginning of a line marks it as a comment,
   // strips the newline,
@@ -56,11 +55,6 @@ public:
   // reads a '~'-terminated string from the file, returns a newly-allocated
   // string.  Much like fread_string, only better.
   char *ReadString(const char* section);
-
-  // only works if vfprintf is defined
-  // Note: this DOESN'T work on my slack8 machine, so I'd advise avoiding it
-  //     : altogether for now.  Maybe sooner or later (maybe).
-  int  Print(const char *format, ...);
 };
 
 #endif // ifndef __file_h__

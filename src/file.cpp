@@ -84,11 +84,6 @@ void File::Rewind()
   line_num = 0;
 }
 
-int  File::Seek(long offset, int origin)
-{
-  return fseek(fl, offset, origin);
-}
-
 bool File::GetLine(char *buf, size_t buf_size, bool blank)
 {
   while (!feof(fl)) {
@@ -190,21 +185,4 @@ char *File::ReadString(const char* section)
   }
 
   return NULL;
-}
-
-int  File::Print(const char *format, ...)
-{
-#ifdef vfprintf
-
-  va_list arg_list;
-
-  va_start(arg_list, format);
-  int res = vfprintf(fl, format, arg_list);
-  va_end(arg_list);
-
-  return res;
-#else
-
-  return 0;
-#endif
 }

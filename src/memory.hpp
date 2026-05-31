@@ -35,10 +35,6 @@ public:
     return max_size;
   }
   void PopDelete();
-  bool StackIsEmpty()
-  {
-    return (top < 0 ? 1 : 0);
-  }
 
 private:
   // private data for the stack
@@ -94,35 +90,6 @@ void stackClass<T>::PopDelete()
   delete (Items[top + 1]);
 }
 
-template <class T>
-bool stackClass<T>::ResizeStack()
-{
-  // create a new stack array larger than the previous
-  T **NewItems;
-
-  NewItems = new T*[max_size + STACK_SIZE_INCREASE];
-
-  // now copy the old stack array into the new one
-  for (int Index = 0; Index <= top; ++Index)
-    NewItems[Index] = Items[Index];
-
-  // delete the elements of the old stack
-  // what were you thinking, Chris?  DO NOT delete the elements of the stack,
-  // as we just passed the pointers to them above!  Just get rid of the array
-  // itself
-  //  delete [] *Items;
-  delete Items;
-  // point Items to the new stack now
-  Items = NewItems;
-
-  max_size += STACK_SIZE_INCREASE;
-
-  char log_buf[1000];
-  snprintf(log_buf, sizeof(log_buf), "Resizing Stack (%d to %d)...", max_size - STACK_SIZE_INCREASE, max_size);
-  mudlog(log_buf, NULL, LOG_SYSLOG, TRUE);
-  return TRUE;
-}
-
 class memoryClass
 {
 private:
@@ -138,24 +105,6 @@ public:
   memoryClass();
   ~memoryClass();
   memoryClass(const memoryClass& mClass);
-
-  // size operations for general info
-  int RoomSize()
-  {
-    return Room->Size();
-  }
-  int VehSize()
-  {
-    return Veh->Size();
-  }
-  int RoomMaxSize()
-  {
-    return Room->MaxSize();
-  }
-  int VehMaxSize()
-  {
-    return Veh->MaxSize();
-  }
 
   // get routines which return objects from the different stacks
   struct obj_data *GetObject();

@@ -115,7 +115,6 @@ static int exit_code = SUCCESS;
 int circle_reboot = 0;          /* reboot the game after a shutdown */
 int no_specials = 0;            /* Suppress ass. of special routines */
 int max_players = 0;            /* max descriptors available */
-int tics = 0;                   /* for extern checkpointing */
 int scheck = 0;                 /* for syntax checking mode */
 extern int nameserver_is_slow;  /* see config.c */
 struct timeval zero_time;       // zero-valued time structure, used to be
@@ -1067,7 +1066,9 @@ void game_loop(int mother_desc)
       // Send GMCP Vitals
       for (d = descriptor_list; d; d = next_d) {
         next_d = d->next;
+#ifdef USE_DISCORD_RICH_PRESENCE
         update_gmcp_discord_info(d);
+#endif
       }
     }
 #endif
@@ -1175,8 +1176,10 @@ void game_loop(int mother_desc)
 
     // Every MUD hour
     if (!(pulse % (SECS_PER_MUD_HOUR * PASSES_PER_SEC))) {
+#ifdef USE_ZONE_HOTLOADING
       // This is the big laggy pulse, so offload whatever we can before digging into the rest of this.
       attempt_to_offload_unused_zones();
+#endif
 
       matrix_hour_update();
       point_update();
@@ -1303,8 +1306,6 @@ void game_loop(int mother_desc)
       verify_every_pointer_we_can_think_of();
     }
 #endif
-
-    tics++;                     /* tics since last checkpoint signal */
   }
 
   // Shutdown is handled in the greater loop above: search for DBFinalize().
@@ -2796,16 +2797,6 @@ void shutdown(int code)
 /* ******************************************************************
  *  signal-handling functions (formerly signals.c)                   *
  ****************************************************************** */
-
-
-void checkpointing(int Empty)
-{
-  if (!tics) {
-    log("SYSERR: CHECKPOINT shutdown: tics not updated");
-    abort();
-  } else
-    tics = 0;
-}
 
 void free_up_memory(int Empty)
 {
