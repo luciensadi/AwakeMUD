@@ -1,6 +1,8 @@
 /* A stub file to allow compilation of the game in the absence of the actual secrets.cpp file.
    The info in that file is kept out of the repo to avoid spoilers for Awake CE. */
 
+#ifndef USE_PRIVATE_CE_WORLD
+
 #include "structs.hpp"
 
 SPECIAL(marksmanship_trainer) { return false; }
@@ -16,3 +18,5 @@ void rewrite_hidden_site(struct descriptor_data *d) {}
 void perform_secret_room_assignments() {}
 void perform_secret_mob_assignments() {}
 void perform_secret_obj_assignments() {}
+
+#endif
