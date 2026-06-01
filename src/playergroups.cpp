@@ -1009,9 +1009,11 @@ void do_pgroup_roster(struct char_data *ch, char *argument) {
   pgroup_roster_data *roster_data = NULL;
   while ((row = mysql_fetch_row(res))) {
     idnum_t idnum = atoi(row[0]);
+    /*
     if (!does_player_exist(idnum)) {
       continue;
     }
+    */
 
     roster_data = new struct pgroup_roster_data;
     roster_data->idnum = idnum;

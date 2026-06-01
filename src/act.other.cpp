@@ -2723,7 +2723,7 @@ void cedit_parse(struct descriptor_data *d, char *arg)
     switch (*arg) {
     case 'y':
     case 'Y':
-      d->edit_mob = Mem->GetCh();
+      d->edit_mob = GetCh();
       d->edit_mob->player_specials = new player_special_data;
 
       // Copy over lifestyle-impacting information.
@@ -2869,7 +2869,7 @@ void cedit_parse(struct descriptor_data *d, char *arg)
       }
 
       if (d->edit_mob) {
-        Mem->DeleteCh(d->edit_mob);
+        DeleteCh(d->edit_mob);
       }
 
       d->edit_mob = NULL;
@@ -2885,7 +2885,7 @@ void cedit_parse(struct descriptor_data *d, char *arg)
       PLR_FLAGS(CH).RemoveBit(PLR_CUSTOMIZE);
 
       if (d->edit_mob)
-        Mem->DeleteCh(d->edit_mob);
+        DeleteCh(d->edit_mob);
 
       d->edit_mob = NULL;
       d->edit_mode = 0;

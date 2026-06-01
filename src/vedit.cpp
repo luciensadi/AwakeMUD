@@ -24,8 +24,6 @@
 
 #define VEH     d->edit_veh
 
-extern class memoryClass *Mem;
-
 void write_vehs_to_disk(int zone);
 
 // extern funcs
@@ -140,7 +138,7 @@ void vedit_parse(struct descriptor_data * d, const char *arg)
       STATE(d) = CON_PLAYING;
       /* free up the editing vehicle */
       if (d->edit_veh)
-        Mem->DeleteVehicle(d->edit_veh);
+        DeleteVehicle(d->edit_veh);
       d->edit_veh = NULL;
       d->edit_number = 0;
       PLR_FLAGS(d->character).RemoveBit(PLR_EDITING);
@@ -174,7 +172,7 @@ void vedit_parse(struct descriptor_data * d, const char *arg)
            * with the new one */
           for (struct veh_data *i = veh_list; i; i = i->next) {
             if (veh_number == i->veh_number) {
-              temp = Mem->GetVehicle();
+              temp = GetVehicle();
               *temp = *i;
               *i = *d->edit_veh;
               /* copy game-time dependent vars over */
@@ -335,7 +333,7 @@ if (d->edit_veh->ITEM && veh_proto[veh_number].ITEM && d->edit_veh->ITEM != veh_
       /* free up the editing vehicle. free_veh *is* safe since
          it checks against prototype table */
       if (d->edit_veh)
-        Mem->DeleteVehicle(d->edit_veh);
+        DeleteVehicle(d->edit_veh);
       d->edit_veh = NULL;
       d->edit_number = 0;
       PLR_FLAGS(d->character).RemoveBit(PLR_EDITING);
@@ -712,7 +710,7 @@ void write_vehs_to_disk(int zone)
 
   zone = real_zone(zone);
 
-  veh = Mem->GetVehicle();
+  veh = GetVehicle();
 
   char final_file_name[1000];
   snprintf(final_file_name, sizeof(final_file_name), "%s/%d.veh", VEH_PREFIX, zone_table[zone].number);

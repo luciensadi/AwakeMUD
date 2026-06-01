@@ -8472,26 +8472,6 @@ int crapcount_target(struct char_data *victim, struct char_data *viewer) {
   return total_crap;
 }
 
-// Iterate through all active connections and warn them if their crapcount is high.
-void send_crapcount_warnings() {
-  for (struct descriptor_data *d = descriptor_list; d; d = d->next) {
-    struct char_data *vict = d->original ? d->original : d->character;
-    if (d->idle_ticks < 60 && vict) {
-      int crap_count = crapcount_target(vict, NULL);
-
-      if (crap_count >= CRAP_COUNT_EXTREME) {
-        send_to_char(vict, "(OOC note): ^RYour total item count is excessively high at %d.^n\r\n"
-                           "Please sell or junk unwanted items. If you are unable to do so, staff will assist in reducing your item count.\r\n", crap_count);
-      } else if (crap_count >= CRAP_COUNT_VERY_HIGH) {
-        send_to_char(vict, "(OOC note): ^rYour total item count is very high at ^R%d^r.^n\r\n"
-                           "Please sell or junk unwanted items. If you'd like, staff can assist in reducing your item count.\r\n", crap_count);
-      } else if (crap_count >= CRAP_COUNT_HIGH) {
-        send_to_char(vict, "(OOC note): Your total item count is high at %d. Please consider selling or junking unwanted items to reduce game load.\r\n", crap_count);
-      }
-    }
-  }
-}
-
 ACMD(do_count) {
   skip_spaces(&argument);
   long dummy_cash = 0;

@@ -31,7 +31,6 @@
 #include "newhouse.hpp"
 #include "zoomies.hpp"
 
-extern class memoryClass *Mem;
 extern std::map<std::string, int> room_flag_map;
 
 #define ROOM d->edit_room
@@ -430,7 +429,7 @@ void redit_parse(struct descriptor_data * d, const char *arg)
       /* player doesn't want to edit, free entire temp room */
       STATE(d) = CON_PLAYING;
       if (d->edit_room)
-        Mem->DeleteRoom(d->edit_room);
+        DeleteRoom(d->edit_room);
       d->edit_room = NULL;
       PLR_FLAGS(d->character).RemoveBit(PLR_EDITING);
         char_to_room(CH, GET_WAS_IN(CH));
@@ -497,7 +496,7 @@ void redit_parse(struct descriptor_data * d, const char *arg)
             if (!resize_world_array()) {
               send_to_char("Unable to save, OLC temporarily unavailable.\r\n"
                            ,CH);
-              Mem->DeleteRoom(d->edit_room);
+              DeleteRoom(d->edit_room);
               olc_state = 0;
               d->edit_room = NULL;
               PLR_FLAGS(d->character).RemoveBit(PLR_EDITING);
@@ -662,7 +661,7 @@ void redit_parse(struct descriptor_data * d, const char *arg)
       send_to_char("Room not saved, aborting.\r\n", d->character);
       /* free everything up, including strings etc */
       if (d->edit_room)
-        Mem->DeleteRoom(d->edit_room); // this is set to NULL in clear_editing_data().
+        DeleteRoom(d->edit_room); // this is set to NULL in clear_editing_data().
       char_to_room(CH, GET_WAS_IN(CH));
       GET_WAS_IN(CH) = NULL;
       STATE(d) = CON_PLAYING;

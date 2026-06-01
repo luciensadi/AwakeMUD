@@ -186,7 +186,6 @@ void process_autonav(void);
 void process_vehicle_decay(void);
 void update_buildrepair(void);
 void process_boost(void);
-class memoryClass *Mem = new memoryClass();
 void show_string(struct descriptor_data * d, char *input);
 extern void update_paydata_market();
 extern void warn_about_apartment_deletion();
@@ -2503,20 +2502,20 @@ void free_editing_structs(descriptor_data *d, int state)
     {
       extract_obj(d->edit_obj);
     }
-    // Anything falling through to here MUST have been created with direct memory creation (e.g. Mem->GetObject(), hopefully not 'new') 
+    // Anything falling through to here MUST have been created with direct memory creation (e.g. GetObject(), hopefully not 'new') 
     else {
-      Mem->DeleteObject(d->edit_obj, "comm.cpp's raw editing struct deletion");
+      DeleteObject(d->edit_obj, "comm.cpp's raw editing struct deletion");
     }
     d->edit_obj = NULL;
   }
 
   if (d->edit_room) {
-    Mem->DeleteRoom(d->edit_room);
+    DeleteRoom(d->edit_room);
     d->edit_room = NULL;
   }
 
   if (d->edit_mob) {
-    Mem->DeleteCh(d->edit_mob);
+    DeleteCh(d->edit_mob);
     d->edit_mob = NULL;
   }
 
@@ -2536,15 +2535,15 @@ void free_editing_structs(descriptor_data *d, int state)
   }
 
   if (d->edit_veh) {
-    Mem->DeleteVehicle(d->edit_veh);
+    DeleteVehicle(d->edit_veh);
     d->edit_veh = NULL;
   }
   if (d->edit_host) {
-    Mem->DeleteHost(d->edit_host);
+    DeleteHost(d->edit_host);
     d->edit_host = NULL;
   }
   if (d->edit_icon) {
-    Mem->DeleteIcon(d->edit_icon);
+    DeleteIcon(d->edit_icon);
     d->edit_icon = NULL;
   }
 

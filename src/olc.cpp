@@ -249,7 +249,7 @@ ACMD (do_redit)
   char_from_room(ch);
   d->edit_number = number;
   if (room_num >= 0) {
-    room = Mem->GetRoom();
+    room = GetRoom();
     *room = world[room_num];
     /* allocate space for all strings  */
     if (world[room_num].name)
@@ -315,7 +315,7 @@ ACMD (do_redit)
     /*
      * create dummy room
      */
-    d->edit_room = Mem->GetRoom();
+    d->edit_room = GetRoom();
     //memset((char *) d->edit_room, 0, sizeof(struct room_data));
     d->edit_room->name = str_dup(STRING_ROOM_TITLE_UNFINISHED);
     d->edit_room->description = str_dup(STRING_ROOM_DESC_UNFINISHED);
@@ -387,7 +387,7 @@ ACMD(do_rclone)
   // now for the fun part
   // first duplicate the room
   struct room_data *room;
-  room = Mem->GetRoom();
+  room = GetRoom();
 
   *room = world[num1];
   /* allocate space for all strings  */
@@ -514,7 +514,7 @@ ACMD(do_dig)
 
       // Create the new room in their editing struct.
       ch->desc->edit_number = atoi_buf;
-      ch->desc->edit_room = Mem->GetRoom();
+      ch->desc->edit_room = GetRoom();
       ch->desc->edit_room->name = str_dup(remainder && *remainder ? remainder : STRING_ROOM_TITLE_UNFINISHED_BUT_CONNECTED);
       ch->desc->edit_room->description = str_dup(STRING_ROOM_DESC_UNFINISHED);
       ch->desc->edit_room->address = str_dup(STRING_ROOM_JACKPOINT_NO_ADDR);
@@ -830,7 +830,7 @@ ACMD(do_vclone)
   // now for the fun part
   // first duplicate the veh
   struct veh_data *veh;
-  veh = Mem->GetVehicle();
+  veh = GetVehicle();
   //clear_vehect (veh);
   *veh = veh_proto[veh_num1];
 
@@ -914,7 +914,7 @@ ACMD (do_vedit)
     /*
      * allocate object
      */
-    veh = Mem->GetVehicle();
+    veh = GetVehicle();
     *veh = veh_proto[veh_num];        /*
                                                                                              * the RNUM
                                                                                              */
@@ -954,7 +954,7 @@ ACMD (do_vedit)
     /*
      * create dummy object!
      */
-    d->edit_veh = Mem->GetVehicle();
+    d->edit_veh = GetVehicle();
     d->edit_veh->name = str_dup (STRING_OBJ_NAME_UNFINISHED);
     d->edit_veh->description = str_dup (STRING_OBJ_RDESC_UNFINISHED);
     d->edit_veh->short_description = str_dup (STRING_OBJ_SDESC_UNFINISHED);
@@ -1024,7 +1024,7 @@ ACMD (do_iedit)
     /*
      * allocate object
      */
-    obj = Mem->GetObject();
+    obj = GetObject();
     //clear_object (obj);
     *obj = obj_proto[obj_num];        /*
                                                                                              * the RNUM
@@ -1083,7 +1083,7 @@ ACMD (do_iedit)
     /*
      * create dummy object!
      */
-    d->edit_obj = Mem->GetObject();
+    d->edit_obj = GetObject();
     //clear_object (d->edit_obj);
     d->edit_obj->text.keywords = str_dup(STRING_OBJ_NAME_UNFINISHED);
     d->edit_obj->text.name = str_dup(STRING_OBJ_SDESC_UNFINISHED);
@@ -1152,7 +1152,7 @@ ACMD(do_iclone)
   // first duplicate the obj
   struct extra_descr_data *This, *temp, *temp2;
   struct obj_data *obj;
-  obj = Mem->GetObject();
+  obj = GetObject();
   //clear_object (obj);
   *obj = obj_proto[obj_num1];
 
@@ -1379,7 +1379,7 @@ ACMD(do_medit)
 
   if (mob_num >= 0) {
     // allocate mobile
-    mob = Mem->GetCh();
+    mob = GetCh();
 
     *mob = mob_proto[mob_num]; // the RNUM
     mob->load_origin = PC_LOAD_REASON_MEDIT_ALLOCATION;
@@ -1451,7 +1451,7 @@ ACMD(do_medit)
   } else {
     send_to_char("That mobile does not exist, create it?\r\n", ch);
     // create a dummy mobile
-    d->edit_mob = Mem->GetCh();
+    d->edit_mob = GetCh();
     d->edit_mob->load_origin = PC_LOAD_REASON_MEDIT_CREATION;
     d->edit_mob->load_time = time(0);
 
@@ -1543,7 +1543,7 @@ ACMD(do_mclone)
   // first duplicate the mob
   struct char_data *mob;
   // allocate the structure
-  mob = Mem->GetCh();
+  mob = GetCh();
 
   *mob = mob_proto[mob_num1]; // the RNUM
   mob->load_origin = PC_LOAD_REASON_MCLONE;
@@ -1654,7 +1654,7 @@ ACMD(do_mdelete)
     }
   }
 
-  Mem->DeleteCh(&mob_proto[rnum]);
+  DeleteCh(&mob_proto[rnum]);
 
   for (counter = rnum; counter < top_of_mobt; counter++) {
     mob_index[counter] = mob_index[counter + 1];
@@ -1663,7 +1663,7 @@ ACMD(do_mdelete)
 
     for (j = character_list; j; j = j->next_in_character_list) {
       if (IS_NPC(j) && j->nr == counter) {
-        temp = Mem->GetCh();
+        temp = GetCh();
         *temp = *j;
         temp->load_origin = PC_LOAD_REASON_MDELETE;
         temp->load_time = time(0);
@@ -2170,7 +2170,7 @@ ACMD(do_hedit)
   STATE (d) = CON_HEDIT;
   d->edit_number = number;
   if (host_num >= 0) {
-    host = Mem->GetHost();
+    host = GetHost();
 
     // Clone all values.
     *host = matrix[host_num];
@@ -2264,7 +2264,7 @@ ACMD(do_hedit)
     return;
   } else {
     send_to_char ("That host does not exist, create it?\r\n", ch);
-    d->edit_host = Mem->GetHost();
+    d->edit_host = GetHost();
     d->edit_host->name = str_dup("An unfinished host");
     d->edit_host->keywords = str_dup("unfinished host");
     d->edit_host->desc = str_dup("This host is unfinished.");
@@ -2324,7 +2324,7 @@ ACMD(do_icedit)
   STATE (d) = CON_ICEDIT;
   d->edit_number = number;
   if (ic_num >= 0) {
-    icon = Mem->GetIcon();
+    icon = GetIcon();
     *icon = ic_proto[ic_num];
     d->edit_icon = icon;
     if (ic_proto[ic_num].name)
@@ -2345,7 +2345,7 @@ ACMD(do_icedit)
     return;
   } else {
     send_to_char("That IC does not exist, create it?\r\n", ch);
-    d->edit_icon = Mem->GetIcon();
+    d->edit_icon = GetIcon();
     d->edit_icon->name = str_dup(STRING_IC_NAME_UNFINISHED);
     d->edit_icon->look_desc = str_dup(STRING_IC_RDESC_UNFINISHED);
     d->edit_icon->long_desc = str_dup(STRING_IC_LDESC_UNFINISHED);

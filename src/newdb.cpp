@@ -1726,7 +1726,7 @@ char_data *CreateChar(char_data *ch)
 char_data *LoadChar(const char *name, bool logon, int load_origin)
 {
   // load the character data
-  char_data *ch = Mem->GetCh();
+  char_data *ch = GetCh();
 
   ch->player_specials = new player_special_data;
   ch->load_origin = load_origin;

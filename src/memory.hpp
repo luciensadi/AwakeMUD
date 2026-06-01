@@ -10,134 +10,23 @@
 #ifndef _memory_h_
 #define _memory_h_
 
-#define INITIAL_STACK_SIZE      500
-#define STACK_SIZE_INCREASE 100
-
 #include "structs.hpp"
 #include "utils.hpp"
 
-template <class T>
-class stackClass
-{
-public:
-  // constructors and destructors
-  stackClass();
-  stackClass(const stackClass<T>& O);
-  ~stackClass();
+extern struct obj_data *GetObject();
+extern struct char_data *GetCh();
+extern struct room_data *GetRoom();
+extern struct veh_data  *GetVehicle();
+extern struct host_data *GetHost();
+extern struct matrix_icon *GetIcon();
 
-  // stack routines
-  int Size()
-  {
-    return (top + 1);
-  }
-  int MaxSize()
-  {
-    return max_size;
-  }
-  void PopDelete();
+extern void DeleteObject(struct obj_data *obj, const char *source);
+extern void DeleteCh(struct char_data *ch);
+extern void DeleteRoom(struct room_data *room);
+extern void DeleteVehicle(struct veh_data *veh);
+extern void DeleteHost(struct host_data *host);
+extern void DeleteIcon(struct matrix_icon * icon);
 
-private:
-  // private data for the stack
-  int top;
-  int max_size;
-  // Precondition:  objStackClass must be created already
-  // Postcondition: the stack will be increased by the constant
-  //    OBJ_STACK_SIZE_INCREASE.  If it is increased, TRUE is returned
-  //    else FALSE.
-  bool ResizeStack();
-
-  // This is the array of objects
-  T **Items;
-
-}
-; // end class
-
-template <class T>
-stackClass<T>::stackClass()
-{
-  max_size = INITIAL_STACK_SIZE;
-  Items = new T*[max_size];
-  top = -1;
-}
-
-template <class T>
-stackClass<T>::stackClass(const stackClass<T>& O)
-{
-  max_size = O.max_size;
-  top = O.top;
-
-  for (int Index = 0; Index <= O.top; ++Index)
-    Items[Index] = O.Items[Index];
-}
-
-template <class T>
-stackClass<T>::~stackClass()
-{
-  while (top >= 0)
-    PopDelete();
-}
-
-template <class T>
-void stackClass<T>::PopDelete()
-{
-  if (top < 0)
-    return;
-
-  --top;
-
-  // we just call delete on the object since we know it is insides
-  // have already been cleared up when it was put on the stack
-  delete (Items[top + 1]);
-}
-
-class memoryClass
-{
-private:
-  stackClass<struct obj_data> *Obj;
-  stackClass<struct char_data> *Ch;
-  stackClass<struct room_data> *Room;
-  stackClass<struct veh_data> *Veh;
-  stackClass<struct host_data> *Host;
-  stackClass<struct matrix_icon> *Icon;
-
-public:
-  // constructors and destructors
-  memoryClass();
-  ~memoryClass();
-  memoryClass(const memoryClass& mClass);
-
-  // get routines which return objects from the different stacks
-  struct obj_data *GetObject();
-  struct char_data *GetCh();
-  struct room_data *GetRoom();
-  struct veh_data  *GetVehicle();
-  struct host_data *GetHost();
-  struct matrix_icon *GetIcon();
-
-  // delete routines which push objects onto the stacks after deallocating
-  // all strings and such in the object
-  void DeleteObject(struct obj_data *obj, const char *source);
-  void DeleteCh(struct char_data *ch);
-  void DeleteRoom(struct room_data *room);
-  void DeleteVehicle(struct veh_data *veh);
-  void DeleteHost(struct host_data *host);
-  void DeleteIcon(struct matrix_icon * icon);
-
-  // clear routines which push objects onto the stacks after just clearing
-  // the variables and pointers in the objects.  These will not wipe out
-  // the strings and other allocated vars
-  void ClearObject(struct obj_data *obj);
-  void ClearCh(struct char_data *ch);
-  void ClearRoom(struct room_data *room);
-  void ClearVehicle(struct veh_data *veh);
-  void ClearHost(struct host_data *host);
-  void ClearIcon(struct matrix_icon *icon);
-
-  // clear stacks
-  bool ClearStacks();
-};
-
-extern class memoryClass *Mem;
 extern class objList ObjList;
 
 #endif

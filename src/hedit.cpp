@@ -221,7 +221,7 @@ void hedit_parse(struct descriptor_data *d, const char *arg)
           delete entrance;
         }
         d->edit_host->entrance = NULL;
-        Mem->DeleteHost(d->edit_host);
+        DeleteHost(d->edit_host);
       }
       d->edit_host = NULL;
       d->edit_number = 0;
@@ -328,7 +328,7 @@ void hedit_parse(struct descriptor_data *d, const char *arg)
           delete entrance;
         }
         d->edit_host->entrance = NULL;
-        Mem->DeleteHost(d->edit_host);
+        DeleteHost(d->edit_host);
       }
       d->edit_host = NULL;
       d->edit_number = 0;

@@ -3119,7 +3119,7 @@ void nanny(struct descriptor_data * d, char *arg)
             return;
           }
         if (d->character == NULL) {
-          d->character = Mem->GetCh();
+          d->character = GetCh();
           d->character->load_origin = PC_LOAD_REASON_CHARACTER_CREATION;
 
           // Create and zero out their player_specials.

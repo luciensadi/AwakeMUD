@@ -2548,7 +2548,7 @@ void extract_icon(struct matrix_icon * icon)
   }
 
   REMOVE_FROM_LIST(icon, icon_list, next);
-  Mem->DeleteIcon(icon);
+  DeleteIcon(icon);
 
 #ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
   verify_every_pointer_we_can_think_of();
@@ -2706,7 +2706,7 @@ void extract_veh(struct veh_data * veh)
   if (veh->in_room || veh->in_veh)
     veh_from_room(veh);
   veh_index[veh->veh_number].number--;
-  Mem->DeleteVehicle(veh);
+  DeleteVehicle(veh);
 
 #ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
   verify_every_pointer_we_can_think_of();
@@ -2873,7 +2873,7 @@ void extract_obj(struct obj_data * obj, bool dont_warn_on_kept_items)
   if (GET_OBJ_RNUM(obj) >= 0)
     (obj_index[GET_OBJ_RNUM(obj)].number)--;
 
-  Mem->DeleteObject(obj, "extract_obj");
+  DeleteObject(obj, "extract_obj");
 
 #ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
   verify_every_pointer_we_can_think_of();
@@ -3161,13 +3161,13 @@ void extract_char(struct char_data * ch, bool do_save)
         SEND_TO_Q(MENU, ch->desc);
       }
     } else {
-      Mem->DeleteCh(ch);
+      DeleteCh(ch);
     }
   } else
   {
     if (GET_MOB_RNUM(ch) > -1)          /* if mobile */
       mob_index[GET_MOB_RNUM(ch)].number--;
-    Mem->DeleteCh(ch);
+    DeleteCh(ch);
   }
 }
 

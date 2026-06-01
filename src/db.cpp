@@ -252,8 +252,6 @@ void set_up_pet_dummy_mob();
 extern int no_specials;
 /* external ascii pfile vars */
 extern const char *pc_race_types[];
-/* memory objects */
-extern class memoryClass *Mem;
 /*************************************************************************
 *  routines for booting the system                                       *
 *********************************************************************** */
@@ -4480,7 +4478,7 @@ struct veh_data *read_vehicle(int nr, int type)
   } else
     i = nr;
 
-  veh = Mem->GetVehicle();
+  veh = GetVehicle();
   *veh = veh_proto[i];
   veh->next = veh_list;
   veh_list = veh;
@@ -4504,7 +4502,7 @@ struct char_data *read_mobile(int nr, int type)
   } else
     i = nr;
 
-  mob = Mem->GetCh();
+  mob = GetCh();
   *mob = mob_proto[i];
   mob->load_origin = PC_LOAD_REASON_READ_MOBILE;
   mob->load_time = time(0);
@@ -4579,7 +4577,7 @@ struct matrix_icon *read_ic(int nr, int type)
   } else
     i = nr;
 
-  ic = Mem->GetIcon();
+  ic = GetIcon();
   *ic = ic_proto[i];
   ic_index[i].number++;
   ic->condition = 10;
@@ -4594,7 +4592,7 @@ struct obj_data *create_obj(void)
 {
   struct obj_data *obj;
 
-  obj = Mem->GetObject();
+  obj = GetObject();
   ObjList.ADD(obj);
 
   return obj;
@@ -4620,7 +4618,7 @@ struct obj_data *read_object(int nr, int type, int load_origin, int pc_load_orig
   } else
     i = nr;
 
-  obj = Mem->GetObject();
+  obj = GetObject();
   *obj = obj_proto[i];
   ObjList.ADD(obj);
   obj_index[i].number++;

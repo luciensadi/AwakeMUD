@@ -2404,7 +2404,7 @@ ACMD(do_connect)
     else send_to_char(ch, "You find a place to sit and work with your deck.\r\n");
   }
 
-  icon = Mem->GetIcon();
+  icon = GetIcon();
   icon->condition = 10;
   if (ch->player.matrix_text.name)
     icon->name = str_dup(ch->player.matrix_text.name);
