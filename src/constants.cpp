@@ -1711,7 +1711,7 @@ const char *color_liquid[] =
     "rich brown",    // Cocoa
     "vivid blue",    // coolant
     "thick yellow",  // motor oil
-    "acrid yellow",  // battery acid
+    "pungent yellow", // battery acid
   };
 
 const char *fullness[] =
