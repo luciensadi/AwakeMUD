@@ -6065,6 +6065,8 @@ bool can_select_metamagic(struct char_data *ch, int i)
         return GET_METAMAGIC(ch, i) % 2 == 0;
       case META_MASKING:
         return GET_METAMAGIC(ch, i) == 0;
+      case META_DIVINING:
+        return GET_METAMAGIC(ch, i) == 0;
       default:
         return FALSE;
     }
