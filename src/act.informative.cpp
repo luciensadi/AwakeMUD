@@ -888,7 +888,7 @@ void diag_char_to_char(struct char_data * i, struct char_data * ch)
       bool has_metabolic_arrester = FALSE;
 
       if (AFF_FLAGS(i).IsSet(AFF_STABILIZE)) {
-        send_to_char(ch, "%s'%s stabilized for the moment.\r\n", HSSH(i), !HSSH_SHOULD_PLURAL(i) ? "re" : "s");
+        send_to_char(ch, "%s'%s stabilized for the moment.\r\n", capitalize(HSSH(i)), !HSSH_SHOULD_PLURAL(i) ? "re" : "s");
         return;
       }
 
