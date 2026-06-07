@@ -950,6 +950,7 @@ ACMD(do_gen_write)
   if (subcmd == SCMD_TYPO) {
     FAILURE_CASE((str_str(argument, "chernobyl") || str_str(argument, "chornobyl")), "Thanks for the report, but we use the Ukrainian spelling of Chornobyl here.");
     FAILURE_CASE((str_str(argument, "produccion")), "Thanks for the report, but Meridional is an Andalusian company, so the Spanish is intended.");
+    FAILURE_CASE((str_str(argument, "cetheral")), "Thanks for the report, but cetheral is a Sperethiel word describing a rare pearly, iridescent skin color unique to elves.");
   }
 
   mudlog_vfprintf(ch, LOG_MISCLOG, "%s %s: %s",
