@@ -892,6 +892,7 @@ const char *affected_bits[] =
     "Cheatlog Mark",
     "Complex Form Design",
     "Has Eye Light",
+    "Sends Docwagon Pings",
     MAX_FLAG_MARKER
   };
 

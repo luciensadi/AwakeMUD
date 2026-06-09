@@ -223,10 +223,12 @@ void alert_player_doctors_of_contract_withdrawal(struct char_data *ch, bool with
                     "Your DocWagon receiver emits a sad beep and displays: \"^r%s^n\"\r\n",
                     capitalize(replace_too_long_words(d->character, NULL, speech_buf, SKILL_ENGLISH, "^r")));
 
-      if (d->character->in_room) {
-        act("$n's DocWagon receiver emits a sad beep.", FALSE, d->character, 0, 0, TO_ROOM);
-      } else if (d->character->in_veh) {
-        act("$n's DocWagon receiver emits a sad beep.", FALSE, d->character, 0, 0, TO_VEH);
+      if (!AFF_FLAGGED(d->character, AFF_DOCWAGON_PINGS)) {
+        if (d->character->in_room) {
+          act("$n's DocWagon receiver emits a sad beep.", FALSE, d->character, 0, 0, TO_ROOM);
+        } else if (d->character->in_veh) {
+          act("$n's DocWagon receiver emits a sad beep.", FALSE, d->character, 0, 0, TO_VEH);
+        }
       }
     } else if (withdrawn_because_of_autodoc) {
       snprintf(speech_buf, sizeof(speech_buf),
@@ -237,10 +239,12 @@ void alert_player_doctors_of_contract_withdrawal(struct char_data *ch, bool with
                     "Your DocWagon receiver beeps a corporate jingle and displays: \"^o%s^n\"\r\n",
                     capitalize(replace_too_long_words(d->character, NULL, speech_buf, SKILL_ENGLISH, "^o")));
 
-      if (d->character->in_room) {
-        act("$n's DocWagon receiver beeps a corporate jingle.", FALSE, d->character, 0, 0, TO_ROOM);
-      } else if (d->character->in_veh) {
-        act("$n's DocWagon receiver beeps a corporate jingle.", FALSE, d->character, 0, 0, TO_VEH);
+      if (!AFF_FLAGGED(d->character, AFF_DOCWAGON_PINGS)) {
+        if (d->character->in_room) {
+          act("$n's DocWagon receiver beeps a corporate jingle.", FALSE, d->character, 0, 0, TO_ROOM);
+        } else if (d->character->in_veh) {
+          act("$n's DocWagon receiver beeps a corporate jingle.", FALSE, d->character, 0, 0, TO_VEH);
+        }
       }
     } else {
       bool in_same_room = get_ch_in_room(d->character) == get_ch_in_room(ch);
@@ -256,10 +260,12 @@ void alert_player_doctors_of_contract_withdrawal(struct char_data *ch, bool with
                     in_same_room ? "^c" : "^o",
                     capitalize(replace_too_long_words(d->character, NULL, speech_buf, SKILL_ENGLISH, in_same_room ? "^c" : "^o")));
 
-      if (d->character->in_room) {
-        act("$n's DocWagon receiver emits a cheery beep.", FALSE, d->character, 0, 0, TO_ROOM);
-      } else if (d->character->in_veh) {
-        act("$n's DocWagon receiver emits a cheery beep.", FALSE, d->character, 0, 0, TO_VEH);
+      if (!AFF_FLAGGED(d->character, AFF_DOCWAGON_PINGS)) {
+        if (d->character->in_room) {
+          act("$n's DocWagon receiver emits a cheery beep.", FALSE, d->character, 0, 0, TO_ROOM);
+        } else if (d->character->in_veh) {
+          act("$n's DocWagon receiver emits a cheery beep.", FALSE, d->character, 0, 0, TO_VEH);
+        }
       }
     }
   }
@@ -375,6 +381,7 @@ const char *get_char_representation_for_docwagon(struct char_data *vict, struct 
 #define MODE_ACCEPT  1
 #define MODE_DECLINE 2
 #define MODE_LIST    3
+#define MODE_SILENT  4
 
 ACMD(do_docwagon) {
   int mode = 0;
@@ -393,7 +400,8 @@ ACMD(do_docwagon) {
                  "  ^WDOCWAGON ACCEPT <name>^n    (to accept a pickup request)\r\n"
                  "  ^WDOCWAGON WITHDRAW <name>^n  (to withdraw your acceptance)\r\n"
                  "  ^WDOCWAGON LOCATE <name>^n    (to see where they are)\r\n"
-                 "  ^WDOCWAGON OOC <message>^n    (to coordinate with other Docwagon retrievers)\r\n", ch);
+                 "  ^WDOCWAGON OOC <message>^n    (to coordinate with other Docwagon retrievers)\r\n"
+                 "  ^WDOCWAGON SILENT^n           (to mute the messages sent to other people in your room)", ch);
     return;
   }
 
@@ -417,6 +425,9 @@ ACMD(do_docwagon) {
     FAILURE_CASE(!*name, "Syntax: DOCWAGON OOC <message>");
     send_docwagon_chat_message(ch, name, TRUE);
     return;
+  }
+  else if (is_abbrev(mode_switch, "silent")) {
+    mode = MODE_SILENT;
   }
   else {
     send_to_char("Syntax: DOCWAGON (ACCEPT|WITHDRAW) <name>\r\n", ch);
@@ -526,6 +537,16 @@ ACMD(do_docwagon) {
     } else {
       send_to_char("Your receiver isn't picking up any distress signals.\r\n", ch);
     }
+    return;
+  }
+
+  if (mode == MODE_SILENT) {
+    if (AFF_FLAGGED(ch, AFF_DOCWAGON_PINGS)) {
+      send_to_char("Your receiver will no longer echo alerts to other players in your room.\r\n", ch);
+    } else {
+      send_to_char("Your receiver will now echo alerts to other players in your room.\r\n", ch);
+    }
+    AFF_FLAGS(ch).ToggleBit(AFF_DOCWAGON_PINGS);
     return;
   }
 
