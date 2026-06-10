@@ -2906,7 +2906,7 @@ struct obj_data *find_workshop(struct char_data *ch, int type)
     return ch->in_room->best_workshop[type];
   }
 
-  if (ch->in_veh) {
+  else if (ch->in_veh) {
     // Iterate through vehicle's contents and find the best candidate.
     for (struct obj_data *o = ch->in_veh->contents; o; o = o->next_content)
     {
@@ -2920,15 +2920,23 @@ struct obj_data *find_workshop(struct char_data *ch, int type)
           // Jackpot! Facilities are the best option, so we can terminate early and return this item.
           return o;
         }
-        else if (GET_WORKSHOP_GRADE(o) == TYPE_WORKSHOP && GET_WORKSHOP_IS_SETUP(o))
+        else if (GET_WORKSHOP_GRADE(o) == TYPE_WORKSHOP && GET_WORKSHOP_IS_SETUP(o)) {
+          // It's a workshop, so keep iterating in case there's a facility (slim chance, but why not)
           workshop = o;
-        // If we got here, it's either a kit, or a workshop that's not set up.
+          continue;
+        }
+        // If we got here, it's either a kit, or an invalid workshop (wrong type, not set up). Do nothing.
       }
     }
+
+    // Return workshop (which is NULL if no workshop was found).
+    return workshop;
   }
 
-  // Return workshop (which is NULL if no workshop was found).
-  return workshop;
+  else {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: %s is looking for a workshop, but is neither in a vehicle nor room!", GET_CHAR_NAME(ch));
+    return nullptr;
+  }
 }
 #undef IS_KIT
 

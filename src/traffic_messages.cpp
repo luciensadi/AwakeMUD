@@ -42,9 +42,18 @@ const char *_vehicle_adjectives[] = {
   "bullet-hole riddled",
   "sticky-looking",
   "greasy",
-  "decked-out"
+  "decked-out",
+  "underlit",
+  "secondhand",
+  "duct-taped",
+  "sputtering",
+  "bloodstained",
+  "souped-up",
+  "sun-bleached",
+  "dented",
+  "sketchy-looking"
 };
-#define _NUM_VEHICLE_ADJECTIVES 20
+#define _NUM_VEHICLE_ADJECTIVES 29
 
 const char *_vehicle_colors[] = {
   "^Wbright white",
@@ -163,6 +172,7 @@ const char *_vehicle_speeds[] = {
   "flies past you" // 16
 };
 #define _NUM_VEHICLE_SPEEDS 17
+#define _BACKFIRES_VEHICLE_SPEED 2
 
 const char *_vehicle_addendums[] = {
   "splashing mud on you",
@@ -180,7 +190,6 @@ const char *_vehicle_addendums[] = {
   "blasting music",
   "blasting music",
   "overloaded with way too many passengers",
-  "sounding like it's on its last gasp",
   "followed closely by the sound of gunfire",
   "chased by a puffing Lone Star officer",
   "trailing debris",
@@ -189,7 +198,7 @@ const char *_vehicle_addendums[] = {
   "dangling an unsecured load",
   "causing problems",
 };
-#define _NUM_VEHICLE_ADDENDUMS 23
+#define _NUM_VEHICLE_ADDENDUMS 22
 
 const char *_person_adjectives[] = {
   "hulking",
@@ -304,7 +313,11 @@ const char *generate_dynamic_traffic_message__returns_new() {
       }
       
       // Add a speed.
-      snprintf(ENDOF(msg_buf), sizeof(msg_buf) - strlen(msg_buf), "%s^n", _vehicle_speeds[number(0, _NUM_VEHICLE_SPEEDS - 1)]);
+      if (on_vs_in) {
+        snprintf(ENDOF(msg_buf), sizeof(msg_buf) - strlen(msg_buf), "%s^n", _vehicle_speeds[number(_BACKFIRES_VEHICLE_SPEED + 1, _NUM_VEHICLE_SPEEDS - 1)]);
+      } else {
+        snprintf(ENDOF(msg_buf), sizeof(msg_buf) - strlen(msg_buf), "%s^n", _vehicle_speeds[number(0, _NUM_VEHICLE_SPEEDS - 1)]);
+      }
 
       // Add a random addendum 10% of the time.
       if (!number(0, 9)) {
