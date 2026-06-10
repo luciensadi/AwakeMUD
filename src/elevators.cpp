@@ -628,7 +628,11 @@ static void open_elevator_doors(struct room_data *car, rnum_t elevator_idx, int 
     REMOVE_BIT(car->dir_option[dir]->exit_info, EX_CLOSED);
     REMOVE_BIT(car->dir_option[dir]->exit_info, EX_LOCKED);
     if (send_opening_message_to_car) {
-      snprintf(msg_buf, sizeof(msg_buf), "The elevator doors open to the %s.\r\n", fulldirs[dir]);
+      if (!number(0, 10000000)) {
+        snprintf(msg_buf, sizeof(msg_buf), "The elevator doors open to the %s, revealing a man in a very loud pumpkin-covered sui-- wait, no, must have been your imagination.\r\n", fulldirs[dir]);
+      } else {
+        snprintf(msg_buf, sizeof(msg_buf), "The elevator doors open to the %s.\r\n", fulldirs[dir]);
+      }
       send_to_room(msg_buf, car);
     }
   } else {
