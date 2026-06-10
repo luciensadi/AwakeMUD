@@ -631,6 +631,10 @@ struct char_data *find_a_character_that_blocks_fleeing_for_ch(struct char_data *
       break;
       }
 
+  int hydraulic_jack_rating = 0;
+  bool has_foot_anchor;
+  bool has_kid_stealth;
+
   // Iterate through people in the room and see if any of them will stop you.
   for (struct char_data *combatant = get_ch_in_room(ch)->people; combatant; combatant = combatant->next_in_room) {
     // No matter how hard you try, you can't stop yourself.
@@ -663,8 +667,16 @@ struct char_data *find_a_character_that_blocks_fleeing_for_ch(struct char_data *
     }
 
     // Make a test to see if they can stop you. It's made easier for you if they can't see you, harder if you can't see them.
-    int dice = GET_QUI(ch) * 1.25;
-    int tn = MIN(11, (GET_REA(combatant) + racial_flee_modifier) + calculate_vision_penalty(ch, combatant) - calculate_vision_penalty(combatant, ch));
+    for (struct obj_data *cyber = ch->cyberware; cyber; cyber = cyber->next_content) {
+      if (GET_CYBERWARE_TYPE(cyber) == CYB_HYDRAULICJACK)
+        hydraulic_jack_rating = GET_CYBERWARE_RATING(cyber);
+      else if (GET_CYBERWARE_TYPE(cyber) == CYB_FOOTANCHOR && !GET_CYBERWARE_IS_DISABLED(cyber))
+        has_foot_anchor = TRUE;
+      else if (GET_CYBERWARE_TYPE(cyber) == CYB_LEGS && IS_SET(GET_CYBERWARE_FLAGS(cyber), LEGS_MOD_KIDSTEALTH))
+        has_kid_stealth = TRUE;
+    }
+    int dice = (GET_QUI(ch) + hydraulic_jack_rating) * (has_foot_anchor ? 1 : 0.5) * 1.25;
+    int tn = MIN(11, (GET_REA(combatant) + racial_flee_modifier - (has_kid_stealth ? 1 : 0)) + calculate_vision_penalty(ch, combatant) - calculate_vision_penalty(combatant, ch));
     tn -= affected_by_power(ch, MOVEMENTUP) - affected_by_power(ch, MOVEMENTDOWN);
     tn += affected_by_power(combatant, MOVEMENTUP) - affected_by_power(combatant, MOVEMENTDOWN);
     int successes = success_test(dice, tn);
