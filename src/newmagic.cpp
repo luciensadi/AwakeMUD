@@ -2454,8 +2454,8 @@ void raw_cast_manipulation_spell(struct char_data *ch, struct char_data *vict, i
             send_to_char("The acid splashes against you causing a mild burning sensation.\r\n", vict);
           } else {
             act("The acid splashes on $n, but $e doesn't seem to flinch.", FALSE, vict, 0, ch, TO_ROOM);
-            send_to_char(vict, "You are splashed by the acid, but %s\r\n",
-                         is_nbc_immune ? "it just rolls off your chem-sealed suit" : "it causes nothing more than a moment's irritation.");
+            send_to_char(vict, "You are splashed by the acid, but %s.\r\n",
+                         is_nbc_immune ? "it just rolls off your chem-sealed suit" : "it causes nothing more than a moment's irritation");
           }
 
           if ((IS_NPC(ch) && number(0, GET_MAG(ch) / 500)) || IS_NPC(vict)) {
