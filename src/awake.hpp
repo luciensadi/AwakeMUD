@@ -602,7 +602,8 @@ enum {
 #define AFF_CHEATLOG_MARK                           56
 #define AFF_COMPLEX_FORM_PROGRAM                    57
 #define AFF_HAS_EYE_LIGHT                           58
-#define AFF_MAX                                     59
+#define AFF_DOCWAGON_PINGS                          59
+#define AFF_MAX                                     60
 // TODO: If you add another long-state action like building, designing, etc:
 // - Add it to the BR_TASK_AFF_FLAGS section below, which affects bioware_check and the B/R flag in the wholist
 // - Add it to the IS_WORKING and STOP_WORKING macros in utils.h
