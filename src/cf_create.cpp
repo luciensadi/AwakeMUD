@@ -159,7 +159,7 @@ void cfedit_parse(struct descriptor_data *d, const char *arg)
     if (option_n > GET_SKILL(CH, SKILL_COMPUTER)) {
       send_to_char(CH, "You can't create a complex form of a higher rating than your computer skill.\r\n"
                    "Enter Rating: ");
-    } else if (option_n > GET_OTAKU_MPCP(CH)) {
+    } else if (option_n > get_otaku_mpcp(CH)) {
       send_to_char(CH, "You can't create a complex form of a higher rating than your living persona's MPCP rating.\r\n"
                    "Enter Rating: ");
     } else if (option_n <= 0) {
