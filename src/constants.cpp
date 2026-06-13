@@ -1442,7 +1442,7 @@ struct program_data programs[] =
     {"Reality Filter",           10, FALSE, "A hardware driver. Required for part installation." },
     {"Response Increase",        1,  FALSE, "A hardware driver. Required for part installation." },
     {"Shield",                   4,  FALSE, "Enables you to parry attacks in cybercombat. Running copy is degraded with each use." },
-    {"Radio Link",               1,  FALSE, "A hardware driver. Required for part installation." },
+    {"Radio Link",               1,  FALSE, "Enables you to send and receive broadcast messages through an accompanying Radio Interface part." },
     {"Doorstop",                 2,  TRUE , "Not implemented, but would lock open a vanishing SAN to prevent you from being cut off." },
     {"Mirrors",                  3,  TRUE , "Not implemented, but would let you clone your icon, making Decoy operations easier." },
     {"Purge",                    2,  TRUE , "Not implemented, but aids in Disinfect system operations and removal of worms." },
@@ -1495,7 +1495,7 @@ struct part_data parts[] =
     { "Cellular Interface", TYPE_KIT, SOFT_CELLULAR_LINK, 1, "Not implemented, but allows connection over the cellular network." },
     { "Laser Interface", TYPE_KIT, SOFT_LASER_LINK, 0, "Not implemented, but allows connection through a matching laser transciever within line of sight." },
     { "Microwave Interface", TYPE_WORKSHOP, SOFT_MICROWAVE_LINK, 1, "Not implemented, but allows connection through a nearby microwave transponder." },
-    { "Radio Interface", TYPE_KIT, 0, 0, "Partially implemented. Supposed to allow connection through radio network, but instead allows you to send and receive broadcast messages while decking." },
+    { "Radio Interface", TYPE_KIT, 0, 0, "Partially implemented. Supposed to allow connection through radio network, but instead allows you to send and receive broadcast messages while decking. Requires a Radio Link program to function." },
     { "Satellite Interface", TYPE_WORKSHOP, SOFT_SATELLITE_LINK, 2, "Not implemented, but allows connection through a satellite transponder." },
     { "Signal Amplifier", TYPE_KIT, 0, -1, "Not implemented, but improves your wireless connection range through certain interfaces." },
   };
