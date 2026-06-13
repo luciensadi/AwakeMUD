@@ -86,12 +86,16 @@ void dbuild_parse(struct descriptor_data *d, const char *arg);
 void pbuild_parse(struct descriptor_data *d, const char *arg);
 void spedit_parse(struct descriptor_data *d, const char *arg);
 void aedit_parse(struct descriptor_data *d, const char *arg);
+int parse_class(struct descriptor_data *d, char *arg);
+int parse_race(struct descriptor_data *d, char *arg);
+int parse_totem(struct descriptor_data *d, char *arg);
 void houseedit_apartment_parse(struct descriptor_data *d, const char *arg);
 void houseedit_complex_parse(struct descriptor_data *d, const char *arg);
 void free_shop(struct shop_data *shop);
 void free_quest(struct quest_data *quest);
 void init_parse(struct descriptor_data *d, char *arg);
 void submersion_parse(struct descriptor_data *d, char *arg);
+void activity_activity_editing_entrypoint_parse(struct descriptor_data *d, const char *arg);
 void vehcust_parse(struct descriptor_data *d, char *arg);
 void pocketsec_parse(struct descriptor_data *d, char *arg);
 void faction_edit_parse(struct descriptor_data *d, const char *arg);
@@ -150,9 +154,10 @@ ACMD_DECLARE(do_olcon);
 ACMD_DECLARE(do_abilityset);
 ACMD_DECLARE(do_accept);
 ACMD_DECLARE(do_account);
-ACMD_DECLARE(do_adjust);
 ACMD_DECLARE(do_action);
 ACMD_DECLARE(do_activate);
+ACMD_DECLARE(do_activity);
+ACMD_DECLARE(do_adjust);
 ACMD_DECLARE(do_advance);
 ACMD_DECLARE(do_afk);
 ACMD_DECLARE(do_alias);
@@ -552,6 +557,7 @@ struct command_info cmd_info[] =
     { "abilities"  , POS_MORTALLYW, do_skills   , 0, SCMD_ABILITIES, ALLOWS_IDLE_REWARD },
     { "abilityset" , POS_SLEEPING, do_abilityset , LVL_DEVELOPER, 0, ALLOWS_IDLE_REWARD },
     { "activate"   , POS_LYING   , do_activate , 0, 0, BLOCKS_IDLE_REWARD },
+    { "activity"   , POS_LYING   , do_activity , LVL_BUILDER, 0, BLOCKS_IDLE_REWARD },
     { "aecho"      , POS_SLEEPING, do_new_echo , LVL_ARCHITECT, SCMD_AECHO, BLOCKS_IDLE_REWARD },
     { "accept"     , POS_LYING   , do_accept   , 0, 0, BLOCKS_IDLE_REWARD },
 #ifdef IS_BUILDPORT
@@ -2962,10 +2968,6 @@ void nanny(struct descriptor_data * d, char *arg)
   rnum_t load_room_rnum = 0;
   bool dirty_password = FALSE;
 
-  int parse_class(struct descriptor_data *d, char *arg);
-  int parse_race(struct descriptor_data *d, char *arg);
-  int parse_totem(struct descriptor_data *d, char *arg);
-
   skip_spaces(&arg);
 
   switch (STATE(d))
@@ -3045,6 +3047,9 @@ void nanny(struct descriptor_data * d, char *arg)
     break;
   case CON_SUBMERSION:
     submersion_parse(d, arg);
+    break;
+  case CON_ACTIVITY_EDIT:
+    activity_activity_editing_entrypoint_parse(d, arg);
     break;
   case CON_CCREATE:
     create_parse(d, arg);

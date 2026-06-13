@@ -88,6 +88,7 @@ extern void ensure_mob_has_ammo_for_weapon(struct char_data *ch, struct obj_data
 extern void reset_host_paydata(rnum_t rnum);
 extern bool player_is_dead_hardcore(long id);
 extern void load_apartment_complexes();
+extern void load_activities();
 extern void parse_factions();
 extern void initialize_policy_tree();
 extern void initialize_traffic_msgs();
@@ -809,6 +810,9 @@ void DBInit()
 
   log("Migrating pocket secretaries in database.");
   migrate_pocket_secretaries_in_database();
+
+  log("Booting activities.");
+  load_activities();
 
   log("Booting houses.");
   load_apartment_complexes();

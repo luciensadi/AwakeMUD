@@ -2677,8 +2677,8 @@ void cedit_disp_menu(struct descriptor_data *d, int mode)
       send_to_char(CH, "5) Arriving Text: ^c%s^n\r\n", d->edit_mob->char_specials.arrive);
       send_to_char(CH, "6) Leaving Text:  ^c%s^n\r\n", d->edit_mob->char_specials.leave);
 
-      send_to_char(CH, "Preview:\r\n  %s %s the north.\r\n", d->edit_mob->player.physical_text.name, d->edit_mob->char_specials.arrive);
-      send_to_char(CH, "  %s %s north.\r\n", d->edit_mob->player.physical_text.name, d->edit_mob->char_specials.leave);
+      send_to_char(CH, "Preview:\r\n  %s %s the north.\r\n", CAP(d->edit_mob->player.physical_text.name), d->edit_mob->char_specials.arrive);
+      send_to_char(CH, "  %s %s north.\r\n", CAP(d->edit_mob->player.physical_text.name), d->edit_mob->char_specials.leave);
 
       send_to_char(CH, "7) Change Height: ^c%dcm^n\r\n", GET_HEIGHT(CH));
       send_to_char(CH, "8) Change Weight: ^c%dkg^n\r\n", GET_WEIGHT(CH));
