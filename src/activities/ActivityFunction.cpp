@@ -20,18 +20,19 @@ using json = nlohmann::json;
 
 const char *activity_param_type_name(ActivityParamType type) {
   switch (type) {
-    case ActivityParamType::STRING:        return "string";
-    case ActivityParamType::INTEGER:       return "integer";
-    case ActivityParamType::BOOLEAN:       return "boolean";
-    case ActivityParamType::SKILL_IDX:     return "skill idx";
-    case ActivityParamType::SPELL_IDX:     return "spell idx";
-    case ActivityParamType::POWER_IDX:     return "power idx";
-    case ActivityParamType::OBJ_VNUM:      return "object vnum";
-    case ActivityParamType::MOB_VNUM:      return "mob vnum";
-    case ActivityParamType::ROOM_VNUM:     return "room vnum";
-    case ActivityParamType::QUEST_VNUM:    return "quest vnum";
-    case ActivityParamType::NUYEN_AMOUNT:  return "nuyen amount";
-    case ActivityParamType::KARMA_AMOUNT:  return "karma amount";
+    case ActivityParamType::STRING:         return "string";
+    case ActivityParamType::INTEGER:        return "integer";
+    case ActivityParamType::INTEGER_MAX_12: return "integer (max 12)";
+    case ActivityParamType::BOOLEAN:        return "boolean";
+    case ActivityParamType::SKILL_IDX:      return "skill idx";
+    case ActivityParamType::SPELL_IDX:      return "spell idx";
+    case ActivityParamType::POWER_IDX:      return "power idx";
+    case ActivityParamType::OBJ_VNUM:       return "object vnum";
+    case ActivityParamType::MOB_VNUM:       return "mob vnum";
+    case ActivityParamType::ROOM_VNUM:      return "room vnum";
+    case ActivityParamType::QUEST_VNUM:     return "quest vnum";
+    case ActivityParamType::NUYEN_AMOUNT:   return "nuyen amount";
+    case ActivityParamType::KARMA_AMOUNT:   return "karma amount";
   }
   return "unknown";
 }
@@ -82,10 +83,16 @@ bool validate_activity_param_value(ActivityParamType type,
       }
       return true;
 
-    case ActivityParamType::INTEGER: {
+    case ActivityParamType::INTEGER:
+    case ActivityParamType::INTEGER_MAX_12:
+    {
       long parsed = 0;
       if (!parse_clean_long(value, parsed)) {
         err_out = "must be a whole number (e.g. 5, -3)";
+        return false;
+      }
+      if (type == ActivityParamType::INTEGER_MAX_12 && (parsed < 0 || parsed > 12)) {
+        err_out = "must be in range [0,12]";
         return false;
       }
       return true;

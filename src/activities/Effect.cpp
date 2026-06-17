@@ -33,7 +33,7 @@ namespace {
       "Debug-only effect that does nothing (and logs the call). Never kills.",
       {
         {"message",  "A string to echo in the log output.",       ActivityParamType::STRING,  PARAM_REQUIRED},
-        {"count",    "How many times to log it (for testing).",   ActivityParamType::INTEGER, PARAM_OPTIONAL, "1"},
+        {"count",    "How many times to log it (for testing).",   ActivityParamType::INTEGER, PARAM_OPTIONAL},
       },
       DETERMINISTIC,
     }},

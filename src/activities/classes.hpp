@@ -54,6 +54,7 @@ typedef bool (*ActivityFuncPtr)(struct char_data*, const std::map<std::string, s
 enum class ActivityParamType {
   STRING,         // any non-empty string
   INTEGER,        // base-10 signed int (atoi-clean, no trailing junk)
+  INTEGER_MAX_12, // Same as above, but in range [0,12]
   BOOLEAN,        // "true"/"false"/"1"/"0"/"yes"/"no" (case-insensitive)
   SKILL_IDX,      // trusted pre-resolved value
   SPELL_IDX,      // trusted pre-resolved value
@@ -79,7 +80,6 @@ struct ActivityParamSpec {
   std::string description;                                // human-facing hint, e.g. "the target number to roll against"
   ActivityParamType type = ActivityParamType::STRING;     // value-type constraint
   bool required = PARAM_REQUIRED;                         // whether the param must be present
-  std::string default_value = "";                         // only meaningful when !required
 };
 
 // Describes one entry in a Check or Effect registry.
