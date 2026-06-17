@@ -504,7 +504,7 @@ MenuFrameResult CheckParametersMenuFrame::parse(struct descriptor_data *d, char 
           nextFrame = std::make_unique<PowerNamePromptFrame>("Enter the name of the power: ", 0, [param_name=param_itr.name, d](int power_idx){ (*PARAMS)[param_name] = std::to_string(power_idx); });
           return { MenuFrameAction::Push };
         case ActivityParamType::INTEGER:
-          MF_PROMPT_INT_AND_RETURN("Enter an integer: ", 0, [param_name=param_itr.name, d](int result){ (*PARAMS)[param_name] = result; });
+          MF_PROMPT_INT_AND_RETURN("Enter an integer: ", 0, [param_name=param_itr.name, d](int result){ (*PARAMS)[param_name] = std::to_string(result); });
         case ActivityParamType::OBJ_VNUM:
           nextFrame = std::make_unique<ObjVnumPromptFrame>("Enter the object vnum: ", 0, [param_name=param_itr.name, d](vnum_t vnum){ (*PARAMS)[param_name] = std::to_string(vnum); });
           return { MenuFrameAction::Push };
@@ -521,7 +521,7 @@ MenuFrameResult CheckParametersMenuFrame::parse(struct descriptor_data *d, char 
           nextFrame = std::make_unique<NuyenAmountPromptFrame>("Enter the nuyen quantity: ", 0, [param_name=param_itr.name, d](int amount){ (*PARAMS)[param_name] = std::to_string(amount); });
           return { MenuFrameAction::Push };
         case ActivityParamType::BOOLEAN:
-          MF_PROMPT_YESNO_AND_RETURN("Enter Y or N: ", 0, [param_name=param_itr.name, d](bool result){ (*PARAMS)[param_name] = result; });
+          MF_PROMPT_YESNO_AND_RETURN("Enter Y or N: ", 0, [param_name=param_itr.name, d](bool result){ (*PARAMS)[param_name] = std::to_string(result); });
         case ActivityParamType::KARMA_AMOUNT:
           nextFrame = std::make_unique<KarmaAmountPromptFrame>("Enter the karma amount as a decimal number (ex: 2.3): ", 0, [param_name=param_itr.name, d](float amount){ (*PARAMS)[param_name] = std::to_string(amount); });
           return { MenuFrameAction::Push };
