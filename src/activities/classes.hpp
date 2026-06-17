@@ -55,9 +55,9 @@ enum class ActivityParamType {
   STRING,         // any non-empty string
   INTEGER,        // base-10 signed int (atoi-clean, no trailing junk)
   BOOLEAN,        // "true"/"false"/"1"/"0"/"yes"/"no" (case-insensitive)
-  SKILL_NAME,     // resolves via skill_name_to_idx()
-  SPELL_NAME,     // resolves via spell_name_to_idx()
-  POWER_NAME,     // resolves via power_name_to_idx()
+  SKILL_IDX,      // trusted pre-resolved value
+  SPELL_IDX,      // trusted pre-resolved value
+  POWER_IDX,      // trusted pre-resolved value
   OBJ_VNUM,       // resolves via real_object()
   MOB_VNUM,       // resolves via real_mobile()
   ROOM_VNUM,      // resolves via real_room()

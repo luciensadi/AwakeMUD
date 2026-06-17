@@ -23,9 +23,9 @@ const char *activity_param_type_name(ActivityParamType type) {
     case ActivityParamType::STRING:        return "string";
     case ActivityParamType::INTEGER:       return "integer";
     case ActivityParamType::BOOLEAN:       return "boolean";
-    case ActivityParamType::SKILL_NAME:    return "skill name";
-    case ActivityParamType::SPELL_NAME:    return "spell name";
-    case ActivityParamType::POWER_NAME:    return "power name";
+    case ActivityParamType::SKILL_IDX:     return "skill idx";
+    case ActivityParamType::SPELL_IDX:     return "spell idx";
+    case ActivityParamType::POWER_IDX:     return "power idx";
     case ActivityParamType::OBJ_VNUM:      return "object vnum";
     case ActivityParamType::MOB_VNUM:      return "mob vnum";
     case ActivityParamType::ROOM_VNUM:     return "room vnum";
@@ -100,23 +100,23 @@ bool validate_activity_param_value(ActivityParamType type,
       return false;
     }
 
-    case ActivityParamType::SKILL_NAME:
-      if (skill_name_to_idx(value.c_str()) < 0) {
-        err_out = "not a recognized skill name";
+    case ActivityParamType::SKILL_IDX:
+      if (atoi(value.c_str()) < 0 || atoi(value.c_str()) >= MAX_SKILLS) {
+        err_out = "not a recognized skill idx";
         return false;
       }
       return true;
 
-    case ActivityParamType::SPELL_NAME:
-      if (spell_name_to_idx(value.c_str()) < 0) {
-        err_out = "not a recognized spell name";
+    case ActivityParamType::SPELL_IDX:
+      if (atoi(value.c_str()) < 0 || atoi(value.c_str()) >= MAX_SPELLS) {
+        err_out = "not a recognized spell idx";
         return false;
       }
       return true;
 
-    case ActivityParamType::POWER_NAME:
-      if (power_name_to_idx(value.c_str()) < 0) {
-        err_out = "not a recognized adept power name";
+    case ActivityParamType::POWER_IDX:
+      if (atoi(value.c_str()) < 0 || atoi(value.c_str()) >= ADEPT_NUMPOWER) {
+        err_out = "not a recognized adept power idx";
         return false;
       }
       return true;

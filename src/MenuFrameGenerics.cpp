@@ -1,11 +1,13 @@
 #include "MenuFrameGenerics.hpp"
 #include "interpreter.hpp"
 #include "constants.hpp"
+#include "db.hpp"
 
-#define AS_BOOL(thing)   std::variant<int, float, bool, std::string>{std::in_place_type<bool>, thing}
-#define AS_INT(thing)    std::variant<int, float, bool, std::string>{std::in_place_type<int>, thing}
-#define AS_FLOAT(thing)  std::variant<int, float, bool, std::string>{std::in_place_type<float>, thing}
-#define AS_STRING(thing) std::variant<int, float, bool, std::string>{std::in_place_type<std::string>, thing}
+#define AS_BOOL(thing)   std::variant<int, float, bool, std::string, vnum_t>{std::in_place_type<bool>, thing}
+#define AS_INT(thing)    std::variant<int, float, bool, std::string, vnum_t>{std::in_place_type<int>, thing}
+#define AS_VNUM(thing)   std::variant<int, float, bool, std::string, vnum_t>{std::in_place_type<vnum_t>, thing}
+#define AS_FLOAT(thing)  std::variant<int, float, bool, std::string, vnum_t>{std::in_place_type<float>, thing}
+#define AS_STRING(thing) std::variant<int, float, bool, std::string, vnum_t>{std::in_place_type<std::string>, thing}
 
 MenuFrameResult YesNoPromptFrame::parse(struct descriptor_data *d, char *arg) {
   skip_spaces(&arg);
@@ -29,7 +31,12 @@ MenuFrameResult IntPromptFrame::parse(struct descriptor_data *d, char *arg) {
   if (on_choice_) {
     on_choice_(value);
   }
-  return { MenuFrameAction::Pop, child_identifier, AS_BOOL(value) };
+  return { MenuFrameAction::Pop, child_identifier, AS_INT(value) };
+}
+
+MenuFrameResult VnumPromptFrame::parse(struct descriptor_data *d, char *arg) {
+  mudlog_vfprintf(d->character, LOG_SYSLOG, "SYSERR: You invoked a raw VnumPromptFrame. This can only be used by a child frame (parent ver has no real_x() checks).");
+  return { MenuFrameAction::Pop, child_identifier, AS_VNUM(-1) };
 }
 
 MenuFrameResult FloatPromptFrame::parse(struct descriptor_data *d, char *arg) {
@@ -44,7 +51,7 @@ MenuFrameResult FloatPromptFrame::parse(struct descriptor_data *d, char *arg) {
   if (on_choice_) {
     on_choice_(value);
   }
-  return { MenuFrameAction::Pop, child_identifier, AS_BOOL(value) };
+  return { MenuFrameAction::Pop, child_identifier, AS_FLOAT(value) };
 }
 
 MenuFrameResult StringPromptFrame::parse(struct descriptor_data *d, char *arg) {
@@ -145,5 +152,160 @@ MenuFrameResult PowerNamePromptFrame::parse(struct descriptor_data *d, char *arg
     on_choice_(result);
   }
   return { MenuFrameAction::Pop, child_identifier, AS_INT(result) };  
+}
+#undef SYNTAX
+
+////// Nuyen and karma.
+
+#define SYNTAX_WITH_ARGS "Invalid input: Must be between %d and %d nuyen (inclusive), or 'abort' to cancel.", min_val, max_val
+MenuFrameResult NuyenAmountPromptFrame::parse(struct descriptor_data *d, char *arg) {
+  skip_spaces(&arg);
+
+  MF_TRYAGAIN_CASE_PRINTF(!*arg, SYNTAX_WITH_ARGS);
+
+  if (!str_cmp(arg, "abort")) {
+    // Don't call on_choice_, just bail.
+    return { MenuFrameAction::Pop, child_identifier, AS_INT(-1) };
+  }
+
+  int result = atoi(arg);
+
+  MF_TRYAGAIN_CASE_PRINTF(result < 0, SYNTAX_WITH_ARGS);
+  MF_TRYAGAIN_CASE_PRINTF(result < min_val || result > max_val, SYNTAX_WITH_ARGS);
+
+  if (on_choice_) {
+    on_choice_(result);
+  }
+  return { MenuFrameAction::Pop, child_identifier, AS_INT(result) };  
+}
+#undef SYNTAX_WITH_ARGS
+
+#define SYNTAX_WITH_ARGS "Invalid input: Must be between %0.2f and %0.2f karma (inclusive), or 'abort' to cancel.", min_val, max_val
+MenuFrameResult KarmaAmountPromptFrame::parse(struct descriptor_data *d, char *arg) {
+  skip_spaces(&arg);
+  
+  MF_TRYAGAIN_CASE_PRINTF(!*arg, SYNTAX_WITH_ARGS);
+
+  if (!str_cmp(arg, "abort")) {
+    // Don't call on_choice_, just bail.
+    return { MenuFrameAction::Pop, child_identifier, AS_FLOAT(-1.0f) };
+  }
+
+  float value = atof(arg);
+
+  MF_TRYAGAIN_CASE_PRINTF((value < min_val && !FLOATS_ARE_EQUAL_ISH(value, min_val))
+                          || (value > max_val && !FLOATS_ARE_EQUAL_ISH(value, max_val)),
+                          SYNTAX_WITH_ARGS);
+  
+  if (on_choice_) {
+    on_choice_(value);
+  }
+  return { MenuFrameAction::Pop, child_identifier, AS_FLOAT(value) };
+}
+#undef SYNTAX_WITH_ARGS
+
+////// Vnums for various things.
+
+#define SYNTAX "Invalid input: Must be an object's vnum (greater than zero), or 'abort' to cancel.\r\n"
+MenuFrameResult ObjVnumPromptFrame::parse(struct descriptor_data *d, char *arg) {
+  skip_spaces(&arg);
+
+  MF_TRYAGAIN_CASE(!*arg, SYNTAX);
+
+  if (!str_cmp(arg, "abort")) {
+    // Don't call on_choice_, just bail.
+    return { MenuFrameAction::Pop, child_identifier, AS_VNUM(-1) };
+  }
+
+  vnum_t vnum = atol(arg);
+  MF_TRYAGAIN_CASE(vnum <= 0, SYNTAX);
+
+  rnum_t rnum = real_object(vnum);
+  MF_TRYAGAIN_CASE(rnum < 0, SYNTAX);
+
+  // TODO: Decide if we need to do an editor-can-use check here on the vnum.
+
+  if (on_choice_) {
+    on_choice_(vnum);
+  }
+  return { MenuFrameAction::Pop, child_identifier, AS_VNUM(vnum) };  
+}
+#undef SYNTAX
+
+#define SYNTAX "Invalid input: Must be a mob's vnum (greater than zero), or 'abort' to cancel.\r\n"
+MenuFrameResult MobVnumPromptFrame::parse(struct descriptor_data *d, char *arg) {
+  skip_spaces(&arg);
+
+  MF_TRYAGAIN_CASE(!*arg, SYNTAX);
+
+  if (!str_cmp(arg, "abort")) {
+    // Don't call on_choice_, just bail.
+    return { MenuFrameAction::Pop, child_identifier, AS_VNUM(-1) };
+  }
+
+  vnum_t vnum = atol(arg);
+  MF_TRYAGAIN_CASE(vnum <= 0, SYNTAX);
+
+  rnum_t rnum = real_mobile(vnum);
+  MF_TRYAGAIN_CASE(rnum < 0, SYNTAX);
+
+  // TODO: Decide if we need to do an editor-can-use check here on the vnum.
+
+  if (on_choice_) {
+    on_choice_(vnum);
+  }
+  return { MenuFrameAction::Pop, child_identifier, AS_VNUM(vnum) };  
+}
+#undef SYNTAX
+
+#define SYNTAX "Invalid input: Must be a room's vnum (greater than zero), or 'abort' to cancel.\r\n"
+MenuFrameResult RoomVnumPromptFrame::parse(struct descriptor_data *d, char *arg) {
+  skip_spaces(&arg);
+
+  MF_TRYAGAIN_CASE(!*arg, SYNTAX);
+
+  if (!str_cmp(arg, "abort")) {
+    // Don't call on_choice_, just bail.
+    return { MenuFrameAction::Pop, child_identifier, AS_VNUM(-1) };
+  }
+
+  vnum_t vnum = atol(arg);
+  MF_TRYAGAIN_CASE(vnum <= 0, SYNTAX);
+
+  rnum_t rnum = real_room(vnum);
+  MF_TRYAGAIN_CASE(rnum < 0, SYNTAX);
+
+  // TODO: Decide if we need to do an editor-can-use check here on the vnum.
+
+  if (on_choice_) {
+    on_choice_(vnum);
+  }
+  return { MenuFrameAction::Pop, child_identifier, AS_VNUM(vnum) };  
+}
+#undef SYNTAX
+
+#define SYNTAX "Invalid input: Must be a quest's vnum (greater than zero), or 'abort' to cancel.\r\n"
+MenuFrameResult QuestVnumPromptFrame::parse(struct descriptor_data *d, char *arg) {
+  skip_spaces(&arg);
+
+  MF_TRYAGAIN_CASE(!*arg, SYNTAX);
+
+  if (!str_cmp(arg, "abort")) {
+    // Don't call on_choice_, just bail.
+    return { MenuFrameAction::Pop, child_identifier, AS_VNUM(-1) };
+  }
+
+  vnum_t vnum = atol(arg);
+  MF_TRYAGAIN_CASE(vnum <= 0, SYNTAX);
+
+  rnum_t rnum = real_quest(vnum);
+  MF_TRYAGAIN_CASE(rnum < 0, SYNTAX);
+
+  // TODO: Decide if we need to do an editor-can-use check here on the vnum.
+
+  if (on_choice_) {
+    on_choice_(vnum);
+  }
+  return { MenuFrameAction::Pop, child_identifier, AS_VNUM(vnum) };  
 }
 #undef SYNTAX

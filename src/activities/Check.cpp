@@ -1,6 +1,7 @@
 #include "classes.hpp"
 #include "../handler.hpp"
 #include "../db.hpp"
+#include "../constants.hpp"
 #include "nlohmann/json.hpp"
 
 #include "activity_olc.hpp"
@@ -61,7 +62,7 @@ namespace {
       &_check_function_has_skill,
       "True if the character has any rank in the named skill.",
       {
-        {"skill_name", "Skill to check (e.g. \"firearms\").", ActivityParamType::SKILL_NAME, PARAM_REQUIRED},
+        {"skill_idx", "Skill to check (e.g. \"firearms\").", ActivityParamType::SKILL_IDX, PARAM_REQUIRED},
       },
       DETERMINISTIC,
     }},
@@ -69,7 +70,7 @@ namespace {
       &_check_function_roll_skill,
       "Rolls the named skill against a target number; passes on net successes > 0.",
       {
-        {"skill_name", "Skill to roll (e.g. \"firearms\").", ActivityParamType::SKILL_NAME, PARAM_REQUIRED},
+        {"skill_idx",  "Skill to roll (e.g. \"firearms\").", ActivityParamType::SKILL_IDX, PARAM_REQUIRED},
         {"tn",         "Target number for the roll.",        ActivityParamType::INTEGER,    PARAM_REQUIRED},
       },
       NON_DETERMINISTIC,
@@ -77,9 +78,9 @@ namespace {
 
     {"has_spell_active", {
       &_check_function_has_spell_active,
-      "True if the character is currently affected by the named spell.",
+      "True if the character is currently affected by the specified spell.",
       {
-        {"spell_name", "Spell to look for.", ActivityParamType::SPELL_NAME, PARAM_REQUIRED},
+        {"spell_idx", "Spell to look for.", ActivityParamType::SPELL_IDX, PARAM_REQUIRED},
       },
       DETERMINISTIC,
     }},
@@ -87,7 +88,7 @@ namespace {
       &_check_function_could_cast_spell,
       "True if the character knows the spell at >= the requested force and is capable of casting.",
       {
-        {"spell_name", "Spell to look for.",                                ActivityParamType::SPELL_NAME, PARAM_REQUIRED},
+        {"spell_idx",  "Spell to look for.",                               ActivityParamType::SPELL_IDX, PARAM_REQUIRED},
         {"force",      "Minimum force the character must know it at.",     ActivityParamType::INTEGER,    PARAM_OPTIONAL, "1"},
       },
       DETERMINISTIC,
@@ -95,9 +96,9 @@ namespace {
 
     {"has_power_active", {
       &_check_function_has_power_active,
-      "True if the character has the named adept power active at >= the requested rank.",
+      "True if the character has the named adept power active at >= the requested rank.",  // todo enforce rank?
       {
-        {"power_name", "Adept power to check.",         ActivityParamType::POWER_NAME, PARAM_REQUIRED},
+        {"power_idx",  "Adept power to check.",         ActivityParamType::POWER_IDX, PARAM_REQUIRED},
         {"rank",       "Minimum rank required (>= 1).", ActivityParamType::INTEGER,    PARAM_OPTIONAL, "1"},
       },
       DETERMINISTIC,
@@ -217,16 +218,16 @@ CHECK_FUNCTION(test_func) {
 /////////////// Skills section
 
 CHECK_FUNCTION(has_skill) {
-  GET_SETTING(skill_name);
-  int skill_idx = skill_name_to_idx(skill_name);
-  CHECK_FAILURE_CASE(skill_idx < 0, "Bad skill name: %s", skill_name);
+  GET_SETTING(setting_skill_idx);
+  int skill_idx = atoi(setting_skill_idx);
+  CHECK_FAILURE_CASE(skill_idx < 0, "Bad skill name: %s", setting_skill_idx);
   return GET_SKILL(ch, skill_idx) > 0;
 }
 
 CHECK_FUNCTION(roll_skill) {
-  GET_SETTING(skill_name);
-  int skill_idx = skill_name_to_idx(skill_name);
-  CHECK_FAILURE_CASE(skill_idx < 0, "Bad skill name: %s", skill_name);
+  GET_SETTING(setting_skill_idx);
+  int skill_idx = atoi(setting_skill_idx);
+  CHECK_FAILURE_CASE(skill_idx < 0, "Bad skill name: %s", setting_skill_idx);
 
   GET_SETTING(tn);
   int tn_val = atoi(tn);
@@ -240,10 +241,10 @@ CHECK_FUNCTION(roll_skill) {
 /////////////// Spells section
 
 CHECK_FUNCTION(has_spell_active) {
-  GET_SETTING(spell_name);
-  int spell_idx = spell_name_to_idx(spell_name);
-  CHECK_FAILURE_CASE(spell_idx < 0, "Bad spell name: %s", spell_name);
-  return affected_by_spell(ch, spell_idx) > 0;
+  GET_SETTING(spell_idx);
+  int parsed_spell_idx = atoi(spell_idx);
+  CHECK_FAILURE_CASE(parsed_spell_idx < 0 || parsed_spell_idx >= MAX_SPELLS, "Bad spell idx: %s", spell_idx);
+  return affected_by_spell(ch, parsed_spell_idx) > 0;
 }
 
 CHECK_FUNCTION(could_cast_spell) {
@@ -252,13 +253,13 @@ CHECK_FUNCTION(could_cast_spell) {
     return false;
   }
 
-  GET_SETTING(spell_name);
-  int spell_idx = spell_name_to_idx(spell_name);
+  GET_SETTING(spell_idx);
+  int parsed_spell_idx = atoi(spell_idx);
   GET_SETTING_DEFAULT(force, "1");
   int spell_force = atoi(force);
   
   for (struct spell_data *spell = GET_SPELLS(ch); spell; spell = spell->next)
-    if (spell->type == spell_idx)
+    if (spell->type == parsed_spell_idx)
       return spell->force >= spell_force;
   
   return false;
@@ -267,9 +268,9 @@ CHECK_FUNCTION(could_cast_spell) {
 ////////////// Powers section
 
 CHECK_FUNCTION(has_power_active) {
-  GET_SETTING(power_name);
-  int power_idx = power_name_to_idx(power_name);
-  CHECK_FAILURE_CASE(power_idx < 0, "Bad power name: %s", power_name);
+  GET_SETTING(setting_power_idx);
+  int power_idx = atoi(setting_power_idx);
+  CHECK_FAILURE_CASE(power_idx < 0, "Bad power name: %s", setting_power_idx);
 
   GET_SETTING_DEFAULT(rank, "1");
   int power_rank = atoi(rank);
@@ -333,15 +334,49 @@ public:
 
 
 //// OLC
-void _display_check_parameters_for_olc(struct descriptor_data *d, bool with_indentation) {
+void _display_check_parameters_for_olc(struct descriptor_data *d, bool with_indentation, bool reference_temporary_editing_params=false) {
+  auto settings_to_check = (reference_temporary_editing_params ? *(PARAMS) : CHK->settings);
   for (auto param_itr : CHK->lookup_spec(CHK->get_func_name())->params) {
-    auto check_param = CHK->settings.find(param_itr.name);
+    auto check_param = settings_to_check.find(param_itr.name);
 
-    send_to_char(CH, "%s%20s ^c%s^n%s\r\n",
-                 with_indentation ? "  " : "",
-                 std::string(param_itr.name + ":").c_str(),
-                 check_param == CHK->settings.end() ? (param_itr.required ? "^y(not set)^n" : "(not set)") : check_param->second.c_str(),
-                 !param_itr.required ? " (optional)" : "");
+    send_to_char(CH, "%s%20s ", with_indentation ? "  " : "", std::string(param_itr.name + ":").c_str());
+
+    if (check_param == settings_to_check.end()) {
+      send_to_char(CH, "%s\r\n", (param_itr.required ? "^y(not set)^n [required]" : "^c(not set)^n"));
+      continue;
+    }
+
+    // Special parsing: Spell, skill, and power idx are converted back to names.
+    if (param_itr.type == ActivityParamType::SKILL_IDX || param_itr.type == ActivityParamType::SPELL_IDX || param_itr.type == ActivityParamType::POWER_IDX) {
+      int parsed_value = atoi(check_param->second.c_str());
+      switch (param_itr.type) {
+        case ActivityParamType::SKILL_IDX:
+          if (parsed_value >= 0 && parsed_value < MAX_SKILLS) {
+            send_to_char(CH, "%s\r\n", skills[parsed_value].name);
+          } else {
+            send_to_char(CH, "<invalid! set me again>\r\n");
+          }
+          break;
+        case ActivityParamType::SPELL_IDX:
+          if (parsed_value >= 0 && parsed_value < MAX_SPELLS) {
+            send_to_char(CH, "%s\r\n", spells[parsed_value].name);
+          } else {
+            send_to_char(CH, "<invalid! set me again>\r\n");
+          }
+          break;
+        case ActivityParamType::POWER_IDX:
+          if (parsed_value >= 0 && parsed_value < ADEPT_NUMPOWER) {
+            send_to_char(CH, "%s\r\n", adept_powers[parsed_value]);
+          } else {
+            send_to_char(CH, "<invalid! set me again>\r\n");
+          }
+          break;
+        default:
+          break;
+      }
+    } else {
+      send_to_char(CH, "%s\r\n", check_param->second.c_str());
+    }
   }
 }
 
@@ -356,11 +391,11 @@ void CheckMenuFrame::display(struct descriptor_data *d) const {
     send_to_char(CH, "2) Parameters:\r\n\r\n");
     _display_check_parameters_for_olc(d, true);
   } else {
-    send_to_char(CH, "2) Parameters: ^c(not set)^n\r\n");
+    send_to_char(CH, "-) Parameters: ^c(must set function first)^n\r\n");
   }
   
   send_to_char(CH, "\r\n"
-                   "q) Keep changes\r\n",
+                   "q) Keep changes\r\n"
                    "x) Discard changes\r\n"
                    "\r\n"
                    "Enter your choice: ");
@@ -433,12 +468,12 @@ const MenuFrameResult CheckFunctionMenuFrame::handle_child_response(struct descr
 ////////////////////////////////////////////////////////
 
 void CheckParametersMenuFrame::display(struct descriptor_data *d) const {
-  _display_check_parameters_for_olc(d, false);
+  _display_check_parameters_for_olc(d, false, true);
   send_to_char(CH, "\r\n"
-                   "q) Keep changes\r\n",
+                   "q) Keep changes\r\n"
                    "x) Discard changes\r\n"
                    "\r\n"
-                   "Enter a parameter name, or 'abort' to cancel: ");
+                   "Enter a parameter name to edit, or 'abort' to cancel: ");
 }
 
 MenuFrameResult CheckParametersMenuFrame::parse(struct descriptor_data *d, char *arg) {
@@ -459,13 +494,13 @@ MenuFrameResult CheckParametersMenuFrame::parse(struct descriptor_data *d, char 
       switch (param_itr.type) {
         case ActivityParamType::STRING:
           MF_PROMPT_STRING_AND_RETURN("Enter a string: ", 0, [param_name=param_itr.name, d](std::string result){ (*PARAMS)[param_name] = result; });
-        case ActivityParamType::SKILL_NAME:
+        case ActivityParamType::SKILL_IDX:
           nextFrame = std::make_unique<SkillNamePromptFrame>("Enter the name of the skill: ", 0, [param_name=param_itr.name, d](int skill_idx){ (*PARAMS)[param_name] = std::to_string(skill_idx); });
           return { MenuFrameAction::Push };
-        case ActivityParamType::SPELL_NAME:
+        case ActivityParamType::SPELL_IDX:
           nextFrame = std::make_unique<SpellNamePromptFrame>("Enter the name of the spell: ", 0, [param_name=param_itr.name, d](int spell_idx){ (*PARAMS)[param_name] = std::to_string(spell_idx); });
           return { MenuFrameAction::Push };
-        case ActivityParamType::POWER_NAME:
+        case ActivityParamType::POWER_IDX:
           nextFrame = std::make_unique<PowerNamePromptFrame>("Enter the name of the power: ", 0, [param_name=param_itr.name, d](int power_idx){ (*PARAMS)[param_name] = std::to_string(power_idx); });
           return { MenuFrameAction::Push };
         case ActivityParamType::INTEGER:
@@ -477,18 +512,18 @@ MenuFrameResult CheckParametersMenuFrame::parse(struct descriptor_data *d, char 
           nextFrame = std::make_unique<MobVnumPromptFrame>("Enter the mob's vnum: ", 0, [param_name=param_itr.name, d](vnum_t vnum){ (*PARAMS)[param_name] = std::to_string(vnum); });
           return { MenuFrameAction::Push };
         case ActivityParamType::ROOM_VNUM:
-          nextFrame = std::make_unique<ObjVnumPromptFrame>("Enter the room's vnum: ", 0, [param_name=param_itr.name, d](vnum_t vnum){ (*PARAMS)[param_name] = std::to_string(vnum); });
+          nextFrame = std::make_unique<RoomVnumPromptFrame>("Enter the room's vnum: ", 0, [param_name=param_itr.name, d](vnum_t vnum){ (*PARAMS)[param_name] = std::to_string(vnum); });
           return { MenuFrameAction::Push };
         case ActivityParamType::QUEST_VNUM:
-          nextFrame = std::make_unique<ObjVnumPromptFrame>("Enter the quest's vnum: ", 0, [param_name=param_itr.name, d](vnum_t vnum){ (*PARAMS)[param_name] = std::to_string(vnum); });
+          nextFrame = std::make_unique<QuestVnumPromptFrame>("Enter the quest's vnum: ", 0, [param_name=param_itr.name, d](vnum_t vnum){ (*PARAMS)[param_name] = std::to_string(vnum); });
           return { MenuFrameAction::Push };
         case ActivityParamType::NUYEN_AMOUNT:
-          nextFrame = std::make_unique<NuyenQtyPromptFrame>("Enter the nuyen quantity: ", 0, [param_name=param_itr.name, d](int amount){ (*PARAMS)[param_name] = std::to_string(amount); });
+          nextFrame = std::make_unique<NuyenAmountPromptFrame>("Enter the nuyen quantity: ", 0, [param_name=param_itr.name, d](int amount){ (*PARAMS)[param_name] = std::to_string(amount); });
           return { MenuFrameAction::Push };
         case ActivityParamType::BOOLEAN:
           MF_PROMPT_YESNO_AND_RETURN("Enter Y or N: ", 0, [param_name=param_itr.name, d](bool result){ (*PARAMS)[param_name] = result; });
         case ActivityParamType::KARMA_AMOUNT:
-          nextFrame = std::make_unique<KarmaQtyPromptFrame>("Enter the karma amount as a decimal number (ex: 2.3): ", 0, [param_name=param_itr.name, d](float amount){ (*PARAMS)[param_name] = std::to_string(amount); });
+          nextFrame = std::make_unique<KarmaAmountPromptFrame>("Enter the karma amount as a decimal number (ex: 2.3): ", 0, [param_name=param_itr.name, d](float amount){ (*PARAMS)[param_name] = std::to_string(amount); });
           return { MenuFrameAction::Push };
       };
     }
@@ -504,6 +539,12 @@ MenuFrameResult CheckParametersMenuFrame::parse(struct descriptor_data *d, char 
 const MenuFrameResult CheckParametersMenuFrame::handle_child_response(struct descriptor_data *d, const MenuFrameResult & result) { return { MenuFrameAction::JustDisplay }; }
 
 
+void debug_check_menu(struct char_data *ch) {
+  send_to_char(ch, "entering check menu debug:\r\n");
+  ch->desc->edit_check = new Check(); 
+  ch->desc->edit_check_original = new Check();
+  push_menu_frame(ch->desc, std::make_unique<CheckMenuFrame>(0));
+}
 
 //// shitty little debug test function, tucked out of the way down here
 void run_check_debug_tests(struct char_data *ch) {

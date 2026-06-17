@@ -35,7 +35,7 @@ struct MenuFrameResult {
     MenuFrameAction action;
     int child_identifier = 0;
 
-    std::variant<int, float, bool, std::string> data{std::in_place_type<int>, 0};
+    std::variant<int, float, bool, std::string, vnum_t> data{std::in_place_type<int>, 0};
 };
 
 

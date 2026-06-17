@@ -90,6 +90,15 @@ public:
   MenuFrameResult parse(struct descriptor_data *d, char *arg) override;
 };
 
+class BooleanPromptFrame : public GenericInputMenuFrame {
+protected:
+  std::function<void(bool)> on_choice_ = nullptr;
+public:
+  BooleanPromptFrame(std::string prompt, int child_identifier, std::function<void(bool)> on_choice=nullptr)
+      : GenericInputMenuFrame(std::move(prompt), child_identifier), on_choice_(std::move(on_choice)) {}
+  MenuFrameResult parse(struct descriptor_data *d, char *arg) override;
+};
+
 class IntPromptFrame : public GenericInputMenuFrame {
 protected:
   std::function<void(int)> on_choice_ = nullptr;
@@ -103,9 +112,9 @@ public:
 class VnumPromptFrame : public GenericInputMenuFrame {
 protected:
   std::function<void(vnum_t)> on_choice_ = nullptr;
-  int min_val, max_val;
+  vnum_t min_val, max_val;
 public:
-  VnumPromptFrame(std::string prompt, int child_identifier, std::function<void(vnum_t)> on_choice=nullptr, vnum_t min=INT_MIN, vnum_t max=INT_MAX)
+  VnumPromptFrame(std::string prompt, int child_identifier, std::function<void(vnum_t)> on_choice=nullptr, vnum_t min=1, vnum_t max=INT_MAX)
       : GenericInputMenuFrame(std::move(prompt), child_identifier), on_choice_(std::move(on_choice)), min_val(min), max_val(max) {}
   MenuFrameResult parse(struct descriptor_data *d, char *arg) override;
 };
@@ -115,7 +124,7 @@ protected:
   std::function<void(float)> on_choice_ = nullptr;
   int min_val, max_val;
 public:
-  FloatPromptFrame(std::string prompt, int child_identifier, std::function<void(float)> on_choice=nullptr, float min=-100000.0f, int max=100000.0f)
+  FloatPromptFrame(std::string prompt, int child_identifier, std::function<void(float)> on_choice=nullptr, float min=-100000.0f, float max=100000.0f)
       : GenericInputMenuFrame(std::move(prompt), child_identifier), on_choice_(std::move(on_choice)), min_val(min), max_val(max) {}
   MenuFrameResult parse(struct descriptor_data *d, char *arg) override;
 };
@@ -145,7 +154,7 @@ public:
 // Less-generic generics below here (skill, spell, power, etc inputs)
 //////////////////////////////////////////////////////////////////////
 
-// Prompts for a skill name, returns the skill index (int). Also accepts 'abort' to cancel.
+// Prompts for a skill name, returns the skill index (int). Also accepts 'abort' to cancel, which returns -1.
 class SkillNamePromptFrame : public IntPromptFrame {
 public:
   SkillNamePromptFrame(std::string prompt, int child_identifier, std::function<void(int)> on_choice=nullptr)
@@ -153,7 +162,7 @@ public:
   MenuFrameResult parse(struct descriptor_data *d, char *arg) override;
 };
 
-// Prompts for a spell name, returns the spell index (int). Does not have handling for spells with subtypes (e.g. Increase/Decrease). Also accepts 'abort' to cancel.
+// Prompts for a spell name, returns the spell index (int). Does not have handling for spells with subtypes (e.g. Increase/Decrease). Also accepts 'abort' to cancel, which returns -1.
 class SpellNamePromptFrame : public IntPromptFrame {
 public:
   SpellNamePromptFrame(std::string prompt, int child_identifier, std::function<void(int)> on_choice=nullptr)
@@ -161,7 +170,7 @@ public:
   MenuFrameResult parse(struct descriptor_data *d, char *arg) override;
 };
 
-// Prompts for a power name, returns the power index (int). Also accepts 'abort' to cancel.
+// Prompts for a power name, returns the power index (int). Also accepts 'abort' to cancel, which returns -1.
 class PowerNamePromptFrame : public IntPromptFrame {
 public:
   PowerNamePromptFrame(std::string prompt, int child_identifier, std::function<void(int)> on_choice=nullptr)
@@ -169,32 +178,50 @@ public:
   MenuFrameResult parse(struct descriptor_data *d, char *arg) override;
 };
 
-// Prompts for an object vnum, validates that it exists, then returns the vnum. Also accepts -1 to cancel.
+// Prompts for a positive nuyen amount, validates it against parameters, and returns it. Also accepts 'abort' to cancel, which returns -1.
+class NuyenAmountPromptFrame : public IntPromptFrame {
+public:
+  NuyenAmountPromptFrame(std::string prompt, int child_identifier, std::function<void(int)> on_choice=nullptr, int min=0, int max=INT_MAX)
+      : IntPromptFrame(std::move(prompt), child_identifier, std::move(on_choice), std::max(0, min), max) {}
+  MenuFrameResult parse(struct descriptor_data *d, char *arg) override;
+};
+
+// Prompts for a positive karma amount, validates it against parameters, and returns it. Also accepts 'abort' to cancel, which returns -1.
+class KarmaAmountPromptFrame : public FloatPromptFrame {
+public:
+  KarmaAmountPromptFrame(std::string prompt, int child_identifier, std::function<void(float)> on_choice=nullptr, float min=0.0f, float max=100000.0f)
+      : FloatPromptFrame(std::move(prompt), child_identifier, std::move(on_choice), std::max(0.0f, min), max) {}
+  MenuFrameResult parse(struct descriptor_data *d, char *arg) override;
+};
+
+// Prompts for an object vnum, validates that it exists, then returns the vnum. Also accepts 'abort' to cancel, which returns -1.
 class ObjVnumPromptFrame : public VnumPromptFrame {
 public:
-  ObjVnumPromptFrame(std::string prompt, int child_identifier, std::function<void(int)> on_choice=nullptr)
+  ObjVnumPromptFrame(std::string prompt, int child_identifier, std::function<void(vnum_t)> on_choice=nullptr)
       : VnumPromptFrame(std::move(prompt), child_identifier, std::move(on_choice)) {}
   MenuFrameResult parse(struct descriptor_data *d, char *arg) override;
 };
-/*
 
-        case ActivityParamType::OBJ_VNUM:
-          nextFrame = std::make_unique<ObjVnumPromptFrame>("Enter the object vnum: ", 0, [param_name=param_itr.name, d](vnum_t vnum){ (*PARAMS)[param_name] = std::to_string(vnum); });
-          return { MenuFrameAction::Push };
-        case ActivityParamType::MOB_VNUM:
-          nextFrame = std::make_unique<MobVnumPromptFrame>("Enter the mob's vnum: ", 0, [param_name=param_itr.name, d](vnum_t vnum){ (*PARAMS)[param_name] = std::to_string(vnum); });
-          return { MenuFrameAction::Push };
-        case ActivityParamType::ROOM_VNUM:
-          nextFrame = std::make_unique<ObjVnumPromptFrame>("Enter the room's vnum: ", 0, [param_name=param_itr.name, d](vnum_t vnum){ (*PARAMS)[param_name] = std::to_string(vnum); });
-          return { MenuFrameAction::Push };
-        case ActivityParamType::QUEST_VNUM:
-          nextFrame = std::make_unique<ObjVnumPromptFrame>("Enter the quest's vnum: ", 0, [param_name=param_itr.name, d](vnum_t vnum){ (*PARAMS)[param_name] = std::to_string(vnum); });
-          return { MenuFrameAction::Push };
-        case ActivityParamType::NUYEN_AMOUNT:
-          nextFrame = std::make_unique<NuyenQtyPromptFrame>("Enter the nuyen quantity: ", 0, [param_name=param_itr.name, d](int amount){ (*PARAMS)[param_name] = std::to_string(amount); });
-          return { MenuFrameAction::Push };
-        case ActivityParamType::BOOLEAN:
-          MF_PROMPT_YESNO_AND_RETURN("Enter Y or N: ", 0, [param_name=param_itr.name, d](bool result){ (*PARAMS)[param_name] = result; });
-        case ActivityParamType::KARMA_AMOUNT:
-          nextFrame = std::make_unique<KarmaQtyPromptFrame
-*/
+// Prompts for an mob vnum, validates that it exists, then returns the vnum. Also accepts 'abort' to cancel, which returns -1.
+class MobVnumPromptFrame : public VnumPromptFrame {
+public:
+  MobVnumPromptFrame(std::string prompt, int child_identifier, std::function<void(vnum_t)> on_choice=nullptr)
+      : VnumPromptFrame(std::move(prompt), child_identifier, std::move(on_choice)) {}
+  MenuFrameResult parse(struct descriptor_data *d, char *arg) override;
+};
+
+// Prompts for an room vnum, validates that it exists, then returns the vnum. Also accepts 'abort' to cancel, which returns -1.
+class RoomVnumPromptFrame : public VnumPromptFrame {
+public:
+  RoomVnumPromptFrame(std::string prompt, int child_identifier, std::function<void(vnum_t)> on_choice=nullptr)
+      : VnumPromptFrame(std::move(prompt), child_identifier, std::move(on_choice)) {}
+  MenuFrameResult parse(struct descriptor_data *d, char *arg) override;
+};
+
+// Prompts for an quest vnum, validates that it exists, then returns the vnum. Also accepts 'abort' to cancel, which returns -1.
+class QuestVnumPromptFrame : public VnumPromptFrame {
+public:
+  QuestVnumPromptFrame(std::string prompt, int child_identifier, std::function<void(vnum_t)> on_choice=nullptr)
+      : VnumPromptFrame(std::move(prompt), child_identifier, std::move(on_choice)) {}
+  MenuFrameResult parse(struct descriptor_data *d, char *arg) override;
+};

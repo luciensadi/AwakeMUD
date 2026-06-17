@@ -587,6 +587,12 @@ ACMD(do_debug) {
 
     return;
   }
+  
+  if (!str_cmp(arg1, "checkmenu")) {
+    extern void debug_check_menu(struct char_data *ch);
+    debug_check_menu(ch);
+    return;
+  }
 
   if (!str_cmp(arg1, "makesecs")) {
     extern void initialize_pocket_secretary(struct obj_data *sec);

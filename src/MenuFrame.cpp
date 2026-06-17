@@ -31,17 +31,36 @@ void handle_menu_frames(struct descriptor_data *d, char *arg) {
   MenuFrameResult result = d->menu_frame_stack.back().get()->parse(d, arg);
 
   if (result.action == MenuFrameAction::DoNothing) {
+    std::cout << "Entered handle_menu_frames() with result.action=DoNothing, bailing." << std::endl;
     return;
   }
 
   // Pop in a loop until we have a non-pop result OR until the stack is empty.
   while (result.action == MenuFrameAction::Pop) {
+    std::cout << "Entered handle_menu_frames() with result.action=Pop:" << std::endl;
     d->menu_frame_stack.pop_back();
 
     if (d->menu_frame_stack.empty()) {
+      std::cout << " - stack is empty, returning to con_playing" << std::endl;
       // Nothing left in the stack? Restore to playing state and bail.
       STATE(d) = CON_PLAYING;
       return;
+    } else {
+      std::cout << " - passing '";
+      if (auto pVal = std::get_if<int>(&result.data)) {
+        std::cout << "int: " << *pVal;
+      } else if (auto pVal = std::get_if<std::string>(&result.data)) {
+        std::cout << "str: " << *pVal;
+      } else if (auto pVal = std::get_if<bool>(&result.data)) {
+        std::cout << "bool: " << *pVal;
+      } else if (auto pVal = std::get_if<float>(&result.data)) {
+        std::cout << "float: " << *pVal;
+      } else if (auto pVal = std::get_if<vnum_t>(&result.data)) {
+        std::cout << "vnum: " << *pVal;
+      } else {
+        std::cout << "other val!";
+      }
+      std::cout << "' to parent frame" << std::endl;
     }
 
     result = d->menu_frame_stack.back().get()->handle_child_response(d, result);
@@ -60,6 +79,8 @@ void handle_menu_frames(struct descriptor_data *d, char *arg) {
       send_to_char(d->character, "^RThat selection is bugged!^n Please report it to staff. If you're stuck in this menu, disconnect and reconnect to abort.\r\n");
       return;
     }
+
+    std::cout << "Entered handle_menu_frames() with result.action=" << (result.action == MenuFrameAction::Push ? "Push" : "Replace") << "." << std::endl;
 
     auto next_frame = std::move(d->menu_frame_stack.back().get()->nextFrame);
     d->menu_frame_stack.back().get()->nextFrame = nullptr;
