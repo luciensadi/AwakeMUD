@@ -396,7 +396,7 @@ void totem_bonus(struct char_data *ch, int action, int type, int &target, int &s
 
     switch (GET_TOTEM(ch)) {
     case TOTEM_LEOPARD:
-      if (time_info.hours < 6 || time_info.hours > 19)
+      if (GET_ASPECT(ch) == ASPECT_FULL && (time_info.hours < 6 || time_info.hours > 19))
         skill += 2;
       break;
     case TOTEM_LIZARD:
@@ -411,13 +411,15 @@ void totem_bonus(struct char_data *ch, int action, int type, int &target, int &s
         skill += 2;
       break;
     case TOTEM_SUN:
-      {
-        if (CH_IN_SUNLIGHT(ch)) {
-          skill += 2;
-        }
-        // +2 TN for conjuring at night.
-        else if (time_info.hours < 6 || time_info.hours > 19) {
-          target += 2;
+      if (GET_ASPECT(ch) == ASPECT_FULL) {
+        {
+          if (CH_IN_SUNLIGHT(ch)) {
+            skill += 2;
+          }
+          // +2 TN for conjuring at night.
+          else if (time_info.hours < 6 || time_info.hours > 19) {
+            target += 2;
+          }
         }
       }
       break;
