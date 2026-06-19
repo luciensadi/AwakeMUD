@@ -155,7 +155,7 @@ const char *_vehicle_types__ride_in[] = {
 const char *_vehicle_speeds[] = {
   "putters by", // 0
   "splutters on through",
-  "backfires as it passes",
+  "passes by you",
   "idles past",
   "speeds past",
   "speeds past you",
@@ -406,7 +406,7 @@ const char *traffic_messages[] = {
   "Two opposing motorcycle gangs fly by at breakneck speed, their battle sending stray rounds cracking off the pavement.\r\n",
   "A beat-up junker of a car putt-putts by, its muffler scraping the ground.\r\n",
   "You catch the vague movement of a shadowy figure leaping between rooftops, but they're gone when you take a closer look.\r\n",
-  "A city bus drives by with a billboard on the side advertising some local politican.\r\n",
+  "A city bus drives by with a billboard on the side advertising some local politician.\r\n",
   "An ad for the latest Novatech cyberdeck flashes on a billboard nearby.\r\n", // 60
   "An advertisement hologram depicting a nuclear fission power station comes to life nearby, followed by the sentence \"Shiawase: Advancing Life\".\r\n",
   "A cheap neon light illuminates graffiti over an old poster depicting Renraku's latest Plant Research.\r\n",

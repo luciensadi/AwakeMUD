@@ -246,13 +246,13 @@ const struct totem_bonus_t totem_bonuses[NUM_TOTEMS] = {
 /*  5 */ { { 0, 0, 2, 0, 0, 0}, { 2, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },  /* Dog */
 /*  6 */ { { 0,-1, 2, 0, 0, 0}, { 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0} },  /* Dolphin */
 /*  7 */ { { 0, 0, 2, 0, 0, 0}, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 0, 0} },  /* Eagle */
-/*  8 */ { { 0, 2, 0, 0,-1, 0}, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },  /* Gator */
+/*  8 */ { { 0, 2, 2, 0,-1, 0}, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },  /* Gator */
 /*  9 */ { { 0, 2, 0,-1, 0, 0}, { 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0} },  /* Lion */
 /* 10 */ { { 0,-2, 2, 2, 0, 0}, { 2, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },  /* Mouse */
 //          na CO DE HE IL MA    HE CI FI FO DE MO RI SE PR MI ST WI LA SW
 /* 11 */ { { 0, 0, 0, 0, 0, 0}, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },  /* Owl */
 /* 12 */ { { 0,-1, 0, 0, 0, 2}, { 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },  /* Raccoon */
-/* 13 */ { {-1, 0, 2, 0, 2, 0}, { 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },  /* Rat */
+/* 13 */ { { 0,-1, 2, 0, 2, 0}, { 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },  /* Rat */
 /* 14 */ { { 0, 0, 0, 0, 0, 2}, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 0, 0} },  /* Raven */
 /* 15 */ { { 0, 2, 2, 0, 0, 0}, { 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0} },  /* Shark */
 /* 16 */ { { 0, 0, 2, 2, 2, 0}, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },  /* Snake */
@@ -268,14 +268,14 @@ const struct totem_bonus_t totem_bonuses[NUM_TOTEMS] = {
 /* 25 */ { { 0, 2, 0, 0, 1, 0}, { 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0} },  /* Crocodile */
 /* 26 */ { {0,-99, 1, 2, 0, 0}, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0} },  /* Dove */
 /* 27 */ { { 0,-2, 0, 1, 0, 0}, { 0, 0, 0, 2, 2, 2, 0, 0, 2, 0, 0, 0, 0, 0} },  /* Elk */
-/* 28 */ { { 0,-1, 2, 0, 0, 0}, { 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0, 0, 2, 2} },  /* Fish */
+/* 28 */ { { 0,-1, 2, 0, 0, 0}, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },  /* Fish */
 /* 29 */ { { 0,-1, 0, 0, 2, 0}, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },  /* Fox */
 /* 30 */ { { 0,-1, 0, 0, 0, 0}, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },  /* Gecko - special spells, see switch */
 //          na CO DE HE IL MA    HE CI FI FO DE MO RI SE PR MI ST WI LA SW
 /* 31 */ { { 0, 1, 2, 0, 0, 0}, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },  /* Goose */
 /* 32 */ { { 0, 0, 0, 2, 0, 0}, { 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0} },  /* Horse */
 /* 33 */ { { 0, 2, 0,-1, 0, 0}, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },  /* Hyena */
-/* 34 */ { {-1, 0, 2, 0, 2, 0}, { 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0} },  /* Jackal */
+/* 34 */ { { 0,-0, 2, 0, 2, 0}, { 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0} },  /* Jackal */
 /* 35 */ { { 0, 0, 2,-1, 0, 0}, { 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },  /* Jaguar */
 /* 36 */ { { 0, 2, 0, 2, 0, 0}, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },  /* Leopard */
 /* 37 */ { { 0, 0, 0, 2, 0, 0}, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },  /* Lizard */
@@ -298,7 +298,7 @@ const struct totem_bonus_t totem_bonuses[NUM_TOTEMS] = {
 /* 52 */ { { 0, 0, 0, 0, 2, 0}, { 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },  /* Seductress */
 /* 53 */ { { 0, 0, 0, 0, 2, 0}, { 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0, 0, 2, 2} },  /* Siren */
 /* 54 */ { { 0, 0, 0, 2, 0, 0}, { 2, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },  /* Oak */
-/* 55 */ { { 0,-1, 2, 0, 2, 0}, { 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0} },  /* Moon */
+/* 55 */ { { 0,-1, 1, 0, 2, 0}, { 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1} },  /* Moon */
 /* 56 */ { { 0, 0, 0, 0,-1, 2}, { 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0} },  /* Mountain */
 /* 57 */ { { 0, 0, 0, 2, 0, 0}, { 2, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0} },  /* Sea */
 /* 58 */ { { 0,-1, 0, 2, 0, 0}, { 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0} },  /* Stream */
@@ -365,9 +365,13 @@ void totem_bonus(struct char_data *ch, int action, int type, int &target, int &s
         break;
       case TOTEM_MOON:
       case TOTEM_SEA:
-      case TOTEM_SIREN:
         // Bonus to manipulation applies only to transformation manips.
         if (category == MANIPULATION && SPELL_IS_TRANSFORMATION_MANIPULATION(spell))
+          skill += 2;
+        break;
+      case TOTEM_SIREN:
+        // Bonus to manipulation applies only to control manips (NERPs).
+        if (category == MANIPULATION && SPELL_IS_CONTROL_MANIPULATION(spell))
           skill += 2;
         // TN penalty when in combat with more than one foe. Should technically include people shooting from around you too.
         if (ch->in_room) {
@@ -392,7 +396,7 @@ void totem_bonus(struct char_data *ch, int action, int type, int &target, int &s
 
     switch (GET_TOTEM(ch)) {
     case TOTEM_LEOPARD:
-      if (time_info.hours < 6 || time_info.hours > 19)
+      if (GET_ASPECT(ch) == ASPECT_FULL && (time_info.hours < 6 || time_info.hours > 19))
         skill += 2;
       break;
     case TOTEM_LIZARD:
@@ -407,13 +411,15 @@ void totem_bonus(struct char_data *ch, int action, int type, int &target, int &s
         skill += 2;
       break;
     case TOTEM_SUN:
-      {
-        if (CH_IN_SUNLIGHT(ch)) {
-          skill += 2;
-        }
-        // +2 TN for conjuring at night.
-        else if (time_info.hours < 6 || time_info.hours > 19) {
-          target += 2;
+      if (GET_ASPECT(ch) == ASPECT_FULL) {
+        {
+          if (CH_IN_SUNLIGHT(ch)) {
+            skill += 2;
+          }
+          // +2 TN for conjuring at night.
+          else if (time_info.hours < 6 || time_info.hours > 19) {
+            target += 2;
+          }
         }
       }
       break;
@@ -2450,8 +2456,8 @@ void raw_cast_manipulation_spell(struct char_data *ch, struct char_data *vict, i
             send_to_char("The acid splashes against you causing a mild burning sensation.\r\n", vict);
           } else {
             act("The acid splashes on $n, but $e doesn't seem to flinch.", FALSE, vict, 0, ch, TO_ROOM);
-            send_to_char(vict, "You are splashed by the acid, but %s\r\n",
-                         is_nbc_immune ? "it just rolls off your chem-sealed suit" : "it causes nothing more than a moment's irritation.");
+            send_to_char(vict, "You are splashed by the acid, but %s.\r\n",
+                         is_nbc_immune ? "it just rolls off your chem-sealed suit" : "it causes nothing more than a moment's irritation");
           }
 
           if ((IS_NPC(ch) && number(0, GET_MAG(ch) / 500)) || IS_NPC(vict)) {
@@ -6060,6 +6066,8 @@ bool can_select_metamagic(struct char_data *ch, int i)
         // Centering can go up an arbitrary number of levels.
         return GET_METAMAGIC(ch, i) % 2 == 0;
       case META_MASKING:
+        return GET_METAMAGIC(ch, i) == 0;
+      case META_DIVINING:
         return GET_METAMAGIC(ch, i) == 0;
       default:
         return FALSE;

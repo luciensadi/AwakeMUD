@@ -891,7 +891,7 @@ void diag_char_to_char(struct char_data * i, struct char_data * ch)
       bool has_metabolic_arrester = FALSE;
 
       if (AFF_FLAGS(i).IsSet(AFF_STABILIZE)) {
-        send_to_char(ch, "%s'%s stabilized for the moment.\r\n", HSSH(i), !HSSH_SHOULD_PLURAL(i) ? "re" : "s");
+        send_to_char(ch, "%s'%s stabilized for the moment.\r\n", capitalize(HSSH(i)), !HSSH_SHOULD_PLURAL(i) ? "re" : "s");
         return;
       }
 
@@ -8492,7 +8492,7 @@ ACMD(do_count) {
   if (!str_cmp(argument, "all")) {
     send_to_char("Counting all of your character's stuff across the game...\r\n", ch);
     crapcount_target(ch, ch);
-    send_to_char("\r\nIf this seems high, note that each individual pocket secretary mail is an item. Deleting old mail etc will help.\r\n", ch);
+    send_to_char("\r\nIf this seems high, note that each individual pocket secretary note is an item. Deleting some will help.\r\n", ch);
     return;
   }
 
@@ -8606,7 +8606,7 @@ ACMD(do_count) {
     }
   }
 
-  send_to_char("\r\nIf any of this seems high, note that each individual pocket secretary mail is an item. Deleting old mail etc will help.\r\n", ch);
+  send_to_char("\r\nIf any of this seems high, note that each individual pocket secretary note is an item. Deleting some etc will help.\r\n", ch);
 }
 
 void write_gsgp_file(int player_count, const char *path) {

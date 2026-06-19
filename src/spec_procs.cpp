@@ -4291,9 +4291,9 @@ void process_auth_room(struct char_data *ch) {
     int amount = ((int) GET_NUYEN(ch) / 5000) * 5000;
     add_cash_to_housing_card(ch, amount, FALSE);
     send_to_char(ch, "You receive a housing card with your remaining %d nuyen on it.\r\n", amount);
-    // Clear the rest, it can't be kept.
-    GET_NUYEN_RAW(ch) = 0;
   }
+  // Clear the rest, it can't be kept.
+  GET_NUYEN_RAW(ch) = 0;
 
   if (GET_BANK(ch)) {
     mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: %s (%ld) ended up with %d banked nuyen after chargen.", GET_CHAR_NAME(ch), GET_IDNUM(ch), GET_BANK(ch));
@@ -4301,8 +4301,8 @@ void process_auth_room(struct char_data *ch) {
       int amount = ((int) GET_BANK(ch) / 5000) * 5000;
       add_cash_to_housing_card(ch, amount, FALSE);
       send_to_char(ch, "You receive a housing card with your remaining %d banked nuyen on it.\r\n", amount);
-      GET_BANK_RAW(ch) = 0;
     }
+    GET_BANK_RAW(ch) = 0;
   }
 
   char_from_room(ch);
