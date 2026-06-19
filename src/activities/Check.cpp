@@ -62,8 +62,8 @@ namespace {
       &_check_function_has_skill,
       "True if the character has the specified rank in the named skill.",
       {
-        {"skill_idx", "Internal index of skill to check.",          ActivityParamType::SKILL_IDX,      PARAM_REQUIRED},
-        {"rank",      "Required rank between 0 and 12 inclusive.",  ActivityParamType::INTEGER_MAX_12, PARAM_OPTIONAL},
+        {"skill_idx", "Internal index of skill to check.",            ActivityParamType::SKILL_IDX,      PARAM_REQUIRED},
+        {"rank",      "Rank between 1 and 12 inclusive (default 1)",  ActivityParamType::INTEGER_MAX_12, PARAM_OPTIONAL},
       },
       DETERMINISTIC,
     }},
@@ -81,8 +81,8 @@ namespace {
       &_check_function_has_spell_active,
       "True if the character is currently affected by the specified spell.",
       {
-        {"spell_idx", "Spell to look for.", ActivityParamType::SPELL_IDX, PARAM_REQUIRED},
-        {"force",     "Required force between 0 and 12 inclusive.",  ActivityParamType::INTEGER_MAX_12, PARAM_OPTIONAL},
+        {"spell_idx", "Spell to look for.",                            ActivityParamType::SPELL_IDX, PARAM_REQUIRED},
+        {"force",     "Force between 1 and 12 inclusive (default 1)",  ActivityParamType::INTEGER_MAX_12, PARAM_OPTIONAL},
       },
       DETERMINISTIC,
     }},
@@ -90,18 +90,18 @@ namespace {
       &_check_function_could_cast_spell,
       "True if the character knows the spell at >= the requested force and is capable of casting.",
       {
-        {"spell_idx",  "Spell to look for.",                               ActivityParamType::SPELL_IDX,      PARAM_REQUIRED},
-        {"force",      "Minimum force the character must know it at.",     ActivityParamType::INTEGER_MAX_12, PARAM_OPTIONAL},
+        {"spell_idx",  "Spell to look for.",                                               ActivityParamType::SPELL_IDX,      PARAM_REQUIRED},
+        {"force",      "Force the character must know it at (1-12 inclusive, default 1)",  ActivityParamType::INTEGER_MAX_12, PARAM_OPTIONAL},
       },
       DETERMINISTIC,
     }},
 
     {"has_power_active", {
       &_check_function_has_power_active,
-      "True if the character has the named adept power active at >= the requested rank.",  // todo enforce rank?
+      "True if the character has the named adept power active at >= the requested rank.",
       {
-        {"power_idx",  "Adept power to check.",         ActivityParamType::POWER_IDX,      PARAM_REQUIRED},
-        {"rank",       "Minimum rank required (>= 1).", ActivityParamType::INTEGER_MAX_12, PARAM_OPTIONAL},
+        {"power_idx",  "Adept power to check.",                    ActivityParamType::POWER_IDX,      PARAM_REQUIRED},
+        {"rank",       "Minimum rank required (>= 1, default 1).", ActivityParamType::INTEGER_MAX_12, PARAM_OPTIONAL},
       },
       DETERMINISTIC,
     }},
@@ -127,8 +127,7 @@ namespace {
   };
 } // anonymous namespace
 
-// Family-locked accessors. These are the ONLY way to reach _check_registry
-// from outside Check.cpp.
+// Family-locked accessors. These are the ONLY way to reach _check_registry from outside Check.cpp.
 const ActivityFuncSpec* Check::lookup_spec(const std::string& slug) {
   auto it = _check_registry.find(slug);
   if (it == _check_registry.end()) return nullptr;
@@ -175,9 +174,8 @@ bool Check::test(struct char_data *ch) {
   return invoke(ch);
 }
 
-const char *Check::stringify() const {
-  // todo
-  return nullptr;
+const std::string Check::stringify() const {
+  return "stringify not implemented on check";
 }
 
 ///////////// Check function definitions below. Remember, check functions can NEVER result in character death!
@@ -475,8 +473,8 @@ MenuFrameResult CheckMenuFrame::parse(struct descriptor_data *d, char *arg) {
   }
 
   // If they got here, their specified parameter name was not part of the check's valid parameter list; show an error and bail
-  send_to_char(d->character, "That's not a valid selection. Enter a choice number%s, 'q' to save, or 'x' to abort without saving.\r\n", !CHK->func_ptr_is_set() ? ", the name of the parameter you want to edit" : "");
-  return { MenuFrameAction::JustDisplay };
+  MF_PARSE_FAILED("That's not a valid selection. Enter a choice number%s, 'q' to save, or 'x' to abort without saving.\r\n",
+                         !CHK->func_ptr_is_set() ? ", the name of the parameter you want to edit" : "");
 }
 
 const MenuFrameResult CheckMenuFrame::handle_child_response(struct descriptor_data *d, const MenuFrameResult & result) { return { MenuFrameAction::JustDisplay }; }
@@ -504,12 +502,14 @@ MenuFrameResult CheckFunctionMenuFrame::parse(struct descriptor_data *d, char *a
     return { MenuFrameAction::Pop };
   }
 
-  MF_TRYAGAIN_CASE(_check_registry.find(arg) == _check_registry.end(), "That's not a valid function name. Enter a slug from above, or 'abort' to cancel: ");
-
   // Valid function name-- blow away current check and replace it with a new one of that function.
-  delete CHK;
-  CHK = new Check(std::string(arg), {});
-  return { MenuFrameAction::Pop, child_identifier };
+  if (_check_registry.find(arg) != _check_registry.end()) {
+    delete CHK;
+    CHK = new Check(std::string(arg), {});
+    return { MenuFrameAction::Pop, child_identifier };
+  }
+
+  MF_PARSE_FAILED("That's not a valid function name. Enter a slug from above, or 'abort' to cancel.");
 }
 
 const MenuFrameResult CheckFunctionMenuFrame::handle_child_response(struct descriptor_data *d, const MenuFrameResult & result) { return { MenuFrameAction::JustDisplay }; }

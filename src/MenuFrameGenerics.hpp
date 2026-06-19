@@ -4,6 +4,12 @@
 
 #include "structs.hpp"
 
+#define AS_BOOL(thing)   std::variant<int, float, bool, std::string, vnum_t>{std::in_place_type<bool>, thing}
+#define AS_INT(thing)    std::variant<int, float, bool, std::string, vnum_t>{std::in_place_type<int>, thing}
+#define AS_VNUM(thing)   std::variant<int, float, bool, std::string, vnum_t>{std::in_place_type<vnum_t>, thing}
+#define AS_FLOAT(thing)  std::variant<int, float, bool, std::string, vnum_t>{std::in_place_type<float>, thing}
+#define AS_STRING(thing) std::variant<int, float, bool, std::string, vnum_t>{std::in_place_type<std::string>, thing}
+
 #define MF_TRYAGAIN_CASE(condition, message) {       \
   if (d->character && (condition)) {                 \
     send_to_char(d->character, "%s\r\n", (message)); \

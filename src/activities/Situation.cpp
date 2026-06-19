@@ -1,4 +1,5 @@
 #include "classes.hpp"
+#include "activity_olc.hpp"
 
 /*
   std::string slug;
@@ -58,10 +59,70 @@ std::vector<Option *> Situation::get_options_for_ch(struct char_data *ch) {
   return available_options;
 }
 
-const char *Situation::stringify() const {
-  // todo
-  return nullptr;
+const std::string Situation::stringify() const {
+  char tmp[1000] = {0};
+  snprintf(tmp, sizeof(tmp), "^W%20s^n: %.50s%s\r\n", get_slug(), get_text(), strlen(get_text()) > 50 ? "..." : "");
+  return std::string(tmp);
 }
+
+
+
+//////////////////////////////////////////////
+// OLC
+/////////////////////////////////////////////
+
+
+// Use when creating a slug for a situation. Requires that the slugs follow a set of rules.
+void SituationSlugCreateFrame::display(struct descriptor_data *d) const {
+  send_to_char(
+    "Slugs are identifiers for situations that you can reference elsewhere in activity creation."
+    " These should be clear and memorable without being overly long."
+    "\r\nExamples:"
+    "\r\n"
+    "\r\nbandit_fight: This is okay, but what if you later want multiple bandit fights? Add details."
+    "\r\nbandit_fight_in_forest: Better, but:"
+    "\r\nfight_three_bandits_in_forest_after_stealth_failure: You know exactly what this is and where it falls in the activity."
+    " This might be a bit _too_ long, so aim for something shorter, but this level of clarity is recommended."
+    " You may have to edit this activity in a few months-- do yourself a favor and make it memorable!"
+    "\r\n"
+    "\r\nEnter the slug you'd like to use. You may use alphanumeric characters as well as dashes and underscores: ",
+    CH
+  );
+}
+
+MenuFrameResult SituationSlugCreateFrame::parse(struct descriptor_data *d, char *arg) {
+  if (*arg == '0' && strlen(arg) == 1) {
+    return { MenuFrameAction::Pop };
+  }
+
+  for (const char *arg_ptr = arg; *arg_ptr; arg_ptr++) {
+    MF_TRYAGAIN_CASE(!isalnum(*arg_ptr) && *arg_ptr != '-' && *arg_ptr != '_', "Acceptable characters are a-z, A-Z, 0-9, '-', and '_'.");
+  }
+
+  if (ACT) {
+    MF_TRYAGAIN_CASE(
+      (ACT->situations.find(arg) != ACT->situations.end()
+       || std::find(ACT->slugs_that_need_writing.begin(), ACT->slugs_that_need_writing.end(), arg) != ACT->slugs_that_need_writing.end()),
+      "That slug already exists."
+    );
+  }
+  
+  // Add this new slug to the slugs_that_need_writing list
+  ACT->slugs_that_need_writing.emplace_back(arg);
+  std::sort(ACT->slugs_that_need_writing.begin(), ACT->slugs_that_need_writing.end());
+
+  // return as a stringified result (finally using the return ability)
+  return { MenuFrameAction::Pop, child_identifier, AS_STRING(arg) };
+}
+
+const MenuFrameResult SituationSlugCreateFrame::handle_child_response(struct descriptor_data *d, const MenuFrameResult & result) { return { MenuFrameAction::JustDisplay }; }
+
+
+
+
+
+
+
 
 
 //// shitty little debug test function, tucked out of the way down here
@@ -73,8 +134,8 @@ void run_situation_debug_tests(struct char_data *ch) {
   std::vector<Check> checkvec = {Check("_test_func", {{"g", "h"}})};
   std::vector<Effect> effectvec = {Effect("_test_func", {{"i", "j"}})};
   std::vector<Option> optionvec = {
-    Option("sluggy", "This is the menu text.", opt_preconditions, opt_tests, Outcome("pass_msg", {}, {}, true), Outcome("fail_msg", {}, {}, false)),
-    Option("alwaysfalse", "This is the false menu text.", opt_preconditions, opt_false_tests, Outcome("pass_msg", {}, {}, true), Outcome("fail_msg", {}, {}, false))
+    Option("sluggy", "This is the menu text.", opt_preconditions, opt_tests, Outcome("pass_msg", {}, {}), Outcome("fail_msg", {}, {})),
+    Option("alwaysfalse", "This is the false menu text.", opt_preconditions, opt_false_tests, Outcome("pass_msg", {}, {}), Outcome("fail_msg", {}, {}))
   };
 
   Situation *situation = new Situation(

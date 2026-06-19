@@ -68,12 +68,12 @@ MENUFUNC(activity_main) {
 
   send_to_char(CH, "\r\n4)  Preconditions:\r\n%s", ACT->preconditions.empty() ? "    - None defined (always available)\r\n" : "");
   for (const auto &precondition : ACT->preconditions) {
-    send_to_char(CH, "    - ^c%s^n\r\n", precondition.stringify());
+    send_to_char(CH, "    - ^c%s^n\r\n", precondition.stringify().c_str());
   }
 
   send_to_char(CH, "\r\n5)  Situations Available:\r\n%s", ACT->situations.empty() ? "    - ^yNone defined^n\r\n" : "");
   for (const auto &pair : ACT->situations) {
-    send_to_char(CH, "    - ^c%s^n\r\n", pair.second.stringify());
+    send_to_char(CH, "    - ^c%s^n\r\n", pair.second.stringify().c_str());
   }
 
   send_to_char(CH, "\r\n6)  Starting Situations: ^c%s^n", ACT->starting_situations.empty() ? "^ynot set^n\r\n" : "");
@@ -161,7 +161,7 @@ MENUFUNC(activity_edit_preconditions) {
   } else {
     int idx = 1;
     for (const auto &precondition : ACT->preconditions) {
-      send_to_char(CH, "%2d) %s\r\n", idx++, precondition.stringify());
+      send_to_char(CH, "%2d) %s\r\n", idx++, precondition.stringify().c_str());
     }
   }
   send_to_char(CH, "\r\n c) Create a condition that must be true for this activity to show up for a character\r\n");

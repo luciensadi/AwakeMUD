@@ -94,9 +94,8 @@ std::string Effect::serialize(const int indent, const char indent_char) {
   return basic_info.dump(indent, indent_char);
 }
 
-const char *Effect::stringify() const {
-  // todo
-  return nullptr;
+const std::string Effect::stringify() const {
+  return std::string("(effect stringify not implemented)");
 }
 
 ///////////// Effect function definitions below. Remember, effect functions return TRUE on death, FALSE otherwise!

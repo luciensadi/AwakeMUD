@@ -1203,6 +1203,8 @@ struct descriptor_data
   Situation *edit_situation_original;
   std::map<std::string, std::string> *edit_params;
   std::map<std::string, std::string> *edit_params_original;
+  std::vector<std::string> edit_effects_original;
+  std::vector<std::string> edit_slugs_original;
   // If you add more of these edit_whatevers, touch comm.cpp's free_editing_structs and add them!
 
   int canary;

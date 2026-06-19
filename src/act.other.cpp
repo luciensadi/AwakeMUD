@@ -1234,7 +1234,9 @@ const char *tog_messages[][2] = {
                             {"You will now automatically ready your holstered/sheathed weapons.\r\n",
                              "You will no longer automatically ready your holstered/sheathed weapons.\r\n"},
                             {"You will now see roundtime messages for your actions.\r\n",
-                             "You will no longer see roundtime messages for your actions.\r\n"}
+                             "You will no longer see roundtime messages for your actions.\r\n"},
+                            {"Activities system debug output enabled.\r\n",
+                             "Activities system debug output disabled.\r\n"}
                           };
 
 ACMD(do_toggle)
@@ -1543,6 +1545,9 @@ ACMD(do_toggle)
       }
       playerDB.SaveChar(ch);
       return;
+    } else if (access_level(ch, LVL_BUILDER) && (is_abbrev(argument, "activities") || is_abbrev(argument, "encounters"))) {
+      result = PRF_TOG_CHK(ch, PRF_ACTIVITIES_DEBUG);
+      mode = 55;
     } else {
       send_to_char("That is not a valid toggle option.\r\n", ch);
       return;

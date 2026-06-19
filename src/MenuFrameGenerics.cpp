@@ -3,11 +3,7 @@
 #include "constants.hpp"
 #include "db.hpp"
 
-#define AS_BOOL(thing)   std::variant<int, float, bool, std::string, vnum_t>{std::in_place_type<bool>, thing}
-#define AS_INT(thing)    std::variant<int, float, bool, std::string, vnum_t>{std::in_place_type<int>, thing}
-#define AS_VNUM(thing)   std::variant<int, float, bool, std::string, vnum_t>{std::in_place_type<vnum_t>, thing}
-#define AS_FLOAT(thing)  std::variant<int, float, bool, std::string, vnum_t>{std::in_place_type<float>, thing}
-#define AS_STRING(thing) std::variant<int, float, bool, std::string, vnum_t>{std::in_place_type<std::string>, thing}
+extern void send_activity_debug_msg(struct char_data *ch, const char *fmt, ...);
 
 MenuFrameResult YesNoPromptFrame::parse(struct descriptor_data *d, char *arg) {
   skip_spaces(&arg);

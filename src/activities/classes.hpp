@@ -15,7 +15,7 @@ namespace fs = std::filesystem;
 
 #define BASE_ACTIVITY_PATH fs::absolute("lib") / "activities"
 
-#define STRING_GETTER(varname)  const char *get_##varname() { return varname.empty() ? "(not set)" : varname.c_str(); }
+#define STRING_GETTER(varname)  const char *get_##varname() const { return varname.empty() ? "(not set)" : varname.c_str(); }
 
 /*
   Design:
@@ -45,6 +45,8 @@ namespace fs = std::filesystem;
 
 
 */
+
+extern void send_activity_debug_msg(struct char_data *ch, const char *fmt, ...);
 
 typedef bool (*ActivityFuncPtr)(struct char_data*, const std::map<std::string, std::string>&);
 
@@ -159,7 +161,7 @@ public:
   std::string serialize(const int indent = -1, const char indent_char = ' ') override;
   
   // Display the Check for easy reading. Only used in edit/debug contexts.
-  const char *stringify() const;
+  const std::string stringify() const;
 
   // True if this specific test passed for the character, false otherwise.
   bool test(struct char_data *ch);
@@ -172,7 +174,7 @@ public:
   static std::vector<std::string> list_slugs();
 };
 
-// A side effect that, when encountered, modifies the character and/or their RunningActivity in some way. (todo add ptr from char struct to RunningActivity)
+// A side effect that, when encountered, modifies the character and/or their RunningActivity in some way. (todo add ptr from char struct to RunningActivity, let it recover from saved state (val stores uuid, lookup in map on login?))
 class Effect : public ActivityFunction {
 public:
   Effect(const std::string& type, const std::map<std::string, std::string>& settings);
@@ -182,7 +184,7 @@ public:
   std::string serialize(const int indent = -1, const char indent_char = ' ') override;
 
   // Display the Effect for easy reading. Only used in edit/debug contexts.
-  const char *stringify() const;
+  const std::string stringify() const;
 
   // Applying an effect can result in death. Returns true when this happens.
   bool apply(struct char_data *ch);
@@ -197,24 +199,23 @@ class Outcome {
 public:
   std::string message; // A fragment that would fit after both 'Lucien ' and 'Assisted by X and Y, Lucien '.
   // e.g. "breaks down the door with his enormous schlong!"
-  bool is_pass_outcome;
 
-  std::vector<Effect> effects = {};
   // An optional list of effects that apply to all characters in the party when this outcome is selected.
+  std::vector<Effect> effects = {};
 
-  std::vector<std::string> situations = {};  // (these slugs may become invalidated during OLC, so handle that gracefully)
   // A list of situations this outcome can branch to, or empty if the end of the activity.
+  std::vector<std::string> situations = {};  // (these slugs may become invalidated during OLC, so handle that gracefully)
 
-  Outcome(const std::string message, const std::vector<Effect> effects, const std::vector<std::string> situations, bool is_pass_outcome) :
-          message(message), is_pass_outcome(is_pass_outcome), effects(effects), situations(situations) {}
-  explicit Outcome(const std::string serialized_json, bool is_pass_outcome);
+  Outcome(const std::string message, const std::vector<Effect> effects, const std::vector<std::string> situations) :
+          message(message), effects(effects), situations(situations) {}
+  explicit Outcome(const std::string serialized_json);
   Outcome() = default;
 
   // Getters, which kindly return C strings to prevent having to go .c_str() all the time.
   STRING_GETTER(message)
 
   // Display the Outcome for easy reading. Only used in edit/debug contexts.
-  const char *stringify() const;
+  const std::string stringify() const;
 
   // Apply all effects to the selected character. Return true if they die (i.e. they have been extracted.)
   bool apply(struct char_data *ch) { for (auto& effect : effects) { if (effect.apply(ch)) { return true; } }    return false; }
@@ -236,10 +237,7 @@ public:
 
   // Testing constructor.
   Option(const std::string slug, const std::string menu_text, std::vector<Check> preconditions, std::vector<Check> tests, Outcome pass, Outcome fail) : 
-         slug(slug), menu_text(menu_text), preconditions(preconditions), tests(tests), pass(pass), fail(fail) {
-          pass.is_pass_outcome = true;
-          fail.is_pass_outcome = false;
-         }
+         slug(slug), menu_text(menu_text), preconditions(preconditions), tests(tests), pass(pass), fail(fail) {}
 
   explicit Option(const std::string serialized_json);
 
@@ -250,7 +248,7 @@ public:
   STRING_GETTER(menu_text)
 
   // Display the Option for easy reading. Only used in edit/debug contexts.
-  const char *stringify() const;
+  const std::string stringify() const;
 
   // Returns TRUE if you successfully pass all the preconditions to even see this option, FALSE otherwise.
   bool is_available_to_ch(struct char_data *ch) { for (auto check : preconditions) { if (!check.test(ch)) return false; } return true; }
@@ -286,7 +284,7 @@ public:
   STRING_GETTER(text)
 
   // Display the Situation for easy reading. Only used in edit/debug contexts.
-  const char *stringify() const;
+  const std::string stringify() const;
 
   bool meets_preconditions(struct char_data *ch) { for (auto check : preconditions) { if (!check.test(ch)) return false; } return true; }
 
@@ -319,6 +317,7 @@ public:
 
   // All possible situations in this activity, keyed by situation slug
   std::map<std::string, Situation> situations = {};
+  std::vector<std::string> slugs_that_need_writing = {}; // TODO: not saved, must be populated on boot
 
   // List of potential starting situation slugs
   std::vector<std::string> starting_situations = {};

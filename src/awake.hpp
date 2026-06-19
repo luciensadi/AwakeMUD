@@ -418,7 +418,7 @@ enum {
 
 /* preference flags: used by char_data.player_specials.pref */
 
-// If you add to this list, also add to constant.cpp's preference_bits[].
+// If you add to this list, also add to constant.cpp's preference_bits[] AND preference_bits_v2.
 #define PRF_PACIFY                             0
 #define PRF_COMPACT                            1
 #define PRF_AUTOEXIT                           2  /* Display exits in a room       */
@@ -493,7 +493,9 @@ enum {
 #define PRF_PASSIVE_IN_COMBAT                  71
 #define PRF_NO_AUTOREADY                       72
 #define PRF_NOROUNDTIME                        73
-#define PRF_MAX                                74
+#define PRF_ACTIVITIES_DEBUG                   74
+#define PRF_MAX                                75
+// If you add to this list, also add to constant.cpp's preference_bits[] AND preference_bits_v2.
 
 /* log watch */
 

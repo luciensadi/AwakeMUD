@@ -41,3 +41,25 @@ void load_activities() {
     }
   }
 }
+
+void send_activity_debug_msg(struct char_data *ch, const char *fmt, ...) {
+  va_list args;
+
+  char msg_str[10000];
+
+  va_start(args, fmt);
+  vsnprintf(msg_str, sizeof(msg_str), fmt, args);
+  va_end(args);
+
+  strlcpy(msg_str, replace_neutral_color_codes(msg_str, "^L"), sizeof(msg_str));
+
+  // Send it to all subscribers around ch, including ch if necessary
+  for (struct char_data *witness = ch->in_room ? ch->in_room->people : ch->in_veh->people;
+       witness;
+       witness = ch->in_room ? witness->next_in_room : witness->next_in_veh)
+  {
+    if (PRF_FLAGGED(witness, PRF_ACTIVITIES_DEBUG)) {
+      send_to_char(witness, "^L[Activities Debug (%s^L)]: %s^n\r\n", GET_CHAR_NAME(ch), msg_str);
+    }
+  }
+}

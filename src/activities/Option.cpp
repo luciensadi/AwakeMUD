@@ -40,9 +40,6 @@ void from_json(const json& j, Option& e) {
   j.at("tests").get_to(e.tests);
   j.at("pass").get_to(e.pass);
   j.at("fail").get_to(e.fail);
-
-  e.pass.is_pass_outcome = true;
-  e.fail.is_pass_outcome = false;
 }
 // And the wrapper to get a string out of the serialization function. Not sure I actually need this.
 std::string Option::serialize(const int indent, const char indent_char) const {
@@ -55,18 +52,18 @@ Option::Option(const std::string serialized_json) {
   from_json(json::parse(serialized_json), *this);
 }
 
-const char *Option::stringify() const {
+const std::string Option::stringify() const {
   // todo
-  return nullptr;
+  return std::string("option stringify not implemented");
 }
 
 //// shitty little debug test function, tucked out of the way down here
 void run_option_debug_tests(struct char_data *ch) {
   std::vector<Check> preconditions = {Check("_test_func", {{"a", "b"}})};
   std::vector<Check> tests = {Check("_test_func", {{"a", "b"}})};
-  Option *option = new Option("sluggy", "This is the menu text.", preconditions, tests, Outcome("pass_msg", {}, {}, true), Outcome("fail_msg", {}, {}, false));
+  Option *option = new Option("sluggy", "This is the menu text.", preconditions, tests, Outcome("pass_msg", {}, {}), Outcome("fail_msg", {}, {}));
 
-  send_to_char(ch, "Option '%s' %s available to you, and you %s the tests.\r\n", option->slug.c_str(), option->is_available_to_ch(ch) ? "is" : "is not", option->test(ch)->is_pass_outcome ? "passed" : "failed");
+  send_to_char(ch, "Option '%s' %s available to you, and you succeeded on the checks for it.\r\n", option->slug.c_str(), option->is_available_to_ch(ch) ? "is" : "is not");
 
   auto serialized = option->serialize(2);
   send_to_char(ch, "Serialized, the option is '%s'\r\n", serialized.c_str());
@@ -75,7 +72,7 @@ void run_option_debug_tests(struct char_data *ch) {
   auto reserialized = deserialized->serialize(2);
   send_to_char(ch, "Reserialization: %s\r\n", !strcmp(serialized.c_str(), reserialized.c_str()) ? "match!" : "mismatch");
 
-  send_to_char(ch, "Reserialized option '%s' %s available to you, and you %s the tests.\r\n", deserialized->slug.c_str(), deserialized->is_available_to_ch(ch) ? "is" : "is not", deserialized->test(ch)->is_pass_outcome ? "passed" : "failed");
+  send_to_char(ch, "Reserialized option '%s' %s available to you, and you succeeded on the checks for it.\r\n", deserialized->slug.c_str(), deserialized->is_available_to_ch(ch) ? "is" : "is not");
 
   delete deserialized;
   delete option;

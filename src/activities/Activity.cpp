@@ -129,6 +129,18 @@ Situation* Activity::get_next_situation_from_outcome(const Outcome *outcome, str
 }
 
 
+/////////////////////////////////////////////////
+// OLC
+//////////////////////////////////////////////////
+
+// TODO: Make sure that the situations list is highlighted if there are missing situations.
+// Right now that's going to look like a slug getting added to the slugs_that_need_writing list.
+
+
+
+
+
+
 //// shitty little debug test function, tucked out of the way down here
 void run_activity_debug_tests(struct char_data *ch) {
   std::vector<Check> opt_preconditions = {Check("_test_func", {{"a", "b"}})};
@@ -138,8 +150,8 @@ void run_activity_debug_tests(struct char_data *ch) {
   std::vector<Check> checkvec = {Check("_test_func", {{"g", "h"}})};
   std::vector<Effect> effectvec = {Effect("_test_func", {{"i", "j"}})};
   std::vector<Option> optionvec = {
-    Option("sluggy", "This is the menu text.", opt_preconditions, opt_tests, Outcome("pass_msg", {}, {}, true), Outcome("fail_msg", {}, {}, false)),
-    Option("alwaysfalse", "This is the false menu text.", opt_preconditions, opt_false_tests, Outcome("pass_msg", {}, {}, true), Outcome("fail_msg", {}, {}, false))
+    Option("sluggy", "This is the menu text.", opt_preconditions, opt_tests, Outcome("pass_msg", {}, {}), Outcome("fail_msg", {}, {})),
+    Option("alwaysfalse", "This is the false menu text.", opt_preconditions, opt_false_tests, Outcome("pass_msg", {}, {}), Outcome("fail_msg", {}, {}))
   };
 
   Situation *situation = new Situation(
