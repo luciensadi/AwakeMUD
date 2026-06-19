@@ -46,6 +46,9 @@ void cfedit_disp_menu(struct descriptor_data *d)
     // Others multiply by a set multiplier based on software type.
     program_size *= programs[GET_COMPLEX_FORM_PROGRAM(FORM)].multiplier;
   }
+  if (GET_COMPLEX_FORM_PROGRAM(FORM) > 0) {
+    send_to_char(CH, "\r\n  %s\r\n\r\n", programs[GET_COMPLEX_FORM_PROGRAM(FORM)].description);
+  }
   send_to_char(CH, "Effective Size: ^c%d^n\r\n", program_size);
   send_to_char(CH, "    Karma Cost: ^c%.2f^n\r\n\r\n", (float)complex_form_karma_cost(CH, FORM) / 100);
   send_to_char(CH, "q) Quit and save\r\nEnter your choice: ");
@@ -62,15 +65,13 @@ void cfedit_disp_program_menu(struct descriptor_data *d)
   for (int counter = 0; counter < COMPLEX_FORM_TYPES; counter++)
   {
     program_data* prog_data = &programs[complex_form_programs[counter]];
-    if (screenreader_mode)
-      send_to_char(d->character, "%d) %s\r\n", counter + 1, prog_data->name);
-    else {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%s%2d) %-22s%s",
-              (counter + 1) % 3 == 1 ? "  " : "",
-              counter + 1,
-              prog_data->name,
-              (counter + 1) % 3 == 0 ? "\r\n" : "");
-    }
+    send_to_char(d->character, "%s%d) %s%s%s^n\r\n",
+      prog_data->nerps ? "^L" : "",
+      counter + 1,
+      prog_data->nerps ? "" : "^c",
+      prog_data->name,
+      prog_data->nerps ? "  (not implemented)" : ""
+    );
   }
   if (!screenreader_mode)
     send_to_char(d->character, "%s\r\nSelect program type:\r\n", buf);
