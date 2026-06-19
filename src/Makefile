@@ -105,6 +105,12 @@ LDLIBS   = $(BASE_LDLIBS) $(OS_LDLIBS)
 
 # Further setup (identify source files etc)
 sourcefiles   = $(wildcard activities/*.cpp *.cpp)
+
+# If secrets.cpp exists, exclude secrets_stub.cpp from the build
+ifneq ($(wildcard secrets.cpp),)
+  sourcefiles := $(filter-out secrets_stub.cpp,$(sourcefiles))
+endif
+
 objfiles      = $(sourcefiles:.cpp=.o)
 test_objfiles = $(sourcefiles:.cpp=.test.o) # Separate objects for testing
 depfiles      = $(sourcefiles:.cpp=.d) $(sourcefiles:.cpp=.test.d)

@@ -1619,7 +1619,7 @@ int make_prompt(struct descriptor_data * d)
               snprintf(str, sizeof(str), "%0.2f", ((float)GET_KARMA(ch) / 100));
               break;
             case 'K':       // rep
-              snprintf(str, sizeof(str), "%d", GET_REP(d->character));
+              snprintf(str, sizeof(str), "%ld", GET_REP(d->character));
               break;
             case 'l':       // current weight
               snprintf(str, sizeof(str), "%.2f", IS_CARRYING_W(d->character));
