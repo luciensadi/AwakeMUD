@@ -1050,7 +1050,6 @@ ACMD(do_broadcast)
     for (d = descriptor_list; d; d = d->next) {
       if (d != ch->desc && d->character && 
           (IS_VALID_STATE_TO_RECEIVE_COMMS(d->connected) && !(d->connected != CON_PLAYING && PRF_FLAGGED(d->character, PRF_MENUGAG)))
-          && !PLR_FLAGGED(d->character, PLR_MATRIX)
           && !IS_PROJECT(d->character) &&
           !ROOM_FLAGGED(get_ch_in_room(d->character), ROOM_SOUNDPROOF) &&
           !ROOM_FLAGGED(get_ch_in_room(d->character), ROOM_BFS_MARK))
