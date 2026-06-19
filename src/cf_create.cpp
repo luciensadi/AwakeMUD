@@ -46,6 +46,9 @@ void cfedit_disp_menu(struct descriptor_data *d)
     // Others multiply by a set multiplier based on software type.
     program_size *= programs[GET_COMPLEX_FORM_PROGRAM(FORM)].multiplier;
   }
+  if (GET_COMPLEX_FORM_PROGRAM(FORM) > 0) {
+    send_to_char(CH, "\r\n  %s\r\n\r\n", programs[GET_COMPLEX_FORM_PROGRAM(FORM)].description);
+  }
   send_to_char(CH, "Effective Size: ^c%d^n\r\n", program_size);
   send_to_char(CH, "    Karma Cost: ^c%.2f^n\r\n\r\n", (float)complex_form_karma_cost(CH, FORM) / 100);
   send_to_char(CH, "q) Quit and save\r\nEnter your choice: ");
