@@ -2833,7 +2833,7 @@ static void ExecuteMSDPPair( descriptor_t *apDescriptor, const char *apVariable,
                 char *pBuffer = new char[VariableNameTable[i].Max+1];
                 int j; /* Loop counter */
 
-                for ( j = 0; j < VariableNameTable[i].Max && *apValue != '\0'; ++apValue )
+                for ( j = 0; j < VariableNameTable[i].Max - 1 && *apValue != '\0'; ++apValue )
                 {
                   if ( isprint(*apValue) )
                     pBuffer[j++] = *apValue;
