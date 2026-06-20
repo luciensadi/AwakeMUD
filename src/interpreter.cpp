@@ -738,7 +738,7 @@ struct command_info cmd_info[] =
     { "hcontrol"   , POS_DEAD    , do_hcontrol , LVL_EXECUTIVE, 0, BLOCKS_IDLE_REWARD },
     { "heal"       , POS_SITTING , do_heal     , 0, 0, BLOCKS_IDLE_REWARD },
     { "hedit"      , POS_DEAD    , do_hedit    , LVL_BUILDER, 0, BLOCKS_IDLE_REWARD },
-    { "helpedit"   , POS_DEAD    , do_helpedit , LVL_FIXER, 0, BLOCKS_IDLE_REWARD },
+    { "helpedit"   , POS_DEAD    , do_helpedit , LVL_ADMIN 0, BLOCKS_IDLE_REWARD },
     { "helpexport" , POS_DEAD    , do_helpexport, LVL_PRESIDENT, 0, BLOCKS_IDLE_REWARD },
     { "hit"        , POS_FIGHTING, do_hit      , 0, SCMD_HIT, BLOCKS_IDLE_REWARD },
     { "highlight"  , POS_DEAD    , do_highlight, 0, 0, ALLOWS_IDLE_REWARD },
