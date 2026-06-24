@@ -2830,13 +2830,17 @@ static void ExecuteMSDPPair( descriptor_t *apDescriptor, const char *apVariable,
                 !strcmp(apDescriptor->pProtocol->pVariables[i]->pValueString, "Unknown") )
               {
                 /* Store the new value if it's valid */
-                char *pBuffer = new char[VariableNameTable[i].Max+1];
-                int j; /* Loop counter */
+                char *pBuffer = new char[VariableNameTable[i].Max + 1];
+                int j = 0; /* Loop counter */
 
-                for ( j = 0; j < VariableNameTable[i].Max - 1 && *apValue != '\0'; ++apValue )
-                {
-                  if ( isprint(*apValue) )
-                    pBuffer[j++] = *apValue;
+                if (VariableNameTable[i].Max <= 0) {
+                  log_vfprintf("ERROR in protocol.cpp: VariableTableName[%d].Max = %d! This will break MSDP parsing. (apValue='%s')", i, VariableNameTable[i].Max, apValue);
+                } else {
+                  for ( j = 0; j < VariableNameTable[i].Max && *apValue != '\0'; ++apValue )
+                  {
+                    if ( isprint(*apValue) )
+                      pBuffer[j++] = *apValue;
+                  }
                 }
                 pBuffer[j++] = '\0';
 
