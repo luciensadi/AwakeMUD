@@ -32,12 +32,23 @@
 #include "chargen.hpp"
 #include "vision_overhaul.hpp"
 #include "drugs.hpp"
+#include "MenuFrame.hpp"
 
 class Faction;
 class ApartmentComplex;
 class Apartment;
 class ApartmentRoom;
 class PCExDesc;
+
+// Editing info for the activity system.
+class Activity;
+class Check;
+class Effect;
+class Outcome;
+class Option;
+class Situation;
+class RunningActivity;
+struct ActivityParamSpec;
 
 /***********************************************************************
  * Structures                                                          *
@@ -1143,6 +1154,8 @@ struct descriptor_data
 
   listClass<const char *> message_history[NUM_COMMUNICATION_CHANNELS];
 
+  RunningActivity *running_activity;
+
   // all this from here down is stuff for on-line creation
   int edit_mode;                /* editing sub mode */
   bool edit_convert_color_codes; /* if this is true, display color codes in descs as ^^ for copy-paste */
@@ -1173,6 +1186,25 @@ struct descriptor_data
   Faction *edit_faction;
   PCExDesc *edit_exdesc;
   Playergroup *edit_pgroup; /* playergroups */
+
+  std::vector<std::unique_ptr<MenuFrame>> menu_frame_stack;
+
+  // Need original pointers so we know what to overwrite.
+  Activity *edit_activity;
+  Check *edit_check;
+  Check *edit_check_original;
+  Effect *edit_effect;
+  Effect *edit_effect_original;
+  Outcome *edit_outcome;
+  Outcome *edit_outcome_original;
+  Option *edit_option;
+  Option *edit_option_original;
+  Situation *edit_situation;
+  Situation *edit_situation_original;
+  std::map<std::string, std::string> *edit_params;
+  std::map<std::string, std::string> *edit_params_original;
+  std::vector<std::string> edit_effects_original;
+  std::vector<std::string> edit_slugs_original;
   // If you add more of these edit_whatevers, touch comm.cpp's free_editing_structs and add them!
 
   int canary;
@@ -1192,8 +1224,10 @@ struct descriptor_data
       edit_zon(NULL), edit_cmd(NULL), edit_veh(NULL), edit_host(NULL), edit_icon(NULL),
       edit_helpfile(NULL), edit_complex(NULL), edit_complex_original(NULL),
       edit_apartment(NULL), edit_apartment_original(NULL), edit_apartment_room(NULL),
-      edit_apartment_room_original(NULL), edit_faction(NULL), edit_exdesc(NULL), edit_pgroup(NULL),
-      canary(CANARY_VALUE), pProtocol(NULL)
+      edit_apartment_room_original(NULL), edit_faction(NULL), edit_exdesc(NULL), edit_pgroup(NULL), menu_frame_stack(),
+      edit_activity(NULL), edit_check(NULL), edit_check_original(NULL), edit_effect(NULL), edit_effect_original(NULL),
+      edit_outcome(NULL), edit_outcome_original(NULL), edit_option(NULL), edit_option_original(NULL),
+      edit_situation(NULL), edit_situation_original(NULL), edit_params(NULL), edit_params_original(NULL), canary(CANARY_VALUE), pProtocol(NULL)
   {
     // Zero out our metrics.
     for (int i = 0; i < NUM_OF_TRACKED_NUYEN_INCOME_SOURCES; i++) {
