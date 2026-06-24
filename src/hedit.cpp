@@ -757,7 +757,7 @@ void hedit_parse(struct descriptor_data *d, const char *arg)
         REMOVE_FROM_LIST(exit, HOST->exit, next);
         DELETE_ARRAY_IF_EXTANT(exit->addresses);
         DELETE_ARRAY_IF_EXTANT(exit->roomstring);
-        delete [] exit;
+        delete exit;
         hedit_disp_exit_menu(d);
       }
     }
