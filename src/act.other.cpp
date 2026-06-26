@@ -4598,7 +4598,7 @@ ACMD(do_cpool)
   extern int get_skill_num_in_use_for_weapons(struct char_data *ch);
   extern int get_skill_dice_in_use_for_weapons(struct char_data *ch);
 
-  int dodge = 0, bod = 0, off = 0, total = GET_COMBAT_POOL(ch);
+  int dodge = 0, bod = 0, off = 0;
 
   if (!*argument) {
     do_pool(ch, argument, 0, 0);
@@ -4622,38 +4622,49 @@ ACMD(do_cpool)
     dodge = 0;
   }
 
+  // Dodge also doesn't apply when prone, but prone combat code already adds dodge dice to soak
+
   if (dodge < 0 || bod < 0 || off < 0) {
     send_to_char("Combat pool values cannot be negative!\r\n", ch);
     return;
   }
 
-  total -= ch->real_abils.defense_pool = GET_DODGE(ch) = MIN(dodge, total);
-  total -= ch->real_abils.body_pool = GET_BODY_POOL(ch) = MIN(bod, total);
+  // Allow storing overallocated values to support weapon switching and dynamic cpool totals
+  ch->real_abils.defense_pool = dodge;
+  ch->real_abils.body_pool = bod;
+  ch->real_abils.offense_pool = off;
 
   int skill_num = get_skill_num_in_use_for_weapons(ch);
-  int skill_dice = get_skill_dice_in_use_for_weapons(ch);
+  int dice_max = get_skill_dice_in_use_for_weapons(ch);
+  int remainder = GET_COMBAT_POOL(ch);
 
   if (GET_CHIPJACKED_SKILL(ch, skill_num)) {
-    skill_dice = 0;
+    dice_max = 0;
     if (off > 0) {
       send_to_char("You're using an activesoft, so you can't allocate any dice to your offense pool.\r\n", ch);
       off = 0;
     }
   }
 
-  if (off > skill_dice) {
-    send_to_char(ch, "You're not skilled enough with %s, so your offense pool is capped at %d.\r\n", skills[skill_num].name, skill_dice);
-    off = skill_dice;
-  }
+  // Now set allocation for current cpool/weapon
+  remainder -= GET_DODGE(ch) = MIN(dodge, remainder);
+  remainder -= GET_BODY_POOL(ch) = MIN(bod, remainder);
 
-  total -= ch->real_abils.offense_pool = GET_OFFENSE(ch) = MIN(total, off);
-  if (total > 0) {
-    if (IS_ASTRAL(ch)) {
-      GET_DODGE(ch) += total;
-      send_to_char(ch, "Putting the %d remaining dice in your ranged-attack dodging pool.\r\n", total);
+  if (off > dice_max) {
+    send_to_char(ch, "You're not skilled enough with %s, so your offense pool is capped at %d.\r\n", skills[skill_num].name, dice_max);
+    off = dice_max;
+  }
+  remainder -= GET_OFFENSE(ch) = MIN(off, remainder);
+
+  // Any remaining dice are reallocated based on existing dodge/soak assignments
+  // Where dodge == soak, extra dice default to soak
+  if (remainder) {
+    if (GET_DODGE(ch) > GET_BODY_POOL(ch)) {
+      GET_DODGE(ch) += remainder;
+      send_to_char(ch, "Putting the %d remaining dice in your dodge pool.\r\n", remainder);
     } else {
-      GET_BODY_POOL(ch) += total;
-      send_to_char(ch, "Putting the %d remaining dice in your body pool.\r\n", total);
+      GET_BODY_POOL(ch) += remainder;
+      send_to_char(ch, "Putting the %d remaining dice in your body pool.\r\n", remainder);
     }
   }
 

@@ -1040,39 +1040,38 @@ void affect_total(struct char_data * ch)
     }
   }
 
-  int skill_used = get_skill_num_in_use_for_weapons(ch);
+  int skill_num = get_skill_num_in_use_for_weapons(ch);
   int dice_max = get_skill_dice_in_use_for_weapons(ch);
+  int remainder = GET_COMBAT_POOL(ch);
 
-  if (GET_CHIPJACKED_SKILL(ch, skill_used)) {
+  if (GET_CHIPJACKED_SKILL(ch, skill_num)) {
     dice_max = 0;
   }
 
   // There's nothing to dodge on the astral plane.
+  // Dodge also doesn't apply when prone, but prone combat code already moves dodge to soak
   if (IS_ASTRAL(ch))
     GET_DODGE(ch) = 0;
   else {
-    GET_DODGE(ch) = MIN(GET_DODGE(ch), GET_COMBAT_POOL(ch));
-
-    if (ch_is_npc && AFF_FLAGGED(ch, AFF_PRONE)) {
-      GET_BODY_POOL(ch) += GET_DODGE(ch) / 2;
-      GET_DODGE(ch) = 0;
-      // The remaining points will be assigned to offense in the next stanza.
-    }
+    remainder -= GET_DODGE(ch) = MIN(GET_DODGE(ch), remainder);
   }
 
-  GET_BODY_POOL(ch) = MIN(GET_BODY_POOL(ch), GET_COMBAT_POOL(ch) - GET_DODGE(ch));
-  GET_OFFENSE(ch) = GET_COMBAT_POOL(ch) - GET_DODGE(ch) - GET_BODY_POOL(ch);
-  if (GET_OFFENSE(ch) > dice_max) {
-    if (ch_is_npc && !IS_ASTRAL(ch) && AFF_FLAGGED(ch, AFF_PRONE)) {
-      GET_BODY_POOL(ch) += GET_OFFENSE(ch) - dice_max;
+  remainder -= GET_BODY_POOL(ch) = MIN(GET_BODY_POOL(ch), remainder);
+  remainder -= GET_OFFENSE(ch) = MIN(MIN(GET_OFFENSE(ch), dice_max), remainder);
+
+  // Any offense dice above cap are reallocated based on existing dodge/soak assignments
+  // Where dodge == soak, extra dice default to soak
+  if (remainder) {
+    if (GET_DODGE(ch) > GET_BODY_POOL(ch)) {
+      GET_DODGE(ch) += remainder;
     } else {
-      GET_DODGE(ch) += GET_OFFENSE(ch) - dice_max;
+      GET_BODY_POOL(ch) += remainder;
     }
-    GET_OFFENSE(ch) = dice_max;
   }
 
   // NPCs specialize their defenses: unless they've got crazy dodge dice, they'll want to just soak.
   // AKA, 'your average wage slave is not going to try to do the Matrix bullet dodge when he sees a gun.'
+  // ..with the perform_violence combat loop, NPC cpool is set by decide_combat_pool. When does this code matter? - Khai
   if (ch_is_npc) {
     if (GET_DODGE(ch) < 8) {
       GET_BODY_POOL(ch) += GET_DODGE(ch);
