@@ -493,7 +493,8 @@ enum {
 #define PRF_PASSIVE_IN_COMBAT                  71
 #define PRF_NO_AUTOREADY                       72
 #define PRF_NOROUNDTIME                        73
-#define PRF_MAX                                74
+#define PRF_MUTE_DOCWAGON_ALERTS               74
+#define PRF_MAX                                75
 
 /* log watch */
 
