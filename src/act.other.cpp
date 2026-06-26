@@ -82,6 +82,7 @@ extern void check_quest_destroy(struct char_data *ch, struct obj_data *obj);
 extern int get_docwagon_faux_id(struct char_data *ch);
 extern unsigned int get_johnson_overall_max_rep(struct char_data *johnson);
 extern unsigned int get_johnson_overall_min_rep(struct char_data *johnson);
+extern void set_combat_pools(struct char_data *ch, int dodge, int soak, int offense, bool message);
 
 extern bool restring_with_args(struct char_data *ch, char *argument, bool using_sysp);
 
@@ -4595,10 +4596,7 @@ extern ACMD_DECLARE(do_pool);
 
 ACMD(do_cpool)
 {
-  extern int get_skill_num_in_use_for_weapons(struct char_data *ch);
-  extern int get_skill_dice_in_use_for_weapons(struct char_data *ch);
-
-  int dodge = 0, bod = 0, off = 0;
+  int dodge = 0, soak = 0, offense = 0;
 
   if (!*argument) {
     do_pool(ch, argument, 0, 0);
@@ -4613,63 +4611,20 @@ ACMD(do_cpool)
   }
 
   half_chop(buf, argument, arg, sizeof(arg));
-  bod = atoi(argument);
-  off = atoi(arg);
+  soak = atoi(argument);
+  offense = atoi(arg);
 
-  if (dodge > 0 && IS_ASTRAL(ch)) {
-    send_to_char("Astral characters have no need to dodge anything, so your dice have been re-allocated to Body.\r\n", ch);
-    bod += dodge;
-    dodge = 0;
-  }
-
-  // Dodge also doesn't apply when prone, but prone combat code already adds dodge dice to soak
-
-  if (dodge < 0 || bod < 0 || off < 0) {
+  if (dodge < 0 || soak < 0 || offense < 0) {
     send_to_char("Combat pool values cannot be negative!\r\n", ch);
     return;
   }
 
-  // Allow storing overallocated values to support weapon switching and dynamic cpool totals
+  // Store uncapped values to support dynamic scenarios (weap swaps, temp buffs)
   ch->real_abils.defense_pool = dodge;
-  ch->real_abils.body_pool = bod;
-  ch->real_abils.offense_pool = off;
+  ch->real_abils.body_pool = soak;
+  ch->real_abils.offense_pool = offense;
 
-  int skill_num = get_skill_num_in_use_for_weapons(ch);
-  int dice_max = get_skill_dice_in_use_for_weapons(ch);
-  int remainder = GET_COMBAT_POOL(ch);
-
-  if (GET_CHIPJACKED_SKILL(ch, skill_num)) {
-    dice_max = 0;
-    if (off > 0) {
-      send_to_char("You're using an activesoft, so you can't allocate any dice to your offense pool.\r\n", ch);
-      off = 0;
-    }
-  }
-
-  // Now set allocation for current cpool/weapon
-  remainder -= GET_DODGE(ch) = MIN(dodge, remainder);
-  remainder -= GET_BODY_POOL(ch) = MIN(bod, remainder);
-
-  if (off > dice_max) {
-    send_to_char(ch, "You're not skilled enough with %s, so your offense pool is capped at %d.\r\n", skills[skill_num].name, dice_max);
-    off = dice_max;
-  }
-  remainder -= GET_OFFENSE(ch) = MIN(off, remainder);
-
-  // Any remaining dice are reallocated based on existing dodge/soak assignments
-  // Where dodge == soak, extra dice default to soak
-  if (remainder) {
-    if (GET_DODGE(ch) > GET_BODY_POOL(ch)) {
-      GET_DODGE(ch) += remainder;
-      send_to_char(ch, "Putting the %d remaining dice in your dodge pool.\r\n", remainder);
-    } else {
-      GET_BODY_POOL(ch) += remainder;
-      send_to_char(ch, "Putting the %d remaining dice in your body pool.\r\n", remainder);
-    }
-  }
-
-  send_to_char(ch, "Pools set as: Ranged Dodge: %d, Damage Soak: %d, Offense: %d\r\n", GET_DODGE(ch), GET_BODY_POOL(ch), GET_OFFENSE(ch));
-  SendGMCPCharPools(ch);
+  set_combat_pools(ch, dodge, soak, offense, TRUE);
 
 #ifdef APPLY_DELAY_ON_POOL_CHANGE_IN_COMBAT
   // If they're in combat, add a delay to lessen the pool-shoot-pool cheese strat.
@@ -4695,8 +4650,6 @@ ACMD(do_spool)
     send_to_char("Syntax: ^WSPOOL <casting> <drain> <defence>^n, where each value is a number. Ex: SPOOL 1 5 4\r\n", ch);
     return;
   }
-
-  FAILURE_CASE_PRINTF(cast > GET_SKILL(ch, SKILL_SORCERY), "You can't allocate more than %d dice to your casting pool (limited by Sorcery skill).", GET_SKILL(ch, SKILL_SORCERY));
 
   half_chop(buf, argument, arg, sizeof(arg));
   drain = atoi(argument);

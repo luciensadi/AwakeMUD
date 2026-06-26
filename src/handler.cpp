@@ -49,6 +49,7 @@ extern int max_ability(int i);
 extern int calculate_vehicle_entry_load(struct veh_data *veh);
 extern void end_quest(struct char_data *ch, bool succeeded);
 extern void set_casting_pools(struct char_data *ch, int casting, int drain, int spell_defense, int reflection, bool message);
+extern void set_combat_pools(struct char_data *ch, int dodge, int soak, int offense, bool message);
 extern void calc_weight(struct char_data *);
 extern void exdesc_conceal_reveal(struct char_data *vict, int wearloc, bool check_for_reveal);
 #ifdef USE_ZONE_HOTLOADING
@@ -1040,38 +1041,11 @@ void affect_total(struct char_data * ch)
     }
   }
 
-  int skill_num = get_skill_num_in_use_for_weapons(ch);
-  int dice_max = get_skill_dice_in_use_for_weapons(ch);
-  int remainder = GET_COMBAT_POOL(ch);
-
-  if (GET_CHIPJACKED_SKILL(ch, skill_num)) {
-    dice_max = 0;
-  }
-
-  // There's nothing to dodge on the astral plane.
-  // Dodge also doesn't apply when prone, but prone combat code already moves dodge to soak
-  if (IS_ASTRAL(ch))
-    GET_DODGE(ch) = 0;
-  else {
-    remainder -= GET_DODGE(ch) = MIN(GET_DODGE(ch), remainder);
-  }
-
-  remainder -= GET_BODY_POOL(ch) = MIN(GET_BODY_POOL(ch), remainder);
-  remainder -= GET_OFFENSE(ch) = MIN(MIN(GET_OFFENSE(ch), dice_max), remainder);
-
-  // Any offense dice above cap are reallocated based on existing dodge/soak assignments
-  // Where dodge == soak, extra dice default to soak
-  if (remainder) {
-    if (GET_DODGE(ch) > GET_BODY_POOL(ch)) {
-      GET_DODGE(ch) += remainder;
-    } else {
-      GET_BODY_POOL(ch) += remainder;
-    }
-  }
+  set_combat_pools(ch, ch->real_abils.defense_pool, ch->real_abils.body_pool, ch->real_abils.offense_pool, FALSE);
 
   // NPCs specialize their defenses: unless they've got crazy dodge dice, they'll want to just soak.
   // AKA, 'your average wage slave is not going to try to do the Matrix bullet dodge when he sees a gun.'
-  // ..with the perform_violence combat loop, NPC cpool is set by decide_combat_pool. When does this code matter? - Khai
+  // ..with the perform_violence combat loop, NPC cpool is set immediately prior by decide_combat_pool. When does this code matter? - Khai
   if (ch_is_npc) {
     if (GET_DODGE(ch) < 8) {
       GET_BODY_POOL(ch) += GET_DODGE(ch);
@@ -1222,6 +1196,7 @@ void affect_total(struct char_data * ch)
 
   SendGMCPCharPools(ch);
 }
+
 
 /*
  * If ch is affected by specified spell, returns force, otherwise returns 0.
