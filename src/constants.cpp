@@ -957,6 +957,7 @@ const char *connected_types[] =
     "Creating a Pet",
     "Creating Complex Form",
     "Increasing Submersion",
+    "Trigger Editing",
     "\n"
   };
 
@@ -3597,6 +3598,10 @@ const char *obj_load_reasons[] {
   "CREATE_PART",
   "CREATE_DECK",
   "COOK_PROGRAM",
+  /* The defines skip 41: they have jumped 40 to 42 since load tracking
+     went in. Without a slot here, every name from CREATE_SPELL on is
+     off by one and the highest reason reads past the end. */
+  "UNUSED_41",
   "CREATE_SPELL",
   "SPAWN_PAYDATA",
   "MTX_CONNECT",
