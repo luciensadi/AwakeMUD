@@ -467,7 +467,13 @@ void redit_parse(struct descriptor_data * d, const char *arg)
           mudlog(buf, d->character, LOG_WIZLOG, TRUE);
         }
         room_num = real_room(d->edit_number);
-        if (room_num > 0) {
+        /* real_room() answers NOWHERE, not 0, when there is no such room, and
+         * rnum 0 is the first room in the world -- the one that holds the
+         * mud-wide %global% variables. Testing > 0 sent a save of it down the
+         * insert path, which put a second room with the same vnum into the
+         * world and left every script that reads a global looking at the
+         * wrong one. */
+        if (room_num >= 0) {
           /* copy people/object pointers over to the temp room
              as a temporary measure */
           d->edit_room->contents = world[room_num].contents;
