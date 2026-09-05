@@ -436,7 +436,6 @@ ACMD(do_rclone)
 
   vnum_t arg1, arg2;
   rnum_t zone1 = -1, zone2 = -1;
-  int  counter;
 
   two_arguments(argument, buf, buf1);
 
