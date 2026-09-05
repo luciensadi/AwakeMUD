@@ -97,7 +97,7 @@ void extract_trigger(struct trig_data *trig)
     GET_TRIG_WAIT(trig) = NULL;
   }
 
-  if (trig->nr >= 0 && trig->nr <= top_of_trigt)
+  if (trig->nr >= 0 && trig->nr < top_of_trigt)
     trig_index[trig->nr]->number--;
 
   /* walk the trigger list and remove this one */

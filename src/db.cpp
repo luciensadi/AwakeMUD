@@ -160,8 +160,6 @@ int top_of_matrix_array = 0;
 int top_of_ic_array = 0;
 int top_of_world_array = 0;
 int world_chunk_size = 1000;     /* size of world to add on each reallocation */
-int top_of_trig_array = 0;
-int trig_chunk_size = 500;       /* room for new triggers on top of the loaded ones */
 int olc_state = 1;              /* current olc state */
 int _NO_OOC_  = 0;  /* Disable the OOC Channel */
 
@@ -1083,11 +1081,9 @@ void index_boot(int mode)
     break;
 
   case DB_BOOT_TRG:
-    // Triggers are cheap; leave room for a chunk of new ones.
-    trig_index = new struct trig_index_data *[rec_count + trig_chunk_size];
-    memset((char *) trig_index, 0, (sizeof(struct trig_index_data *) *
-                                    (rec_count + trig_chunk_size)));
-    top_of_trig_array = rec_count + trig_chunk_size;
+    /* trigedit rebuilds this table exactly on every insert, so there is no
+     * point carrying slack: allocate what the index actually holds. */
+    trig_index = new struct trig_index_data *[rec_count]();
     break;
   case DB_BOOT_ZON:
     // the zone table is pretty small, so it is no biggie

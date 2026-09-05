@@ -190,7 +190,7 @@ static void trigedit_disp_types(struct descriptor_data *d)
  * rnum the new entry landed on. */
 static rnum_t trigedit_insert_index(vnum_t vnum)
 {
-  struct trig_index_data **new_index = new struct trig_index_data *[top_of_trigt + 2];
+  struct trig_index_data **new_index = new struct trig_index_data *[top_of_trigt + 1]();
   rnum_t rnum = top_of_trigt;
   rnum_t i;
   bool found = FALSE;

@@ -168,7 +168,7 @@ void write_index_file(const char *suffix)
           }
         break;
       case 't':
-        for (rnum_t tmp_idx = 0; tmp_idx <= top_of_trigt; tmp_idx++)
+        for (rnum_t tmp_idx = 0; tmp_idx < top_of_trigt; tmp_idx++)
           if (trig_index[tmp_idx] && VNUM_IN_ZONE(trig_index[tmp_idx]->vnum)) {
             fprintf(fp, "%d.%s\n", zone_table[zone_idx].number, suffix);
             break;
@@ -242,8 +242,12 @@ ACMD (do_redit)
   if (room_num >= 0) {
     room = GetRoom();
     *room = world[room_num];
-    /* Do not share the prototype's attached-trigger list: take a copy, so
-     * that editing it only reaches the prototype on save. */
+    /* Do not share the prototype's attached-trigger list, and do not
+     * inherit whatever scripts the prototype's live counterpart happens
+     * to be running. The list is copied so that editing it only reaches
+     * the prototype on save; the running scripts are dropped so that
+     * abandoning the edit cannot free them out from under the game. */
+    room->script = NULL;
     room->proto_script = NULL;
     copy_proto_script(&world[room_num], room, WLD_TRIGGER);
     /* allocate space for all strings  */
@@ -395,8 +399,12 @@ ACMD(do_rclone)
   if (world[num1].flight_code)
     room->flight_code = str_dup(world[num1].flight_code);
   room->zone = zone2;
-  /* Do not share the prototype's attached-trigger list: take a copy, so
-   * that editing it only reaches the prototype on save. */
+  /* Do not share the prototype's attached-trigger list, and do not
+   * inherit whatever scripts the prototype's live counterpart happens
+   * to be running. The list is copied so that editing it only reaches
+   * the prototype on save; the running scripts are dropped so that
+   * abandoning the edit cannot free them out from under the game. */
+  room->script = NULL;
   room->proto_script = NULL;
   copy_proto_script(&world[num1], room, WLD_TRIGGER);
   /* exits - alloc only if necessary */
@@ -1062,8 +1070,13 @@ ACMD (do_iedit)
       }
     }
 
-    /* Do not share the prototype's attached-trigger list: take a copy, so
-     * that editing it only reaches the prototype on save. */
+    /* Do not share the prototype's attached-trigger list, and do not
+     * inherit whatever scripts the prototype's live counterpart happens
+     * to be running. The list is copied so that editing it only reaches
+     * the prototype on save; the running scripts are dropped so that
+     * abandoning the edit cannot free them out from under the game. */
+    obj->script = NULL;
+    obj->script_id = 0;
     obj->proto_script = NULL;
     copy_proto_script(&obj_proto[obj_num], obj, OBJ_TRIGGER);
     d->edit_obj = obj;
@@ -1196,8 +1209,13 @@ ACMD(do_iclone)
   PLR_FLAGS(ch).SetBit(PLR_EDITING);
   send_to_char("Are you sure you want to clone that object?\r\n", ch);
   ch->desc->edit_number = arg2; // the vnum
-  /* Do not share the prototype's attached-trigger list: take a copy, so
-   * that editing it only reaches the prototype on save. */
+  /* Do not share the prototype's attached-trigger list, and do not
+   * inherit whatever scripts the prototype's live counterpart happens
+   * to be running. The list is copied so that editing it only reaches
+   * the prototype on save; the running scripts are dropped so that
+   * abandoning the edit cannot free them out from under the game. */
+  obj->script = NULL;
+  obj->script_id = 0;
   obj->proto_script = NULL;
   copy_proto_script(&obj_proto[obj_num1], obj, OBJ_TRIGGER);
   ch->desc->edit_obj = obj;
@@ -1389,8 +1407,14 @@ ACMD(do_medit)
     mob = GetCh();
 
     *mob = mob_proto[mob_num]; // the RNUM
-    /* Do not share the prototype's attached-trigger list: take a copy, so
-     * that editing it only reaches the prototype on save. */
+    /* Do not share the prototype's attached-trigger list, and do not
+     * inherit whatever scripts the prototype's live counterpart happens
+     * to be running. The list is copied so that editing it only reaches
+     * the prototype on save; the running scripts are dropped so that
+     * abandoning the edit cannot free them out from under the game. */
+    mob->script = NULL;
+    mob->script_memory = NULL;
+    mob->script_id = 0;
     mob->proto_script = NULL;
     copy_proto_script(&mob_proto[mob_num], mob, MOB_TRIGGER);
     mob->load_origin = PC_LOAD_REASON_MEDIT_ALLOCATION;
@@ -1557,8 +1581,14 @@ ACMD(do_mclone)
   mob = GetCh();
 
   *mob = mob_proto[mob_num1]; // the RNUM
-  /* Do not share the prototype's attached-trigger list: take a copy, so
-   * that editing it only reaches the prototype on save. */
+  /* Do not share the prototype's attached-trigger list, and do not
+   * inherit whatever scripts the prototype's live counterpart happens
+   * to be running. The list is copied so that editing it only reaches
+   * the prototype on save; the running scripts are dropped so that
+   * abandoning the edit cannot free them out from under the game. */
+  mob->script = NULL;
+  mob->script_memory = NULL;
+  mob->script_id = 0;
   mob->proto_script = NULL;
   copy_proto_script(&mob_proto[mob_num1], mob, MOB_TRIGGER);
   mob->load_origin = PC_LOAD_REASON_MCLONE;

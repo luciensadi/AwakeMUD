@@ -332,7 +332,7 @@ void write_trigs_to_disk(vnum_t zone_vnum)
     return;
   }
 
-  for (rnum_t rnum = 0; rnum <= top_of_trigt; rnum++) {
+  for (rnum_t rnum = 0; rnum < top_of_trigt; rnum++) {
     struct trig_index_data *t_index = trig_index[rnum];
     struct trig_data *trig;
 

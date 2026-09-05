@@ -574,6 +574,11 @@ void redit_parse(struct descriptor_data * d, const char *arg)
           /* now this is the *real* room_num */
           room_num = real_room(d->edit_number);
 
+          /* A brand new room has no scripts running yet, so build them
+           * from whatever the builder attached. */
+          world[room_num].script = NULL;
+          assign_triggers(&world[room_num], WLD_TRIGGER);
+
           /* now zoom through the character list and update anyone in limbo */
           struct char_data * temp_ch;
           for (temp_ch = character_list; temp_ch; temp_ch = temp_ch->next_in_character_list) {
