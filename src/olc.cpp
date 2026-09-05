@@ -20,6 +20,7 @@
 #include "utils.hpp"
 #include "db.hpp"
 #include "dblist.hpp"
+#include "dg_scripts.hpp"
 #include "olc.hpp"
 #include "memory.hpp"
 #include "newshop.hpp"
@@ -179,6 +180,13 @@ void write_index_file(const char *suffix)
       case 's':
         for (rnum_t tmp_idx = 0; tmp_idx <= top_of_shopt; tmp_idx++)
           if (VNUM_IN_ZONE(shop_table[tmp_idx].vnum)) {
+            fprintf(fp, "%d.%s\n", zone_table[zone_idx].number, suffix);
+            break;
+          }
+        break;
+      case 't':
+        for (rnum_t tmp_idx = 0; tmp_idx <= top_of_trigt; tmp_idx++)
+          if (trig_index[tmp_idx] && VNUM_IN_ZONE(trig_index[tmp_idx]->vnum)) {
             fprintf(fp, "%d.%s\n", zone_table[zone_idx].number, suffix);
             break;
           }

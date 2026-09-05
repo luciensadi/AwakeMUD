@@ -3552,6 +3552,7 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
       case TYPE_MANABOLT_OR_STUNBOLT:
       case TYPE_FOCUS_OVERUSE:
       case TYPE_PENANCE:
+      case TYPE_SCRIPT:
         // These types do not risk equipment damage.
         break;
       default:

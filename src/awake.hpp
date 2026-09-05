@@ -1264,6 +1264,7 @@ enum {
 #define TYPE_POISON           417
 #define TYPE_FOCUS_OVERUSE    418
 #define TYPE_PENANCE          419
+#define TYPE_SCRIPT           420
 // Adding a new one? Put it in raw_damage()'s equipment damage check.
 
 /* magic attack types */
@@ -2391,6 +2392,7 @@ enum {
 #define DB_BOOT_VEH     6
 #define DB_BOOT_MTX     7
 #define DB_BOOT_IC      8
+#define DB_BOOT_TRG     9
 /* Defines for sending text */
 
 #define TO_ROOM                1
@@ -3355,6 +3357,7 @@ enum {
 #define OBJ_LOAD_REASON_OTAKU_RESONANCE          60
 #define OBJ_LOAD_REASON_CREATE_COMPLEX_FORM      61
 #define OBJ_LOAD_REASON_UNSTOW_CMD               62
+#define OBJ_LOAD_REASON_SCRIPT                   63
 
 #define IDNUM_FOR_MOB_ALERT_STATE  -1
 
