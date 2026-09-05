@@ -336,6 +336,20 @@ void trigedit_string_cleanup(struct descriptor_data *d, bool aborted)
     return;
   }
 
+  text = (d->str && *(d->str)) ? *(d->str) : NULL;
+
+  if (!text || !*text) {
+    DELETE_D_STR_IF_EXTANT(d);
+    send_to_char("Nothing written, so the script stands as it was.\r\n", CH);
+    trigedit_disp_menu(d);
+    return;
+  }
+
+  /* Lay the script out before it is broken up, so what comes back from the
+   * editor reads the way a script should. */
+  if (format_script(d))
+    text = *(d->str);
+
   /* Out with the old list. */
   for (cmd = d->edit_trig->cmdlist; cmd; cmd = next_cmd) {
     next_cmd = cmd->next;
@@ -344,7 +358,6 @@ void trigedit_string_cleanup(struct descriptor_data *d, bool aborted)
   }
   d->edit_trig->cmdlist = NULL;
 
-  text = (d->str && *(d->str)) ? *(d->str) : NULL;
   cmd = NULL;
 
   for (line = text ? strtok(text, "\n\r") : NULL; line; line = strtok(NULL, "\n\r")) {
@@ -379,9 +392,13 @@ int format_script(struct descriptor_data *d)
   if (!d->str || !*(d->str))
     return FALSE;
 
-  t = strtok(str_dup(*(d->str)), "\r\n");
-  if (!t)
+  char *work = str_dup(*(d->str));
+
+  t = strtok(work, "\r\n");
+  if (!t) {
+    DELETE_ARRAY_IF_EXTANT(work);
     return FALSE;
+  }
 
   *nsc = '\0';
 
@@ -397,6 +414,7 @@ int format_script(struct descriptor_data *d)
     } else if (!strncasecmp(t, "end", 3) || !strncasecmp(t, "done", 4)) {
       if (!indent) {
         send_to_char(CH, "Unmatched 'end' or 'done' on line %d.\r\n", line_num);
+        DELETE_ARRAY_IF_EXTANT(work);
         return FALSE;
       }
       indent--;
@@ -404,6 +422,7 @@ int format_script(struct descriptor_data *d)
     } else if (!strncasecmp(t, "else", 4)) {
       if (!indent) {
         send_to_char(CH, "Unmatched 'else' on line %d.\r\n", line_num);
+        DELETE_ARRAY_IF_EXTANT(work);
         return FALSE;
       }
       indent--;
@@ -411,6 +430,7 @@ int format_script(struct descriptor_data *d)
     } else if (!strncasecmp(t, "case", 4) || !strncasecmp(t, "default", 7)) {
       if (!indent) {
         send_to_char(CH, "Case or default outside a switch on line %d.\r\n", line_num);
+        DELETE_ARRAY_IF_EXTANT(work);
         return FALSE;
       }
       if (found_end)
@@ -422,6 +442,7 @@ int format_script(struct descriptor_data *d)
     nlen = snprintf(line, sizeof(line), "%*s%s\r\n", indent * 2, "", t);
     if ((len + nlen) > MAX_STRING_LENGTH - 100) {
       send_to_char("String too long, formatting aborted.\r\n", CH);
+      DELETE_ARRAY_IF_EXTANT(work);
       return FALSE;
     }
     len += nlen;
@@ -438,6 +459,7 @@ int format_script(struct descriptor_data *d)
   if (indent)
     send_to_char("Unmatched if, while or switch ignored.\r\n", CH);
 
+  DELETE_ARRAY_IF_EXTANT(work);
   DELETE_ARRAY_IF_EXTANT(*(d->str));
   *(d->str) = str_dup(nsc);
 
@@ -577,19 +599,17 @@ void trigedit_parse(struct descriptor_data *d, const char *arg)
           d->edit_mode = TRIGEDIT_ARGUMENT;
           return;
 
-        case '6': {
-          char commands[MAX_STRING_LENGTH];
-
-          send_to_char("Enter trigger commands:\r\n", CH);
+        case '6':
+          send_to_char("What you write replaces the script above, so bring anything\r\n"
+                       "you want to keep with you. Finish without writing a line and\r\n"
+                       "the script is left as it is.\r\n"
+                       "\r\nEnter trigger commands:\r\n", CH);
           d->edit_mode = TRIGEDIT_COMMANDS;
           DELETE_D_STR_IF_EXTANT(d);
           INITIALIZE_NEW_D_STR(d);
-          trigedit_render_commands(d->edit_trig, commands, sizeof(commands));
-          *(d->str) = str_dup(commands);
           d->max_str = MAX_STRING_LENGTH - 100;
           d->mail_to = 0;
           return;
-        }
 
         case 'w':
           send_to_char("Copy which trigger (by vnum)? ", CH);

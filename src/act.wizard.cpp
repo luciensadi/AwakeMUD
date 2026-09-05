@@ -57,6 +57,7 @@
 #include "vehicles.hpp"
 #include "olc.hpp"
 #include "gmcp.hpp"
+#include "dg_scripts.hpp"
 
 #if defined(__CYGWIN__)
 #include <crypt.h>
@@ -1387,6 +1388,8 @@ void do_stat_room(struct char_data * ch)
     send_to_char("\r\n", ch);
   }
 
+  dg_stat_triggers(ch, SCRIPT(rm));
+
   for (i = 0; i < NUM_OF_DIRS; i++)
   {
     if (rm->dir_option[i]) {
@@ -1759,6 +1762,8 @@ void do_stat_object(struct char_data * ch, struct obj_data * j)
     strlcat(buf, " None", sizeof(buf));
   strlcat(buf, "\r\n", sizeof(buf));
   send_to_char(buf, ch);
+
+  dg_stat_triggers(ch, SCRIPT(j));
 }
 
 void do_stat_character(struct char_data * ch, struct char_data * k)
@@ -2238,6 +2243,8 @@ void do_stat_mobile(struct char_data * ch, struct char_data * k)
     send_to_char(ch, "Precast Spells:\r\n");
     list_mob_precast_spells_to_ch(k, ch);
   }
+
+  dg_stat_triggers(ch, SCRIPT(k));
 }
 
 ACMD(do_stat)

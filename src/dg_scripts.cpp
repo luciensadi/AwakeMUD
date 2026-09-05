@@ -588,6 +588,30 @@ void check_time_triggers(void)
 
 }
 
+/* Name the triggers attached to something, for the stat commands. Says
+ * nothing at all when there are none, so stat output for the overwhelming
+ * majority of the world is unchanged. */
+void dg_stat_triggers(struct char_data *ch, struct script_data *sc)
+{
+  bool printed_any = FALSE;
+
+  if (!sc)
+    return;
+
+  for (struct trig_data *t = TRIGGERS(sc); t; t = t->next) {
+    if (!printed_any)
+      send_to_char("Triggers: ", ch);
+
+    send_to_char(ch, "%s^c%s [%ld]^n", printed_any ? ", " : "",
+                 GET_TRIG_NAME(t) ? GET_TRIG_NAME(t) : "unnamed",
+                 (long) GET_TRIG_VNUM(t));
+    printed_any = TRUE;
+  }
+
+  if (printed_any)
+    send_to_char("\r\n", ch);
+}
+
 /* ************************************************************************
 *  Deferred extraction.                                                    *
 *                                                                          *
