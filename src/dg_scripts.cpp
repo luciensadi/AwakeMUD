@@ -148,8 +148,8 @@ int trgvar_in_room(vnum_t vnum)
   return i;
 }
 
-/* Find an object in a list, by uid or by name. Declared in handler.hpp. */
-struct obj_data *get_obj_in_list(char *name, struct obj_data *list)
+/* Find an object in a list, by uid or by name. */
+struct obj_data *get_obj_in_list(const char *name, struct obj_data *list)
 {
   struct obj_data *i;
   long id;
@@ -327,7 +327,7 @@ struct obj_data *get_obj_near_obj(struct obj_data *obj, const char *name)
     return obj;
 
   /* is it inside? */
-  if (obj->contains && (i = get_obj_in_list((char *) name, obj->contains)))
+  if (obj->contains && (i = get_obj_in_list(name, obj->contains)))
     return i;
 
   /* or outside? */
@@ -346,12 +346,12 @@ struct obj_data *get_obj_near_obj(struct obj_data *obj, const char *name)
     return i;
   }
   /* or carried? */
-  else if (obj->carried_by && (i = get_obj_in_list((char *) name, obj->carried_by->carrying))) {
+  else if (obj->carried_by && (i = get_obj_in_list(name, obj->carried_by->carrying))) {
     return i;
   }
   else if ((room = obj_room(obj))) {
     /* check the floor */
-    if ((i = get_obj_in_list((char *) name, room->contents)))
+    if ((i = get_obj_in_list(name, room->contents)))
       return i;
 
     /* check people's equipment */
@@ -363,10 +363,12 @@ struct obj_data *get_obj_near_obj(struct obj_data *obj, const char *name)
   return NULL;
 }
 
-/* The object in the world with this name or uid, or NULL. Declared in
- * handler.hpp. */
-struct obj_data *get_obj(char *name)
+/* The object in the world with this name or uid, or NULL. */
+struct obj_data *get_obj(const char *name)
 {
+  if (!name || !*name)
+    return NULL;
+
   if (*name == UID_CHAR)
     return find_obj(atol(name + 1));
 
@@ -454,7 +456,7 @@ struct obj_data *get_obj_by_obj(struct obj_data *obj, const char *name)
   if (!str_cmp(name, "self") || !str_cmp(name, "me"))
     return obj;
 
-  if (obj->contains && (i = get_obj_in_list((char *) name, obj->contains)))
+  if (obj->contains && (i = get_obj_in_list(name, obj->contains)))
     return i;
 
   if (obj->in_obj && dg_obj_is_named(name, obj->in_obj))
@@ -463,13 +465,13 @@ struct obj_data *get_obj_by_obj(struct obj_data *obj, const char *name)
   if (obj->worn_by && (i = get_object_in_equip(obj->worn_by, name)))
     return i;
 
-  if (obj->carried_by && (i = get_obj_in_list((char *) name, obj->carried_by->carrying)))
+  if (obj->carried_by && (i = get_obj_in_list(name, obj->carried_by->carrying)))
     return i;
 
-  if ((room = obj_room(obj)) && (i = get_obj_in_list((char *) name, room->contents)))
+  if ((room = obj_room(obj)) && (i = get_obj_in_list(name, room->contents)))
     return i;
 
-  return get_obj((char *) name);
+  return get_obj(name);
 }
 
 /* only searches the room */
@@ -508,7 +510,7 @@ struct obj_data *get_obj_by_room(struct room_data *room, const char *name)
       if (dg_obj_is_named(name, obj))
         return obj;
 
-  return get_obj((char *) name);
+  return get_obj(name);
 }
 
 /* checks every PULSE_DG_SCRIPT for random triggers */
@@ -813,7 +815,7 @@ void find_uid_name(const char *uid, char *name, size_t nlen)
 
   if ((ch = get_char(uid)))
     snprintf(name, nlen, "%s", GET_CHAR_NAME(ch));
-  else if ((obj = get_obj((char *) uid)))
+  else if ((obj = get_obj(uid)))
     snprintf(name, nlen, "%s", GET_OBJ_NAME(obj));
   else if ((room = find_room(atol(uid + 1))))
     snprintf(name, nlen, "%s", GET_ROOM_NAME(room));

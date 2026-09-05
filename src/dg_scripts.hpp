@@ -275,7 +275,7 @@ struct char_data *get_char(const char *name);
 struct char_data *get_char_near_obj(struct obj_data *obj, const char *name);
 struct char_data *get_char_in_room(struct room_data *room, const char *name);
 struct obj_data *get_obj_near_obj(struct obj_data *obj, const char *name);
-/* get_obj() is declared in handler.hpp; dg_scripts.cpp defines it. */
+struct obj_data *get_obj(const char *name);
 struct room_data *get_room(const char *name);
 struct char_data *get_char_by_obj(struct obj_data *obj, const char *name);
 struct char_data *get_char_by_room(struct room_data *room, const char *name);
@@ -283,7 +283,7 @@ struct obj_data *get_obj_by_obj(struct obj_data *obj, const char *name);
 struct obj_data *get_obj_in_room(struct room_data *room, const char *name);
 struct obj_data *get_obj_by_room(struct room_data *room, const char *name);
 int trgvar_in_room(vnum_t vnum);
-/* get_obj_in_list() is declared in handler.hpp; dg_scripts.cpp defines it. */
+struct obj_data *get_obj_in_list(const char *name, struct obj_data *list);
 struct obj_data *get_object_in_equip(struct char_data *ch, const char *name);
 void script_trigger_check(void);
 void check_time_triggers(void);
