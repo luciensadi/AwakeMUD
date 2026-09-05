@@ -604,6 +604,12 @@ void redit_parse(struct descriptor_data * d, const char *arg)
                   case 'R': /* rem obj from room */
                     UPDATE_VALUE(ZCMD.arg1);
                     break;
+                  case 'T': /* attach a trigger */
+                    /* Only a room trigger names a room. */
+                    if (ZCMD.arg1 == WLD_TRIGGER) {
+                      UPDATE_VALUE(ZCMD.arg3);
+                    }
+                    break;
                 }
               }
             }
