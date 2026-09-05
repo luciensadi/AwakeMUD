@@ -1577,10 +1577,6 @@ int perform_get_from_room(struct char_data *ch, struct obj_data *obj)
 	if (!can_take_obj_from_anywhere(ch, obj))
 		return FALSE;
 
-	/* A get trigger that returns 0 refuses the pickup. */
-	if (!get_otrigger(obj, ch))
-		return FALSE;
-
 	// Error messages sent in function.
 	if (!can_take_obj_from_room(ch, obj))
 		return FALSE;
@@ -1604,6 +1600,13 @@ int perform_get_from_room(struct char_data *ch, struct obj_data *obj)
 				return FALSE;
 			}
 	}
+
+	/* A get trigger that returns 0 refuses the pickup. It runs below the
+	 * can-take checks so that it never fires for a get the game itself
+	 * refuses, and above the logging below, which clears the object's
+	 * dropped-by record. */
+	if (!get_otrigger(obj, ch))
+		return FALSE;
 
 	{
 		char *representation = generate_new_loggable_representation(obj);
@@ -2323,12 +2326,6 @@ int perform_drop(struct char_data *ch, struct obj_data *obj, byte mode,
 
 	struct room_data *in_room = get_ch_in_room(ch);
 
-	/* Either the object or the room may refuse the drop. */
-	if (!drop_otrigger(obj, ch))
-		return 0;
-	if (!drop_wtrigger(obj, ch))
-		return 0;
-
 	FALSE_CASE(mode == SCMD_DROP && ROOM_FLAGGED(in_room, ROOM_NO_DROP), "The game's administration requests that you do not drop anything here.");
 	FALSE_CASE_PRINTF(mode != SCMD_JUNK && IS_OBJ_STAT(obj, ITEM_EXTRA_NODROP) && !IS_SENATOR(ch), "You can't %s %s, but you can always JUNK it.", sname, decapitalize_a_an(obj));
 	FALSE_CASE_PRINTF(mode != SCMD_JUNK && obj_contains_items_with_flag(obj, ITEM_EXTRA_NODROP) && !IS_SENATOR(ch),
@@ -2541,6 +2538,14 @@ int perform_drop(struct char_data *ch, struct obj_data *obj, byte mode,
 			break;
 		}
 	}
+
+	/* Either the object or the room may refuse the drop. Both run here, after
+	 * the game has finished deciding, so that a trigger never fires for a drop
+	 * that is about to be turned down anyway. */
+	if (!drop_otrigger(obj, ch))
+		return 0;
+	if (!drop_wtrigger(obj, ch))
+		return 0;
 
 	if (ch->in_veh)
 	{
@@ -2910,13 +2915,6 @@ void _ch_gives_obj_to_vict(struct char_data *ch, struct obj_data *obj, struct ch
 
 bool perform_give(struct char_data *ch, struct char_data *vict, struct obj_data *obj)
 {
-	/* The object may refuse to be handed over, and the recipient may refuse
-	 * to take it. */
-	if (!give_otrigger(obj, ch, vict))
-		return 0;
-	if (!receive_mtrigger(vict, ch, obj))
-		return 0;
-
 	FALSE_CASE_PRINTF(IS_ASTRAL(vict), "Astral beings can't touch %s.", decapitalize_a_an(obj));
 	FALSE_CASE_PRINTF(IS_OBJ_STAT(obj, ITEM_EXTRA_NODROP) && !IS_SENATOR(ch), "You can't let go of %s! You can JUNK it if you want to get rid of it.", decapitalize_a_an(obj));
 	FALSE_CASE_PRINTF(GET_OBJ_TYPE(obj) == ITEM_PET, "%s would be so sad... :(", CAP(GET_OBJ_NAME(obj)));
@@ -2959,6 +2957,11 @@ bool perform_give(struct char_data *ch, struct char_data *vict, struct obj_data 
 			// Successful delivery of quest item.
 			if (check_quest_delivery(ch, vict, obj))
 			{
+				/* Last chance for either side to refuse: everything below this
+				 * point actually moves the object. */
+				if (!give_otrigger(obj, ch, vict) || !receive_mtrigger(vict, ch, obj))
+					return 0;
+
 				// Give it to them now.
 				_ch_gives_obj_to_vict(ch, obj, vict);
 				if (MOB_FLAGGED(vict, MOB_INANIMATE))
@@ -2982,6 +2985,9 @@ bool perform_give(struct char_data *ch, struct char_data *vict, struct obj_data 
 		}
 
 		// Not a quest item. Give succeeds.
+		if (!give_otrigger(obj, ch, vict) || !receive_mtrigger(vict, ch, obj))
+			return 0;
+
 		_ch_gives_obj_to_vict(ch, obj, vict);
 
 		if (GET_MOB_SPEC(vict) || GET_MOB_SPEC2(vict))
@@ -3029,6 +3035,9 @@ bool perform_give(struct char_data *ch, struct char_data *vict, struct obj_data 
 		}
 
 		// All other cases (pc -> pc, npc -> npc): succeed without further checks
+
+		if (!give_otrigger(obj, ch, vict) || !receive_mtrigger(vict, ch, obj))
+			return 0;
 
 		_ch_gives_obj_to_vict(ch, obj, vict);
 	}
@@ -3505,10 +3514,6 @@ ACMD(do_eat)
 		send_to_char(ch, "You don't seem to have anything named '%s' in your inventory.\r\n", arg);
 		return;
 	}
-	/* A consume trigger that returns 0 refuses the bite. */
-	if (!consume_otrigger(food, ch, OCMD_EAT))
-		return;
-
 	if (subcmd == SCMD_TASTE && ((GET_OBJ_TYPE(food) == ITEM_DRINKCON) ||
 															 (GET_OBJ_TYPE(food) == ITEM_FOUNTAIN)))
 	{
@@ -3535,6 +3540,11 @@ ACMD(do_eat)
 		die(ch, GET_IDNUM(ch), true);
 		return;
 	}
+
+	/* A consume trigger that returns 0 refuses the bite. It runs here so that
+	 * it never fires for a meal the game itself turns down. */
+	if (!consume_otrigger(food, ch, OCMD_EAT))
+		return;
 
 	if (subcmd == SCMD_EAT)
 	{
@@ -3915,10 +3925,6 @@ int can_wield_both(struct char_data *ch, struct obj_data *one, struct obj_data *
 
 void perform_wear(struct char_data *ch, struct obj_data *obj, int where, bool print_messages)
 {
-	/* A wear trigger that returns 0 refuses the wear. */
-	if (!wear_otrigger(obj, ch, where))
-		return;
-
 	struct obj_data *wielded = GET_EQ(ch, WEAR_WIELD);
 
 	const char *already_wearing[] = {
@@ -4222,6 +4228,11 @@ void perform_wear(struct char_data *ch, struct obj_data *obj, int where, bool pr
 			}
 		}
 	}
+
+	/* A wear trigger that returns 0 refuses the wear. It runs here so that it
+	 * never fires for a wear the game itself turns down. */
+	if (!wear_otrigger(obj, ch, where))
+		return;
 
 	if (print_messages)
 		wear_message(ch, obj, where);
@@ -4530,7 +4541,9 @@ void perform_remove(struct char_data *ch, int pos)
 		return;
 	}
 
-	/* A remove trigger that returns 0 refuses the removal. */
+	/* A remove trigger that returns 0 refuses the removal. Everything below
+	 * this point either tells the room something or takes time, so this is the
+	 * last place it can run without being seen. */
 	if (!remove_otrigger(obj, ch))
 		return;
 
