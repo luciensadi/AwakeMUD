@@ -497,14 +497,24 @@ void redit_parse(struct descriptor_data * d, const char *arg)
             }
           }
 
+          /* free_room() is a destructor and would take the room's script with
+           * it: the triggers, and every variable a script has stored on the
+           * room. A save is not a destruction. Lift the script out, drop only
+           * its triggers -- the part the builder has been editing -- and put
+           * it back for the new list to attach to. The room that holds the
+           * mud-wide globals has no triggers of its own, so without this a
+           * builder saving it would leave %global% with nowhere to live. */
+          struct script_data *sc = SCRIPT(world + room_num);
+
+          SCRIPT(world + room_num) = NULL;
+          extract_script_triggers(sc);
+
           // we use free_room here because we are not ready to turn it over
           // to the stack just yet as we are gonna use it immediately
           free_room(world + room_num);
           /* now copy everything over! */
           world[room_num] = *d->edit_room;
-          /* free_room() took the room's live script with it; build a new
-           * one from whatever the builder has now attached. */
-          world[room_num].script = NULL;
+          world[room_num].script = sc;
           assign_triggers(&world[room_num], WLD_TRIGGER);
         } else {
           /* hm, we can't just copy.. gotta insert a new room */

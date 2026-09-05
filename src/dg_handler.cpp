@@ -107,10 +107,32 @@ void extract_trigger(struct trig_data *trig)
 }
 
 /* remove all triggers from a mob/obj/room */
+/* Take a script's triggers off it and leave the rest of it standing. Editing a
+ * room is not destroying it: the trigger list is the part the builder has been
+ * changing, while the variables a script has stored there are the room's own
+ * state and have to outlive the edit. */
+void extract_script_triggers(struct script_data *sc)
+{
+  struct trig_data *trig, *next_trig;
+
+  if (!sc)
+    return;
+
+  for (trig = TRIGGERS(sc); trig; trig = next_trig) {
+    next_trig = trig->next;
+    extract_trigger(trig);
+  }
+
+  TRIGGERS(sc) = NULL;
+
+  /* add_trigger() ors into this, so a type the builder has just taken away
+   * would otherwise go on being claimed for the rest of the reboot. */
+  SCRIPT_TYPES(sc) = 0;
+}
+
 void extract_script(void *thing, int type)
 {
   struct script_data *sc = NULL;
-  struct trig_data *trig, *next_trig;
 
   switch (type) {
     case MOB_TRIGGER: {
@@ -136,11 +158,7 @@ void extract_script(void *thing, int type)
   if (!sc)
     return;
 
-  for (trig = TRIGGERS(sc); trig; trig = next_trig) {
-    next_trig = trig->next;
-    extract_trigger(trig);
-  }
-  TRIGGERS(sc) = NULL;
+  extract_script_triggers(sc);
 
   free_varlist(sc->global_vars);
   sc->global_vars = NULL;
