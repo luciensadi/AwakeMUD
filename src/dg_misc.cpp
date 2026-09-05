@@ -45,6 +45,11 @@ extern bool damage(struct char_data *ch, struct char_data *victim, int dam, int 
  * DG_ALLOW_GODS is off for %force%, on for the likes of %teleport%. */
 int valid_dg_target(struct char_data *ch, int bitvector)
 {
+  /* Purged but not yet taken off the lists: as far as the rest of the game is
+   * concerned this one is already gone. */
+  if (dg_extraction_is_pending(ch))
+    return FALSE;
+
   if (IS_NPC(ch))
     return TRUE;  /* all NPCs are allowed as targets */
 

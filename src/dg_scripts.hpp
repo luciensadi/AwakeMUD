@@ -304,6 +304,10 @@ void dg_pc_vars_changed(struct char_data *ch);
 /* How many script variables one player may be made to carry. A quest wants
  * a handful; anything approaching this is a script looping over remote. */
 #define DG_MAX_PC_VARS 128
+/* pfiles_scriptvars.name is a varchar(100), and prepare_quotes() halts the
+ * game rather than truncate, so a name has to be refused before it is ever
+ * stored on a player. */
+#define DG_MAX_PC_VAR_NAME_LEN 100
 int has_obj_by_uid_in_lookup_table(long uid);
 const char *dg_edit_door(char *argument, char *errbuf, size_t errbuf_size);
 void dg_note_char_extraction(struct char_data *ch);
@@ -323,6 +327,13 @@ void process_eval(void *go, struct script_data *sc, struct trig_data *trig,
 void init_lookup_table(void);
 void add_to_lookup_table(long uid, void *c);
 void remove_from_lookup_table(long uid);
+
+/* Anything a script destroys is taken out of the world at the end of the pulse
+ * rather than there and then; see the deferred-extraction block in
+ * dg_scripts.cpp. Until then it is still on the lists, so it has to be treated
+ * as no longer a valid target. */
+bool dg_extraction_is_pending(struct char_data *ch);
+bool dg_extraction_is_pending(struct obj_data *obj);
 
 /* from dg_db_scripts.cpp */
 void parse_trigger(File &fl, long nr);

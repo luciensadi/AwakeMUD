@@ -34,6 +34,8 @@
 #include "constants.hpp"
 #include "olc.hpp"
 #include "newdb.hpp"
+#include <vector>
+
 #include "dg_scripts.hpp"
 #include "dg_event.hpp"
 
@@ -658,44 +660,66 @@ void dg_stat_triggers(struct char_data *ch, struct script_data *sc)
 *  first; the pulse hook does the actual extraction.                        *
 ************************************************************************ */
 
-static struct char_data *pending_char_extractions[64];
-static int pending_char_count = 0;
-static struct obj_data *pending_obj_extractions[64];
-static int pending_obj_count = 0;
+static std::vector<struct char_data *> pending_char_extractions;
+static std::vector<struct obj_data *> pending_obj_extractions;
 
 void dg_note_char_extraction(struct char_data *ch)
 {
-  for (int i = 0; i < pending_char_count; i++)
-    if (pending_char_extractions[i] == ch)
+  if (!ch)
+    return;
+
+  for (struct char_data *pending : pending_char_extractions)
+    if (pending == ch)
       return;
 
-  if (pending_char_count >= (int) (sizeof(pending_char_extractions) / sizeof(pending_char_extractions[0]))) {
-    mudlog("SYSERR: DG Scripts deferred-extraction table for characters is full.", NULL, LOG_SYSLOG, TRUE);
-    return;
-  }
-
-  pending_char_extractions[pending_char_count++] = ch;
+  pending_char_extractions.push_back(ch);
 }
 
 void dg_note_obj_extraction(struct obj_data *obj)
 {
-  for (int i = 0; i < pending_obj_count; i++)
-    if (pending_obj_extractions[i] == obj)
+  if (!obj)
+    return;
+
+  for (struct obj_data *pending : pending_obj_extractions)
+    if (pending == obj)
       return;
 
-  if (pending_obj_count >= (int) (sizeof(pending_obj_extractions) / sizeof(pending_obj_extractions[0]))) {
-    mudlog("SYSERR: DG Scripts deferred-extraction table for objects is full.", NULL, LOG_SYSLOG, TRUE);
-    return;
-  }
+  pending_obj_extractions.push_back(obj);
+}
 
-  pending_obj_extractions[pending_obj_count++] = obj;
+/* Between the purge and the flush the thing is still on every list it was on.
+ * Anything that picks targets has to skip it, or a script can echo at, force,
+ * or count something that is already gone as far as the game is concerned. */
+bool dg_extraction_is_pending(struct char_data *ch)
+{
+  for (struct char_data *pending : pending_char_extractions)
+    if (pending == ch)
+      return TRUE;
+
+  return FALSE;
+}
+
+bool dg_extraction_is_pending(struct obj_data *obj)
+{
+  for (struct obj_data *pending : pending_obj_extractions)
+    if (pending == obj)
+      return TRUE;
+
+  return FALSE;
 }
 
 void dg_flush_pending_extractions(void)
 {
-  while (pending_char_count > 0) {
-    struct char_data *ch = pending_char_extractions[--pending_char_count];
+  /* extract_char() can cascade -- it takes a mob's spirits with it -- so work
+   * from a copy and let anything that noted itself while we were running wait
+   * for the next pulse. */
+  std::vector<struct char_data *> chars;
+  std::vector<struct obj_data *> objs;
 
+  chars.swap(pending_char_extractions);
+  objs.swap(pending_obj_extractions);
+
+  for (struct char_data *ch : chars) {
     /* Something else may have got to it first; only extract what is still
      * on the character list. */
     for (struct char_data *i = character_list; i; i = i->next_in_character_list) {
@@ -706,9 +730,7 @@ void dg_flush_pending_extractions(void)
     }
   }
 
-  while (pending_obj_count > 0) {
-    struct obj_data *obj = pending_obj_extractions[--pending_obj_count];
-
+  for (struct obj_data *obj : objs) {
     for (nodeStruct<struct obj_data *> *node = ObjList.Head(); node; node = node->next) {
       if (node->data == obj) {
         extract_obj(obj);
@@ -2090,6 +2112,17 @@ static void process_remote(struct script_data *sc, struct trig_data *trig, char 
     if (!IS_NPC(mob)) {
       context = 0;
 
+      /* The name has to fit the column it is saved into. It is worth being
+       * strict here rather than at save time: prepare_quotes() halts the whole
+       * game rather than truncate, so a long name written now would take the
+       * MUD down at this player's next save. */
+      if (strlen(vd->name) > DG_MAX_PC_VAR_NAME_LEN) {
+        script_log("Trigger: %s, VNum %ld. remote: variable name is %d characters, over the %d allowed on a player: '%.40s...'",
+                   GET_TRIG_NAME(trig), (long) GET_TRIG_VNUM(trig),
+                   (int) strlen(vd->name), DG_MAX_PC_VAR_NAME_LEN, vd->name);
+        return;
+      }
+
       /* Being pfile data, they must not be something a runaway script can
        * pile up without limit. Overwriting an existing variable is always
        * fine; only a new name can lengthen the list. */
@@ -2361,6 +2394,7 @@ int script_driver(void *go_adress, struct trig_data *trig, int type, int mode)
 int script_driver_default(void *go_adress, struct trig_data *trig, int type, int mode,
                           int default_ret)
 {
+  int outer_owner_purged = 0;
   static int depth = 0;
   int ret_val = default_ret;
   struct cmdlist_element *cl;
@@ -2420,6 +2454,11 @@ int script_driver_default(void *go_adress, struct trig_data *trig, int type, int
     sc->context = 0;
   }
 
+  /* A script can start another one -- mforce, or a command that fires a
+   * command trigger -- and the inner driver must not hand its own verdict
+   * back to the outer one. Each invocation gets a clean flag and puts the
+   * caller's back before it returns. */
+  outer_owner_purged = dg_owner_purged;
   dg_owner_purged = 0;
 
   for (cl = (mode == TRIG_NEW) ? trig->cmdlist : trig->curr_state;
@@ -2488,6 +2527,7 @@ int script_driver_default(void *go_adress, struct trig_data *trig, int type, int
             cl->loops = 0;
             process_wait(go, trig, type, (char *) "wait 1", cl);
             depth--;
+            dg_owner_purged = outer_owner_purged;
             return ret_val;
           }
           if (GET_TRIG_LOOPS(trig) >= 100) {
@@ -2549,6 +2589,7 @@ int script_driver_default(void *go_adress, struct trig_data *trig, int type, int
       else if (!strncmp(cmd, "wait ", 5)) {
         process_wait(go, trig, type, cmd, cl);
         depth--;
+        dg_owner_purged = outer_owner_purged;
         return ret_val;
       }
 
@@ -2573,6 +2614,8 @@ int script_driver_default(void *go_adress, struct trig_data *trig, int type, int
 
         if (dg_owner_purged) {
           depth--;
+          dg_owner_purged = outer_owner_purged;
+
           if (type == OBJ_TRIGGER)
             *(struct obj_data **) go_adress = NULL;
           else if (type == MOB_TRIGGER)
@@ -2596,6 +2639,7 @@ int script_driver_default(void *go_adress, struct trig_data *trig, int type, int
   GET_TRIG_DEPTH(trig) = 0;
 
   depth--;
+  dg_owner_purged = outer_owner_purged;
   return ret_val;
 }
 

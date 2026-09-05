@@ -442,8 +442,10 @@ void find_replacement(void *go, struct script_data *sc, struct trig_data *trig,
     }
 
     else if (!str_cmp(var, "global")) {
-      /* Room 0 holds the mud-wide globals. */
-      struct script_data *thescript = SCRIPT(&world[0]);
+      /* The room with vnum 0 holds the mud-wide globals, and %global% hands
+       * out its uid, so look it up the same way rather than by rnum. */
+      rnum_t global_rnum = real_room(0);
+      struct script_data *thescript = global_rnum >= 0 ? SCRIPT(&world[global_rnum]) : NULL;
       *str = '\0';
       if (!thescript) {
         script_log("Attempt to read a global var, but room 0 has no script.");

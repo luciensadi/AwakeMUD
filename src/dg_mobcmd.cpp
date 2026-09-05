@@ -204,25 +204,25 @@ ACMD(do_mjunk)
 
   if ((find_all_dots(arg, sizeof(arg)) != FIND_INDIV) && !junk_all) {
     if (get_object_in_equip_vis(ch, arg, ch->equipment, &pos)) {
-      extract_obj(unequip_char(ch, pos, TRUE));
+      dg_note_obj_extraction(unequip_char(ch, pos, TRUE));
       return;
     }
     if ((obj = get_obj_in_list_vis(ch, arg, ch->carrying)) != NULL)
-      extract_obj(obj);
+      dg_note_obj_extraction(obj);
     return;
   }
 
   for (obj = ch->carrying; obj != NULL; obj = obj_next) {
     obj_next = obj->next_content;
     if (junk_all || isname(arg + 4, GET_OBJ_KEYWORDS(obj)))
-      extract_obj(obj);
+      dg_note_obj_extraction(obj);
   }
 
   for (pos = 0; pos < NUM_WEARS; pos++) {
     if (!GET_EQ(ch, pos))
       continue;
     if (junk_all || isname(arg + 4, GET_OBJ_KEYWORDS(GET_EQ(ch, pos))))
-      extract_obj(unequip_char(ch, pos, TRUE));
+      dg_note_obj_extraction(unequip_char(ch, pos, TRUE));
   }
 }
 
@@ -504,12 +504,12 @@ ACMD(do_mpurge)
     for (victim = ch->in_room->people; victim; victim = vnext) {
       vnext = victim->next_in_room;
       if (IS_NPC(victim) && victim != ch)
-        extract_char(victim);
+        dg_note_char_extraction(victim);
     }
 
     for (obj = ch->in_room->contents; obj; obj = obj_next) {
       obj_next = obj->next_content;
-      extract_obj(obj);
+      dg_note_obj_extraction(obj);
     }
 
     return;
@@ -521,7 +521,7 @@ ACMD(do_mpurge)
     obj = (*arg == UID_CHAR) ? get_obj(arg) : get_obj_vis(ch, arg);
 
     if (obj)
-      extract_obj(obj);
+      dg_note_obj_extraction(obj);
     else
       mob_log(ch, "mpurge: bad argument");
 
@@ -535,13 +535,14 @@ ACMD(do_mpurge)
 
   if (victim == ch) {
     /* Purging the mob whose script is running would free it out from under
-     * script_driver, so record the intent and let the driver unwind first. */
+     * script_driver, so let the driver unwind before it happens. */
     dg_owner_purged = 1;
-    dg_note_char_extraction(victim);
-    return;
   }
 
-  extract_char(victim);
+  /* Deferred: see dg_note_char_extraction(). A script that frees something
+   * here would be freeing it out from under whichever trigger check is
+   * walking the list that owns it. */
+  dg_note_char_extraction(victim);
 }
 
 /* lets the mobile go to any location it likes */
@@ -712,10 +713,14 @@ ACMD(do_mforce)
   }
 
   if (!str_cmp(arg, "all")) {
-    struct descriptor_data *i;
+    struct descriptor_data *i, *next_i;
     struct char_data *vch;
 
-    for (i = descriptor_list; i; i = i->next) {
+    /* The command being forced can close a link, so the next pointer has to
+     * be taken before it runs. */
+    for (i = descriptor_list; i; i = next_i) {
+      next_i = i->next;
+
       if (i->character && (i->character != ch) && !i->connected &&
           (i->character->in_room == ch->in_room)) {
         vch = i->character;

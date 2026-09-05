@@ -48,7 +48,19 @@ static struct cmdlist_element *build_cmdlist(char *commands, vnum_t vnum)
   struct cmdlist_element *head = NULL, *cle = NULL;
   char *s;
 
-  for (s = strtok(commands, "\n\r"); s; s = strtok(NULL, "\n\r")) {
+  /* Split by hand rather than with strtok(), which runs delimiters together
+   * and so would quietly drop every blank line a builder had used to space
+   * their script out. */
+  for (s = commands; s; ) {
+    char *eol = s;
+
+    while (*eol && *eol != '\n' && *eol != '\r')
+      eol++;
+
+    bool last = (*eol == '\0');
+    char terminator = *eol;
+    *eol = '\0';
+
     if (!head) {
       head = cle = new cmdlist_element;
     } else {
@@ -56,6 +68,18 @@ static struct cmdlist_element *build_cmdlist(char *commands, vnum_t vnum)
       cle = cle->next;
     }
     cle->cmd = str_dup(s);
+
+    if (last)
+      break;
+
+    /* Treat CRLF as one line ending, not two. */
+    s = eol + 1;
+    if (terminator == '\r' && *s == '\n')
+      s++;
+
+    /* A trailing newline ends the script; it does not add a blank line. */
+    if (!*s)
+      break;
   }
 
   if (!head) {

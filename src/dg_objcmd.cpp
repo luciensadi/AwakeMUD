@@ -396,13 +396,13 @@ OCMD(do_opurge)
       for (ch = rm->people; ch; ch = next_ch) {
         next_ch = ch->next_in_room;
         if (IS_NPC(ch))
-          extract_char(ch);
+          dg_note_char_extraction(ch);
       }
 
       for (o = rm->contents; o; o = next_obj) {
         next_obj = o->next_content;
         if (o != obj)
-          extract_obj(o);
+          dg_note_obj_extraction(o);
       }
     }
 
@@ -415,12 +415,11 @@ OCMD(do_opurge)
     if (o) {
       if (o == obj) {
         /* Purging the object whose script is running would free it out from
-         * under script_driver, so defer it. */
+         * under script_driver, so let the driver unwind first. */
         dg_owner_purged = 1;
-        dg_note_obj_extraction(o);
-      } else {
-        extract_obj(o);
       }
+
+      dg_note_obj_extraction(o);
     } else {
       obj_log(obj, "opurge: bad argument");
     }
@@ -433,7 +432,10 @@ OCMD(do_opurge)
     return;
   }
 
-  extract_char(ch);
+  /* Deferred: see dg_note_char_extraction(). A script that frees something
+   * here would be freeing it out from under whichever trigger check is
+   * walking the list that owns it. */
+  dg_note_char_extraction(ch);
 }
 
 OCMD(do_oteleport)

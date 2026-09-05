@@ -334,12 +334,12 @@ WCMD(do_wpurge)
     for (ch = room->people; ch; ch = next_ch) {
       next_ch = ch->next_in_room;
       if (IS_NPC(ch))
-        extract_char(ch);
+        dg_note_char_extraction(ch);
     }
 
     for (obj = room->contents; obj; obj = next_obj) {
       next_obj = obj->next_content;
-      extract_obj(obj);
+      dg_note_obj_extraction(obj);
     }
 
     return;
@@ -351,7 +351,7 @@ WCMD(do_wpurge)
     obj = get_obj_in_room(room, arg);
 
     if (obj)
-      extract_obj(obj);
+      dg_note_obj_extraction(obj);
     else
       wld_log(room, "wpurge: bad argument");
 
@@ -363,7 +363,10 @@ WCMD(do_wpurge)
     return;
   }
 
-  extract_char(ch);
+  /* Deferred: see dg_note_char_extraction(). A script that frees something
+   * here would be freeing it out from under whichever trigger check is
+   * walking the list that owns it. */
+  dg_note_char_extraction(ch);
 }
 
 WCMD(do_wload)
