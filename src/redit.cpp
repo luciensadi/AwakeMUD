@@ -973,6 +973,7 @@ void redit_parse(struct descriptor_data * d, const char *arg)
     }
     if (d->edit_room->flight_code)
       delete [] d->edit_room->flight_code;
+    DELETE_ARRAY_IF_EXTANT(d->edit_room->flight_code);
     d->edit_room->flight_code = str_dup(arg);
     redit_disp_menu(d);
     break;

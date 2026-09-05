@@ -5965,7 +5965,7 @@ void free_char(struct char_data * ch)
       DELETE_AND_NULL_ARRAY(ch->char_specials.leave);
     }
 
-    if (SETTABLE_CHAR_COLOR_HIGHLIGHT(ch) && SETTABLE_CHAR_COLOR_HIGHLIGHT(ch) != SETTABLE_CHAR_COLOR_HIGHLIGHT(ch)) {
+    if (SETTABLE_CHAR_COLOR_HIGHLIGHT(ch) && SETTABLE_CHAR_COLOR_HIGHLIGHT(ch) != SETTABLE_CHAR_COLOR_HIGHLIGHT(proto)) {
       DELETE_AND_NULL_ARRAY(SETTABLE_CHAR_COLOR_HIGHLIGHT(ch));
     }
   }
@@ -5988,6 +5988,7 @@ void free_room(struct room_data *room)
   DELETE_ARRAY_IF_EXTANT(room->name);
   DELETE_ARRAY_IF_EXTANT(room->description);
   DELETE_ARRAY_IF_EXTANT(room->night_desc);
+  DELETE_ARRAY_IF_EXTANT(room->flight_code);
   DELETE_ARRAY_IF_EXTANT(room->address);
 
   // then free up the exits
