@@ -835,8 +835,20 @@ void find_replacement(void *go, struct script_data *sc, struct trig_data *trig,
           snprintf(str, slen, "%d", GET_REA(c));
         }
         else if (!str_cmp(field, "room")) {
-          snprintf(str, slen, "%c%ld", UID_CHAR,
-                   c->in_room ? room_script_id(c->in_room) : (long) ROOM_ID_BASE);
+          /* Somebody riding in a vehicle is not on any room's people list,
+           * so no room trigger will ever see them, but a script that already
+           * has hold of them should still be told where they are rather than
+           * be handed the void. Anyone who is in neither a room nor a vehicle
+           * is between states and yields nothing at all. */
+          struct room_data *where = c->in_room;
+
+          if (!where && c->in_veh)
+            where = get_veh_in_room(c->in_veh);
+
+          if (where)
+            snprintf(str, slen, "%c%ld", UID_CHAR, room_script_id(where));
+          else
+            *str = '\0';
         }
         break;
 

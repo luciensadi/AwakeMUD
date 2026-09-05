@@ -548,7 +548,6 @@ void script_trigger_check(void)
     }
   }
 
-  dg_flush_pending_extractions();
 }
 
 void check_time_triggers(void)
@@ -587,7 +586,6 @@ void check_time_triggers(void)
     }
   }
 
-  dg_flush_pending_extractions();
 }
 
 /* ************************************************************************
@@ -2026,8 +2024,11 @@ static void process_remote(struct script_data *sc, struct trig_data *trig, char 
   if ((room = find_room(uid))) {
     sc_remote = SCRIPT(room);
   } else if ((mob = find_char(uid))) {
-    /* A PC has no triggers, but it can still carry script variables, which
-     * is how quest state follows a player around. */
+    /* A PC never has triggers attached, but it can still carry script
+     * variables, which is how quest state follows a player around. These
+     * live in memory only: nothing writes them to the database, so they
+     * are gone the moment the player quits. A script that has to remember
+     * something across a login wants a real pfile field for now. */
     if (!SCRIPT(mob))
       SCRIPT(mob) = new script_data;
     sc_remote = SCRIPT(mob);

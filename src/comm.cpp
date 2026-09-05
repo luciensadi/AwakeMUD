@@ -1112,8 +1112,11 @@ void game_loop(int mother_desc)
       script_trigger_check();
     }
 
-    /* Every pulse: let any script that is part-way through a wait resume. */
+    /* Every pulse: let any script that is part-way through a wait resume,
+     * then carry out any extraction a script deferred so it could finish
+     * running first. */
     event_process();
+    dg_flush_pending_extractions();
 
     if (!(pulse % ViolencePulse)) {
       decide_combat_pool();
@@ -3693,6 +3696,12 @@ const char *act(const char *str, int hide_invisible, struct char_data * ch,
     }
     if (can_send_act_to_target(ch, hide_invisible, obj, vict_obj, to, type))
       perform_act(str, ch, obj, vict_obj, to, skip_you_stanzas);
+
+    /* An act trigger reads what everyone else in the room just saw. It is
+     * given the raw string rather than the rendered one, which is what a
+     * builder writes their match against. */
+    if (SCRIPT_CHECK(to, MTRIG_ACT))
+      act_mtrigger(to, str, ch, (struct char_data *) vict_obj, obj, NULL, NULL);
   }
 
   // Send to riggers.

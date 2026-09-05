@@ -15,6 +15,7 @@
 #include "db.hpp"
 #include "utils.hpp"
 #include "dblist.hpp"
+#include "dg_scripts.hpp"
 #include "handler.hpp"
 #include "file.hpp"
 #include "newdb.hpp"
@@ -270,6 +271,16 @@ void objList::UpdateCounters(void)
     if (OBJ->load_origin == OBJ_LOAD_REASON_MOB_DEFAULT_GEAR)
       continue;
     */
+
+    /* Objects carrying a timer trigger tick down towards it. Objects
+     * without one are left alone: several item types use the same field
+     * for their own purposes. */
+    if (SCRIPT_CHECK(OBJ, OTRIG_TIMER) && GET_OBJ_TIMER(OBJ) > 0) {
+      if (--GET_OBJ_TIMER(OBJ) <= 0) {
+        timer_otrigger(OBJ);
+        continue;
+      }
+    }
 
     switch (GET_OBJ_TYPE(OBJ)) {
       case ITEM_PET:

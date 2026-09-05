@@ -999,7 +999,7 @@ void index_boot(int mode)
 
     fscanf(index, "%32767s\n", buf1);
   }
-  if (!rec_count) {
+  if (!rec_count && mode != DB_BOOT_TRG) {
     log("SYSERR: boot error - 0 records counted");
     exit(ERROR_BOOT_ZERO_RECORDS_COUNTED);
   }

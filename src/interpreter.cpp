@@ -3641,6 +3641,10 @@ void nanny(struct descriptor_data * d, char *arg)
       }
       if (!d->character->in_veh)
         char_to_room(d->character, &world[load_room_rnum]);
+      /* Login triggers fire for the room the character arrives in. */
+      if (d->character->in_room)
+        login_wtrigger(d->character->in_room, d->character);
+
       act("$n has entered the game.", TRUE, d->character, 0, 0, TO_ROOM);
       mudlog_vfprintf(d->character, LOG_CONNLOG, "%s has entered the game.", GET_CHAR_NAME(d->character));
 
