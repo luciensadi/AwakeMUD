@@ -1389,6 +1389,7 @@ void do_stat_room(struct char_data * ch)
   }
 
   dg_stat_triggers(ch, SCRIPT(rm));
+  dg_stat_variables(ch, SCRIPT(rm));
 
   for (i = 0; i < NUM_OF_DIRS; i++)
   {
@@ -1764,6 +1765,7 @@ void do_stat_object(struct char_data * ch, struct obj_data * j)
   send_to_char(buf, ch);
 
   dg_stat_triggers(ch, SCRIPT(j));
+  dg_stat_variables(ch, SCRIPT(j));
 }
 
 void do_stat_character(struct char_data * ch, struct char_data * k)
@@ -2012,6 +2014,8 @@ void do_stat_character(struct char_data * ch, struct char_data * k)
   }
   strlcat(buf, "\r\n", sizeof(buf));
   send_to_char(buf, ch);
+
+  dg_stat_variables(ch, SCRIPT(k));
 }
 
 void do_stat_mobile(struct char_data * ch, struct char_data * k)
@@ -2245,6 +2249,7 @@ void do_stat_mobile(struct char_data * ch, struct char_data * k)
   }
 
   dg_stat_triggers(ch, SCRIPT(k));
+  dg_stat_variables(ch, SCRIPT(k));
 }
 
 ACMD(do_stat)

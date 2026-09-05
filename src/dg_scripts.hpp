@@ -298,6 +298,12 @@ struct room_data *dg_room_of_obj(struct obj_data *obj);
 int trig_is_attached(struct script_data *sc, vnum_t trig_num);
 void dg_flush_pending_extractions(void);
 void dg_stat_triggers(struct char_data *ch, struct script_data *sc);
+void dg_stat_variables(struct char_data *ch, struct script_data *sc);
+void dg_pc_vars_changed(struct char_data *ch);
+
+/* How many script variables one player may be made to carry. A quest wants
+ * a handful; anything approaching this is a script looping over remote. */
+#define DG_MAX_PC_VARS 128
 int has_obj_by_uid_in_lookup_table(long uid);
 const char *dg_edit_door(char *argument, char *errbuf, size_t errbuf_size);
 void dg_note_char_extraction(struct char_data *ch);

@@ -588,6 +588,40 @@ void check_time_triggers(void)
 
 }
 
+/* A player's script variables are pfile data, so anything that changes them
+ * has to say so or the change is lost at the next save. */
+void dg_pc_vars_changed(struct char_data *ch)
+{
+  if (ch && !IS_NPC(ch))
+    GET_SCRIPTVAR_DIRTY_BIT(ch) = TRUE;
+}
+
+/* Name the script variables something is carrying, for the stat commands.
+ * A player's are pfile data now, and a quest that misbehaves is nearly
+ * impossible to diagnose without being able to read them. Says nothing when
+ * there are none. */
+void dg_stat_variables(struct char_data *ch, struct script_data *sc)
+{
+  bool printed_any = FALSE;
+
+  if (!sc)
+    return;
+
+  for (struct trig_var_data *vd = sc->global_vars; vd; vd = vd->next) {
+    if (!printed_any)
+      send_to_char("Script vars: ", ch);
+
+    send_to_char(ch, "%s^c%s^n", printed_any ? ", " : "", vd->name ? vd->name : "?");
+    if (vd->context)
+      send_to_char(ch, "{%ld}", vd->context);
+    send_to_char(ch, "=^c%s^n", vd->value ? vd->value : "");
+    printed_any = TRUE;
+  }
+
+  if (printed_any)
+    send_to_char("\r\n", ch);
+}
+
 /* Name the triggers attached to something, for the stat commands. Says
  * nothing at all when there are none, so stat output for the overwhelming
  * majority of the world is unchanged. */
@@ -2049,15 +2083,38 @@ static void process_remote(struct script_data *sc, struct trig_data *trig, char 
     sc_remote = SCRIPT(room);
   } else if ((mob = find_char(uid))) {
     /* A PC never has triggers attached, but it can still carry script
-     * variables, which is how quest state follows a player around. These
-     * live in memory only: nothing writes them to the database, so they
-     * are gone the moment the player quits. A script that has to remember
-     * something across a login wants a real pfile field for now. */
+     * variables, which is how quest state follows a player around. For a
+     * player they are saved with the pfile and come back at the next login. */
+    if (!IS_NPC(mob)) {
+      context = 0;
+
+      /* Being pfile data, they must not be something a runaway script can
+       * pile up without limit. Overwriting an existing variable is always
+       * fine; only a new name can lengthen the list. */
+      if (SCRIPT(mob)) {
+        int count = 0;
+        bool already_there = FALSE;
+
+        for (struct trig_var_data *existing = SCRIPT(mob)->global_vars; existing; existing = existing->next) {
+          count++;
+          if (!str_cmp(existing->name, vd->name))
+            already_there = TRUE;
+        }
+
+        if (!already_there && count >= DG_MAX_PC_VARS) {
+          script_log("Trigger: %s, VNum %ld. remote: %s already carries %d variables, refusing to add '%s'",
+                     GET_TRIG_NAME(trig), (long) GET_TRIG_VNUM(trig),
+                     GET_CHAR_NAME(mob), count, vd->name);
+          return;
+        }
+      }
+
+      dg_pc_vars_changed(mob);
+    }
+
     if (!SCRIPT(mob))
       SCRIPT(mob) = new script_data;
     sc_remote = SCRIPT(mob);
-    if (!IS_NPC(mob))
-      context = 0;
   } else if ((obj = find_obj(uid))) {
     sc_remote = SCRIPT(obj);
   } else {
@@ -2082,7 +2139,7 @@ ACMD(do_vdelete)
   char buf[MAX_INPUT_LENGTH], buf2[MAX_INPUT_LENGTH];
   long uid;
   struct room_data *room;
-  struct char_data *mob;
+  struct char_data *mob, *char_target = NULL;
   struct obj_data *obj;
 
   two_arguments(argument, buf, buf2);
@@ -2105,7 +2162,7 @@ ACMD(do_vdelete)
   if ((room = find_room(uid)))
     sc_remote = SCRIPT(room);
   else if ((mob = find_char(uid)))
-    sc_remote = SCRIPT(mob);
+    sc_remote = SCRIPT(char_target = mob);
   else if ((obj = find_obj(uid)))
     sc_remote = SCRIPT(obj);
   else {
@@ -2121,6 +2178,7 @@ ACMD(do_vdelete)
   if (*var == '*' || is_abbrev(var, "all")) {
     free_varlist(sc_remote->global_vars);
     sc_remote->global_vars = NULL;
+    dg_pc_vars_changed(char_target);
     send_to_char("All variables deleted from that id.\r\n", ch);
     return;
   }
@@ -2140,6 +2198,7 @@ ACMD(do_vdelete)
     sc_remote->global_vars = vd->next;
 
   free_var_el(vd);
+  dg_pc_vars_changed(char_target);
 
   send_to_char("Deleted.\r\n", ch);
 }
@@ -2154,7 +2213,7 @@ static void process_rdelete(struct script_data *sc, struct trig_data *trig, char
   char arg[MAX_INPUT_LENGTH], buf[MAX_INPUT_LENGTH], buf2[MAX_INPUT_LENGTH];
   long uid;
   struct room_data *room;
-  struct char_data *mob;
+  struct char_data *mob, *char_target = NULL;
   struct obj_data *obj;
 
   line = any_one_arg(cmd, arg);
@@ -2180,7 +2239,7 @@ static void process_rdelete(struct script_data *sc, struct trig_data *trig, char
   if ((room = find_room(uid)))
     sc_remote = SCRIPT(room);
   else if ((mob = find_char(uid)))
-    sc_remote = SCRIPT(mob);
+    sc_remote = SCRIPT(char_target = mob);
   else if ((obj = find_obj(uid)))
     sc_remote = SCRIPT(obj);
   else {
@@ -2205,6 +2264,7 @@ static void process_rdelete(struct script_data *sc, struct trig_data *trig, char
     sc_remote->global_vars = vd->next;
 
   free_var_el(vd);
+  dg_pc_vars_changed(char_target);
 }
 
 /* Makes a local variable into a global variable. */

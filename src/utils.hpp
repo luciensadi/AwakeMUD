@@ -791,6 +791,7 @@ extern int global_dummy_val; // Trash value to use on spent_restricted etc when 
 #define GET_ALIAS_DIRTY_BIT(ch)         ((ch)->char_specials.dirty_bits[DIRTY_BIT_ALIAS])
 #define GET_QUEST_DIRTY_BIT(ch)         ((ch)->char_specials.dirty_bits[DIRTY_BIT_QUESTS])
 #define GET_BULLETPANTS_DIRTY_BIT(ch)   ((ch)->char_specials.dirty_bits[DIRTY_BIT_BULLETPANTS])
+#define GET_SCRIPTVAR_DIRTY_BIT(ch)     ((ch)->char_specials.dirty_bits[DIRTY_BIT_SCRIPTVARS])
 
 #define GET_CONGREGATION_BONUS(ch) ((ch)->congregation_bonus_pool)
 
