@@ -59,10 +59,7 @@ static void mob_log(struct char_data *mob, const char *format, ...)
  ((IS_NPC(ch) && (!(ch)->desc || ((ch)->desc->original && access_level((ch)->desc->original, LVL_PRESIDENT)))) || \
   (SCRIPT(ch) && TRIGGERS(SCRIPT(ch))))
 
-/* Stock DG refuses these commands to a charmed mob, so a player cannot drive
- * one through its own script commands. Awake has no charm affect; the mobs a
- * player directs are conjured spirits and elementals. */
-#define MOB_IS_PLAYER_DIRECTED(ch) (IS_SPIRIT(ch) || IS_PC_CONJURED_ELEMENTAL(ch))
+#define MOB_IS_PLAYER_DIRECTED(ch) DG_MOB_IS_PLAYER_DIRECTED(ch)
 
 /* The guard every one of these commands opens with. */
 #define MOBCMD_PREAMBLE(ch)                     \

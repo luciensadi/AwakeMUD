@@ -2675,6 +2675,13 @@ static struct obj_data *find_obj_by_uid_in_lookup_table(long uid)
   return NULL;
 }
 
+/* Whether anything is still registered under this uid. Lets a trigger notice
+ * that an object it was holding on to has been purged. */
+int has_obj_by_uid_in_lookup_table(long uid)
+{
+  return find_element_by_uid_in_lookup_table(uid) != NULL;
+}
+
 void add_to_lookup_table(long uid, void *c)
 {
   struct lookup_table_t *lt = get_bucket_head(uid);

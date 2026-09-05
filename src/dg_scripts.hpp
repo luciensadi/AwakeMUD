@@ -297,6 +297,7 @@ char *matching_quote(char *p);
 struct room_data *dg_room_of_obj(struct obj_data *obj);
 int trig_is_attached(struct script_data *sc, vnum_t trig_num);
 void dg_flush_pending_extractions(void);
+int has_obj_by_uid_in_lookup_table(long uid);
 const char *dg_edit_door(char *argument, char *errbuf, size_t errbuf_size);
 void dg_note_char_extraction(struct char_data *ch);
 void dg_note_obj_extraction(struct obj_data *obj);
@@ -408,6 +409,11 @@ void trigedit_disp_menu(struct descriptor_data *d);
 
 #define SCRIPT_TYPES(s)           ((s)->types)
 #define TRIGGERS(s)               ((s)->trig_list)
+
+/* Stock DG will not run a charmed mob's triggers, so that a player cannot
+ * drive one through its own script. Awake has no charm affect; the mobs a
+ * player directs are conjured spirits and elementals. */
+#define DG_MOB_IS_PLAYER_DIRECTED(ch) (IS_SPIRIT(ch) || IS_PC_CONJURED_ELEMENTAL(ch))
 
 #define SCRIPT_CHECK(go, type)   (SCRIPT(go) && \
                                   IS_SET(SCRIPT_TYPES(SCRIPT(go)), type))
