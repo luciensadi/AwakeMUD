@@ -24,6 +24,7 @@
 #include "boards.hpp"
 #include "screen.hpp"
 #include "olc.hpp"
+#include "dg_scripts.hpp"
 #include "memory.hpp"
 #include "constants.hpp"
 #include "handler.hpp"
@@ -393,6 +394,7 @@ void redit_disp_menu(struct descriptor_data * d)
     send_to_char("t) Restore color codes\r\n", d->character);
   else
     send_to_char("t) Toggle color codes\r\n", d->character);
+  send_to_char("w) Attached triggers\r\n", d->character);
   send_to_char("q) Quit and save\r\n", d->character);
   send_to_char("x) Exit and abort\r\n", d->character);
   send_to_char("Enter your choice:\r\n", d->character);
@@ -415,6 +417,15 @@ void redit_parse(struct descriptor_data * d, const char *arg)
   int             number;
   int             room_num;
   float number_float;
+
+  /* The attached-trigger sub-menu borrows this editor for a moment.
+   * Its submodes sit in their own range, well clear of this one. */
+  if (d->edit_mode >= DG_SCRIPT_MAIN_MENU && d->edit_mode <= DG_SCRIPT_DONE) {
+    if (!dg_script_edit_parse(d, arg))
+      redit_disp_menu(d);
+    return;
+  }
+
   switch (d->edit_mode)
   {
   case REDIT_CONFIRM_EDIT:
@@ -485,6 +496,10 @@ void redit_parse(struct descriptor_data * d, const char *arg)
           free_room(world + room_num);
           /* now copy everything over! */
           world[room_num] = *d->edit_room;
+          /* free_room() took the room's live script with it; build a new
+           * one from whatever the builder has now attached. */
+          world[room_num].script = NULL;
+          assign_triggers(&world[room_num], WLD_TRIGGER);
         } else {
           /* hm, we can't just copy.. gotta insert a new room */
           int             counter;
@@ -682,6 +697,9 @@ void redit_parse(struct descriptor_data * d, const char *arg)
     case 'x':
       d->edit_mode = REDIT_CONFIRM_SAVESTRING;
       redit_parse(d, "n");
+      break;
+    case 'w':
+      dg_script_menu(d);
       break;
       case 't':
         if ((d->edit_convert_color_codes = !d->edit_convert_color_codes))
@@ -1474,6 +1492,12 @@ void write_world_to_disk(vnum_t zone_vnum)
         fprintf(fp, "NightDesc:$\n%s~\n", prep_string_for_writing_to_savefile(buf2, RM.night_desc));
 
       fprintf(fp, "Flags:\t%s\n", RM.room_flags.ToString());
+
+      {
+        const char *attached_triggers = dg_render_proto_list(&RM, WLD_TRIGGER);
+        if (attached_triggers)
+          fprintf(fp, "Scripts:\t%s\n", attached_triggers);
+      }
 
       if (RM.sector_type != DEFAULT_SECTOR_TYPE)
         fprintf(fp, "SecType:\t%s\n", spirit_name[RM.sector_type]);

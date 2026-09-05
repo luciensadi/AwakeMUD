@@ -172,6 +172,11 @@ void objList::UpdateObjs(const struct obj_data *proto, int rnum)
       temp->data->next_content = old.next_content;
       temp->data->in_host = old.in_host;
 
+      /* The struct copy above brought the prototype's script pointers along.
+       * A live object keeps its own running script and its own id. */
+      temp->data->script = old.script;
+      temp->data->script_id = old.script_id;
+
       temp->data->cyberdeck_part_pointer = old.cyberdeck_part_pointer;
 
       temp->data->targ = old.targ;

@@ -10,9 +10,29 @@
 // extern functions
 extern void write_index_file(const char *suffix);
 extern bool can_edit_zone(struct char_data *ch, struct zone_data *zone);
+extern bool can_edit_zone(struct char_data *ch, rnum_t real_zone);
 
 // Message sent in function.
 extern bool is_olc_available(struct char_data *ch);
+
+// Bails out of the calling command unless ch may edit this zone.
+#define REQUIRE_ZONE_EDIT_ACCESS(real_zonenum) {                                                                                               \
+  if (real_zonenum < 0 || real_zonenum > top_of_zone_table) {                                                                                  \
+    send_to_char("That's not a zone.\r\n", ch);                                                                                                \
+    return;                                                                                                                                    \
+  }                                                                                                                                            \
+                                                                                                                                               \
+  if (!can_edit_zone(ch, (real_zonenum))) {                                                                                                    \
+    send_to_char(ch, "Sorry, you don't have access to edit zone %ld.\r\n", zone_table[(real_zonenum)].number);                                 \
+    return;                                                                                                                                    \
+  }                                                                                                                                            \
+                                                                                                                                               \
+  if (!(access_level(ch, LVL_ADMIN) || PLR_FLAGGED(ch, PLR_EDCON)) && zone_table[(real_zonenum)].editing_restricted_to_admin) {                \
+    send_to_char(ch, "Sorry, zone %d closed for editing.\r\n", zone_table[(real_zonenum)].number);                                             \
+    return;                                                                                                                                    \
+  }                                                                                                                                            \
+}
+
 
 #define CH              d->character
 #ifdef NO_CLS
@@ -414,6 +434,24 @@ extern bool is_olc_available(struct char_data *ch);
 #define HOUSEEDIT_APARTMENT_COMPLEX         7
 #define HOUSEEDIT_APARTMENT_ROOMS           8
 #define HOUSEEDIT_APARTMENT_GARAGE_OVERRIDE 9
+
+// trigedit defines
+#define TRIGEDIT_MAIN_MENU                  0
+#define TRIGEDIT_CONFIRM_SAVESTRING         1
+#define TRIGEDIT_NAME                       2
+#define TRIGEDIT_INTENDED                   3
+#define TRIGEDIT_TYPES                      4
+#define TRIGEDIT_COMMANDS                   5
+#define TRIGEDIT_NARG                       6
+#define TRIGEDIT_ARGUMENT                   7
+#define TRIGEDIT_COPY                       8
+
+/* The attached-trigger sub-menu is shared by redit, medit and iedit, so
+ * its submodes sit well clear of any one editor's own numbering. */
+#define DG_SCRIPT_MAIN_MENU               900
+#define DG_SCRIPT_ATTACH                  901
+#define DG_SCRIPT_DETACH                  902
+#define DG_SCRIPT_DONE                    903
 
 #define FACTION_EDIT_MAIN_MENU              0
 #define FACTION_EDIT_NAME                   1

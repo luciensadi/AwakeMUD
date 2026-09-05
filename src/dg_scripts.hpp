@@ -262,8 +262,8 @@ int login_wtrigger(struct room_data *room, struct char_data *actor);
 int damage_mtrigger(struct char_data *ch, struct char_data *victim, int dam, int attacktype);
 
 /* function prototypes from dg_scripts.cpp */
-ACMD_DECLARE(do_attach);
-ACMD_DECLARE(do_detach);
+ACMD_DECLARE(do_tattach);
+ACMD_DECLARE(do_tdetach);
 ACMD_DECLARE(do_tstat);
 ACMD_DECLARE(do_vdelete);
 char *dg_str_str(char *cs, const char *ct);
@@ -275,7 +275,7 @@ struct char_data *get_char(const char *name);
 struct char_data *get_char_near_obj(struct obj_data *obj, const char *name);
 struct char_data *get_char_in_room(struct room_data *room, const char *name);
 struct obj_data *get_obj_near_obj(struct obj_data *obj, const char *name);
-struct obj_data *get_obj(const char *name);
+/* get_obj() is declared in handler.hpp; dg_scripts.cpp defines it. */
 struct room_data *get_room(const char *name);
 struct char_data *get_char_by_obj(struct obj_data *obj, const char *name);
 struct char_data *get_char_by_room(struct room_data *room, const char *name);
@@ -373,11 +373,14 @@ void wld_command_interpreter(struct room_data *room, char *argument);
 /* from trigedit.cpp */
 void trigedit_parse(struct descriptor_data *d, const char *arg);
 void trigedit_save(struct descriptor_data *d);
-void trigedit_string_cleanup(struct descriptor_data *d, int terminator);
+void trigedit_string_cleanup(struct descriptor_data *d, bool aborted);
 int format_script(struct descriptor_data *d);
 void trigedit_setup_existing(struct descriptor_data *d, rnum_t rtrg_num);
 void trigedit_setup_new(struct descriptor_data *d);
 void trigedit_disp_menu(struct descriptor_data *d);
+ACMD_DECLARE(do_trigedit);
+void dg_script_menu(struct descriptor_data *d);
+bool dg_script_edit_parse(struct descriptor_data *d, const char *arg);
 
 /* defines for valid_dg_target */
 #define DG_ALLOW_GODS (1 << 0)

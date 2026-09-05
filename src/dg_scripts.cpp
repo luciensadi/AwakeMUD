@@ -363,8 +363,9 @@ struct obj_data *get_obj_near_obj(struct obj_data *obj, const char *name)
   return NULL;
 }
 
-/* The object in the world with this name or uid, or NULL. */
-struct obj_data *get_obj(const char *name)
+/* The object in the world with this name or uid, or NULL. Declared in
+ * handler.hpp. */
+struct obj_data *get_obj(char *name)
 {
   if (*name == UID_CHAR)
     return find_obj(atol(name + 1));
@@ -468,7 +469,7 @@ struct obj_data *get_obj_by_obj(struct obj_data *obj, const char *name)
   if ((room = obj_room(obj)) && (i = get_obj_in_list((char *) name, room->contents)))
     return i;
 
-  return get_obj(name);
+  return get_obj((char *) name);
 }
 
 /* only searches the room */
@@ -507,7 +508,7 @@ struct obj_data *get_obj_by_room(struct room_data *room, const char *name)
       if (dg_obj_is_named(name, obj))
         return obj;
 
-  return get_obj(name);
+  return get_obj((char *) name);
 }
 
 /* checks every PULSE_DG_SCRIPT for random triggers */
@@ -756,7 +757,7 @@ void find_uid_name(const char *uid, char *name, size_t nlen)
 
   if ((ch = get_char(uid)))
     snprintf(name, nlen, "%s", GET_CHAR_NAME(ch));
-  else if ((obj = get_obj(uid)))
+  else if ((obj = get_obj((char *) uid)))
     snprintf(name, nlen, "%s", GET_OBJ_NAME(obj));
   else if ((room = find_room(atol(uid + 1))))
     snprintf(name, nlen, "%s", GET_ROOM_NAME(room));
@@ -882,7 +883,7 @@ void add_trigger(struct script_data *sc, struct trig_data *t, int loc)
   trigger_list = t;
 }
 
-ACMD(do_attach)
+ACMD(do_tattach)
 {
   struct char_data *victim;
   struct obj_data *object;
@@ -898,7 +899,7 @@ ACMD(do_attach)
   two_arguments(argument, targ_name, loc_name);
 
   if (!*arg || !*targ_name || !*trig_name) {
-    send_to_char("Usage: attach { mob | obj | room } { trigger } { name } [ location ]\r\n", ch);
+    send_to_char("Usage: tattach { mob | obj | room } { trigger } { name } [ location ]\r\n", ch);
     return;
   }
 
@@ -1077,7 +1078,7 @@ static int remove_trigger(struct script_data *sc, char *name)
   return 1;
 }
 
-ACMD(do_detach)
+ACMD(do_tdetach)
 {
   struct char_data *victim = NULL;
   struct obj_data *object = NULL;
@@ -1090,7 +1091,7 @@ ACMD(do_detach)
   one_argument(argument, arg3);
 
   if (!*arg1 || !*arg2) {
-    send_to_char("Usage: detach [ mob | object | room ] { target } { trigger | 'all' }\r\n", ch);
+    send_to_char("Usage: tdetach [ mob | object | room ] { target } { trigger | 'all' }\r\n", ch);
     return;
   }
 

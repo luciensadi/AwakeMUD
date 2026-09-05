@@ -21,6 +21,7 @@
 #include "awake.hpp"
 #include "comm.hpp"
 #include "interpreter.hpp"
+#include "dg_scripts.hpp"
 #include "db.hpp"
 #include "newdb.hpp"
 #include "utils.hpp"
@@ -1012,6 +1013,10 @@ struct command_info cmd_info[] =
     { "treat"      , POS_SITTING , do_treat    , 0, 0, BLOCKS_IDLE_REWARD },
     { "trade"      , POS_DEAD    , do_trade    , 0, 0, BLOCKS_IDLE_REWARD },
     { "train"      , POS_STANDING, do_train    , 0, 0, BLOCKS_IDLE_REWARD },
+    { "tattach"    , POS_DEAD    , do_tattach  , LVL_BUILDER, 0, BLOCKS_IDLE_REWARD },
+    { "tdetach"    , POS_DEAD    , do_tdetach  , LVL_BUILDER, 0, BLOCKS_IDLE_REWARD },
+    { "trigedit"   , POS_DEAD    , do_trigedit , LVL_BUILDER, 0, BLOCKS_IDLE_REWARD },
+    { "tstat"      , POS_DEAD    , do_tstat    , LVL_BUILDER, 0, BLOCKS_IDLE_REWARD },
     { "transfer"   , POS_SLEEPING, do_trans    , 0, 0, BLOCKS_IDLE_REWARD },
     { "tridlog"    , POS_DEAD    , do_tridlog  , LVL_FIXER, 0, BLOCKS_IDLE_REWARD },
     { "type"       , POS_STANDING, do_type     , 0, 0, BLOCKS_IDLE_REWARD },
@@ -1055,6 +1060,7 @@ struct command_info cmd_info[] =
     { "view"       , POS_LYING   , do_imagelink, 0, 0, ALLOWS_IDLE_REWARD },
     { "vfind"      , POS_DEAD    , do_vfind    , LVL_BUILDER, 0, BLOCKS_IDLE_REWARD },
     { "vlist"      , POS_DEAD    , do_vlist    , LVL_BUILDER, 0, BLOCKS_IDLE_REWARD },
+    { "vdelete"    , POS_DEAD    , do_vdelete  , LVL_BUILDER, 0, BLOCKS_IDLE_REWARD },
     { "vnum"       , POS_DEAD    , do_vnum     , LVL_BUILDER, 0, BLOCKS_IDLE_REWARD },
     { "vset"       , POS_DEAD    , do_vset     , LVL_DEVELOPER, 0, BLOCKS_IDLE_REWARD },
     { "vstat"      , POS_DEAD    , do_vstat    , LVL_BUILDER, 0, BLOCKS_IDLE_REWARD },
@@ -1916,6 +1922,13 @@ void command_interpreter(struct char_data * ch, char *argument, const char *tcna
 #endif
   } else
   {
+    /* Command triggers see the line before the command table does, so a
+     * script can intercept a command, or invent one of its own. */
+    if (command_wtrigger(ch, arg, line) ||
+        command_mtrigger(ch, arg, line) ||
+        command_otrigger(ch, arg, line))
+      return;
+
     for (length = strlen(arg), cmd = 0; *cmd_info[cmd].command != '\n'; cmd++)
       if (!strncmp(cmd_info[cmd].command, arg, length))
         if ((cmd_info[cmd].minimum_level < LVL_BUILDER) ||
@@ -2978,6 +2991,9 @@ void nanny(struct descriptor_data * d, char *arg)
     break;
   case CON_REDIT:
     redit_parse(d, arg);
+    break;
+  case CON_TRIGEDIT:
+    trigedit_parse(d, arg);
     break;
   case CON_IEDIT:
     iedit_parse(d, arg);

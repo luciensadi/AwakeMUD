@@ -3681,8 +3681,7 @@ const char *trig_types[] = {
   "Door",
   "Damage",
   "Time",
-  "
-"
+  "\n"
 };
 
 const char *otrig_types[] = {
@@ -3706,8 +3705,7 @@ const char *otrig_types[] = {
   "UNUSED6",
   "Consume",
   "Time",
-  "
-"
+  "\n"
 };
 
 const char *wtrig_types[] = {
@@ -3731,6 +3729,5 @@ const char *wtrig_types[] = {
   "Door",
   "Login",
   "Time",
-  "
-"
+  "\n"
 };

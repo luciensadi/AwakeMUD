@@ -60,23 +60,6 @@ bool ch_can_stat_or_clone_from_zone(struct char_data *ch, struct zone_data *zon,
 // mem class
 extern class memoryClass *Mem;
 
-#define REQUIRE_ZONE_EDIT_ACCESS(real_zonenum) {                                                                                               \
-  if (real_zonenum < 0 || real_zonenum > top_of_zone_table) {                                                                                  \
-    send_to_char("That's not a zone.\r\n", ch);                                                                                                \
-    return;                                                                                                                                    \
-  }                                                                                                                                            \
-                                                                                                                                               \
-  if (!can_edit_zone(ch, (real_zonenum))) {                                                                                                    \
-    send_to_char(ch, "Sorry, you don't have access to edit zone %ld.\r\n", zone_table[(real_zonenum)].number);                                 \
-    return;                                                                                                                                    \
-  }                                                                                                                                            \
-                                                                                                                                               \
-  if (!(access_level(ch, LVL_ADMIN) || PLR_FLAGGED(ch, PLR_EDCON)) && zone_table[(real_zonenum)].editing_restricted_to_admin) {                \
-    send_to_char(ch, "Sorry, zone %d closed for editing.\r\n", zone_table[(real_zonenum)].number);                                             \
-    return;                                                                                                                                    \
-  }                                                                                                                                            \
-}
-
 // Checks for OLC availability and advises you on how to fix it, assuming you're capable.
 bool is_olc_available(struct char_data *ch) {
   if (!olc_state) {
@@ -259,6 +242,10 @@ ACMD (do_redit)
   if (room_num >= 0) {
     room = GetRoom();
     *room = world[room_num];
+    /* Do not share the prototype's attached-trigger list: take a copy, so
+     * that editing it only reaches the prototype on save. */
+    room->proto_script = NULL;
+    copy_proto_script(&world[room_num], room, WLD_TRIGGER);
     /* allocate space for all strings  */
     if (world[room_num].name)
       room->name = str_dup (world[room_num].name);
@@ -408,6 +395,10 @@ ACMD(do_rclone)
   if (world[num1].flight_code)
     room->flight_code = str_dup(world[num1].flight_code);
   room->zone = zone2;
+  /* Do not share the prototype's attached-trigger list: take a copy, so
+   * that editing it only reaches the prototype on save. */
+  room->proto_script = NULL;
+  copy_proto_script(&world[num1], room, WLD_TRIGGER);
   /* exits - alloc only if necessary */
   for (counter = 0; counter < NUM_OF_DIRS; counter++) {
     if (world[num1].dir_option[counter]) {
@@ -1071,6 +1062,10 @@ ACMD (do_iedit)
       }
     }
 
+    /* Do not share the prototype's attached-trigger list: take a copy, so
+     * that editing it only reaches the prototype on save. */
+    obj->proto_script = NULL;
+    copy_proto_script(&obj_proto[obj_num], obj, OBJ_TRIGGER);
     d->edit_obj = obj;
 #ifdef CONFIRM_EXISTING
 
@@ -1201,6 +1196,10 @@ ACMD(do_iclone)
   PLR_FLAGS(ch).SetBit(PLR_EDITING);
   send_to_char("Are you sure you want to clone that object?\r\n", ch);
   ch->desc->edit_number = arg2; // the vnum
+  /* Do not share the prototype's attached-trigger list: take a copy, so
+   * that editing it only reaches the prototype on save. */
+  obj->proto_script = NULL;
+  copy_proto_script(&obj_proto[obj_num1], obj, OBJ_TRIGGER);
   ch->desc->edit_obj = obj;
   ch->desc->edit_mode = IEDIT_CONFIRM_SAVESTRING;
 }
@@ -1390,6 +1389,10 @@ ACMD(do_medit)
     mob = GetCh();
 
     *mob = mob_proto[mob_num]; // the RNUM
+    /* Do not share the prototype's attached-trigger list: take a copy, so
+     * that editing it only reaches the prototype on save. */
+    mob->proto_script = NULL;
+    copy_proto_script(&mob_proto[mob_num], mob, MOB_TRIGGER);
     mob->load_origin = PC_LOAD_REASON_MEDIT_ALLOCATION;
     mob->load_time = time(0);
 
@@ -1554,6 +1557,10 @@ ACMD(do_mclone)
   mob = GetCh();
 
   *mob = mob_proto[mob_num1]; // the RNUM
+  /* Do not share the prototype's attached-trigger list: take a copy, so
+   * that editing it only reaches the prototype on save. */
+  mob->proto_script = NULL;
+  copy_proto_script(&mob_proto[mob_num1], mob, MOB_TRIGGER);
   mob->load_origin = PC_LOAD_REASON_MCLONE;
   mob->load_time = time(0);
 

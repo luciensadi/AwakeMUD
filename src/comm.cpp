@@ -57,6 +57,8 @@
 #include "utils.hpp"
 #include "constants.hpp"
 #include "comm.hpp"
+#include "dg_scripts.hpp"
+#include "dg_event.hpp"
 #include "interpreter.hpp"
 #include "handler.hpp"
 #include "db.hpp"
@@ -1104,6 +1106,15 @@ void game_loop(int mother_desc)
       mobile_activity();
     }
 
+    /* Random triggers run on their own pulse so they do not land on top of
+     * mobile_activity(). */
+    if (!(pulse % PULSE_DG_SCRIPT)) {
+      script_trigger_check();
+    }
+
+    /* Every pulse: let any script that is part-way through a wait resume. */
+    event_process();
+
     if (!(pulse % ViolencePulse)) {
       decide_combat_pool();
       perform_violence();
@@ -1116,6 +1127,11 @@ void game_loop(int mother_desc)
           d->regenerating_art_quota++;
         }
       }
+    }
+
+    // Every MUD hour, give the time triggers their moment.
+    if (!(pulse % (SECS_PER_MUD_HOUR * PASSES_PER_SEC))) {
+      check_time_triggers();
     }
 
     // Every MUD minute
@@ -2515,6 +2531,20 @@ void free_editing_structs(descriptor_data *d, int state)
   if (d->edit_room) {
     DeleteRoom(d->edit_room);
     d->edit_room = NULL;
+  }
+
+  if (d->edit_trig) {
+    /* The editor's copy owns its command list outright, unlike a live
+     * trigger, which shares the prototype's. */
+    struct cmdlist_element *cmd, *next_cmd;
+    for (cmd = d->edit_trig->cmdlist; cmd; cmd = next_cmd) {
+      next_cmd = cmd->next;
+      DELETE_ARRAY_IF_EXTANT(cmd->cmd);
+      delete cmd;
+    }
+    d->edit_trig->cmdlist = NULL;
+    free_trigger(d->edit_trig);
+    d->edit_trig = NULL;
   }
 
   if (d->edit_mob) {

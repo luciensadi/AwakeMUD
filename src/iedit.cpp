@@ -23,6 +23,7 @@
 #include "boards.hpp"
 #include "screen.hpp"
 #include "olc.hpp"
+#include "dg_scripts.hpp"
 #include "memory.hpp"
 #include "newmagic.hpp"
 #include "constants.hpp"
@@ -1476,6 +1477,7 @@ void iedit_disp_menu(struct descriptor_data * d)
                "j) Source book: ^c%s^n\r\n"
                "k) Street index: ^c%.2f\r\n^n",  d->edit_obj->source_info ? d->edit_obj->source_info : "<none>", GET_OBJ_STREET_INDEX(d->edit_obj));
   if (!IS_OBJ_STAT(OBJ, ITEM_EXTRA_DONT_TOUCH)) {
+    send_to_char(CH, "w) Attached triggers\r\n");
     send_to_char(CH, "q) Quit and save\r\n");
   }
   send_to_char(CH, "x) Exit and abort\r\n"
@@ -1498,6 +1500,15 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
   float fnumber;
   int real_obj;
   bool modified = FALSE;
+
+  /* The attached-trigger sub-menu borrows this editor for a moment.
+   * Its submodes sit in their own range, well clear of this one. */
+  if (d->edit_mode >= DG_SCRIPT_MAIN_MENU && d->edit_mode <= DG_SCRIPT_DONE) {
+    if (!dg_script_edit_parse(d, arg))
+      iedit_disp_menu(d);
+    return;
+  }
+
   switch (d->edit_mode)
   {
 
@@ -1565,7 +1576,11 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
               obj_proto[obj_number].ex_description = NULL;
             }
 
+            /* The prototype is about to adopt the editor's attached-trigger
+             * list, so free the one it has now. */
+            free_proto_script(&obj_proto[obj_number], OBJ_TRIGGER);
             obj_proto[obj_number] = *d->edit_obj;
+            obj_proto[obj_number].script = NULL;
             obj_proto[obj_number].item_number = obj_number;
           } else {
             /* uhoh.. need to make a new place in the object prototype table */
@@ -1730,6 +1745,10 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
         case 'X':
           d->edit_mode = IEDIT_CONFIRM_SAVESTRING;
           iedit_parse(d, "n");
+          break;
+        case 'w':
+        case 'W':
+          dg_script_menu(d);
           break;
         case '1':
           send_to_char("Enter namelist:", d->character);
@@ -3236,6 +3255,11 @@ void write_objs_to_disk(vnum_t zonenum)
       fprintf(fp, "#%ld\n", GET_OBJ_VNUM(obj));
 
       fprintf(fp, "Keywords:\t%s\n", obj->text.keywords? obj->text.keywords : "unnamed");
+      {
+        const char *attached_triggers = dg_render_proto_list(obj, OBJ_TRIGGER);
+        if (attached_triggers)
+          fprintf(fp, "Scripts:\t%s\n", attached_triggers);
+      }
       fprintf(fp, "Name:\t%s\n", obj->text.name? obj->text.name : "an unnamed object");
       fprintf(fp, "RoomDesc:$\n%s~\n", obj->text.room_desc ? prep_string_for_writing_to_savefile(buf2, obj->text.room_desc) : "An unnamed object sits here");
       fprintf(fp, "LookDesc:$\n%s~\n", obj->text.look_desc ? prep_string_for_writing_to_savefile(buf2, obj->text.look_desc) : "You see an uncreative object.\n");
