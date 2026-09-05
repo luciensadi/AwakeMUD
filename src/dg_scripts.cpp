@@ -2466,7 +2466,8 @@ int script_driver_default(void *go_adress, struct trig_data *trig, int type, int
     for (p = cl->cmd; *p && isspace(*p); p++)
       ;
 
-    if (*p == '*') /* comment */
+    /* Blank lines survive a reload now, so there are real ones to skip. */
+    if (!*p || *p == '*') /* blank line, or comment */
       continue;
 
     else if (!strncmp(p, "if ", 3)) {

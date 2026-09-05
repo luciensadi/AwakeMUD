@@ -51,7 +51,7 @@ static struct cmdlist_element *build_cmdlist(char *commands, vnum_t vnum)
   /* Split by hand rather than with strtok(), which runs delimiters together
    * and so would quietly drop every blank line a builder had used to space
    * their script out. */
-  for (s = commands; s; ) {
+  for (s = (commands && *commands) ? commands : NULL; s; ) {
     char *eol = s;
 
     while (*eol && *eol != '\n' && *eol != '\r')
