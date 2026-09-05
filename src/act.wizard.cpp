@@ -2610,6 +2610,7 @@ void perform_wizload_object(struct char_data *ch, int vnum) {
 
   obj = read_object(real_num, REAL, OBJ_LOAD_REASON_WIZLOAD);
   obj_to_char(obj, ch);
+  load_otrigger(obj);
   GET_OBJ_TIMER(obj) = 2;
   obj->obj_flags.extra_flags.SetBit(ITEM_EXTRA_WIZLOAD);
   act("$n makes a strange magical gesture.", TRUE, ch, 0, 0, TO_ROOM);
@@ -2702,6 +2703,7 @@ ACMD(do_wizload)
     mob = read_mobile(r_num, REAL);
     mob->mob_loaded_in_room = GET_ROOM_VNUM(get_ch_in_room(ch));
     char_to_room(mob, get_ch_in_room(ch));
+    load_mtrigger(mob);
 
     // Reset questgivers so they talk to you faster.
     if (CHECK_FUNC_AND_SFUNC_FOR(mob, johnson)) {

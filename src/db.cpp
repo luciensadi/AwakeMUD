@@ -713,11 +713,20 @@ void boot_world(void)
   // log("Creating Help Indexes.");
   // TODO: Is this supposed to actually do anything?
 
-  /* Room 0 holds the mud-wide script variables, the ones a script reads
-   * through %global.<name>%. It needs somewhere to keep them whether or not
-   * a builder ever attached a trigger to it. */
-  if (top_of_world >= 0 && !SCRIPT(&world[0]))
-    SCRIPT(&world[0]) = new script_data;
+  /* The room with vnum 0 holds the mud-wide script variables, the ones a
+   * script reads through %global.<name>%. It needs somewhere to keep them
+   * whether or not a builder ever attached a trigger to it. Reached by vnum,
+   * because that is what %global% resolves to as a uid. */
+  {
+    rnum_t global_rnum = real_room(0);
+
+    if (global_rnum >= 0) {
+      if (!SCRIPT(&world[global_rnum]))
+        SCRIPT(&world[global_rnum]) = new script_data;
+    } else {
+      log("Warning: no room with vnum 0, so %global% script variables have nowhere to live.");
+    }
+  }
 
   log("Performing final validation checks.");
   check_for_common_fuckups();
@@ -4914,6 +4923,9 @@ void reset_zone(rnum_t zone, int reboot, bool process_doors)
           mob->mob_loaded_in_room = GET_ROOM_VNUM(&world[ZCMD.arg3]);
           char_to_room(mob, &world[ZCMD.arg3]);
           act("$n has arrived.", TRUE, mob, 0, 0, TO_ROOM);
+          /* Now that it is standing somewhere, anything watching for its
+           * arrival can run. */
+          load_mtrigger(mob);
           last_cmd = 1;
         } else {
           if (ZCMD.arg2 == 0 && !reboot)
@@ -4956,6 +4968,7 @@ void reset_zone(rnum_t zone, int reboot, bool process_doors)
           bool is_driver = !(veh->people);
 
           char_to_veh(veh, mob);
+          load_mtrigger(mob);
 
           if (is_driver) {
             // If the vehicle is empty, make the mob the driver.
@@ -5192,6 +5205,7 @@ void reset_zone(rnum_t zone, int reboot, bool process_doors)
         if (passed_global_limits || passed_load_on_reboot || passed_room_limits) {
           obj = read_object(ZCMD.arg1, REAL, OBJ_LOAD_REASON_ZONECMD);
           obj_to_room(obj, &world[ZCMD.arg3]);
+          load_otrigger(obj);
 
           act("You blink and realize that $p must have been here the whole time.", TRUE, 0, obj, 0, TO_ROOM);
 
