@@ -221,6 +221,14 @@ void objList::UpdateObjsIDelete(const struct obj_data *proto, int rnum, int new_
       temp->data->photo = old.photo;
       temp->data->graffiti = old.graffiti;
       temp->data->idnum = old.idnum;
+
+      /* As in UpdateObjs above: the struct copy brought the prototype's script
+       * pointers along, and a live object keeps its own. Losing script_id here
+       * would also leave the uid lookup table pointing at an object that
+       * free_obj() no longer knows to unregister. */
+      temp->data->script = old.script;
+      temp->data->script_id = old.script_id;
+
       if (temp->data->carried_by)
         affect_total(temp->data->carried_by);
       else if (temp->data->worn_by)
