@@ -335,6 +335,10 @@ void remove_from_lookup_table(long uid);
 bool dg_extraction_is_pending(struct char_data *ch);
 bool dg_extraction_is_pending(struct obj_data *obj);
 
+/* Rooms do not get extracted. The overload is here so that SCRIPT_CHECK() can
+ * ask the question the same way whatever it has been handed. */
+inline bool dg_extraction_is_pending(struct room_data *) { return false; }
+
 /* from dg_db_scripts.cpp */
 void parse_trigger(File &fl, long nr);
 struct trig_data *read_trigger(rnum_t nr);
@@ -436,8 +440,12 @@ bool dg_script_edit_parse(struct descriptor_data *d, const char *arg);
  * player directs are conjured spirits and elementals. */
 #define DG_MOB_IS_PLAYER_DIRECTED(ch) (IS_SPIRIT(ch) || IS_PC_CONJURED_ELEMENTAL(ch))
 
+/* The last clause is what keeps a purge honest: between the purge and the
+ * end-of-pulse flush the mobile or object is still on every list it was on,
+ * and every trigger check in the engine opens with this macro. */
 #define SCRIPT_CHECK(go, type)   (SCRIPT(go) && \
-                                  IS_SET(SCRIPT_TYPES(SCRIPT(go)), type))
+                                  IS_SET(SCRIPT_TYPES(SCRIPT(go)), type) && \
+                                  !dg_extraction_is_pending(go))
 #define TRIGGER_CHECK(t, type)   (IS_SET(GET_TRIG_TYPE(t), type) && \
                                   !GET_TRIG_DEPTH(t))
 
