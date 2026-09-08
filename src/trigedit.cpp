@@ -146,7 +146,8 @@ static void trigedit_render_commands(struct trig_data *trig, char *dest, size_t 
       snprintf(dest + len, dest_size - len, "*** script too long to display ***\r\n");
       return;
     }
-    len += snprintf(dest + len, dest_size - len, "%s\r\n", cle->cmd ? cle->cmd : "");
+    snprintf(dest + len, dest_size - len, "%s\r\n", cle->cmd ? cle->cmd : "");
+    len = strlen(dest);
   }
 }
 

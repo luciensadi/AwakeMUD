@@ -3,6 +3,21 @@
 #include <catch.hpp>
 #include <cstring>
 
+TEST_CASE("Updating a script context does not duplicate its variable", "[dg]") {
+  trig_var_data *vars = NULL;
+  add_var(&vars, "answer", "first", 1);
+  add_var(&vars, "answer", "second", 2);
+  add_var(&vars, "answer", "updated", 1);
+  int count = 0;
+  for (trig_var_data *v = vars; v; v = v->next) {
+    count++;
+    if (v->context == 1)
+      REQUIRE(std::strcmp(v->value, "updated") == 0);
+  }
+  REQUIRE(count == 2);
+  free_varlist(vars);
+}
+
 TEST_CASE("Script first-word extraction respects its destination", "[dg]") {
   trig_var_data value;
   value.value = str_dup("abcdefgh");

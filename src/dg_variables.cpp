@@ -67,10 +67,10 @@ void add_var(struct trig_var_data **var_list, const char *name, const char *valu
     return;
   }
 
-  for (vd = *var_list; vd && str_cmp(vd->name, name); vd = vd->next)
+  for (vd = *var_list; vd && (str_cmp(vd->name, name) || (vd->context && vd->context != id)); vd = vd->next)
     ;
 
-  if (vd && (!vd->context || vd->context == id)) {
+  if (vd) {
     DELETE_ARRAY_IF_EXTANT(vd->value);
   } else {
     vd = new trig_var_data;

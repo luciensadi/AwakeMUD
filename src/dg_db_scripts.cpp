@@ -246,8 +246,15 @@ const char *dg_render_proto_list(void *proto, int type)
     return NULL;
 
   *buf = '\0';
-  for (; trg_proto; trg_proto = trg_proto->next)
-    len += snprintf(buf + len, sizeof(buf) - len, "%s%ld", len ? " " : "", (long) trg_proto->vnum);
+  for (; trg_proto; trg_proto = trg_proto->next) {
+    int written = snprintf(buf + len, sizeof(buf) - len, "%s%ld", len ? " " : "", (long) trg_proto->vnum);
+    if (written < 0 || (size_t) written >= sizeof(buf) - len) {
+      buf[len] = '\0';
+      script_log("Attached trigger list exceeds the world-file line limit.");
+      break;
+    }
+    len += written;
+  }
 
   return buf;
 }

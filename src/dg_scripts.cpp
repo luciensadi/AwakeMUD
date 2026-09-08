@@ -798,23 +798,29 @@ static void do_stat_trigger(struct char_data *ch, struct trig_data *trig)
 
   len += snprintf(sb, sizeof(sb), "Name: '^y%s^n',  VNum: [^g%5ld^n], RNum: [%5ld]\r\n",
                   GET_TRIG_NAME(trig), (long) GET_TRIG_VNUM(trig), (long) GET_TRIG_RNUM(trig));
+  len = strlen(sb);
 
   if (trig->attach_type == OBJ_TRIGGER) {
     len += snprintf(sb + len, sizeof(sb) - len, "Trigger Intended Assignment: Objects\r\n");
+    len = strlen(sb);
     sprintbit(GET_TRIG_TYPE(trig), otrig_types, flagbuf, sizeof(flagbuf));
   } else if (trig->attach_type == WLD_TRIGGER) {
     len += snprintf(sb + len, sizeof(sb) - len, "Trigger Intended Assignment: Rooms\r\n");
+    len = strlen(sb);
     sprintbit(GET_TRIG_TYPE(trig), wtrig_types, flagbuf, sizeof(flagbuf));
   } else {
     len += snprintf(sb + len, sizeof(sb) - len, "Trigger Intended Assignment: Mobiles\r\n");
+    len = strlen(sb);
     sprintbit(GET_TRIG_TYPE(trig), trig_types, flagbuf, sizeof(flagbuf));
   }
 
   len += snprintf(sb + len, sizeof(sb) - len, "Trigger Type: %s, Numeric Arg: %d, Arg list: %s\r\n",
                   flagbuf, GET_TRIG_NARG(trig),
                   ((GET_TRIG_ARG(trig) && *GET_TRIG_ARG(trig)) ? GET_TRIG_ARG(trig) : "None"));
+  len = strlen(sb);
 
   len += snprintf(sb + len, sizeof(sb) - len, "Commands:\r\n");
+  len = strlen(sb);
 
   for (cmd_list = trig->cmdlist; cmd_list; cmd_list = cmd_list->next) {
     if (len > sizeof(sb) - 128) {
@@ -822,8 +828,10 @@ static void do_stat_trigger(struct char_data *ch, struct trig_data *trig)
       break;
     }
 
-    if (cmd_list->cmd)
+    if (cmd_list->cmd) {
       len += snprintf(sb + len, sizeof(sb) - len, "%s\r\n", cmd_list->cmd);
+      len = strlen(sb);
+    }
   }
 
   page_string(ch->desc, sb, 1);
