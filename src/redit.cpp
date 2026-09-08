@@ -545,6 +545,7 @@ void redit_parse(struct descriptor_data * d, const char *arg)
               if (world[counter].number > d->edit_number) {
                 // now, zoom backwards through the list copying over
                 for (counter2 = top_of_world + 1; counter2 > counter; counter2--) {
+                  update_wait_events(&world[counter2], &world[counter2 - 1]);
                   world[counter2] = world[counter2 - 1];
                 }
 
@@ -987,8 +988,6 @@ void redit_parse(struct descriptor_data * d, const char *arg)
       send_to_char("You must specify a 3-letter airport code, like YVR, SEA, etc. Make one up if you have to.\r\n", CH);
       return;
     }
-    if (d->edit_room->flight_code)
-      delete [] d->edit_room->flight_code;
     DELETE_ARRAY_IF_EXTANT(d->edit_room->flight_code);
     d->edit_room->flight_code = str_dup(arg);
     redit_disp_menu(d);

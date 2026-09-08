@@ -202,7 +202,7 @@ ACMD(do_mjunk)
   if (!str_cmp(arg, "all"))
     junk_all = TRUE;
 
-  if ((find_all_dots(arg, sizeof(arg)) != FIND_INDIV) && !junk_all) {
+  if (find_all_dots(arg, sizeof(arg)) == FIND_INDIV) {
     if (get_object_in_equip_vis(ch, arg, ch->equipment, &pos)) {
       dg_note_obj_extraction(unequip_char(ch, pos, TRUE));
       return;
@@ -214,14 +214,14 @@ ACMD(do_mjunk)
 
   for (obj = ch->carrying; obj != NULL; obj = obj_next) {
     obj_next = obj->next_content;
-    if (junk_all || isname(arg + 4, GET_OBJ_KEYWORDS(obj)))
+    if (junk_all || isname(arg, GET_OBJ_KEYWORDS(obj)))
       dg_note_obj_extraction(obj);
   }
 
   for (pos = 0; pos < NUM_WEARS; pos++) {
     if (!GET_EQ(ch, pos))
       continue;
-    if (junk_all || isname(arg + 4, GET_OBJ_KEYWORDS(GET_EQ(ch, pos))))
+    if (junk_all || isname(arg, GET_OBJ_KEYWORDS(GET_EQ(ch, pos))))
       dg_note_obj_extraction(unequip_char(ch, pos, TRUE));
   }
 }
@@ -596,7 +596,7 @@ ACMD(do_mat)
   original = ch->in_room;
   char_from_room(ch);
   char_to_room(ch, location);
-  command_interpreter(ch, argument, GET_CHAR_NAME(ch));
+  mob_command_interpreter(ch, argument);
 
   /* The command may have moved or removed ch; only put it back if it is
    * still standing where we left it. */

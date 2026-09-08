@@ -297,6 +297,7 @@ OCMD(do_otransform)
   struct obj_data *o;
   struct char_data *wearer = NULL;
   rnum_t new_rnum;
+  rnum_t old_rnum = GET_OBJ_RNUM(obj);
   int pos = 0;
 
   one_argument(argument, arg);
@@ -321,6 +322,10 @@ OCMD(do_otransform)
     obj_log(obj, "otransform: could not read object");
     return;
   }
+
+  /* The transformed object keeps its running script; the temporary body's
+   * newly assigned triggers must not become orphaned in trigger_list. */
+  extract_script(o, OBJ_TRIGGER);
 
   if (obj->worn_by) {
     pos = obj->worn_on;
@@ -378,6 +383,9 @@ OCMD(do_otransform)
   o->proto_script = NULL;
   o->script = NULL;
   extract_obj(o);
+  if (old_rnum >= 0)
+    obj_index[old_rnum].number--;
+  obj_index[new_rnum].number++;
 }
 
 /* purge all objects and NPCs in the room, or a named object or mob */

@@ -202,6 +202,14 @@ static void forget_one_memory(struct char_data *ch, struct script_memory *mem)
   delete mem;
 }
 
+static bool memory_is_attached(struct char_data *ch, struct script_memory *mem)
+{
+  for (struct script_memory *i = SCRIPT_MEM(ch); i; i = i->next)
+    if (i == mem)
+      return true;
+  return false;
+}
+
 void greet_memory_mtrigger(struct char_data *actor)
 {
   struct trig_data *t;
@@ -238,7 +246,11 @@ void greet_memory_mtrigger(struct char_data *actor)
         }
       }
 
+      if (!ch || dg_extraction_is_pending(ch))
+        break;
       forget_one_memory(ch, mem);
+      if (next_mem && !memory_is_attached(ch, next_mem))
+        next_mem = NULL;
     }
   }
 }
@@ -316,7 +328,11 @@ void entry_memory_mtrigger(struct char_data *ch)
         }
       }
 
+      if (!ch || dg_extraction_is_pending(ch))
+        return;
       forget_one_memory(ch, mem);
+      if (next_mem && !memory_is_attached(ch, next_mem))
+        next_mem = NULL;
     }
   }
 }
@@ -753,6 +769,9 @@ int get_otrigger(struct obj_data *obj, struct char_data *actor)
     return 1;
 
   object_id = obj_script_id(obj);
+  struct room_data *original_room = obj->in_room;
+  struct veh_data *original_vehicle = obj->in_veh;
+  struct obj_data *original_container = obj->in_obj;
 
   for (t = TRIGGERS(SCRIPT(obj)); t; t = t->next) {
     if (TRIGGER_CHECK(t, OTRIG_GET) && (number(1, 100) <= GET_TRIG_NARG(t))) {
@@ -761,7 +780,9 @@ int get_otrigger(struct obj_data *obj, struct char_data *actor)
 
       /* Refuse the get if the actor died or the object was purged: obj_to_char
        * would choke on either. */
-      if (DG_DEAD(actor) || !obj || !has_obj_by_uid_in_lookup_table(object_id))
+      if (DG_DEAD(actor) || !obj || !has_obj_by_uid_in_lookup_table(object_id) ||
+          obj->in_room != original_room || obj->in_veh != original_vehicle ||
+          obj->in_obj != original_container)
         return 0;
 
       return ret_val;
@@ -846,13 +867,16 @@ int wear_otrigger(struct obj_data *obj, struct char_data *actor, int where)
     return 1;
 
   object_id = obj_script_id(obj);
+  struct obj_data *original_container = obj->in_obj;
+  struct char_data *original_carrier = obj->carried_by;
 
   for (t = TRIGGERS(SCRIPT(obj)); t; t = t->next) {
     if (TRIGGER_CHECK(t, OTRIG_WEAR)) {
       ADD_UID_VAR(buf, t, char_script_id(actor), "actor", 0);
       ret_val = script_driver(&obj, t, OBJ_TRIGGER, TRIG_NEW);
 
-      if (!obj || !has_obj_by_uid_in_lookup_table(object_id))
+      if (!obj || !has_obj_by_uid_in_lookup_table(object_id) ||
+          obj->carried_by != original_carrier || obj->in_obj != original_container)
         return 0;
 
       return ret_val;
@@ -909,7 +933,7 @@ int drop_otrigger(struct obj_data *obj, struct char_data *actor)
       ADD_UID_VAR(buf, t, char_script_id(actor), "actor", 0);
       ret_val = script_driver(&obj, t, OBJ_TRIGGER, TRIG_NEW);
 
-      if (!obj || !has_obj_by_uid_in_lookup_table(object_id))
+      if (!obj || !has_obj_by_uid_in_lookup_table(object_id) || obj->carried_by != actor)
         return 0;
 
       return ret_val;
@@ -1042,7 +1066,7 @@ int consume_otrigger(struct obj_data *obj, struct char_data *actor, int cmd)
   object_id = obj_script_id(obj);
 
   for (t = TRIGGERS(SCRIPT(obj)); t; t = t->next) {
-    if (TRIGGER_CHECK(t, OTRIG_CONSUME)) {
+    if (TRIGGER_CHECK(t, OTRIG_CONSUME) && (GET_TRIG_NARG(t) & cmd)) {
       ADD_UID_VAR(buf, t, char_script_id(actor), "actor", 0);
       switch (cmd) {
         case OCMD_EAT:   add_var(&GET_TRIG_VARS(t), "command", "eat", 0);   break;

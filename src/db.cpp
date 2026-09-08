@@ -5063,6 +5063,7 @@ void reset_zone(rnum_t zone, int reboot, bool process_doors)
           } else {
             ZONE_ERROR("Not enough mounts in target vehicle, cannot mount item");
             extract_obj(obj);
+            obj = NULL;
           }
         }
         else {
@@ -5088,8 +5089,9 @@ void reset_zone(rnum_t zone, int reboot, bool process_doors)
             affect_veh(veh, obj->affected[j].location, obj->affected[j].modifier);
         }
 
-        last_cmd = 1;
-
+        if (obj)
+          load_otrigger(obj);
+        last_cmd = obj != NULL;
 
       } else
         last_cmd = 0;
@@ -5108,6 +5110,7 @@ void reset_zone(rnum_t zone, int reboot, bool process_doors)
           (ZCMD.arg2 == 0 && reboot)) {
         obj = read_object(ZCMD.arg1, REAL, OBJ_LOAD_REASON_ZONECMD);
         obj_to_veh(obj, veh);
+        load_otrigger(obj);
         last_cmd = 1;
       } else
         last_cmd = 0;
@@ -5173,7 +5176,9 @@ void reset_zone(rnum_t zone, int reboot, bool process_doors)
 
         if ((already_there < ZCMD.arg2) || (ZCMD.arg2 == -1) ||
             (ZCMD.arg2 == 0 && reboot)) {
-          obj_to_host(read_object(ZCMD.arg1, REAL, OBJ_LOAD_REASON_ZONECMD), &matrix[ZCMD.arg3]);
+          obj = read_object(ZCMD.arg1, REAL, OBJ_LOAD_REASON_ZONECMD);
+          obj_to_host(obj, &matrix[ZCMD.arg3]);
+          load_otrigger(obj);
           last_cmd = 1;
         } else
           last_cmd = 0;
@@ -5310,6 +5315,7 @@ void reset_zone(rnum_t zone, int reboot, bool process_doors)
               }
             }
           }
+          load_otrigger(obj);
           last_cmd = 1;
         } else
           last_cmd = 0;
@@ -5347,6 +5353,7 @@ void reset_zone(rnum_t zone, int reboot, bool process_doors)
         if (passed_global_limits || passed_load_on_reboot || passed_room_limits) {
           obj = read_object(ZCMD.arg1, REAL, OBJ_LOAD_REASON_ZONECMD);
           obj_to_char(obj, mob);
+          load_otrigger(obj);
           last_cmd = 1;
         } else
           last_cmd = 0;
@@ -5405,6 +5412,7 @@ void reset_zone(rnum_t zone, int reboot, bool process_doors)
                   get_ch_in_room(mob)->debris--;
                 }
               }
+              load_otrigger(obj);
             }
           }
         } else
@@ -5429,6 +5437,7 @@ void reset_zone(rnum_t zone, int reboot, bool process_doors)
                                       (ZCMD.arg2 == -1) || (ZCMD.arg2 == 0 && reboot)); ++i) {
         obj = read_object(ZCMD.arg1, REAL, OBJ_LOAD_REASON_ZONECMD);
         obj_to_char(obj, mob);
+        load_otrigger(obj);
         last_cmd = 1;
       }
       break;
@@ -5487,6 +5496,7 @@ void reset_zone(rnum_t zone, int reboot, bool process_doors)
           GET_OBJ_VAL(obj, 5) = 24;
         obj_to_bioware(obj, mob);
       }
+      load_otrigger(obj);
       last_cmd = 1;
       break;
     case 'R': /* rem obj from room */
@@ -5596,6 +5606,12 @@ void reset_zone(rnum_t zone, int reboot, bool process_doors)
           break;
         }
 
+        if (trig_index[trig_rnum]->proto->attach_type != ZCMD.arg1) {
+          ZONE_ERROR("trigger has the wrong attach type");
+          last_cmd = 0;
+          break;
+        }
+
         switch (ZCMD.arg1) {
           case MOB_TRIGGER:
             if (!mob) {
@@ -5624,7 +5640,8 @@ void reset_zone(rnum_t zone, int reboot, bool process_doors)
             }
             if (!SCRIPT(&world[ZCMD.arg3]))
               SCRIPT(&world[ZCMD.arg3]) = new script_data;
-            add_trigger(SCRIPT(&world[ZCMD.arg3]), read_trigger(trig_rnum), -1);
+            if (!trig_is_attached(SCRIPT(&world[ZCMD.arg3]), ZCMD.arg2))
+              add_trigger(SCRIPT(&world[ZCMD.arg3]), read_trigger(trig_rnum), -1);
             last_cmd = 1;
             break;
           default:

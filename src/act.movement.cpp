@@ -451,6 +451,10 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
   if (!leave_otrigger(was_in, ch, dir) || ch->in_room != was_in)
     return 0;
 
+  /* A leave trigger may have removed this exit. */
+  if (!was_in->dir_option[dir] || !was_in->dir_option[dir]->to_room)
+    return 0;
+
   STOP_WORKING(ch);
   char_from_room(ch);
   char_to_room(ch, was_in->dir_option[dir]->to_room);
@@ -459,11 +463,8 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
    * refuse the move -- the character is already through the door. */
   entry_memory_mtrigger(ch);
   greet_memory_mtrigger(ch);
-  if (!enter_wtrigger(ch->in_room, ch, dir))
-    return 1;
-  if (!entry_mtrigger(ch))
-    return 1;
-  greet_mtrigger(ch, dir);
+  if (enter_wtrigger(ch->in_room, ch, dir) && entry_mtrigger(ch))
+    greet_mtrigger(ch, dir);
 
   if (ROOM_FLAGGED(was_in, ROOM_INDOORS) && !ROOM_FLAGGED(ch->in_room, ROOM_INDOORS))
   {
@@ -1320,6 +1321,8 @@ void do_doorcmd(struct char_data *ch, struct obj_data *obj, int door, int scmd, 
     if (!door_mtrigger(ch, scmd, door))
       return;
     if (!door_wtrigger(ch, scmd, door))
+      return;
+    if (!ch->in_room || !EXIT(ch, door))
       return;
   }
 

@@ -15,6 +15,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <vector>
 
 #include "structs.hpp"
 #include "awake.hpp"
@@ -25,6 +26,23 @@
 #include "constants.hpp"
 #include "dg_scripts.hpp"
 #include "dg_event.hpp"
+
+static std::vector<struct trig_data *> purged_triggers;
+static std::vector<struct script_data *> purged_scripts;
+
+/* Trigger checks and nested drivers may still hold pointers to detached
+ * scripts. Reclaim them only after the heartbeat has unwound every caller. */
+void dg_flush_purged_scripts(void)
+{
+  for (struct trig_data *trig : purged_triggers)
+    free_trigger(trig);
+  purged_triggers.clear();
+  for (struct script_data *sc : purged_scripts) {
+    free_varlist(sc->global_vars);
+    delete sc;
+  }
+  purged_scripts.clear();
+}
 
 /* frees memory associated with var */
 void free_var_el(struct trig_var_data *var)
@@ -92,6 +110,9 @@ void extract_trigger(struct trig_data *trig)
 {
   struct trig_data *temp;
 
+  if (trig->purged)
+    return;
+
   if (GET_TRIG_WAIT(trig)) {
     event_cancel(GET_TRIG_WAIT(trig));
     GET_TRIG_WAIT(trig) = NULL;
@@ -103,7 +124,8 @@ void extract_trigger(struct trig_data *trig)
   /* walk the trigger list and remove this one */
   REMOVE_FROM_LIST(trig, trigger_list, next_in_world);
 
-  free_trigger(trig);
+  trig->purged = TRUE;
+  purged_triggers.push_back(trig);
 }
 
 /* remove all triggers from a mob/obj/room */
@@ -160,10 +182,8 @@ void extract_script(void *thing, int type)
 
   extract_script_triggers(sc);
 
-  free_varlist(sc->global_vars);
-  sc->global_vars = NULL;
-
-  delete sc;
+  sc->purged = TRUE;
+  purged_scripts.push_back(sc);
 }
 
 /* erase the script memory of a mob */

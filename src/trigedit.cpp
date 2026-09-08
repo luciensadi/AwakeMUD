@@ -36,6 +36,16 @@
 extern void write_index_file(const char *suffix);
 extern int get_zone_index_number_from_vnum(vnum_t vnum);
 extern bool is_olc_available(struct char_data *ch);
+extern class objList ObjList;
+
+static void refresh_script_types(struct script_data *sc)
+{
+  if (!sc)
+    return;
+  SCRIPT_TYPES(sc) = 0;
+  for (struct trig_data *t = TRIGGERS(sc); t; t = t->next)
+    SCRIPT_TYPES(sc) |= GET_TRIG_TYPE(t);
+}
 
 /* Which trigger-type table goes with which attach type. The three are not the
  * same length, so the count comes from the table rather than from a constant. */
@@ -308,6 +318,14 @@ void trigedit_save(struct descriptor_data *d)
   proto->nr = rnum;
 
   trigedit_refresh_live(rnum, proto);
+
+  /* SCRIPT_CHECK tests the owner's cached mask before looking at triggers. */
+  for (struct char_data *ch = character_list; ch; ch = ch->next_in_character_list)
+    refresh_script_types(SCRIPT(ch));
+  for (nodeStruct<struct obj_data *> *node = ObjList.Head(); node; node = node->next)
+    refresh_script_types(SCRIPT(node->data));
+  for (rnum_t room = 0; room <= top_of_world; room++)
+    refresh_script_types(SCRIPT(&world[room]));
 
   /* Write it out now rather than leaving it to the builder: losing a trigger
    * that things have already been attached to produces errors at reboot that
@@ -590,7 +608,7 @@ void trigedit_parse(struct descriptor_data *d, const char *arg)
           return;
 
         case '4':
-          send_to_char("Enter numeric argument (0-100): ", CH);
+          send_to_char("Enter numeric argument (non-negative; percentages use 0-100): ", CH);
           d->edit_mode = TRIGEDIT_NARG;
           return;
 
@@ -645,7 +663,7 @@ void trigedit_parse(struct descriptor_data *d, const char *arg)
       break;
 
     case TRIGEDIT_NARG:
-      d->edit_trig->narg = MAX(0, MIN(100, atoi(arg)));
+      d->edit_trig->narg = MAX(0, atoi(arg));
       d->edit_number2 = 1;
       break;
 

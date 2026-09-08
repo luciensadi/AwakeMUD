@@ -303,6 +303,12 @@ void assign_triggers(void *i, int type)
     if (!*script)
       *script = new script_data;
 
+    if (trig_index[rnum]->proto->attach_type != type) {
+      script_log("Trigger #%ld has the wrong attach type for %s #%ld.",
+                 (long) trg_proto->vnum, what, what_vnum);
+      continue;
+    }
+
     add_trigger(*script, read_trigger(rnum), -1);
   }
 }

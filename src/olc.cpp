@@ -217,8 +217,8 @@ void write_index_file(const char *suffix)
 *     the caller's business and differ between editing and cloning.        *
 *   - a room's temp_desc and temporary_stored_exit, which are live state   *
 *     that redit writes straight back on save and that nothing frees.      *
-*   - an object's source_info and a mobile's strings, which read_object()  *
-*     and read_mobile() hand to every instance by pointer. The prototype   *
+*   - a mobile's nonphysical strings, which read_mobile() hands to every   *
+*     instance by pointer. The prototype                                  *
 *     owns those for the lifetime of the game and free_obj()/free_char()   *
 *     know not to touch them.                                              *
 ************************************************************************ */
@@ -306,6 +306,7 @@ void clone_obj_for_editing(struct obj_data *dst, struct obj_data *src)
   CLONE_STRING(restring);
   CLONE_STRING(photo);
   CLONE_STRING(graffiti);
+  CLONE_STRING(source_info);
 
   dst->script = NULL;
   dst->script_id = 0;

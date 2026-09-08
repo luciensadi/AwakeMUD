@@ -1069,6 +1069,11 @@ bool perform_get_from_container(struct char_data *ch, struct obj_data *obj,
 		}
 
 		bool should_wizlog = IS_OBJ_STAT(obj, ITEM_EXTRA_WIZLOAD);
+
+		// Ordinary container pickups have passed every refusal check here.
+		if (!cyberdeck && !computer && !get_otrigger(obj, ch))
+			return FALSE;
+
 		bool should_cheatlog = (!IS_NPC(ch) && access_level(ch, LVL_BUILDER)) || (IS_OBJ_STAT(obj, ITEM_EXTRA_CHEATLOG_MARK) || IS_OBJ_STAT(cont, ITEM_EXTRA_CHEATLOG_MARK));
 		bool should_gridlog = FALSE;
 		bool same_host_warning = FALSE;
@@ -2542,6 +2547,11 @@ int perform_drop(struct char_data *ch, struct obj_data *obj, byte mode,
 	/* Either the object or the room may refuse the drop. Both run here, after
 	 * the game has finished deciding, so that a trigger never fires for a drop
 	 * that is about to be turned down anyway. */
+	if (ch->in_veh && mode != SCMD_DONATE && mode != SCMD_JUNK &&
+			ch->in_veh->usedload + GET_OBJ_WEIGHT(obj) > ch->in_veh->load) {
+		send_to_char("There is too much in the vehicle already!\r\n", ch);
+		return 0;
+	}
 	if (!drop_otrigger(obj, ch))
 		return 0;
 	if (!drop_wtrigger(obj, ch))
@@ -3403,6 +3413,8 @@ ACMD(do_drink)
 		send_to_char("It's empty.\r\n", ch);
 		return;
 	}
+	if (!consume_otrigger(temp, ch, OCMD_DRINK))
+		return;
 	if (subcmd == SCMD_DRINK)
 	{
 		act("$n drinks from $p.", TRUE, ch, temp, 0, TO_ROOM);
@@ -4544,6 +4556,9 @@ void perform_remove(struct char_data *ch, int pos)
 	/* A remove trigger that returns 0 refuses the removal. Everything below
 	 * this point either tells the room something or takes time, so this is the
 	 * last place it can run without being seen. */
+	if (GET_OBJ_TYPE(obj) == ITEM_GYRO || IS_OBJ_STAT(obj, ITEM_EXTRA_HARDENED_ARMOR)) {
+		FAILURE_CASE(CH_IN_COMBAT(ch), "While fighting?? That would be a neat trick.");
+	}
 	if (!remove_otrigger(obj, ch))
 		return;
 

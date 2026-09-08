@@ -56,6 +56,7 @@
 #include "dg_event.hpp"
 
 extern struct time_info_data time_info;
+extern int wear_bitvectors[];
 
 void add_var(struct trig_var_data **var_list, const char *name, const char *value, long id)
 {
@@ -214,10 +215,13 @@ int text_processed(const char *field, const char *subfield, struct trig_var_data
   }
 
   if (!str_cmp(field, "car")) {                        /* car */
-    char *car = vd->value;
-    while (*car && !isspace(*car))
-      *str++ = *car++;
-    *str = '\0';
+    size_t n = 0;
+    while (vd->value[n] && !isspace(vd->value[n]) && n + 1 < slen) {
+      str[n] = vd->value[n];
+      n++;
+    }
+    if (slen)
+      str[n] = '\0';
     return TRUE;
   }
 
@@ -341,7 +345,7 @@ void find_replacement(void *go, struct script_data *sc, struct trig_data *trig,
       if (!str_cmp(vd->name, var) && (vd->context == 0 || vd->context == sc->context))
         break;
 
-  if (!*field) {
+  if (!field || !*field) {
     if (vd) {
       snprintf(str, slen, "%s", vd->value);
     } else if (!str_cmp(var, "self")) {
@@ -602,7 +606,15 @@ void find_replacement(void *go, struct script_data *sc, struct trig_data *trig,
     /* mark it as 'no match yet' with a byte no field would produce */
     *str = '\x1';
 
-    switch (LOWER(*field)) {
+    /* Route aliases to the branch implementing the stock field. */
+    char field_initial = LOWER(*field);
+    if (!str_cmp(field, "ballistic")) field_initial = 'a';
+    else if (!str_cmp(field, "karma")) field_initial = 'e';
+    else if (!str_cmp(field, "nuyen")) field_initial = 'g';
+    else if (!str_cmp(field, "physical")) field_initial = 'h';
+    else if (!str_cmp(field, "pronouns")) field_initial = 's';
+
+    switch (field_initial) {
       case 'a':
         if (!str_cmp(field, "alias")) {
           snprintf(str, slen, "%s", IS_NPC(c) ? GET_KEYWORDS(c) : GET_CHAR_NAME(c));
@@ -1076,7 +1088,7 @@ void find_replacement(void *go, struct script_data *sc, struct trig_data *trig,
         if (!str_cmp(field, "wearflag")) {
           if (subfield && *subfield) {
             int pos = find_eq_pos_script(subfield);
-            strcpy(str, (pos >= 0 && CAN_WEAR(o, 1 << pos)) ? "1" : "0");
+            strcpy(str, (pos >= 0 && CAN_WEAR(o, wear_bitvectors[pos])) ? "1" : "0");
           } else {
             strcpy(str, "0");
           }
@@ -1307,6 +1319,10 @@ void var_subst(void *go, struct script_data *sc, struct trig_data *trig,
     }
 
     else if (*p && (left > 0)) {
+      subfield_p = subfield;
+      *subfield = '\0';
+      paren_count = 0;
+
       /* search until the end of the var, or the start of the field */
       for (var = p; *p && (*p != '%') && (*p != '.'); p++)
         ;
@@ -1343,6 +1359,10 @@ void var_subst(void *go, struct script_data *sc, struct trig_data *trig,
         }
       }
 
+      if (!*p) {
+        script_log("Unterminated variable in trigger %ld.", (long) GET_TRIG_VNUM(trig));
+        break;
+      }
       *(p++) = '\0';
       *subfield_p = '\0';
 

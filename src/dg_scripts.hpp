@@ -367,6 +367,7 @@ void free_trigger(struct trig_data *trig);
 void extract_trigger(struct trig_data *trig);
 void extract_script_triggers(struct script_data *sc);
 void extract_script(void *thing, int type);
+void dg_flush_purged_scripts(void);
 void extract_script_mem(struct script_memory *sc);
 void free_proto_script(void *thing, int type);
 void copy_proto_script(void *source, void *dest, int type);
@@ -447,7 +448,7 @@ bool dg_script_edit_parse(struct descriptor_data *d, const char *arg);
 #define SCRIPT_CHECK(go, type)   (SCRIPT(go) && \
                                   IS_SET(SCRIPT_TYPES(SCRIPT(go)), type) && \
                                   !dg_extraction_is_pending(go))
-#define TRIGGER_CHECK(t, type)   (IS_SET(GET_TRIG_TYPE(t), type) && \
+#define TRIGGER_CHECK(t, type)   (!(t)->purged && IS_SET(GET_TRIG_TYPE(t), type) && \
                                   !GET_TRIG_DEPTH(t))
 
 #define ADD_UID_VAR(buf, trig, id, name, context) do { \

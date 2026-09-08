@@ -738,6 +738,7 @@ void dg_flush_pending_extractions(void)
       }
     }
   }
+  dg_flush_purged_scripts();
 }
 
 /* ************************************************************************ */
@@ -1016,6 +1017,11 @@ ACMD(do_tattach)
       return;
     }
 
+    if (trig->attach_type != MOB_TRIGGER) {
+      extract_trigger(trig);
+      send_to_char("That trigger is not meant for mobiles.\r\n", ch);
+      return;
+    }
     if (!SCRIPT(victim))
       SCRIPT(victim) = new script_data;
     add_trigger(SCRIPT(victim), trig, loc);
@@ -1054,6 +1060,11 @@ ACMD(do_tattach)
       return;
     }
 
+    if (trig->attach_type != OBJ_TRIGGER) {
+      extract_trigger(trig);
+      send_to_char("That trigger is not meant for objects.\r\n", ch);
+      return;
+    }
     if (!SCRIPT(object))
       SCRIPT(object) = new script_data;
     add_trigger(SCRIPT(object), trig, loc);
@@ -1090,6 +1101,11 @@ ACMD(do_tattach)
 
     room = &world[rnum];
 
+    if (trig->attach_type != WLD_TRIGGER) {
+      extract_trigger(trig);
+      send_to_char("That trigger is not meant for rooms.\r\n", ch);
+      return;
+    }
     if (!SCRIPT(room))
       SCRIPT(room) = new script_data;
     add_trigger(SCRIPT(room), trig, loc);
@@ -1292,7 +1308,9 @@ ACMD(do_tdetach)
   }
 
   if (victim) {
-    if (!SCRIPT(victim)) {
+    if (!IS_NPC(victim)) {
+      send_to_char("Players do not have triggers; use vdelete to remove a variable.\r\n", ch);
+    } else if (!SCRIPT(victim)) {
       send_to_char(ch, "That %s doesn't have any triggers.\r\n", IS_NPC(victim) ? "mob" : "player");
     } else if (IS_NPC(victim) && victim->in_room &&
                !can_edit_zone(ch, &zone_table[victim->in_room->zone])) {
@@ -1464,7 +1482,7 @@ static void eval_op(const char *op, char *lhs, char *rhs, char *result, void *go
 char *matching_quote(char *p)
 {
   for (p++; *p && (*p != '"'); p++) {
-    if (*p == '\\')
+    if (*p == '\\' && p[1])
       p++;
   }
 
@@ -1813,6 +1831,12 @@ static void process_attach(void *go, struct script_data *sc, struct trig_data *t
     return;
   }
 
+  if (newtrig->attach_type != (c ? MOB_TRIGGER : o ? OBJ_TRIGGER : WLD_TRIGGER)) {
+    script_log("Trigger %ld: attach target has the wrong type.", (long) GET_TRIG_VNUM(trig));
+    extract_trigger(newtrig);
+    return;
+  }
+
   if (c) {
     if (!IS_NPC(c)) {
       script_log("Trigger: %s, VNum %ld. attach cannot target the player '%s'",
@@ -1882,6 +1906,8 @@ static void process_detach(void *go, struct script_data *sc, struct trig_data *t
   }
 
   if (c && SCRIPT(c)) {
+    if (!IS_NPC(c))
+      return;
     if (!strcmp(trignum_s, "all")) {
       extract_script(c, MOB_TRIGGER);
       return;
@@ -2406,19 +2432,22 @@ int script_driver_default(void *go_adress, struct trig_data *trig, int type, int
   switch (type) {
     case MOB_TRIGGER:
       go = *(struct char_data **) go_adress;
+      if (!go) return ret_val;
       sc = SCRIPT((struct char_data *) go);
       break;
     case OBJ_TRIGGER:
       go = *(struct obj_data **) go_adress;
+      if (!go) return ret_val;
       sc = SCRIPT((struct obj_data *) go);
       break;
     case WLD_TRIGGER:
       go = *(struct room_data **) go_adress;
+      if (!go) return ret_val;
       sc = SCRIPT((struct room_data *) go);
       break;
   }
 
-  if (!go || !sc)
+  if (!go || !sc || sc->purged || trig->purged)
     return ret_val;
 
   if (depth > MAX_SCRIPT_DEPTH) {
@@ -2462,7 +2491,7 @@ int script_driver_default(void *go_adress, struct trig_data *trig, int type, int
   dg_owner_purged = 0;
 
   for (cl = (mode == TRIG_NEW) ? trig->cmdlist : trig->curr_state;
-       cl && GET_TRIG_DEPTH(trig); cl = cl->next) {
+       cl && !trig->purged && !sc->purged && GET_TRIG_DEPTH(trig); cl = cl->next) {
     for (p = cl->cmd; *p && isspace(*p); p++)
       ;
 
@@ -2812,7 +2841,8 @@ static struct obj_data *find_obj_by_uid_in_lookup_table(long uid)
  * that an object it was holding on to has been purged. */
 int has_obj_by_uid_in_lookup_table(long uid)
 {
-  return find_element_by_uid_in_lookup_table(uid) != NULL;
+  struct obj_data *obj = find_obj(uid);
+  return obj && !dg_extraction_is_pending(obj);
 }
 
 void add_to_lookup_table(long uid, void *c)

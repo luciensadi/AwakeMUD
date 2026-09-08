@@ -46,7 +46,7 @@ char *any_one_name(char *argument, char *first_arg)
 
   /* Find length of first word */
   for (arg = first_arg;
-       *argument && !isspace(*argument) && (!ispunct(*argument) || *argument == '#' || *argument == '-');
+       *argument && !isspace(*argument) && (!ispunct(*argument) || *argument == UID_CHAR || *argument == '#' || *argument == '-');
        arg++, argument++)
     *arg = LOWER(*argument);
   *arg = '\0';
@@ -178,7 +178,10 @@ void sub_write(char *arg, struct char_data *ch, byte find_invis, int targets)
 
       case '\\':
         p++;
-        *s++ = *p++;
+        if (*p)
+          *s++ = *p++;
+        else
+          *s++ = '\\';
         break;
 
       default:

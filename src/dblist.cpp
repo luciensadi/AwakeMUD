@@ -283,7 +283,9 @@ void objList::UpdateCounters(void)
     /* Objects carrying a timer trigger tick down towards it. Objects
      * without one are left alone: several item types use the same field
      * for their own purposes. */
+    bool script_timer_ticked = FALSE;
     if (SCRIPT_CHECK(OBJ, OTRIG_TIMER) && GET_OBJ_TIMER(OBJ) > 0) {
+      script_timer_ticked = TRUE;
       if (--GET_OBJ_TIMER(OBJ) <= 0) {
         timer_otrigger(OBJ);
         continue;
@@ -389,7 +391,7 @@ void objList::UpdateCounters(void)
             continue;
 
           // Corpse decay.
-          if (GET_OBJ_TIMER(OBJ)-- <= 0) {
+          if ((script_timer_ticked ? GET_OBJ_TIMER(OBJ) : GET_OBJ_TIMER(OBJ)--) <= 0) {
             if (OBJ->carried_by)
               act("$p decays in your hands.", FALSE, temp->data->carried_by, temp->data, 0, TO_CHAR);
             else if (temp->data->worn_by)
