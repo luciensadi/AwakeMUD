@@ -4116,7 +4116,7 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
       qedit_disp_secondary_menu(d);
       break;
     case '2':
-      send_to_char("Enter number of item objective to edit: ", CH);
+      send_to_char("Enter number of item objective to edit (q to go back): ", CH);
       d->edit_mode = QEDIT_S_AWAIT_NUMBER;
       break;
     case 'q':
@@ -4131,6 +4131,12 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
     }
     break;
   case QEDIT_S_AWAIT_NUMBER:
+    if (*arg == 'q' || *arg == 'Q') {
+      CLS(CH);
+      qedit_disp_secondary_menu(d);
+      break;
+    }
+
     number = atoi(arg);
     if (number < 0 || number >= QUEST->num_objs) {
       CLS(CH);
@@ -4138,7 +4144,7 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
     } else {
       d->edit_number2 = number;
       if (!qedit_secondary_objective_is_editable(d)) {
-        send_to_char(CH, "Seconary objective must be deviver item to target. Enter number of item objective to edit: ");
+        send_to_char(CH, "Seconary objective must be deviver item to target. Enter number of item objective (q to go back): ");
       } else {
         if (QUEST->obj[d->edit_number2].s_type == QSO_GIVE_OBJECTIVE) {
           QUEST->obj[d->edit_number2].s_type = QSO_NO_RESPONSE;
