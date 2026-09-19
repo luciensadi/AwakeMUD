@@ -1768,12 +1768,18 @@ ACMD(do_qedit)
     *qst = quest_table[rnum];
 
     qst->obj = new struct quest_om_data[QMAX_OBJS];
-    for (i = 0; i < qst->num_objs; i++)
+    for (i = 0; i < qst->num_objs; i++) {
       qst->obj[i] = quest_table[rnum].obj[i];
+      if (quest_table[rnum].obj[i].s_message)
+        qst->obj[i].s_message = str_dup(quest_table[rnum].obj[i].s_message);
+    }
 
     qst->mob = new struct quest_om_data[QMAX_MOBS];
-    for (i = 0; i < qst->num_mobs; i++)
+    for (i = 0; i < qst->num_mobs; i++) {
       qst->mob[i] = quest_table[rnum].mob[i];
+      if (quest_table[rnum].mob[i].s_message)
+        qst->mob[i].s_message = str_dup(quest_table[rnum].mob[i].s_message);
+    }
 
     // Clone strings.
     if (quest_table[rnum].intro)

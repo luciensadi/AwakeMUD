@@ -2523,9 +2523,13 @@ void parse_quest(File &fl, long virtual_nr)
 
     for (j = 0; j < quest_table[quest_nr].num_objs; j++) {
       fl.GetLine(line, 256, FALSE);
-      if (sscanf(line, "%ld %ld %ld %ld %ld %ld %ld %ld", t, t + 1, t + 2, t + 3,
-                 t + 4, t + 5, t + 6, t + 7) != 8) {
-        fprintf(stderr, "FATAL ERROR: Format error in quest #%ld, obj #%ld: expecting 8 numbers like '# # # # # # # #'\n", quest_nr, j);
+      int parsed = sscanf(line, "%ld %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld",
+                          t, t + 1, t + 2, t + 3, t + 4, t + 5, t + 6, t + 7,
+                          t + 8, t + 9, t + 10, t + 11);
+
+      // awkward, but doesn't break existing qst files
+      if (parsed != 8 && parsed != 12) {
+        fprintf(stderr, "FATAL ERROR: Format error in quest #%ld, obj #%ld: expecting either 8 numbers ('# # # # # # # #') or 12 numbers ('# # # # # # # # # # # #').\n", quest_nr, j);
         exit(ERROR_WORLD_BOOT_FORMAT_ERROR);
       }
       quest_table[quest_nr].obj[j].vnum = t[0];
@@ -2536,6 +2540,15 @@ void parse_quest(File &fl, long virtual_nr)
       quest_table[quest_nr].obj[j].l_data = t[5];
       quest_table[quest_nr].obj[j].l_data2 = t[6];
       quest_table[quest_nr].obj[j].o_data = t[7];
+
+      if (parsed == 12) {
+        quest_table[quest_nr].obj[j].s_enabled = t[8] ? 1 : 0;
+        quest_table[quest_nr].obj[j].s_type = (byte) t[9];
+        quest_table[quest_nr].obj[j].s_obj_vnum = t[10];
+        if (t[11]) {
+          quest_table[quest_nr].obj[j].s_message = fl.ReadString("secondary_message");
+        }
+      }
     }
   } else
     quest_table[quest_nr].obj = NULL;
@@ -5999,6 +6012,16 @@ void free_obj(struct obj_data * obj)
 
 void free_quest(struct quest_data *quest)
 {
+  if (quest->obj) {
+    for (int i = 0; i < quest->num_objs; i++)
+      DELETE_ARRAY_IF_EXTANT(quest->obj[i].s_message);
+  }
+
+  if (quest->mob) {
+    for (int i = 0; i < quest->num_mobs; i++)
+      DELETE_ARRAY_IF_EXTANT(quest->mob[i].s_message);
+  }
+
   DELETE_ARRAY_IF_EXTANT(quest->obj);
   DELETE_ARRAY_IF_EXTANT(quest->mob);
   DELETE_ARRAY_IF_EXTANT(quest->intro);

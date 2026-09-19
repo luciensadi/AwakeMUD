@@ -52,6 +52,13 @@ extern int calculate_vehicle_weight(struct veh_data *veh);
 extern void die(struct char_data *ch, idnum_t cause_of_death_idnum, bool should_splatter_and_scream);
 extern bool obj_can_be_stowed(struct char_data *ch, struct obj_data *obj, bool send_messages);
 extern bool raw_stow_obj(struct char_data *ch, struct obj_data *obj, bool send_messages);
+extern vnum_t translate_quest_mob_identifier_to_vnum(vnum_t identifier, struct quest_data *quest);
+extern struct obj_data *instantiate_quest_object(rnum_t rnum, int load_reason, struct char_data *questor);
+extern void display_single_emote_for_quest(struct char_data *johnson, emote_t emote_to_display, struct char_data *target);
+extern bool perform_give(struct char_data *ch, struct char_data *vict, struct obj_data *obj);
+extern int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode, const char *sname, struct room_data *random_donation_room);
+
+ACMD_CONST(do_say);
 
 extern SPECIAL(fence);
 extern SPECIAL(hacker);
@@ -2943,13 +2950,16 @@ bool perform_give(struct char_data *ch, struct char_data *vict, struct obj_data 
 			{
 				// Give it to them now.
 				_ch_gives_obj_to_vict(ch, obj, vict);
-				if (MOB_FLAGGED(vict, MOB_INANIMATE))
-				{
-					act("$n beeps at $N and retains $p.", TRUE, vict, obj, ch, TO_ROOM);
-				}
-				else
-				{
-					act("$n nods slightly to $N and tucks $p away.", TRUE, vict, obj, ch, TO_ROOM);
+				bool secondary = check_secondary_objective(ch, vict, obj);
+				if (!secondary) {
+					if (MOB_FLAGGED(vict, MOB_INANIMATE))
+					{
+						act("$n beeps at $N and retains $p.", TRUE, vict, obj, ch, TO_ROOM);
+					}
+					else
+					{
+						act("$n nods slightly to $N and tucks $p away.", TRUE, vict, obj, ch, TO_ROOM);
+					}
 				}
 				extract_obj(obj);
 				return 1;
