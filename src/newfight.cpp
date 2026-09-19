@@ -30,7 +30,6 @@ extern int find_sight(struct char_data *ch);
 extern int find_weapon_range(struct char_data *ch, struct obj_data *weapon);
 extern bool has_ammo_no_deduct(struct char_data *ch, struct obj_data *wielded);
 extern void combat_message(struct char_data *ch, struct char_data *victim, struct obj_data *weapon, int damage, int burst, int vision_penalty_for_messaging);
-extern int check_smartlink(struct char_data *ch, struct obj_data *weapon);
 extern bool can_hurt(struct char_data *ch, struct char_data *victim, int attacktype, bool include_func_protections);
 extern int get_weapon_damage_type(struct obj_data* weapon);
 extern bool damage(struct char_data *ch, struct char_data *victim, int dam, int attacktype, bool is_physical);
