@@ -12,6 +12,7 @@ void vehicle_inventory(struct char_data *ch);
 bool can_take_veh(struct char_data *ch, struct veh_data *veh);
 void generate_veh_idnum(struct veh_data *veh);
 bool save_single_vehicle(struct veh_data *veh, bool fromCopyover=FALSE);
+void save_vehicles(bool fromCopyover=FALSE);
 
 int get_obj_vehicle_load_usage(struct obj_data *obj, bool is_installed_mod);
 void recalculate_vehicle_usedload(struct veh_data *veh);
