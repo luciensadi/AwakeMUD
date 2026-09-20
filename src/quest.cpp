@@ -162,7 +162,7 @@ void process_secondary_dialogue_queue(void) {
     bool will_add_ellipses = FALSE;
 
     i = strlen(node->message);
-    while (i > 0 && (node->message[i] == '\r' || node->message[i] == '\n' || node->message[i] == '\0'))
+    while (i > 0 && (node->message[i - 1] == '\r' || node->message[i - 1] == '\n' || node->message[i - 1] == '\0'))
       i--;
 
     if ((pos + 200) < i) {
@@ -227,13 +227,16 @@ bool check_secondary_objective(struct char_data *ch, struct char_data *mob, stru
   bool secondary_objective = FALSE;
 
   for (int i = 0; i < quest_table[GET_QUEST(ch)].num_objs; i++) {
-    if (quest_table[GET_QUEST(ch)].obj[i].objective != QOO_TAR_MOB)
+    if (quest_table[GET_QUEST(ch)].obj[i].objective != QOO_TAR_MOB
+        && quest_table[GET_QUEST(ch)].obj[i].objective != QOO_JOHNSON)
       continue;
 
     if (quest_table[GET_QUEST(ch)].obj[i].vnum != GET_OBJ_VNUM(obj))
       continue;
 
-    vnum_t mob_vnum = translate_quest_mob_identifier_to_vnum(quest_table[GET_QUEST(ch)].obj[i].o_data, &quest_table[GET_QUEST(ch)]);
+    vnum_t mob_vnum = quest_table[GET_QUEST(ch)].obj[i].objective == QOO_JOHNSON
+                        ? quest_table[GET_QUEST(ch)].johnson
+                        : translate_quest_mob_identifier_to_vnum(quest_table[GET_QUEST(ch)].obj[i].o_data, &quest_table[GET_QUEST(ch)]);
     if (mob_vnum != GET_MOB_VNUM(mob))
       continue;
 
@@ -257,7 +260,7 @@ bool check_secondary_objective(struct char_data *ch, struct char_data *mob, stru
             bool will_add_ellipses = FALSE;
 
             i = strlen(o_data->s_message);
-            while (i > 0 && (o_data->s_message[i] == '\r' || o_data->s_message[i] == '\n' || o_data->s_message[i] == '\0'))
+            while (i > 0 && (o_data->s_message[i - 1] == '\r' || o_data->s_message[i - 1] == '\n' || o_data->s_message[i - 1] == '\0'))
               i--;
 
             if ((pos + 200) < i) {
@@ -324,7 +327,7 @@ bool check_secondary_objective(struct char_data *ch, struct char_data *mob, stru
             bool will_add_ellipses = FALSE;
 
             i = strlen(o_data->s_message);
-            while (i > 0 && (o_data->s_message[i] == '\r' || o_data->s_message[i] == '\n' || o_data->s_message[i] == '\0'))
+            while (i > 0 && (o_data->s_message[i - 1] == '\r' || o_data->s_message[i - 1] == '\n' || o_data->s_message[i - 1] == '\0'))
               i--;
 
             if ((pos + 200) < i) {
@@ -3221,7 +3224,7 @@ void qedit_disp_obj_menu(struct descriptor_data *d)
                " 1) List current objectives\r\n"
                " 2) Edit an existing objective\r\n"
                " 3) Add a new objective (%d slots remaining)\r\n"
-               " 4) Secondary objective menu\r\n"
+               " 4) Secondary objectives/speech menu\r\n"
                " q) Return to main menu\r\n"
                "Enter your choice: ", QMAX_OBJS - QUEST->num_objs);
 
@@ -3249,7 +3252,7 @@ bool qedit_secondary_objective_is_editable(struct descriptor_data *d)
   if (idx < 0 || idx >= QUEST->num_objs)
     return FALSE;
 
-  if (QUEST->obj[idx].objective == QOO_TAR_MOB)
+  if (QUEST->obj[idx].objective == QOO_TAR_MOB || QUEST->obj[idx].objective == QOO_JOHNSON)
     return TRUE;
 
   return FALSE;
@@ -3263,35 +3266,14 @@ void qedit_list_secondary_objectives(struct descriptor_data *d)
 
   for (int i = 0; i < QUEST->num_objs; i++) {
     rnum_t obj_rnum = real_object(QUEST->obj[i].vnum);
-    struct obj_data *obj = obj_rnum >= 0 ? &obj_proto[obj_rnum] : NULL;
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%2d) %ld (%s): ", i, QUEST->obj[i].vnum, obj_rnum >= 0 ? GET_OBJ_NAME(&obj_proto[obj_rnum]) : "invalid vnum");
 
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%2d) %ld (%s): ", i, QUEST->obj[i].vnum, obj ? GET_OBJ_NAME(obj) : "N/A");
-
-    if (QUEST->obj[i].objective != QOO_TAR_MOB) {
-      strlcat(buf, "invalid objective type\r\n", sizeof(buf));
-      continue;
-    }
-
-    rnum_t target_rnum = translate_quest_mob_identifier_to_rnum(QUEST->obj[i].o_data, QUEST);
-    struct char_data *target_mob = target_rnum >= 0 ? &mob_proto[target_rnum] : NULL;
-    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "target %ld (%s): ", QUEST->obj[i].o_data, target_mob ? GET_CHAR_NAME(target_mob) : "N/A");
-
-    if (QUEST->obj[i].s_type == QSO_SAY || QUEST->obj[i].s_type == QSO_EMOTE) {
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "say/emote %s - \"%s\"", secondary_say_emote_types[QUEST->obj[i].s_type], QUEST->obj[i].s_message ? QUEST->obj[i].s_message : "<not set>");
+    if (QUEST->obj[i].objective == QOO_JOHNSON) {
+      rnum_t johnson_rnum = real_mobile(QUEST->johnson);
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "target %ld (%s): ", QUEST->johnson, johnson_rnum >= 0 ? GET_CHAR_NAME(&mob_proto[johnson_rnum]) : "invalid vnum");
     } else {
-      strlcat(buf, "no say/emote", sizeof(buf));
-    }
-
-    bool give_enabled = QUEST->obj[i].s_enabled || QUEST->obj[i].s_type == QSO_GIVE_OBJECTIVE;
-
-    if (give_enabled && QUEST->obj[i].s_obj_vnum > 0) {
-      rnum_t secondary_obj_rnum = real_object(QUEST->obj[i].s_obj_vnum);
-      struct obj_data *secondary_obj = secondary_obj_rnum >= 0 ? &obj_proto[secondary_obj_rnum] : NULL;
-      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " + give %ld (%s)", QUEST->obj[i].s_obj_vnum, secondary_obj ? GET_OBJ_NAME(secondary_obj) : "N/A");
-    } else if (give_enabled) {
-      strlcat(buf, " + give item (item not set)", sizeof(buf));
-    } else {
-      strlcat(buf, " + give item", sizeof(buf));
+      rnum_t target_rnum = translate_quest_mob_identifier_to_rnum(QUEST->obj[i].o_data, QUEST);
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "target %ld (%s): ", QUEST->obj[i].o_data, target_rnum >= 0 ? GET_CHAR_NAME(&mob_proto[target_rnum]) : "invalid vnum");
     }
 
     strlcat(buf, "\r\n", sizeof(buf));
@@ -3318,30 +3300,37 @@ void qedit_disp_secondary_edit_menu(struct descriptor_data *d)
     return;
   }
 
-  if (!qedit_secondary_objective_is_editable(d)) {
-    send_to_char(CH, "That objective does not target a mob delivery objective.\r\n");
-    qedit_disp_secondary_menu(d);
-    return;
-  }
-
   int idx = d->edit_number2;
   rnum_t obj_rnum = real_object(QUEST->obj[idx].vnum);
-  struct obj_data *obj = obj_rnum >= 0 ? &obj_proto[obj_rnum] : NULL;
-  rnum_t reward_rnum = real_object(QUEST->obj[idx].s_obj_vnum);
-  struct obj_data *reward_obj = reward_rnum >= 0 ? &obj_proto[reward_rnum] : NULL;
+  const char *obj_name = obj_rnum >= 0 ? GET_OBJ_NAME(&obj_proto[obj_rnum]) : "invalid vnum";
+  const char *target_name = "invalid vnum";
+  vnum_t target_vnum;
+
+  if (QUEST->obj[idx].objective == QOO_JOHNSON) {
+    target_vnum = QUEST->johnson;
+    rnum_t johnson_rnum = real_mobile(QUEST->johnson);
+    target_name = johnson_rnum >= 0 ? GET_CHAR_NAME(&mob_proto[johnson_rnum]) : "invalid vnum";
+  } else {
+    target_vnum = QUEST->obj[idx].o_data;
+    rnum_t target_rnum = translate_quest_mob_identifier_to_rnum(QUEST->obj[idx].o_data, QUEST);
+    target_name = target_rnum >= 0 ? GET_CHAR_NAME(&mob_proto[target_rnum]) : "invalid vnum";
+  }
+
+  const char *secondary_name = "none";
+  if (QUEST->obj[idx].s_obj_vnum > 0) {
+    rnum_t secondary_rnum = real_object(QUEST->obj[idx].s_obj_vnum);
+    secondary_name = secondary_rnum >= 0 ? GET_OBJ_NAME(&obj_proto[secondary_rnum]) : "invalid vnum";
+  }
 
   CLS(CH);
 
-  send_to_char(CH, "Secondary objective %d\r\n", idx);
-  send_to_char(CH, " Item: %ld (%s)\r\n", QUEST->obj[idx].vnum, obj ? GET_OBJ_NAME(obj) : "N/A");
-  rnum_t target_rnum = translate_quest_mob_identifier_to_rnum(QUEST->obj[idx].o_data, QUEST);
-  struct char_data *target_mob = target_rnum >= 0 ? &mob_proto[target_rnum] : NULL;
-  send_to_char(CH, " Target mob: %ld (%s)\r\n", QUEST->obj[idx].o_data, target_mob ? GET_CHAR_NAME(target_mob) : "N/A");
-  send_to_char(CH, " Objective type: %s\r\n", QUEST->obj[idx].objective >= 0 && QUEST->obj[idx].objective < NUM_OBJ_OBJECTIVES ? obj_objectives[QUEST->obj[idx].objective] : "Invalid");
+  send_to_char(CH, "Secondary objectives/speech for objective %d\r\n", idx);
+  send_to_char(CH, " Item: %ld (%s)\r\n", QUEST->obj[idx].vnum, obj_name);
+  send_to_char(CH, " Target: %ld (%s)\r\n", target_vnum, target_name);
   send_to_char(CH, " 1) Message type: %s\r\n", QUEST->obj[idx].s_type <= QSO_EMOTE ? secondary_say_emote_types[QUEST->obj[idx].s_type] : secondary_say_emote_types[QSO_NO_RESPONSE]);
   send_to_char(CH, " 2) Message text: %s\r\n", QUEST->obj[idx].s_message ? QUEST->obj[idx].s_message : "<not set>");
   send_to_char(CH, " 3) Gives a secondary objective item: %s\r\n", (QUEST->obj[idx].s_enabled || QUEST->obj[idx].s_type == QSO_GIVE_OBJECTIVE) ? "YES" : "NO");
-  send_to_char(CH, " 4) Secondary objective item vnum: %ld (%s)\r\n", QUEST->obj[idx].s_obj_vnum, reward_obj ? GET_OBJ_NAME(reward_obj) : "N/A");
+  send_to_char(CH, " 4) Secondary objective item vnum: %ld (%s)\r\n", QUEST->obj[idx].s_obj_vnum, secondary_name);
   send_to_char(CH, " q) Return to secondary objective menu\r\n");
   send_to_char(CH, "Enter your choice: ");
 
@@ -3350,7 +3339,7 @@ void qedit_disp_secondary_edit_menu(struct descriptor_data *d)
 
 void qedit_disp_secondary_menu(struct descriptor_data *d)
 {
-  send_to_char(CH, "Secondary objective menu:\r\n"
+  send_to_char(CH, "Secondary objectives/speech menu:\r\n"
                " 1) List current objectives\r\n"
                " 2) Edit an existing objective\r\n"
                " q) Return to item objective menu\r\n"
@@ -4144,7 +4133,7 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
     } else {
       d->edit_number2 = number;
       if (!qedit_secondary_objective_is_editable(d)) {
-        send_to_char(CH, "Seconary objective must be deviver item to target. Enter number of item objective (q to go back): ");
+        send_to_char(CH, "Secondary objectives must be 'deliver item to target' or 'return item to Johnson'. Enter number of item objective (q to go back): ");
       } else {
         if (QUEST->obj[d->edit_number2].s_type == QSO_GIVE_OBJECTIVE) {
           QUEST->obj[d->edit_number2].s_type = QSO_NO_RESPONSE;
@@ -4164,7 +4153,7 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
       d->edit_mode = QEDIT_S_MESSAGE;
       break;
     case '3':
-      send_to_char(CH, "Does the mob return an item? (y/n): ");
+      send_to_char(CH, "Does the mob return a (quest) item? (y/n): ");
       d->edit_mode = QEDIT_S_ENABLED;
       break;
     case '4':
