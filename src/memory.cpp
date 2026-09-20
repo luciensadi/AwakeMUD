@@ -32,51 +32,42 @@
 #include "dblist.hpp"
 #include "player_exdescs.hpp"
 
-memoryClass::memoryClass()
-{}
-
-memoryClass::memoryClass(const memoryClass & mClass)
-{}
-
-memoryClass::~memoryClass()
-{}
-
-struct obj_data *memoryClass::GetObject()
+struct obj_data *GetObject()
 {
   struct obj_data *temp = new obj_data;
   clear_object(temp);
   return temp;
 }
 
-struct veh_data *memoryClass::GetVehicle()
+struct veh_data *GetVehicle()
 {
   struct veh_data *temp = new veh_data;
   clear_vehicle(temp);
   return temp;
 }
 
-struct host_data *memoryClass::GetHost()
+struct host_data *GetHost()
 {
   struct host_data *temp = new host_data;
   clear_host(temp);
   return temp;
 }
 
-struct matrix_icon *memoryClass::GetIcon()
+struct matrix_icon *GetIcon()
 {
   struct matrix_icon *temp = new matrix_icon;
   clear_icon(temp);
   return temp;
 }
 
-struct char_data *memoryClass::GetCh()
+struct char_data *GetCh()
 {
   struct char_data *temp = new char_data;
   clear_char(temp);
   return temp;
 }
 
-struct room_data *memoryClass::GetRoom()
+struct room_data *GetRoom()
 {
   struct room_data *temp = new room_data;
   // clear room just zeros the room structure, which is all we need to
@@ -85,7 +76,7 @@ struct room_data *memoryClass::GetRoom()
   return temp;
 }
 
-void memoryClass::DeleteObject(struct obj_data *obj, const char *source)
+void DeleteObject(struct obj_data *obj, const char *source)
 {
   // we want to do this so that when we pop em off, they are usable
   free_obj(obj);
@@ -93,7 +84,7 @@ void memoryClass::DeleteObject(struct obj_data *obj, const char *source)
   // Obj->Push(obj);
 }
 
-void memoryClass::DeleteCh(struct char_data *ch)
+void DeleteCh(struct char_data *ch)
 {
   extern struct char_data *combat_list;
   extern void stop_fighting(struct char_data * ch);
@@ -165,26 +156,26 @@ void memoryClass::DeleteCh(struct char_data *ch)
 #endif
 }
 
-void memoryClass::DeleteRoom(struct room_data *room)
+void DeleteRoom(struct room_data *room)
 {
   free_room(room);
   delete room;
 }
 
-void memoryClass::DeleteHost(struct host_data *host)
+void DeleteHost(struct host_data *host)
 {
   free_host(host);
   delete host;
 }
 
-void memoryClass::DeleteIcon(struct matrix_icon *icon)
+void DeleteIcon(struct matrix_icon *icon)
 {
   free_icon(icon);
   delete icon;
 }
 
 
-void memoryClass::DeleteVehicle(struct veh_data *veh)
+void DeleteVehicle(struct veh_data *veh)
 {
   // Used to be free_veh(veh), but that just pointed to clear_vehicle(veh), so...
   clear_vehicle(veh);

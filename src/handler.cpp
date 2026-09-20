@@ -2475,12 +2475,15 @@ void obj_from_obj(struct obj_data * obj)
     temp->in_room->dirty_bit = TRUE;
 }
 
+bool global_an_icon_was_extracted = false;
 void extract_icon(struct matrix_icon * icon)
 {
   if (!icon) {
     mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Received NULL icon to extract_icon()!");
     return;
   }
+
+  global_an_icon_was_extracted = true;
 
   struct matrix_icon *temp;
 
@@ -2526,12 +2529,12 @@ void extract_icon(struct matrix_icon * icon)
       send_to_char(icon->decker->hitcher, "You return to your senses.\r\n");
       clear_hitcher(icon->decker->hitcher, FALSE);
     }
-    for (struct obj_data *obj = icon->decker->software, *temp; obj; obj = temp) {
-      temp = obj->next_content;
+    for (struct obj_data *obj = icon->decker->software, *temp_obj = nullptr; obj; obj = temp_obj) {
+      temp_obj = obj->next_content;
       extract_obj(obj);
     }
-    for (struct seen_data *seen = icon->decker->seen, *temp2; seen; seen = temp2) {
-      temp2 = seen->next;
+    for (struct seen_data *seen = icon->decker->seen, *temp_seen; seen; seen = temp_seen) {
+      temp_seen = seen->next;
       delete seen;
     }
     // Clear the deck if this is an otaku
@@ -2545,7 +2548,7 @@ void extract_icon(struct matrix_icon * icon)
   }
 
   REMOVE_FROM_LIST(icon, icon_list, next);
-  Mem->DeleteIcon(icon);
+  DeleteIcon(icon);
 
 #ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
   verify_every_pointer_we_can_think_of();
@@ -2703,7 +2706,7 @@ void extract_veh(struct veh_data * veh)
   if (veh->in_room || veh->in_veh)
     veh_from_room(veh);
   veh_index[veh->veh_number].number--;
-  Mem->DeleteVehicle(veh);
+  DeleteVehicle(veh);
 
 #ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
   verify_every_pointer_we_can_think_of();
@@ -2870,7 +2873,7 @@ void extract_obj(struct obj_data * obj, bool dont_warn_on_kept_items)
   if (GET_OBJ_RNUM(obj) >= 0)
     (obj_index[GET_OBJ_RNUM(obj)].number)--;
 
-  Mem->DeleteObject(obj, "extract_obj");
+  DeleteObject(obj, "extract_obj");
 
 #ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
   verify_every_pointer_we_can_think_of();
@@ -2928,7 +2931,7 @@ void extract_char(struct char_data * ch, bool do_save)
 
     // Save the player.
     if (do_save)
-      playerDB.SaveChar(ch, GET_LOADROOM(ch));
+      SaveChar(ch, GET_LOADROOM(ch));
 
     // Hollow player body? Figure out who this was supposed to belong to and return them.
     if (!ch->desc) {
@@ -3158,13 +3161,13 @@ void extract_char(struct char_data * ch, bool do_save)
         SEND_TO_Q(MENU, ch->desc);
       }
     } else {
-      Mem->DeleteCh(ch);
+      DeleteCh(ch);
     }
   } else
   {
     if (GET_MOB_RNUM(ch) > -1)          /* if mobile */
       mob_index[GET_MOB_RNUM(ch)].number--;
-    Mem->DeleteCh(ch);
+    DeleteCh(ch);
   }
 }
 
@@ -3920,7 +3923,7 @@ int _get_weapon_focus_bonus_dice(struct char_data *ch, struct obj_data *weapon) 
     return 0;
 
   if (GET_OBJ_TYPE(weapon) == ITEM_WEAPON && WEAPON_IS_FOCUS(weapon) && is_weapon_focus_usable_by(weapon, ch)) {
-    return GET_WEAPON_FOCUS_RATING(GET_EQ(ch, WEAR_WIELD));
+    return GET_WEAPON_FOCUS_RATING(weapon);
   }
 
   return 0;

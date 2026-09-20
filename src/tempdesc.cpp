@@ -29,7 +29,7 @@ void boot_tempdescs() {
       json td_info;
       _json_parse_from_file(itr->path(), td_info);
 
-      vnum_t vnum = (vnum_t) td_info["landlord_vnum"].get<vnum_t>();
+      vnum_t vnum = (vnum_t) td_info["vnum"].get<vnum_t>();
       rnum_t rnum = real_room(vnum);
 
       if (rnum < 0) {

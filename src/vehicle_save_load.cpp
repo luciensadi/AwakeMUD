@@ -71,10 +71,6 @@ void delete_veh_from_map(struct veh_data *veh) {
   veh_map.erase(std::string(get_veh_save_key(veh)));
 }
 
-bool veh_is_in_map(struct veh_data *veh) {
-  return veh_map.contains(get_veh_save_key(veh));
-}
-
 vnum_t junkyard_room_numbers[] = {
   RM_JUNKYARD_GATES, // Just Inside the Gates
   RM_JUNKYARD_PARTS, // Rounding a Tottering Pile of Drone Parts

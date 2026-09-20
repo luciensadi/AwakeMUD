@@ -30,7 +30,6 @@ extern int find_sight(struct char_data *ch);
 extern int find_weapon_range(struct char_data *ch, struct obj_data *weapon);
 extern bool has_ammo_no_deduct(struct char_data *ch, struct obj_data *wielded);
 extern void combat_message(struct char_data *ch, struct char_data *victim, struct obj_data *weapon, int damage, int burst, int vision_penalty_for_messaging);
-extern int check_smartlink(struct char_data *ch, struct obj_data *weapon);
 extern bool can_hurt(struct char_data *ch, struct char_data *victim, int attacktype, bool include_func_protections);
 extern int get_weapon_damage_type(struct obj_data* weapon);
 extern bool damage(struct char_data *ch, struct char_data *victim, int dam, int attacktype, bool is_physical);
@@ -44,8 +43,11 @@ bool handle_flame_aura(struct combat_data *att, struct combat_data *def);
 
 bool does_weapon_have_bayonet(struct obj_data *weapon);
 bool perform_nerve_strike(struct combat_data *att, struct combat_data *def, char *rbuf, size_t rbuf_len);
-void remove_riot_shield_bonuses(struct combat_data *wearer, struct combat_data *other);
 bool _return_true_if_exit_can_be_shot_through_also_attempt_to_break_door_if_not(struct room_data *room, int dir, struct combat_data *att, bool *hit_door);
+
+#ifdef USE_RIOT_SHIELD_CODE
+void remove_riot_shield_bonuses(struct combat_data *wearer, struct combat_data *other);
+#endif
 
 #define SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER {act( rbuf, 1, att->ch, NULL, NULL, TO_ROLLS ); if (att->ch->in_room != def->ch->in_room && !PLR_FLAGGED(att->ch, PLR_REMOTE)) act( rbuf, 1, def->ch, NULL, NULL, TO_ROLLS );}
 
@@ -1590,6 +1592,7 @@ bool perform_nerve_strike(struct combat_data *att, struct combat_data *def, char
   return TRUE;
 }
 
+#ifdef USE_RIOT_SHIELD_CODE
 void remove_riot_shield_bonuses(struct combat_data *wearer, struct combat_data *other) {
   int old_bal = wearer->standard_ballistic_rating, old_imp = wearer->standard_impact_rating;
 
@@ -1616,6 +1619,7 @@ void remove_riot_shield_bonuses(struct combat_data *wearer, struct combat_data *
     if (wearer->ch->in_room != other->ch->in_room && !PLR_FLAGGED(wearer->ch, PLR_REMOTE)) act( rbuf, 1, other->ch, NULL, NULL, TO_ROLLS );
   }
 }
+#endif
 
 #undef SEND_RBUF_TO_ROLLS_FOR_BOTH_ATTACKER_AND_DEFENDER
 

@@ -75,12 +75,6 @@ int objList::PrintBelongings(struct char_data *ch)
   return num;
 }
 
-void objList::Traverse(void (*func)(struct obj_data *))
-{
-  for (nodeStruct<struct obj_data *> *temp = head; temp; temp = temp->next)
-    func(temp->data);
-}
-
 #ifdef ENABLE_THIS_IF_YOU_WANT_TO_HATE_YOUR_LIFE
 void objList::CheckPointers()
 {
@@ -106,22 +100,6 @@ int objList::CountObj(int num)
   nodeStruct<struct obj_data *> *temp;
   for (temp = head; temp; temp = temp->next)
     if (num == GET_OBJ_RNUM(temp->data))
-      counter++;
-
-  return counter;
-}
-
-// Adaptation of CountObj to find PC corpses with things in them.
-int objList::CountPlayerCorpses()
-{
-  int counter = 0;
-  nodeStruct<struct obj_data *> *temp;
-  for (temp = head; temp; temp = temp->next)
-    if (GET_OBJ_TYPE(temp->data) == ITEM_CONTAINER
-        && temp->data->contains
-        && GET_OBJ_VAL(temp->data, 4)
-        && IS_OBJ_STAT(temp->data, ITEM_EXTRA_CORPSE)
-    )
       counter++;
 
   return counter;

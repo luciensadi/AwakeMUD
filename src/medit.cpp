@@ -39,9 +39,6 @@ extern const char *attack_types[];
 extern char *prep_string_for_writing_to_savefile(char *dest, const char *src);
 extern const char *get_spell_name(int spell, int subtype);
 
-// mem func
-extern class memoryClass *Mem;
-
 // local defines
 #define MOB d->edit_mob
 #define NUM_ATTACK_TYPES       28
@@ -391,7 +388,7 @@ void medit_parse(struct descriptor_data *d, const char *arg)
           GET_EQ(d->edit_mob, wearloc) = NULL;
         }
 
-        Mem->DeleteCh(d->edit_mob);
+        DeleteCh(d->edit_mob);
       }
 
       d->edit_mob = NULL;
@@ -428,7 +425,7 @@ void medit_parse(struct descriptor_data *d, const char *arg)
         for (i = character_list; i; i = i->next_in_character_list) {
           if (mob_number == i->nr) {
             // alloc a temp mobile
-            temp = Mem->GetCh();
+            temp = GetCh();
             *temp = *i;
             temp->load_origin = PC_LOAD_REASON_MEDIT_SAVE_UPDATE;
             temp->load_time = time(0);
@@ -774,7 +771,7 @@ void medit_parse(struct descriptor_data *d, const char *arg)
           }
         }
 
-        Mem->DeleteCh(MOB);
+        DeleteCh(MOB);
       }
       MOB = NULL;
       d->edit_number = 0;
@@ -1863,7 +1860,10 @@ void write_mobs_to_disk(vnum_t zone_num)
   char tmp_file_name[1000];
   snprintf(tmp_file_name, sizeof(tmp_file_name), "%s.tmp", final_file_name);
 
-  fp = fopen(tmp_file_name, "w+");
+  if (!(fp = fopen(tmp_file_name, "w+"))) {
+    perror("Error opening file in write_mobs_to_disk()"); 
+    return;
+  }
 
   /* start running through all mobiles in this zone */
   for (counter = zone_table[znum].number * 100;

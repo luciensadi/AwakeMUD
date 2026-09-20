@@ -381,7 +381,7 @@ void load_quest_targets(struct char_data *johnson, struct char_data *ch)
           }
         }
       }
-      return;
+      continue;
     }
 
     if ((rnum = real_object(quest_table[num].obj[i].vnum)) > -1) {
@@ -2323,15 +2323,14 @@ void reboot_quest(int rnum, struct quest_data *quest)
   {
     ojn = real_mobile(quest_table[rnum].johnson);
     njn = real_mobile(quest->johnson);
-    if (njn < 0) {
-      char oopsbuf[5000];
-      snprintf(oopsbuf, sizeof(oopsbuf), "BUILD ERROR: Quest %ld has non-existent new Johnson %ld.", quest_table[rnum].vnum, quest->johnson);
-      mudlog(oopsbuf, NULL, LOG_SYSLOG, TRUE);
-      return;
-    }
 
     // It's possible for ojn to be -1 in the case of the quest first being built.
     if (ojn >= 0) {
+      if (njn < 0) {
+        mudlog_vfprintf(NULL, LOG_SYSLOG, "BUILD ERROR: Quest %ld has non-existent new Johnson %ld.", quest_table[rnum].vnum, quest->johnson);
+        return;
+      }
+      
       if (mob_index[ojn].func == johnson) {
         mob_index[ojn].func = mob_index[ojn].sfunc;
         mob_index[ojn].sfunc = NULL;
@@ -2467,8 +2466,7 @@ int write_quests_to_disk(int zone) {
 
   if (!(fp = fopen(tmp_file_name, "w+"))) {
     log_vfprintf("SYSERR: could not open file %s", tmp_file_name);
-
-    fclose(fp);
+    perror("unable to open file in write_quests_to_disk()");
     return 0;
   }
 
@@ -2548,7 +2546,10 @@ int write_quests_to_disk(int zone) {
 
   // If we wrote anything for this zone, update the index file.
   if (wrote_something) {
-    fp = fopen("world/qst/index", "w+");
+    if (!(fp = fopen("world/qst/index", "w+"))) {
+      perror("Error opening file in write_quests_to_disk()"); 
+      return false;
+    }
 
     for (i = 0; i <= top_of_zone_table; ++i) {
       found = 0;
@@ -3364,12 +3365,11 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
   case QEDIT_JOHNSON:
     number = atoi(arg);
     if (real_mobile(number) < 0) {
-      send_to_char("No such mob!  Enter Johnson's vnum: ", CH);
-      return;
-    } else {
-      QUEST->johnson = number;
-      qedit_disp_menu(d);
+      send_to_char("No such mob!", CH);
+      number = -1;
     }
+    QUEST->johnson = number;
+    qedit_disp_menu(d);
     break;
   case QEDIT_PREREQUISITE:
     number = atoi(arg);
@@ -3391,8 +3391,8 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
     return;
   case QEDIT_TIME:
     number = atoi(arg);
-    if (number < 30 || number > 1440)
-      send_to_char("Time must range from 30 to 1440 mud minutes.\r\n"
+    if (number != 0 && (number < 30 || number > 1440))
+      send_to_char("Time must range from 30 to 1440 mud minutes (or 0 for no limit).\r\n"
                    "Enter allowed time: ", CH);
     else {
       QUEST->time = number;

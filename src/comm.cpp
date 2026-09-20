@@ -95,6 +95,7 @@ extern char help[];
 
 // act.wizard.cpp
 extern idnum_t global_copyover_enqueued_by_idnum;
+extern time_t global_copyover_override_quests_at;
 
 extern void handle_menu_frames(struct descriptor_data *d, char *arg);
 
@@ -117,7 +118,6 @@ static int exit_code = SUCCESS;
 int circle_reboot = 0;          /* reboot the game after a shutdown */
 int no_specials = 0;            /* Suppress ass. of special routines */
 int max_players = 0;            /* max descriptors available */
-int tics = 0;                   /* for extern checkpointing */
 int scheck = 0;                 /* for syntax checking mode */
 extern int nameserver_is_slow;  /* see config.c */
 struct timeval zero_time;       // zero-valued time structure, used to be
@@ -146,7 +146,6 @@ void flush_queues(struct descriptor_data * d);
 void nonblock(int s);
 int perform_subst(struct descriptor_data * t, char *orig, char *subst);
 int perform_alias(struct descriptor_data * d, char *orig);
-void record_usage(void);
 int make_prompt(struct descriptor_data * point);
 void check_idle_passwords(void);
 void init_descriptor (struct descriptor_data *newd, int desc);
@@ -190,7 +189,6 @@ void process_autonav(void);
 void process_vehicle_decay(void);
 void update_buildrepair(void);
 void process_boost(void);
-class memoryClass *Mem = new memoryClass();
 void show_string(struct descriptor_data * d, char *input);
 extern void update_paydata_market();
 extern void warn_about_apartment_deletion();
@@ -410,7 +408,7 @@ void copyover_recover()
 
     /* Now, find the pfile */
 
-    if ((d->character = playerDB.LoadChar(name, FALSE, PC_LOAD_REASON_COPYOVER_RECOVERY))) {
+    if ((d->character = LoadChar(name, FALSE, PC_LOAD_REASON_COPYOVER_RECOVERY))) {
       d->character->desc = d;
       if (!PLR_FLAGGED(d->character, PLR_DELETED))
         PLR_FLAGS(d->character).RemoveBits(PLR_WRITING, PLR_MAILING, ENDBIT);
@@ -884,18 +882,56 @@ void game_loop(int mother_desc)
 
     // If we have an enqueued copyover, run it forcefully if qualifications are met.
     if (global_copyover_enqueued_by_idnum) {
-      bool can_proceed = true;
-      for (d = descriptor_list; d; d = next_d) {
-        if (d->character && STATE(d) != CON_PLAYING) {
-          can_proceed = false;
-          break;
-        }
-      }
-      if (can_proceed) {
+      bool nobody_is_editing = true;
+      bool nobody_is_on_quests = true;
+
+      // Hard timeout means we don't bother checking anything, we just roll with it.
+      if (global_copyover_override_quests_at && time(0) >= (global_copyover_override_quests_at + (10 * 60))) {
         const char *char_name = get_player_name(global_copyover_enqueued_by_idnum);
-        mudlog_vfprintf(NULL, LOG_SYSLOG, "Everyone is out of build, kicking off the copyover enqueued by %s (%ld).", char_name, global_copyover_enqueued_by_idnum);
+        mudlog_vfprintf(NULL, LOG_SYSLOG, "Hard timeout reached, kicking off the copyover enqueued by %s (%ld).", char_name, global_copyover_enqueued_by_idnum);
         delete [] char_name;
         execute_copyover();
+        return;
+      }
+
+      // First, check for people in menus and on quests.
+      for (d = descriptor_list; d && !nobody_is_editing && !nobody_is_on_quests; d = d->next) {
+        if (d->character && GET_QUEST(d->character)) {
+          nobody_is_on_quests = false;
+        }
+          
+        // List the states we're comfortable with moving forward in; if not in CON_PLAYING they will be DC'd.
+        if ((STATE(d) >= CON_CLOSE && STATE(d) <= CON_MENU) || (STATE(d) >= CON_CHPWD_GETOLD && STATE(d) <= CON_QDELCONF2)) {
+          continue;
+        }
+        
+        // Further states where we can drop them without loss of creative data.
+        switch (STATE(d)) {
+          case CON_INITIATE:
+          case CON_POCKETSEC: // grey area
+          case CON_AMMO_CREATE:
+          case CON_ASKNAME:
+          case CON_SUBMERSION:
+            continue;
+        }
+
+        // If we got here, they're in an unacceptable state; data loss (e.g. edited content) will occur.
+        nobody_is_editing = false;
+      }
+
+      if (nobody_is_editing) {
+        if (nobody_is_on_quests && time(0) > global_copyover_override_quests_at) {
+          mudlog_vfprintf(NULL, LOG_SYSLOG, "Soft copyover timeout reached with questors active, overriding.");
+          nobody_is_on_quests = false;
+        }
+        
+        if (nobody_is_on_quests) {
+          const char *char_name = get_player_name(global_copyover_enqueued_by_idnum);
+          mudlog_vfprintf(NULL, LOG_SYSLOG, "Everyone is out of build, kicking off the copyover enqueued by %s (%ld).", char_name, global_copyover_enqueued_by_idnum);
+          delete [] char_name;
+          execute_copyover();
+          return;
+        }
       }
     }
 
@@ -1034,7 +1070,9 @@ void game_loop(int mother_desc)
       // Send GMCP Vitals
       for (d = descriptor_list; d; d = next_d) {
         next_d = d->next;
+#ifdef USE_DISCORD_RICH_PRESENCE
         update_gmcp_discord_info(d);
+#endif
       }
     }
 #endif
@@ -1142,8 +1180,10 @@ void game_loop(int mother_desc)
 
     // Every MUD hour
     if (!(pulse % (SECS_PER_MUD_HOUR * PASSES_PER_SEC))) {
+#ifdef USE_ZONE_HOTLOADING
       // This is the big laggy pulse, so offload whatever we can before digging into the rest of this.
       attempt_to_offload_unused_zones();
+#endif
 
       matrix_hour_update();
       point_update();
@@ -1270,8 +1310,6 @@ void game_loop(int mother_desc)
       verify_every_pointer_we_can_think_of();
     }
 #endif
-
-    tics++;                     /* tics since last checkpoint signal */
   }
 
   // Shutdown is handled in the greater loop above: search for DBFinalize().
@@ -1333,33 +1371,6 @@ struct timeval timediff(struct timeval * a, struct timeval * b)
       rslt.tv_usec = a->tv_usec - b->tv_usec;
     return rslt;
   }
-}
-
-void record_usage(void)
-{
-  int sockets_connected = 0, sockets_playing = 0;
-  struct descriptor_data *d;
-
-  for (d = descriptor_list; d; d = d->next) {
-    sockets_connected++;
-    if (!d->connected)
-      sockets_playing++;
-  }
-
-  log_vfprintf("usage: %-3d sockets connected, %-3d sockets playing",
-      sockets_connected, sockets_playing);
-
-#ifdef RUSAGE
-
-  {
-    struct rusage ru;
-
-    getrusage(0, &ru);
-    log("rusage: user time: %ld sec, system time: %ld sec, max res size: %ld",
-        ru.ru_utime.tv_sec, ru.ru_stime.tv_sec, ru.ru_maxrss);
-  }
-#endif
-
 }
 
 /*
@@ -1611,6 +1622,9 @@ int make_prompt(struct descriptor_data * d)
               break;
             case 'k':       // karma
               snprintf(str, sizeof(str), "%0.2f", ((float)GET_KARMA(ch) / 100));
+              break;
+            case 'K':       // rep
+              snprintf(str, sizeof(str), "%ld", GET_REP(d->character));
               break;
             case 'l':       // current weight
               snprintf(str, sizeof(str), "%.2f", IS_CARRYING_W(d->character));
@@ -2496,9 +2510,9 @@ void free_editing_structs(descriptor_data *d, int state)
     {
       extract_obj(d->edit_obj);
     }
-    // Anything falling through to here MUST have been created with direct memory creation (e.g. Mem->GetObject(), hopefully not 'new') 
+    // Anything falling through to here MUST have been created with direct memory creation (e.g. GetObject(), hopefully not 'new') 
     else {
-      Mem->DeleteObject(d->edit_obj, "comm.cpp's raw editing struct deletion");
+      DeleteObject(d->edit_obj, "comm.cpp's raw editing struct deletion");
     }
     d->edit_obj = NULL;
   }
@@ -2511,12 +2525,12 @@ void free_editing_structs(descriptor_data *d, int state)
   if (d->edit_situation) { delete d->edit_situation; d->edit_situation = NULL; }
 
   if (d->edit_room) {
-    Mem->DeleteRoom(d->edit_room);
+    DeleteRoom(d->edit_room);
     d->edit_room = NULL;
   }
 
   if (d->edit_mob) {
-    Mem->DeleteCh(d->edit_mob);
+    DeleteCh(d->edit_mob);
     d->edit_mob = NULL;
   }
 
@@ -2536,15 +2550,15 @@ void free_editing_structs(descriptor_data *d, int state)
   }
 
   if (d->edit_veh) {
-    Mem->DeleteVehicle(d->edit_veh);
+    DeleteVehicle(d->edit_veh);
     d->edit_veh = NULL;
   }
   if (d->edit_host) {
-    Mem->DeleteHost(d->edit_host);
+    DeleteHost(d->edit_host);
     d->edit_host = NULL;
   }
   if (d->edit_icon) {
-    Mem->DeleteIcon(d->edit_icon);
+    DeleteIcon(d->edit_icon);
     d->edit_icon = NULL;
   }
 
@@ -2666,7 +2680,7 @@ void close_socket(struct descriptor_data *d)
         d->edit_obj = NULL;
         d->edit_mob = NULL;
       }
-      playerDB.SaveChar(d->character);
+      SaveChar(d->character);
       act("^L[OOC]: $n has lost $s link.^n", TRUE, d->character, 0, 0, TO_ROOM);
       mudlog_vfprintf(d->character, LOG_CONNLOG, "Closing link to: %s. (%s)", GET_CHAR_NAME(d->character), connected_types[d->connected]);
       if (d->character->persona) {
@@ -2798,28 +2812,6 @@ void shutdown(int code)
  *  signal-handling functions (formerly signals.c)                   *
  ****************************************************************** */
 
-
-void checkpointing(int Empty)
-{
-  if (!tics) {
-    log("SYSERR: CHECKPOINT shutdown: tics not updated");
-    abort();
-  } else
-    tics = 0;
-}
-
-
-
-void unrestrict_game(int Empty)
-{
-  extern struct ban_list_element *ban_list;
-
-  mudlog("Received SIGUSR2 - completely unrestricting game (emergency)",
-         NULL, LOG_SYSLOG, TRUE);
-  ban_list = NULL;
-  restrict_mud = 0;
-}
-
 void free_up_memory(int Empty)
 {
   std::cerr << "SYSERR: Out of memory, saving houses and shutting down...\n";
@@ -2844,13 +2836,6 @@ void hupsig(int Empty)
 void intsig(int Empty)
 {
   mudlog("Received SIGINT.  Shutting down...", NULL, LOG_SYSLOG, TRUE);
-  save_all_apartments_and_storage_rooms();
-  exit(EXIT_CODE_ZERO_ALL_IS_WELL);
-}
-
-void termsig(int Empty)
-{
-  mudlog("Received SIGTERM.  Shutting down...", NULL, LOG_SYSLOG, TRUE);
   save_all_apartments_and_storage_rooms();
   exit(EXIT_CODE_ZERO_ALL_IS_WELL);
 }

@@ -69,9 +69,6 @@ public:
   }
 
   // Getters / setters
-  idnum_t get_pc_idnum() { return pc_idnum; }
-  void set_pc_idnum(idnum_t new_id) { pc_idnum = new_id; }
-
   const char *get_keyword() { return keyword; }
   void set_keyword(const char *new_keyword) { delete [] keyword; keyword = str_dup(new_keyword); }
 

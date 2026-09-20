@@ -950,6 +950,7 @@ ACMD(do_gen_write)
   if (subcmd == SCMD_TYPO) {
     FAILURE_CASE((str_str(argument, "chernobyl") || str_str(argument, "chornobyl")), "Thanks for the report, but we use the Ukrainian spelling of Chornobyl here.");
     FAILURE_CASE((str_str(argument, "produccion")), "Thanks for the report, but Meridional is an Andalusian company, so the Spanish is intended.");
+    FAILURE_CASE((str_str(argument, "cetheral")), "Thanks for the report, but cetheral is a Sperethiel word describing a rare pearly, iridescent skin color unique to elves.");
   }
 
   mudlog_vfprintf(ch, LOG_MISCLOG, "%s %s: %s",
@@ -1543,7 +1544,7 @@ ACMD(do_toggle)
         send_to_char(ch, "You have been restored to the old-style interface of internal index numbers for parts and software during deck creation.\r\n");
         PLR_FLAGS(ch).SetBit(PLR_DEALPHABETIZE_DECKBUILDING);
       }
-      playerDB.SaveChar(ch);
+      SaveChar(ch);
       return;
     } else if (access_level(ch, LVL_BUILDER) && (is_abbrev(argument, "activities") || is_abbrev(argument, "encounters"))) {
       result = PRF_TOG_CHK(ch, PRF_ACTIVITIES_DEBUG);
@@ -1558,7 +1559,7 @@ ACMD(do_toggle)
       send_to_char(tog_messages[mode][0], ch);
   }
 
-  playerDB.SaveChar(ch);
+  SaveChar(ch);
 }
 
 ACMD(do_brief) {
@@ -2728,7 +2729,7 @@ void cedit_parse(struct descriptor_data *d, char *arg)
     switch (*arg) {
     case 'y':
     case 'Y':
-      d->edit_mob = Mem->GetCh();
+      d->edit_mob = GetCh();
       d->edit_mob->player_specials = new player_special_data;
 
       // Copy over lifestyle-impacting information.
@@ -2874,7 +2875,7 @@ void cedit_parse(struct descriptor_data *d, char *arg)
       }
 
       if (d->edit_mob) {
-        Mem->DeleteCh(d->edit_mob);
+        DeleteCh(d->edit_mob);
       }
 
       d->edit_mob = NULL;
@@ -2882,7 +2883,7 @@ void cedit_parse(struct descriptor_data *d, char *arg)
       STATE(d) = CON_PLAYING;
       snprintf(ENDOF(buf2), sizeof(buf2) - strlen(buf2), " WHERE idnum=%ld;", GET_IDNUM(CH));
       mysql_wrapper(mysql, buf2);
-      playerDB.SaveChar(CH);
+      SaveChar(CH);
       break;
 
     case 'n':
@@ -2890,7 +2891,7 @@ void cedit_parse(struct descriptor_data *d, char *arg)
       PLR_FLAGS(CH).RemoveBit(PLR_CUSTOMIZE);
 
       if (d->edit_mob)
-        Mem->DeleteCh(d->edit_mob);
+        DeleteCh(d->edit_mob);
 
       d->edit_mob = NULL;
       d->edit_mode = 0;
@@ -4436,9 +4437,10 @@ ACMD(do_dice)
     dice = atoi(buf);
   }
 
-  snprintf(buf, sizeof(buf), "%d %sdice are %srolled by $n ",
+  snprintf(buf, sizeof(buf), "%d %s%s %srolled by $n ",
            dice,
            dice_explode ? "" : "non-exploding ",
+           dice == 1 ? "die is" : "dice are",
            subcmd == SCMD_PRIVATE_ROLL ? "^cprivately^n " : "");
 
   if (*buf1 && atoi(buf1)) {
@@ -4452,7 +4454,7 @@ ACMD(do_dice)
   } else if (dice >= 100) {
     send_to_char("You can't roll that many dice.\r\n", ch);
   } else {
-    strlcat(buf, "and scores:", sizeof(buf));
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "and %s:", dice == 1 ? "scores" : "score");
     for (;dice > 0; dice--) {
        roll = tot = number(1, 6);
        while (dice_explode && roll == 6) {
@@ -5150,7 +5152,7 @@ ACMD(do_syspoints) {
         delete [] name;
 
       // Save the result on the actor.
-      playerDB.SaveChar(ch);
+      SaveChar(ch);
 
       send_to_char(ch, "Done. Please note that this command is only for transferring to ^Wyour own alts^n. If the character you transferred to is not your alt, please request the points back, or contact staff for next steps.\r\n");
       return;
@@ -5459,7 +5461,7 @@ ACMD(do_syspoints) {
     mudlog(buf, ch, LOG_WIZLOG, TRUE);
 
     // Finally, save.
-    playerDB.SaveChar(vict);
+    SaveChar(vict);
     return;
   }
 }

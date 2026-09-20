@@ -2753,7 +2753,11 @@ void write_shops_to_disk(int zone)
   struct shop_data *shop;
   zone = real_zone(zone);
   snprintf(buf, sizeof(buf), "%s/%d.shp", SHP_PREFIX, zone_table[zone].number);
-  fp = fopen(buf, "w+");
+
+  if (!(fp = fopen(buf, "w+"))) {
+    perror("Error opening file in write_shops_to_disk()"); 
+    return;
+  }
 
   /* start running through all mobiles in this zone */
   for (counter = zone_table[zone].number * 100;

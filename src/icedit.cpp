@@ -46,7 +46,10 @@ void write_ic_to_disk(int vnum)
   char tmp_file_name[1000];
   snprintf(tmp_file_name, sizeof(tmp_file_name), "%s.tmp", final_file_name);
   
-  fl = fopen(tmp_file_name, "w+");
+  if (!(fl = fopen(tmp_file_name, "w+"))) {
+    perror("Error opening file in write_ic_to_disk()"); 
+    return;
+  }
 
   for (counter = zone_table[zone].number * 100;
        counter <= zone_table[zone].top;
@@ -135,7 +138,7 @@ void icedit_parse(struct descriptor_data *d, const char *arg)
     case 'N':
       STATE(d) = CON_PLAYING;
       if (d->edit_icon)
-        Mem->DeleteIcon(d->edit_icon);
+        DeleteIcon(d->edit_icon);
       d->edit_icon = NULL;
       PLR_FLAGS(CH).RemoveBit(PLR_EDITING);
       break;
@@ -154,7 +157,7 @@ void icedit_parse(struct descriptor_data *d, const char *arg)
           struct matrix_icon *i, *temp;
           for (i = icon_list; i; i = i->next)
             if (i->rnum == ic_num) {
-              temp = Mem->GetIcon();
+              temp = GetIcon();
               *temp = *i;
               *i = *d->edit_icon;
               i->in_host = temp->in_host;
@@ -237,7 +240,7 @@ void icedit_parse(struct descriptor_data *d, const char *arg)
       PLR_FLAGS(CH).RemoveBit(PLR_EDITING);
       /* free everything up, including strings etc */
       if (d->edit_icon)
-        Mem->DeleteIcon(d->edit_icon);
+        DeleteIcon(d->edit_icon);
       d->edit_icon = NULL;
       d->edit_number = 0;
       break;

@@ -35,7 +35,10 @@ void write_host_to_disk(int vnum)
   char tmp_file_name[1000];
   snprintf(tmp_file_name, sizeof(tmp_file_name), "%s.tmp", final_file_name);
   
-  fl = fopen(tmp_file_name, "w+");
+  if (!(fl = fopen(tmp_file_name, "w+"))) {
+    perror("Error opening file in write_host_to_disk()"); 
+    return;
+  }
 
   for (counter = zone_table[zone].number * 100;
        counter <= zone_table[zone].top;
@@ -218,7 +221,7 @@ void hedit_parse(struct descriptor_data *d, const char *arg)
           delete entrance;
         }
         d->edit_host->entrance = NULL;
-        Mem->DeleteHost(d->edit_host);
+        DeleteHost(d->edit_host);
       }
       d->edit_host = NULL;
       d->edit_number = 0;
@@ -325,7 +328,7 @@ void hedit_parse(struct descriptor_data *d, const char *arg)
           delete entrance;
         }
         d->edit_host->entrance = NULL;
-        Mem->DeleteHost(d->edit_host);
+        DeleteHost(d->edit_host);
       }
       d->edit_host = NULL;
       d->edit_number = 0;
@@ -754,7 +757,7 @@ void hedit_parse(struct descriptor_data *d, const char *arg)
         REMOVE_FROM_LIST(exit, HOST->exit, next);
         DELETE_ARRAY_IF_EXTANT(exit->addresses);
         DELETE_ARRAY_IF_EXTANT(exit->roomstring);
-        delete [] exit;
+        delete exit;
         hedit_disp_exit_menu(d);
       }
     }

@@ -66,7 +66,6 @@ extern int restrict_mud;
 void echo_on(struct descriptor_data * d);
 void echo_off(struct descriptor_data * d);
 void do_start(struct char_data * ch, bool wipe_skills);
-int special(struct char_data * ch, int cmd, char *arg);
 int isbanned(char *hostname);
 void init_create_vars(struct descriptor_data *d);
 // for olc
@@ -733,7 +732,7 @@ struct command_info cmd_info[] =
     { "gecho"      , POS_DEAD    , do_gecho    , LVL_CONSPIRATOR, 0, BLOCKS_IDLE_REWARD },
     { "give"       , POS_RESTING , do_give     , 0, 0, BLOCKS_IDLE_REWARD },
     { "goto"       , POS_MORTALLYW, do_goto     , LVL_BUILDER, 0, BLOCKS_IDLE_REWARD },
-    { "group"      , POS_RESTING , do_group    , 1, 0, BLOCKS_IDLE_REWARD },
+    { "group"      , POS_MORTALLYW , do_group    , 1, 0, BLOCKS_IDLE_REWARD },
     { "grab"       , POS_RESTING , do_grab     , 0, 0, BLOCKS_IDLE_REWARD },
     { "gridguide"  , POS_RESTING , do_gridguide, 0, 0, BLOCKS_IDLE_REWARD },
 
@@ -744,7 +743,7 @@ struct command_info cmd_info[] =
     { "hcontrol"   , POS_DEAD    , do_hcontrol , LVL_EXECUTIVE, 0, BLOCKS_IDLE_REWARD },
     { "heal"       , POS_SITTING , do_heal     , 0, 0, BLOCKS_IDLE_REWARD },
     { "hedit"      , POS_DEAD    , do_hedit    , LVL_BUILDER, 0, BLOCKS_IDLE_REWARD },
-    { "helpedit"   , POS_DEAD    , do_helpedit , LVL_FIXER, 0, BLOCKS_IDLE_REWARD },
+    { "helpedit"   , POS_DEAD    , do_helpedit , LVL_ADMIN, 0, BLOCKS_IDLE_REWARD },
     { "helpexport" , POS_DEAD    , do_helpexport, LVL_PRESIDENT, 0, BLOCKS_IDLE_REWARD },
     { "hit"        , POS_FIGHTING, do_hit      , 0, SCMD_HIT, BLOCKS_IDLE_REWARD },
     { "highlight"  , POS_DEAD    , do_highlight, 0, 0, ALLOWS_IDLE_REWARD },
@@ -2775,18 +2774,17 @@ int _parse_name(char *arg, char *name)
 
 int perform_dupe_check(struct descriptor_data *d)
 {
-  struct descriptor_data *k, *next_k;
   struct char_data *target = NULL;
   int mode = 0;
 
-  int id = GET_IDNUM(d->character);
+  idnum_t id = GET_IDNUM(d->character);
 
   /*
    * Now that this descriptor has successfully logged in, disconnect all
    * other descriptors controlling a character with the same ID number.
    */
 
-  for (k = descriptor_list; k; k = next_k)
+  for (struct descriptor_data *k = descriptor_list, *next_k; k; k = next_k)
   {
     next_k = k->next;
 
@@ -2799,25 +2797,39 @@ int perform_dupe_check(struct descriptor_data *d)
       if (!target) {
         target = k->original;
         mode = UNSWITCH;
+      } else {
+        k->original->desc = NULL;
+        extract_char(k->original);
       }
-      // TODO: Desc is leaked?
-      if (k->character)
+
+      if (k->character) {
         k->character->desc = NULL;
-      // TODO: Character is leaked?
-      k->character = NULL;
+        extract_char(k->character);
+        k->character = NULL;
+      }
+
       // Original is not leaked since it's inherited by the new connection.
       k->original = NULL;
-    } else if (k->character && (GET_IDNUM(k->character) == id)) {
+    }
+    else if (k->character && (GET_IDNUM(k->character) == id)) {
+      k->character->desc = NULL;
+
       if (!target && STATE(k) == CON_PLAYING) {
         SEND_TO_Q("\r\nThis body has been usurped!\r\n", k);
         target = k->character;
         mode = USURP;
+      } else {
+        extract_char(k->character);
       }
-      // TODO: Desc is leaked?
-      k->character->desc = NULL;
-      // TODO: Character is leaked?
+
       k->character = NULL;
-      k->original = NULL;
+
+      if (k->original) {
+        k->original->desc = NULL;
+        extract_char(k->original);
+        k->original = NULL;
+      }
+
       SEND_TO_Q("\r\nMultiple login detected (type 2) -- disconnecting.\r\n", k);
       STATE(k) = CON_CLOSE;
     }
@@ -2883,6 +2895,7 @@ int perform_dupe_check(struct descriptor_data *d)
             GET_CHAR_NAME(d->character));
     mudlog(buf, d->character, LOG_CONNLOG, TRUE);
     log_vfprintf("[CONNLOG: %s has reconnected from %s]", GET_CHAR_NAME(d->character), d->host);
+#ifdef USE_ZONE_HOTLOADING
     {
       struct room_data *in_room = (d->character ? get_ch_in_room(d->character) : NULL);
       if (in_room) {
@@ -2892,6 +2905,7 @@ int perform_dupe_check(struct descriptor_data *d)
         recalculate_whole_game_players_in_zone();
       }
     }
+#endif
     break;
   case USURP:
     SEND_TO_Q("You take over your own body, already in use!\r\n", d);
@@ -3090,7 +3104,7 @@ void nanny(struct descriptor_data * d, char *arg)
         return;
       }
       if (does_player_exist(tmp_name)) {
-        d->character = playerDB.LoadChar(tmp_name, TRUE, PC_LOAD_REASON_ENTER_PASSWORD);
+        d->character = LoadChar(tmp_name, TRUE, PC_LOAD_REASON_ENTER_PASSWORD);
         d->character->desc = d;
 
         snprintf(buf, sizeof(buf), "Welcome back. Enter your password. Not %s? Enter 'abort' to try a different name. ", CAP(tmp_name));
@@ -3109,7 +3123,7 @@ void nanny(struct descriptor_data * d, char *arg)
             return;
           }
         if (d->character == NULL) {
-          d->character = Mem->GetCh();
+          d->character = GetCh();
           d->character->load_origin = PC_LOAD_REASON_CHARACTER_CREATION;
 
           // Create and zero out their player_specials.
@@ -3213,7 +3227,7 @@ void nanny(struct descriptor_data * d, char *arg)
         mudlog(buf, d->character, LOG_CONNLOG, TRUE);
         GET_BAD_PWS(d->character)++;
         d->character->in_room = &world[MAX(0, real_room(GET_LAST_IN(d->character)))];
-        playerDB.SaveChar(d->character, GET_LOADROOM(d->character));
+        SaveChar(d->character, GET_LOADROOM(d->character));
         if (++(d->bad_pws) >= max_bad_pws) {    /* 3 strikes and you're out. */
           SEND_TO_Q("Wrong password... disconnecting.\r\n", d);
           STATE(d) = CON_CLOSE;
@@ -3244,7 +3258,7 @@ void nanny(struct descriptor_data * d, char *arg)
       GET_BAD_PWS(d->character) = 0;
 
       d->character->in_room = &world[MAX(0, real_room(GET_LAST_IN(d->character)))];
-      playerDB.SaveChar(d->character, GET_LOADROOM(d->character));
+      SaveChar(d->character, GET_LOADROOM(d->character));
 
       // TODO: Don't these returns leak memory by not cleaning up d->character?
       if (isbanned(d->host) == BAN_SELECT &&
@@ -3290,16 +3304,11 @@ void nanny(struct descriptor_data * d, char *arg)
       else
         SEND_TO_Q(motd, d);
 
-      if(PLR_FLAGGED(d->character,PLR_NOT_YET_AUTHED))
-        snprintf(buf, sizeof(buf), "%s has connected (UNAUTHORIZED).",
-                GET_CHAR_NAME(d->character));
-      else
-        snprintf(buf, sizeof(buf), "%s has connected.",
-                 GET_CHAR_NAME(d->character));
       DELETE_ARRAY_IF_EXTANT(d->character->player.host);
       d->character->player.host = str_dup(d->host);
-      playerDB.SaveChar(d->character);
-      mudlog(buf, d->character, LOG_CONNLOG, TRUE);
+      SaveChar(d->character);
+
+      mudlog_vfprintf(d->character, LOG_CONNLOG, "%s has connected%s.", GET_CHAR_NAME(d->character), PLR_FLAGGED(d->character,PLR_NOT_YET_AUTHED) ? " (UNAUTHORIZED)" : "");
       log_vfprintf("[CONNLOG: %s connecting from %s with fingerprint %s and JSON '''%s''']", GET_CHAR_NAME(d->character), d->host, get_descriptor_fingerprint(d), d->pProtocol ? STRING_TO_CSTR(d->pProtocol->new_environ_info.dump()) : "{}");
       if (load_result) {
         snprintf(buf, sizeof(buf), "\r\n\r\n"
@@ -3357,10 +3366,10 @@ void nanny(struct descriptor_data * d, char *arg)
       ccr_pronoun_menu(d);
     } else {
       if (STATE(d) != CON_CHPWD_VRFY)
-        d->character = playerDB.LoadChar(GET_CHAR_NAME(d->character), TRUE, PC_LOAD_REASON_CON_QVERIFYPW);
+        d->character = LoadChar(GET_CHAR_NAME(d->character), TRUE, PC_LOAD_REASON_CON_QVERIFYPW);
       SEND_TO_Q("\r\nDone.\r\n", d);
       if (PLR_FLAGGED(d->character,PLR_NOT_YET_AUTHED)) {
-        playerDB.SaveChar(d->character);
+        SaveChar(d->character);
         SEND_TO_Q(MENU, d);
         STATE(d) = CON_MENU;
       }
@@ -3412,7 +3421,7 @@ void nanny(struct descriptor_data * d, char *arg)
           do_start(d->character, TRUE);
         }
 
-        playerDB.SaveChar(d->character, load_room_vnum);
+        SaveChar(d->character, load_room_vnum);
       }
       close_socket(d);
       break;
@@ -3430,7 +3439,7 @@ void nanny(struct descriptor_data * d, char *arg)
         strlcpy(char_name, GET_CHAR_NAME(d->character), sizeof(char_name));
         extract_char(d->character, FALSE);
 
-        d->character = playerDB.LoadChar(char_name, false, PC_LOAD_REASON_MAIN_MENU_1);
+        d->character = LoadChar(char_name, false, PC_LOAD_REASON_MAIN_MENU_1);
         d->character->desc = d;
         PLR_FLAGS(d->character).RemoveBits(PLR_JUST_DIED, PLR_DOCWAGON_READY, ENDBIT);
         if (PLR_FLAGGED(d->character, PLR_NEWBIE)) {
@@ -3464,7 +3473,7 @@ void nanny(struct descriptor_data * d, char *arg)
           PLR_FLAGS(d->character).SetBit(PLR_PERCEIVE);
         }
 
-        playerDB.SaveChar(d->character, GET_LOADROOM(d->character));
+        SaveChar(d->character, GET_LOADROOM(d->character));
       }
       // Wipe out various pointers related to game state and recalculate carry weight.
       reset_char(d->character);
@@ -3600,12 +3609,12 @@ void nanny(struct descriptor_data * d, char *arg)
           do_start(d->character, TRUE);
         }
 
-        playerDB.SaveChar(d->character, GET_ROOM_VNUM(&world[load_room_rnum]));
+        SaveChar(d->character, GET_ROOM_VNUM(&world[load_room_rnum]));
         send_to_char(START_MESSG, d->character);
       } else {
         // Save their updated load room.
         if (GET_LOADROOM(d->character) != load_room_vnum && load_room_vnum != GET_LAST_IN(d->character)) {
-          playerDB.SaveChar(d->character, GET_ROOM_VNUM(&world[load_room_rnum]));
+          SaveChar(d->character, GET_ROOM_VNUM(&world[load_room_rnum]));
         }
 
         send_to_char(WELC_MESSG, d->character);

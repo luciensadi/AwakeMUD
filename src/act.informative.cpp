@@ -76,7 +76,10 @@ extern unsigned int get_johnson_overall_max_rep(struct char_data *johnson);
 extern const char *get_crap_count_string(long crap_count, const char *default_color = "^n", bool screenreader = FALSE);
 extern void display_gamba_ledger_leaderboard(struct char_data *ch);
 const char *convert_and_write_string_to_file(const char *str, const char *path);
+
+#ifdef USE_ZONE_HOTLOADING
 extern void hotload_zone(rnum_t zone_rnum);
+#endif
 
 extern int get_weapon_damage_type(struct obj_data* weapon);
 
@@ -888,7 +891,7 @@ void diag_char_to_char(struct char_data * i, struct char_data * ch)
       bool has_metabolic_arrester = FALSE;
 
       if (AFF_FLAGS(i).IsSet(AFF_STABILIZE)) {
-        send_to_char(ch, "%s'%s stabilized for the moment.\r\n", HSSH(i), !HSSH_SHOULD_PLURAL(i) ? "re" : "s");
+        send_to_char(ch, "%s'%s stabilized for the moment.\r\n", capitalize(HSSH(i)), !HSSH_SHOULD_PLURAL(i) ? "re" : "s");
         return;
       }
 
@@ -7174,8 +7177,10 @@ const char *render_room_for_scan(struct char_data *ch, struct room_data *room, s
     return NULL;
   }
 
+#ifdef USE_ZONE_HOTLOADING
   // Ensure it's hotloaded.
   hotload_zone(room->zone);
+#endif
 
   // TODO: Add logic to hide ultrasound-visible-only characters in adjacent silent rooms. Not a big urgency unless/until PvP becomes more of a thing.
 
@@ -8467,26 +8472,6 @@ int crapcount_target(struct char_data *victim, struct char_data *viewer) {
   return total_crap;
 }
 
-// Iterate through all active connections and warn them if their crapcount is high.
-void send_crapcount_warnings() {
-  for (struct descriptor_data *d = descriptor_list; d; d = d->next) {
-    struct char_data *vict = d->original ? d->original : d->character;
-    if (d->idle_ticks < 60 && vict) {
-      int crap_count = crapcount_target(vict, NULL);
-
-      if (crap_count >= CRAP_COUNT_EXTREME) {
-        send_to_char(vict, "(OOC note): ^RYour total item count is excessively high at %d.^n\r\n"
-                           "Please sell or junk unwanted items. If you are unable to do so, staff will assist in reducing your item count.\r\n", crap_count);
-      } else if (crap_count >= CRAP_COUNT_VERY_HIGH) {
-        send_to_char(vict, "(OOC note): ^rYour total item count is very high at ^R%d^r.^n\r\n"
-                           "Please sell or junk unwanted items. If you'd like, staff can assist in reducing your item count.\r\n", crap_count);
-      } else if (crap_count >= CRAP_COUNT_HIGH) {
-        send_to_char(vict, "(OOC note): Your total item count is high at %d. Please consider selling or junking unwanted items to reduce game load.\r\n", crap_count);
-      }
-    }
-  }
-}
-
 ACMD(do_count) {
   skip_spaces(&argument);
   long dummy_cash = 0;
@@ -8507,7 +8492,7 @@ ACMD(do_count) {
   if (!str_cmp(argument, "all")) {
     send_to_char("Counting all of your character's stuff across the game...\r\n", ch);
     crapcount_target(ch, ch);
-    send_to_char("\r\nIf this seems high, note that each individual pocket secretary mail is an item. Deleting old mail etc will help.\r\n", ch);
+    send_to_char("\r\nIf this seems high, note that each individual pocket secretary note is an item. Deleting some will help.\r\n", ch);
     return;
   }
 
@@ -8621,7 +8606,7 @@ ACMD(do_count) {
     }
   }
 
-  send_to_char("\r\nIf any of this seems high, note that each individual pocket secretary mail is an item. Deleting old mail etc will help.\r\n", ch);
+  send_to_char("\r\nIf any of this seems high, note that each individual pocket secretary note is an item. Deleting some etc will help.\r\n", ch);
 }
 
 void write_gsgp_file(int player_count, const char *path) {

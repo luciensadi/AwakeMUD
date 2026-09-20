@@ -36,7 +36,7 @@ public:
   bool HasAnythingSetAtAll() const;
 
   bool AreAnyShared(const Bitfield &test) const;
-  int  GetNumShared(const Bitfield &test) const;
+  // int  GetNumShared(const Bitfield &test) const;
 
 
   bool operator==(const Bitfield &test) const;

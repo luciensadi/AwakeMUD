@@ -82,13 +82,13 @@ void wire_nuyen(struct char_data *ch, int amount, idnum_t character_id, const ch
   // Deduct from the sender (if any). Not a faucet or sink, unless coming from a shop.
   if (ch) {
     GET_BANK_RAW(ch) -= amount;
-    playerDB.SaveChar(ch);
+    SaveChar(ch);
   }
 
   // Add to the receiver. Not a faucet or sink, unless coming from a shop.
   if (targ) {
     GET_BANK_RAW(targ) += amount;
-    playerDB.SaveChar(targ);
+    SaveChar(targ);
   } else {
     snprintf(query_buf, sizeof(query_buf), "UPDATE pfiles SET Bank=Bank+%d WHERE idnum=%ld;", amount, character_id);
     mysql_wrapper(mysql, query_buf);

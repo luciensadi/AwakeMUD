@@ -38,10 +38,7 @@ VTable::section::~section()
   field_size = 0;
 }
 
-int  VTable::NumSections() const
-{
-  return (count_subsections(&top)+1);
-}
+// int  VTable::NumSections() const { return (count_subsections(&top)+1); }
 
 int  VTable::NumSubsections(const char *sect)
 {
@@ -327,6 +324,7 @@ int  VTable::GetIndexInt(const char *sect_name, int n, int defawlt)
   return atoi(ptr->field_tab[n].line);
 }
 
+/*
 const char *VTable::GetIndexString(const char *sect_name, int n,
                                    const char *defawlt)
 {
@@ -338,6 +336,7 @@ const char *VTable::GetIndexString(const char *sect_name, int n,
   return (ptr->field_tab[n].multiline? ptr->field_tab[n].multiline
           : ptr->field_tab[n].line);
 }
+*/
 
 void VTable::separate(const char *where,
                       char sect_name[MAX_SECTION_LENGTH],

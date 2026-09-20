@@ -374,50 +374,6 @@ void attack_random_player(struct char_data *mob, struct char_data *boss)
     }
 }
 
-int summon_mob(struct char_data *ch, int vnum, int number)
-{
-  struct char_data *tch;
-  int num = 0, rnum, total = 0;
-
-  if (!ch || !FIGHTING(ch) || (rnum = real_mobile(vnum)) < 0)
-    return 0;
-
-  for (tch = ch->in_room->people; tch; tch = tch->next_in_room)
-    if (GET_MOB_VNUM(tch) == vnum && GET_POS(tch) > POS_SLEEPING &&
-        !FIGHTING(tch))
-    {
-      num++;
-      total++;
-      if (!MOB_FLAGGED(tch, MOB_AGGRESSIVE))
-        set_fighting(tch, FIGHTING(ch));
-      else
-        attack_random_player(tch, ch);
-    }
-
-  number = MIN(number, mob_index[rnum].number - num);
-
-  // since it is necessary, find and summon the mob(s)
-  global_a_character_was_extracted = false;
-  for (tch = character_list; !global_a_character_was_extracted && tch && number > 0; tch = tch->next_in_character_list)
-    if (GET_MOB_VNUM(tch) == vnum && ch->in_room != tch->in_room &&
-        !FIGHTING(tch) && GET_POS(tch) > POS_SLEEPING)
-    {
-      number--;
-      total++;
-      act("You have been summoned by $N.", FALSE, tch, 0, ch, TO_CHAR);
-      act("$n suddenly vanishes.", TRUE, tch, 0, 0, TO_ROOM);
-      char_from_room(tch);
-      char_to_room(tch, ch->in_room);
-      act("$n has arrived.", TRUE, tch, 0, 0, TO_ROOM);
-      if (!MOB_FLAGGED(tch, MOB_AGGRESSIVE))
-        set_fighting(tch, FIGHTING(ch));
-      else
-        attack_random_player(tch, ch);
-    }
-
-  return total;
-}
-
 int load_mob(struct char_data *ch, int vnum, int number, char *message)
 {
   struct char_data *mob;
@@ -4335,9 +4291,9 @@ void process_auth_room(struct char_data *ch) {
     int amount = ((int) GET_NUYEN(ch) / 5000) * 5000;
     add_cash_to_housing_card(ch, amount, FALSE);
     send_to_char(ch, "You receive a housing card with your remaining %d nuyen on it.\r\n", amount);
-    // Clear the rest, it can't be kept.
-    GET_NUYEN_RAW(ch) = 0;
   }
+  // Clear the rest, it can't be kept.
+  GET_NUYEN_RAW(ch) = 0;
 
   if (GET_BANK(ch)) {
     mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: %s (%ld) ended up with %d banked nuyen after chargen.", GET_CHAR_NAME(ch), GET_IDNUM(ch), GET_BANK(ch));
@@ -4345,8 +4301,8 @@ void process_auth_room(struct char_data *ch) {
       int amount = ((int) GET_BANK(ch) / 5000) * 5000;
       add_cash_to_housing_card(ch, amount, FALSE);
       send_to_char(ch, "You receive a housing card with your remaining %d banked nuyen on it.\r\n", amount);
-      GET_BANK_RAW(ch) = 0;
     }
+    GET_BANK_RAW(ch) = 0;
   }
 
   char_from_room(ch);
@@ -4424,7 +4380,7 @@ void process_auth_room(struct char_data *ch) {
   }
 #endif
 
-  playerDB.SaveChar(ch);
+  SaveChar(ch);
 
   // Make them look.
   // if (!PRF_FLAGGED(ch, PRF_SCREENREADER))

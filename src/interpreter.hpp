@@ -60,6 +60,7 @@ void    skip_spaces(char **string);
 char    *delete_doubledollar(char *string);
 void    replace_word(const char *input, char *output, size_t output_size, const char *replace_from, const char *replace_to);
 std::optional<std::vector<const char *>> argparse(const char *input, std::initializer_list<const char *> fill_words, struct char_data *ch);
+int     special(struct char_data * ch, int cmd, char *arg);
 
 struct command_info
 {

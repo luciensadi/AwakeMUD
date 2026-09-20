@@ -1033,16 +1033,6 @@ bool has_cyberweapon(struct char_data *ch)
   return 0;
 }
 
-/* log a death trap hit */
-void log_death_trap(struct char_data *ch)
-{
-  char buf[150];
-
-  snprintf(buf, sizeof(buf), "%s hit DeathTrap #%ld (%s)", GET_CHAR_NAME(ch),
-           GET_ROOM_VNUM(ch->in_room), GET_ROOM_NAME(ch->in_room));
-  mudlog(buf, ch, LOG_DEATHLOG, TRUE);
-}
-
 void log(const char *str)
 {
   time_t ct = time(0);
@@ -1561,15 +1551,6 @@ char *buf_mod(char *rbuf, size_t rbuf_len, const char *name, int bonus)
   else
     snprintf(rbuf, rbuf_len, "%s%s %d", prepend_comma ? ", " : "", name, bonus);
   rbuf += strlen(rbuf);
-  return rbuf;
-}
-
-char *buf_roll(char *rbuf, size_t rbuf_len, const char *name, int bonus)
-{
-  if (!rbuf)
-    return rbuf;
-  rbuf += strlen(rbuf);
-  snprintf(rbuf, rbuf_len, " [%s %d]", name, bonus);
   return rbuf;
 }
 
@@ -2925,7 +2906,7 @@ struct obj_data *find_workshop(struct char_data *ch, int type)
     return ch->in_room->best_workshop[type];
   }
 
-  if (ch->in_veh) {
+  else if (ch->in_veh) {
     // Iterate through vehicle's contents and find the best candidate.
     for (struct obj_data *o = ch->in_veh->contents; o; o = o->next_content)
     {
@@ -2939,15 +2920,23 @@ struct obj_data *find_workshop(struct char_data *ch, int type)
           // Jackpot! Facilities are the best option, so we can terminate early and return this item.
           return o;
         }
-        else if (GET_WORKSHOP_GRADE(o) == TYPE_WORKSHOP && GET_WORKSHOP_IS_SETUP(o))
+        else if (GET_WORKSHOP_GRADE(o) == TYPE_WORKSHOP && GET_WORKSHOP_IS_SETUP(o)) {
+          // It's a workshop, so keep iterating in case there's a facility (slim chance, but why not)
           workshop = o;
-        // If we got here, it's either a kit, or a workshop that's not set up.
+          continue;
+        }
+        // If we got here, it's either a kit, or an invalid workshop (wrong type, not set up). Do nothing.
       }
     }
+
+    // Return workshop (which is NULL if no workshop was found).
+    return workshop;
   }
 
-  // Return workshop (which is NULL if no workshop was found).
-  return workshop;
+  else {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: %s is looking for a workshop, but is neither in a vehicle nor room!", GET_CHAR_NAME(ch));
+    return nullptr;
+  }
 }
 #undef IS_KIT
 
@@ -4385,7 +4374,7 @@ void set_character_skill(struct char_data *ch, int skill_num, int new_value, boo
   SET_SKILL(ch, skill_num, new_value);
 
   if (save_immediately)
-    playerDB.SaveChar(ch);
+    SaveChar(ch);
 }
 
 // Per SR3 core p98-99.
@@ -6298,14 +6287,6 @@ bool room_accessible_to_vehicle_piloted_by_ch(struct room_data *room, struct veh
     return FALSE;
   }
 
-#ifdef DEATH_FLAGS
-  if (ROOM_FLAGGED(room, ROOM_DEATH))
-  {
-    SEND_MESSAGE(CANNOT_GO_THAT_WAY);
-    return FALSE;
-  }
-#endif
-
   // Prevent aircraft from traveling anywhere they're not supposed to be.
   if (veh_is_aircraft(veh) && !ROOM_FLAGGED(room, ROOM_AIRCRAFT_CAN_DRIVE_HERE))
   {
@@ -8137,7 +8118,7 @@ struct char_data *find_or_load_ch(const char *name, idnum_t idnum, const char *c
     load_name = get_player_name(idnum);
   }
 
-  struct char_data *loaded = playerDB.LoadChar(load_name, FALSE, PC_LOAD_REASON_FIND_OR_LOAD_CHAR);
+  struct char_data *loaded = LoadChar(load_name, FALSE, PC_LOAD_REASON_FIND_OR_LOAD_CHAR);
 
   if (!loaded)
   {
@@ -8940,7 +8921,7 @@ bool transfer_credstick_contents_to_bank(struct obj_data *credstick, struct char
     // Update the bank and stick, then save.
     gain_bank(ch, GET_ITEM_MONEY_VALUE(credstick), NUYEN_INCOME_CREDSTICK_ACTIVATION);
     GET_ITEM_MONEY_VALUE(credstick) = 0;
-    playerDB.SaveChar(ch);
+    SaveChar(ch);
 
     return TRUE;
   }
@@ -9876,7 +9857,7 @@ bool spend_syspoints(struct char_data *ch, int amount, bool use_restricted, cons
     GET_UNRESTRICTED_SYSTEM_POINTS(ch) -= amount;
 
     // Save it.
-    playerDB.SaveChar(ch);
+    SaveChar(ch);
 
     return true;
   }
@@ -9916,7 +9897,7 @@ bool spend_syspoints(struct char_data *ch, int amount, bool use_restricted, cons
                     for_what);
 
     // Save it.
-    playerDB.SaveChar(ch);
+    SaveChar(ch);
 
     return true;
   }
@@ -9948,7 +9929,7 @@ bool gain_syspoints(struct char_data *ch, int amount, bool is_restricted, const 
   }
 
   // Save it.
-  playerDB.SaveChar(ch);
+  SaveChar(ch);
 
   return true;
 }

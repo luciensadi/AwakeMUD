@@ -246,13 +246,13 @@ const struct totem_bonus_t totem_bonuses[NUM_TOTEMS] = {
 /*  5 */ { { 0, 0, 2, 0, 0, 0}, { 2, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },  /* Dog */
 /*  6 */ { { 0,-1, 2, 0, 0, 0}, { 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0} },  /* Dolphin */
 /*  7 */ { { 0, 0, 2, 0, 0, 0}, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 0, 0} },  /* Eagle */
-/*  8 */ { { 0, 2, 0, 0,-1, 0}, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },  /* Gator */
+/*  8 */ { { 0, 2, 2, 0,-1, 0}, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },  /* Gator */
 /*  9 */ { { 0, 2, 0,-1, 0, 0}, { 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0} },  /* Lion */
 /* 10 */ { { 0,-2, 2, 2, 0, 0}, { 2, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },  /* Mouse */
 //          na CO DE HE IL MA    HE CI FI FO DE MO RI SE PR MI ST WI LA SW
 /* 11 */ { { 0, 0, 0, 0, 0, 0}, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },  /* Owl */
 /* 12 */ { { 0,-1, 0, 0, 0, 2}, { 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },  /* Raccoon */
-/* 13 */ { {-1, 0, 2, 0, 2, 0}, { 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },  /* Rat */
+/* 13 */ { { 0,-1, 2, 0, 2, 0}, { 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },  /* Rat */
 /* 14 */ { { 0, 0, 0, 0, 0, 2}, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 0, 0} },  /* Raven */
 /* 15 */ { { 0, 2, 2, 0, 0, 0}, { 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0} },  /* Shark */
 /* 16 */ { { 0, 0, 2, 2, 2, 0}, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },  /* Snake */
@@ -268,14 +268,14 @@ const struct totem_bonus_t totem_bonuses[NUM_TOTEMS] = {
 /* 25 */ { { 0, 2, 0, 0, 1, 0}, { 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0} },  /* Crocodile */
 /* 26 */ { {0,-99, 1, 2, 0, 0}, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0} },  /* Dove */
 /* 27 */ { { 0,-2, 0, 1, 0, 0}, { 0, 0, 0, 2, 2, 2, 0, 0, 2, 0, 0, 0, 0, 0} },  /* Elk */
-/* 28 */ { { 0,-1, 2, 0, 0, 0}, { 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0, 0, 2, 2} },  /* Fish */
+/* 28 */ { { 0,-1, 2, 0, 0, 0}, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },  /* Fish */
 /* 29 */ { { 0,-1, 0, 0, 2, 0}, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },  /* Fox */
 /* 30 */ { { 0,-1, 0, 0, 0, 0}, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },  /* Gecko - special spells, see switch */
 //          na CO DE HE IL MA    HE CI FI FO DE MO RI SE PR MI ST WI LA SW
 /* 31 */ { { 0, 1, 2, 0, 0, 0}, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },  /* Goose */
 /* 32 */ { { 0, 0, 0, 2, 0, 0}, { 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0} },  /* Horse */
 /* 33 */ { { 0, 2, 0,-1, 0, 0}, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },  /* Hyena */
-/* 34 */ { {-1, 0, 2, 0, 2, 0}, { 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0} },  /* Jackal */
+/* 34 */ { { 0,-0, 2, 0, 2, 0}, { 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0} },  /* Jackal */
 /* 35 */ { { 0, 0, 2,-1, 0, 0}, { 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },  /* Jaguar */
 /* 36 */ { { 0, 2, 0, 2, 0, 0}, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },  /* Leopard */
 /* 37 */ { { 0, 0, 0, 2, 0, 0}, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },  /* Lizard */
@@ -298,7 +298,7 @@ const struct totem_bonus_t totem_bonuses[NUM_TOTEMS] = {
 /* 52 */ { { 0, 0, 0, 0, 2, 0}, { 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },  /* Seductress */
 /* 53 */ { { 0, 0, 0, 0, 2, 0}, { 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0, 0, 2, 2} },  /* Siren */
 /* 54 */ { { 0, 0, 0, 2, 0, 0}, { 2, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },  /* Oak */
-/* 55 */ { { 0,-1, 2, 0, 2, 0}, { 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0} },  /* Moon */
+/* 55 */ { { 0,-1, 1, 0, 2, 0}, { 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1} },  /* Moon */
 /* 56 */ { { 0, 0, 0, 0,-1, 2}, { 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0} },  /* Mountain */
 /* 57 */ { { 0, 0, 0, 2, 0, 0}, { 2, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0} },  /* Sea */
 /* 58 */ { { 0,-1, 0, 2, 0, 0}, { 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0} },  /* Stream */
@@ -365,9 +365,13 @@ void totem_bonus(struct char_data *ch, int action, int type, int &target, int &s
         break;
       case TOTEM_MOON:
       case TOTEM_SEA:
-      case TOTEM_SIREN:
         // Bonus to manipulation applies only to transformation manips.
         if (category == MANIPULATION && SPELL_IS_TRANSFORMATION_MANIPULATION(spell))
+          skill += 2;
+        break;
+      case TOTEM_SIREN:
+        // Bonus to manipulation applies only to control manips (NERPs).
+        if (category == MANIPULATION && SPELL_IS_CONTROL_MANIPULATION(spell))
           skill += 2;
         // TN penalty when in combat with more than one foe. Should technically include people shooting from around you too.
         if (ch->in_room) {
@@ -392,7 +396,7 @@ void totem_bonus(struct char_data *ch, int action, int type, int &target, int &s
 
     switch (GET_TOTEM(ch)) {
     case TOTEM_LEOPARD:
-      if (time_info.hours < 6 || time_info.hours > 19)
+      if (GET_ASPECT(ch) == ASPECT_FULL && (time_info.hours < 6 || time_info.hours > 19))
         skill += 2;
       break;
     case TOTEM_LIZARD:
@@ -407,13 +411,15 @@ void totem_bonus(struct char_data *ch, int action, int type, int &target, int &s
         skill += 2;
       break;
     case TOTEM_SUN:
-      {
-        if (CH_IN_SUNLIGHT(ch)) {
-          skill += 2;
-        }
-        // +2 TN for conjuring at night.
-        else if (time_info.hours < 6 || time_info.hours > 19) {
-          target += 2;
+      if (GET_ASPECT(ch) == ASPECT_FULL) {
+        {
+          if (CH_IN_SUNLIGHT(ch)) {
+            skill += 2;
+          }
+          // +2 TN for conjuring at night.
+          else if (time_info.hours < 6 || time_info.hours > 19) {
+            target += 2;
+          }
         }
       }
       break;
@@ -537,6 +543,7 @@ void elemental_fulfilled_services(struct char_data *ch, struct char_data *mob, s
   if (spirit->services < 1 && !(MOB_FLAGGED(mob, MOB_SPIRITGUARD) || MOB_FLAGGED(mob, MOB_STUDY) || GET_SUSTAINED(mob) || GET_SUSTAINED_NUM(mob) || CH_IN_COMBAT(mob)))
   {
     send_to_char(ch, "Its services fulfilled, %s departs to the metaplanes.\r\n", CAP(GET_NAME(mob)));
+    GET_ELEMENTALS_DIRTY_BIT(ch) = TRUE;
     delete_spirit_or_elemental_from_entry(ch, spirit);
   }
 }
@@ -2450,8 +2457,8 @@ void raw_cast_manipulation_spell(struct char_data *ch, struct char_data *vict, i
             send_to_char("The acid splashes against you causing a mild burning sensation.\r\n", vict);
           } else {
             act("The acid splashes on $n, but $e doesn't seem to flinch.", FALSE, vict, 0, ch, TO_ROOM);
-            send_to_char(vict, "You are splashed by the acid, but %s\r\n",
-                         is_nbc_immune ? "it just rolls off your chem-sealed suit" : "it causes nothing more than a moment's irritation.");
+            send_to_char(vict, "You are splashed by the acid, but %s.\r\n",
+                         is_nbc_immune ? "it just rolls off your chem-sealed suit" : "it causes nothing more than a moment's irritation");
           }
 
           if ((IS_NPC(ch) && number(0, GET_MAG(ch) / 500)) || IS_NPC(vict)) {
@@ -3376,13 +3383,18 @@ ACMD(do_contest)
   int casuc = success_test(caskill, tn);
   struct spirit_data *temp;
   if (chsuc < 1 && casuc < 1) {
-    for (struct spirit_data *sdata = GET_SPIRIT(caster); sdata; sdata = sdata->next)
+    for (struct spirit_data *sdata = GET_SPIRIT(caster); sdata; sdata = sdata->next) {
       if (sdata->id == GET_GRADE(mob)) {
         REMOVE_FROM_LIST(sdata, GET_SPIRIT(caster), next);
         delete sdata;
         break;
       }
-    GET_ELEMENTALS_DIRTY_BIT(ch) = TRUE;
+    }
+    
+    // Cleanup
+    GET_ELEMENTALS_DIRTY_BIT(caster) = TRUE;
+    GET_NUM_SPIRITS(caster)--;
+
     if (GET_MOB_VNUM(mob) < 25 || GET_MOB_VNUM(mob) > 28) {
       act("$n senses an opportunity and vanishes!", TRUE, mob, 0, 0, TO_ROOM);
       extract_char(mob);
@@ -3391,10 +3403,6 @@ ACMD(do_contest)
       act("$n becomes uncontrolled!", TRUE, mob, 0, 0, TO_ROOM);
       GET_ACTIVE(mob) = 0;
     }
-    if (conjuring_drain(caster, GET_LEVEL(mob)))
-      return;
-    if (conjuring_drain(ch, GET_LEVEL(mob)))
-      return;
   } else if (chsuc > casuc) {
     send_to_char(ch, "You steal control of %s!\r\n", GET_NAME(mob));
     snprintf(buf, sizeof(buf), "$n steals control of %s!", GET_NAME(mob));
@@ -3412,17 +3420,19 @@ ACMD(do_contest)
         break;
       }
     GET_ACTIVE(mob) = GET_IDNUM(ch);
-    if (conjuring_drain(caster, GET_LEVEL(mob)))
-      return;
-    if (conjuring_drain(ch, GET_LEVEL(mob)))
-      return;
   } else {
     send_to_char("You fail to gain control!\r\n", ch);
     snprintf(buf, sizeof(buf), "$n tries to steal control of %s!", GET_NAME(mob));
     act(buf, FALSE, ch, 0, caster, TO_VICT);
-    if (conjuring_drain(ch, GET_LEVEL(mob)))
-      return;
   }
+
+  // We want to apply drain damage to both the caster and the ch even if one or both dies, so we do this janky method of damaging and returning.
+  if (conjuring_drain(caster, GET_LEVEL(mob)))
+    caster = nullptr;
+  if (conjuring_drain(ch, GET_LEVEL(mob)))
+    ch = nullptr;
+  if (!ch || !caster)
+    return;
 }
 ACMD(do_unbond)
 {
@@ -3770,10 +3780,11 @@ ACMD(do_release)
           send_to_char(ch, "You release %s from its obligations and it departs to the metaplanes.\r\n",
                        (real_mob = real_mobile(elements[spirit->type].vnum)) >= 0 ? GET_NAME(&mob_proto[real_mob]) : "an elemental");
         }
-        else
+        else {
           send_to_char(ch, "You release %s from its obligations and it departs to the metaplanes.\r\n",
                        (real_mob = real_mobile(spirits[spirit->type].vnum)) >= 0 ? GET_NAME(&mob_proto[real_mob]) : "a spirit");
-
+        }
+        GET_ELEMENTALS_DIRTY_BIT(ch) = TRUE;
         delete_spirit_or_elemental_from_entry(ch, spirit);
         return;
       }
@@ -3903,7 +3914,6 @@ ACMD(do_conjure)
     // message was sent in function
     return;
   }
-  FAILURE_CASE_PRINTF(GET_NUM_SPIRITS(ch) >= GET_REAL_CHA(ch), "You're limited in the number of %s you can have by your unaugmented charisma.", GET_TRADITION(ch) == TRAD_HERMETIC ? "elementals" : "spirits");
   if (ch->in_veh) {
     send_to_char("There is not enough room to conjure in here.\r\n", ch);
     return;
@@ -6062,6 +6072,8 @@ bool can_select_metamagic(struct char_data *ch, int i)
         return GET_METAMAGIC(ch, i) % 2 == 0;
       case META_MASKING:
         return GET_METAMAGIC(ch, i) == 0;
+      case META_DIVINING:
+        return GET_METAMAGIC(ch, i) == 0;
       default:
         return FALSE;
     }
@@ -6883,12 +6895,11 @@ void delete_spirit_or_elemental_from_entry(struct char_data *ch, struct spirit_d
   delete sdata;
 }
 
-void cleanup_excess_elementals(struct char_data *ch) {
-  if (GET_TRADITION(ch) == TRAD_HERMETIC && GET_SPIRIT(ch)) {
-    if (GET_NUM_SPIRITS(ch) <= GET_REAL_CHA(ch))
-      return;
-    
-    while (GET_NUM_SPIRITS(ch) > GET_REAL_CHA(ch)) {
+bool cleanup_excess_elementals(struct char_data *ch) {
+  if (ch->desc && GET_SPIRIT(ch) && GET_NUM_SPIRITS(ch) > GET_CHA(ch)){
+    send_to_char(ch, "You realize with a dawning sense of horror that your charisma is no longer high enough to allow you to control so many %s, and you quickly set about releasing the weakest.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elementals" : "spirits");
+
+    while (GET_NUM_SPIRITS(ch) > GET_CHA(ch)) {
       struct spirit_data *lowest_force = GET_SPIRIT(ch);
       // Find the excess elemental with the lowest force (and lowest service count in case of a tie)
       for (struct spirit_data *itr = GET_SPIRIT(ch)->next; itr; itr = itr->next) {
@@ -6896,23 +6907,30 @@ void cleanup_excess_elementals(struct char_data *ch) {
           lowest_force = itr;
         }
       }
-      
+
       // Log and clean up.
-      mudlog_vfprintf(ch, LOG_SYSLOG, "%s has too many bound elementals (qty %d > cha %d), so popping a force-%d %s elemental (%d service%s).",
+      mudlog_vfprintf(ch, LOG_SYSLOG, "%s has too many bound %s (qty %d > cha %d), so popping a force-%d %s %s (%d service%s).",
                       GET_CHAR_NAME(ch),
+                      GET_TRADITION(ch) == TRAD_HERMETIC ? "elementals" : "spirits",
                       GET_NUM_SPIRITS(ch),
-                      GET_REAL_CHA(ch),
+                      GET_CHA(ch),
                       lowest_force->force,
-                      CAP(elements[lowest_force->type].name),
+                      CAP((GET_TRADITION(ch) == TRAD_HERMETIC ? elements[lowest_force->type].name : spirits[lowest_force->type].name)),
+                      GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit",
                       lowest_force->services,
                       lowest_force->services == 1 ? "" : "s");
 
+      send_to_char(ch, "You release a force-%d %s %s from your services.\r\n",
+                   lowest_force->force,
+                   CAP((GET_TRADITION(ch) == TRAD_HERMETIC ? elements[lowest_force->type].name : spirits[lowest_force->type].name)),
+                   GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
+
       delete_spirit_or_elemental_from_entry(ch, lowest_force);
     }
+    GET_ELEMENTALS_DIRTY_BIT(ch) = TRUE;
+    SaveChar(ch, GET_LOADROOM(ch));
+
+    return true;
   }
-
-  GET_ELEMENTALS_DIRTY_BIT(ch) = TRUE;
-  playerDB.SaveChar(ch, GET_LOADROOM(ch));
+  return false;
 }
-
-// TODO: debug why a character showed up twice in the character list: maybe write a function to add a char to the list, scanning the whole list for duplicates in the process

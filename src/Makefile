@@ -81,7 +81,7 @@ ifeq ($(UNAME_S),Darwin)  # OSX
   OS_LDLIBS   = -lcurl -lsodium
 else ifeq ($(UNAME_S),Linux)  # Linux
   ifeq ($(CI),true)
-    OS_CPPFLAGS    = -Dlinux -DNOCRYPT
+    OS_CPPFLAGS    = -Dlinux -DNOCRYPT -DADD_SECRET_STUBS
     OS_LDFLAGS     = 
     OS_LDLIBS      = -lcrypt -lnsl -lcurl
 		# Suppress all warnings during the CI build process.
@@ -104,7 +104,13 @@ LDFLAGS  = $(BASE_LDFLAGS) $(OS_LDFLAGS)
 LDLIBS   = $(BASE_LDLIBS) $(OS_LDLIBS)
 
 # Further setup (identify source files etc)
-sourcefiles   = $(wildcard *.cpp activities/*.cpp)
+sourcefiles   = $(wildcard activities/*.cpp *.cpp)
+
+# If secrets.cpp exists, exclude secrets_stub.cpp from the build
+ifneq ($(wildcard secrets.cpp),)
+  sourcefiles := $(filter-out secrets_stub.cpp,$(sourcefiles))
+endif
+
 objfiles      = $(sourcefiles:.cpp=.o)
 test_objfiles = $(sourcefiles:.cpp=.test.o) # Separate objects for testing
 depfiles      = $(sourcefiles:.cpp=.d) $(sourcefiles:.cpp=.test.d)

@@ -15,7 +15,6 @@ public:
   int PrintList(struct char_data *ch, const char *arg, bool override_vis_check=FALSE);
   int PrintBelongings(struct char_data *ch);
   int CountObj(int num);
-  int CountPlayerCorpses();
   struct obj_data *FindObj(int num);
   struct obj_data *FindObj(struct char_data *ch, char *name, int num);
   void UpdateObjs(const struct obj_data *proto, int rnum);

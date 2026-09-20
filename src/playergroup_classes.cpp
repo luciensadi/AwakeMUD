@@ -498,7 +498,7 @@ void Playergroup::add_member(struct char_data *ch) {
   GET_PGROUP_MEMBER_DATA(ch)->title = str_dup("Member");
 
   // Save the character.
-  playerDB.SaveChar(ch);
+  SaveChar(ch);
 
   // Log the character's joining.
   // TODO: Should we conceal this info in a secret group?
@@ -542,7 +542,7 @@ void Playergroup::remove_member(struct char_data *ch) {
   GET_PGROUP_MEMBER_DATA(ch) = NULL;
 
   // Save the character.
-  playerDB.SaveChar(ch);
+  SaveChar(ch);
 }
 
 void Playergroup::set_zone(unsigned long znum) {

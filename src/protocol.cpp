@@ -135,7 +135,7 @@ static const char s_Gauge5[]  = "\005\002Opponent\002darkred\002OPPONENT_HEALTH\
 #define NUMBER_IN_THE_RANGE(x,y)  FALSE, TRUE,  FALSE, FALSE,  x,  y,  0, NULL
 #define BOOLEAN_SET_TO(x)       FALSE, TRUE,  FALSE, FALSE,  0,  1,  x, NULL
 #define STRING_WITH_LENGTH_OF(x,y) TRUE,  TRUE,  FALSE, FALSE,  x,  y,  0, NULL
-#define STRING_WRITE_ONCE(x,y)    TRUE,  TRUE,  TRUE,  FALSE, -1, -1,  0, NULL
+#define STRING_WRITE_ONCE(x,y)    TRUE,  TRUE,  TRUE,  FALSE, x, y,  0, NULL
 #define STRING_GUI(x)          TRUE,  FALSE, FALSE, TRUE,  -1, -1,  0, x
 
 static variable_name_t VariableNameTable[eMSDP_MAX+1] =
@@ -392,7 +392,12 @@ void ProtocolInput( descriptor_t *apDescriptor, char *apData, int aSize, char *a
   int IacIndex = 0;
   int Index;
 
-  protocol_t *pProtocol = apDescriptor ? apDescriptor->pProtocol : NULL;
+  if (!apDescriptor) {
+    mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Got ProtocolInput with a NULL apDescriptor!");
+    return;
+  }
+
+  protocol_t *pProtocol = apDescriptor->pProtocol;
 
   for ( Index = 0; Index < aSize; ++Index )
   {
@@ -404,7 +409,7 @@ void ProtocolInput( descriptor_t *apDescriptor, char *apData, int aSize, char *a
     }
 
     /* IAC IAC is treated as a single value of 255 */
-    if ( apData[Index] == (char)IAC && apData[Index+1] == (char)IAC )
+    if ( Index + 1 < aSize && apData[Index] == (char)IAC && apData[Index+1] == (char)IAC )
     {
       if ( pProtocol->bIACMode )
         IacBuf[IacIndex++] = (char)IAC;
@@ -415,7 +420,7 @@ void ProtocolInput( descriptor_t *apDescriptor, char *apData, int aSize, char *a
     else if ( pProtocol->bIACMode )
     {
       /* End subnegotiation. */
-      if ( apData[Index] == (char)IAC && apData[Index+1] == (char)SE )
+      if ( Index + 1 < aSize && apData[Index] == (char)IAC && apData[Index+1] == (char)SE )
       {
         Index++;
         pProtocol->bIACMode = FALSE;
@@ -427,7 +432,7 @@ void ProtocolInput( descriptor_t *apDescriptor, char *apData, int aSize, char *a
       else
         IacBuf[IacIndex++] = apData[Index];
     }
-    else if ( apData[Index] == (char)27 && apData[Index+1] == '[' &&
+    else if ( Index + 3 < aSize && apData[Index] == (char)27 && apData[Index+1] == '[' &&
       isdigit(apData[Index+2]) && apData[Index+3] == 'z' )
     {
       char MXPBuffer [1024];
@@ -513,7 +518,7 @@ void ProtocolInput( descriptor_t *apDescriptor, char *apData, int aSize, char *a
     }
     else /* In-band command */
     {
-      if ( apData[Index] == (char)IAC )
+      if ( Index + 1 < aSize && apData[Index] == (char)IAC )
       {
         switch ( apData[Index+1] )
         {
@@ -526,8 +531,10 @@ void ProtocolInput( descriptor_t *apDescriptor, char *apData, int aSize, char *a
           case (char)DONT:
           case (char)WILL:
           case (char)WONT:
-            PerformHandshake( apDescriptor, apData[Index+1], apData[Index+2] );
-            Index += 2;
+            if (Index + 2 < aSize) {
+              PerformHandshake( apDescriptor, apData[Index+1], apData[Index+2] );
+              Index += 2;
+            }
             break;
 
           case (char)IAC: /* Two IACs count as one. */
@@ -1333,6 +1340,7 @@ void MSDPUpdate( descriptor_t *apDescriptor )
   }
 }
 
+/*
 void MSDPFlush( descriptor_t *apDescriptor, variable_t aMSDP )
 {
   if ( aMSDP > eMSDP_NONE && aMSDP < eMSDP_MAX )
@@ -1347,6 +1355,7 @@ void MSDPFlush( descriptor_t *apDescriptor, variable_t aMSDP )
     }
   }
 }
+*/
 
 void MSDPSend( descriptor_t *apDescriptor, variable_t aMSDP )
 {
@@ -1547,6 +1556,7 @@ void MSDPSetString( descriptor_t *apDescriptor, variable_t aMSDP, const char *ap
   }
 }
 
+/*
 void MSDPSetTable( descriptor_t *apDescriptor, variable_t aMSDP, const char *apValue )
 {
   protocol_t *pProtocol = apDescriptor ? apDescriptor->pProtocol : NULL;
@@ -1555,7 +1565,7 @@ void MSDPSetTable( descriptor_t *apDescriptor, variable_t aMSDP, const char *apV
   {
     if ( *apValue == '\0' )
     {
-      /* It's easier to call MSDPSetString if the value is empty */
+      // It's easier to call MSDPSetString if the value is empty
       MSDPSetString(apDescriptor, aMSDP, apValue);
     }
     else if ( VariableNameTable[aMSDP].bString )
@@ -1564,7 +1574,7 @@ void MSDPSetTable( descriptor_t *apDescriptor, variable_t aMSDP, const char *apV
       const char MsdpTableStop[]  = { (char)MSDP_TABLE_CLOSE, '\0' };
 
       const size_t pTableSize = strlen(apValue) + 3;
-      char *pTable = new char[pTableSize]; /* 3: START, STOP, NUL */
+      char *pTable = new char[pTableSize]; // 3: START, STOP, NUL
 
       strlcpy(pTable, MsdpTableStart, pTableSize);
       strlcat(pTable, apValue, pTableSize);
@@ -1576,14 +1586,16 @@ void MSDPSetTable( descriptor_t *apDescriptor, variable_t aMSDP, const char *apV
         pProtocol->pVariables[aMSDP]->pValueString = pTable;
         pProtocol->pVariables[aMSDP]->bDirty = TRUE;
       }
-      else /* Just discard the table, we've already got one */
+      else // Just discard the table, we've already got one
       {
         delete [] pTable;
       }
     }
   }
 }
+*/
 
+/*
 void MSDPSetArray( descriptor_t *apDescriptor, variable_t aMSDP, const char *apValue )
 {
   protocol_t *pProtocol = apDescriptor ? apDescriptor->pProtocol : NULL;
@@ -1592,7 +1604,7 @@ void MSDPSetArray( descriptor_t *apDescriptor, variable_t aMSDP, const char *apV
   {
     if ( *apValue == '\0' )
     {
-      /* It's easier to call MSDPSetString if the value is empty */
+      // It's easier to call MSDPSetString if the value is empty
       MSDPSetString(apDescriptor, aMSDP, apValue);
     }
     else if ( VariableNameTable[aMSDP].bString )
@@ -1601,7 +1613,7 @@ void MSDPSetArray( descriptor_t *apDescriptor, variable_t aMSDP, const char *apV
       const char MsdpArrayStop[]  = { (char)MSDP_ARRAY_CLOSE, '\0' };
 
       const size_t pArrayLen = strlen(apValue) + 3;
-      char *pArray = new char[pArrayLen]; /* 3: START, STOP, NUL */
+      char *pArray = new char[pArrayLen]; // 3: START, STOP, NUL
 
       strlcpy(pArray, MsdpArrayStart, pArrayLen);
       strlcat(pArray, apValue, pArrayLen);
@@ -1613,13 +1625,14 @@ void MSDPSetArray( descriptor_t *apDescriptor, variable_t aMSDP, const char *apV
         pProtocol->pVariables[aMSDP]->pValueString = pArray;
         pProtocol->pVariables[aMSDP]->bDirty = TRUE;
       }
-      else /* Just discard the array, we've already got one */
+      else // Just discard the array, we've already got one
       {
         delete [] pArray;
       }
     }
   }
 }
+*/
 
 /******************************************************************************
  MSSP global functions.
@@ -1637,6 +1650,7 @@ void MSSPSetPlayers( int aPlayers )
  MXP global functions.
  ******************************************************************************/
 
+/*
 const char *MXPCreateTag( descriptor_t *apDescriptor, const char *apTag )
 {
   protocol_t *pProtocol = apDescriptor ? apDescriptor->pProtocol : NULL;
@@ -1648,11 +1662,12 @@ const char *MXPCreateTag( descriptor_t *apDescriptor, const char *apTag )
     snprintf( MXPBuffer, sizeof(MXPBuffer), "\033[1z%s\033[7z", apTag );
     return MXPBuffer;
   }
-  else /* Leave the tag as-is, don't try to MXPify it */
+  else // Leave the tag as-is, don't try to MXPify it
   {
     return apTag;
   }
 }
+*/
 
 void MXPSendTag( descriptor_t *apDescriptor, const char *apTag )
 {
@@ -1695,9 +1710,10 @@ void MXPSendTag( descriptor_t *apDescriptor, const char *apTag )
  Sound global functions.
  ******************************************************************************/
 
+ /*
 void SoundSend( descriptor_t *apDescriptor, const char *apTrigger )
 {
-  const int MaxTriggerLength = 128; /* Used for the buffer size */
+  const int MaxTriggerLength = 128; // Used for the buffer size
 
   if ( apDescriptor != NULL && apTrigger != NULL )
   {
@@ -1707,12 +1723,12 @@ void SoundSend( descriptor_t *apDescriptor, const char *apTrigger )
     {
       if ( pProtocol->bMSDP || pProtocol->bATCP )
       {
-        /* Send the sound trigger through MSDP or ATCP */
+        // Send the sound trigger through MSDP or ATCP
         MSDPSendPair( apDescriptor, "PLAY_SOUND", apTrigger );
       }
       else if ( strlen(apTrigger) <= MaxTriggerLength )
       {
-        /* Use an old MSP-style trigger */
+        // Use an old MSP-style trigger
         size_t length = MaxTriggerLength+10;
         char *pBuffer = new char[length];
         snprintf( pBuffer, length, "\t!SOUND(%s)", apTrigger );
@@ -1722,6 +1738,7 @@ void SoundSend( descriptor_t *apDescriptor, const char *apTrigger )
     }
   }
 }
+*/
 
 /******************************************************************************
  Colour global functions.
@@ -2820,15 +2837,19 @@ static void ExecuteMSDPPair( descriptor_t *apDescriptor, const char *apVariable,
                 !strcmp(apDescriptor->pProtocol->pVariables[i]->pValueString, "Unknown") )
               {
                 /* Store the new value if it's valid */
-                char *pBuffer = new char[VariableNameTable[i].Max+1];
-                int j; /* Loop counter */
+                char *pBuffer = new char[VariableNameTable[i].Max + 1];
+                int j = 0; /* Loop counter */
 
-                for ( j = 0; j < VariableNameTable[i].Max && *apValue != '\0'; ++apValue )
-                {
-                  if ( isprint(*apValue) )
-                    pBuffer[j++] = *apValue;
+                if (VariableNameTable[i].Max <= 0) {
+                  log_vfprintf("ERROR in protocol.cpp: VariableTableName[%d].Max = %d! This will break MSDP parsing. (apValue='%s')", i, VariableNameTable[i].Max, apValue);
+                } else {
+                  for ( j = 0; j < VariableNameTable[i].Max && *apValue != '\0'; ++apValue )
+                  {
+                    if ( isprint(*apValue) )
+                      pBuffer[j++] = *apValue;
+                  }
+                  pBuffer[j++] = '\0';
                 }
-                pBuffer[j++] = '\0';
 
                 if ( j >= VariableNameTable[i].Min )
                 {

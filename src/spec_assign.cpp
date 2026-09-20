@@ -1230,6 +1230,8 @@ void assign_rooms(void)
   ASSIGNROOM(100998, car_dealer);
   ASSIGNROOM(101239, car_dealer);
   ASSIGNROOM(102581, car_dealer);
+  ASSIGNROOM(103502, car_dealer);
+  ASSIGNROOM(103586, car_dealer);
 #endif
 
   /* Mitsuhama */

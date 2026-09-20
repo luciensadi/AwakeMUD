@@ -33,7 +33,14 @@ int complex_form_programs[COMPLEX_FORM_TYPES] = {
   SOFT_SLOW,  
   SOFT_TRACK,
   SOFT_SHIELD,
-  SOFT_RADIO
+  SOFT_RADIO,
+  SOFT_BLACK_HAMMER,
+  SOFT_EROSION,
+  SOFT_HOG,
+  SOFT_KILLJOY,
+  SOFT_RELOCATE,
+  SOFT_REMOTE_CONTROL,
+  SOFT_STEAMROLLER
 };
 
 int get_otaku_cha(struct char_data *ch) {

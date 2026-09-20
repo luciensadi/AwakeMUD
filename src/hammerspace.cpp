@@ -18,6 +18,8 @@
   alternatively, make identical tables with different names for these uses. Would probably be faster.
 */
 
+#ifdef USE_HAMMERSPACE
+
 #include <mysql/mysql.h>
 #include <unordered_map>
 #include <vector>
@@ -281,3 +283,5 @@ void sell_all_stowed_items(struct char_data *ch, rnum_t shop_nr, struct char_dat
   
   send_to_char(ch, "You sell %d item%s for %d nuyen.\r\n", total_sold_items, total_sold_items == 1 ? "" : "s", total_sell_price);
 }
+
+#endif
