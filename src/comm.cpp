@@ -78,6 +78,7 @@
 #include "factions.hpp"
 #include "player_exdescs.hpp"
 #include "gmcp.hpp"
+#include "activities/classes.hpp"
 
 const unsigned perfmon::kPulsePerSecond = PASSES_PER_SEC;
 
@@ -95,6 +96,8 @@ extern char help[];
 // act.wizard.cpp
 extern idnum_t global_copyover_enqueued_by_idnum;
 extern time_t global_copyover_override_quests_at;
+
+extern void handle_menu_frames(struct descriptor_data *d, char *arg);
 
 #ifdef USE_PRIVATE_CE_WORLD
 extern void do_secret_ticks(int pulse);
@@ -976,6 +979,8 @@ void game_loop(int mother_desc)
             string_add(d, comm);
           } else if (d->showstr_point) {     /* reading something w/ pager   */
             show_string(d, comm);
+          } else if (!d->menu_frame_stack.empty()) {
+            handle_menu_frames(d, comm);
           } else if (d->connected != CON_PLAYING) {  /* in menus, etc.       */
             nanny(d, comm);
           } else {                          /* else: we're playing normally */
@@ -2511,6 +2516,13 @@ void free_editing_structs(descriptor_data *d, int state)
     }
     d->edit_obj = NULL;
   }
+
+  if (d->edit_activity) { delete d->edit_activity; d->edit_activity = NULL; }
+  if (d->edit_check) { delete d->edit_check; d->edit_check = NULL; }
+  if (d->edit_effect) { delete d->edit_effect; d->edit_effect = NULL; }
+  if (d->edit_outcome) { delete d->edit_outcome; d->edit_outcome = NULL; }
+  if (d->edit_option) { delete d->edit_option; d->edit_option = NULL; }
+  if (d->edit_situation) { delete d->edit_situation; d->edit_situation = NULL; }
 
   if (d->edit_room) {
     DeleteRoom(d->edit_room);

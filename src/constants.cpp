@@ -747,6 +747,7 @@ struct preference_bit_struct preference_bits_v2[] = {
   { "Passive Combat"       , FALSE, TRUE  },
   { "No Auto Ready"        , FALSE, TRUE  },
   { "No Roundtime"         , FALSE, TRUE  },
+  { "Activities Debug"     , TRUE , TRUE  },
   { "\n"                   , 0    , 0     }
 };
 
@@ -827,6 +828,7 @@ const char *preference_bits[] =
     "PASSIVE_COMBAT",
     "!AUTOREADY",
     "!ROUNDTIME",
+    "ACTIVITY_DEBUG",
     MAX_FLAG_MARKER
   };
 
@@ -957,6 +959,7 @@ const char *connected_types[] =
     "Creating a Pet",
     "Creating Complex Form",
     "Increasing Submersion",
+    "In Menu Frame",
     "\n"
   };
 

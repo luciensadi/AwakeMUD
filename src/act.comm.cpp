@@ -365,7 +365,7 @@ ACMD(do_tell)
                "(Please note that disabling your block, sending a tell, and immediately re-enabling it will be considered abuse.)");
 
   // Enable blocking of tells from everyone except staff.
-  FAILURE_CASE_PRINTF(!access_level(ch, LVL_BUILDER) && ((PRF_FLAGGED(vict, PRF_NOTELL)) || IS_IGNORING(vict, is_blocking_tells_from, ch)),
+  FAILURE_CASE_PRINTF(!access_level(ch, LVL_BUILDER) && (PRF_FLAGGED(vict, PRF_NOTELL) || IS_IGNORING(vict, is_blocking_tells_from, ch)),
                       "%s has disabled tells.", HSSH(vict));
 
   FAILURE_CASE_PRINTF(PLR_FLAGGED(vict, PLR_EDITING), "%s %s editing right now, try again later.", HSSH(vict), ISARE(vict));

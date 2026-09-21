@@ -51,7 +51,7 @@ ACMD(do_account) {
   // char mode[MAX_STRING_LENGTH] = { 0 };
 
   FAILURE_CASE(IS_NPC(ch), "You can't be projecting or puppeting while accessing your account.");
-  FAILURE_CASE(!*arg, access_level(ch, STAFF_LEVEL_REQUIRED_FOR_ELEVATED_ACTIONS) ? ACCOUNTS_STAFF_ONLY_USAGE_STRING : ACCOUNTS_NON_STAFF_USAGE_STRING);
+  FAILURE_CASE(!*argument, access_level(ch, STAFF_LEVEL_REQUIRED_FOR_ELEVATED_ACTIONS) ? ACCOUNTS_STAFF_ONLY_USAGE_STRING : ACCOUNTS_NON_STAFF_USAGE_STRING);
 
   // Split out what we have.
   // char *remainder = any_one_arg(argument, command);
