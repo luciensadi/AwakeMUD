@@ -747,6 +747,7 @@ struct preference_bit_struct preference_bits_v2[] = {
   { "Passive Combat"       , FALSE, TRUE  },
   { "No Auto Ready"        , FALSE, TRUE  },
   { "No Roundtime"         , FALSE, TRUE  },
+  { "Mute DocWagon Alerts" , FALSE, TRUE  },
   { "\n"                   , 0    , 0     }
 };
 
@@ -827,6 +828,7 @@ const char *preference_bits[] =
     "PASSIVE_COMBAT",
     "!AUTOREADY",
     "!ROUNDTIME",
+    "!MUTEDOWAGONALERTS",
     MAX_FLAG_MARKER
   };
 
