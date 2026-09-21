@@ -2944,14 +2944,15 @@ int perform_dupe_check(struct descriptor_data *d)
   // KaVir's protocol snippet.
   MXPSendTag( d, "<VERSION>" );
 
-  // Additional gmcp hooks
+  // Additional gmcp hooks.
+  // MudVault first: delivering pending vote rewards may change syspoint
+  // totals, and this must happen before the vitals/pools GMCP below or the
+  // client's login script would immediately invalidate what it was sent.
+  mv_on_login(d->character);
   SendGMCPCoreSupports(d);
   SendGMCPCharInfo(d->character);
   SendGMCPCharVitals(d->character);
   SendGMCPCharPools ( d->character );
-
-  // MudVault: deliver any pending vote rewards / linking results on (re)login.
-  mv_on_login(d->character);
 
   return 1;
 }
@@ -3642,6 +3643,11 @@ void nanny(struct descriptor_data * d, char *arg)
       // KaVir's protocol snippet.
       MXPSendTag( d, "<VERSION>" );
 
+      // MudVault first: delivering pending vote rewards may change syspoint
+      // totals, and this must happen before the GMCP below or the client's
+      // login script would immediately invalidate what it was sent.
+      mv_on_login(d->character);
+
       // GMCP Protocl injection
       SendGMCPCoreSupports ( d );
       SendGMCPCharInfo ( d->character );
@@ -3651,9 +3657,6 @@ void nanny(struct descriptor_data * d, char *arg)
       if (!str_cmp(GET_EMAIL(d->character), "not set")) {
         send_to_char("\r\n^YNotice:^n This character hasn't been registered yet! Please see ^WHELP REGISTER^n for information.^n\r\n\r\n", d->character);
       }
-
-      // MudVault: deliver any pending vote rewards / linking results.
-      mv_on_login(d->character);
 
       look_at_room(d->character, 0, 0);
       d->prompt_mode = 1;
@@ -3753,9 +3756,6 @@ void nanny(struct descriptor_data * d, char *arg)
 
       // Refund syspoints for prestige purchases if they're in chargen.
       refund_chargen_prestige_syspoints_if_needed(d->character);
-
-      // MudVault: queue an unlink of their site profile before removal.
-      mv_request_unlink(d->character);
 
       DeleteChar(GET_IDNUM(d->character));
 

@@ -37,7 +37,6 @@ namespace fs = std::filesystem;
 #include "deck_build.hpp"
 #include "newshop.hpp"
 #include "bullet_pants.hpp"
-#include "mudvault_voting.hpp"
 
 // The linked list of loaded playergroups.
 extern Playergroup *loaded_playergroups;
@@ -652,7 +651,6 @@ ACMD(do_debug) {
     const char *name = get_player_name(idnum);
     mudlog_vfprintf(ch, LOG_WIZLOG, "Invoked idledelete on %ld (%s)", idnum, name);
 
-    mv_request_unlink_by_id(idnum, name);
     DeleteChar(idnum);
     send_to_char(ch, "OK, deleted %s.\r\n", name);
 

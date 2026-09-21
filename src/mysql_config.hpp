@@ -7,8 +7,12 @@ extern const char *mysql_user;
 extern const char *mysql_db;
 
 /* MudVault API key (format: "mv_<mud_id>_<secret>"). Only ever defined in the
- * gitignored mysql_config.cpp -- never copy this value anywhere else. */
+ * gitignored mysql_config.cpp -- never copy this value anywhere else.
+ * Gated behind MUDVAULT_VOTING so builds with the flag off don't require
+ * operators to stub out a dummy value. */
+#ifdef MUDVAULT_VOTING
 extern const char *mudvault_api_key;
+#endif
 
 #define GAME_MYSQL_PORT 0
 

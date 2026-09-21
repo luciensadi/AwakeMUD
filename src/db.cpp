@@ -716,11 +716,17 @@ void boot_world(void)
   {
     // The exact trailing column sequence load_char() reads positionally (row[85] onward). Any
     // deviation in order, or ANY column inserted after/among these, shifts later indices.
+    // Canonical pfiles tail order -- this matches what the committed
+    // migrations actually produce (add_garnishments.sql adds all three
+    // garnishment columns AFTER submersion_grade, so they end up notor, rep,
+    // nuyen; add_bound_sysp.sql adds RestrictedSysPoints AFTER
+    // garnishment_nuyen). The DB order is authoritative; load_char()'s
+    // row[] indices in newdb.cpp must match this list exactly.
     const char *const expected_pfiles_tail[] = {
       "submersion_grade",
-      "garnishment_nuyen",
-      "garnishment_rep",
       "garnishment_notor",
+      "garnishment_rep",
+      "garnishment_nuyen",
       "RestrictedSysPoints",
       "mudvault_verified",
       "last_vote_time"
