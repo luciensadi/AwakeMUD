@@ -701,10 +701,11 @@ void boot_world(void)
   require_that_sql_table_exists("pfiles_stowed", "SQL/Migrations/hammerspace.sql");
   require_that_field_exists_in_table("garnishment_nuyen", "pfiles", "SQL/Migrations/add_garnishments.sql");
   require_that_field_exists_in_table("RestrictedSysPoints", "pfiles", "SQL/Migrations/add_bound_sysp.sql");
-#ifdef MUDVAULT_VOTING
-  require_that_sql_table_exists("mudvault_votes", "SQL/Migrations/add_votes.sql");
-  require_that_sql_table_exists("mudvault_character_linking", "SQL/Migrations/add_votes.sql");
-  // MudVault pfile columns MUST stay at the end of pfiles (positional load_char); see add_votes.sql.
+  // UNCONDITIONAL (not gated on -DMUDVAULT_VOTING): load_char()/save_char() in
+  // newdb.cpp read/write mudvault_verified and last_vote_time positionally/by
+  // name on every save regardless of the compile flag, so the columns must
+  // exist in every build. MudVault pfile columns MUST stay at the end of
+  // pfiles (positional load_char); see add_votes.sql.
   require_that_field_exists_in_table("mudvault_verified", "pfiles", "SQL/Migrations/add_votes.sql");
   require_that_field_exists_in_table("last_vote_time", "pfiles", "SQL/Migrations/add_votes.sql");
   {
@@ -727,6 +728,10 @@ void boot_world(void)
     };
     require_that_fields_end_table("pfiles", expected_pfiles_tail, (int)(sizeof(expected_pfiles_tail) / sizeof(expected_pfiles_tail[0])), "SQL/Migrations/add_votes.sql");
   }
+
+#ifdef MUDVAULT_VOTING
+  require_that_sql_table_exists("mudvault_votes", "SQL/Migrations/add_votes.sql");
+  require_that_sql_table_exists("mudvault_character_linking", "SQL/Migrations/add_votes.sql");
 
   // MudVault: validate the API key and enable the voting subsystem (idempotent).
   mv_boot();

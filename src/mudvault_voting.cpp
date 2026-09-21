@@ -7,16 +7,22 @@
  * the shared MySQL database. This module heartbeats the DB, delivers rewards
  * to online players, and processes character-verification results.
  *
- * COMPILE GATE: the whole module is behind -DMUDVAULT_VOTING (see
- * mudvault_voting.hpp for the no-op stubs used when it is off).
+ * COMPILE GATE: the integration (boot/heartbeat/verify plumbing) is behind
+ * -DMUDVAULT_VOTING (see mudvault_voting.hpp for the no-op stubs used when it
+ * is off); do_vote/do_verify at the bottom always compile, with their own
+ * "not enabled" branches. The pfile columns mudvault_verified/last_vote_time
+ * are required in EVERY build (load_char()/save_char() are not gated), and
+ * boot_world() enforces their presence/tail order unconditionally.
  *
  * Schema: SQL/Migrations/add_votes.sql. Secrets (API keys) live ONLY in the
  * gitignored src/mysql_config.cpp -- never copy key values elsewhere or into
  * source control.
  */
 
-#ifdef MUDVAULT_VOTING
-
+/* Includes are deliberately NOT gated on MUDVAULT_VOTING: do_vote/do_verify
+ * at the bottom of this file compile in BOTH configurations, so this TU needs
+ * its headers either way (the codebase already requires MySQL headers/libs in
+ * every build). Only the integration itself is behind the gate. */
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -35,6 +41,8 @@
 #include "mysql_config.hpp"
 
 #include "mudvault_voting.hpp"
+
+#ifdef MUDVAULT_VOTING
 
 /* --- file-static state --------------------------------------------------- */
 

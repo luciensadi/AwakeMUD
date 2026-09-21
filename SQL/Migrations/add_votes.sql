@@ -64,6 +64,11 @@ CREATE TABLE `mudvault_votes` (
   `redeemed_at` DATETIME NULL DEFAULT NULL,
   `claimed_at` DATETIME NULL DEFAULT NULL,
 
+  -- The C++ game scans for undelivered rewards by idnum (heartbeat, every
+  -- ~30s, and again on each login); without this index those scans are full
+  -- table walks that only grow over time.
+  KEY `idx_idnum_redeemed` (`idnum`, `redeemed_at`),
+
   PRIMARY KEY (`reward_id_bin`)
 );
 
