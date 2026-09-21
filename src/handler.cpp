@@ -49,6 +49,7 @@ extern int max_ability(int i);
 extern int calculate_vehicle_entry_load(struct veh_data *veh);
 extern void end_quest(struct char_data *ch, bool succeeded);
 extern void set_casting_pools(struct char_data *ch, int casting, int drain, int spell_defense, int reflection, bool message);
+extern void set_combat_pools(struct char_data *ch, int dodge, int soak, int offense, bool message);
 extern void calc_weight(struct char_data *);
 extern void exdesc_conceal_reveal(struct char_data *vict, int wearloc, bool check_for_reveal);
 #ifdef USE_ZONE_HOTLOADING
@@ -1040,39 +1041,11 @@ void affect_total(struct char_data * ch)
     }
   }
 
-  int skill_used = get_skill_num_in_use_for_weapons(ch);
-  int dice_max = get_skill_dice_in_use_for_weapons(ch);
-
-  if (GET_CHIPJACKED_SKILL(ch, skill_used)) {
-    dice_max = 0;
-  }
-
-  // There's nothing to dodge on the astral plane.
-  if (IS_ASTRAL(ch))
-    GET_DODGE(ch) = 0;
-  else {
-    GET_DODGE(ch) = MIN(GET_DODGE(ch), GET_COMBAT_POOL(ch));
-
-    if (ch_is_npc && AFF_FLAGGED(ch, AFF_PRONE)) {
-      GET_BODY_POOL(ch) += GET_DODGE(ch) / 2;
-      GET_DODGE(ch) = 0;
-      // The remaining points will be assigned to offense in the next stanza.
-    }
-  }
-
-  GET_BODY_POOL(ch) = MIN(GET_BODY_POOL(ch), GET_COMBAT_POOL(ch) - GET_DODGE(ch));
-  GET_OFFENSE(ch) = GET_COMBAT_POOL(ch) - GET_DODGE(ch) - GET_BODY_POOL(ch);
-  if (GET_OFFENSE(ch) > dice_max) {
-    if (ch_is_npc && !IS_ASTRAL(ch) && AFF_FLAGGED(ch, AFF_PRONE)) {
-      GET_BODY_POOL(ch) += GET_OFFENSE(ch) - dice_max;
-    } else {
-      GET_DODGE(ch) += GET_OFFENSE(ch) - dice_max;
-    }
-    GET_OFFENSE(ch) = dice_max;
-  }
+  set_combat_pools(ch, ch->real_abils.defense_pool, ch->real_abils.body_pool, ch->real_abils.offense_pool, FALSE);
 
   // NPCs specialize their defenses: unless they've got crazy dodge dice, they'll want to just soak.
   // AKA, 'your average wage slave is not going to try to do the Matrix bullet dodge when he sees a gun.'
+  // ..with the perform_violence combat loop, NPC cpool is set immediately prior by decide_combat_pool. When does this code matter? - Khai
   if (ch_is_npc) {
     if (GET_DODGE(ch) < 8) {
       GET_BODY_POOL(ch) += GET_DODGE(ch);
@@ -1223,6 +1196,7 @@ void affect_total(struct char_data * ch)
 
   SendGMCPCharPools(ch);
 }
+
 
 /*
  * If ch is affected by specified spell, returns force, otherwise returns 0.
