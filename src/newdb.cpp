@@ -34,6 +34,7 @@
 #include "newmail.hpp"
 #include "player_exdescs.hpp"
 #include "gmcp.hpp"
+#include "mudvault_voting.hpp"
 
 /* mysql_config.h must be filled out with your own connection info. */
 /* For obvious reasons, DO NOT ADD THIS FILE TO SOURCE CONTROL AFTER CUSTOMIZATION. */
@@ -484,6 +485,13 @@ bool load_char(const char *name, char_data *ch, bool logon, int pc_load_origin)
   GET_GARNISHMENT_REP(ch) = atol(row[87]);
   GET_GARNISHMENT_NOTOR(ch) = atol(row[88]);
   GET_RESTRICTED_SYSTEM_POINTS(ch) = atol(row[89]);
+  // MudVault voting fields (SQL/Migrations/add_mudvault_pfile_fields.sql).
+  // row[90]: mudvault_verified -- appended at end of pfiles; load_char is positional.
+  // Write the fields directly: the GET_* macros are conditional expressions (READ-ONLY, see utils.hpp).
+  if (ch->player_specials) {
+    ch->player_specials->saved.mudvault_verified = atoi(row[90]) != 0;
+    ch->player_specials->saved.last_vote_time = atol(row[91]);
+  }
   mysql_free_result(res);
 
   // Update lifestyle information.
@@ -1407,7 +1415,8 @@ static bool save_char(char_data *player, vnum_t loadroom, bool fromCopyover = FA
                "PermBodLoss=%d, WimpLevel=%d, Loadroom=%ld, LastRoom=%ld, LastD=%ld, Hunger=%d, Thirst=%d, Drunk=%d, " \
                "ShotsFired='%d', ShotsTriggered='%d', Tradition=%d, pgroup='%ld', "\
                "Inveh=%ld, `rank`=%d, gender=%d, SysPoints=%d, RestrictedSysPoints=%d, socialbonus=%d, email='%s', highlight='%s',"
-               "lifestyle_string='%s', nodelete=%d, garnishment_nuyen=%ld, garnishment_rep=%ld, garnishment_notor=%ld WHERE idnum=%ld;",
+               "lifestyle_string='%s', nodelete=%d, garnishment_nuyen=%ld, garnishment_rep=%ld, garnishment_notor=%ld, "
+               "mudvault_verified=%d, last_vote_time=%ld WHERE idnum=%ld;",
                AFF_FLAGS(player).ToString(),
                PLR_FLAGS(player).ToString(),
                PRF_FLAGS(player).ToString(),
@@ -1460,6 +1469,8 @@ static bool save_char(char_data *player, vnum_t loadroom, bool fromCopyover = FA
                GET_GARNISHMENT_NUYEN(player),
                GET_GARNISHMENT_REP(player),
                GET_GARNISHMENT_NOTOR(player),
+               GET_MUDVAULT_VERIFIED(player) ? 1 : 0,
+               GET_LAST_VOTE_TIME(player),
                GET_IDNUM(player));
   mysql_wrapper(mysql, buf);
 
@@ -2120,6 +2131,11 @@ void idle_delete()
       if (get_idledelete_days_left(lastd, tke, race, rank, otaku_path) < 0) {
 #ifndef IDLEDELETE_DRYRUN
         // TODO: Pull their PLR bitstring and validate that their nodelete bit is set to off.
+        {
+          char *name = get_player_name(atol(row[0]));
+          mv_request_unlink_by_id(atol(row[0]), name);
+          delete[] name;
+        }
         DeleteChar(atol(row[0]));
         deleted++;
 #else

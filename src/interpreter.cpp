@@ -47,6 +47,7 @@
 #include "player_exdescs.hpp"
 #include "pets.hpp"
 #include "gmcp.hpp"
+#include "mudvault_voting.hpp"
 
 #if defined(__CYGWIN__)
 #include <crypt.h>
@@ -454,6 +455,8 @@ ACMD_DECLARE(do_vnum);
 ACMD_DECLARE(do_vstat);
 ACMD_DECLARE(do_vlist);
 ACMD_DECLARE(do_valset);
+ACMD_DECLARE(do_verify);
+ACMD_DECLARE(do_vote);
 ACMD_DECLARE(do_wake);
 ACMD_DECLARE(do_watch);
 ACMD_DECLARE(do_wear);
@@ -1051,11 +1054,13 @@ struct command_info cmd_info[] =
     { "vedit"      , POS_DEAD    , do_vedit    , LVL_BUILDER, 0, BLOCKS_IDLE_REWARD },
     { "version"    , POS_DEAD    , do_gen_ps   , 0, SCMD_VERSION, ALLOWS_IDLE_REWARD },
     { "vemote"     , POS_SLEEPING, do_new_echo , 0 , SCMD_VEMOTE, BLOCKS_IDLE_REWARD }, // was do_vemote
+    { "verify"     , POS_DEAD    , do_verify   , 1, 0, ALLOWS_IDLE_REWARD },
     { "visible"    , POS_RESTING , do_visible  , LVL_BUILDER, 0, BLOCKS_IDLE_REWARD },
     { "view"       , POS_LYING   , do_imagelink, 0, 0, ALLOWS_IDLE_REWARD },
     { "vfind"      , POS_DEAD    , do_vfind    , LVL_BUILDER, 0, BLOCKS_IDLE_REWARD },
     { "vlist"      , POS_DEAD    , do_vlist    , LVL_BUILDER, 0, BLOCKS_IDLE_REWARD },
     { "vnum"       , POS_DEAD    , do_vnum     , LVL_BUILDER, 0, BLOCKS_IDLE_REWARD },
+    { "vote"       , POS_DEAD    , do_vote     , 1, 0, ALLOWS_IDLE_REWARD },
     { "vset"       , POS_DEAD    , do_vset     , LVL_DEVELOPER, 0, BLOCKS_IDLE_REWARD },
     { "vstat"      , POS_DEAD    , do_vstat    , LVL_BUILDER, 0, BLOCKS_IDLE_REWARD },
     { "vteleport"  , POS_DEAD   , do_vteleport , LVL_CONSPIRATOR, 0, BLOCKS_IDLE_REWARD },
@@ -2945,6 +2950,9 @@ int perform_dupe_check(struct descriptor_data *d)
   SendGMCPCharVitals(d->character);
   SendGMCPCharPools ( d->character );
 
+  // MudVault: deliver any pending vote rewards / linking results on (re)login.
+  mv_on_login(d->character);
+
   return 1;
 }
 
@@ -3644,6 +3652,9 @@ void nanny(struct descriptor_data * d, char *arg)
         send_to_char("\r\n^YNotice:^n This character hasn't been registered yet! Please see ^WHELP REGISTER^n for information.^n\r\n\r\n", d->character);
       }
 
+      // MudVault: deliver any pending vote rewards / linking results.
+      mv_on_login(d->character);
+
       look_at_room(d->character, 0, 0);
       d->prompt_mode = 1;
       /* affect total to make cyberware update stats */
@@ -3742,6 +3753,9 @@ void nanny(struct descriptor_data * d, char *arg)
 
       // Refund syspoints for prestige purchases if they're in chargen.
       refund_chargen_prestige_syspoints_if_needed(d->character);
+
+      // MudVault: queue an unlink of their site profile before removal.
+      mv_request_unlink(d->character);
 
       DeleteChar(GET_IDNUM(d->character));
 

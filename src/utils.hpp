@@ -679,6 +679,16 @@ int get_armor_penalty_grade(struct char_data *ch);
 #define GET_UNRESTRICTED_SYSTEM_POINTS(ch)   ((ch && ch->desc && ch->desc->original) ? ch->desc->original->player_specials->saved.system_points : ch->player_specials->saved.system_points)
 #define GET_RESTRICTED_SYSTEM_POINTS(ch)      ((ch && ch->desc && ch->desc->original) ? ch->desc->original->player_specials->saved.restricted_system_points : ch->player_specials->saved.restricted_system_points)
 #define GET_TOTAL_SYSTEM_POINTS(ch)           (GET_UNRESTRICTED_SYSTEM_POINTS(ch) + GET_RESTRICTED_SYSTEM_POINTS(ch))
+/* MudVault voting accessors. vote/verify are level-1 POS_DEAD commands, so an
+ * immortal switched into a mob body can reach these macros with a char whose
+ * player_specials is NULL (or the shared dummy_mob) -- guard every
+ * player_specials deref and yield FALSE/0 on any such path. Mirrors the
+ * desc->original convention of the adjacent syspoint macros: when switched,
+ * read the original player's values. READ-ONLY: these expand to conditional
+ * expressions, so write sites use direct field access instead (they are
+ * PC-only code paths). */
+#define GET_MUDVAULT_VERIFIED(ch)  ((ch && ch->desc && ch->desc->original && ch->desc->original->player_specials) ? ch->desc->original->player_specials->saved.mudvault_verified : ((ch && ch->player_specials) ? ch->player_specials->saved.mudvault_verified : FALSE))
+#define GET_LAST_VOTE_TIME(ch)     ((ch && ch->desc && ch->desc->original && ch->desc->original->player_specials) ? ch->desc->original->player_specials->saved.last_vote_time : ((ch && ch->player_specials) ? ch->player_specials->saved.last_vote_time : 0))
 bool spend_syspoints(struct char_data *ch, int amount, bool use_restricted, const char *for_what, int &spent_restricted);
 bool gain_syspoints(struct char_data *ch, int amount, bool is_restricted, const char *for_what);
 extern int global_dummy_val; // Trash value to use on spent_restricted etc when you don't care about the return. Yes, it's bad practice. No, I don't care right now-- YOU refactor it. >.>

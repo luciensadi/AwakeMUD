@@ -43,6 +43,7 @@
 #include "chipjacks.hpp"
 #include "player_exdescs.hpp"
 #include "gmcp.hpp"
+#include "mudvault_voting.hpp"
 
 #ifdef GITHUB_INTEGRATION
 #include <curl/curl.h>
@@ -5570,4 +5571,100 @@ ACMD(do_changelog) {
   // Put them back where they came from.
   ch->in_room = old_in_room;
   ch->in_veh = old_in_veh;
+}
+
+/* ---- MudVault voting integration (mudvault_voting.cpp) ---- */
+
+ACMD(do_vote)
+{
+#ifndef MUDVAULT_VOTING
+  send_to_char("Voting rewards are not enabled on this server.\r\n", ch);
+  return;
+#else
+  const char *url = mv_vote_url();
+
+  if (!url) {
+    send_to_char("MudVault voting is not configured.\r\n", ch);
+    return;
+  }
+
+  if (!GET_MUDVAULT_VERIFIED(ch)) {
+    send_to_char(ch, "You haven't linked your MudVault profile yet.\r\n"
+                     "1. Visit ^Whttps://mudvault.org/profile^n and get a verification code.\r\n"
+                     "2. Type: ^Wverify <code>^n\r\n"
+                     "3. Then vote for us at ^W%s^n (or just ^WVOTE^n once linked).\r\n", url);
+    return;
+  }
+
+  if (GET_LAST_VOTE_TIME(ch) == 0) {
+    send_to_char(ch, "Thanks for linking your profile! You haven't voted yet -- vote at ^W%s^n and your reward will arrive automatically.\r\n", url);
+    return;
+  }
+
+  long since = time(NULL) - GET_LAST_VOTE_TIME(ch);
+
+  if (since < MUDVAULT_VOTE_COOLDOWN_SECS) {
+    long remaining = MUDVAULT_VOTE_COOLDOWN_SECS - since;
+    int hours = remaining / 3600;
+    int minutes = (remaining % 3600) / 60;
+
+    char remaining_str[64];
+    if (hours && minutes)
+      snprintf(remaining_str, sizeof(remaining_str), "%d hour%s %d minute%s", hours, hours == 1 ? "" : "s", minutes, minutes == 1 ? "" : "s");
+    else if (hours)
+      snprintf(remaining_str, sizeof(remaining_str), "%d hour%s", hours, hours == 1 ? "" : "s");
+    else if (minutes)
+      snprintf(remaining_str, sizeof(remaining_str), "%d minute%s", minutes, minutes == 1 ? "" : "s");
+    else
+      strlcpy(remaining_str, "less than a minute", sizeof(remaining_str));
+
+    time_t last_vote = (time_t) GET_LAST_VOTE_TIME(ch);
+    char *tmstr = asctime(localtime(&last_vote));
+    *(tmstr + strlen(tmstr) - 1) = '\0';
+
+    send_to_char(ch, "You last voted at %s. You can vote again in %s.\r\n", tmstr, remaining_str);
+    return;
+  }
+
+  send_to_char(ch, "You can vote again! Visit ^W%s^n -- your 1 system point reward arrives automatically after voting.\r\n", url);
+#endif /* MUDVAULT_VOTING */
+}
+
+ACMD(do_verify)
+{
+#ifndef MUDVAULT_VOTING
+  send_to_char("Voting rewards are not enabled on this server.\r\n", ch);
+  return;
+#else
+  const char *url = mv_vote_url();
+
+  if (!url) {
+    send_to_char("MudVault voting is not configured.\r\n", ch);
+    return;
+  }
+
+  char code[MAX_INPUT_LENGTH];
+  one_argument(argument, code);
+
+  if (!*code) {
+    send_to_char(ch, "Usage: ^Wverify <code>^n\r\n"
+                     "1. Visit ^Whttps://mudvault.org/profile^n and get a verification code.\r\n"
+                     "2. Type: ^Wverify <code>^n\r\n"
+                     "3. Then vote for us at ^W%s^n (or just ^WVOTE^n once linked).\r\n", url);
+    return;
+  }
+
+  int status = mv_submit_verification(ch, code);
+
+  if (status == MV_VERIFY_OK) {
+    send_to_char(ch, "Verification submitted for %s - you will be notified when it is processed (usually within a few minutes).\r\n"
+                     "If the code is invalid you will be told; grab a fresh one at ^Whttps://mudvault.org/profile^n.\r\n",
+                 GET_CHAR_NAME(ch));
+  } else if (status == MV_VERIFY_BAD_FORMAT) {
+    send_to_char("That doesn't look like a valid verification code (4-10 letters/numbers). Get a fresh code at ^Whttps://mudvault.org/profile^n and try: ^Wverify <code>^n\r\n", ch);
+  } else {
+    send_to_char(ch, "Something went wrong submitting your verification - please try again later or contact staff.\r\n"
+                     "The failure has been logged.\r\n");
+  }
+#endif /* MUDVAULT_VOTING */
 }

@@ -20,6 +20,7 @@
 #include <errno.h>
 #include <math.h>
 #include <vector>
+#include <string>
 #include <algorithm>
 #include <mysql/mysql.h>
 #include <map>
@@ -72,6 +73,7 @@ namespace fs = std::filesystem;
 #include "zoomies.hpp"
 #include "redit.hpp"
 #include "vehicles.hpp"
+#include "mudvault_voting.hpp"
 
 ACMD_DECLARE(do_reload);
 
@@ -305,6 +307,12 @@ void initialize_and_connect_to_mysql() {
   bool reconnect = 1;
   mysql_options(mysql, MYSQL_OPT_RECONNECT, &reconnect);
 
+  // Pin the session time zone to UTC. MySQL DATETIMEs in the mudvault tables
+  // are stored as naive UTC by convention, and UNIX_TIMESTAMP() interprets
+  // them in the session zone -- a local-timezone server would silently skew
+  // MudVault vote cooldowns. mv_boot() double-checks this at startup.
+  mysql_options(mysql, MYSQL_INIT_COMMAND, "SET time_zone = '+00:00'");
+
   // Perform the actual connection.
   if (!mysql_real_connect(mysql, mysql_host, mysql_user, mysql_password, mysql_db, GAME_MYSQL_PORT, NULL, 0)) {
     snprintf(buf, sizeof(buf), "FATAL ERROR: %s\r\n", mysql_error(mysql));
@@ -454,6 +462,69 @@ void require_that_field_meets_constraints(const char *field_name, const char *ta
 
 void require_that_field_exists_in_table(const char *field_name, const char *table_name, const char *migration_path_from_root_directory) {
   require_that_field_meets_constraints(field_name, table_name, migration_path_from_root_directory);
+}
+
+// Kills the game unless the table ENDS with exactly the given sequence of
+// column names, in that exact order, with no other columns after them.
+// load_char() reads pfiles via "SELECT *" POSITIONALLY, so fields read at
+// trailing row[] indices in newdb.cpp must actually sit at the end of the
+// table -- an AFTER clause in a migration (or any mid-table insert) silently
+// shifts every later index and corrupts character loading. Verifying only the
+// last column or two would miss an unrelated mid-table insert that happens to
+// leave the watched fields last, so the ENTIRE expected trailing sequence is
+// checked instead: the i-th expected field must be the column at position
+// (total_columns - num_expected_fields + i).
+void require_that_fields_end_table(const char *table_name, const char *const *expected_trailing_fields, int num_expected_fields, const char *migration_path_from_root_directory) {
+  MYSQL_RES *res;
+  MYSQL_ROW row;
+
+  char query_buf[1000];
+  snprintf(query_buf, sizeof(query_buf), "SHOW COLUMNS FROM %s;", prepare_quotes(buf, table_name, sizeof(buf)));
+  mysql_wrapper(mysql, query_buf);
+
+  std::vector<std::string> columns;
+  if ((res = mysql_use_result(mysql))) {
+    while ((row = mysql_fetch_row(res)))
+      columns.push_back(row[0] ? row[0] : "");
+    mysql_free_result(res);
+  }
+
+  int total_columns = (int)columns.size();
+  bool tail_matches = total_columns >= num_expected_fields;
+
+  for (int i = 0; tail_matches && i < num_expected_fields; i++) {
+    if (strcmp(columns[total_columns - num_expected_fields + i].c_str(), expected_trailing_fields[i]))
+      tail_matches = FALSE;
+  }
+
+  if (!tail_matches) {
+    char expected_tail[1000];
+    expected_tail[0] = '\0';
+    for (int i = 0; i < num_expected_fields; i++) {
+      size_t len = strlen(expected_tail);
+      snprintf(expected_tail + len, sizeof(expected_tail) - len, "%s%s", i > 0 ? ", " : "", expected_trailing_fields[i]);
+    }
+
+    char actual_tail[1000];
+    actual_tail[0] = '\0';
+    int start = total_columns > num_expected_fields ? total_columns - num_expected_fields : 0;
+    for (int i = start; i < total_columns; i++) {
+      size_t len = strlen(actual_tail);
+      snprintf(actual_tail + len, sizeof(actual_tail) - len, "%s%s", i > start ? ", " : "", columns[i].c_str());
+    }
+
+    log_vfprintf("ERROR: %s must end with EXACTLY these columns, in this order: %s. "
+                 "Observed trailing columns of %s (%d columns total): %s. "
+                 "load_char() reads pfiles positionally; a mid-table insert shifts every later index and corrupts character loading. "
+                 "Fix the schema, then re-check: probable migration reference: %s.",
+                 table_name,
+                 expected_tail,
+                 table_name,
+                 total_columns,
+                 total_columns > 0 ? actual_tail : "(table unreadable or empty)",
+                 migration_path_from_root_directory);
+    exit(ERROR_DB_COLUMN_REQUIRED);
+  }
 }
 
 void boot_world(void)
@@ -636,6 +707,32 @@ void boot_world(void)
   require_that_sql_table_exists("pfiles_stowed", "SQL/Migrations/hammerspace.sql");
   require_that_field_exists_in_table("garnishment_nuyen", "pfiles", "SQL/Migrations/add_garnishments.sql");
   require_that_field_exists_in_table("RestrictedSysPoints", "pfiles", "SQL/Migrations/add_bound_sysp.sql");
+#ifdef MUDVAULT_VOTING
+  require_that_sql_table_exists("mudvault_votes", "SQL/Migrations/add_votes.sql");
+  require_that_sql_table_exists("mudvault_character_linking", "SQL/Migrations/add_votes.sql");
+  // MudVault pfile columns MUST stay at the end of pfiles (positional load_char); see add_mudvault_pfile_fields.sql.
+  require_that_field_exists_in_table("mudvault_verified", "pfiles", "SQL/Migrations/add_mudvault_pfile_fields.sql");
+  require_that_field_exists_in_table("last_vote_time", "pfiles", "SQL/Migrations/add_mudvault_pfile_fields.sql");
+  {
+    // The exact trailing column sequence load_char() reads positionally (row[85] onward). Any
+    // deviation in order, or ANY column inserted after/among these, shifts later indices.
+    const char *const expected_pfiles_tail[] = {
+      "submersion_grade",
+      "garnishment_nuyen",
+      "garnishment_rep",
+      "garnishment_notor",
+      "RestrictedSysPoints",
+      "mudvault_verified",
+      "last_vote_time"
+    };
+    require_that_fields_end_table("pfiles", expected_pfiles_tail, (int)(sizeof(expected_pfiles_tail) / sizeof(expected_pfiles_tail[0])), "SQL/Migrations/add_mudvault_pfile_fields.sql");
+  }
+
+  // MudVault: validate the API key and enable the voting subsystem (idempotent).
+  mv_boot();
+#else
+  log("MudVault voting integration not compiled in (build with -DMUDVAULT_VOTING to enable).");
+#endif
 
   {
     const char *object_tables[4] = {
