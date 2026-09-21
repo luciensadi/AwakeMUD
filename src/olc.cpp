@@ -321,7 +321,9 @@ void clone_mob_for_editing(struct char_data *dst, struct char_data *src)
   clone_text_data(&dst->player.physical_text, &src->player.physical_text);
   CLONE_STRING(char_specials.arrive);
   CLONE_STRING(char_specials.leave);
-  SETTABLE_CHAR_COLOR_HIGHLIGHT(dst) = GET_CHAR_COLOR_HIGHLIGHT(src) ? str_dup(GET_CHAR_COLOR_HIGHLIGHT(src)) : NULL;
+  /* Compare the raw field, not GET_CHAR_COLOR_HIGHLIGHT(): that macro
+   * falls back to "^n" and would never leave this NULL. */
+  SETTABLE_CHAR_COLOR_HIGHLIGHT(dst) = src->char_specials.highlight_color_code ? str_dup(src->char_specials.highlight_color_code) : NULL;
 
   /* A mobile has no player_specials of its own; they all borrow one. */
   if (src->player_specials)
@@ -1228,6 +1230,12 @@ ACMD(do_idelete)
   // Wipe the object from the game.
   ch->player_specials->saved.zonenum = zone_table[counter].number;
   ObjList.RemoveObjNum(rnum);
+
+  // free_obj() cannot free a proto's own strings: its guards compare each
+  // pointer against itself and always skip. Nothing shares them anymore, as
+  // RemoveObjNum() has already extracted every live instance, so free them
+  // here instead or they leak.
+  free_obj_strings(&obj_proto[rnum], NULL);
   free_obj(&obj_proto[rnum]);
 
   // Renumber the object tables.
@@ -1586,7 +1594,12 @@ ACMD(do_mdelete)
     }
   }
 
-  DeleteCh(&mob_proto[rnum]);
+  // DeleteCh() ends in `delete ch`, which is only valid for pointers from a
+  // single-object new; &mob_proto[rnum] points into a new[] block, so
+  // delete on it is UB (free() gets an interior pointer). free_char() is all
+  // a proto needs: its string guards self-compare and skip, and the shift
+  // below overwrites this slot anyway.
+  free_char(&mob_proto[rnum]);
 
   for (counter = rnum; counter < top_of_mobt; counter++) {
     mob_index[counter] = mob_index[counter + 1];
@@ -1607,9 +1620,9 @@ ACMD(do_mdelete)
       }
     }
   }
-  // Wipe out the top entry of the table (it's not needed), then shrink the table.
-  delete &mob_proto[top_of_mobt];
-  delete &mob_index[top_of_mobt];
+  // The top entry is now a stale duplicate past top_of_mobt; leave it (the
+  // next resize or insert overwrites it) rather than `delete`ing an interior
+  // pointer into a new[] block, which is UB.
   top_of_mobt--;
 
   // update the zones by decrementing numbers if >= number deleted

@@ -1410,6 +1410,7 @@ struct command_info mtx_info[] =
     { "answer", 0, do_comcall, 0, SCMD_ANSWER, BLOCKS_IDLE_REWARD },
     { "asist", 0, do_asist, 0, 0, BLOCKS_IDLE_REWARD },
     { "broadcast", 0, do_broadcast, 0, 0, BLOCKS_IDLE_REWARD },
+    { ",", 0, do_broadcast, 0, 0, BLOCKS_IDLE_REWARD },
     { "bug", 0, do_gen_write, 0, SCMD_BUG, BLOCKS_IDLE_REWARD },
     { "call", 0, do_comcall, 0, SCMD_RING, BLOCKS_IDLE_REWARD },
   //{ "control", 0, do_control, 0, 0, BLOCKS_IDLE_REWARD },     // This is a rigging command?
