@@ -5832,7 +5832,7 @@ void free_char(struct char_data * ch)
       DELETE_AND_NULL_ARRAY(ch->char_specials.leave);
     }
 
-    if (SETTABLE_CHAR_COLOR_HIGHLIGHT(ch) && SETTABLE_CHAR_COLOR_HIGHLIGHT(ch) != SETTABLE_CHAR_COLOR_HIGHLIGHT(ch)) {
+    if (SETTABLE_CHAR_COLOR_HIGHLIGHT(ch) && SETTABLE_CHAR_COLOR_HIGHLIGHT(ch) != SETTABLE_CHAR_COLOR_HIGHLIGHT(proto)) {
       DELETE_AND_NULL_ARRAY(SETTABLE_CHAR_COLOR_HIGHLIGHT(ch));
     }
   }
@@ -5850,6 +5850,7 @@ void free_room(struct room_data *room)
   DELETE_ARRAY_IF_EXTANT(room->name);
   DELETE_ARRAY_IF_EXTANT(room->description);
   DELETE_ARRAY_IF_EXTANT(room->night_desc);
+  DELETE_ARRAY_IF_EXTANT(room->flight_code);
   DELETE_ARRAY_IF_EXTANT(room->address);
 
   // then free up the exits
@@ -5942,55 +5943,53 @@ void free_icon(struct matrix_icon * icon)
   }
   clear_icon(icon);
 }
+/* Frees the heap strings on an obj_data that participate in prototype
+ * sharing: the four text fields, the extra-description chain and the
+ * source-book string. Instances share their proto's strings, so a pointer
+ * still identical to shared_with's is left alone -- only the owner may free
+ * it. Pass NULL to free unconditionally (the object owns everything, or it
+ * is a proto being replaced or destroyed). restring, photo and graffiti are
+ * deliberately not handled here: they are always instance-owned and never
+ * shared. Keep this in step with clone_obj_for_editing() in olc.cpp. */
+void free_obj_strings(struct obj_data *obj, struct obj_data *shared_with)
+{
+  struct extra_descr_data *this1, *next_one;
+
+  if (obj->text.keywords && (!shared_with || obj->text.keywords != shared_with->text.keywords))
+    DELETE_AND_NULL_ARRAY(obj->text.keywords);
+
+  if (obj->text.name && (!shared_with || obj->text.name != shared_with->text.name))
+    DELETE_AND_NULL_ARRAY(obj->text.name);
+
+  if (obj->text.room_desc && (!shared_with || obj->text.room_desc != shared_with->text.room_desc))
+    DELETE_AND_NULL_ARRAY(obj->text.room_desc);
+
+  if (obj->text.look_desc && (!shared_with || obj->text.look_desc != shared_with->text.look_desc))
+    DELETE_AND_NULL_ARRAY(obj->text.look_desc);
+
+  if (obj->ex_description && (!shared_with || obj->ex_description != shared_with->ex_description)) {
+    for (this1 = obj->ex_description; this1; this1 = next_one) {
+      next_one = this1->next;
+      DELETE_ARRAY_IF_EXTANT(this1->keyword);
+      DELETE_ARRAY_IF_EXTANT(this1->description);
+      DELETE_IF_EXTANT(this1);
+    }
+    obj->ex_description = NULL;
+  }
+
+  if (obj->source_info && (!shared_with || obj->source_info != shared_with->source_info))
+    DELETE_AND_NULL_ARRAY(obj->source_info);
+}
+
 /* release memory allocated for an obj struct */
 void free_obj(struct obj_data * obj)
 {
   int nr;
-  struct extra_descr_data *this1, *next_one;
   if ((nr = GET_OBJ_RNUM(obj)) == -1)
-  {
-    DELETE_ARRAY_IF_EXTANT(obj->text.keywords);
-    DELETE_ARRAY_IF_EXTANT(obj->text.name);
-    DELETE_ARRAY_IF_EXTANT(obj->text.room_desc);
-    DELETE_ARRAY_IF_EXTANT(obj->text.look_desc);
+    free_obj_strings(obj, NULL);
+  else
+    free_obj_strings(obj, obj_proto + nr);
 
-    if (obj->ex_description) {
-      for (this1 = obj->ex_description; this1; this1 = next_one) {
-        next_one = this1->next;
-        DELETE_ARRAY_IF_EXTANT(this1->keyword);
-        DELETE_ARRAY_IF_EXTANT(this1->description);
-        DELETE_IF_EXTANT(this1);
-      }
-      obj->ex_description = NULL;
-    }
-  } else
-  {
-    if (obj->text.keywords && obj->text.keywords != obj_proto[nr].text.keywords) {
-      DELETE_AND_NULL_ARRAY(obj->text.keywords);
-    }
-
-    if (obj->text.name && obj->text.name != obj_proto[nr].text.name) {
-      DELETE_AND_NULL_ARRAY(obj->text.name);
-    }
-
-    if (obj->text.room_desc && obj->text.room_desc != obj_proto[nr].text.room_desc) {
-      DELETE_AND_NULL_ARRAY(obj->text.room_desc);
-    }
-
-    if (obj->text.look_desc && obj->text.look_desc != obj_proto[nr].text.look_desc) {
-      DELETE_AND_NULL_ARRAY(obj->text.look_desc);
-    }
-
-    if (obj->ex_description && obj->ex_description != obj_proto[nr].ex_description) {
-      for (this1 = obj->ex_description; this1; this1 = next_one) {
-        next_one = this1->next;
-        DELETE_ARRAY_IF_EXTANT(this1->keyword);
-        DELETE_ARRAY_IF_EXTANT(this1->description);
-        DELETE_IF_EXTANT(this1);
-      }
-      obj->ex_description = NULL;
-    }
-  }
   DELETE_ARRAY_IF_EXTANT(obj->restring);
   DELETE_ARRAY_IF_EXTANT(obj->graffiti);
   DELETE_ARRAY_IF_EXTANT(obj->photo);

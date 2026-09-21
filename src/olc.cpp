@@ -59,23 +59,6 @@ bool ch_can_stat_or_clone_from_zone(struct char_data *ch, struct zone_data *zon,
 // mem class
 extern class memoryClass *Mem;
 
-#define REQUIRE_ZONE_EDIT_ACCESS(real_zonenum) {                                                                                               \
-  if (real_zonenum < 0 || real_zonenum > top_of_zone_table) {                                                                                  \
-    send_to_char("That's not a zone.\r\n", ch);                                                                                                \
-    return;                                                                                                                                    \
-  }                                                                                                                                            \
-                                                                                                                                               \
-  if (!can_edit_zone(ch, (real_zonenum))) {                                                                                                    \
-    send_to_char(ch, "Sorry, you don't have access to edit zone %ld.\r\n", zone_table[(real_zonenum)].number);                                 \
-    return;                                                                                                                                    \
-  }                                                                                                                                            \
-                                                                                                                                               \
-  if (!(access_level(ch, LVL_ADMIN) || PLR_FLAGGED(ch, PLR_EDCON)) && zone_table[(real_zonenum)].editing_restricted_to_admin) {                \
-    send_to_char(ch, "Sorry, zone %d closed for editing.\r\n", zone_table[(real_zonenum)].number);                                             \
-    return;                                                                                                                                    \
-  }                                                                                                                                            \
-}
-
 // Checks for OLC availability and advises you on how to fix it, assuming you're capable.
 bool is_olc_available(struct char_data *ch) {
   if (!olc_state) {
@@ -202,6 +185,137 @@ void write_index_file(const char *suffix)
 /*
  * the redit ACMD function
  */
+
+/* ************************************************************************
+*  Cloning a prototype for the editor.                                     *
+*                                                                          *
+*  Every editor and clone command starts by copying a prototype with a     *
+*  struct assignment, which copies the pointers along with the numbers.    *
+*  Whatever the prototype owns on the heap has to be duplicated as well,   *
+*  or the copy and the prototype share it and whichever of them is freed   *
+*  first leaves the other holding freed memory. That duplication used to   *
+*  be written out by hand at six call sites, which is six chances to miss  *
+*  a field and six places to remember when a new one is added.             *
+*                                                                          *
+*  It lives here now. Keep these in step with free_room(), free_obj() and  *
+*  free_char(): a pointer one of those frees is a pointer these must       *
+*  duplicate.                                                              *
+*                                                                          *
+*  What they deliberately leave shallow is everything the caller means     *
+*  differently, or that the game shares on purpose:                        *
+*                                                                          *
+*   - which zone the copy belongs to, what is standing in it or carried    *
+*     by it, and the identity a clone has to be issued fresh. Those are    *
+*     the caller's business and differ between editing and cloning.        *
+*   - a room's temp_desc and temporary_stored_exit, which are live state   *
+*     that redit writes straight back on save and that nothing frees.      *
+*   - a mobile's nonphysical strings, which read_mobile() hands to every   *
+*     instance by pointer. The prototype                                  *
+*     owns those for the lifetime of the game and free_obj()/free_char()   *
+*     know not to touch them.                                              *
+************************************************************************ */
+
+#define CLONE_STRING(field) (dst->field = src->field ? str_dup(src->field) : NULL)
+
+static struct extra_descr_data *clone_extra_descriptions(struct extra_descr_data *src)
+{
+  struct extra_descr_data *head = NULL, *tail = NULL;
+
+  for (; src; src = src->next) {
+    struct extra_descr_data *copy = new extra_descr_data;
+
+    copy->keyword = src->keyword ? str_dup(src->keyword) : NULL;
+    copy->description = src->description ? str_dup(src->description) : NULL;
+
+    if (tail)
+      tail->next = copy;
+    else
+      head = copy;
+    tail = copy;
+  }
+
+  return head;
+}
+
+static void clone_text_data(struct text_data *dst, struct text_data *src)
+{
+  CLONE_STRING(keywords);
+  CLONE_STRING(name);
+  CLONE_STRING(room_desc);
+  CLONE_STRING(look_desc);
+}
+
+void clone_room_for_editing(struct room_data *dst, struct room_data *src)
+{
+  *dst = *src;
+
+  CLONE_STRING(name);
+  CLONE_STRING(description);
+  CLONE_STRING(night_desc);
+  CLONE_STRING(address);
+  CLONE_STRING(flight_code);
+
+  for (int dir = 0; dir < NUM_OF_DIRS; dir++) {
+    struct room_direction_data *exit = src->dir_option[dir];
+
+    if (!exit) {
+      dst->dir_option[dir] = NULL;
+      continue;
+    }
+
+    dst->dir_option[dir] = new room_direction_data;
+    *dst->dir_option[dir] = *exit;
+
+#define CLONE_EXIT_STRING(field) (dst->dir_option[dir]->field = exit->field ? str_dup(exit->field) : NULL)
+    CLONE_EXIT_STRING(general_description);
+    CLONE_EXIT_STRING(keyword);
+    CLONE_EXIT_STRING(go_into_secondperson);
+    CLONE_EXIT_STRING(go_into_thirdperson);
+    CLONE_EXIT_STRING(come_out_of_thirdperson);
+#undef CLONE_EXIT_STRING
+  }
+
+  dst->ex_description = clone_extra_descriptions(src->ex_description);
+}
+
+void clone_obj_for_editing(struct obj_data *dst, struct obj_data *src)
+{
+  *dst = *src;
+
+  clone_text_data(&dst->text, &src->text);
+  dst->ex_description = clone_extra_descriptions(src->ex_description);
+
+  /* free_obj() deletes these three unconditionally, so the copy must own
+   * them even though a prototype rarely has any. */
+  CLONE_STRING(restring);
+  CLONE_STRING(photo);
+  CLONE_STRING(graffiti);
+  CLONE_STRING(source_info);
+}
+
+void clone_mob_for_editing(struct char_data *dst, struct char_data *src)
+{
+  *dst = *src;
+
+  clone_text_data(&dst->player.physical_text, &src->player.physical_text);
+  CLONE_STRING(char_specials.arrive);
+  CLONE_STRING(char_specials.leave);
+  /* Compare the raw field, not GET_CHAR_COLOR_HIGHLIGHT(): that macro
+   * falls back to "^n" and would never leave this NULL. */
+  SETTABLE_CHAR_COLOR_HIGHLIGHT(dst) = src->char_specials.highlight_color_code ? str_dup(src->char_specials.highlight_color_code) : NULL;
+
+  /* A mobile has no player_specials of its own; they all borrow one. */
+  if (src->player_specials)
+    dst->player_specials = &dummy_mob;
+
+#ifdef USE_DEBUG_CANARIES
+  dst->canary = CANARY_VALUE;
+#endif
+}
+
+#undef CLONE_STRING
+
+
 ACMD (do_redit)
 {
   int number;
@@ -250,55 +364,11 @@ ACMD (do_redit)
   d->edit_number = number;
   if (room_num >= 0) {
     room = GetRoom();
-    *room = world[room_num];
-    /* allocate space for all strings  */
-    if (world[room_num].name)
-      room->name = str_dup (world[room_num].name);
-    if (world[room_num].description)
-      room->description = str_dup (world[room_num].description);
-    if (world[room_num].night_desc)
-      room->night_desc = str_dup (world[room_num].night_desc);
-    if (world[room_num].address)
-      room->address = str_dup (world[room_num].address);
-    if (world[room_num].flight_code)
-      room->flight_code = str_dup(world[room_num].flight_code);
-    room->zone = world[room_num].zone;
-    /* exits - alloc only if necessary */
-#define DUPLICATE_EXIT_STRING(strname) if (world[room_num].dir_option[counter]->strname) { room->dir_option[counter]->strname = str_dup(world[room_num].dir_option[counter]->strname); }
-    for (counter = 0; counter < NUM_OF_DIRS; counter++) {
-      if (world[room_num].dir_option[counter]) {
-        room->dir_option[counter] = new room_direction_data;
-        /* copy numbers over */
-        *room->dir_option[counter] = *world[room_num].dir_option[counter];
-        /* New'd strings */
-        DUPLICATE_EXIT_STRING(general_description);
-        DUPLICATE_EXIT_STRING(keyword);
-        DUPLICATE_EXIT_STRING(go_into_secondperson);
-        DUPLICATE_EXIT_STRING(go_into_thirdperson);
-        DUPLICATE_EXIT_STRING(come_out_of_thirdperson);
-      }
-    }
-#undef DUPLICATE_EXIT_STRING
-    if (world[room_num].ex_description) {
-      struct extra_descr_data *This, *temp, *temp2;
-
-      temp = new extra_descr_data;
-      room->ex_description = temp;
-      for (This = world[room_num].ex_description;
-           This; This = This->next) {
-        if (This->keyword)
-          temp->keyword = str_dup (This->keyword);
-        if (This->description)
-          temp->description = str_dup (This->description);
-        if (This->next) {
-          temp2 = new extra_descr_data;
-
-          temp->next = temp2;
-          temp = temp2;
-        } else
-          temp->next = NULL;
-      }
-    }
+    clone_room_for_editing(room, &world[room_num]);
+    /* The contents, people and vehicle lists are left pointing at the live
+     * room's. The save path re-reads all three from the world before it
+     * writes anything back, and nothing frees them, so the copy carrying
+     * them costs nothing either way. */
     d->edit_room = room;
 #ifdef CONFIRM_EXISTING
 
@@ -342,7 +412,6 @@ ACMD(do_rclone)
 
   vnum_t arg1, arg2;
   rnum_t zone1 = -1, zone2 = -1;
-  int  counter;
 
   two_arguments(argument, buf, buf1);
 
@@ -389,52 +458,8 @@ ACMD(do_rclone)
   struct room_data *room;
   room = GetRoom();
 
-  *room = world[num1];
-  /* allocate space for all strings  */
-  if (world[num1].name)
-    room->name = str_dup (world[num1].name);
-  if (world[num1].description)
-    room->description = str_dup (world[num1].description);
-  if (world[num1].address)
-    room->address = str_dup (world[num1].address);
-  if (world[num1].flight_code)
-    room->flight_code = str_dup(world[num1].flight_code);
+  clone_room_for_editing(room, &world[num1]);
   room->zone = zone2;
-  /* exits - alloc only if necessary */
-  for (counter = 0; counter < NUM_OF_DIRS; counter++) {
-    if (world[num1].dir_option[counter]) {
-      room->dir_option[counter] = new room_direction_data;
-      /* copy numbers over */
-      *room->dir_option[counter] = *world[num1].dir_option[counter];
-      /* New'd strings */
-      if (world[num1].dir_option[counter]->general_description)
-        room->dir_option[counter]->general_description =
-          str_dup(world[num1].dir_option[counter]->general_description);
-      if (world[num1].dir_option[counter]->keyword)
-        room->dir_option[counter]->keyword =
-          str_dup(world[num1].dir_option[counter]->keyword);
-    }
-  }
-  // now do any extra descriptions
-  if (world[num1].ex_description) {
-    struct extra_descr_data *This, *temp, *temp2;
-
-    temp = new extra_descr_data;
-    room->ex_description = temp;
-    for (This = world[num1].ex_description; This; This = This->next) {
-      if (This->keyword)
-        temp->keyword = str_dup (This->keyword);
-      if (This->description)
-        temp->description = str_dup (This->description);
-      if (This->next) {
-        temp2 = new extra_descr_data;
-
-        temp->next = temp2;
-        temp = temp2;
-      } else
-        temp->next = NULL;
-    }
-  }
 
   ch->player_specials->saved.zonenum = zone_table[zone2].number;
 
@@ -1020,49 +1045,8 @@ ACMD (do_iedit)
                                                            */
 
   if (obj_num >= 0) {
-    struct extra_descr_data *This, *temp, *temp2;
-    /*
-     * allocate object
-     */
     obj = GetObject();
-    //clear_object (obj);
-    *obj = obj_proto[obj_num];        /*
-                                                                                             * the RNUM
-                                                                                             */
-    /*
-     * copy all strings over
-     */
-    if (obj_proto[obj_num].text.keywords)
-      obj->text.keywords = str_dup(obj_proto[obj_num].text.keywords);
-    if (obj_proto[obj_num].text.name)
-      obj->text.name = str_dup(obj_proto[obj_num].text.name);
-    if (obj_proto[obj_num].text.room_desc)
-      obj->text.room_desc = str_dup(obj_proto[obj_num].text.room_desc);
-    if (obj_proto[obj_num].text.look_desc)
-      obj->text.look_desc = str_dup(obj_proto[obj_num].text.look_desc);
-
-    if (obj_proto[obj_num].ex_description) {
-      /*
-       * temp is for obj being edited
-       */
-      temp = new extra_descr_data;
-      obj->ex_description = temp;
-      for (This = obj_proto[obj_num].ex_description;
-           This; This = This->next) {
-        if (This->keyword)
-          temp->keyword = str_dup (This->keyword);
-        if (This->description)
-          temp->description = str_dup (This->description);
-        if (This->next) {
-          temp2 = new extra_descr_data;
-
-          temp->next = temp2;
-          temp = temp2;
-        } else
-          temp->next = NULL;
-      }
-    }
-
+    clone_obj_for_editing(obj, &obj_proto[obj_num]);
     d->edit_obj = obj;
 #ifdef CONFIRM_EXISTING
 
@@ -1150,43 +1134,9 @@ ACMD(do_iclone)
 
   // now for the fun part
   // first duplicate the obj
-  struct extra_descr_data *This, *temp, *temp2;
   struct obj_data *obj;
   obj = GetObject();
-  //clear_object (obj);
-  *obj = obj_proto[obj_num1];
-
-  // copy the strings over
-  if (obj_proto[obj_num1].text.keywords)
-    obj->text.keywords = str_dup(obj_proto[obj_num1].text.keywords);
-  if (obj_proto[obj_num1].text.name)
-    obj->text.name = str_dup(obj_proto[obj_num1].text.name);
-  if (obj_proto[obj_num1].text.room_desc)
-    obj->text.room_desc = str_dup(obj_proto[obj_num1].text.room_desc);
-  if (obj_proto[obj_num1].text.look_desc)
-    obj->text.look_desc = str_dup(obj_proto[obj_num1].text.look_desc);
-  if (obj_proto[obj_num1].source_info)
-    obj->source_info = str_dup(obj_proto[obj_num1].source_info);
-
-  // extra descriptions done next
-  if (obj_proto[obj_num1].ex_description) {
-    temp = new extra_descr_data;
-
-    obj->ex_description = temp;
-    for (This = obj_proto[obj_num1].ex_description; This; This = This->next) {
-      if (This->keyword)
-        temp->keyword = str_dup (This->keyword);
-      if (This->description)
-        temp->description = str_dup (This->description);
-      if (This->next) {
-        temp2 = new extra_descr_data;
-
-        temp->next = temp2;
-        temp = temp2;
-      } else
-        temp->next = NULL;
-    }
-  }
+  clone_obj_for_editing(obj, &obj_proto[obj_num1]);
 
   // now send em into editing mode real quick and confirm their action
   STATE(ch->desc) = CON_IEDIT;
@@ -1253,6 +1203,12 @@ ACMD(do_idelete)
   // Wipe the object from the game.
   ch->player_specials->saved.zonenum = zone_table[counter].number;
   ObjList.RemoveObjNum(rnum);
+
+  // free_obj() cannot free a proto's own strings: its guards compare each
+  // pointer against itself and always skip. Nothing shares them anymore, as
+  // RemoveObjNum() has already extracted every live instance, so free them
+  // here instead or they leak.
+  free_obj_strings(&obj_proto[rnum], NULL);
   free_obj(&obj_proto[rnum]);
 
   // Renumber the object tables.
@@ -1381,33 +1337,9 @@ ACMD(do_medit)
     // allocate mobile
     mob = GetCh();
 
-    *mob = mob_proto[mob_num]; // the RNUM
+    clone_mob_for_editing(mob, &mob_proto[mob_num]);
     mob->load_origin = PC_LOAD_REASON_MEDIT_ALLOCATION;
     mob->load_time = time(0);
-
-#ifdef USE_DEBUG_CANARIES
-    mob->canary = CANARY_VALUE;
-#endif
-
-    // copy all strings over
-    if (mob_proto[mob_num].player.physical_text.keywords)
-      mob->player.physical_text.keywords = str_dup(mob_proto[mob_num].player.physical_text.keywords);
-    if (mob_proto[mob_num].player.physical_text.name)
-      mob->player.physical_text.name = str_dup(mob_proto[mob_num].player.physical_text.name);
-    if (mob_proto[mob_num].player.physical_text.room_desc)
-      mob->player.physical_text.room_desc = str_dup(mob_proto[mob_num].player.physical_text.room_desc);
-    if (mob_proto[mob_num].player.physical_text.look_desc)
-      mob->player.physical_text.look_desc = str_dup(mob_proto[mob_num].player.physical_text.look_desc);
-
-    if (mob_proto[mob_num].char_specials.arrive)
-      mob->char_specials.arrive = str_dup(mob_proto[mob_num].char_specials.arrive);
-    if (mob_proto[mob_num].char_specials.leave)
-      mob->char_specials.leave = str_dup(mob_proto[mob_num].char_specials.leave);
-    if (mob_proto[mob_num].char_specials.highlight_color_code)
-      mob->char_specials.highlight_color_code = str_dup(mob_proto[mob_num].char_specials.highlight_color_code);
-
-    if (mob_proto[mob_num].player_specials)
-      mob->player_specials = &dummy_mob;
 
     // Clone in cyberware.
     mob->cyberware = NULL;
@@ -1545,28 +1477,9 @@ ACMD(do_mclone)
   // allocate the structure
   mob = GetCh();
 
-  *mob = mob_proto[mob_num1]; // the RNUM
+  clone_mob_for_editing(mob, &mob_proto[mob_num1]);
   mob->load_origin = PC_LOAD_REASON_MCLONE;
   mob->load_time = time(0);
-
-  // copy all strings over
-  if (mob_proto[mob_num1].player.physical_text.keywords)
-    mob->player.physical_text.keywords = str_dup(mob_proto[mob_num1].player.physical_text.keywords);
-  if (mob_proto[mob_num1].player.physical_text.name)
-    mob->player.physical_text.name = str_dup(mob_proto[mob_num1].player.physical_text.name);
-  if (mob_proto[mob_num1].player.physical_text.room_desc)
-    mob->player.physical_text.room_desc = str_dup(mob_proto[mob_num1].player.physical_text.room_desc);
-  if (mob_proto[mob_num1].player.physical_text.look_desc)
-    mob->player.physical_text.look_desc = str_dup(mob_proto[mob_num1].player.physical_text.look_desc);
-  if (mob_proto[mob_num1].char_specials.arrive)
-    mob->char_specials.arrive = str_dup(mob_proto[mob_num1].char_specials.arrive);
-  if (mob_proto[mob_num1].char_specials.leave)
-    mob->char_specials.leave = str_dup(mob_proto[mob_num1].char_specials.leave);
-  if (GET_CHAR_COLOR_HIGHLIGHT(&mob_proto[mob_num1]))
-    SETTABLE_CHAR_COLOR_HIGHLIGHT(mob) = str_dup(GET_CHAR_COLOR_HIGHLIGHT(&mob_proto[mob_num1]));
-
-  if (mob_proto[mob_num1].player_specials)
-    mob->player_specials = &dummy_mob;
 
   // Drop all references to the mob_proto's equipment etc and make a new set.
   mob->cyberware = NULL;
@@ -1654,7 +1567,12 @@ ACMD(do_mdelete)
     }
   }
 
-  DeleteCh(&mob_proto[rnum]);
+  // DeleteCh() ends in `delete ch`, which is only valid for pointers from a
+  // single-object new; &mob_proto[rnum] points into a new[] block, so
+  // delete on it is UB (free() gets an interior pointer). free_char() is all
+  // a proto needs: its string guards self-compare and skip, and the shift
+  // below overwrites this slot anyway.
+  free_char(&mob_proto[rnum]);
 
   for (counter = rnum; counter < top_of_mobt; counter++) {
     mob_index[counter] = mob_index[counter + 1];
@@ -1675,9 +1593,9 @@ ACMD(do_mdelete)
       }
     }
   }
-  // Wipe out the top entry of the table (it's not needed), then shrink the table.
-  delete &mob_proto[top_of_mobt];
-  delete &mob_index[top_of_mobt];
+  // The top entry is now a stale duplicate past top_of_mobt; leave it (the
+  // next resize or insert overwrites it) rather than `delete`ing an interior
+  // pointer into a new[] block, which is UB.
   top_of_mobt--;
 
   // update the zones by decrementing numbers if >= number deleted

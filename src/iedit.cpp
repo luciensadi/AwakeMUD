@@ -1542,7 +1542,6 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
           if (obj_number > 0) {
             /* we need to run through each and every object currently in the
              * game to see which ones are pointing to this prototype */
-            struct extra_descr_data *This, *next_one;
 
             /* if object is pointing to this prototype, then we need to replace
              * with the new one */
@@ -1550,20 +1549,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
             // in the mud
             ObjList.UpdateObjs(d->edit_obj, obj_number);
             /* now safe to free old proto and write over */
-            DELETE_ARRAY_IF_EXTANT(obj_proto[obj_number].text.keywords);
-            DELETE_ARRAY_IF_EXTANT(obj_proto[obj_number].text.name);
-            DELETE_ARRAY_IF_EXTANT(obj_proto[obj_number].text.room_desc);
-            DELETE_ARRAY_IF_EXTANT(obj_proto[obj_number].text.look_desc);
-
-            if (obj_proto[obj_number].ex_description) {
-              for (This = obj_proto[obj_number].ex_description; This; This = next_one) {
-                next_one = This->next;
-                DELETE_ARRAY_IF_EXTANT(This->keyword);
-                DELETE_ARRAY_IF_EXTANT(This->description);
-                DELETE_AND_NULL(This);
-              }
-              obj_proto[obj_number].ex_description = NULL;
-            }
+            free_obj_strings(&obj_proto[obj_number], NULL);
 
             obj_proto[obj_number] = *d->edit_obj;
             obj_proto[obj_number].item_number = obj_number;
