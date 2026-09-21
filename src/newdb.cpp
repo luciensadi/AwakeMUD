@@ -490,7 +490,7 @@ bool load_char(const char *name, char_data *ch, bool logon, int pc_load_origin)
   GET_GARNISHMENT_REP(ch) = atol(row[87]);
   GET_GARNISHMENT_NUYEN(ch) = atol(row[88]);
   GET_RESTRICTED_SYSTEM_POINTS(ch) = atol(row[89]);
-  // MudVault voting fields (SQL/Migrations/add_mudvault_pfile_fields.sql).
+  // MudVault voting fields (SQL/Migrations/add_votes.sql).
   // row[90]: mudvault_verified -- appended at end of pfiles; load_char is positional.
   // Write the fields directly: the GET_* macros are conditional expressions (READ-ONLY, see utils.hpp).
   if (ch->player_specials) {

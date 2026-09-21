@@ -714,7 +714,7 @@ struct player_special_data_saved
   int system_points;
   int restricted_system_points;
 
-  // MudVault voting integration (SQL/Migrations/add_mudvault_pfile_fields.sql).
+  // MudVault voting integration (SQL/Migrations/add_votes.sql).
   bool mudvault_verified;
   long last_vote_time;
 

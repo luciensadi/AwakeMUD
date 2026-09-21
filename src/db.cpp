@@ -704,9 +704,9 @@ void boot_world(void)
 #ifdef MUDVAULT_VOTING
   require_that_sql_table_exists("mudvault_votes", "SQL/Migrations/add_votes.sql");
   require_that_sql_table_exists("mudvault_character_linking", "SQL/Migrations/add_votes.sql");
-  // MudVault pfile columns MUST stay at the end of pfiles (positional load_char); see add_mudvault_pfile_fields.sql.
-  require_that_field_exists_in_table("mudvault_verified", "pfiles", "SQL/Migrations/add_mudvault_pfile_fields.sql");
-  require_that_field_exists_in_table("last_vote_time", "pfiles", "SQL/Migrations/add_mudvault_pfile_fields.sql");
+  // MudVault pfile columns MUST stay at the end of pfiles (positional load_char); see add_votes.sql.
+  require_that_field_exists_in_table("mudvault_verified", "pfiles", "SQL/Migrations/add_votes.sql");
+  require_that_field_exists_in_table("last_vote_time", "pfiles", "SQL/Migrations/add_votes.sql");
   {
     // The exact trailing column sequence load_char() reads positionally (row[85] onward). Any
     // deviation in order, or ANY column inserted after/among these, shifts later indices.
@@ -725,7 +725,7 @@ void boot_world(void)
       "mudvault_verified",
       "last_vote_time"
     };
-    require_that_fields_end_table("pfiles", expected_pfiles_tail, (int)(sizeof(expected_pfiles_tail) / sizeof(expected_pfiles_tail[0])), "SQL/Migrations/add_mudvault_pfile_fields.sql");
+    require_that_fields_end_table("pfiles", expected_pfiles_tail, (int)(sizeof(expected_pfiles_tail) / sizeof(expected_pfiles_tail[0])), "SQL/Migrations/add_votes.sql");
   }
 
   // MudVault: validate the API key and enable the voting subsystem (idempotent).

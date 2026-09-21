@@ -14,7 +14,21 @@
 --     and on `mudvault_character_linking` for the linking trigger lookups).
 --   * Cron user: read/write on all `mudvault_*` tables.
 
--- Guards so this migration can be re-run.
+-- Per-player voting state, appended to pfiles. The explicit AFTER chain is
+-- load-bearing: load_char() (src/newdb.cpp) reads pfiles POSITIONALLY via
+-- "SELECT * FROM pfiles", and expects these as the FINAL two columns:
+--   row[90] = mudvault_verified, row[91] = last_vote_time
+-- (the highest pre-existing index is row[89], RestrictedSysPoints). Chaining
+-- each column to the previous one is what guarantees that; inserting them
+-- anywhere else corrupts character loading. db.cpp's
+-- require_that_fields_end_table() re-checks the full tail order at boot.
+-- Note: the ALTER is not re-runnable (MySQL has no ADD COLUMN IF NOT EXISTS);
+-- re-running after it has been applied fails with "Duplicate column name".
+ALTER TABLE `pfiles`
+  ADD COLUMN `mudvault_verified` TINYINT(1) NOT NULL DEFAULT 0 AFTER `RestrictedSysPoints`,
+  ADD COLUMN `last_vote_time` BIGINT NOT NULL DEFAULT 0 AFTER `mudvault_verified`;
+
+-- Guards so the rest of this migration can be re-run.
 DROP TRIGGER IF EXISTS mudvault_votes_before_insert;
 DROP TABLE IF EXISTS `mudvault_votes`;
 DROP TABLE IF EXISTS `mudvault_character_linking`;

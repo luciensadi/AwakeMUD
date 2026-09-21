@@ -61,25 +61,25 @@ mysqladmin ping && systemctl is-active lighttpd && id mudvault
 
 ---
 
-## Step 1 — Run the SQL migrations
+## Step 1 — Run the SQL migration
 
-Two migrations must be applied to the game DB (as your MySQL admin user, e.g. `root`):
+One migration must be applied to the game DB (as your MySQL admin user, e.g. `root`):
 
 ```bash
 cd /path/to/AwakeMUD
 mysql -u root -p AwakeMUD < SQL/Migrations/add_votes.sql
-mysql -u root -p AwakeMUD < SQL/Migrations/add_mudvault_pfile_fields.sql
 ```
 
-What they do:
-- `add_votes.sql` — creates `mudvault_votes` and `mudvault_character_linking`
-  plus the insert trigger that resolves a vote's `idnum` from the character's
-  name (only for MudVault-verified characters).
-- `add_mudvault_pfile_fields.sql` — appends `mudvault_verified` and
-  `last_vote_time` to the END of `pfiles`. **Do not modify these statements to
-  add an `AFTER` clause** — the game reads pfiles columns positionally, so these
-  two columns MUST be the last two in the table. The game verifies this at boot
-  and refuses to start if the order is wrong.
+What it does:
+- Appends `mudvault_verified` and `last_vote_time` to the END of `pfiles`.
+  These statements use explicit `AFTER` clauses on purpose — the game reads
+  pfiles columns positionally, so these two columns MUST be the last two in
+  the table (chained after `RestrictedSysPoints`, the last pre-existing
+  column). The game verifies the full tail order at boot and refuses to start
+  if it is wrong.
+- Creates `mudvault_votes` and `mudvault_character_linking` plus the insert
+  trigger that resolves a vote's `idnum` from the character's name (only for
+  MudVault-verified characters).
 
 > If you ever see `ERROR: You need to run a migration to add ...` in the game's
 > boot log, or `ERROR: ... must be the LAST two columns of pfiles ...`, a
