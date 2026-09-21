@@ -768,13 +768,17 @@ ACMD(do_radio)
   bool cyberware = FALSE, vehicle = FALSE, matrix = FALSE;
 
   radio = find_radio(ch, &cyberware, &vehicle, &matrix);
-  if (PLR_FLAGGED(ch, PLR_MATRIX) && !matrix && !IS_OTAKU(ch)) {
-    if (IS_OTAKU(ch) && !cyberware) {
-      send_to_char("You can't access the radio frequencies without a radio complex form, and a cyber radio.\r\n", ch);
-      return;
-    } else if (!matrix) {
-      send_to_char("You can't access the radio frequencies without a radio link.\r\n", ch);
-      return;
+  if (PLR_FLAGGED(ch, PLR_MATRIX)) {
+    if (IS_OTAKU(ch)) {
+      if (!cyberware) {
+        send_to_char("You can't access the radio frequencies without a radio complex form, and a cyber radio.\r\n", ch);
+        return;
+      }
+    } else {
+      if (!matrix) {
+        send_to_char("You can't access the radio frequencies without a radio link.\r\n", ch);
+        return;
+      }
     }
   }
 
@@ -940,9 +944,18 @@ ACMD(do_broadcast)
   }
 
   radio = find_radio(ch, &cyberware, &vehicle, &matrix);
-  if (PLR_FLAGGED(ch, PLR_MATRIX) && !matrix) {
-    send_to_char("You can't access the radio frequencies without a radio link.\r\n", ch);
-    return;
+  if (PLR_FLAGGED(ch, PLR_MATRIX)) {
+    if (IS_OTAKU(ch)) {
+      if (!cyberware) {
+        send_to_char("You can't access the radio frequencies without a radio complex form, and a cyber radio.\r\n", ch);
+        return;
+      }
+    } else {
+      if (!matrix) {
+        send_to_char("You can't access the radio frequencies without a radio link.\r\n", ch);
+        return;
+      }
+    }
   }
 
   if (IS_NPC(ch) || IS_SENATOR(ch)) {
