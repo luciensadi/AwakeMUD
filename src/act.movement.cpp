@@ -17,6 +17,7 @@
 #include "comm.hpp"
 #include "interpreter.hpp"
 #include "handler.hpp"
+#include "dg_scripts.hpp"
 #include "db.hpp"
 #include "house.hpp"
 #include "transport.hpp"
@@ -440,9 +441,30 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
   }
 
   was_in = ch->in_room;
+
+  /* Anything watching for a departure gets to object before it happens.
+   * A trigger that returns 0 stops the move. */
+  if (!leave_mtrigger(ch, dir) || ch->in_room != was_in)
+    return 0;
+  if (!leave_wtrigger(was_in, ch, dir) || ch->in_room != was_in)
+    return 0;
+  if (!leave_otrigger(was_in, ch, dir) || ch->in_room != was_in)
+    return 0;
+
+  /* A leave trigger may have removed this exit. */
+  if (!was_in->dir_option[dir] || !was_in->dir_option[dir]->to_room)
+    return 0;
+
   STOP_WORKING(ch);
   char_from_room(ch);
   char_to_room(ch, was_in->dir_option[dir]->to_room);
+
+  /* And anything watching for an arrival hears about it. These cannot
+   * refuse the move -- the character is already through the door. */
+  entry_memory_mtrigger(ch);
+  greet_memory_mtrigger(ch);
+  if (enter_wtrigger(ch->in_room, ch, dir) && entry_mtrigger(ch))
+    greet_mtrigger(ch, dir);
 
   if (ROOM_FLAGGED(was_in, ROOM_INDOORS) && !ROOM_FLAGGED(ch->in_room, ROOM_INDOORS))
   {
@@ -1292,6 +1314,17 @@ void do_doorcmd(struct char_data *ch, struct obj_data *obj, int door, int scmd, 
 {
   struct room_data *other_room = NULL;
   struct room_direction_data *back = NULL;
+
+  /* Door triggers only make sense for a real exit, not for a container.
+   * Either may refuse the action. */
+  if (!obj) {
+    if (!door_mtrigger(ch, scmd, door))
+      return;
+    if (!door_wtrigger(ch, scmd, door))
+      return;
+    if (!ch->in_room || !EXIT(ch, door))
+      return;
+  }
 
 
   snprintf(buf, sizeof(buf), "$n %ss ", cmd_door[scmd]);

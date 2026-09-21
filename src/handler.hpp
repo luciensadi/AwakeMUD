@@ -54,9 +54,7 @@ void    obj_from_char(struct obj_data *object);
 bool    equip_char(struct char_data *ch, struct obj_data *obj, int pos, bool recalc = TRUE, bool print_message = FALSE);
 struct obj_data *unequip_char(struct char_data *ch, int pos, bool focus, bool recalc = TRUE, bool print_message = FALSE);
 
-struct obj_data *get_obj_in_list(char *name, struct obj_data *list);
 struct obj_data *get_obj_in_list_num(int num, struct obj_data *list);
-struct obj_data *get_obj(char *name);
 struct obj_data *get_obj_num(int nr);
 
 void    obj_to_veh(struct obj_data *object, struct veh_data *veh);

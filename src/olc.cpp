@@ -20,6 +20,7 @@
 #include "utils.hpp"
 #include "db.hpp"
 #include "dblist.hpp"
+#include "dg_scripts.hpp"
 #include "olc.hpp"
 #include "memory.hpp"
 #include "newshop.hpp"
@@ -166,6 +167,13 @@ void write_index_file(const char *suffix)
             break;
           }
         break;
+      case 't':
+        for (rnum_t tmp_idx = 0; tmp_idx < top_of_trigt; tmp_idx++)
+          if (trig_index[tmp_idx] && VNUM_IN_ZONE(trig_index[tmp_idx]->vnum)) {
+            fprintf(fp, "%d.%s\n", zone_table[zone_idx].number, suffix);
+            break;
+          }
+        break;
       case 'z':
         fprintf(fp, "%d.%s\n", zone_table[zone_idx].number, suffix);
         break;
@@ -276,6 +284,14 @@ void clone_room_for_editing(struct room_data *dst, struct room_data *src)
   }
 
   dst->ex_description = clone_extra_descriptions(src->ex_description);
+
+  /* The copy runs nothing of its own. That is what keeps an abandoned edit
+   * from freeing the scripts the live room is in the middle of, and the
+   * attached-trigger list is its own so that editing it only reaches the
+   * prototype on save. */
+  dst->script = NULL;
+  dst->proto_script = NULL;
+  copy_proto_script(src, dst, WLD_TRIGGER);
 }
 
 void clone_obj_for_editing(struct obj_data *dst, struct obj_data *src)
@@ -291,6 +307,11 @@ void clone_obj_for_editing(struct obj_data *dst, struct obj_data *src)
   CLONE_STRING(photo);
   CLONE_STRING(graffiti);
   CLONE_STRING(source_info);
+
+  dst->script = NULL;
+  dst->script_id = 0;
+  dst->proto_script = NULL;
+  copy_proto_script(src, dst, OBJ_TRIGGER);
 }
 
 void clone_mob_for_editing(struct char_data *dst, struct char_data *src)
@@ -307,6 +328,12 @@ void clone_mob_for_editing(struct char_data *dst, struct char_data *src)
   /* A mobile has no player_specials of its own; they all borrow one. */
   if (src->player_specials)
     dst->player_specials = &dummy_mob;
+
+  dst->script = NULL;
+  dst->script_memory = NULL;
+  dst->script_id = 0;
+  dst->proto_script = NULL;
+  copy_proto_script(src, dst, MOB_TRIGGER);
 
 #ifdef USE_DEBUG_CANARIES
   dst->canary = CANARY_VALUE;

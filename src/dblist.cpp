@@ -15,6 +15,7 @@
 #include "db.hpp"
 #include "utils.hpp"
 #include "dblist.hpp"
+#include "dg_scripts.hpp"
 #include "handler.hpp"
 #include "file.hpp"
 #include "newdb.hpp"
@@ -172,6 +173,11 @@ void objList::UpdateObjs(const struct obj_data *proto, int rnum)
       temp->data->next_content = old.next_content;
       temp->data->in_host = old.in_host;
 
+      /* The struct copy above brought the prototype's script pointers along.
+       * A live object keeps its own running script and its own id. */
+      temp->data->script = old.script;
+      temp->data->script_id = old.script_id;
+
       temp->data->cyberdeck_part_pointer = old.cyberdeck_part_pointer;
 
       temp->data->targ = old.targ;
@@ -215,6 +221,14 @@ void objList::UpdateObjsIDelete(const struct obj_data *proto, int rnum, int new_
       temp->data->photo = old.photo;
       temp->data->graffiti = old.graffiti;
       temp->data->idnum = old.idnum;
+
+      /* As in UpdateObjs above: the struct copy brought the prototype's script
+       * pointers along, and a live object keeps its own. Losing script_id here
+       * would also leave the uid lookup table pointing at an object that
+       * free_obj() no longer knows to unregister. */
+      temp->data->script = old.script;
+      temp->data->script_id = old.script_id;
+
       if (temp->data->carried_by)
         affect_total(temp->data->carried_by);
       else if (temp->data->worn_by)
@@ -265,6 +279,18 @@ void objList::UpdateCounters(void)
     if (OBJ->load_origin == OBJ_LOAD_REASON_MOB_DEFAULT_GEAR)
       continue;
     */
+
+    /* Objects carrying a timer trigger tick down towards it. Objects
+     * without one are left alone: several item types use the same field
+     * for their own purposes. */
+    bool script_timer_ticked = FALSE;
+    if (SCRIPT_CHECK(OBJ, OTRIG_TIMER) && GET_OBJ_TIMER(OBJ) > 0) {
+      script_timer_ticked = TRUE;
+      if (--GET_OBJ_TIMER(OBJ) <= 0) {
+        timer_otrigger(OBJ);
+        continue;
+      }
+    }
 
     switch (GET_OBJ_TYPE(OBJ)) {
       case ITEM_PET:
@@ -365,7 +391,7 @@ void objList::UpdateCounters(void)
             continue;
 
           // Corpse decay.
-          if (GET_OBJ_TIMER(OBJ)-- <= 0) {
+          if ((script_timer_ticked ? GET_OBJ_TIMER(OBJ) : GET_OBJ_TIMER(OBJ)--) <= 0) {
             if (OBJ->carried_by)
               act("$p decays in your hands.", FALSE, temp->data->carried_by, temp->data, 0, TO_CHAR);
             else if (temp->data->worn_by)

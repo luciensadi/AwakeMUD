@@ -11,6 +11,7 @@
 #include "utils.hpp"
 #include "comm.hpp"
 #include "handler.hpp"
+#include "dg_scripts.hpp"
 #include "interpreter.hpp"
 #include "db.hpp"
 #include "screen.hpp"
@@ -1092,6 +1093,9 @@ void die(struct char_data * ch, idnum_t cause_of_death_idnum, bool should_splatt
   } else if (PRF_FLAGGED(ch, PRF_SEE_TIPS) && !PLR_FLAGGED(ch, PLR_NEWBIE)) {
     send_to_char("(TIP: Your belongings have been left behind, so you'll need to go and retrieve them if you want them back. If you forget where they are, you can use ^WWHERE BELONGINGS^n to find them.)\r\n", ch);
   }
+
+  /* Death triggers get their say before the body is dealt with. */
+  death_mtrigger(ch, NULL);
 
   struct room_data *temp_room = get_ch_in_room(ch);
 
@@ -3103,6 +3107,10 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
     return TRUE;
   }
 
+  /* A damage trigger can change the number, or leave it alone by never
+   * returning. It runs before armor and bioware get their say. */
+  dam = damage_mtrigger(ch, victim, dam, attacktype);
+
   if (!can_hurt(ch, victim, attacktype, TRUE)) {
     dam = -1;
     buf_mod(rbuf, sizeof(rbuf), "Can'tHurt",dam);
@@ -3552,6 +3560,7 @@ bool raw_damage(struct char_data *ch, struct char_data *victim, int dam, int att
       case TYPE_MANABOLT_OR_STUNBOLT:
       case TYPE_FOCUS_OVERUSE:
       case TYPE_PENANCE:
+      case TYPE_SCRIPT:
         // These types do not risk equipment damage.
         break;
       default:
@@ -6174,6 +6183,13 @@ void perform_violence(void)
       stop_fighting(ch);
       continue;
     }
+
+    /* Fight and hitprcnt triggers get a look at each round. Either may
+     * end the fight or extract the fighter, so re-check afterwards. */
+    fight_mtrigger(ch);
+    hitprcnt_mtrigger(ch);
+    if (!CH_IN_COMBAT(ch) || !AWAKE(ch))
+      continue;
 
     if (!FIGHTING(ch) && !FIGHTING_VEH(ch)) {
       mudlog("SYSERR: Character is in the combat list, but isn't fighting anything!", ch, LOG_SYSLOG, TRUE);

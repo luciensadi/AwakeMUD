@@ -1264,6 +1264,7 @@ enum {
 #define TYPE_POISON           417
 #define TYPE_FOCUS_OVERUSE    418
 #define TYPE_PENANCE          419
+#define TYPE_SCRIPT           420
 // Adding a new one? Put it in raw_damage()'s equipment damage check.
 
 /* magic attack types */
@@ -2374,7 +2375,8 @@ enum {
 #define CON_PET_CREATE          56
 #define CON_CF_CREATE           57
 #define CON_SUBMERSION          58
-#define CON_MAX                 58
+#define CON_TRIGEDIT            59
+#define CON_MAX                 59
 #define IS_VALID_STATE_TO_RECEIVE_COMMS(s) ((s) == CON_PLAYING || ((s) >= CON_PRO_CREATE && (s) <= CON_AMMO_CREATE) || (s) == CON_PGEDIT || ((s) >= CON_DECORATE_VEH && (s) <= CON_ART_CREATE))
 // If you add another state, you need to touch comm.cpp's close_socket and make sure it's reflected there!
 // Also add it to constants's connected_types.
@@ -2391,6 +2393,7 @@ enum {
 #define DB_BOOT_VEH     6
 #define DB_BOOT_MTX     7
 #define DB_BOOT_IC      8
+#define DB_BOOT_TRG     9
 /* Defines for sending text */
 
 #define TO_ROOM                1
@@ -3212,7 +3215,8 @@ enum {
 #define DIRTY_BIT_ECHOES      8
 #define DIRTY_BIT_QUESTS      9
 #define DIRTY_BIT_BULLETPANTS 10
-#define NUM_DIRTY_BITS        11
+#define DIRTY_BIT_SCRIPTVARS  11
+#define NUM_DIRTY_BITS        12
 
 
 #define SMARTLINK_II_MODIFIER 3
@@ -3355,6 +3359,7 @@ enum {
 #define OBJ_LOAD_REASON_OTAKU_RESONANCE          60
 #define OBJ_LOAD_REASON_CREATE_COMPLEX_FORM      61
 #define OBJ_LOAD_REASON_UNSTOW_CMD               62
+#define OBJ_LOAD_REASON_SCRIPT                   63
 
 #define IDNUM_FOR_MOB_ALERT_STATE  -1
 
