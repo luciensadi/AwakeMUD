@@ -307,12 +307,6 @@ void initialize_and_connect_to_mysql() {
   bool reconnect = 1;
   mysql_options(mysql, MYSQL_OPT_RECONNECT, &reconnect);
 
-  // Pin the session time zone to UTC. MySQL DATETIMEs in the mudvault tables
-  // are stored as naive UTC by convention, and UNIX_TIMESTAMP() interprets
-  // them in the session zone -- a local-timezone server would silently skew
-  // MudVault vote cooldowns. mv_boot() double-checks this at startup.
-  mysql_options(mysql, MYSQL_INIT_COMMAND, "SET time_zone = '+00:00'");
-
   // Perform the actual connection.
   if (!mysql_real_connect(mysql, mysql_host, mysql_user, mysql_password, mysql_db, GAME_MYSQL_PORT, NULL, 0)) {
     snprintf(buf, sizeof(buf), "FATAL ERROR: %s\r\n", mysql_error(mysql));
