@@ -5951,6 +5951,83 @@ void roll_individual_initiative(struct char_data *ch)
   }
 }
 
+
+void set_combat_pools(struct char_data *ch, int dodge, int soak, int offense, bool message) {
+  extern int get_skill_num_in_use_for_weapons(struct char_data *ch);
+  extern int get_skill_dice_in_use_for_weapons(struct char_data *ch);
+
+  if (!ch) {
+    mudlog("SYSERR: Received NULL ch to set_casting_pools!", ch, LOG_SYSLOG, TRUE);
+    return;
+  }
+
+  if (dodge < 0 || soak < 0 || offense < 0) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Received invalid val to set_combat_pools(%s, %d, %d, %d)!", GET_CHAR_NAME(ch), dodge, soak, offense);
+    return;
+  }
+
+  int skill_num = get_skill_num_in_use_for_weapons(ch);
+  int dice_max = get_skill_dice_in_use_for_weapons(ch);
+  int remainder = GET_COMBAT_POOL(ch);
+
+  if (GET_CHIPJACKED_SKILL(ch, skill_num) && offense > 0) {
+    if (message) {
+      send_to_char("You're using an activesoft, so you can't allocate any dice to your offense pool.\r\n", ch);
+    }
+    offense = 0;
+  }
+
+  if (offense > dice_max) {
+    if (message) {
+      send_to_char(ch, "You're not skilled enough with %s, so your offense pool is capped at %d.\r\n", skills[skill_num].name, dice_max);
+    }
+    offense = dice_max;
+  }
+
+  // There's nothing to dodge on the astral plane.
+  if (IS_ASTRAL(ch) && dodge > 0) {
+    if (message) {
+      send_to_char("Astral characters have no need to dodge anything, so your dice have been re-allocated to your soak pool.\r\n", ch);
+    }
+    dodge = 0;
+  }
+
+  // Dodge also doesn't apply when prone, but prone combat code already moves dodge to soak
+  // if (AFF_FLAGGED(ch, AFF_PRONE) && dodge > 0) {
+  //   if (message) {
+  //     send_to_char("Prone characters can't dodge anything, so your dice have been re-allocated to your soak pool.\r\n", ch);
+  //   }
+  //   dodge = 0;
+  // }
+
+  remainder -= GET_DODGE(ch) = MIN(dodge, remainder);
+  remainder -= GET_BODY_POOL(ch) = MIN(soak, remainder);
+  remainder -= GET_OFFENSE(ch) = MIN(offense, remainder);
+
+  // Any remaining dice are reallocated to dodge/soak based on existing dodge/soak assignments
+  // Where dodge == soak, extra dice defaults to soak
+  if (remainder) {
+    if (GET_DODGE(ch) > GET_BODY_POOL(ch)) {
+      if (message) {
+        send_to_char(ch, "Putting the %d remaining dice in your dodge pool.\r\n", remainder);
+      }
+      GET_DODGE(ch) += remainder;
+    } else {
+      if (message) {
+        send_to_char(ch, "Putting the %d remaining dice in your soak pool.\r\n", remainder);
+      }
+      GET_BODY_POOL(ch) += remainder;
+    }
+  }
+
+  if (message) {
+    send_to_char(ch, "You entered: Ranged Dodge: %d, Damage Soak: %d, Offense: %d\r\n", dodge, soak, offense);
+    send_to_char(ch, "Pools set to: Ranged Dodge: %d, Damage Soak: %d, Offense: %d\r\n", GET_DODGE(ch), GET_BODY_POOL(ch), GET_OFFENSE(ch));
+    SendGMCPCharPools(ch);
+  }
+}
+
+
 void decide_combat_pool(void)
 {
   PERF_PROF_SCOPE(pr_, __func__);
