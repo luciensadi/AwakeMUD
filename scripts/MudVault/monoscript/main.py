@@ -19,7 +19,7 @@ if __name__ == "__main__":
   if not all([MUDVAULT_MUD_ID, MUDVAULT_API_KEY]):
     raise EnvironmentError("Missing MUDVAULT environment variables.")
 
-  x_api_key = f"mv_{MUDVAULT_MUD_ID}_{MUDVAULT_API_KEY}"
+  x_api_key = MUDVAULT_API_KEY
 
   try:
     unlink_characters(x_api_key)

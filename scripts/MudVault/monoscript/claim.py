@@ -27,7 +27,8 @@ def claim(x_api_key: str):
       response = requests.post(
         url=COMPOSED_URL,
         headers={
-          "X-API-Key": x_api_key
+          "X-API-Key": x_api_key,
+          "Content-Type": "application/json",
         },
         timeout=30
       )
