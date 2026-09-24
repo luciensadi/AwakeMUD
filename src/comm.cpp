@@ -196,6 +196,7 @@ extern void process_flying_vehicles();
 extern void cleanup_policy_tree();
 extern void save_all_pcs();
 extern void attempt_to_offload_unused_zones();
+void process_secondary_dialogue_queue(void);
 
 extern void save_all_apartments_and_storage_rooms();
 
@@ -1102,6 +1103,7 @@ void game_loop(int mother_desc)
 
     if (!(pulse % PULSE_MOBILE)) {
       mobile_activity();
+      process_secondary_dialogue_queue();
     }
 
     if (!(pulse % ViolencePulse)) {
