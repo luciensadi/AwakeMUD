@@ -3602,6 +3602,7 @@ SPECIAL(bank)
     return TRUE;
   }
 
+  one_argument(argument, buf);
   if (CMD_IS("balance")) {
     if (GET_BANK(ch) > 0)
       send_to_char(ch, "Your balance across your various numbered accounts and aliases is %ld nuyen, and you're carrying %d in cash.\r\n", GET_BANK(ch), GET_NUYEN(ch));
@@ -3613,12 +3614,17 @@ SPECIAL(bank)
   }
 
   else if (CMD_IS("deposit")) {
-    if ((amount = atoi(argument)) <= 0 && str_cmp(buf, "all")) {
+    if ((amount = atoi(buf)) <= 0 && str_cmp(buf, "all")) {
       send_to_char("How much do you want to deposit?\r\n", ch);
       return 1;
     }
-    if (!str_cmp(buf, "all") || GET_NUYEN(ch) < amount)
+    if (!str_cmp(buf, "all") || GET_NUYEN(ch) < amount) {
       amount = GET_NUYEN(ch);
+      if (amount == 0) {
+        send_to_char("You don't have any nuyen on hand to deposit.\r\n", ch);
+        return 1;
+      }
+    }
 
     // Raw amounts-- we don't care about transfering money around like this.
     GET_NUYEN_RAW(ch) -= amount;
@@ -3630,12 +3636,17 @@ SPECIAL(bank)
   }
 
   else if (CMD_IS("withdraw")) {
-    if ((amount = atoi(argument)) <= 0 && str_cmp(buf, "all")) {
+    if ((amount = atoi(buf)) <= 0 && str_cmp(buf, "all")) {
       send_to_char("How much do you want to withdraw?\r\n", ch);
       return 1;
     }
-    if (!str_cmp(buf, "all") || GET_BANK(ch) < amount)
+    if (!str_cmp(buf, "all") || GET_BANK(ch) < amount) {
       amount = GET_BANK(ch);
+      if (amount == 0) {
+        send_to_char("You don't have any nuyen in your accounts to withdraw.\r\n", ch);
+        return 1;
+      } 
+    }
 
     // Raw amounts-- we don't care about transfering money around like this.
     GET_NUYEN_RAW(ch) += amount;
