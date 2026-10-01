@@ -1749,11 +1749,10 @@ ACMD(do_qedit)
     d->edit_quest->intro = str_dup("I've got an incomplete quest for you.");
     d->edit_quest->decline = str_dup("That's too bad...later, chummer.");
     d->edit_quest->quit =
-      str_dup("Null sweat, chummer.  Someone else'll finish the job");
+      str_dup("Null sweat, chummer.  Someone else'll finish the job.");
     d->edit_quest->finish = str_dup("Well done.");
     d->edit_quest->info =
-      str_dup("Well you see, this quest is rather incomplete, "
-              "so I've got no info on it.");
+      str_dup("Well you see, this quest is rather incomplete, so I've got no info on it.");
 
     d->edit_mode = QEDIT_CONFIRM_EDIT;
   }
