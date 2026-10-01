@@ -100,6 +100,11 @@ bool can_edit_zone(struct char_data *ch, rnum_t real_zone) {
     return FALSE;
   }
 
+  if (real_zone < 0) {
+    mudlog("SYSERR: Received invalid zone num in can_edit_zone()!", ch, LOG_SYSLOG, TRUE);
+    return FALSE;
+  }
+
   return can_edit_zone(ch, &zone_table[real_zone]);
 }
 
