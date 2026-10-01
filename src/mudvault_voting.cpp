@@ -114,19 +114,25 @@ static void deliver_vote_reward(struct char_data *ch, const char *reward_id_hex,
    * enforcement of the verified-gate; this re-check mirrors do_vote's gating
    * so an unverified char can never be handed a reward even if a bad row
    * somehow lands in the table. */
-  if (!GET_MUDVAULT_VERIFIED(ch))
+  if (!GET_MUDVAULT_VERIFIED(ch)) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Failed to claim MudVault vote for %s- character is not marked as verified", reward_id_hex);
     return;
+  }
 
   snprintf(query, sizeof(query),
            "UPDATE mudvault_votes SET redeemed_at = NOW() "
            "WHERE reward_id_bin = UNHEX(REPLACE('%s', '-', '')) AND redeemed_at IS NULL",
            reward_id_hex);
 
-  if (mysql_wrapper(mysql, query))
+  if (mysql_wrapper(mysql, query)) {
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Failed to mark MudVault reward %s as claimed in DB- query error", reward_id_hex);
     return;
+  }
 
-  if (mysql_affected_rows(mysql) != 1) {
+  int num_rows = mysql_affected_rows(mysql);
+  if (num_rows != 1) {
     /* Someone else (a concurrent heartbeat / login pass) already claimed it. */
+    mudlog_vfprintf(ch, LOG_SYSLOG, "SYSERR: Failed to mark MudVault reward %s as claimed in DB- %d rows changed", reward_id_hex, num_rows);
     return;
   }
 
@@ -134,13 +140,12 @@ static void deliver_vote_reward(struct char_data *ch, const char *reward_id_hex,
    * so it is a PC with a real player_specials; write the pfile fields
    * directly -- the GET_* macros above are read-only.) */
   ch->player_specials->saved.last_vote_time = voted_at_epoch;
-  gain_syspoints(ch, 1, false, "mudvault vote reward");
+  gain_syspoints(ch, 1, true, "mudvault vote reward");
 
   mudlog_vfprintf(ch, LOG_SYSLOG, "MUDVAULT: %s redeemed vote reward %s.",
                   GET_CHAR_NAME(ch), reward_id_hex);
 
-  send_to_char(ch, "Your vote on MudVault was received - 1 system point awarded. Vote again in 24 hours: %s\r\n",
-               mv_vote_url());
+  send_to_char(ch, "Thanks for voting for us on MudVault! You've been awarded a system point, and can vote again in 24 hours.\r\n");
 }
 
 /* Process one linking-result row, per the heartbeat/on-login contract. */
