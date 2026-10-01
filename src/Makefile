@@ -9,7 +9,10 @@ CXX ?= clang++
 IS_CLANG = $(shell $(CXX) --version | grep -qi clang && echo yes || echo no)
 
 # These flags are set for all builds.
-BASE_CPPFLAGS = -isystem external/ -isystem /usr/local/include/ -std=c++23 -D_GNU_SOURCE -DLOG_COMMANDS -DIDLEDELETE_DRYRUN
+# MUDVAULT_VOTING: compiles in the MudVault voting integration. Currently
+# enabled on ALL deployment types for testing -- scope it down (e.g. enable
+# only on mainport) after testing by moving it into a DEPLOYMENT_MODE block.
+BASE_CPPFLAGS = -isystem external/ -isystem /usr/local/include/ -std=c++23 -D_GNU_SOURCE -DLOG_COMMANDS -DIDLEDELETE_DRYRUN -DMUDVAULT_VOTING
 BASE_CXXFLAGS = -Wall -Wextra -Wno-unused-parameter -Wno-vla -Wno-char-subscripts -Wno-format-truncation -ggdb
 BASE_LDFLAGS  = -L/usr/local/lib
 BASE_LDLIBS   = -lmysqlclient -lz -lm

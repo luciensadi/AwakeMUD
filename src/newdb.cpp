@@ -34,6 +34,7 @@
 #include "newmail.hpp"
 #include "player_exdescs.hpp"
 #include "gmcp.hpp"
+#include "mudvault_voting.hpp"
 
 /* mysql_config.h must be filled out with your own connection info. */
 /* For obvious reasons, DO NOT ADD THIS FILE TO SOURCE CONTROL AFTER CUSTOMIZATION. */
@@ -480,10 +481,22 @@ bool load_char(const char *name, char_data *ch, bool logon, int pc_load_origin)
   set_exdesc_max(ch, atoi(row[83]), FALSE);
   GET_OTAKU_PATH(ch) = atoi(row[84]);
   GET_GRADE(ch) = atoi(row[85]);
-  GET_GARNISHMENT_NUYEN(ch) = atol(row[86]);
+  // Garnishment/RestrictedSysPoints column order is CANONICAL-BUGGED: the
+  // committed migrations (add_garnishments.sql using three AFTER
+  // submersion_grade clauses, then add_bound_sysp.sql AFTER garnishment_nuyen)
+  // yield the tail order notor, rep, nuyen, RestrictedSysPoints. The DB order
+  // is authoritative; see require_that_fields_end_table() in db.cpp.
+  GET_GARNISHMENT_NOTOR(ch) = atol(row[86]);
   GET_GARNISHMENT_REP(ch) = atol(row[87]);
-  GET_GARNISHMENT_NOTOR(ch) = atol(row[88]);
+  GET_GARNISHMENT_NUYEN(ch) = atol(row[88]);
   GET_RESTRICTED_SYSTEM_POINTS(ch) = atol(row[89]);
+  // MudVault voting fields (SQL/Migrations/add_votes.sql).
+  // row[90]: mudvault_verified -- appended at end of pfiles; load_char is positional.
+  // Write the fields directly: the GET_* macros are conditional expressions (READ-ONLY, see utils.hpp).
+  if (ch->player_specials) {
+    ch->player_specials->saved.mudvault_verified = atoi(row[90]) != 0;
+    ch->player_specials->saved.last_vote_time = atol(row[91]);
+  }
   mysql_free_result(res);
 
   // Update lifestyle information.
@@ -1407,7 +1420,8 @@ static bool save_char(char_data *player, vnum_t loadroom, bool fromCopyover = FA
                "PermBodLoss=%d, WimpLevel=%d, Loadroom=%ld, LastRoom=%ld, LastD=%ld, Hunger=%d, Thirst=%d, Drunk=%d, " \
                "ShotsFired='%d', ShotsTriggered='%d', Tradition=%d, pgroup='%ld', "\
                "Inveh=%ld, `rank`=%d, gender=%d, SysPoints=%d, RestrictedSysPoints=%d, socialbonus=%d, email='%s', highlight='%s',"
-               "lifestyle_string='%s', nodelete=%d, garnishment_nuyen=%ld, garnishment_rep=%ld, garnishment_notor=%ld WHERE idnum=%ld;",
+               "lifestyle_string='%s', nodelete=%d, garnishment_nuyen=%ld, garnishment_rep=%ld, garnishment_notor=%ld, "
+               "mudvault_verified=%d, last_vote_time=%ld WHERE idnum=%ld;",
                AFF_FLAGS(player).ToString(),
                PLR_FLAGS(player).ToString(),
                PRF_FLAGS(player).ToString(),
@@ -1460,6 +1474,8 @@ static bool save_char(char_data *player, vnum_t loadroom, bool fromCopyover = FA
                GET_GARNISHMENT_NUYEN(player),
                GET_GARNISHMENT_REP(player),
                GET_GARNISHMENT_NOTOR(player),
+               GET_MUDVAULT_VERIFIED(player) ? 1 : 0,
+               GET_LAST_VOTE_TIME(player),
                GET_IDNUM(player));
   mysql_wrapper(mysql, buf);
 
@@ -1952,13 +1968,19 @@ void DeleteChar(long idx)
 
   // Drop them from the table of folks who exist.
   global_existing_player_cache[std::string(string_to_lowercase(name))] = FALSE;
-  delete[] name;
 
   // Ensure we can open the file.
   if (!(fl = fopen(buf, "w"))) {
     perror(buf);
+    delete[] name;
     return;
   }
+
+  // Deletion will proceed: queue a site-side unlink of their MudVault profile
+  // (all character deletion paths funnel through here, so the hook lives in
+  // the one place deletion actually happens). Must run while `name` is alive.
+  mv_request_unlink_by_id(idx, name);
+  delete[] name;
 
   // Prepend the file with the statement to remove this character's [Deleted] entry.
   fprintf(fl, "DELETE FROM pfiles WHERE idnum=%ld;\r\n", idx);
