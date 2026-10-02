@@ -1189,6 +1189,9 @@ struct descriptor_data
 
   std::vector<std::unique_ptr<MenuFrame>> menu_frame_stack;
 
+  // Connection state to restore to when the menu frame stack empties (see MenuFrame.cpp).
+  int menu_frame_return_state;
+
   // Need original pointers so we know what to overwrite.
   Activity *edit_activity;
   Check *edit_check;
@@ -1224,7 +1227,7 @@ struct descriptor_data
       edit_zon(NULL), edit_cmd(NULL), edit_veh(NULL), edit_host(NULL), edit_icon(NULL),
       edit_helpfile(NULL), edit_complex(NULL), edit_complex_original(NULL),
       edit_apartment(NULL), edit_apartment_original(NULL), edit_apartment_room(NULL),
-      edit_apartment_room_original(NULL), edit_faction(NULL), edit_exdesc(NULL), edit_pgroup(NULL), menu_frame_stack(),
+      edit_apartment_room_original(NULL),       edit_faction(NULL), edit_exdesc(NULL), edit_pgroup(NULL), menu_frame_stack(), menu_frame_return_state(CON_PLAYING),
       edit_activity(NULL), edit_check(NULL), edit_check_original(NULL), edit_effect(NULL), edit_effect_original(NULL),
       edit_outcome(NULL), edit_outcome_original(NULL), edit_option(NULL), edit_option_original(NULL),
       edit_situation(NULL), edit_situation_original(NULL), edit_params(NULL), edit_params_original(NULL), canary(CANARY_VALUE), pProtocol(NULL)
