@@ -29,6 +29,14 @@
 
 extern struct weather_data weather_info;
 
+// These top_ and _index externs save us from having to include the whole db.hpp file.
+extern rnum_t top_of_world;
+extern rnum_t top_of_mobt;
+extern rnum_t top_of_objt;
+extern struct index_data *mob_index;
+extern struct index_data *obj_index;
+extern struct index_data *veh_index;
+
 struct char_data;
 struct obj_data;
 
@@ -200,6 +208,9 @@ int    calculate_ware_essence_or_index_cost(struct char_data *ch, struct obj_dat
 bool   check_if_sitting_and_force_sit_command_if_not(struct char_data *ch);
 const char *cleanup_invalid_color_codes(const char *str);
 struct veh_data *resolve_vehicle_from_vehcontainer(struct obj_data *obj);
+int skill_name_to_idx(const char *skill_name, bool test_abbreviations=false);
+int spell_name_to_idx(const char *spell_name, bool test_abbreviations=false);
+int power_name_to_idx(const char *power_name, bool test_abbreviations=false);
 
 // GMCP / Discord update method. Does nothing if GMCP isn't turned on.
 void update_gmcp_discord_info(struct descriptor_data *desc);
@@ -737,6 +748,9 @@ extern int global_dummy_val; // Trash value to use on spent_restricted etc when 
 #define GET_SPIRIT_OR_ELEMENTAL_TYPE(ch)      (GET_SPARE1(ch))
 #define GET_SPIRIT_OR_ELEMENTAL_FORCE(ch)     (GET_SPARE2(ch))
 
+#define GET_ACTIVITY(ch)                      ((ch) && (ch)->desc ? (ch)->desc->running_activity : nullptr);
+#define GET_SETTABLE_ACTIVITY(ch)             ((ch)->desc->running_activity);
+
 // Changing this? You probably need to change get_veh_controlled_by_char() as well.
 #define RIG_VEH(ch, veh)  ((veh) = ((ch)->char_specials.rigging ? (ch)->char_specials.rigging : (ch)->in_veh));
 
@@ -925,7 +939,6 @@ float get_proto_weight(struct obj_data *obj);
 #define GET_OBJ_KEYWORDS(obj)   ((obj)->text.keywords)
 #define IS_OBJ_STAT(obj, stat)  ((obj)->obj_flags.extra_flags.IsSet(stat))
 #define OBJ_VNUM_RNUM(rnum) ((obj_index[rnum]).vnum)
-#define VEH_VNUM_RNUM(rnum) ((veh_index[rnum]).vnum)
 #define GET_MOD(veh, i) ((veh)->mod[i])
 #define GET_OBJ_SPEC(obj) (VALID_OBJ_RNUM(obj) ? \
     obj_index[GET_OBJ_RNUM(obj)].func : NULL)
@@ -953,6 +966,7 @@ float get_proto_weight(struct obj_data *obj);
 // Give this a weapon type straight from the weapon-- ex WEAP_SMG. It will convert it for you.
 #define GET_BULLETPANTS_AMMO_AMOUNT(ch, weapon_type, ammo_type) ((ch)->bullet_pants[(weapon_type) - START_OF_AMMO_USING_WEAPONS][(ammo_type)])
 
+#define VEH_VNUM_RNUM(rnum) ((veh_index[rnum]).vnum)
 
 /* compound utilities and other macros **********************************/
 

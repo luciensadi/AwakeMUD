@@ -723,7 +723,6 @@ int parse_race(struct descriptor_data *d, const char *arg)
   case '*':
     display_prestige_race_menu(d);
     return RETURN_HELP;
-
   case '?':
     switch (LOWER(*(arg+1))) {
     case '1':
