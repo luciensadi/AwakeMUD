@@ -12,6 +12,9 @@ void do_activities_debug(struct char_data *ch, char *arguments);
 
 void display_activities_help(struct char_data *ch);
 
+// TODO: This is a skeleton of a file with a lot of things only sketched out. Helpstrings aren't done, functions are mostly stubs with a few preconditions.
+
+
 // The list of commands they can run under the ACTIVITY verb. Protip: Keep this alphabetized.
 struct activity_cmd_struct {
   const char *cmd;
@@ -104,7 +107,7 @@ void do_activities_edit(struct char_data *ch, char *arguments) {
   FAILURE_CASE_PRINTF(itr == global_activities.end(), "'%s' is not a valid activity slug. Use ACTIVITIES LIST to see the ones available.", arguments);
 
   // Ensure you have edit abilities.
-  FAILURE_CASE(itr->second.can_edit(ch), "You don't have permission to edit that activity.");
+  FAILURE_CASE(!itr->second.can_edit(ch), "You don't have permission to edit that activity.");
 
   ch->desc->edit_activity = new Activity(itr->second);
 

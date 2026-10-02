@@ -1,3 +1,5 @@
+#include <cstdlib>
+
 #include "classes.hpp"
 #include "../handler.hpp"
 #include "../db.hpp"
@@ -218,26 +220,26 @@ CHECK_FUNCTION(test_func) {
 /////////////// Skills section
 
 CHECK_FUNCTION(has_skill) {
-  GET_SETTING(setting_skill_idx);
-  int skill_idx = atoi(setting_skill_idx);
-  CHECK_FAILURE_CASE(skill_idx < 0, "Bad skill index: %s", setting_skill_idx);
+  GET_SETTING(skill_idx);
+  int parsed_skill_idx = atoi(skill_idx);
+  CHECK_FAILURE_CASE(parsed_skill_idx < 0, "Bad skill index: %s", skill_idx);
 
   GET_SETTING_DEFAULT(setting_required_rank, "1");
   int required_rank = MAX(0, atoi(setting_required_rank));
 
-  return GET_SKILL(ch, skill_idx) > 0 && GET_SKILL(ch, skill_idx) >= required_rank;
+  return GET_SKILL(ch, parsed_skill_idx) > 0 && GET_SKILL(ch, parsed_skill_idx) >= required_rank;
 }
 
 CHECK_FUNCTION(roll_skill) {
-  GET_SETTING(setting_skill_idx);
-  int skill_idx = atoi(setting_skill_idx);
-  CHECK_FAILURE_CASE(skill_idx < 0, "Bad skill index: %s", setting_skill_idx);
+  GET_SETTING(skill_idx);
+  int parsed_skill_idx = atoi(skill_idx);
+  CHECK_FAILURE_CASE(parsed_skill_idx < 0, "Bad skill index: %s", skill_idx);
 
   GET_SETTING(tn);
   int tn_val = atoi(tn);
 
   char writeout_buffer[10000] = {0};
-  int skill_dice = get_skill(ch, skill_idx, tn_val, writeout_buffer, sizeof(writeout_buffer));
+  int skill_dice = get_skill(ch, parsed_skill_idx, tn_val, writeout_buffer, sizeof(writeout_buffer));
   int result = success_test(skill_dice, tn_val);
   return result > 0;
 }
@@ -278,14 +280,14 @@ CHECK_FUNCTION(could_cast_spell) {
 ////////////// Powers section
 
 CHECK_FUNCTION(has_power_active) {
-  GET_SETTING(setting_power_idx);
-  int power_idx = atoi(setting_power_idx);
-  CHECK_FAILURE_CASE(power_idx < 0, "Bad power name: %s", setting_power_idx);
+  GET_SETTING(power_idx);
+  int parsed_power_idx = atoi(power_idx);
+  CHECK_FAILURE_CASE(parsed_power_idx < 0, "Bad power name: %s", power_idx);
 
   GET_SETTING_DEFAULT(rank, "1");
   int power_rank = atoi(rank);
 
-  return affected_by_power(ch, power_idx) >= power_rank;
+  return affected_by_power(ch, parsed_power_idx) >= power_rank;
 }
 
 ///////////// Items, equipment, etc
@@ -312,7 +314,7 @@ CHECK_FUNCTION(random) {
   GET_SETTING(this_or_lower);
   int threshold = atoi(this_or_lower);
 
-  return (random() % max_val) < threshold;
+  return (rand() % max_val) < threshold;
 }
 
 #undef CHECK_FUNCTION
