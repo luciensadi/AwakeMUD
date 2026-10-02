@@ -2519,10 +2519,19 @@ void free_editing_structs(descriptor_data *d, int state)
 
   if (d->edit_activity) { delete d->edit_activity; d->edit_activity = NULL; }
   if (d->edit_check) { delete d->edit_check; d->edit_check = NULL; }
+  if (d->edit_check_original) { delete d->edit_check_original; d->edit_check_original = NULL; }
   if (d->edit_effect) { delete d->edit_effect; d->edit_effect = NULL; }
+  if (d->edit_effect_original) { delete d->edit_effect_original; d->edit_effect_original = NULL; }
   if (d->edit_outcome) { delete d->edit_outcome; d->edit_outcome = NULL; }
+  if (d->edit_outcome_original) { delete d->edit_outcome_original; d->edit_outcome_original = NULL; }
   if (d->edit_option) { delete d->edit_option; d->edit_option = NULL; }
+  if (d->edit_option_original) { delete d->edit_option_original; d->edit_option_original = NULL; }
   if (d->edit_situation) { delete d->edit_situation; d->edit_situation = NULL; }
+  if (d->edit_situation_original) { delete d->edit_situation_original; d->edit_situation_original = NULL; }
+  DELETE_IF_EXTANT(d->edit_params);
+  DELETE_IF_EXTANT(d->edit_params_original);
+  d->edit_effects_original.clear();
+  d->edit_slugs_original.clear();
 
   if (d->edit_room) {
     DeleteRoom(d->edit_room);
@@ -2672,6 +2681,8 @@ void close_socket(struct descriptor_data *d)
     /* added to Free up temporary editing constructs */
     if (d->connected == CON_PLAYING
         || d->connected == CON_PART_CREATE
+        || d->connected == CON_ACTIVITY_EDIT
+        || d->connected == CON_MENUFRAME
         || (d->connected >= CON_SPELL_CREATE && d->connected <= CON_ACCOUNT_PARSE && d->connected != CON_ASKNAME))
     {
       if (d->connected == CON_VEHCUST)
