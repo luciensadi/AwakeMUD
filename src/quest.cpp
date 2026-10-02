@@ -4029,7 +4029,7 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
     break;               // we should never get here
   case QEDIT_REWARD:
     number = atoi(arg);
-    if (real_object(number) < -1)
+    if (number != -1 && real_object(number) < 1)
       send_to_char(CH, "Invalid vnum.  Enter vnum of reward (-1 for nothing): ");
     else {
       QUEST->reward = number;

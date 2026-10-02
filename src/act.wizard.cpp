@@ -10076,24 +10076,44 @@ ACMD(do_audit) {
     FAILURE_CASE(!in_room, "idk how you did it but you broke it, notify staff");
     rnum_t zone_rnum = get_zone_index_number_from_vnum(GET_ROOM_VNUM(in_room));
 
-    // Check the zone for editors.
-    for (int editor_idx = 0; editor_idx < NUM_ZONE_EDITOR_IDS; editor_idx++) {
-      // If this editor ID is theirs, remove it and post a wizlog about it.
-      if (zone_table[zone_rnum].editor_ids[editor_idx] == GET_IDNUM(ch)) {
-        zone_table[zone_rnum].editor_ids[editor_idx] = 0;
-        write_zone_to_disk(zone_table[zone_rnum].number);
+    // Precondition: They must be an editor of this zone, or must be high-enough priv to bypass that.
+    FAILURE_CASE(!can_edit_zone(ch, zone_rnum), "You don't seem to be an editor for the zone you're standing in.");
 
-        mudlog_vfprintf(ch, LOG_WIZLOG, "^W%s^W has flagged zone %d (%s^W) as ready for auditing.^n",
-                        GET_CHAR_NAME(ch),
-                        zone_table[zone_rnum].number,
-                        zone_table[zone_rnum].name);
-        send_to_char(ch, "OK. Your ability to edit %s^n has been removed, and staff have been notified it's ready for review.\r\n", zone_table[zone_rnum].name);
-        return;
-      }
+    char msg_buf[1000] = {0};
+    snprintf(msg_buf, sizeof(msg_buf), "^W%s^W (%ld) has flagged zone %d (%s^W) as ready for auditing, removing editor IDs: ^n",
+              GET_CHAR_NAME(ch),
+              GET_IDNUM(ch),
+              zone_table[zone_rnum].number,
+              zone_table[zone_rnum].name
+            );
+
+    bool ch_was_editor = false;
+    bool removed_any_ids = false;
+
+
+    for (int editor_idx = 0; editor_idx < NUM_ZONE_EDITOR_IDS; editor_idx++) {
+      if (zone_table[zone_rnum].editor_ids[editor_idx] == 0)
+        continue;
+      
+      snprintf(ENDOF(msg_buf), sizeof(msg_buf) - strlen(msg_buf), "%s%d", removed_any_ids ? ", " : "", zone_table[zone_rnum].editor_ids[editor_idx]);
+      removed_any_ids = true;
+
+      if (zone_table[zone_rnum].editor_ids[editor_idx] == GET_IDNUM(ch))
+        ch_was_editor = true;
+
+      zone_table[zone_rnum].editor_ids[editor_idx] = 0;
     }
 
-    // If we got here, they don't have edit privs on this zone.
-    send_to_char("You don't seem to be an editor for the zone you're standing in.\r\n", ch);
+    mudlog_vfprintf(ch, LOG_SYSLOG, "%s.", msg_buf);
+
+    if (ch_was_editor) {
+      send_to_char(ch, "OK. Your ability to edit %s^n has been removed, and staff have been notified it's ready for review.\r\n", zone_table[zone_rnum].name);
+    } else {
+      send_to_char(ch, "OK. All editors have been removed, and staff have been notified it's ready for review.\r\n", zone_table[zone_rnum].name);
+    }
+
+    // Save the changes.
+    write_zone_to_disk(zone_table[zone_rnum].number);
     return;
   }
 

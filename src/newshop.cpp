@@ -2089,7 +2089,7 @@ void shop_info(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
         if (GET_OBJ_VAL(obj, 9) > 0)
           strlcat(buf, " and ", sizeof(buf));
       }
-      if (GET_OBJ_VAL(obj, 9) > 0 && (real_obj = real_object(GET_OBJ_VAL(obj, 9))) > 9) {
+      if (GET_OBJ_VAL(obj, 9) > 0 && (real_obj = real_object(GET_OBJ_VAL(obj, 9))) > 0) {
         strlcat(buf, obj_proto[real_obj].text.name, sizeof(buf));
       }
       snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ". It can hold a maximum of %d rounds.", GET_OBJ_VAL(obj, 5));

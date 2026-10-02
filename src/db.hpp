@@ -95,6 +95,7 @@ struct obj_data *create_obj(void);
 void    clear_object(struct obj_data *obj);
 void    clear_room(struct room_data *room);
 void    free_obj(struct obj_data *obj);
+void    free_obj_strings(struct obj_data *obj, struct obj_data *shared_with);
 void    free_room(struct room_data *room);
 long     real_object(long virt);
 struct obj_data *read_object(int nr, int type, int load_origin, int pc_load_origin=0, idnum_t pc_load_idnum=0);
