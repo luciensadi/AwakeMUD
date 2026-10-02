@@ -2,6 +2,7 @@
  * (c) 1996-97 Erwin S. Andreasen <erwin@andreasen.org> 
  * and of course, extended by Lucien 2026 -- ported from act.wizard.cpp to here */
 
+#include <csignal>
 #include <time.h>
 #include <unistd.h>
 
