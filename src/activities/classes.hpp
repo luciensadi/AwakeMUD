@@ -13,7 +13,10 @@
 
 namespace fs = std::filesystem;
 
-#define BASE_ACTIVITY_PATH fs::absolute("lib") / "activities"
+// Resolves the activities storage directory at call time. The server chdir()s
+// into the lib data dir before boot code runs, so the path can't be a static
+// macro -- see activity_system.cpp for resolution order.
+fs::path activity_base_path();
 
 #define STRING_GETTER(varname)  const char *get_##varname() const { return varname.empty() ? "(not set)" : varname.c_str(); }
 
@@ -172,6 +175,11 @@ public:
   // Check spec is expected.
   static const ActivityFuncSpec* lookup_spec(const std::string& slug);
   static std::vector<std::string> list_slugs();
+
+  // Re-resolves func_ptr from the Check registry by func_name. Used by OLC to
+  // make a check functional again after its function or params were edited
+  // (construction-time validation may have left the fallback ptr in place).
+  void resolve_ptr_from_registry();
 };
 
 // A side effect that, when encountered, modifies the character and/or their RunningActivity in some way. (todo add ptr from char struct to RunningActivity, let it recover from saved state (val stores uuid, lookup in map on login?))

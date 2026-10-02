@@ -105,11 +105,11 @@ MenuFrameResult SituationSlugCreateFrame::parse(struct descriptor_data *d, char 
        || std::find(ACT->slugs_that_need_writing.begin(), ACT->slugs_that_need_writing.end(), arg) != ACT->slugs_that_need_writing.end()),
       "That slug already exists."
     );
+
+    // Add this new slug to the slugs_that_need_writing list
+    ACT->slugs_that_need_writing.emplace_back(arg);
+    std::sort(ACT->slugs_that_need_writing.begin(), ACT->slugs_that_need_writing.end());
   }
-  
-  // Add this new slug to the slugs_that_need_writing list
-  ACT->slugs_that_need_writing.emplace_back(arg);
-  std::sort(ACT->slugs_that_need_writing.begin(), ACT->slugs_that_need_writing.end());
 
   // return as a stringified result (finally using the return ability)
   return { MenuFrameAction::Pop, child_identifier, AS_STRING(arg) };

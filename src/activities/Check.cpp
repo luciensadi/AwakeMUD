@@ -1,5 +1,3 @@
-#include <cstdlib>
-
 #include "classes.hpp"
 #include "../handler.hpp"
 #include "../db.hpp"
@@ -122,7 +120,7 @@ namespace {
       "Rolls 0..max_value-1 and passes if the result is <= this_or_lower (i.e. probabilistic gate).",
       {
         {"max_value",     "Upper bound (exclusive) of the random roll. Must be >= 1.", ActivityParamType::INTEGER, PARAM_REQUIRED},
-        {"this_or_lower", "Pass if the roll is < this value.",                         ActivityParamType::INTEGER, PARAM_REQUIRED},
+        {"this_or_lower", "Pass if the roll is <= this value.",                         ActivityParamType::INTEGER, PARAM_REQUIRED},
       },
       NON_DETERMINISTIC,
     }},
@@ -141,6 +139,11 @@ std::vector<std::string> Check::list_slugs() {
   out.reserve(_check_registry.size());
   for (const auto& kv : _check_registry) out.push_back(kv.first);
   return out;
+}
+
+// Re-resolves func_ptr from the registry by func_name (see classes.hpp).
+void Check::resolve_ptr_from_registry() {
+  resolve_ptr(_check_registry);
 }
 
 // Serialization function.
@@ -314,7 +317,7 @@ CHECK_FUNCTION(random) {
   GET_SETTING(this_or_lower);
   int threshold = atoi(this_or_lower);
 
-  return (rand() % max_val) < threshold;
+  return (random() % MAX(max_val, 1)) <= threshold;
 }
 
 #undef CHECK_FUNCTION
@@ -411,13 +414,29 @@ void CheckMenuFrame::display(struct descriptor_data *d) const {
                    "Enter your choice: ");
 }
 
-MenuFrameResult CheckMenuFrame::parse(struct descriptor_data *d, char *arg) {  
+MenuFrameResult CheckMenuFrame::parse(struct descriptor_data *d, char *arg) {
   // Handle quit-and-save and quit-and-discard modes.
   if (!str_cmp(arg, "x") || !str_cmp(arg, "q")) {
     if (!str_cmp(arg, "x")) {
-      // Discard changes: drop our current val and replace it with a clone of original
+      // Discard changes: drop our current val and replace it with a clone of
+      // the pristine original. In create mode (no original) reset to blank.
       delete d->edit_check;
-      d->edit_check = d->edit_check_original;
+      d->edit_check = d->edit_check_original ? d->edit_check_original : new Check();
+      // Ownership of the clone transferred to edit_check; don't double-delete.
+      d->edit_check_original = nullptr;
+    } else if (ACT) {
+      // Commit-back contract (child_identifier set by check_main):
+      //  1 = create mode: append the edited check to the activity's preconditions.
+      //  2 = edit mode: overwrite the vector element at edit_number2 (1-indexed).
+      // Re-resolve the function ptr first: OLC constructs the Check before its
+      // required params exist, so the ctor may have parked the fallback ptr.
+      d->edit_check->resolve_ptr_from_registry();
+      if (child_identifier == 1) {
+        ACT->preconditions.push_back(*d->edit_check);
+      } else if (child_identifier == 2 && d->edit_number2 > 0
+                 && (size_t)d->edit_number2 <= ACT->preconditions.size()) {
+        ACT->preconditions[d->edit_number2 - 1] = *d->edit_check;
+      }
     }
     return { MenuFrameAction::Pop, child_identifier };
   }
@@ -475,8 +494,11 @@ MenuFrameResult CheckMenuFrame::parse(struct descriptor_data *d, char *arg) {
   }
 
   // If they got here, their specified parameter name was not part of the check's valid parameter list; show an error and bail
-  MF_PARSE_FAILED("That's not a valid selection. Enter a choice number%s, 'q' to save, or 'x' to abort without saving.\r\n",
-                         !CHK->func_ptr_is_set() ? ", the name of the parameter you want to edit" : "");
+  // (can't use MF_PARSE_FAILED here: it wraps its arg in "%s\r\n", which would
+  // leave this message's own inner %s unsubstituted.)
+  send_to_char(CH, "That's not a valid selection. Enter a choice number%s, 'q' to save, or 'x' to abort without saving.\r\n",
+               !CHK->func_ptr_is_set() ? ", the name of the parameter you want to edit" : "");
+  return { MenuFrameAction::JustDisplay };
 }
 
 const MenuFrameResult CheckMenuFrame::handle_child_response(struct descriptor_data *d, const MenuFrameResult & result) { return { MenuFrameAction::JustDisplay }; }

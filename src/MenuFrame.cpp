@@ -9,6 +9,12 @@
 void push_menu_frame(struct descriptor_data *d, std::unique_ptr<MenuFrame> new_frame) {
   if (!new_frame) return;
 
+  // Remember which connection state we came from so we can restore it when the
+  // stack empties (usually CON_PLAYING, but may be CON_ACTIVITY_EDIT etc).
+  if (d->menu_frame_stack.empty()) {
+    d->menu_frame_return_state = STATE(d);
+  }
+
   new_frame->display(d);
 
   d->menu_frame_stack.push_back(std::move(new_frame));
@@ -41,9 +47,11 @@ void handle_menu_frames(struct descriptor_data *d, char *arg) {
     d->menu_frame_stack.pop_back();
 
     if (d->menu_frame_stack.empty()) {
-      std::cout << " - stack is empty, returning to con_playing" << std::endl;
-      // Nothing left in the stack? Restore to playing state and bail.
-      STATE(d) = CON_PLAYING;
+      std::cout << " - stack is empty, restoring prior state" << std::endl;
+      // Nothing left in the stack? Restore the state the stack was pushed from
+      // (CON_PLAYING in the normal case) and bail.
+      STATE(d) = (d->menu_frame_return_state == CON_MENUFRAME ? CON_PLAYING : d->menu_frame_return_state);
+      d->menu_frame_return_state = CON_PLAYING;
       return;
     } else {
       std::cout << " - passing '";

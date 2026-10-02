@@ -81,8 +81,8 @@ Activity::Activity(fs::path path_to_file) {
 }
 
 void Activity::save_to_disk() {
-  // Saves to `lib/activities/slug`
-  fs::path base_path = BASE_ACTIVITY_PATH;
+  // Saves to `<data dir>/activities/slug`
+  fs::path base_path = activity_base_path();
   fs::create_directories(base_path);
 
   json basic_info;

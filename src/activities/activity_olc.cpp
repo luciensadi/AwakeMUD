@@ -55,6 +55,7 @@ PARSEFUNC(activity_editing_entrypoint) {
     MENU_CASE_TO_PARSER(activity_edit_preconditions);
     MENU_CASE_TO_PARSER(activity_edit_situations);
     MENU_CASE_TO_PARSER(activity_edit_starting_situations);
+    MENU_CASE_TO_PARSER(check_main);
     // If your edit mode is one of these, replace the named variable (e.g. 'slug') with your arg contents, aborting if necessary.
     REPLACE_STRING_IF_NOT_ABORT(activity_edit_slug, slug, activity_main);
     REPLACE_STRING_IF_NOT_ABORT(activity_edit_display_name, display_name, activity_main);
@@ -144,7 +145,7 @@ PARSEFUNC(activity_main) {
     CASE_TO_MENU('5', activity_edit_situations);
     CASE_TO_MENU('6', activity_edit_starting_situations);
     default:
-      send_to_char(CH, "'%s' is not a valid selection. Enter a number from the menu, or Q to quit and save, or X to abort without saving.\r\n");
+      send_to_char(CH, "'%s' is not a valid selection. Enter a number from the menu, or Q to quit and save, or X to abort without saving.\r\n", arg);
       break;
   }
 }
@@ -179,12 +180,20 @@ PARSEFUNC(activity_edit_preconditions) {
   // against the param's spec from spec->params before mutating the Check.
   switch (tolower(*arg)) {
     case 'c':
+      delete d->edit_check;
       d->edit_check = new Check();
+      // Null original == create mode (a blank check on discard); edit_number2 = 0 is likewise create mode.
       d->edit_check_original = nullptr;
+      d->edit_number2 = 0;
       activity_check_main_menu(d);
       break;
     case 'q':
+      // Abandon any in-progress editing and go back up.
+      delete d->edit_check;
       d->edit_check = nullptr;
+      delete d->edit_check_original;
+      d->edit_check_original = nullptr;
+      d->edit_number2 = 0;
       activity_activity_main_menu(d);
       break;
     default:
@@ -194,8 +203,16 @@ PARSEFUNC(activity_edit_preconditions) {
           send_to_char(CH, "There aren't that many preconditions. Pick a number from 1 - %ld.", ACT->preconditions.size());
           return;
         }
+        // Both the working copy and the pristine copy must be OWNING clones.
+        // (An interior pointer into ACT->preconditions would dangle on any
+        // vector mutation and would be double-deleted by free_editing_structs.)
         d->edit_check = new Check(ACT->preconditions[selection - 1]);
-        d->edit_check_original = &(ACT->preconditions[selection - 1]);
+        d->edit_check_original = new Check(ACT->preconditions[selection - 1]);
+        // Clones may have arrived with a null/fallback func_ptr (from_json load
+        // path); make them functional before editing.
+        d->edit_check->resolve_ptr_from_registry();
+        // 1-indexed vector position, used by CheckMenuFrame's 'q' commit-back.
+        d->edit_number2 = selection;
         activity_check_main_menu(d);
         break;
       }
@@ -230,12 +247,22 @@ PARSEFUNC(activity_edit_starting_situations) {
 /////////////////////// Check editing
 // Precondition: d->edit_check must be valid.
 MENUFUNC(check_main) {
-  // Display the check, then: - if original ptr, give delete opt
+  // Display the check, then dip into the MenuFrame-based Check editor.
   send_to_char(CH, "Check type: ^c%s^n\r\n", d->edit_check->get_func_name());
+  // child_identifier encodes the commit mode for CheckMenuFrame's 'q' handler:
+  // 1 = create (push_back into ACT->preconditions), 2 = edit (replace in place).
+  push_menu_frame(d, std::make_unique<CheckMenuFrame>(d->edit_check_original ? 2 : 1));
 }
 
+// This mode exists so that input isn't silently swallowed once the Check
+// MenuFrame pops and control returns to CON_ACTIVITY_EDIT. 'q'/'x' back out.
 PARSEFUNC(check_main) {
-
+  switch (tolower(*arg)) {
+    case 'q':
+    case 'x':
+      activity_activity_edit_preconditions_menu(d);
+      break;
+  }
 }
 
 

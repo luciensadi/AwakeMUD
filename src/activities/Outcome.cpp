@@ -81,6 +81,18 @@ void OutcomeMenuFrame::display(struct descriptor_data *d) const {
 }
 
 MenuFrameResult OutcomeMenuFrame::parse(struct descriptor_data *d, char *arg) {
+  if (!OUT) {
+    mudlog_vfprintf(CH, LOG_SYSLOG, "SYSERR: OutcomeMenuFrame::parse reached with a null edit_outcome. Popping.");
+    return { MenuFrameAction::Pop, child_identifier };
+  }
+
+  // Snapshot the pristine outcome the first time input reaches us, so that 'x'
+  // can restore it. (Mutations can only happen via parse-triggered prompts and
+  // submenus, so snapshotting here is always before any mutation.)
+  if (!d->edit_outcome_original) {
+    d->edit_outcome_original = new Outcome(OUT->serialize());
+  }
+
   switch (LOWER(*arg)) {
     case '1':
       MF_PROMPT_STRING_AND_RETURN(
@@ -102,8 +114,13 @@ MenuFrameResult OutcomeMenuFrame::parse(struct descriptor_data *d, char *arg) {
     case 'x':
       delete OUT;
       OUT = d->edit_outcome_original;
+      d->edit_outcome_original = NULL;
       // fall through
     case 'q':
+      // 'q' keeps the working copy, so trash the no-longer-needed snapshot.
+      // (On the 'x' path this is already NULL.)
+      delete d->edit_outcome_original;
+      d->edit_outcome_original = NULL;
       return { MenuFrameAction::Pop, child_identifier };
   }
 
@@ -144,17 +161,17 @@ MenuFrameResult OutcomeEffectsFrame::parse(struct descriptor_data *d, char *arg)
   switch(LOWER(*arg)) {
     case 'a':
     case 'c':
-      delete d->edit_effect;
-      d->edit_effect = new Effect();
-      delete d->edit_effect_original;
-      d->edit_effect_original = nullptr;
+      // NOTE: When the EffectMenuFrame exists (Phase 1), this must set
+      // d->edit_effect = new Effect() plus a null edit_effect_original (create
+      // mode) and MF_PUSH_FRAME(EffectMenuFrame, ...). No menu yet, so no state.
       send_to_char(CH, "^RThis is where you'd dip down into the effect edit OLC system if it existed (new effect). Try a different option.^n\r\n");
-      // TODO: MF_PUSH_FRAME(EffectMenuFrame, _OUTCOME_EFFECTS_FRAME__ADD_EFFECT);
       return { MenuFrameAction::DoNothing };
     case 'd':
       MF_TRYAGAIN_CASE(OUT->effects.empty(), "There's nothing to delete.");
       MF_PROMPT_INT_AND_RETURN("Which effect index do you want to delete? (0 to abort)", 86, [d](int r){
-        if ((--r) < 0) return; // resolve their 1-indexed entry to 0-indexed, if they put 0 then bail
+        --r; // resolve their 1-indexed entry to 0-indexed
+        if (r < 0) return; // if they put 0 then bail
+        if ((size_t)r >= OUT->effects.size()) return; // clamp: never erase(end())
         OUT->effects.erase(OUT->effects.begin() + r);
       }, 0, OUT->effects.size() + 1); // accept +1 since they have a 1-indexed list
     case 'x':
@@ -168,12 +185,12 @@ MenuFrameResult OutcomeEffectsFrame::parse(struct descriptor_data *d, char *arg)
       return { MenuFrameAction::Pop, child_identifier };
   }
 
-  size_t idx = atoi(arg) - 1; // -1 since we give them a 1-indexed list
-  if (idx >= 0 && idx < OUT->effects.size()) {
-    d->edit_effect = &(OUT->effects.at(idx));
-    d->edit_effect_original = new Effect(d->edit_effect->serialize());
+  int idx = atoi(arg) - 1; // -1 since we give them a 1-indexed list
+  if (idx >= 0 && (size_t)idx < OUT->effects.size()) {
+    // NOTE: When the EffectMenuFrame exists (Phase 1), this must hand it an
+    // OWNING clone of the effect plus an owning pristine copy -- never an
+    // interior pointer into OUT->effects, which dangles on list mutation.
     send_to_char(CH, "^RThis is where you'd dip down into the effect edit OLC system if it existed (edit existing). Try a different option.^n\r\n");
-    // TODO: MF_PUSH_FRAME(EffectMenuFrame, _OUTCOME_EFFECTS_FRAME__EDIT_EXISTING_EFFECT);
     return { MenuFrameAction::DoNothing };
   }
 
@@ -198,11 +215,12 @@ void OutcomeSituationsFrame::display(struct descriptor_data *d) const {
           send_to_char(CH, "%2d %s\r\n", index + 1, situation->stringify().c_str());
           continue;
         } else if (std::find(ACT->slugs_that_need_writing.begin(), ACT->slugs_that_need_writing.end(), slug) != ACT->slugs_that_need_writing.end()) {
-          mudlog_vfprintf(CH, LOG_SYSLOG, "SYSERR: Slug '%s' is neither in OUT->situations nor ACT->s_t_n_w! Forcibly adding it.", slug.c_str());
-          ACT->slugs_that_need_writing.push_back(slug);
-          std::sort(ACT->slugs_that_need_writing.begin(), ACT->slugs_that_need_writing.end());
+          // Known-but-unwritten: it's referenced by this outcome but hasn't been created yet.
+          send_to_char(CH, "%2d - %s ^y(situation not yet written, you must create it later)^n\r\n", index + 1, slug.c_str());
+        } else {
+          mudlog_vfprintf(CH, LOG_SYSLOG, "SYSERR: Situation slug '%s' is neither in the activity's situations nor marked as needing writing!", slug.c_str());
+          send_to_char(CH, "%2d - %s ^y(situation not found, you must create it later)^n\r\n", index + 1, slug.c_str());
         }
-        send_to_char(CH, "%2d - %s ^y(situation not found, you must create it later)^n\r\n", index + 1, slug.c_str());
       } else {
         send_to_char(CH, "%2d - %s ^r(unable to lookup - no d->edit_activity)^n\r\n", index + 1, slug.c_str());
       }
@@ -260,7 +278,7 @@ void OutcomeSituationSlugSelectFrame::display(struct descriptor_data *d) const {
     }
     if (auto situation = ACT->lookup_situation(slug)) {
       // Situation exists, so display full lookup info.
-      send_to_char(CH, "\r\n", situation->stringify().c_str());
+      send_to_char(CH, "%s\r\n", situation->stringify().c_str());
     } else {
       // wtf
       mudlog_vfprintf(CH, LOG_SYSLOG, "Somehow got a slug from act->situations that wasn't able to be looked up??");

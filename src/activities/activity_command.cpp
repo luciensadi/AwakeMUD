@@ -80,6 +80,18 @@ void do_activities_create(struct char_data *ch, char *arguments) {
 
   ch->desc->edit_activity = new Activity();
 
+  // Seed the slug from the command argument: save_to_disk() uses the slug as
+  // its filename, and an empty slug would otherwise write to the directory.
+  if (arguments && *arguments) {
+    ch->desc->edit_activity->slug = arguments;
+    send_to_char(ch, "Creating new activity '%s'.\r\n", arguments);
+  } else {
+    send_to_char(ch, "Creating new activity. Set the slug via menu option 1 before saving, or it cannot be written to disk.\r\n");
+  }
+  // Without this, saved activities have author 0 and can_edit() only ever
+  // passes via the LVL_ADMIN path -- authors could not edit their own work.
+  ch->desc->edit_activity->author = GET_IDNUM(ch);
+
   PLR_FLAGS(ch).SetBit(PLR_EDITING);
   STATE(ch->desc) = CON_ACTIVITY_EDIT;
   activity_activity_main_menu(ch->desc);

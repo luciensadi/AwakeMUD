@@ -5,6 +5,22 @@
 
 std::map<std::string, Activity> global_activities = {};
 
+fs::path activity_base_path() {
+  // The server chdir()s into the lib data dir before boot code runs, so the
+  // conventional location is <data dir>/activities. Also accept <data dir>
+  // /lib/activities (repo root as CWD) for tooling and direct invocation.
+  fs::path data_dir_activities = fs::absolute("activities");
+  if (fs::exists(data_dir_activities)) {
+    return data_dir_activities;
+  }
+  fs::path lib_subdir_activities = fs::absolute("lib") / "activities";
+  if (fs::exists(lib_subdir_activities)) {
+    return lib_subdir_activities;
+  }
+  // Neither exists: default to the conventional location (save_to_disk creates it).
+  return data_dir_activities;
+}
+
 /* When putting a character in an activity:
   - set desc->running_activity
   - set a flag in DB for "current activity"
@@ -26,18 +42,24 @@ std::map<std::string, Activity> global_activities = {};
 
 void load_activities() {
   // Iterate over the contents of the lib/activities directory.
-  if (!fs::exists(BASE_ACTIVITY_PATH)) {
-    log_vfprintf("WARNING: Unable to find base activity path at %s. Will not load anything.", (BASE_ACTIVITY_PATH).c_str());
+  fs::path base_path = activity_base_path();
+  if (!fs::exists(base_path)) {
+    log_vfprintf("WARNING: Unable to find base activity path at %s. Will not load anything.", base_path.c_str());
     return;
   }
 
   log("Loading activities:");
 
-  for (const auto &itr : fs::directory_iterator(BASE_ACTIVITY_PATH)) {
+  for (const auto &itr : fs::directory_iterator(base_path)) {
     if (!itr.is_directory()) {
       fs::path filename = itr.path();
       log_vfprintf("Loading activity %s...", filename.c_str());
-      global_activities.emplace(filename.filename().string(), Activity(filename));
+      // One corrupted / hand-edited file must not abort the entire MUD boot.
+      try {
+        global_activities.emplace(filename.filename().string(), Activity(filename));
+      } catch (const std::exception &e) {
+        log_vfprintf("SYSERR: Failed to load activity file %s: %s. Skipping it.", filename.filename().c_str(), e.what());
+      }
     }
   }
 }
@@ -52,6 +74,15 @@ void send_activity_debug_msg(struct char_data *ch, const char *fmt, ...) {
   va_end(args);
 
   strlcpy(msg_str, replace_neutral_color_codes(msg_str, "^L"), sizeof(msg_str));
+
+  // Guard against characters in neither a room list nor a vehicle (limbo /
+  // extraction edge cases): deliver just to ch instead of dereferencing nulls.
+  if (!ch->in_room && !ch->in_veh) {
+    if (PRF_FLAGGED(ch, PRF_ACTIVITIES_DEBUG)) {
+      send_to_char(ch, "^L[Activities Debug (%s^L)]: %s^n\r\n", GET_CHAR_NAME(ch), msg_str);
+    }
+    return;
+  }
 
   // Send it to all subscribers around ch, including ch if necessary
   for (struct char_data *witness = ch->in_room ? ch->in_room->people : ch->in_veh->people;
