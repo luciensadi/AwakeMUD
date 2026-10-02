@@ -122,6 +122,9 @@ unittest_objs = $(unittest_srcs:.cpp=.o)
 # Define build targets etc
 all: ../bin/awake
 
+../test/%.o: ../test/%.cpp
+	$(CXX) $(CPPFLAGS) -DUNITTEST $(CXXFLAGS) -I../3rdparty/catch2 -MMD -MP -c $< -o $@
+
 ../bin/awake: $(objfiles)
 	@mkdir -p ../bin
 	$(CXX) $(CXXFLAGS) $(LDFLAGS) -o $@ $(objfiles) $(LDLIBS)
@@ -138,9 +141,6 @@ unittest: ../bin/unittest
 
 %.test.o: %.cpp
 	$(CXX) $(CPPFLAGS) -DUNITTEST $(CXXFLAGS) -MMD -MP -c $< -o $@
-
-../test/%.o: ../test/%.cpp
-	$(CXX) $(CPPFLAGS) -DUNITTEST $(CXXFLAGS) -I../3rdparty/catch2 -MMD -MP -c $< -o $@
 
 clean:
 	rm -f $(objfiles) $(test_objfiles) $(depfiles) ../test/*.o ../test/*.d ../bin/awake ../bin/unittest
