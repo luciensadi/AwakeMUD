@@ -688,17 +688,17 @@ struct obj_data *find_radio(struct char_data *ch, bool *is_cyberware, bool *is_v
 
   // If you're a decker, we can just check you have a radio installed in your deck
   if (ch->persona && ch->persona->decker && ch->persona->decker->deck) {
-    for (struct obj_data *soft = ch->persona->decker->deck->contains; soft; soft = soft->next_content) {
-      if (GET_OBJ_TYPE(soft) != ITEM_PART || GET_PART_TYPE(soft) != PART_RADIO) continue;
+    for (struct obj_data *part = ch->persona->decker->deck->contains; part; part = part->next_content) {
+      if (GET_OBJ_TYPE(part) != ITEM_PART || GET_PART_TYPE(part) != PART_RADIO) continue;
 
       // Now check they have the program installed
-      for (struct obj_data *active = ch->persona->decker->software; active; active = active->next_content) {
-        if (GET_PROGRAM_TYPE(active) != SOFT_RADIO) continue;
-        if (must_be_on && GET_PART_RADIO_FREQ(active) == 0) continue;
-        if (GET_PROGRAM_RATING(active) > GET_PART_RATING(soft)) continue;
+      for (struct obj_data *soft = ch->persona->decker->software; soft; soft = soft->next_content) {
+        if (GET_PROGRAM_TYPE(soft) != SOFT_RADIO) continue;
+        if (must_be_on && GET_PART_RADIO_FREQ(part) == 0) continue;
+        if (GET_PROGRAM_RATING(soft) > GET_PART_RATING(part)) continue;
         
         *is_matrix = TRUE;
-        return soft;
+        return part;
       }
     }
   }
