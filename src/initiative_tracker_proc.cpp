@@ -87,6 +87,7 @@ void _send_tracker_help_to_ch(struct obj_data *tracker, struct char_data *ch) {
 
     send_to_char("Your current initiative tracker options are:\r\n", ch);
 
+    send_to_char(" - ^WTRACKER^n (to view the current initiative pass)\r\n", ch);
     send_to_char(" - ^WTRACKER ADD <player name>^n\r\n", ch);
     send_to_char(" - ^WTRACKER ADD <NPC name> <value>^n\r\n", ch);
     send_to_char(" - ^WTRACKER EDIT <existing name> <value>^n\r\n", ch);
