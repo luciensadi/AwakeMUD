@@ -952,7 +952,7 @@ ACMD(do_gen_write)
     FAILURE_CASE((str_str(argument, "chernobyl") || str_str(argument, "chornobyl")), "Thanks for the report, but we use the Ukrainian spelling of Chornobyl here.");
     FAILURE_CASE((str_str(argument, "produccion")), "Thanks for the report, but Meridional is an Andalusian company, so the Spanish is intended.");
     FAILURE_CASE((str_str(argument, "cetheral")), "Thanks for the report, but cetheral is a Sperethiel word describing a rare pearly, iridescent skin color unique to elves.");
-    FAILURE_CASE((str_str(argument, "thru")), "Thanks for the report, but Thru is just an informal, simplified spelling of through. It's still English.");
+    FAILURE_CASE((str_str(argument, "thru")), "Thanks for the report, but Thru is just an informal, simplified spelling of through. Please clarify further in a follow-up report if the word incidentally contains thru within it.");
     FAILURE_CASE((str_str(argument, "favour")), "Thanks for the report, but Favour is simply British English, not all of us are Americans.");
     FAILURE_CASE((str_str(argument, "favourable")), "Thanks for the report, but Favourable is simply British English, not all of us are Americans.");
     FAILURE_CASE((str_str(argument, "flavour")), "Thanks for the report, but Flavour is simply British English, not all of us are Americans.");
@@ -995,7 +995,7 @@ ACMD(do_gen_write)
     FAILURE_CASE((str_str(argument, "analysed")), "Thanks for the report, but Analysed is simply British English, not all of us are Americans.");
     FAILURE_CASE((str_str(argument, "analysing")), "Thanks for the report, but Analysing is simply British English, not all of us are Americans.");
     FAILURE_CASE((str_str(argument, "apologise")), "Thanks for the report, but Apologise is simply British English, not all of us are Americans.");
-    FAILURE_CASE((str_str(argument, "apologized")), "Thanks for the report, but Apologised is simply British English, not all of us are Americans.");
+    FAILURE_CASE((str_str(argument, "apologised")), "Thanks for the report, but Apologised is simply British English, not all of us are Americans.");
     FAILURE_CASE((str_str(argument, "apologising")), "Thanks for the report, but Apologise is simply British English, not all of us are Americans.");
     FAILURE_CASE((str_str(argument, "enrol")), "Thanks for the report, but Enrol is simply British English, not all of us are Americans.");
     FAILURE_CASE((str_str(argument, "enrolment")), "Thanks for the report, but Enrolment is simply British English, not all of us are Americans.");
@@ -1005,7 +1005,6 @@ ACMD(do_gen_write)
     FAILURE_CASE((str_str(argument, "dreamt")), "Thanks for the report, but Dreamt is simply British English, not all of us are Americans.");
     FAILURE_CASE((str_str(argument, "aluminium")), "Thanks for the report, but Aluminium is simply British English, not all of us are Americans.");
     FAILURE_CASE((str_str(argument, "defence")), "Thanks for the report, but Defence is simply British English, not all of us are Americans.");
-    FAILURE_CASE((str_str(argument, "tyre")), "Thanks for the report, but Tyre is simply British English, not all of us are Americans.");
     FAILURE_CASE((str_str(argument, "jewellery")), "Thanks for the report, but Jewellery is simply British English, not all of us are Americans.");
   }
 
