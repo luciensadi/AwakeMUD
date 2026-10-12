@@ -1007,6 +1007,7 @@ ACMD(do_gen_write)
     FAILURE_CASE((str_str(argument, "defence")), "Thanks for the report, but Defence is simply British English, not all of us are Americans.");
     FAILURE_CASE((str_str(argument, "jewellery")), "Thanks for the report, but Jewellery is simply British English, not all of us are Americans.");
     FAILURE_CASE((str_str(argument, "conveyer")), "Thanks for the report, but Conveyer is an acceptable variant spelling of Conveyor.");
+    FAILURE_CASE((str_str(argument, "floorplan")), "Thanks for the report, but Floorplan is an informal English compound word.");
   }
 
   mudlog_vfprintf(ch, LOG_MISCLOG, "%s %s: %s",
