@@ -4442,9 +4442,13 @@ ACMD(do_dice)
   if (*buf1 && atoi(buf1)) {
     tn = MAX(2, atoi(buf1));
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "against a TN of %d ", tn);
+  } else if (remainder && *remainder) {
+    snprintf(buf1 + strlen(buf1), sizeof(buf1) - strlen(buf1), " %s", remainder);
+    remainder = buf1;
   } else {
     remainder = buf1;
   }
+
   if (dice <= 0) {
     send_to_char("You have to roll at least 1 die.\r\n", ch);
   } else if (dice >= 100) {
