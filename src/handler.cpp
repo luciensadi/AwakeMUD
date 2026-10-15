@@ -1502,6 +1502,29 @@ void char_to_room(struct char_data * ch, struct room_data *room)
     char_from_room(ch);
   }
 
+  /*
+  // Warn on staff entering occupied apartments.
+  if (GET_APARTMENT(room) && access_level(ch, LVL_BUILDER)) {
+    // Only alert on apartments with PCs in them.
+    for (struct char_data *vict = room->people; vict; vict = vict->next_in_room) {
+      if ((vict->desc || !IS_NPC(vict) || GET_MOB_VNUM(vict) == MOB_PROJECTION) && access_level(vict, LVL_BUILDER)) continue;
+      // Log it and stop looking.
+      mudlog_vfprintf(ch, LOG_WIZLOG, "%s character %s entering occupied apartment (%s) with %s%s.",
+        GET_INVIS_LEV(ch) ? "INVISIBLE staff" : "Staff",
+        GET_CHAR_NAME(ch),
+        GET_APARTMENT(room)->get_full_name(),
+        GET_CHAR_NAME(vict),
+        vict->next_in_room && vict->next_in_room->desc ? " and others" : ""
+      );
+
+      if (GET_INVIS_LEV(ch)) {
+        send_to_char(ch, "^RWARNING:^n You have relocated to an apartment while invisible. Eavesdropping on private RP scenes is forbidden outside of Lucien-approved investigations. If that doesn't apply to you, please either go visible or leave.\r\n");
+      }
+      break;
+    }
+  }
+  */
+
   // Hotload it BEFORE they enter it so they're not spammed with messages.
 #ifdef USE_ZONE_HOTLOADING
   if (ch->desc || !IS_NPC(ch) || GET_MOB_VNUM(ch) == MOB_PROJECTION) {

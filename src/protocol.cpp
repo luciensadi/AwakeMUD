@@ -3265,7 +3265,8 @@ static const char *GetAnsiColour( bool abBackground, int aRed, int aGreen, int a
     return aGreen <= 3 ? s_DarkGreen : s_BoldGreen;
 
   if (aBlue > aRed && aBlue > aGreen)
-    return aBlue <= 3 ? s_DarkBlue : s_BoldBlue;
+    /* Blue-dominant colors darken as green drops: F025 is dodger blue (dark), F035 is light blue. */
+    return (aBlue <= 3 || aGreen <= 2) ? s_DarkBlue : s_BoldBlue;
 
   // And we should never get here, but if we do...
   log_vfprintf("WARNING: Hit end of color conversion tree with non-handled RGB color %s%d%d%d. Using BoldWhite.", abBackground ? "B" : "F", aRed, aGreen, aBlue);
