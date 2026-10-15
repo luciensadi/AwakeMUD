@@ -22,6 +22,7 @@ class ApartmentComplex;
 extern const fs::path global_housing_dir;
 
 extern void warn_about_apartment_deletion();
+extern void globally_rewrite_room_to_apartment_pointers();
 extern void save_all_apartments_and_storage_rooms();
 extern ApartmentComplex *find_apartment_complex(const char *name, struct char_data *ch=NULL);
 extern Apartment *find_apartment(const char *full_name, struct char_data *ch);
@@ -202,6 +203,9 @@ class Apartment {
     bool set_rent(long amount, struct char_data *ch=NULL);
     bool set_lifestyle(int new_lifestyle, struct char_data *ch=NULL);
     void set_base_directory(fs::path path);
+    // Recompute base_directory (and sub-room paths) from our complex WITHOUT renaming anything on disk.
+    // Used when the complex's directory has already been moved out from under us.
+    void regenerate_base_directory();
     void set_garage_override(bool value) { garage_override = value; }
 
 

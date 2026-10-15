@@ -312,6 +312,13 @@ void houseedit_apartment_parse(struct descriptor_data *d, const char *arg) {
                 // Copy over our changes.
                 d->edit_apartment_original->clone_from(APT, "houseedit_apartment_parse(Q)");
 
+                // Handle a complex transfer (menu option 7): clone_from() deliberately doesn't touch
+                // complex membership, so do it here. set_complex() moves us between the complexes'
+                // apartment lists and renames our directory into the new complex's.
+                if (d->edit_apartment_original->get_complex() != APT->get_complex()) {
+                  d->edit_apartment_original->set_complex(APT->get_complex());
+                }
+
                 if (APT->get_rent_cost() != old_rent && paid_secs > 0) {
                   int old_rent_per_day = old_rent / 30;
                   int old_paid_days = paid_secs / SECS_PER_REAL_DAY;
@@ -367,6 +374,9 @@ void houseedit_apartment_parse(struct descriptor_data *d, const char *arg) {
 
               // Apply to world.
               APT->apply_rooms();
+
+              // Register with our complex so it's tracked in memory (and shows up on LIST, etc).
+              APT->get_complex()->add_apartment(APT);
 
               // Null edit_apartment so it's not deleted later.
               APT = NULL;

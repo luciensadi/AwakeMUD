@@ -243,6 +243,11 @@ void houseedit_complex_parse(struct descriptor_data *d, const char *arg) {
             // Landlord spec is cleared/set here.
             d->edit_complex_original->clone_from(COMPLEX, "houseedit_complex_parse(Q)");
 
+            // Note: We deliberately do NOT move the save directory when the landlord changes. Directory
+            // names aren't used as identity (everything loads from the JSON files), and the on-disk move
+            // is done manually via git so the housing backup history stays clean. load_apartment_complexes()
+            // will log a SYSERR at boot if the directory name and landlord vnum ever disagree.
+
             // Write to disk.
             d->edit_complex_original->save();
 
@@ -250,6 +255,10 @@ void houseedit_complex_parse(struct descriptor_data *d, const char *arg) {
             for (auto &apartment : d->edit_complex_original->get_apartments()) {
               apartment->regenerate_full_name();
             }
+
+            // clone_from() replaced all of our real apartments with clones, so every
+            // world[] apartment pointer is now stale. Rebind them.
+            globally_rewrite_room_to_apartment_pointers();
           }
           // It didn't exist: Save new.
           else {
@@ -262,7 +271,8 @@ void houseedit_complex_parse(struct descriptor_data *d, const char *arg) {
                 return;
               }
 
-              fs::path new_save_dir = global_housing_dir / std::string(name_without_color);
+              // Complexes are stored under their landlord's vnum, not their name-- see load_apartment_complexes().
+              fs::path new_save_dir = global_housing_dir / vnum_to_string(COMPLEX->get_landlord_vnum());
 
               if (fs::exists(new_save_dir)) {
                 send_to_char("There's already a directory that matches your new complex. You'll need to change its name.\r\n", CH);

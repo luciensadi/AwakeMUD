@@ -204,6 +204,15 @@ void load_apartment_complexes() {
   for (fs::directory_iterator itr(global_housing_dir); itr != end_itr; ++itr) {
     if (is_directory(itr->status())) {
       fs::path filename = itr->path();
+
+      // Sanity check: A directory with no complex_info.json would call exit(1) deep inside the constructor,
+      // bootlooping the game. Skip it loudly instead.
+      if (!exists(filename / COMPLEX_INFO_FILE_NAME)) {
+        mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Skipping housing directory %s: No %s inside. This complex will not load until it's repaired!",
+                        STRING_TO_CSTR(filename), COMPLEX_INFO_FILE_NAME);
+        continue;
+      }
+
       log_vfprintf(" - Initializing apartment complex from file %s.", STRING_TO_CSTR(filename));
       ApartmentComplex *complex = new ApartmentComplex(filename);
       global_apartment_complexes.push_back(complex);
@@ -212,11 +221,35 @@ void load_apartment_complexes() {
       // Ensure it's been saved with the vnum instead of the name. Convert if not.
       if (atol(STRING_TO_CSTR(filename.filename())) <= 0) {
         fs::path new_name = filename.parent_path() / vnum_to_string(complex->get_landlord_vnum());
-        log_vfprintf(" (Complex %s was saved in the old manner ('%s' is not a number), so I'll rename it to '%s'.)", 
+        log_vfprintf(" (Complex %s was saved in the old manner ('%s' is not a number), so I'll rename it to '%s'.)",
                      complex->get_name(),
                      STRING_TO_CSTR(filename.filename()),
                      STRING_TO_CSTR(new_name));
-        fs::rename(filename, new_name);
+
+        // Guard: If the target dir already exists, fs::rename() would throw and take down the boot.
+        if (fs::exists(new_name)) {
+          mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Can't convert complex dir %s to %s: Target already exists. Leaving it in place.",
+                          STRING_TO_CSTR(filename), STRING_TO_CSTR(new_name));
+        } else {
+          fs::rename(filename, new_name);
+          // Critical: Update our in-memory path to match, or future saves will recreate the old, now-invalid directory.
+          complex->set_base_directory(new_name);
+
+          // Any apartments inside a legacy dir moved along with us-- repoint their paths too, or their
+          // next save will recreate the old directory (without complex_info.json) and bootloop us.
+          for (auto &apartment : complex->get_apartments()) {
+            apartment->regenerate_base_directory();
+          }
+        }
+      } else if (filename.filename() != fs::path(vnum_to_string(complex->get_landlord_vnum()))) {
+        // Dir is numeric but doesn't match the landlord recorded inside-- usually a landlord that was
+        // changed in-game. Data loads fine regardless (dir names aren't identity), but re-key it via git
+        // so collisions don't trip up future complexes under the old landlord's vnum.
+        mudlog_vfprintf(NULL, LOG_SYSLOG, "SYSERR: Complex %s lives in dir %s but its landlord is %ld. git mv the directory to '%s' at your convenience.",
+                        complex->get_name(),
+                        STRING_TO_CSTR(filename.filename()),
+                        complex->get_landlord_vnum(),
+                        STRING_TO_CSTR(global_housing_dir / vnum_to_string(complex->get_landlord_vnum())));
       }
     }
   }
@@ -398,7 +431,15 @@ void ApartmentComplex::save() {
 void ApartmentComplex::mark_as_deleted() {
   char deleted_name[500];
   snprintf(deleted_name, sizeof(deleted_name), "%s-%ld", display_name, time(0));
-  fs::rename(base_directory, fs::absolute("deleted-housing") / deleted_name);
+
+  // deleted-housing lives alongside the housing dir (lib/deleted-housing). fs::absolute("deleted-housing")
+  // would resolve against the CWD instead, littering stray directories wherever we happened to launch from.
+  fs::path deleted_housing_dir = global_housing_dir.parent_path() / "deleted-housing";
+  if (!fs::exists(deleted_housing_dir)) {
+    fs::create_directory(deleted_housing_dir);
+  }
+
+  fs::rename(base_directory, deleted_housing_dir / deleted_name);
 }
 
 void ApartmentComplex::add_editor(idnum_t idnum) {
@@ -879,6 +920,14 @@ Apartment::~Apartment() {
     }
   }
 
+  // Delete our rooms. Swap first so ~ApartmentRoom() doesn't mutate the vector we're iterating;
+  // this also clears world[rnum].apartment_room pointers, which previously dangled forever.
+  std::vector<ApartmentRoom *> rooms_to_delete;
+  rooms_to_delete.swap(rooms);
+  for (auto *room : rooms_to_delete) {
+    delete room;
+  }
+
   // Clean up our str_dup'd bits.
   delete [] shortname;
   delete [] name;
@@ -1008,13 +1057,44 @@ void Apartment::set_base_directory(fs::path new_base) {
                  full_name,
                  STRING_TO_CSTR(base_directory),
                  STRING_TO_CSTR(new_base));
-    fs::rename(base_directory, new_base);
+    // Guard against the old directory already being gone (e.g. our complex dir was renamed around us) --
+    // fs::rename() would throw on a missing source.
+    if (fs::exists(base_directory)) {
+      fs::rename(base_directory, new_base);
+    } else {
+      log_vfprintf("Skipping rename for %s: Old path %s doesn't exist (already moved?).",
+                   full_name,
+                   STRING_TO_CSTR(base_directory));
+    }
   }
 
   // Finally, make the change.
   base_directory = new_base;
 
   // Update our rooms as well.
+  for (auto *aroom : rooms) {
+    aroom->regenerate_paths();
+  }
+}
+
+// Recompute our base_directory (and sub-room paths) from our complex without renaming anything on disk.
+// Used when the complex's directory has already been moved out from under us.
+void Apartment::regenerate_base_directory() {
+  if (!complex || base_directory.empty()) {
+    log_vfprintf("apartment::regenerate_base_directory(): Skipping %s: No complex or no base directory.", full_name);
+    return;
+  }
+
+  fs::path new_base = complex->base_directory / shortname;
+  if (base_directory == new_base)
+    return;
+
+  log_vfprintf("regenerate_base_directory(): Repointing %s from %s to %s.",
+               full_name,
+               STRING_TO_CSTR(base_directory),
+               STRING_TO_CSTR(new_base));
+  base_directory = new_base;
+
   for (auto *aroom : rooms) {
     aroom->regenerate_paths();
   }
