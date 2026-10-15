@@ -163,11 +163,18 @@ void display_room_desc(struct char_data *ch);
 char *make_desc(struct char_data *ch, struct char_data *i, char *buf, int act, bool dont_capitalize_a_an, size_t buf_size)
 {
   char buf2[MAX_STRING_LENGTH];
+
+  bool can_see_face = victs_wearslot_is_visible(i, ITEM_WEAR_FACE);
+  // If the face is covered by anything, check to see if it's got a high enough conceal to actually block.
+  if (!can_see_face) {
+    can_see_face = !(   (GET_EQ(i, WEAR_HEAD) && GET_WORN_CONCEAL_RATING(GET_EQ(i, WEAR_HEAD)) > 1)
+                     || (GET_EQ(i, WEAR_FACE) && GET_WORN_CONCEAL_RATING(GET_EQ(i, WEAR_FACE)) > 1));
+  }
+
   if (!IS_NPC(i)
       && !IS_SENATOR(ch)
       && ch != i
-      && ((GET_EQ(i, WEAR_HEAD) && GET_WORN_CONCEAL_RATING(GET_EQ(i, WEAR_HEAD)) > 1)
-          || (GET_EQ(i, WEAR_FACE) && GET_WORN_CONCEAL_RATING(GET_EQ(i, WEAR_FACE)) > 1))
+      && !can_see_face
       && (act == 2
           || success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT),
                           (GET_EQ(i, WEAR_HEAD) ? GET_WORN_CONCEAL_RATING(GET_EQ(i, WEAR_HEAD)) : 0) +
@@ -963,25 +970,6 @@ void look_at_char(struct char_data * i, struct char_data * ch, const char *used_
   float height;
   struct obj_data *tmp_obj;
 
-#ifdef USE_JANKY_EQUIPMENT_CONCEAL_SYSTEM
-  if (((GET_EQ(i, WEAR_HEAD) && GET_OBJ_VAL(GET_EQ(i, WEAR_HEAD), 7) > 1) ||
-       (GET_EQ(i, WEAR_FACE) && GET_OBJ_VAL(GET_EQ(i, WEAR_FACE), 7) > 1)) &&
-      success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT),
-                   (GET_EQ(i, WEAR_HEAD) ? GET_OBJ_VAL(GET_EQ(i, WEAR_HEAD), 7) : 0) +
-                   (GET_EQ(i, WEAR_FACE) ? GET_OBJ_VAL(GET_EQ(i, WEAR_FACE), 7) : 0)) < 1)
-  {
-    if (GET_EQ(i, WEAR_HEAD))
-      send_to_char(ch, GET_EQ(i, WEAR_HEAD)->text.look_desc);
-    else if (GET_EQ(i, WEAR_FACE))
-      send_to_char(ch, GET_EQ(i, WEAR_FACE)->text.look_desc);
-    if (GET_EQ(i, WEAR_ABOUT))
-      send_to_char(ch, GET_EQ(i, WEAR_ABOUT)->text.look_desc);
-    else if (GET_EQ(i, WEAR_BODY))
-      send_to_char(ch, GET_EQ(i, WEAR_BODY)->text.look_desc);
-    else if (GET_EQ(i, WEAR_UNDER))
-      send_to_char(ch, GET_EQ(i, WEAR_UNDER)->text.look_desc);
-  } else
-#endif
   {
     if (i->player.physical_text.look_desc)
       send_to_char(i->player.physical_text.look_desc, ch);
@@ -1182,12 +1170,12 @@ void look_at_char(struct char_data * i, struct char_data * ch, const char *used_
         break;
       // BUF2 is VISIBLE, buf is hidden
       case CYB_DATAJACK:
-        if (!GET_EQ(i, WEAR_HEAD) && !GET_CYBERWARE_FLAGS(tmp_obj)) {
+        if (victs_wearslot_is_visible(i, ITEM_WEAR_HEAD) && !GET_CYBERWARE_FLAGS(tmp_obj)) {
           ware_is_internal = FALSE;
         }
         break;
       case CYB_CHIPJACK:
-        if (!GET_EQ(i, WEAR_HEAD)) {
+        if (victs_wearslot_is_visible(i, ITEM_WEAR_HEAD)) {
           ware_is_internal = FALSE;
         }
         break;
@@ -1196,8 +1184,16 @@ void look_at_char(struct char_data * i, struct char_data * ch, const char *used_
         ware_is_internal = FALSE;
         break;
       case CYB_EYES:
-        if (!ch_can_see_all_ware && (GET_EQ(i, WEAR_EYES) || (GET_EQ(i, WEAR_HEAD) && GET_WORN_CONCEAL_RATING(GET_EQ(i, WEAR_HEAD)) > 1)))
-          continue;
+        // Check if a non-sheer item is covering the eyes (could be an eye slot or head slot)
+        if (!ch_can_see_all_ware && !victs_wearslot_is_visible(i, ITEM_WEAR_EYES)) {
+          // If it's directly on the eyes, bail out
+          if (GET_EQ(i, WEAR_EYES))
+            continue;
+          
+          // If it's on the head and has a 2+ conceal rating, bail out
+          if (GET_EQ(i, WEAR_HEAD) && GET_WORN_CONCEAL_RATING(GET_EQ(i, WEAR_HEAD)) > 1)
+            continue;
+        }
 
         ware_is_internal = FALSE;
 

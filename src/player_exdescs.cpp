@@ -233,6 +233,26 @@ void set_exdesc_max(struct char_data *ch, int amount, bool save_to_db) {
   }
 }
 
+bool victs_wearslot_is_visible(struct char_data *vict, int wear_idx) {
+  if (!vict->player_specials || IS_NPC(vict))
+    return TRUE;
+
+  switch (wear_idx) {
+    case ITEM_WEAR_TAKE: return true;
+    case ITEM_WEAR_WIELD: return true;
+  }
+
+  // If it's directly covered, fail. Note that covered_wearlocs does not include sheer items, so no need to check for that.
+  if (GET_CHAR_COVERED_WEARLOCS(vict).IsSet(wear_idx))
+    return false;
+
+  // If it's indirectly covered (e.g. Under slot when you're wearing Body or About), fail.
+  if (GET_CHAR_COVERED_WEARLOCS(vict).AreAnyShared(wearloc_shadowing_locations[wear_idx]))
+    return false;
+
+  return true;
+}
+
 /*
  * Code for display of exdescs.
  */

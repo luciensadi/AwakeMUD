@@ -109,5 +109,6 @@ void clone_exdesc_vector_to_edit_mob_for_editing(struct descriptor_data *d);
 void overwrite_pc_exdescs_with_edit_mob_exdescs_and_then_save_to_db(struct descriptor_data *d);
 void pc_exdesc_edit_parse(struct descriptor_data *d, const char *arg);
 
+bool victs_wearslot_is_visible(struct char_data *vict, int wear_idx); // Less exdesc related, more about cyberware etc visibility.
 bool viewer_can_see_at_least_one_exdesc_on_vict(struct char_data *viewer, struct char_data *victim);
 void send_exdescs_on_look(struct char_data *viewer, struct char_data *vict, const char *used_keyword);

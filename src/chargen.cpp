@@ -1765,9 +1765,9 @@ void create_parse(struct descriptor_data *d, const char *arg)
 
     if (real_object(OBJ_MAP_OF_SEATTLE) > -1)
       obj_to_char(read_object(OBJ_MAP_OF_SEATTLE, VIRTUAL, OBJ_LOAD_REASON_CHARGEN_CLOTHES), d->character);
-    GET_EQ(d->character, WEAR_BODY) = read_object(shirts[number(0, 4)], VIRTUAL, OBJ_LOAD_REASON_CHARGEN_CLOTHES);
-    GET_EQ(d->character, WEAR_LEGS) = read_object(pants[number(0, 4)], VIRTUAL, OBJ_LOAD_REASON_CHARGEN_CLOTHES);
-    GET_EQ(d->character, WEAR_FEET) = read_object(shoes[number(0, 4)], VIRTUAL, OBJ_LOAD_REASON_CHARGEN_CLOTHES);
+    equip_char(d->character, read_object(shirts[number(0, 4)], VIRTUAL, OBJ_LOAD_REASON_CHARGEN_CLOTHES), WEAR_BODY);
+    equip_char(d->character, read_object(pants[number(0, 4)], VIRTUAL, OBJ_LOAD_REASON_CHARGEN_CLOTHES), WEAR_LEGS);
+    equip_char(d->character, read_object(shoes[number(0, 4)], VIRTUAL, OBJ_LOAD_REASON_CHARGEN_CLOTHES), WEAR_FEET);
     ccr_type_menu(d);
     break;
   case CCR_TOTEM:
