@@ -18,6 +18,7 @@
 #include "comm.hpp"
 #include "interpreter.hpp"
 #include "handler.hpp"
+#include "dg_scripts.hpp"
 #include "db.hpp"
 #include "awake.hpp"
 #include "constants.hpp"
@@ -1068,6 +1069,11 @@ bool perform_get_from_container(struct char_data *ch, struct obj_data *obj,
 		}
 
 		bool should_wizlog = IS_OBJ_STAT(obj, ITEM_EXTRA_WIZLOAD);
+
+		// Ordinary container pickups have passed every refusal check here.
+		if (!cyberdeck && !computer && !get_otrigger(obj, ch))
+			return FALSE;
+
 		bool should_cheatlog = (!IS_NPC(ch) && access_level(ch, LVL_BUILDER)) || (IS_OBJ_STAT(obj, ITEM_EXTRA_CHEATLOG_MARK) || IS_OBJ_STAT(cont, ITEM_EXTRA_CHEATLOG_MARK));
 		bool should_gridlog = FALSE;
 		bool same_host_warning = FALSE;
@@ -1599,6 +1605,13 @@ int perform_get_from_room(struct char_data *ch, struct obj_data *obj)
 				return FALSE;
 			}
 	}
+
+	/* A get trigger that returns 0 refuses the pickup. It runs below the
+	 * can-take checks so that it never fires for a get the game itself
+	 * refuses, and above the logging below, which clears the object's
+	 * dropped-by record. */
+	if (!get_otrigger(obj, ch))
+		return FALSE;
 
 	{
 		char *representation = generate_new_loggable_representation(obj);
@@ -2531,6 +2544,19 @@ int perform_drop(struct char_data *ch, struct obj_data *obj, byte mode,
 		}
 	}
 
+	/* Either the object or the room may refuse the drop. Both run here, after
+	 * the game has finished deciding, so that a trigger never fires for a drop
+	 * that is about to be turned down anyway. */
+	if (ch->in_veh && mode != SCMD_DONATE && mode != SCMD_JUNK &&
+			ch->in_veh->usedload + GET_OBJ_WEIGHT(obj) > ch->in_veh->load) {
+		send_to_char("There is too much in the vehicle already!\r\n", ch);
+		return 0;
+	}
+	if (!drop_otrigger(obj, ch))
+		return 0;
+	if (!drop_wtrigger(obj, ch))
+		return 0;
+
 	if (ch->in_veh)
 	{
 		if (mode != SCMD_DONATE && mode != SCMD_JUNK)
@@ -2941,6 +2967,11 @@ bool perform_give(struct char_data *ch, struct char_data *vict, struct obj_data 
 			// Successful delivery of quest item.
 			if (check_quest_delivery(ch, vict, obj))
 			{
+				/* Last chance for either side to refuse: everything below this
+				 * point actually moves the object. */
+				if (!give_otrigger(obj, ch, vict) || !receive_mtrigger(vict, ch, obj))
+					return 0;
+
 				// Give it to them now.
 				_ch_gives_obj_to_vict(ch, obj, vict);
 				if (MOB_FLAGGED(vict, MOB_INANIMATE))
@@ -2964,6 +2995,9 @@ bool perform_give(struct char_data *ch, struct char_data *vict, struct obj_data 
 		}
 
 		// Not a quest item. Give succeeds.
+		if (!give_otrigger(obj, ch, vict) || !receive_mtrigger(vict, ch, obj))
+			return 0;
+
 		_ch_gives_obj_to_vict(ch, obj, vict);
 
 		if (GET_MOB_SPEC(vict) || GET_MOB_SPEC2(vict))
@@ -3011,6 +3045,9 @@ bool perform_give(struct char_data *ch, struct char_data *vict, struct obj_data 
 		}
 
 		// All other cases (pc -> pc, npc -> npc): succeed without further checks
+
+		if (!give_otrigger(obj, ch, vict) || !receive_mtrigger(vict, ch, obj))
+			return 0;
 
 		_ch_gives_obj_to_vict(ch, obj, vict);
 	}
@@ -3065,6 +3102,9 @@ void perform_give_gold(struct char_data *ch, struct char_data *vict, int amount)
 	FAILURE_CASE(IS_ASTRAL(vict), "You can't hand astral beings anything.");
 	FAILURE_CASE((GET_NUYEN(ch) < amount) && (IS_NPC(ch) || (!access_level(ch, LVL_VICEPRES))), "You don't have that much!");
 	FAILURE_CASE(IS_SENATOR(ch) && !access_level(ch, LVL_PRESIDENT) && !IS_SENATOR(vict) && !IS_NPC(vict), "Staff must use the PAYOUT command instead.");
+
+	/* Handing an NPC nuyen is what a bribe trigger waits for. */
+	bribe_mtrigger(vict, ch, amount);
 
 	bool ch_is_npc = IS_NPC(ch);
 	bool vict_is_npc = IS_NPC(vict);
@@ -3373,6 +3413,8 @@ ACMD(do_drink)
 		send_to_char("It's empty.\r\n", ch);
 		return;
 	}
+	if (!consume_otrigger(temp, ch, OCMD_DRINK))
+		return;
 	if (subcmd == SCMD_DRINK)
 	{
 		act("$n drinks from $p.", TRUE, ch, temp, 0, TO_ROOM);
@@ -3510,6 +3552,11 @@ ACMD(do_eat)
 		die(ch, GET_IDNUM(ch), true);
 		return;
 	}
+
+	/* A consume trigger that returns 0 refuses the bite. It runs here so that
+	 * it never fires for a meal the game itself turns down. */
+	if (!consume_otrigger(food, ch, OCMD_EAT))
+		return;
 
 	if (subcmd == SCMD_EAT)
 	{
@@ -4194,6 +4241,11 @@ void perform_wear(struct char_data *ch, struct obj_data *obj, int where, bool pr
 		}
 	}
 
+	/* A wear trigger that returns 0 refuses the wear. It runs here so that it
+	 * never fires for a wear the game itself turns down. */
+	if (!wear_otrigger(obj, ch, where))
+		return;
+
 	if (print_messages)
 		wear_message(ch, obj, where);
 	if (obj->in_obj)
@@ -4500,6 +4552,15 @@ void perform_remove(struct char_data *ch, int pos)
 		act("$p: you can't carry that many items!", FALSE, ch, obj, 0, TO_CHAR);
 		return;
 	}
+
+	/* A remove trigger that returns 0 refuses the removal. Everything below
+	 * this point either tells the room something or takes time, so this is the
+	 * last place it can run without being seen. */
+	if (GET_OBJ_TYPE(obj) == ITEM_GYRO || IS_OBJ_STAT(obj, ITEM_EXTRA_HARDENED_ARMOR)) {
+		FAILURE_CASE(CH_IN_COMBAT(ch), "While fighting?? That would be a neat trick.");
+	}
+	if (!remove_otrigger(obj, ch))
+		return;
 
 	int was_worn_on = obj->worn_on;
 	int previous_armor_penalty = get_armor_penalty_grade(ch);

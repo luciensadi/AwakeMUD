@@ -24,6 +24,7 @@
 #include "boards.hpp"
 #include "screen.hpp"
 #include "olc.hpp"
+#include "dg_scripts.hpp"
 #include "memory.hpp"
 #include "constants.hpp"
 #include "handler.hpp"
@@ -393,6 +394,7 @@ void redit_disp_menu(struct descriptor_data * d)
     send_to_char("t) Restore color codes\r\n", d->character);
   else
     send_to_char("t) Toggle color codes\r\n", d->character);
+  send_to_char("w) Attached triggers\r\n", d->character);
   send_to_char("q) Quit and save\r\n", d->character);
   send_to_char("x) Exit and abort\r\n", d->character);
   send_to_char("Enter your choice:\r\n", d->character);
@@ -415,6 +417,15 @@ void redit_parse(struct descriptor_data * d, const char *arg)
   int             number;
   int             room_num;
   float number_float;
+
+  /* The attached-trigger sub-menu borrows this editor for a moment.
+   * Its submodes sit in their own range, well clear of this one. */
+  if (d->edit_mode >= DG_SCRIPT_MAIN_MENU && d->edit_mode <= DG_SCRIPT_DONE) {
+    if (!dg_script_edit_parse(d, arg))
+      redit_disp_menu(d);
+    return;
+  }
+
   switch (d->edit_mode)
   {
   case REDIT_CONFIRM_EDIT:
@@ -456,7 +467,13 @@ void redit_parse(struct descriptor_data * d, const char *arg)
           mudlog(buf, d->character, LOG_WIZLOG, TRUE);
         }
         room_num = real_room(d->edit_number);
-        if (room_num > 0) {
+        /* real_room() answers NOWHERE, not 0, when there is no such room, and
+         * rnum 0 is the first room in the world -- the one that holds the
+         * mud-wide %global% variables. Testing > 0 sent a save of it down the
+         * insert path, which put a second room with the same vnum into the
+         * world and left every script that reads a global looking at the
+         * wrong one. */
+        if (room_num >= 0) {
           /* copy people/object pointers over to the temp room
              as a temporary measure */
           d->edit_room->contents = world[room_num].contents;
@@ -480,11 +497,25 @@ void redit_parse(struct descriptor_data * d, const char *arg)
             }
           }
 
+          /* free_room() is a destructor and would take the room's script with
+           * it: the triggers, and every variable a script has stored on the
+           * room. A save is not a destruction. Lift the script out, drop only
+           * its triggers -- the part the builder has been editing -- and put
+           * it back for the new list to attach to. The room that holds the
+           * mud-wide globals has no triggers of its own, so without this a
+           * builder saving it would leave %global% with nowhere to live. */
+          struct script_data *sc = SCRIPT(world + room_num);
+
+          SCRIPT(world + room_num) = NULL;
+          extract_script_triggers(sc);
+
           // we use free_room here because we are not ready to turn it over
           // to the stack just yet as we are gonna use it immediately
           free_room(world + room_num);
           /* now copy everything over! */
           world[room_num] = *d->edit_room;
+          world[room_num].script = sc;
+          assign_triggers(&world[room_num], WLD_TRIGGER);
         } else {
           /* hm, we can't just copy.. gotta insert a new room */
           int             counter;
@@ -514,6 +545,7 @@ void redit_parse(struct descriptor_data * d, const char *arg)
               if (world[counter].number > d->edit_number) {
                 // now, zoom backwards through the list copying over
                 for (counter2 = top_of_world + 1; counter2 > counter; counter2--) {
+                  update_wait_events(&world[counter2], &world[counter2 - 1]);
                   world[counter2] = world[counter2 - 1];
                 }
 
@@ -559,6 +591,11 @@ void redit_parse(struct descriptor_data * d, const char *arg)
           /* now this is the *real* room_num */
           room_num = real_room(d->edit_number);
 
+          /* A brand new room has no scripts running yet, so build them
+           * from whatever the builder attached. */
+          world[room_num].script = NULL;
+          assign_triggers(&world[room_num], WLD_TRIGGER);
+
           /* now zoom through the character list and update anyone in limbo */
           struct char_data * temp_ch;
           for (temp_ch = character_list; temp_ch; temp_ch = temp_ch->next_in_character_list) {
@@ -583,6 +620,12 @@ void redit_parse(struct descriptor_data * d, const char *arg)
                   case 'D':
                   case 'R': /* rem obj from room */
                     UPDATE_VALUE(ZCMD.arg1);
+                    break;
+                  case 'T': /* attach a trigger */
+                    /* Only a room trigger names a room. */
+                    if (ZCMD.arg1 == WLD_TRIGGER) {
+                      UPDATE_VALUE(ZCMD.arg3);
+                    }
                     break;
                 }
               }
@@ -682,6 +725,9 @@ void redit_parse(struct descriptor_data * d, const char *arg)
     case 'x':
       d->edit_mode = REDIT_CONFIRM_SAVESTRING;
       redit_parse(d, "n");
+      break;
+    case 'w':
+      dg_script_menu(d);
       break;
       case 't':
         if ((d->edit_convert_color_codes = !d->edit_convert_color_codes))
@@ -942,8 +988,7 @@ void redit_parse(struct descriptor_data * d, const char *arg)
       send_to_char("You must specify a 3-letter airport code, like YVR, SEA, etc. Make one up if you have to.\r\n", CH);
       return;
     }
-    if (d->edit_room->flight_code)
-      delete [] d->edit_room->flight_code;
+    DELETE_ARRAY_IF_EXTANT(d->edit_room->flight_code);
     d->edit_room->flight_code = str_dup(arg);
     redit_disp_menu(d);
     break;
@@ -1474,6 +1519,12 @@ void write_world_to_disk(vnum_t zone_vnum)
         fprintf(fp, "NightDesc:$\n%s~\n", prep_string_for_writing_to_savefile(buf2, RM.night_desc));
 
       fprintf(fp, "Flags:\t%s\n", RM.room_flags.ToString());
+
+      {
+        const char *attached_triggers = dg_render_proto_list(&RM, WLD_TRIGGER);
+        if (attached_triggers)
+          fprintf(fp, "Scripts:\t%s\n", attached_triggers);
+      }
 
       if (RM.sector_type != DEFAULT_SECTOR_TYPE)
         fprintf(fp, "SecType:\t%s\n", spirit_name[RM.sector_type]);

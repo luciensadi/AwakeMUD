@@ -374,6 +374,14 @@ CREATE TABLE `pfiles_alias` (
   KEY(`idnum`)
 );
 
+CREATE TABLE `pfiles_scriptvars` (
+  `idnum` mediumint(5) unsigned NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `context` bigint(20) NOT NULL default 0,
+  `value` text NOT NULL,
+  PRIMARY KEY (`idnum`, `name`, `context`)
+);
+
 CREATE TABLE `trideo_broadcast` (
   `idnum` int unsigned auto_increment,
   `author` mediumint(5) unsigned default '0',

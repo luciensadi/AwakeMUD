@@ -4073,6 +4073,12 @@ void copy_over_necessary_info(struct char_data *original, struct char_data *clon
   REPLICATE(followers);
   REPLICATE(master);
 
+  // Script data. A medit save replaces the whole struct, and a live mob
+  // must not lose the script it is part-way through.
+  REPLICATE(script);
+  REPLICATE(script_memory);
+  REPLICATE(script_id);
+
   // Ignore data (null for NPCs)
   REPLICATE(ignore_data);
 

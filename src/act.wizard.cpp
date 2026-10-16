@@ -57,6 +57,7 @@
 #include "vehicles.hpp"
 #include "olc.hpp"
 #include "gmcp.hpp"
+#include "dg_scripts.hpp"
 
 #if defined(__CYGWIN__)
 #include <crypt.h>
@@ -976,6 +977,9 @@ void do_stat_room(struct char_data * ch)
     send_to_char("\r\n", ch);
   }
 
+  dg_stat_triggers(ch, SCRIPT(rm));
+  dg_stat_variables(ch, SCRIPT(rm));
+
   for (i = 0; i < NUM_OF_DIRS; i++)
   {
     if (rm->dir_option[i]) {
@@ -1348,6 +1352,9 @@ void do_stat_object(struct char_data * ch, struct obj_data * j)
     strlcat(buf, " None", sizeof(buf));
   strlcat(buf, "\r\n", sizeof(buf));
   send_to_char(buf, ch);
+
+  dg_stat_triggers(ch, SCRIPT(j));
+  dg_stat_variables(ch, SCRIPT(j));
 }
 
 void do_stat_character(struct char_data * ch, struct char_data * k)
@@ -1596,6 +1603,8 @@ void do_stat_character(struct char_data * ch, struct char_data * k)
   }
   strlcat(buf, "\r\n", sizeof(buf));
   send_to_char(buf, ch);
+
+  dg_stat_variables(ch, SCRIPT(k));
 }
 
 void do_stat_mobile(struct char_data * ch, struct char_data * k)
@@ -1827,6 +1836,9 @@ void do_stat_mobile(struct char_data * ch, struct char_data * k)
     send_to_char(ch, "Precast Spells:\r\n");
     list_mob_precast_spells_to_ch(k, ch);
   }
+
+  dg_stat_triggers(ch, SCRIPT(k));
+  dg_stat_variables(ch, SCRIPT(k));
 }
 
 ACMD(do_stat)
@@ -2187,6 +2199,7 @@ void perform_wizload_object(struct char_data *ch, int vnum) {
 
   obj = read_object(real_num, REAL, OBJ_LOAD_REASON_WIZLOAD);
   obj_to_char(obj, ch);
+  load_otrigger(obj);
   GET_OBJ_TIMER(obj) = 2;
   obj->obj_flags.extra_flags.SetBit(ITEM_EXTRA_WIZLOAD);
   act("$n makes a strange magical gesture.", TRUE, ch, 0, 0, TO_ROOM);
@@ -2279,6 +2292,7 @@ ACMD(do_wizload)
     mob = read_mobile(r_num, REAL);
     mob->mob_loaded_in_room = GET_ROOM_VNUM(get_ch_in_room(ch));
     char_to_room(mob, get_ch_in_room(ch));
+    load_mtrigger(mob);
 
     // Reset questgivers so they talk to you faster.
     if (CHECK_FUNC_AND_SFUNC_FOR(mob, johnson)) {
