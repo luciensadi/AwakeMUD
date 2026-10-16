@@ -52,6 +52,11 @@ rnum_t translate_quest_mob_identifier_to_rnum(vnum_t identifier, struct quest_da
 vnum_t translate_quest_mob_identifier_to_vnum(vnum_t identifier, struct quest_data *quest);
 struct char_data * fetch_quest_mob_target_mob_proto(struct quest_data *qst, int mob_idx);
 struct char_data * fetch_quest_mob_actual_mob_proto(struct quest_data *qst, int mob_idx);
+struct obj_data *instantiate_quest_object(rnum_t rnum, int load_reason, struct char_data *questor);
+void qedit_disp_secondary_menu(struct descriptor_data *d);
+void qedit_disp_secondary_edit_menu(struct descriptor_data *d);
+void qedit_disp_secondary_types(struct descriptor_data *d);
+void qedit_list_secondary_objectives(struct descriptor_data *d);
 
 ACMD_CONST(do_say);
 ACMD_DECLARE(do_action);
@@ -108,6 +113,294 @@ const char *mob_objectives[] =
     "Do not kill",
     "\n"
   };
+
+const char *secondary_say_emote_types[] =
+  {
+    "No response",
+    "Say message",
+    "Emote message",
+    "\n"
+  };
+
+struct queued_secondary_dialogue *secondary_dialogue_queue = NULL;
+
+void process_secondary_dialogue_queue(void) {
+  struct queued_secondary_dialogue *node = secondary_dialogue_queue;
+  struct queued_secondary_dialogue *prev = NULL;
+
+  while (node) {
+    if (!node->ch || !node->mob || !node->message || !*node->message) {
+      struct queued_secondary_dialogue *next = node->next;
+      if (prev)
+        prev->next = next;
+      else
+        secondary_dialogue_queue = next;
+      DELETE_ARRAY_IF_EXTANT(node->message);
+      delete node;
+      node = next;
+      continue;
+    }
+
+    int pos = node->pos;
+    int i, speech_index = 0;
+    while (node->message[pos] == ' ' || node->message[pos] == '\t' || node->message[pos] == '\r' || node->message[pos] == '\n')
+      pos++;
+
+    if (!node->message[pos]) {
+      struct queued_secondary_dialogue *next = node->next;
+      if (prev)
+        prev->next = next;
+      else
+        secondary_dialogue_queue = next;
+      DELETE_ARRAY_IF_EXTANT(node->message);
+      delete node;
+      node = next;
+      continue;
+    }
+
+    int cut;
+    bool will_add_ellipses = FALSE;
+
+    i = strlen(node->message);
+    while (i > 0 && (node->message[i - 1] == '\r' || node->message[i - 1] == '\n' || node->message[i - 1] == '\0'))
+      i--;
+
+    if ((pos + 200) < i) {
+      for (cut = pos + 200; cut > pos; cut--)
+        if ((isspace(*(node->message + cut)) || *(node->message + cut) == '\r')
+            && isprint(*(node->message + cut - 1))
+            && !isspace(*(node->message + cut - 1)))
+          break;
+      if (cut <= pos)
+        cut = pos + 200;
+      will_add_ellipses = TRUE;
+    } else {
+      cut = i;
+    }
+
+    char speech[300];
+    for (; pos < cut && speech_index < (int) sizeof(speech) - 1; pos++) {
+      if (*(node->message + pos) == '\n')
+        continue;
+      if (*(node->message + pos) == '\r')
+        speech[speech_index++] = ' ';
+      else
+        speech[speech_index++] = *(node->message + pos);
+    }
+    speech[speech_index] = '\0';
+
+    if (node->type == QSO_EMOTE) {
+      char emote_with_carriage_return[450];
+      snprintf(emote_with_carriage_return, sizeof(emote_with_carriage_return), "%s%s\r\n", speech, will_add_ellipses ? "..." : "");
+      display_single_emote_for_quest(node->mob, emote_with_carriage_return, node->ch);
+    } else {
+      char say_buf[400];
+      snprintf(say_buf, sizeof(say_buf), "%s%s", speech, will_add_ellipses ? "..." : "");
+      do_say(node->mob, say_buf, 0, 0);
+    }
+
+    while (node->message[pos] == ' ' || node->message[pos] == '\t' || node->message[pos] == '\r' || node->message[pos] == '\n')
+      pos++;
+
+    if (node->message[pos]) {
+      node->pos = pos;
+      if (node->type == QSO_EMOTE)
+        send_to_char(node->ch, "^L(%s is still acting...)^n\r\n", GET_CHAR_NAME(node->mob));
+      return;
+    }
+
+    struct queued_secondary_dialogue *next = node->next;
+    if (prev)
+      prev->next = next;
+    else
+      secondary_dialogue_queue = next;
+    DELETE_ARRAY_IF_EXTANT(node->message);
+    delete node;
+    node = next;
+  }
+}
+
+bool check_secondary_objective(struct char_data *ch, struct char_data *mob, struct obj_data *obj) {
+  if (!ch || !mob || !obj || !GET_QUEST(ch))
+    return FALSE;
+
+  bool secondary_objective = FALSE;
+
+  for (int i = 0; i < quest_table[GET_QUEST(ch)].num_objs; i++) {
+    if (quest_table[GET_QUEST(ch)].obj[i].objective != QOO_TAR_MOB
+        && quest_table[GET_QUEST(ch)].obj[i].objective != QOO_JOHNSON)
+      continue;
+
+    if (quest_table[GET_QUEST(ch)].obj[i].vnum != GET_OBJ_VNUM(obj))
+      continue;
+
+    vnum_t mob_vnum = quest_table[GET_QUEST(ch)].obj[i].objective == QOO_JOHNSON
+                        ? quest_table[GET_QUEST(ch)].johnson
+                        : translate_quest_mob_identifier_to_vnum(quest_table[GET_QUEST(ch)].obj[i].o_data, &quest_table[GET_QUEST(ch)]);
+    if (mob_vnum != GET_MOB_VNUM(mob))
+      continue;
+
+    if (!ch->player_specials->obj_complete[i])
+      continue;
+
+    struct quest_om_data *o_data = &quest_table[GET_QUEST(ch)].obj[i];
+
+    // frankensteined from the Johnson code
+    // it probably should be a helper
+    switch (o_data->s_type) {
+      case QSO_SAY:
+        if (o_data->s_message && *o_data->s_message) {
+          int pos = 0, i, speech_index;
+          speech_index = 0;
+          while (o_data->s_message[pos] == ' ' || o_data->s_message[pos] == '\t' || o_data->s_message[pos] == '\r' || o_data->s_message[pos] == '\n')
+            pos++;
+
+          if (o_data->s_message[pos]) {
+            int cut;
+            bool will_add_ellipses = FALSE;
+
+            i = strlen(o_data->s_message);
+            while (i > 0 && (o_data->s_message[i - 1] == '\r' || o_data->s_message[i - 1] == '\n' || o_data->s_message[i - 1] == '\0'))
+              i--;
+
+            if ((pos + 200) < i) {
+              for (cut = pos + 200; cut > pos; cut--)
+                if ((isspace(*(o_data->s_message + cut)) || *(o_data->s_message + cut) == '\r')
+                    && isprint(*(o_data->s_message + cut - 1))
+                    && !isspace(*(o_data->s_message + cut - 1)))
+                  break;
+              if (cut <= pos)
+                cut = pos + 200;
+              will_add_ellipses = TRUE;
+            } else {
+              cut = i;
+            }
+
+            char speech[300];
+            for (; pos < cut && speech_index < (int) sizeof(speech) - 1; pos++) {
+              if (*(o_data->s_message + pos) == '\n')
+                continue;
+              if (*(o_data->s_message + pos) == '\r')
+                speech[speech_index++] = ' ';
+              else
+                speech[speech_index++] = *(o_data->s_message + pos);
+            }
+            speech[speech_index] = '\0';
+
+            char say_buf[400];
+            snprintf(say_buf, sizeof(say_buf), "%s%s", speech, will_add_ellipses ? "..." : "");
+            do_say(mob, say_buf, 0, 0);
+
+            while (o_data->s_message[pos] == ' ' || o_data->s_message[pos] == '\t' || o_data->s_message[pos] == '\r' || o_data->s_message[pos] == '\n')
+              pos++;
+            if (o_data->s_message[pos]) {
+              struct queued_secondary_dialogue *node = new struct queued_secondary_dialogue;
+              node->ch = ch;
+              node->mob = mob;
+              node->message = str_dup(o_data->s_message);
+              node->pos = pos;
+              node->type = QSO_SAY;
+              node->next = NULL;
+              if (!secondary_dialogue_queue)
+                secondary_dialogue_queue = node;
+              else {
+                struct queued_secondary_dialogue *iter = secondary_dialogue_queue;
+                while (iter->next)
+                  iter = iter->next;
+                iter->next = node;
+              }
+            }
+          }
+          secondary_objective = TRUE;
+        }
+        break;
+      case QSO_EMOTE:
+        if (o_data->s_message && *o_data->s_message) {
+          int pos = 0, i, speech_index;
+          act("^n", FALSE, mob, 0, 0, TO_ROOM);
+          speech_index = 0;
+          while (o_data->s_message[pos] == ' ' || o_data->s_message[pos] == '\t' || o_data->s_message[pos] == '\r' || o_data->s_message[pos] == '\n')
+            pos++;
+
+          if (o_data->s_message[pos]) {
+            int cut;
+            bool will_add_ellipses = FALSE;
+
+            i = strlen(o_data->s_message);
+            while (i > 0 && (o_data->s_message[i - 1] == '\r' || o_data->s_message[i - 1] == '\n' || o_data->s_message[i - 1] == '\0'))
+              i--;
+
+            if ((pos + 200) < i) {
+              for (cut = pos + 200; cut > pos; cut--)
+                if ((isspace(*(o_data->s_message + cut)) || *(o_data->s_message + cut) == '\r')
+                    && isprint(*(o_data->s_message + cut - 1))
+                    && !isspace(*(o_data->s_message + cut - 1)))
+                  break;
+              if (cut <= pos)
+                cut = pos + 200;
+              will_add_ellipses = TRUE;
+            } else {
+              cut = i;
+            }
+
+            char speech[300];
+            for (; pos < cut && speech_index < (int) sizeof(speech) - 1; pos++) {
+              if (*(o_data->s_message + pos) == '\n')
+                continue;
+              if (*(o_data->s_message + pos) == '\r')
+                speech[speech_index++] = ' ';
+              else
+                speech[speech_index++] = *(o_data->s_message + pos);
+            }
+            speech[speech_index] = '\0';
+
+            char emote_with_carriage_return[450];
+            snprintf(emote_with_carriage_return, sizeof(emote_with_carriage_return), "%s%s\r\n", speech, will_add_ellipses ? "..." : "");
+            display_single_emote_for_quest(mob, emote_with_carriage_return, ch);
+
+            while (o_data->s_message[pos] == ' ' || o_data->s_message[pos] == '\t' || o_data->s_message[pos] == '\r' || o_data->s_message[pos] == '\n')
+              pos++;
+            if (o_data->s_message[pos]) {
+              struct queued_secondary_dialogue *node = new struct queued_secondary_dialogue;
+              node->ch = ch;
+              node->mob = mob;
+              node->message = str_dup(o_data->s_message);
+              node->pos = pos;
+              node->type = QSO_EMOTE;
+              node->next = NULL;
+              if (!secondary_dialogue_queue)
+                secondary_dialogue_queue = node;
+              else {
+                struct queued_secondary_dialogue *iter = secondary_dialogue_queue;
+                while (iter->next)
+                  iter = iter->next;
+                iter->next = node;
+              }
+              send_to_char(ch, "^L(%s is still acting...)^n\r\n", GET_CHAR_NAME(mob));
+            }
+          }
+          secondary_objective = TRUE;
+        }
+        break;
+      case QSO_GIVE_OBJECTIVE:
+      case QSO_NO_RESPONSE:
+        break;
+    }
+
+    if ((o_data->s_enabled || o_data->s_type == QSO_GIVE_OBJECTIVE) && o_data->s_obj_vnum > 0) {
+      rnum_t rnum = real_object(o_data->s_obj_vnum);
+      if (rnum >= 0) {
+        struct obj_data *secondary_item = instantiate_quest_object(rnum, OBJ_LOAD_REASON_QUEST_JOHNSON, ch);
+        obj_to_char(secondary_item, mob);
+        if (!perform_give(mob, ch, secondary_item))
+          perform_drop(mob, secondary_item, SCMD_DROP, "drop", NULL);
+        secondary_objective = TRUE;
+      }
+    }
+  }
+
+  return secondary_objective;
+}
 
 
 const char *sol[] =
@@ -2268,8 +2561,11 @@ void boot_one_quest(struct quest_data *quest)
   if (quest_table[quest_nr].num_objs > 0)
   {
     quest_table[quest_nr].obj = new struct quest_om_data[quest_table[quest_nr].num_objs];
-    for (int i = 0; i < quest_table[quest_nr].num_objs; i++)
+    for (int i = 0; i < quest_table[quest_nr].num_objs; i++) {
       quest_table[quest_nr].obj[i] = quest->obj[i];
+      if (quest->obj[i].s_message)
+        quest_table[quest_nr].obj[i].s_message = str_dup(quest->obj[i].s_message);
+    }
   } else
     quest_table[quest_nr].obj = NULL;
 
@@ -2277,8 +2573,11 @@ void boot_one_quest(struct quest_data *quest)
   if (quest_table[quest_nr].num_mobs > 0)
   {
     quest_table[quest_nr].mob = new struct quest_om_data[quest_table[quest_nr].num_mobs];
-    for (int i = 0; i < quest_table[quest_nr].num_mobs; i++)
+    for (int i = 0; i < quest_table[quest_nr].num_mobs; i++) {
       quest_table[quest_nr].mob[i] = quest->mob[i];
+      if (quest->mob[i].s_message)
+        quest_table[quest_nr].mob[i].s_message = str_dup(quest->mob[i].s_message);
+    }
   } else
     quest_table[quest_nr].mob = NULL;
 
@@ -2318,6 +2617,8 @@ void boot_one_quest(struct quest_data *quest)
 void reboot_quest(int rnum, struct quest_data *quest)
 {
   int i, ojn, njn;
+  int old_num_objs = quest_table[rnum].num_objs;
+  int old_num_mobs = quest_table[rnum].num_mobs;
 
   if (quest_table[rnum].johnson != quest->johnson)
   {
@@ -2354,27 +2655,39 @@ void reboot_quest(int rnum, struct quest_data *quest)
   quest_table[rnum].prerequisite_quest = quest->prerequisite_quest;
   quest_table[rnum].disqualifying_quest = quest->disqualifying_quest;
 
-  if (quest_table[rnum].obj)
+  if (quest_table[rnum].obj) {
+    for (i = 0; i < old_num_objs; i++)
+      DELETE_ARRAY_IF_EXTANT(quest_table[rnum].obj[i].s_message);
     delete [] quest_table[rnum].obj;
+  }
 
   if (quest_table[rnum].num_objs > 0)
   {
     quest_table[rnum].obj = new quest_om_data[quest_table[rnum].num_objs];
 
-    for (i = 0; i < quest_table[rnum].num_objs; i++)
+    for (i = 0; i < quest_table[rnum].num_objs; i++) {
       quest_table[rnum].obj[i] = quest->obj[i];
+      if (quest->obj[i].s_message)
+        quest_table[rnum].obj[i].s_message = str_dup(quest->obj[i].s_message);
+    }
   } else
     quest_table[rnum].obj = NULL;
 
-  if (quest_table[rnum].mob)
+  if (quest_table[rnum].mob) {
+    for (i = 0; i < old_num_mobs; i++)
+      DELETE_ARRAY_IF_EXTANT(quest_table[rnum].mob[i].s_message);
     delete [] quest_table[rnum].mob;
+  }
 
   if (quest_table[rnum].num_mobs > 0)
   {
     quest_table[rnum].mob = new quest_om_data[quest_table[rnum].num_mobs];
 
-    for (i = 0; i < quest_table[rnum].num_mobs; i++)
+    for (i = 0; i < quest_table[rnum].num_mobs; i++) {
       quest_table[rnum].mob[i] = quest->mob[i];
+      if (quest->mob[i].s_message)
+        quest_table[rnum].mob[i].s_message = str_dup(quest->mob[i].s_message);
+    }
   } else
     quest_table[rnum].mob = NULL;
 
@@ -2492,7 +2805,8 @@ int write_quests_to_disk(int zone) {
             );
 
       for (j = 0; j < quest_table[i].num_objs; j++)
-        fprintf(fp, "%ld %d %d %d %d %ld %ld %ld\n", 
+      {
+        fprintf(fp, "%ld %d %d %d %d %ld %ld %ld %d %d %ld %d\n", 
                 quest_table[i].obj[j].vnum,
                 quest_table[i].obj[j].nuyen, 
                 quest_table[i].obj[j].karma,
@@ -2500,7 +2814,15 @@ int write_quests_to_disk(int zone) {
                 quest_table[i].obj[j].objective,
                 quest_table[i].obj[j].l_data, 
                 quest_table[i].obj[j].l_data2,
-                quest_table[i].obj[j].o_data);
+                quest_table[i].obj[j].o_data,
+                quest_table[i].obj[j].s_enabled ? 1 : 0,
+                quest_table[i].obj[j].s_type,
+                quest_table[i].obj[j].s_obj_vnum,
+                (quest_table[i].obj[j].s_message && *quest_table[i].obj[j].s_message) ? 1 : 0);
+
+        if (quest_table[i].obj[j].s_message && *quest_table[i].obj[j].s_message)
+          fprintf(fp, "%s~\n", prep_string_for_writing_to_savefile(buf2, quest_table[i].obj[j].s_message));
+      }
 
       for (j = 0; j < quest_table[i].num_mobs; j++)
         fprintf(fp, "%ld %d %d %d %d %ld %ld %ld\n", 
@@ -2902,6 +3224,7 @@ void qedit_disp_obj_menu(struct descriptor_data *d)
                " 1) List current objectives\r\n"
                " 2) Edit an existing objective\r\n"
                " 3) Add a new objective (%d slots remaining)\r\n"
+               " 4) Secondary objectives/speech menu\r\n"
                " q) Return to main menu\r\n"
                "Enter your choice: ", QMAX_OBJS - QUEST->num_objs);
 
@@ -2920,6 +3243,110 @@ void qedit_disp_mob_menu(struct descriptor_data *d)
 
   d->edit_number2 = 0;
   d->edit_mode = QEDIT_M_MENU;
+}
+
+bool qedit_secondary_objective_is_editable(struct descriptor_data *d)
+{
+  int idx = d->edit_number2;
+
+  if (idx < 0 || idx >= QUEST->num_objs)
+    return FALSE;
+
+  if (QUEST->obj[idx].objective == QOO_TAR_MOB || QUEST->obj[idx].objective == QOO_JOHNSON)
+    return TRUE;
+
+  return FALSE;
+}
+
+void qedit_list_secondary_objectives(struct descriptor_data *d)
+{
+  CLS(CH);
+
+  *buf = '\0';
+
+  for (int i = 0; i < QUEST->num_objs; i++) {
+    rnum_t obj_rnum = real_object(QUEST->obj[i].vnum);
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%2d) %ld (%s): ", i, QUEST->obj[i].vnum, obj_rnum >= 0 ? GET_OBJ_NAME(&obj_proto[obj_rnum]) : "invalid vnum");
+
+    if (QUEST->obj[i].objective == QOO_JOHNSON) {
+      rnum_t johnson_rnum = real_mobile(QUEST->johnson);
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "target %ld (%s): ", QUEST->johnson, johnson_rnum >= 0 ? GET_CHAR_NAME(&mob_proto[johnson_rnum]) : "invalid vnum");
+    } else {
+      rnum_t target_rnum = translate_quest_mob_identifier_to_rnum(QUEST->obj[i].o_data, QUEST);
+      snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "target %ld (%s): ", QUEST->obj[i].o_data, target_rnum >= 0 ? GET_CHAR_NAME(&mob_proto[target_rnum]) : "invalid vnum");
+    }
+
+    strlcat(buf, "\r\n", sizeof(buf));
+  }
+
+  send_to_char(buf, CH);
+}
+
+void qedit_disp_secondary_types(struct descriptor_data *d)
+{
+  CLS(CH);
+
+  for (int i = QSO_NO_RESPONSE; i <= QSO_EMOTE; i++)
+    send_to_char(CH, "%2d) %s\r\n", i, secondary_say_emote_types[i]);
+
+  send_to_char(CH, "Enter say/emote response type: ");
+  d->edit_mode = QEDIT_S_TYPE;
+}
+
+void qedit_disp_secondary_edit_menu(struct descriptor_data *d)
+{
+  if (d->edit_number2 < 0 || d->edit_number2 >= QUEST->num_objs) {
+    qedit_disp_secondary_menu(d);
+    return;
+  }
+
+  int idx = d->edit_number2;
+  rnum_t obj_rnum = real_object(QUEST->obj[idx].vnum);
+  const char *obj_name = obj_rnum >= 0 ? GET_OBJ_NAME(&obj_proto[obj_rnum]) : "invalid vnum";
+  const char *target_name = "invalid vnum";
+  vnum_t target_vnum;
+
+  if (QUEST->obj[idx].objective == QOO_JOHNSON) {
+    target_vnum = QUEST->johnson;
+    rnum_t johnson_rnum = real_mobile(QUEST->johnson);
+    target_name = johnson_rnum >= 0 ? GET_CHAR_NAME(&mob_proto[johnson_rnum]) : "invalid vnum";
+  } else {
+    target_vnum = QUEST->obj[idx].o_data;
+    rnum_t target_rnum = translate_quest_mob_identifier_to_rnum(QUEST->obj[idx].o_data, QUEST);
+    target_name = target_rnum >= 0 ? GET_CHAR_NAME(&mob_proto[target_rnum]) : "invalid vnum";
+  }
+
+  const char *secondary_name = "none";
+  if (QUEST->obj[idx].s_obj_vnum > 0) {
+    rnum_t secondary_rnum = real_object(QUEST->obj[idx].s_obj_vnum);
+    secondary_name = secondary_rnum >= 0 ? GET_OBJ_NAME(&obj_proto[secondary_rnum]) : "invalid vnum";
+  }
+
+  CLS(CH);
+
+  send_to_char(CH, "Secondary objectives/speech for objective %d\r\n", idx);
+  send_to_char(CH, " Item: %ld (%s)\r\n", QUEST->obj[idx].vnum, obj_name);
+  send_to_char(CH, " Target: %ld (%s)\r\n", target_vnum, target_name);
+  send_to_char(CH, " 1) Message type: %s\r\n", QUEST->obj[idx].s_type <= QSO_EMOTE ? secondary_say_emote_types[QUEST->obj[idx].s_type] : secondary_say_emote_types[QSO_NO_RESPONSE]);
+  send_to_char(CH, " 2) Message text: %s\r\n", QUEST->obj[idx].s_message ? QUEST->obj[idx].s_message : "<not set>");
+  send_to_char(CH, " 3) Gives a secondary objective item: %s\r\n", (QUEST->obj[idx].s_enabled || QUEST->obj[idx].s_type == QSO_GIVE_OBJECTIVE) ? "YES" : "NO");
+  send_to_char(CH, " 4) Secondary objective item vnum: %ld (%s)\r\n", QUEST->obj[idx].s_obj_vnum, secondary_name);
+  send_to_char(CH, " q) Return to secondary objective menu\r\n");
+  send_to_char(CH, "Enter your choice: ");
+
+  d->edit_mode = QEDIT_S_EDIT_MENU;
+}
+
+void qedit_disp_secondary_menu(struct descriptor_data *d)
+{
+  send_to_char(CH, "Secondary objectives/speech menu:\r\n"
+               " 1) List current objectives\r\n"
+               " 2) Edit an existing objective\r\n"
+               " q) Return to item objective menu\r\n"
+               "Enter your choice: ");
+
+  d->edit_number2 = 0;
+  d->edit_mode = QEDIT_S_MENU;
 }
 
 void qedit_disp_obj_loads(struct descriptor_data *d)
@@ -3657,6 +4084,10 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
         qedit_disp_obj_menu(d);
       }
       break;
+    case '4':
+      CLS(CH);
+      qedit_disp_secondary_menu(d);
+      break;
     case 'q':
     case 'Q':
       qedit_disp_menu(d);
@@ -3665,6 +4096,144 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
       CLS(CH);
       qedit_disp_obj_menu(d);
       break;
+    }
+    break;
+  case QEDIT_S_MENU:
+    switch (*arg) {
+    case '1':
+      qedit_list_secondary_objectives(d);
+      qedit_disp_secondary_menu(d);
+      break;
+    case '2':
+      send_to_char("Enter number of item objective to edit (q to go back): ", CH);
+      d->edit_mode = QEDIT_S_AWAIT_NUMBER;
+      break;
+    case 'q':
+    case 'Q':
+      CLS(CH);
+      qedit_disp_obj_menu(d);
+      break;
+    default:
+      CLS(CH);
+      qedit_disp_secondary_menu(d);
+      break;
+    }
+    break;
+  case QEDIT_S_AWAIT_NUMBER:
+    if (*arg == 'q' || *arg == 'Q') {
+      CLS(CH);
+      qedit_disp_secondary_menu(d);
+      break;
+    }
+
+    number = atoi(arg);
+    if (number < 0 || number >= QUEST->num_objs) {
+      CLS(CH);
+      qedit_disp_secondary_menu(d);
+    } else {
+      d->edit_number2 = number;
+      if (!qedit_secondary_objective_is_editable(d)) {
+        send_to_char(CH, "Secondary objectives must be 'deliver item to target' or 'return item to Johnson'. Enter number of item objective (q to go back): ");
+      } else {
+        if (QUEST->obj[d->edit_number2].s_type == QSO_GIVE_OBJECTIVE) {
+          QUEST->obj[d->edit_number2].s_type = QSO_NO_RESPONSE;
+          QUEST->obj[d->edit_number2].s_enabled = 1;
+        }
+        qedit_disp_secondary_edit_menu(d);
+      }
+    }
+    break;
+  case QEDIT_S_EDIT_MENU:
+    switch (*arg) {
+    case '1':
+      qedit_disp_secondary_types(d);
+      break;
+    case '2':
+      send_to_char(CH, "Enter text for SAY/EMOTE response: ");
+      d->edit_mode = QEDIT_S_MESSAGE;
+      break;
+    case '3':
+      send_to_char(CH, "Does the mob return a (quest) item? (y/n): ");
+      d->edit_mode = QEDIT_S_ENABLED;
+      break;
+    case '4':
+      send_to_char(CH, "Enter vnum of objective item to give: ");
+      d->edit_mode = QEDIT_S_ITEM_VNUM;
+      break;
+    case 'q':
+    case 'Q':
+      CLS(CH);
+      qedit_disp_secondary_menu(d);
+      break;
+    default:
+      qedit_disp_secondary_edit_menu(d);
+      break;
+    }
+    break;
+  case QEDIT_S_ENABLED:
+    if (!qedit_secondary_objective_is_editable(d)) {
+      qedit_disp_secondary_menu(d);
+    } else {
+      switch (*arg) {
+        case 'y':
+        case 'Y':
+          QUEST->obj[d->edit_number2].s_enabled = 1;
+          qedit_disp_secondary_edit_menu(d);
+          break;
+        case 'n':
+        case 'N':
+          QUEST->obj[d->edit_number2].s_enabled = 0;
+          qedit_disp_secondary_edit_menu(d);
+          break;
+        default:
+          send_to_char(CH, "Please enter y or n: ");
+          break;
+      }
+    }
+    break;
+  case QEDIT_S_TYPE:
+    number = atoi(arg);
+    if (number < QSO_NO_RESPONSE || number > QSO_EMOTE) {
+      qedit_disp_secondary_types(d);
+    } else {
+      if (!qedit_secondary_objective_is_editable(d)) {
+        qedit_disp_secondary_menu(d);
+      } else {
+        QUEST->obj[d->edit_number2].s_type = number;
+        qedit_disp_secondary_edit_menu(d);
+      }
+    }
+    break;
+  case QEDIT_S_MESSAGE:
+    {
+      if (!qedit_secondary_objective_is_editable(d)) {
+        qedit_disp_secondary_menu(d);
+      } else {
+        if (QUEST->obj[d->edit_number2].s_message)
+          delete [] QUEST->obj[d->edit_number2].s_message;
+        if (*arg) {
+          char mutable_arg[MAX_STRING_LENGTH];
+          strlcpy(mutable_arg, arg, sizeof(mutable_arg));
+          delete_doubledollar(mutable_arg);
+          QUEST->obj[d->edit_number2].s_message = str_dup(mutable_arg);
+        } else {
+          QUEST->obj[d->edit_number2].s_message = NULL;
+        }
+        qedit_disp_secondary_edit_menu(d);
+      }
+    }
+    break;
+  case QEDIT_S_ITEM_VNUM:
+    number = atoi(arg);
+    if (number != 0 && real_object(number) < 0) {
+      send_to_char(CH, "No such item. Enter vnum of secondary objective item to give: ");
+    } else {
+      if (!qedit_secondary_objective_is_editable(d)) {
+        qedit_disp_secondary_menu(d);
+      } else {
+        QUEST->obj[d->edit_number2].s_obj_vnum = number;
+        qedit_disp_secondary_edit_menu(d);
+      }
     }
     break;
   case QEDIT_EMOTE__INSERT_EMOTE_BEFORE:
@@ -3849,7 +4418,10 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
     number = atoi(arg);
     switch (QUEST->obj[d->edit_number2].load) {
     case QOL_TARMOB_I:
-      if (*arg == 'l' || *arg == 'L') {
+      if (*arg == 'q' || *arg == 'Q') {
+        CLS(CH);
+        qedit_disp_obj_menu(d);
+      } else if (*arg == 'l' || *arg == 'L') {
         qedit_list_mob_objectives(d);
         send_to_char(CH, "Enter M# of mob to put item in inventory of: ('l' to list, 'q' to quit): ");
       } else if (number < 0 || number >= QUEST->num_mobs)
@@ -3860,7 +4432,10 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
       }
       break;
     case QOL_TARMOB_E:
-      if (*arg == 'l' || *arg == 'L') {
+      if (*arg == 'q' || *arg == 'Q') {
+        CLS(CH);
+        qedit_disp_obj_menu(d);
+      } else if (*arg == 'l' || *arg == 'L') {
         qedit_list_mob_objectives(d);
         send_to_char(CH, "Enter M# of mob to equip item on: ('l' to list, 'q' to quit): ");
       } else if (number < 0 || number >= QUEST->num_mobs)
@@ -3871,7 +4446,10 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
       }
       break;
     case QOL_TARMOB_C:
-      if (*arg == 'l' || *arg == 'L') {
+      if (*arg == 'q' || *arg == 'Q') {
+        CLS(CH);
+        qedit_disp_obj_menu(d);
+      } else if (*arg == 'l' || *arg == 'L') {
         qedit_list_mob_objectives(d);
         send_to_char(CH, "Enter M# of mob to install item in: ('l' to list, 'q' to quit): ");
       } else  if (number < 0 || number >= QUEST->num_mobs)

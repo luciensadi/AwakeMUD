@@ -342,6 +342,13 @@ extern bool is_olc_available(struct char_data *ch);
 #define QEDIT_EMOTE_MENU__INFO_EMOTES                50
 #define QEDIT_PREREQUISITE                           51
 #define QEDIT_DISQUALIFYING                          52
+#define QEDIT_S_MENU                                 53
+#define QEDIT_S_AWAIT_NUMBER                         54
+#define QEDIT_S_EDIT_MENU                            55
+#define QEDIT_S_ENABLED                              56
+#define QEDIT_S_TYPE                                 57
+#define QEDIT_S_MESSAGE                              58
+#define QEDIT_S_ITEM_VNUM                            59
 
 // zone defines
 #define ZEDIT_CONFIRM_EDIT_DATA         0

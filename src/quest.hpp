@@ -38,6 +38,12 @@ typedef  std::vector<emote_t>   emote_vector_t;
 #define QOO_UPLOAD	       7
 #define NUM_OBJ_OBJECTIVES 8
 
+#define QSO_NO_RESPONSE    0
+#define QSO_SAY            1
+#define QSO_EMOTE          2
+#define QSO_GIVE_OBJECTIVE 3
+#define NUM_QSO_TYPES      4
+
 #define QMO_NO_OBJECTIVE   0
 #define QMO_LOCATION       1
 #define QMO_KILL_ONE       2
@@ -59,9 +65,14 @@ struct quest_om_data
   byte objective;
   vnum_t l_data, l_data2;
   vnum_t o_data;
+  byte s_enabled;
+  byte s_type;
+  vnum_t s_obj_vnum;
+  char *s_message;
 
   quest_om_data() :
-    vnum(0), nuyen(0), karma(0), load(0), objective(0), l_data(0), l_data2(0), o_data(0)
+    vnum(0), nuyen(0), karma(0), load(0), objective(0), l_data(0), l_data2(0), o_data(0),
+    s_enabled(0), s_type(QSO_NO_RESPONSE), s_obj_vnum(0), s_message(NULL)
   {}
 };
 
@@ -118,6 +129,17 @@ struct quest_entry {
   {}
 };
 
+struct queued_secondary_dialogue {
+  struct char_data *ch;
+  struct char_data *mob;
+  char *message;
+  int pos;
+  byte type;
+  struct queued_secondary_dialogue *next;
+};
+
+extern struct queued_secondary_dialogue *secondary_dialogue_queue;
+
 #define CMD_JOB_NONE  0
 #define CMD_JOB_QUIT  1
 #define CMD_JOB_DONE  2
@@ -127,5 +149,6 @@ struct quest_entry {
 
 void load_quest_targets(struct char_data *johnson, struct char_data *ch);
 void handle_info(struct char_data *johnson, int num, struct char_data *target);
+bool check_secondary_objective(struct char_data *ch, struct char_data *mob, struct obj_data *obj);
 
 #endif
