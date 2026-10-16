@@ -21,7 +21,7 @@ ifeq ($(DEPLOYMENT_MODE),2)
   JUST_FUCK_ME_UP_WITH_WARNINGS ?= 1
   USE_FSAN ?= 1  # FSAN in address,undefined mode
 else ifeq ($(DEPLOYMENT_MODE),1)
-  BASE_CPPFLAGS += -DIS_BUILDPORT -DSELFADVANCE -DUSE_MEMORY_CANARIES -DDEBUG -D_GLIBCXX_DEBUG
+  BASE_CPPFLAGS += -DIS_BUILDPORT -DUSE_MEMORY_CANARIES -DDEBUG -D_GLIBCXX_DEBUG
   JUST_FUCK_ME_UP_WITH_WARNINGS ?= 1
   USE_FSAN ?= 1  # FSAN in address,undefined mode
 else
@@ -64,7 +64,7 @@ ifeq ($(JUST_FUCK_ME_UP_WITH_WARNINGS),1)
       -Wc++-compat -Wbool-operation -Wbitwise-op-parentheses -Wbitwise-instead-of-logical -Wbad-function-cast \
       -Watomic-properties -Watomic-access -Wassign-enum -Warray-parameter -Warray-bounds-pointer-arithmetic \
       -Waddress-of-temporary -Wabstract-vbase-init \
-      -Wno-double-promotion
+      -Wno-double-promotion -Wno-c++98-compat-extra-semi
   else
     BASE_CXXFLAGS += -Wduplicated-cond -Wduplicated-branches -Wlogical-op -Wrestrict -Wfloat-equal -Wextra-semi -Wexpansion-to-defined -Wdouble-promotion \
       -Wdeprecated -Wdate-time -Wcast-qual -Wcast-function-type -Wbool-operation -Warray-parameter \
@@ -122,6 +122,9 @@ unittest_objs = $(unittest_srcs:.cpp=.o)
 # Define build targets etc
 all: ../bin/awake
 
+../test/%.o: ../test/%.cpp
+	$(CXX) $(CPPFLAGS) -DUNITTEST $(CXXFLAGS) -I../3rdparty/catch2 -MMD -MP -c $< -o $@
+
 ../bin/awake: $(objfiles)
 	@mkdir -p ../bin
 	$(CXX) $(CXXFLAGS) $(LDFLAGS) -o $@ $(objfiles) $(LDLIBS)
@@ -138,9 +141,6 @@ unittest: ../bin/unittest
 
 %.test.o: %.cpp
 	$(CXX) $(CPPFLAGS) -DUNITTEST $(CXXFLAGS) -MMD -MP -c $< -o $@
-
-../test/%.o: ../test/%.cpp
-	$(CXX) $(CPPFLAGS) -DUNITTEST $(CXXFLAGS) -I../3rdparty/catch2 -MMD -MP -c $< -o $@
 
 clean:
 	rm -f $(objfiles) $(test_objfiles) $(depfiles) ../test/*.o ../test/*.d ../bin/awake ../bin/unittest

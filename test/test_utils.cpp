@@ -1,4 +1,4 @@
-#include "../src/utils.h"
+#include "../src/utils.hpp"
 
 #include <catch.hpp>
 

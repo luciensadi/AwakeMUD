@@ -37,6 +37,7 @@ namespace fs = std::filesystem;
 #include "deck_build.hpp"
 #include "newshop.hpp"
 #include "bullet_pants.hpp"
+#include "MenuFrameGenerics.hpp"
 
 // The linked list of loaded playergroups.
 extern Playergroup *loaded_playergroups;
@@ -255,6 +256,7 @@ double calculate_relative_percentage_boost_from_adding_one_die(int dice, int tn)
 }
 
 bool drinks_are_unfucked = TRUE;
+
 ACMD(do_debug) {
   static char arg1[MAX_INPUT_LENGTH];
   static char arg2[MAX_INPUT_LENGTH];
@@ -273,6 +275,70 @@ ACMD(do_debug) {
   // Extract the mode switch argument.
   rest_of_argument = any_one_arg(argument, arg1);
   skip_spaces(&rest_of_argument);
+
+  if (!str_cmp(arg1, "menuframes")) {
+    extern void debug_menu_frames(struct char_data *, char *);
+    debug_menu_frames(ch, rest_of_argument);
+    return;
+  }
+
+  if (!str_cmp(arg1, "activities")) {
+    extern void run_check_debug_tests(struct char_data *ch);
+    extern void run_effect_debug_tests(struct char_data *ch);
+    extern void run_outcome_debug_tests(struct char_data *ch);
+    extern void run_option_debug_tests(struct char_data *ch);
+    extern void run_situation_debug_tests(struct char_data *ch);
+    extern void run_activity_debug_tests(struct char_data *ch);
+
+    if (!str_cmp(rest_of_argument, "all")) {
+      send_to_char(ch, "OK, running in sequence.\r\n", ch);
+      mudlog_vfprintf(ch, LOG_SYSLOG, "checks");
+      run_check_debug_tests(ch);
+      mudlog_vfprintf(ch, LOG_SYSLOG, "effects");
+      run_effect_debug_tests(ch);
+      mudlog_vfprintf(ch, LOG_SYSLOG, "outcomes");
+      run_outcome_debug_tests(ch);
+      mudlog_vfprintf(ch, LOG_SYSLOG, "options");
+      run_option_debug_tests(ch);
+      mudlog_vfprintf(ch, LOG_SYSLOG, "situation");
+      run_situation_debug_tests(ch);
+      mudlog_vfprintf(ch, LOG_SYSLOG, "activity");
+      run_activity_debug_tests(ch);
+    }
+
+    else if (!str_cmp(rest_of_argument, "check")) {
+      send_to_char(ch, "OK, running the check.\r\n", ch);
+      run_check_debug_tests(ch);
+    }
+
+    else if (!str_cmp(rest_of_argument, "effect")) {
+      send_to_char(ch, "OK, running the effect.\r\n", ch);
+      run_effect_debug_tests(ch);
+    }
+
+    else if (!str_cmp(rest_of_argument, "outcome")) {
+      send_to_char(ch, "OK, running the outcome.\r\n", ch);
+      run_outcome_debug_tests(ch);
+    }
+
+    else if (!str_cmp(rest_of_argument, "option")) {
+      send_to_char(ch, "OK, running the option.\r\n", ch);
+      run_option_debug_tests(ch);
+    }
+
+    else if (!str_cmp(rest_of_argument, "situation")) {
+      send_to_char(ch, "OK, running the situation.\r\n", ch);
+      run_situation_debug_tests(ch);
+    }
+
+    else if (!str_cmp(rest_of_argument, "activity")) {
+      send_to_char(ch, "OK, running the activity.\r\n", ch);
+      run_activity_debug_tests(ch);
+    }
+    
+    send_to_char(ch, "Success!\r\n");
+    return;
+  }
 
   if (!str_cmp(arg1, "formatting")) {
     send_to_char(ch, "\e[3mitalics test\e[0m\r\n");
@@ -525,6 +591,12 @@ ACMD(do_debug) {
                  (void*)data->input.tail);
     delete data;
 
+    return;
+  }
+  
+  if (!str_cmp(arg1, "checkmenu")) {
+    extern void debug_check_menu(struct char_data *ch);
+    debug_check_menu(ch);
     return;
   }
 
