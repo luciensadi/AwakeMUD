@@ -745,7 +745,7 @@ bool load_char(const char *name, char_data *ch, bool logon, int pc_load_origin)
           obj->photo = str_dup(cleanup_invalid_color_codes(PFILES_CYBERWARE_PHOTO));
         for (int x = 0; x < NUM_OBJ_VALUES; x++)
           GET_OBJ_VAL(obj, x) = atoi(row[x + 5]);
-        if (GET_CYBERWARE_TYPE(obj) == CYB_PHONE && GET_OBJ_VAL(obj, 7))
+        if (GET_OBJ_TYPE(obj) == ITEM_CYBERWARE && GET_CYBERWARE_TYPE(obj) == CYB_PHONE && GET_CYBERWARE_PHONE_NUMBER_IS_ON(obj))
           add_phone_to_list(obj);
         /* TODO: Not sure what this code used to do. It checked obj val 2 == 4 and obj val 7 as boolean, then disabled the ware if both were true.
         else if (GET_OBJ_VAL(obj, 2) == 4 && GET_OBJ_VAL(obj, 7))
