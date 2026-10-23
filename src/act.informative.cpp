@@ -1207,7 +1207,15 @@ void look_at_char(struct char_data * i, struct char_data * ch, const char *used_
                || IS_SET(GET_CYBERWARE_FLAGS(tmp_obj), EYE_OPTMAG3))
               && success_test(GET_INT(ch), 9) > 0)
           {
-            strlcat(visible_ware, "Optical Magnification\r\n", sizeof(visible_ware));
+            // If a player has spent karma on a restring, let them keep it but concat (Optical Magnification) at the end
+            if (tmp_obj->restring) {
+              char displayed_ware[MAX_STRING_LENGTH] = {0};
+
+              snprintf(displayed_ware, sizeof(displayed_ware), "%s^N (Optical Magnification)\r\n",tmp_obj->restring);
+              strlcat(visible_ware, displayed_ware, sizeof(visible_ware));
+            } else {
+              strlcat(visible_ware, "Optical Magnification\r\n", sizeof(visible_ware));
+            }
             continue;
           }
         }
