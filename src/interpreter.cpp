@@ -47,6 +47,7 @@
 #include "player_exdescs.hpp"
 #include "pets.hpp"
 #include "gmcp.hpp"
+#include "mudvault_voting.hpp"
 
 #if defined(__CYGWIN__)
 #include <crypt.h>
@@ -454,6 +455,8 @@ ACMD_DECLARE(do_vnum);
 ACMD_DECLARE(do_vstat);
 ACMD_DECLARE(do_vlist);
 ACMD_DECLARE(do_valset);
+ACMD_DECLARE(do_verify);
+ACMD_DECLARE(do_vote);
 ACMD_DECLARE(do_wake);
 ACMD_DECLARE(do_watch);
 ACMD_DECLARE(do_wear);
@@ -1051,11 +1054,13 @@ struct command_info cmd_info[] =
     { "vedit"      , POS_DEAD    , do_vedit    , LVL_BUILDER, 0, BLOCKS_IDLE_REWARD },
     { "version"    , POS_DEAD    , do_gen_ps   , 0, SCMD_VERSION, ALLOWS_IDLE_REWARD },
     { "vemote"     , POS_SLEEPING, do_new_echo , 0 , SCMD_VEMOTE, BLOCKS_IDLE_REWARD }, // was do_vemote
+    { "verify"     , POS_DEAD    , do_verify   , 1, 0, ALLOWS_IDLE_REWARD },
     { "visible"    , POS_RESTING , do_visible  , LVL_BUILDER, 0, BLOCKS_IDLE_REWARD },
     { "view"       , POS_LYING   , do_imagelink, 0, 0, ALLOWS_IDLE_REWARD },
     { "vfind"      , POS_DEAD    , do_vfind    , LVL_BUILDER, 0, BLOCKS_IDLE_REWARD },
     { "vlist"      , POS_DEAD    , do_vlist    , LVL_BUILDER, 0, BLOCKS_IDLE_REWARD },
     { "vnum"       , POS_DEAD    , do_vnum     , LVL_BUILDER, 0, BLOCKS_IDLE_REWARD },
+    { "vote"       , POS_DEAD    , do_vote     , 1, 0, ALLOWS_IDLE_REWARD },
     { "vset"       , POS_DEAD    , do_vset     , LVL_DEVELOPER, 0, BLOCKS_IDLE_REWARD },
     { "vstat"      , POS_DEAD    , do_vstat    , LVL_BUILDER, 0, BLOCKS_IDLE_REWARD },
     { "vteleport"  , POS_DEAD   , do_vteleport , LVL_CONSPIRATOR, 0, BLOCKS_IDLE_REWARD },
@@ -2939,7 +2944,11 @@ int perform_dupe_check(struct descriptor_data *d)
   // KaVir's protocol snippet.
   MXPSendTag( d, "<VERSION>" );
 
-  // Additional gmcp hooks
+  // Additional gmcp hooks.
+  // MudVault first: delivering pending vote rewards may change syspoint
+  // totals, and this must happen before the vitals/pools GMCP below or the
+  // client's login script would immediately invalidate what it was sent.
+  mv_on_login(d->character);
   SendGMCPCoreSupports(d);
   SendGMCPCharInfo(d->character);
   SendGMCPCharVitals(d->character);
@@ -3633,6 +3642,11 @@ void nanny(struct descriptor_data * d, char *arg)
 
       // KaVir's protocol snippet.
       MXPSendTag( d, "<VERSION>" );
+
+      // MudVault first: delivering pending vote rewards may change syspoint
+      // totals, and this must happen before the GMCP below or the client's
+      // login script would immediately invalidate what it was sent.
+      mv_on_login(d->character);
 
       // GMCP Protocl injection
       SendGMCPCoreSupports ( d );

@@ -1,0 +1,46 @@
+[Unit]
+Description=Gunicorn instance to serve MudVault Webhooks
+After=network.target
+
+[Service]
+# Replace 'youruser' with the actual user on your server
+User=youruser
+Group=www-data
+# The path to your project folder
+WorkingDirectory=/home/youruser/mudvault_project
+# The path to your virtualenv's gunicorn (if using a venv); serve the app as
+# "webhooks.webhooks:app" (the app object lives in webhooks/webhooks.py, and
+# this must run with WorkingDirectory set to the scripts/MudVault directory so
+# that `webhooks` and `utils` resolve).
+ExecStart=/home/youruser/mudvault_project/webhooks/venv/bin/gunicorn \
+    --workers 3 \
+    --bind [IP_ADDRESS]:8001 \
+    --access-logfile - \
+    --error-logfile /home/youruser/mudvault_project/webhooks/webhook_error.log \
+    webhooks.webhooks:app
+
+# SECURITY: bind to loopback (127.0.0.1:8001) or a private interface whenever
+# possible, and firewall this port. Gunicorn MUST NOT be reachable from the
+# internet directly: it should only receive traffic proxied by lighttpd (see
+# the mod_proxy/extforward block in webhooks.py). A direct exposure lets
+# clients spoof X-Forwarded-For and bypass the flask-limiter rate limit (the
+# in-memory limiter is also per-worker -- with N workers the effective limit
+# is N x 5/sec; do not scale workers up for "more capacity").
+
+# Load MudVault secrets + DB credentials. This file must be root-owned with
+# mode 600 (chmod 600 mudvault.env). In addition to the MudVault secrets, it
+# must also define the MySQL connection for this stack, e.g.:
+# MYSQL_HOST=localhost
+# MYSQL_USER=mudvault_web
+# MYSQL_PASSWORD=...
+# MYSQL_DATABASE=AwakeMUD
+# The web user should be INSERT-only on mudvault_votes (scoped-user plan);
+# linking/claim reads+writes run from cron under a separate identity.
+EnvironmentFile=/home/youruser/mudvault_project/mudvault.env
+
+# Restart policy: very important for production
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

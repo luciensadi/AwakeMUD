@@ -78,6 +78,7 @@
 #include "factions.hpp"
 #include "player_exdescs.hpp"
 #include "gmcp.hpp"
+#include "mudvault_voting.hpp"
 
 const unsigned perfmon::kPulsePerSecond = PASSES_PER_SEC;
 
@@ -1250,6 +1251,10 @@ void game_loop(int mother_desc)
     if (!(pulse % (SECONDS_BETWEEN_CONGREGATION_POOL_GAINS * PASSES_PER_SEC))) {
       increase_congregation_bonus_pools();
     }
+
+    // Every 30 IRL seconds: MudVault heartbeat.
+    if (!(pulse % (30 * PASSES_PER_SEC)))
+      mv_heartbeat();
 
     // Every IRL minute
     if (!(pulse % (PASSES_PER_SEC * SECS_PER_REAL_MIN))) {
