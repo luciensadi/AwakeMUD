@@ -1041,7 +1041,7 @@ void look_at_char(struct char_data * i, struct char_data * ch, const char *used_
         send_to_char(ch, "%s %s dual.\r\n", CAP(HSSH(i)), ISARE(i));
     }
   }
-  if (!IS_NPC(i) && GET_LEVEL(ch) > LVL_MORTAL && i->player.background)
+  if (!IS_NPC(i) && i->player.background && ((PRF_FLAGGED(i, PRF_HIRED) && PRF_FLAGGED(ch, PRF_QUESTOR)) || (GET_LEVEL(ch) > LVL_MORTAL)))
     send_to_char(ch, "\r\n^cBackground:^n\r\n%s\r\n", i->player.background);
   found = FALSE;
   for (j = 0; !found && j < NUM_WEARS; j++)
