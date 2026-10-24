@@ -1236,7 +1236,9 @@ const char *tog_messages[][2] = {
                             {"You will now automatically ready your holstered/sheathed weapons.\r\n",
                              "You will no longer automatically ready your holstered/sheathed weapons.\r\n"},
                             {"You will now see roundtime messages for your actions.\r\n",
-                             "You will no longer see roundtime messages for your actions.\r\n"}
+                             "You will no longer see roundtime messages for your actions.\r\n"},
+                            {"Your gear will now be hidden when concealment checks are not passed.\r\n",
+                             "Your gear will now always show even when concealment checks would pass.\r\n"}
                           };
 
 ACMD(do_toggle)
@@ -1534,6 +1536,9 @@ ACMD(do_toggle)
     } else if (is_abbrev(argument, "roundtime messages") || is_abbrev(argument, "no roundtime messages") || is_abbrev(argument, "round time messages") || is_abbrev(argument, "no round time messages")) {
       result = PRF_TOG_CHK(ch, PRF_NOROUNDTIME);
       mode = 54;
+    } else if (is_abbrev(argument, "show covered gear") || is_abbrev(argument, "covered gear")) {
+      result = PRF_TOG_CHK(ch, PRF_REVEALED);
+      mode = 55;
     } else if (is_abbrev(argument, "alphabetize parts") || is_abbrev(argument, "alphabetize programs") || is_abbrev(argument, "alphabetize deckbuilding")) {
       // don't @ me about using a PLR flag for a PRF, it's just really convenient because it's already set to 1 for everyone who exists.
       if (PLR_FLAGGED(ch, PLR_DEALPHABETIZE_DECKBUILDING)) {
