@@ -1081,7 +1081,7 @@ void look_at_char(struct char_data * i, struct char_data * ch, const char *used_
         if (   (j == WEAR_BODY || j == WEAR_LARM || j == WEAR_RARM || j == WEAR_WAIST)
             && GET_EQ(i, WEAR_ABOUT)) 
         {
-          if (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 4 + GET_WORN_CONCEAL_RATING(GET_EQ(i, WEAR_ABOUT))) >= 2) {
+          if (PRF_FLAGGED(i, PRF_REVEALED) || (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 4 + GET_WORN_CONCEAL_RATING(GET_EQ(i, WEAR_ABOUT))) >= 2)) {
             send_to_char(where[j], ch);
             show_obj_to_char(eq, ch, SHOW_MODE_SOMEONE_ELSES_EQUIPMENT);
           }
@@ -1090,9 +1090,9 @@ void look_at_char(struct char_data * i, struct char_data * ch, const char *used_
         
         // Under-armor slot is hidden by about and body slots unless you pass a check.
         if (j == WEAR_UNDER && (GET_EQ(i, WEAR_ABOUT) || GET_EQ(i, WEAR_BODY))) {
-          if (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 6 +
+          if (PRF_FLAGGED(i, PRF_REVEALED) || (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 6 +
                            (GET_EQ(i, WEAR_ABOUT) ? GET_WORN_CONCEAL_RATING(GET_EQ(i, WEAR_ABOUT)) : 0) +
-                           (GET_EQ(i, WEAR_BODY) ? GET_WORN_CONCEAL_RATING(GET_EQ(i, WEAR_BODY)) : 0)) >= 2) {
+                           (GET_EQ(i, WEAR_BODY) ? GET_WORN_CONCEAL_RATING(GET_EQ(i, WEAR_BODY)) : 0)) >= 2)) {
             send_to_char(where[j], ch);
             show_obj_to_char(eq, ch, SHOW_MODE_SOMEONE_ELSES_EQUIPMENT);
           }
@@ -1101,7 +1101,7 @@ void look_at_char(struct char_data * i, struct char_data * ch, const char *used_
         
         // Legs are hidden by about unless you pass a check.
         if (j == WEAR_LEGS && GET_EQ(i, WEAR_ABOUT)) {
-          if (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 2 + GET_WORN_CONCEAL_RATING(GET_EQ(i, WEAR_ABOUT))) >= 2) {
+          if (PRF_FLAGGED(i, PRF_REVEALED) || (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 2 + GET_WORN_CONCEAL_RATING(GET_EQ(i, WEAR_ABOUT))) >= 2)) {
             send_to_char(where[j], ch);
             show_obj_to_char(eq, ch, SHOW_MODE_SOMEONE_ELSES_EQUIPMENT);
           }
@@ -1110,9 +1110,9 @@ void look_at_char(struct char_data * i, struct char_data * ch, const char *used_
         
         // Ankle slots are hidden by about and legs unless passing a check.
         if ((j == WEAR_RANKLE || j == WEAR_LANKLE) && (GET_EQ(i, WEAR_ABOUT) || GET_EQ(i, WEAR_LEGS))) {
-          if (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 5 +
+          if (PRF_FLAGGED(i, PRF_REVEALED) || (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 5 +
                            (GET_EQ(i, WEAR_ABOUT) ? GET_WORN_CONCEAL_RATING(GET_EQ(i, WEAR_ABOUT)) : 0) +
-                           (GET_EQ(i, WEAR_LEGS) ? GET_WORN_CONCEAL_RATING(GET_EQ(i, WEAR_LEGS)) : 0)) >= 2) {
+                           (GET_EQ(i, WEAR_LEGS) ? GET_WORN_CONCEAL_RATING(GET_EQ(i, WEAR_LEGS)) : 0)) >= 2)) {
             send_to_char(where[j], ch);
             show_obj_to_char(eq, ch, SHOW_MODE_SOMEONE_ELSES_EQUIPMENT);
           }
