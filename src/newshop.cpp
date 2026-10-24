@@ -2549,9 +2549,15 @@ void shop_cancel(char *arg, struct char_data *ch, struct char_data *keeper, vnum
           int repayment_amount = total_prepayment - (total_prepayment / PREORDER_RESTOCKING_FEE_DIVISOR);
           if (repayment_amount > 0) {
             // In this instance, we do a raw refund, then decrement the shop purchase amount.
-            GET_NUYEN_RAW(ch) += repayment_amount;
+            if (!shop_table[shop_nr].type == SHOP_LEGAL) {
+              GET_NUYEN_RAW(ch) += repayment_amount;
+              act("$n hands $N some nuyen.", FALSE, keeper, 0, ch, TO_ROOM);
+            } else {
+              // If we're dealing with a legal, credsticks only shop, the refund goes directly to the bank.
+              GET_BANK_RAW(ch) += repayment_amount;
+              act("$n arragnes a bank refund for $N.", FALSE, keeper, 0, ch, TO_ROOM);
+            }
             GET_NUYEN_INCOME_THIS_PLAY_SESSION(ch, NUYEN_OUTFLOW_SHOP_PURCHASES) -= repayment_amount;
-            act("$n hands $N some nuyen.", FALSE, keeper, 0, ch, TO_ROOM);
           }
         }
 
