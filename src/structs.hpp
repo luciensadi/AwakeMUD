@@ -306,6 +306,7 @@ struct room_data
   char *temp_desc;
   int temp_desc_timeout;
   idnum_t temp_desc_author_idnum;
+  bool temp_social_room;
 
 #ifdef USE_DEBUG_CANARIES
   int canary;
