@@ -15,6 +15,7 @@
 
 #include "structs.hpp"
 #include "newdb.hpp"
+#include "dg_scripts.hpp"
 #include "db.hpp"
 #include "comm.hpp"       // for shutdown()
 #include "file.hpp"
@@ -73,6 +74,7 @@ void save_pc_memory_to_db(struct char_data *player);
 void save_drug_data_to_db(struct char_data *player);
 void save_skills_to_db(struct char_data *player);
 void save_aliases_to_db(struct char_data *player);
+void save_scriptvars_to_db(struct char_data *player);
 void save_bioware_to_db(struct char_data *player);
 void save_cyberware_to_db(struct char_data *player);
 void fix_ghoul_index(struct char_data *ch);
@@ -686,6 +688,20 @@ bool load_char(const char *name, char_data *ch, bool logon, int pc_load_origin)
     GET_ALIASES(ch) = a;
   }
   mysql_free_result(res);
+
+  snprintf(buf, sizeof(buf), "SELECT name, context, value FROM pfiles_scriptvars WHERE idnum=%ld;", GET_IDNUM(ch));
+  mysql_wrapper(mysql, buf);
+  res = mysql_use_result(mysql);
+  while ((row = mysql_fetch_row(res))) {
+    if (!SCRIPT(ch))
+      SCRIPT(ch) = new script_data;
+    add_var(&SCRIPT(ch)->global_vars, row[0], row[2], atol(row[1]));
+  }
+  mysql_free_result(res);
+
+  /* Reading them back is not a change: a player who touches no script this
+   * session must not rewrite the table on the way out. */
+  GET_SCRIPTVAR_DIRTY_BIT(ch) = FALSE;
 
   snprintf(buf, sizeof(buf), "SELECT * FROM pfiles_memory WHERE idnum=%ld;", GET_IDNUM(ch));
   mysql_wrapper(mysql, buf);
@@ -1541,6 +1557,9 @@ static bool save_char(char_data *player, vnum_t loadroom, bool fromCopyover = FA
 
   SAVE_IF_DIRTY_BIT_SET(GET_ALIAS_DIRTY_BIT, save_aliases_to_db);
 
+  /* Only players a script has actually written to ever touch this table. */
+  SAVE_IF_DIRTY_BIT_SET(GET_SCRIPTVAR_DIRTY_BIT, save_scriptvars_to_db);
+
   // Save bioware and cyberware.
   save_bioware_to_db(player);
   save_cyberware_to_db(player);
@@ -1628,6 +1647,7 @@ idnum_t get_highest_idnum_in_use() {
     "pfiles_named_tags",
     "pfiles_playergroups",
     "pfiles_quests",
+    "pfiles_scriptvars",
     "pfiles_skills",
     "pfiles_spells",
     "pfiles_spirits",
@@ -1635,7 +1655,7 @@ idnum_t get_highest_idnum_in_use() {
     "you-deleted-something-and-didn't-change-the-table-length-dumbass" // must be last for obvious reasons
   };
 
-  #define NUM_IDNUM_TABLES 20
+  #define NUM_IDNUM_TABLES 21
 
   // Get the pfiles idnum. This SHOULD be the only one we need.
   idnum_t highest_pfiles_idnum = get_one_number_from_query("SELECT idnum FROM pfiles ORDER BY idnum DESC LIMIT 1;");
@@ -1933,14 +1953,15 @@ void DeleteChar(long idx)
     "pfiles_named_tags       ",
     // pfiles_playergroups handled as a special case below
     "pfiles_quests           ",
-    "pfiles_skills           ", // 20
+    "pfiles_scriptvars       ", // 20
+    "pfiles_skills           ",
     "pfiles_spells           ",
     "pfiles_spirits          ",
     "pfiles_worn             ",
-    "playergroup_invitations ",
-    "pocsec_phonebook        "  // 25
+    "playergroup_invitations ", // 25
+    "pocsec_phonebook        "
   };
-  #define NUM_SQL_TABLE_NAMES     26
+  #define NUM_SQL_TABLE_NAMES     27
   #define PFILES_INDEX            0
   #define PFILES_IGNORE_INDEX     10
   #define PFILES_IGNORE_V2_INDEX  11
@@ -2651,6 +2672,33 @@ void save_aliases_to_db(struct char_data *player) {
   }
   if (q) {
     strcat(buf, ");");
+    mysql_wrapper(mysql, buf);
+  }
+}
+
+/* Script variables a player is carrying. One statement per row rather than
+ * the accumulated multi-row form the shorter tables use, because a value is
+ * whatever a script chose to put there and the total has no useful bound. */
+void save_scriptvars_to_db(struct char_data *player) {
+  PERF_PROF_SCOPE(pr_, __func__);
+  char name_buf[300], value_buf[MAX_STRING_LENGTH * 2 + 1];
+
+  snprintf(buf, sizeof(buf), "DELETE FROM pfiles_scriptvars WHERE idnum=%ld", GET_IDNUM(player));
+  mysql_wrapper(mysql, buf);
+
+  if (!SCRIPT(player))
+    return;
+
+  for (struct trig_var_data *vd = SCRIPT(player)->global_vars; vd; vd = vd->next) {
+    if (!vd->name || !*vd->name)
+      continue;
+
+    snprintf(buf, sizeof(buf),
+             "INSERT INTO pfiles_scriptvars (idnum, name, context, value) VALUES (%ld, '%s', %ld, '%s')",
+             GET_IDNUM(player),
+             prepare_quotes(name_buf, vd->name, sizeof(name_buf) / sizeof(name_buf[0])),
+             vd->context,
+             prepare_quotes(value_buf, vd->value ? vd->value : "", sizeof(value_buf) / sizeof(value_buf[0])));
     mysql_wrapper(mysql, buf);
   }
 }

@@ -153,7 +153,8 @@ void icedit_parse(struct descriptor_data *d, const char *arg)
     case 'y':
     case 'Y': {
         ic_num = real_ic(d->edit_number);
-        if (ic_num > 0) {
+        /* rnum 0 is the first IC, not "no such IC"; see redit.cpp. */
+        if (ic_num >= 0) {
           struct matrix_icon *i, *temp;
           for (i = icon_list; i; i = i->next)
             if (i->rnum == ic_num) {

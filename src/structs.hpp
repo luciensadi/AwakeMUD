@@ -3,6 +3,13 @@
 
 #define NOWHERE (-1)
 #define NOTHING (-1)
+
+/* DG Scripts. Defined in dg_scripts.hpp; forward-declared so that the
+ * entity structs below can carry script pointers without pulling that
+ * header in ahead of the types it needs. */
+struct script_data;
+struct script_memory;
+struct trig_proto_list;
 #define NOBODY  (-1)
 
 #define SPECIAL(name) \
@@ -164,6 +171,11 @@ struct obj_data
 
   unsigned long idnum;
 
+  /* DG Scripts. script_id is handed out lazily by obj_script_id(). */
+  long script_id;
+  struct trig_proto_list *proto_script; /* list of default triggers */
+  struct script_data *script;           /* the live script          */
+
   // Adding new fields? Add them to dblist's UpdateObjs too to avoid iedit breaking things.
 
 #ifdef USE_DEBUG_CANARIES
@@ -174,7 +186,8 @@ struct obj_data
       ex_description(NULL), restring(NULL), photo(NULL), graffiti(NULL), source_info(NULL), carried_by(NULL),
       worn_by(NULL), worn_on(0), in_obj(NULL), contains(NULL), next_content(NULL),
       in_host(NULL), cyberdeck_part_pointer(NULL), targ(NULL), tveh(NULL), 
-      dropped_by_host(NULL), dropped_by_char(0), idnum(0)
+      dropped_by_host(NULL), dropped_by_char(0), idnum(0),
+      script_id(0), proto_script(NULL), script(NULL)
   {
     #ifdef USE_DEBUG_CANARIES
       canary = CANARY_VALUE;
@@ -307,6 +320,11 @@ struct room_data
   int temp_desc_timeout;
   idnum_t temp_desc_author_idnum;
 
+  /* DG Scripts. A room's script id is derived from its vnum, so it needs no
+   * id field of its own. */
+  struct trig_proto_list *proto_script; /* list of default triggers */
+  struct script_data *script;           /* the live script          */
+
 #ifdef USE_DEBUG_CANARIES
   int canary;
 #endif
@@ -318,7 +336,8 @@ struct room_data
       type(0), x(0), y(0), z(0), peaceful(0), func(NULL), dirty_bit(FALSE),
       staff_level_lock(0), elevator_number(0), contents(NULL), people(NULL),
       vehicles(NULL), watching(NULL), latitude(0), longitude(0), apartment(NULL), apartment_room(NULL),
-      temp_desc(NULL), temp_desc_timeout(0), temp_desc_author_idnum(0)
+      temp_desc(NULL), temp_desc_timeout(0), temp_desc_author_idnum(0),
+      proto_script(NULL), script(NULL)
   {
     ZERO_OUT_ARRAY(dir_option, NUM_OF_DIRS);
     ZERO_OUT_ARRAY(temporary_stored_exit, NUM_OF_DIRS);
@@ -1018,6 +1037,12 @@ struct char_data
 
   bool is_carrying_vehicle;
 
+  /* DG Scripts. script_id is handed out lazily by char_script_id(). */
+  long script_id;
+  struct trig_proto_list *proto_script; /* list of default triggers  */
+  struct script_data *script;           /* the live script           */
+  struct script_memory *script_memory;  /* for mob memory triggers   */
+
   /* Adding a field to this struct? If it's a pointer, or if it's important, add it to utils.cpp's copy_over_necessary_info() to avoid breaking mdelete etc. */
 #ifdef USE_DEBUG_CANARIES
   int canary;
@@ -1030,7 +1055,8 @@ struct char_data
       next_in_veh(NULL), next_watching(NULL), followers(NULL), master(NULL), spells(NULL), ignore_data(NULL), pgroup(NULL),
       pgroup_invitations(NULL), congregation_bonus_pool(0), last_loop_id(999), pc_invis_resistance_test_results(NULL),
       mob_invis_resistance_test_results(NULL), alias_dirty_bit(FALSE), mob_loaded_in_room(0), precast_spells(NULL),
-      is_carrying_vehicle(FALSE)
+      is_carrying_vehicle(FALSE), script_id(0), proto_script(NULL), script(NULL),
+      script_memory(NULL)
   {
     ZERO_OUT_ARRAY(equipment, NUM_WEARS);
 
@@ -1173,6 +1199,7 @@ struct descriptor_data
   Faction *edit_faction;
   PCExDesc *edit_exdesc;
   Playergroup *edit_pgroup; /* playergroups */
+  struct trig_data *edit_trig;  /* trigedit */
   // If you add more of these edit_whatevers, touch comm.cpp's free_editing_structs and add them!
 
   int canary;
@@ -1193,6 +1220,7 @@ struct descriptor_data
       edit_helpfile(NULL), edit_complex(NULL), edit_complex_original(NULL),
       edit_apartment(NULL), edit_apartment_original(NULL), edit_apartment_room(NULL),
       edit_apartment_room_original(NULL), edit_faction(NULL), edit_exdesc(NULL), edit_pgroup(NULL),
+      edit_trig(NULL),
       canary(CANARY_VALUE), pProtocol(NULL)
   {
     // Zero out our metrics.

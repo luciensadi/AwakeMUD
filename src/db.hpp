@@ -33,6 +33,7 @@
 #define QST_PREFIX      "world/qst"     /* autoquests                   */
 #define VEH_PREFIX      "world/veh"     /* vehicles */
 #define MTX_PREFIX      "world/mtx"     /* Matrix			*/
+#define TRG_PREFIX      "world/trg"     /* DG Scripts triggers          */
 
 #define CREDITS_FILE    "text/credits"  /* for the 'credits' command    */
 #define NEWS_FILE       "text/news"     /* for the 'news' command       */

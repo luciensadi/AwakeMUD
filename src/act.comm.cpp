@@ -21,6 +21,7 @@
 #include "comm.hpp"
 #include "interpreter.hpp"
 #include "handler.hpp"
+#include "dg_scripts.hpp"
 #include "db.hpp"
 #include "screen.hpp"
 #include "awake.hpp"
@@ -199,6 +200,13 @@ ACMD(do_say)
         store_message_to_history(veh->rigger->desc, COMM_CHANNEL_SAYS, perform_act(buf, ch, NULL, NULL, veh->rigger, FALSE));
       }
     }
+  }
+
+  /* Let anything listening in the room react to what was said. OOC speech
+   * is out of character and does not reach triggers. */
+  if (subcmd != SCMD_OSAY) {
+    speech_mtrigger(ch, arg_known_size);
+    speech_wtrigger(ch, arg_known_size);
   }
 
   // Acknowledge transmission of message.

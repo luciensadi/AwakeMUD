@@ -957,6 +957,7 @@ const char *connected_types[] =
     "Creating a Pet",
     "Creating Complex Form",
     "Increasing Submersion",
+    "Trigger Editing",
     "\n"
   };
 
@@ -3597,6 +3598,10 @@ const char *obj_load_reasons[] {
   "CREATE_PART",
   "CREATE_DECK",
   "COOK_PROGRAM",
+  /* The defines skip 41: they have jumped 40 to 42 since load tracking
+     went in. Without a slot here, every name from CREATE_SPELL on is
+     off by one and the highest reason reads past the end. */
+  "UNUSED_41",
   "CREATE_SPELL",
   "SPAWN_PAYDATA",
   "MTX_CONNECT",
@@ -3617,7 +3622,8 @@ const char *obj_load_reasons[] {
   "CREATE_PET",
   "OTAKU_RESONANCE",
   "CREATE_COMPLEX_FORM",
-  "UNSTOW_CMD"
+  "UNSTOW_CMD",
+  "SCRIPT"
 };
 
 int bone_lacing_power_lookup[] = {
@@ -3654,4 +3660,79 @@ struct kosher_weapon_values_struct kosher_weapon_values[MAX_WEAP] = {
 /* MISS_LAUNCHER  */ {   0  ,   0  , 0       , SKILL_MISSILE_LAUNCHERS, 0   , 1   , TRUE , FALSE, FALSE, FALSE, 0   , TRUE , TRUE , TRUE , 0   , 0    }, // WEAP_MISS_LAUNCHER  
 /* REVOLVER       */ {   0  ,   9  , MODERATE, SKILL_PISTOLS          , 0   , 7   , TRUE , TRUE , FALSE, FALSE, 1   , TRUE , TRUE , TRUE , 0   , 0    }, // WEAP_REVOLVER       
 /* GRENADE        */ {   0  ,   0  , 0       , 0                      , 0   , 0   , FALSE, FALSE, FALSE, FALSE, 0   , FALSE, TRUE , TRUE , 0   , 0    }  // WEAP_GRENADE        
+};
+
+/* DG Scripts trigger types. The order of each table matches the MTRIG_/
+ * OTRIG_/WTRIG_ bits in dg_scripts.hpp, and sprintbit() walks it in step with
+ * them, so a gap in the bits needs a placeholder here. */
+const char *trig_types[] = {
+  "Global",
+  "Random",
+  "Command",
+  "Speech",
+  "Act",
+  "Death",
+  "Greet",
+  "Greet-All",
+  "Entry",
+  "Receive",
+  "Fight",
+  "HitPrcnt",
+  "Bribe",
+  "Load",
+  "Memory",
+  "Cast",
+  "Leave",
+  "Door",
+  "Damage",
+  "Time",
+  "\n"
+};
+
+const char *otrig_types[] = {
+  "Global",
+  "Random",
+  "Command",
+  "UNUSED1",
+  "UNUSED2",
+  "Timer",
+  "Get",
+  "Drop",
+  "Give",
+  "Wear",
+  "UNUSED3",
+  "Remove",
+  "UNUSED4",
+  "Load",
+  "UNUSED5",
+  "Cast",
+  "Leave",
+  "UNUSED6",
+  "Consume",
+  "Time",
+  "\n"
+};
+
+const char *wtrig_types[] = {
+  "Global",
+  "Random",
+  "Command",
+  "Speech",
+  "UNUSED1",
+  "Reset",
+  "Enter",
+  "Drop",
+  "UNUSED2",
+  "UNUSED3",
+  "UNUSED4",
+  "UNUSED5",
+  "UNUSED6",
+  "UNUSED7",
+  "UNUSED8",
+  "Cast",
+  "Leave",
+  "Door",
+  "Login",
+  "Time",
+  "\n"
 };

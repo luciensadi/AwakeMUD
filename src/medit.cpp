@@ -15,6 +15,7 @@
 #include "interpreter.hpp"
 #include "db.hpp"
 #include "olc.hpp"
+#include "dg_scripts.hpp"
 #include "boards.hpp"
 #include "screen.hpp"
 #include "memory.hpp"
@@ -135,6 +136,7 @@ void medit_disp_menu(struct descriptor_data *d)
                GET_MOB_FACTION_IDNUM(MOB) ? get_faction_name(GET_MOB_FACTION_IDNUM(MOB), CH) : "<not set>",
                GET_MOB_FACTION_IDNUM(MOB));
 
+  send_to_char("w) Attached triggers\r\n", CH);
   send_to_char("q) Quit and save\r\n", CH);
   send_to_char("x) Exit and abort\r\n", CH);
   send_to_char("Enter your choice:\r\n", CH);
@@ -349,6 +351,14 @@ void medit_parse(struct descriptor_data *d, const char *arg)
   int number;
   int mob_number;  // the RNUM
 
+  /* The attached-trigger sub-menu borrows this editor for a moment.
+   * Its submodes sit in their own range, well clear of this one. */
+  if (d->edit_mode >= DG_SCRIPT_MAIN_MENU && d->edit_mode <= DG_SCRIPT_DONE) {
+    if (!dg_script_edit_parse(d, arg))
+      medit_disp_menu(d);
+    return;
+  }
+
   switch(d->edit_mode)
   {
   case MEDIT_CONFIRM_EDIT:
@@ -494,7 +504,12 @@ void medit_parse(struct descriptor_data *d, const char *arg)
         GET_IMPACT(MOB) = GET_INNATE_IMPACT(MOB) = innate_impact;
         GET_BALLISTIC(MOB) = GET_INNATE_BALLISTIC(MOB) = innate_ballistic;
 
+        /* The prototype is about to adopt the editor's attached-trigger
+         * list, so free the one it has now. */
+        free_proto_script(&mob_proto[mob_number], MOB_TRIGGER);
         mob_proto[mob_number] = *d->edit_mob;
+        mob_proto[mob_number].script = NULL;
+        mob_proto[mob_number].script_memory = NULL;
         mob_proto[mob_number].nr = mob_number;
 
         assert(GET_INNATE_IMPACT(&mob_proto[mob_number]) == innate_impact);
@@ -797,6 +812,10 @@ void medit_parse(struct descriptor_data *d, const char *arg)
     case 'X':
       d->edit_mode = MEDIT_CONFIRM_SAVESTRING;
       medit_parse(d, "n");
+      break;
+    case 'w':
+    case 'W':
+      dg_script_menu(d);
       break;
     case '1':
       send_to_char("Enter keywords:", CH);
@@ -1879,6 +1898,11 @@ void write_mobs_to_disk(vnum_t zone_num)
       fprintf(fp, "#%ld\n", GET_MOB_VNUM(mob));
 
       fprintf(fp, "Keywords:\t%s\n", GET_SETTABLE_KEYWORDS(mob) ? GET_SETTABLE_KEYWORDS(mob) : "mob unnamed");
+      {
+        const char *attached_triggers = dg_render_proto_list(mob, MOB_TRIGGER);
+        if (attached_triggers)
+          fprintf(fp, "Scripts:\t%s\n", attached_triggers);
+      }
       fprintf(fp, "Name:\t%s\n", mob->player.physical_text.name ? mob->player.physical_text.name : "An unnamed mob");
       fprintf(fp, "RoomDesc:$\n%s\n~\n",
               prep_string_for_writing_to_savefile(buf2, mob->player.physical_text.room_desc ? mob->player.physical_text.room_desc : "An unnamed mob is here."));

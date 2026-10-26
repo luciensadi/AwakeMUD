@@ -61,6 +61,8 @@ namespace fs = std::filesystem;
 #include "newshop.hpp"
 #include "constants.hpp"
 #include "vtable.hpp"
+#include "dg_scripts.hpp"
+#include "dg_event.hpp"
 #include "config.hpp"
 #include "security.hpp"
 #include "olc.hpp"
@@ -200,6 +202,7 @@ MYSQL *mysql;
 void index_boot(int mode);
 void discrete_load(File &fl, int mode);
 void parse_room(File &in, long nr);
+void parse_trigger(File &in, long nr);
 void parse_mobile(File &in, long nr);
 void parse_object(File &in, long nr);
 void parse_shop(File &fl, long virtual_nr);
@@ -665,6 +668,9 @@ void boot_world(void)
   log("Loading zone table.");
   index_boot(DB_BOOT_ZON);
 
+  log("Loading triggers.");
+  index_boot(DB_BOOT_TRG);
+
   log("Loading rooms.");
   index_boot(DB_BOOT_WLD);
 
@@ -707,6 +713,21 @@ void boot_world(void)
   // log("Creating Help Indexes.");
   // TODO: Is this supposed to actually do anything?
 
+  /* The room with vnum 0 holds the mud-wide script variables, the ones a
+   * script reads through %global.<name>%. It needs somewhere to keep them
+   * whether or not a builder ever attached a trigger to it. Reached by vnum,
+   * because that is what %global% resolves to as a uid. */
+  {
+    rnum_t global_rnum = real_room(0);
+
+    if (global_rnum >= 0) {
+      if (!SCRIPT(&world[global_rnum]))
+        SCRIPT(&world[global_rnum]) = new script_data;
+    } else {
+      log("Warning: no room with vnum 0, so %global% script variables have nowhere to live.");
+    }
+  }
+
   log("Performing final validation checks.");
   check_for_common_fuckups();
 
@@ -748,6 +769,10 @@ void DBInit()
 
   log("Loading lifestyles.");
   load_lifestyles();
+
+  log("Initializing DG Scripts.");
+  init_lookup_table();
+  event_init();
 
   log("Booting world.");
   boot_world();
@@ -943,6 +968,9 @@ void index_boot(int mode)
   case DB_BOOT_MTX:
     prefix = MTX_PREFIX;
     break;
+  case DB_BOOT_TRG:
+    prefix = TRG_PREFIX;
+    break;
   default:
     log("SYSERR: Unknown subcommand to index_boot!");
     exit(ERROR_UNKNOWN_SUBCOMMAND_TO_INDEX_BOOT);
@@ -978,7 +1006,7 @@ void index_boot(int mode)
 
     fscanf(index, "%32767s\n", buf1);
   }
-  if (!rec_count) {
+  if (!rec_count && mode != DB_BOOT_TRG) {
     log("SYSERR: boot error - 0 records counted");
     exit(ERROR_BOOT_ZERO_RECORDS_COUNTED);
   }
@@ -1061,6 +1089,11 @@ void index_boot(int mode)
 #endif
     break;
 
+  case DB_BOOT_TRG:
+    /* trigedit rebuilds this table exactly on every insert, so there is no
+     * point carrying slack: allocate what the index actually holds. */
+    trig_index = new struct trig_index_data *[rec_count]();
+    break;
   case DB_BOOT_ZON:
     // the zone table is pretty small, so it is no biggie
     zone_table = new struct zone_data[rec_count];
@@ -1099,6 +1132,7 @@ void index_boot(int mode)
       case DB_BOOT_SHP:
       case DB_BOOT_QST:
       case DB_BOOT_IC:
+      case DB_BOOT_TRG:
         discrete_load(in_file, mode);
         break;
       case DB_BOOT_ZON:
@@ -1119,7 +1153,8 @@ void discrete_load(File &fl, int mode)
   char line[256];
   bool is_new = (mode == DB_BOOT_WLD || mode == DB_BOOT_MTX ||
                  mode == DB_BOOT_OBJ || mode == DB_BOOT_IC ||
-                 mode == DB_BOOT_MOB || mode == DB_BOOT_VEH || mode == DB_BOOT_SHP);
+                 mode == DB_BOOT_MOB || mode == DB_BOOT_VEH || mode == DB_BOOT_SHP ||
+                 mode == DB_BOOT_TRG);
 
   for (;;) {
     fl.GetLine(line, 256, FALSE);
@@ -1160,6 +1195,9 @@ void discrete_load(File &fl, int mode)
           break;
         case DB_BOOT_IC:
           parse_ic(fl, nr);
+          break;
+        case DB_BOOT_TRG:
+          parse_trigger(fl, nr);
           break;
         }
     } else {
@@ -1450,6 +1488,8 @@ void parse_room(File &fl, long nr)
     else
       room->vision[0] = LIGHT_NORMAL;
   }
+  dg_read_trigger_list(data.GetString("Scripts", NULL), room, WLD_TRIGGER);
+  assign_triggers(room, WLD_TRIGGER);
   room->crowd = data.GetInt("Crowd", 0);
   room->cover = data.GetInt("Cover", 0);
   room->x = data.GetInt("X", DEFAULT_DIMENSIONS_X);
@@ -1752,6 +1792,12 @@ void renum_zone_table(void)
         case 'D':
           a = ZCMD.arg1 = real_room(ZCMD.arg1);
           break;
+        case 'T': /* attach a trigger */
+          /* arg1 is the attach type and arg2 the trigger vnum, both of
+           * which stay vnums. arg3 is a room, and only for W triggers. */
+          if (ZCMD.arg1 == WLD_TRIGGER)
+            b = ZCMD.arg3 = real_room(ZCMD.arg3);
+          break;
         case 'R': /* rem obj from room */
           a = ZCMD.arg1 = real_room(ZCMD.arg1);
           b = ZCMD.arg2 = real_object(ZCMD.arg2);
@@ -2018,6 +2064,10 @@ void parse_mobile(File &in, long nr)
 
   GET_INNATE_IMPACT(mob) = innate_impact;
   GET_IMPACT(mob) += GET_INNATE_IMPACT(mob);
+
+  /* The prototype only records which triggers to attach; read_mobile()
+   * arms them on each mob it hands out. */
+  dg_read_trigger_list(data.GetString("Scripts", NULL), mob, MOB_TRIGGER);
 
   top_of_mobt = rnum++;
 }
@@ -2473,6 +2523,9 @@ void parse_object(File &fl, long nr)
       break;
   }
 
+  /* As with mobs, the prototype only records the list. */
+  dg_read_trigger_list(data.GetString("Scripts", NULL), obj, OBJ_TRIGGER);
+
   top_of_objt = rnum++;
 }
 
@@ -2832,7 +2885,7 @@ void load_zones(File &fl)
           ZCMD.arg4 = 1;
         }
       }
-    } else if (strchr("VOHPDEN", ZCMD.command)) { // 3-arg.
+    } else if (strchr("VOHPDENT", ZCMD.command)) { // 3-arg.
       if (sscanf(ptr, " %d %ld %ld %ld ", &tmp, &ZCMD.arg1, &ZCMD.arg2, &ZCMD.arg3) != 4)
         error = 1;
     } else if (strchr("SUIGCR", ZCMD.command)) { // 2-arg.
@@ -4522,6 +4575,13 @@ struct char_data *read_mobile(int nr, int type)
   // See utils.cpp for this.
   set_new_mobile_unique_id(mob);
 
+  /* The struct copy above brought the prototype's trigger list along, but
+   * not a live script; build one. */
+  mob->script = NULL;
+  mob->script_memory = NULL;
+  mob->script_id = 0;
+  assign_triggers(mob, MOB_TRIGGER);
+
   set_natural_vision_for_race(mob);
 
   // Copy off their cyberware from prototype.
@@ -4639,7 +4699,15 @@ struct obj_data *read_object(int nr, int type, int load_origin, int pc_load_orig
       GET_ITEM_PHONE_NUMBER_PART_ONE(obj) = number(0, 9999);
       GET_ITEM_PHONE_NUMBER_PART_TWO(obj) = number(0, 9999);
     }
-  } else if (GET_OBJ_TYPE(obj) == ITEM_GUN_MAGAZINE) {
+  }
+
+  /* The struct copy above brought the prototype's trigger list along, but
+   * not a live script; build one. */
+  obj->script = NULL;
+  obj->script_id = 0;
+  assign_triggers(obj, OBJ_TRIGGER);
+
+  if (GET_OBJ_TYPE(obj) == ITEM_GUN_MAGAZINE) {
     GET_MAGAZINE_AMMO_COUNT(obj) = GET_MAGAZINE_BONDED_MAXAMMO(obj);
   } else if (GET_OBJ_TYPE(obj) == ITEM_WEAPON)
     handle_weapon_attachments(obj);
@@ -4855,6 +4923,9 @@ void reset_zone(rnum_t zone, int reboot, bool process_doors)
           mob->mob_loaded_in_room = GET_ROOM_VNUM(&world[ZCMD.arg3]);
           char_to_room(mob, &world[ZCMD.arg3]);
           act("$n has arrived.", TRUE, mob, 0, 0, TO_ROOM);
+          /* Now that it is standing somewhere, anything watching for its
+           * arrival can run. */
+          load_mtrigger(mob);
           last_cmd = 1;
         } else {
           if (ZCMD.arg2 == 0 && !reboot)
@@ -4897,6 +4968,7 @@ void reset_zone(rnum_t zone, int reboot, bool process_doors)
           bool is_driver = !(veh->people);
 
           char_to_veh(veh, mob);
+          load_mtrigger(mob);
 
           if (is_driver) {
             // If the vehicle is empty, make the mob the driver.
@@ -4991,6 +5063,7 @@ void reset_zone(rnum_t zone, int reboot, bool process_doors)
           } else {
             ZONE_ERROR("Not enough mounts in target vehicle, cannot mount item");
             extract_obj(obj);
+            obj = NULL;
           }
         }
         else {
@@ -5016,8 +5089,9 @@ void reset_zone(rnum_t zone, int reboot, bool process_doors)
             affect_veh(veh, obj->affected[j].location, obj->affected[j].modifier);
         }
 
-        last_cmd = 1;
-
+        if (obj)
+          load_otrigger(obj);
+        last_cmd = obj != NULL;
 
       } else
         last_cmd = 0;
@@ -5036,6 +5110,7 @@ void reset_zone(rnum_t zone, int reboot, bool process_doors)
           (ZCMD.arg2 == 0 && reboot)) {
         obj = read_object(ZCMD.arg1, REAL, OBJ_LOAD_REASON_ZONECMD);
         obj_to_veh(obj, veh);
+        load_otrigger(obj);
         last_cmd = 1;
       } else
         last_cmd = 0;
@@ -5101,7 +5176,9 @@ void reset_zone(rnum_t zone, int reboot, bool process_doors)
 
         if ((already_there < ZCMD.arg2) || (ZCMD.arg2 == -1) ||
             (ZCMD.arg2 == 0 && reboot)) {
-          obj_to_host(read_object(ZCMD.arg1, REAL, OBJ_LOAD_REASON_ZONECMD), &matrix[ZCMD.arg3]);
+          obj = read_object(ZCMD.arg1, REAL, OBJ_LOAD_REASON_ZONECMD);
+          obj_to_host(obj, &matrix[ZCMD.arg3]);
+          load_otrigger(obj);
           last_cmd = 1;
         } else
           last_cmd = 0;
@@ -5133,6 +5210,7 @@ void reset_zone(rnum_t zone, int reboot, bool process_doors)
         if (passed_global_limits || passed_load_on_reboot || passed_room_limits) {
           obj = read_object(ZCMD.arg1, REAL, OBJ_LOAD_REASON_ZONECMD);
           obj_to_room(obj, &world[ZCMD.arg3]);
+          load_otrigger(obj);
 
           act("You blink and realize that $p must have been here the whole time.", TRUE, 0, obj, 0, TO_ROOM);
 
@@ -5237,6 +5315,7 @@ void reset_zone(rnum_t zone, int reboot, bool process_doors)
               }
             }
           }
+          load_otrigger(obj);
           last_cmd = 1;
         } else
           last_cmd = 0;
@@ -5274,6 +5353,7 @@ void reset_zone(rnum_t zone, int reboot, bool process_doors)
         if (passed_global_limits || passed_load_on_reboot || passed_room_limits) {
           obj = read_object(ZCMD.arg1, REAL, OBJ_LOAD_REASON_ZONECMD);
           obj_to_char(obj, mob);
+          load_otrigger(obj);
           last_cmd = 1;
         } else
           last_cmd = 0;
@@ -5332,6 +5412,7 @@ void reset_zone(rnum_t zone, int reboot, bool process_doors)
                   get_ch_in_room(mob)->debris--;
                 }
               }
+              load_otrigger(obj);
             }
           }
         } else
@@ -5356,6 +5437,7 @@ void reset_zone(rnum_t zone, int reboot, bool process_doors)
                                       (ZCMD.arg2 == -1) || (ZCMD.arg2 == 0 && reboot)); ++i) {
         obj = read_object(ZCMD.arg1, REAL, OBJ_LOAD_REASON_ZONECMD);
         obj_to_char(obj, mob);
+        load_otrigger(obj);
         last_cmd = 1;
       }
       break;
@@ -5414,6 +5496,7 @@ void reset_zone(rnum_t zone, int reboot, bool process_doors)
           GET_OBJ_VAL(obj, 5) = 24;
         obj_to_bioware(obj, mob);
       }
+      load_otrigger(obj);
       last_cmd = 1;
       break;
     case 'R': /* rem obj from room */
@@ -5509,6 +5592,65 @@ void reset_zone(rnum_t zone, int reboot, bool process_doors)
 #undef REV_DOOR_STRUCT
 #undef DOOR_STRUCT
 
+    case 'T': /* attach a trigger */
+      /* arg1 is the attach type, arg2 the trigger vnum. For a mob or an
+       * object it attaches to whatever the last M or O command loaded; for
+       * a room, arg3 says which one. */
+      {
+        rnum_t trig_rnum = real_trigger(ZCMD.arg2);
+
+        if (trig_rnum < 0) {
+          snprintf(buf, sizeof(buf), "Trigger %ld does not exist.", ZCMD.arg2);
+          ZONE_ERROR(buf);
+          ZCMD.command = '*';
+          break;
+        }
+
+        if (trig_index[trig_rnum]->proto->attach_type != ZCMD.arg1) {
+          ZONE_ERROR("trigger has the wrong attach type");
+          last_cmd = 0;
+          break;
+        }
+
+        switch (ZCMD.arg1) {
+          case MOB_TRIGGER:
+            if (!mob) {
+              ZONE_ERROR("attach-to-mob with no mob loaded");
+              break;
+            }
+            if (!SCRIPT(mob))
+              SCRIPT(mob) = new script_data;
+            add_trigger(SCRIPT(mob), read_trigger(trig_rnum), -1);
+            last_cmd = 1;
+            break;
+          case OBJ_TRIGGER:
+            if (!obj) {
+              ZONE_ERROR("attach-to-object with no object loaded");
+              break;
+            }
+            if (!SCRIPT(obj))
+              SCRIPT(obj) = new script_data;
+            add_trigger(SCRIPT(obj), read_trigger(trig_rnum), -1);
+            last_cmd = 1;
+            break;
+          case WLD_TRIGGER:
+            if (ZCMD.arg3 < 0 || ZCMD.arg3 > top_of_world) {
+              ZONE_ERROR("attach-to-room with an invalid room");
+              break;
+            }
+            if (!SCRIPT(&world[ZCMD.arg3]))
+              SCRIPT(&world[ZCMD.arg3]) = new script_data;
+            if (!trig_is_attached(SCRIPT(&world[ZCMD.arg3]), ZCMD.arg2))
+              add_trigger(SCRIPT(&world[ZCMD.arg3]), read_trigger(trig_rnum), -1);
+            last_cmd = 1;
+            break;
+          default:
+            ZONE_ERROR("attach with an unknown trigger type");
+            break;
+        }
+      }
+      break;
+
     default:
       snprintf(buf, sizeof(buf), "Unknown cmd '%c' in reset table; cmd disabled. Args were %ld %ld %ld.",
               ZCMD.command, ZCMD.arg1, ZCMD.arg2, ZCMD.arg3);
@@ -5522,10 +5664,16 @@ void reset_zone(rnum_t zone, int reboot, bool process_doors)
   for (int counter = zone_table[zone].number * 100;
        counter <= zone_table[zone].top; counter++) {
     long rnum = real_room(counter);
-    if (rnum > 0 && world[rnum].background[PERMANENT_BACKGROUND_COUNT]) {
+    if (rnum < 0)
+      continue;
+
+    if (world[rnum].background[PERMANENT_BACKGROUND_COUNT]) {
       world[rnum].background[CURRENT_BACKGROUND_COUNT] = world[rnum].background[PERMANENT_BACKGROUND_COUNT];
       world[rnum].background[CURRENT_BACKGROUND_TYPE] = world[rnum].background[PERMANENT_BACKGROUND_TYPE];
     }
+
+    /* Rooms in the zone get a crack at their reset triggers. */
+    reset_wtrigger(&world[rnum]);
   }
 
 }
@@ -5681,6 +5829,22 @@ char *fread_string(FILE * fl, char *error)
 void free_char(struct char_data * ch)
 {
   int i;
+
+  /* Scripts first: extract_script() walks the trigger list, which wants the
+   * character still intact. A live mob shares proto_script with its
+   * prototype, so only a prototype-less one owns that list. */
+  if (SCRIPT(ch))
+    extract_script(ch, MOB_TRIGGER);
+  if (SCRIPT_MEM(ch)) {
+    extract_script_mem(SCRIPT_MEM(ch));
+    SCRIPT_MEM(ch) = NULL;
+  }
+  if (ch->script_id)
+    remove_from_lookup_table(ch->script_id);
+  if (!IS_NPC(ch) || GET_MOB_RNUM(ch) == -1)
+    free_proto_script(ch, MOB_TRIGGER);
+  else
+    ch->proto_script = NULL;
 
   /* clean up spells */
   {
@@ -5846,6 +6010,11 @@ void free_room(struct room_data *room)
 {
   struct extra_descr_data *This, *next_one;
 
+  /* Unlike mobs and objects, each room owns its own trigger list. */
+  if (SCRIPT(room))
+    extract_script(room, WLD_TRIGGER);
+  free_proto_script(room, WLD_TRIGGER);
+
   // first free up the strings
   DELETE_ARRAY_IF_EXTANT(room->name);
   DELETE_ARRAY_IF_EXTANT(room->description);
@@ -5953,6 +6122,18 @@ void free_icon(struct matrix_icon * icon)
  * shared. Keep this in step with clone_obj_for_editing() in olc.cpp. */
 void free_obj_strings(struct obj_data *obj, struct obj_data *shared_with)
 {
+  int nr;
+
+  /* As with characters, a prototype-backed object shares its trigger list
+   * with the prototype and must not free it. */
+  if (SCRIPT(obj))
+    extract_script(obj, OBJ_TRIGGER);
+  if (obj->script_id)
+    remove_from_lookup_table(obj->script_id);
+  if (GET_OBJ_RNUM(obj) == -1)
+    free_proto_script(obj, OBJ_TRIGGER);
+  else
+    obj->proto_script = NULL;
   struct extra_descr_data *this1, *next_one;
 
   if (obj->text.keywords && (!shared_with || obj->text.keywords != shared_with->text.keywords))

@@ -8,7 +8,7 @@ echo "Loading AwakeMUD base schema..."
 mysql -u root -p"$MYSQL_ROOT_PASSWORD" "$MYSQL_DATABASE" < "$SQL_SOURCE/awakemud.sql"
 
 # Load patch files in the same order as gensql.sh
-for patch in playergroups.sql mail_fixes.sql helpfile_expansion.sql bullet_pants.sql fuckups.sql ignore_system_v2.sql; do
+for patch in playergroups.sql mail_fixes.sql helpfile_expansion.sql bullet_pants.sql fuckups.sql ignore_system_v2.sql dg_scripts_help.sql; do
     if [ -f "$SQL_SOURCE/$patch" ]; then
         echo "Loading patch: $patch"
         mysql -u root -p"$MYSQL_ROOT_PASSWORD" "$MYSQL_DATABASE" < "$SQL_SOURCE/$patch"

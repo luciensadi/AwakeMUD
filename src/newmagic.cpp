@@ -7,6 +7,7 @@
 #include "comm.hpp"
 #include "interpreter.hpp"
 #include "handler.hpp"
+#include "dg_scripts.hpp"
 #include "newmagic.hpp"
 #include "utils.hpp"
 #include "screen.hpp"
@@ -2947,6 +2948,30 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
 
 void cast_spell(struct char_data *ch, int spell, int sub, int force, char *arg)
 {
+  /* Cast triggers get a look before the spell goes off. The room sees
+   * every cast; a named target sees the ones aimed at it. Any of them may
+   * stop the cast. */
+  {
+    struct char_data *targ_ch = NULL;
+    struct obj_data *targ_obj = NULL;
+
+    if (arg && *arg) {
+      char targ_name[MAX_INPUT_LENGTH];
+      one_argument(arg, targ_name);
+      if (*targ_name) {
+        if (!(targ_ch = get_char_room_vis(ch, targ_name)))
+          targ_obj = get_obj_in_list_vis(ch, targ_name, ch->in_room ? ch->in_room->contents : NULL);
+      }
+    }
+
+    if (!cast_wtrigger(ch, targ_ch, targ_obj, spell))
+      return;
+    if (targ_ch && !cast_mtrigger(ch, targ_ch, spell))
+      return;
+    if (targ_obj && !cast_otrigger(ch, targ_obj, spell))
+      return;
+  }
+
   if (spells[spell].duration == SUSTAINED)
   {
     if (GET_SUSTAINED_NUM(ch) >= GET_SKILL(ch, SKILL_SORCERY)) {

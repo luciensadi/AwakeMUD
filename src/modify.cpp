@@ -24,6 +24,7 @@
 #include "newmail.hpp"
 #include "boards.hpp"
 #include "olc.hpp"
+#include "dg_scripts.hpp"
 #include "quest.hpp"
 #include "newmagic.hpp"
 #include "newmatrix.hpp"
@@ -452,6 +453,8 @@ void string_add(struct descriptor_data *d, char *str)
         icedit_disp_menu(d);
         break;
       }
+    } else if (STATE(d) == CON_TRIGEDIT) {
+      trigedit_string_cleanup(d, detected_abort);
     } else if (STATE(d) == CON_REDIT) {
       switch(d->edit_mode) {
       case REDIT_DESC:

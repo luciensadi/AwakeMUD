@@ -247,7 +247,8 @@ void hedit_parse(struct descriptor_data *d, const char *arg)
           mudlog(buf, d->character, LOG_WIZLOG, TRUE);
         }
         host_num = real_host(d->edit_number);
-        if (host_num > 0) {
+        /* rnum 0 is the first host, not "no such host"; see redit.cpp. */
+        if (host_num >= 0) {
           d->edit_host->icons = matrix[host_num].icons;
           d->edit_host->alert = matrix[host_num].alert;
           d->edit_host->file = matrix[host_num].file;

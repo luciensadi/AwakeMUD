@@ -21,6 +21,7 @@
 #include "olc.hpp"
 #include "newmatrix.hpp"
 #include "config.hpp"
+#include "dg_scripts.hpp"
 
 extern const char *dirs[];
 extern const char *short_where[];
@@ -173,6 +174,16 @@ void write_zone_to_disk(int vnum)
               Zcmd.if_flag,
               OBJ(Zcmd.arg1),
               Zcmd.arg2);
+      break;
+    case 'T':
+      /* arg1 is the attach type and arg2 the trigger vnum, both stored as
+       * vnums. arg3 is a room rnum, and only means anything for W triggers. */
+      fprintf(fp, "%c %d %ld %ld %ld\n",
+              Zcmd.command,
+              Zcmd.if_flag,
+              Zcmd.arg1,
+              Zcmd.arg2,
+              Zcmd.arg1 == WLD_TRIGGER ? (long) ROOM(Zcmd.arg3) : Zcmd.arg3);
       break;
     case 'R':
       fprintf(fp, "%c %d %ld %ld\n",
