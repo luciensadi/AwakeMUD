@@ -312,11 +312,14 @@ void SendGMCPRoomInfo( struct char_data *ch, struct room_data *room )
   j["vnum"] = GET_ROOM_VNUM(room);
   j["name"] = GET_ROOM_NAME(room);
 
-  // Zone info: Not necessary maybe
-  // struct zone_data *z = &zone_table[room->zone];
-  // j["zone"] = json::object();
-  // j["zone"]["number"] = z->number;
-  // j["zone"]["name"] = z->name;
+  // Zone info
+  struct zone_data *z = &zone_table[room->zone];
+  j["zone"] = json::object();
+  j["zone"]["number"] = z->number;
+  j["zone"]["name"] = z->name;
+
+  // SectType, where the type of terrain is stored
+  j["terrain"] = SECT(room);
 
   // Flags
   j["flags"] = json::array();
