@@ -1656,6 +1656,9 @@ int make_prompt(struct descriptor_data * d)
             case 'o':       // offense pool
               snprintf(str, sizeof(str), "%d", GET_OFFENSE(d->character));
               break;
+            case 'O':       // availability offset
+              snprintf(str, sizeof(str), "%d", GET_AVAIL_OFFSET(d->character));
+              break;
             case 'p':       // current physical
             case '&':       // current physical, but subtracted from 10 to give damage boxes taken instead
               physical = (int)(GET_PHYSICAL(ch) / 100);
