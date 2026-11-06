@@ -1127,7 +1127,7 @@ void affect_total(struct char_data * ch)
 
     int mpcp = 0;
     if (PLR_FLAGGED(ch, PLR_MATRIX) && ch->persona) {
-      GET_HACKING(ch) += (int)((GET_INT(ch) + ch->persona->decker->mpcp) / 3);
+      GET_HACKING(ch) += (int)((GET_INT(ch) + (IS_OTAKU(ch) ? GET_OTAKU_MPCP(ch) : ch->persona->decker->mpcp)) / 3);
       // when in the matrix, a VCR also applies a 1 TN penalty, unless disabled via reflex trigger (Matrix, pg 28)
       if (has_rig && (has_trigger == -1)) {
         GET_TARGET_MOD(ch) += 1;
