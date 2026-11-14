@@ -2389,7 +2389,18 @@ void shop_info(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
   strlcat(buf, " It weighs about ", sizeof(buf));
   if (GET_OBJ_WEIGHT(obj) < 1) {
     snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%d grams", (int)(GET_OBJ_WEIGHT(obj) * 1000));
-  } else snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%.0f kilogram%s", GET_OBJ_WEIGHT(obj), (GET_OBJ_WEIGHT(obj) >= 2 ? "s" : ""));
+  } else {
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), "%.0f kilogram%s", GET_OBJ_WEIGHT(obj), (GET_OBJ_WEIGHT(obj) >= 2 ? "s" : ""));
+  }
+  if (GET_LEGAL_NUM(obj) <= 0) {
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", it is completely legal"); 
+  } else if (GET_LEGAL_NUM(obj) <= 3) {
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", it is highly illegal"); 
+  } else if (GET_LEGAL_NUM(obj) == 6) {
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", it is illegal"); 
+  } else {
+    snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), ", it could be considered illegal"); 
+  }
   snprintf(ENDOF(buf), sizeof(buf) - strlen(buf), " and I couldn't let it go for less than %d nuyen.", buy_price(obj, shop_nr, GET_MOB_FACTION_IDNUM(keeper), ch));
 
   if (IS_OBJ_STAT(obj, ITEM_EXTRA_NERPS)) {
