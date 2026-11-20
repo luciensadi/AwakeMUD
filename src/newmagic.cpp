@@ -1451,11 +1451,11 @@ void raw_cast_detection_spell(struct char_data *ch, struct char_data *vict, int 
         if (success > 0) {
           send_to_char("Your eyes tingle as the shadows around you become clearer.\r\n", vict);
           act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
-          create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
+          direct_sustain = create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
         } else {
           send_to_char(FAILED_CAST, ch);
         }
-        spell_drain(ch, spell, force, 0);
+        spell_drain(ch, spell, force, direct_sustain);
       }
       break;
     case SPELL_INFRAVISION:
@@ -1479,10 +1479,10 @@ void raw_cast_detection_spell(struct char_data *ch, struct char_data *vict, int 
         if (success > 0) {
           send_to_char("Your eyes tingle as you begin to see heat signatures around you.\r\n", vict);
           act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
-          create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
+          direct_sustain = create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
         } else
           send_to_char(FAILED_CAST, ch);
-        spell_drain(ch, spell, force, 0);
+        spell_drain(ch, spell, force, direct_sustain);
       }
       break;
   }
@@ -1619,7 +1619,7 @@ void raw_cast_health_spell(struct char_data *ch, struct char_data *vict, int spe
           vict->points.resistpain = MIN(force, success) * 100;
         } else
           send_to_char(FAILED_CAST, ch);
-        spell_drain(ch, spell, force, drain);
+        spell_drain(ch, spell, force, drain, direct_sustain);
       }
       break;
     case SPELL_HEALTHYGLOW:
@@ -2849,10 +2849,10 @@ void raw_cast_manipulation_spell(struct char_data *ch, struct char_data *vict, i
           act("$n's body is enveloped in an aura of fierce flames.", TRUE, vict, 0, 0, TO_ROOM);
           send_to_char("Your body is enveloped in an aura of fierce flames.\r\n", vict);
           act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
-          create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
+          direct_sustain = create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
         } else
           send_to_char(FAILED_CAST, ch);
-        spell_drain(ch, spell, force, 0);
+        spell_drain(ch, spell, force, direct_sustain);
       }
       break;
     case SPELL_LEVITATE:
@@ -2876,10 +2876,10 @@ void raw_cast_manipulation_spell(struct char_data *ch, struct char_data *vict, i
           act(msg_buf, TRUE, vict, 0, 0, TO_ROOM);
           send_to_char("Your feet gently lift off from the ground as you begin to levitate.\r\n", vict);
           act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
-          create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
+          direct_sustain = create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
         } else
           send_to_char(FAILED_CAST, ch);
-        spell_drain(ch, spell, force, 0);
+        spell_drain(ch, spell, force, direct_sustain);
       }
       break;
   }
